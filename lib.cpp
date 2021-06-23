@@ -35,7 +35,8 @@ class Time{
 
 public:  int Y, M, D, h, m;
   double s;
-  bool check_M(void), check_D(void), check_h(void), check_m(void), check_s(void), bool print(void);
+  bool check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
+  void print(void);
   
 };
 
@@ -171,6 +172,7 @@ int main(int argc, char *argv[]){
   Sight sight;
 
   sight.set_time();
+  sight.t.print();
   
   cout << "\n";
   return(0);

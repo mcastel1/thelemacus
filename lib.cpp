@@ -35,7 +35,7 @@ class Time{
 
 public:  int Y, M, D, h, m;
   double s;
-  bool check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
+  bool check_M(void), check_D(void), check_h(void), check_m(void), check_s(void), bool print(void);
   
 };
 
@@ -98,6 +98,13 @@ bool Time::check_s(void){
     flush(cout);
     return false;
   }
+
+};
+
+void Time::print(void){
+
+  cout << "\nTime is" << Y << " " << M << " " << D << " " << h << "-" << m << "-" << s << "UTC";
+  flush(cout);
 
 };
 

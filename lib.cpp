@@ -104,7 +104,17 @@ bool Time::check_s(void){
 
 void Time::print(void){
 
-  cout << "\nTime is" << Y << " " << M << " " << D << " " << h << "-" << m << "-" << s << "UTC";
+  cout << "\nTime is " << Y << " ";
+  if(M<10){cout << 0;}
+  cout << M << " ";
+  if(D<10){cout << 0;}
+  cout << D << " ";
+  if(h<10){cout << 0;}
+  cout << h << "-";
+  if(m<10){cout << 0;}
+  cout << m << "-";
+  if(m<10.0){cout << 0;}
+  cout << s << " UTC";
   flush(cout);
 
 };

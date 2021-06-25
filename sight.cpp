@@ -7,7 +7,6 @@
 #include <string>
 #include <sstream>
 
-#include "lib.h"
 
 //mac
 /*
@@ -31,11 +30,14 @@
 
 
 using namespace std;
+#include "lib.h"
+
 
 
 
 
 int main(int argc, char *argv[]){
+
 
   /*
     int options;
@@ -58,6 +60,9 @@ int main(int argc, char *argv[]){
 
   sight.t.set();
   sight.t.print();
+
+  cout << "Set the index error:\n";
+  sight.index_error.set();
   
   cout << "\n";
   return(0);

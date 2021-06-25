@@ -1,0 +1,214 @@
+class Time{
+
+public:  int Y, M, D, h, m;
+  double s;
+  bool check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
+  void set(void);
+  void print(void);
+  
+};
+
+class Angle{
+
+public:
+  int ad;
+  double am;
+  void set(void);
+  bool check_ad(void), check_am(void);
+  
+};
+
+class Sight{
+
+public:
+  Time t;
+  double index_error;
+  void set_index_error(void);
+};
+
+bool Angle::check_ad(void){
+
+  if((ad >= 0) && (ad < 360)){return true;}
+  else{
+    cout << "\nEntered value is not valid! Try again.";
+    flush(cout);
+    return false;
+  }
+
+};
+
+
+bool Angle::check_am(void){
+
+  if((am >= 0.0) && (am < 60.0)){return true;}
+  else{
+    cout << "\nEntered value is not valid! Try again.";
+    flush(cout);
+    return false;
+  }
+
+};
+
+void Angle::set(void){
+
+  cout << "\nEnter angle adadad amam:";
+
+  do{
+    cout << "\nEnter adadad: ";
+    cin >> ad;
+  }while(!check_ad());
+  
+  do{
+    cout << "\nEnter amam: ";
+    cin >> am;
+  }while(!check_am());
+
+}
+
+
+
+bool Time::check_M(void){
+
+  if((M >= 1) && (M <= 12)){return true;}
+  else{
+    cout << "\nEntered value is not valid! Try again.";
+    flush(cout);
+    return false;
+  }
+
+};
+
+bool Time::check_D(void){
+
+  if((D >= 1) && (D <= 31)){return true;}
+  else{
+    cout << "\nEntered value is not valid! Try again.";
+    flush(cout);
+    return false;
+  }
+
+};
+
+bool Time::check_h(void){
+
+  if((h >= 0) && (h < 24)){return true;}
+  else{
+    cout << "\nEntered value is not valid! Try again.";
+    flush(cout);
+    return false;
+  }
+
+};
+
+bool Time::check_m(void){
+
+  if((m >= 0) && (m < 60)){return true;}
+  else{
+    cout << "\nEntered value is not valid! Try again.";
+    flush(cout);
+    return false;
+  }
+
+};
+
+bool Time::check_s(void){
+
+  if((s >= 0.0) && (s < 60.0)){return true;}
+  else{
+    cout << "\nEntered value is not valid! Try again.";
+    flush(cout);
+    return false;
+  }
+
+};
+
+void Time::print(void){
+
+  cout << "\nTime is " << Y << " ";
+  if(M<10){cout << 0;}
+  cout << M << " ";
+  if(D<10){cout << 0;}
+  cout << D << " ";
+  if(h<10){cout << 0;}
+  cout << h << "-";
+  if(m<10){cout << 0;}
+  cout << m << "-";
+  if(m<10.0){cout << 0;}
+  cout << s << " UTC";
+  flush(cout);
+
+};
+
+
+
+
+void Time::set (void) {
+
+  cout << "\nEnter UTC time YYYY MM DD hh-mm-s:";
+
+  cout << "\nEnter YYYY: ";
+  cin >> Y;
+
+  do{
+    cout << "\nEnter MM: ";
+    cin >> M;
+  }while(!check_M());
+
+  do{
+    cout << "\nEnter DD: ";
+    cin >> D;
+  }while(!(check_D()));
+
+  do{
+    cout << "\nEnter hh: ";
+    cin >> h;
+  }while(!(check_h()));
+
+  do{
+    cout << "\nEnter mm: ";
+    cin >> m;
+  }while(!(check_m()));
+
+  do{
+    cout << "\nEnter ss: ";
+    cin >> s;
+  }while(!(check_s()));
+
+}
+
+/*
+  void Sight::set_index_error (void) {
+
+  cout << "\nEnter index error +- ddd\260 mm':";
+
+  cout << "\nEnter +-: ";
+  cin >> t.index_error;
+
+  do{
+  cout << "\nEnter MM: ";
+  cin >> t.M;
+  }while(!t.check_M());
+
+  do{
+  cout << "\nEnter DD: ";
+  cin >> t.D;
+  }while(!(t.check_D()));
+
+  do{
+  cout << "\nEnter hh: ";
+  cin >> t.h;
+  }while(!(t.check_h()));
+
+  do{
+  cout << "\nEnter mm: ";
+  cin >> t.m;
+  }while(!(t.check_m()));
+
+  do{
+  cout << "\nEnter ss: ";
+  cin >> t.s;
+  }while(!(t.check_s()));
+
+  }
+
+*/

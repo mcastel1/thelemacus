@@ -6,6 +6,8 @@
 #include <strstream>
 #include <string>
 #include <sstream>
+#include <algorithm>
+#include <list>
 
 
 //mac
@@ -30,6 +32,7 @@
 
 
 using namespace std;
+
 #include "lib.h"
 
 
@@ -38,7 +41,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-
+  unsigned int i;
   /*
     int options;
 
@@ -55,14 +58,36 @@ int main(int argc, char *argv[]){
 		
     }
   */
-
+    
   Sight sight;
 
+  
+ 
   sight.t.set();
   sight.t.print();
 
-  cout << "Set the index error:\n";
+  cout << "\nSet the index error...\n";
   sight.index_error.set();
+  sight.index_error.print();
+
+  /*
+  catalog[0].type = find(body_type.begin(), body_type.end(), "sun");
+  catalog[0].name = find(body_name.begin(), body_name.end(), "sun");
+
+  catalog[1].type = find(body_type.begin(), body_type.end(), "moon");
+  catalog[1].name = find(body_name.begin(), body_name.end(), "moon");
+
+  catalog[2].type = find(body_type.begin(), body_type.end(), "planet");
+  catalog[2].name = find(body_name.begin(), body_name.end(), "jupiter");
+
+  catalog[3].type = find(body_type.begin(), body_type.end(), "star");
+  catalog[3].name = find(body_name.begin(), body_name.end(), "vega");
+
+  for(unsigned int i=0; i<catalog.size(); i++){
+    catalog[i].print();
+  }
+  */
+  //sight.body.set();
   
   cout << "\n";
   return(0);

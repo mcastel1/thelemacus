@@ -8,11 +8,44 @@
 //one nautical mile in kilometers
 #define nm 1.852
 
+class Distance{
+
+ public:
+  double value;
+  void set(const char*, double);
+  void enter(const char*);
+  void print(const char*);
+
+};
+
+class Angle{
+
+public:
+ 
+  double value;
+  void normalize(void);
+  void enter(const char*);
+  void set(const char*, double);
+  void print(const char*);
+  
+};
+
+class Limb{
+
+ public:
+  char value;
+  void enter(const char*);
+  void print(const char*);
+
+};
+
+
 
 class Body{
 
  public:
   vector<string>::iterator name, type;
+  Distance radius;
   void enter(void), print(void);
   
 };
@@ -64,37 +97,14 @@ public:  int Y, M, D, h, m;
   
 };
 
-class Distance{
-
- public:
-  double value;
-  void set(const char*, double);
-  void print(const char*);
-
-};
-
-class Angle{
-
-public:
- 
-  double value;
-  void normalize(void);
-  void enter(const char*);
-  void set(const char*, double);
-  void print(const char*);
-  
-};
-
-
-
-
 class Sight{
 
 public:
   Time t;
   Angle index_error, GHA, d;
-  Distance r;
+  Distance r, height_of_eye;
   Body body;
+  Limb limb;
 
   void get_coordinates(void);
 
@@ -110,6 +120,20 @@ void Distance::set(const char* name, double x){
   else{
     cout << "Entered value of " << name << "is not valid!\n";
   }
+  
+}
+
+void Distance::enter(const char* name){
+
+    cout << "Enter " << name << " [m]:\n";
+
+    do{
+      cin >> value;    
+    }while(value < 0.0);
+    //convert to nautical miles
+    value/=(1e3*nm);
+    
+    print(name); 
   
 }
 
@@ -276,6 +300,33 @@ void Angle::print(const char* name){
 
 }
 
+void Limb::enter(const char* name){
+
+  bool check;
+  cout << "Enter " << name << " [u/l]:\n";
+
+  do{
+    cin >> value;
+    
+    if((value=='u') || (value=='l')){check = true;}
+     else{
+       cout << "Entered value is not valid! Try again.\n";
+       flush(cout);
+       check = false;
+     }
+  }while(!check);
+  
+  print(name);
+  
+}
+
+
+void Limb::print(const char* name){
+
+  cout << name << " is " << value << "\n";
+  
+}
+
 
 bool Time::check_Y(void){
 
@@ -356,7 +407,7 @@ void Time::print(const char* name){
   if(m<10){cout << 0;}
   cout << m << "-";
   if(s<10.0){cout << 0;}
-  cout << s << ", " << mjd << " MJD\n";
+  cout << s << " (" << mjd << " MJD)\n";
   flush(cout);
 
 };
@@ -366,7 +417,7 @@ void Time::print(const char* name){
 
 void Time::enter(const char* name) {
 
-  cout << "\nEnter " << name << " [YYYY MM DD hh-mm-s]\n";
+  cout << "Enter " << name << " [YYYY MM DD hh-mm-ss]\n";
 
   do{
     cout << "\tEnter YYYY: ";

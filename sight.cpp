@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
 
   cout.precision(my_precision);
 
-  unsigned int i;
+  //unsigned int i;
   /*
     int options;
 
@@ -67,9 +67,11 @@ int main(int argc, char *argv[]){
   
  
   sight.t.enter("UTC time of sight");
-
   sight.index_error.enter("index error");
+  sight.height_of_eye.enter("height of eye");
+  sight.limb.enter("limb");
 
+  
   sight.get_coordinates();
 
   

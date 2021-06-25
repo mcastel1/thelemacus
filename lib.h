@@ -50,10 +50,11 @@ void Body::set(void){
 class Time{
 
 public:  int Y, M, D, h, m;
-  double s;
+  double s, mjd;
   bool check_Y(void), check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
   void set(void);
   void print(void);
+  void to_mjd(void);
   
 };
 
@@ -270,6 +271,46 @@ void Time::set (void) {
     cin >> s;
   }while(!(check_s()));
 
+}
+
+void Time:: to_mjd(void)
+  
+  /*
+    Modified Julian Date ( MJD = Julian Date - 2400000.5)
+    valid for every date
+    Julian Calendar up to 4-OCT-1582,
+    Gregorian Calendar from 15-OCT-1582.
+  */
+{
+  
+  long int b, c;
+   
+  mjd = 10000.0 * Y + 100.0 * M + D;
+  if (M <= 2)
+    {
+      M = M + 12;
+      Y = Y - 1;
+    };
+  if (mjd <= 15821004.1)
+    {
+      b = ((Y+4716)/4) - 1181;
+      if (Y < -4716)
+        {
+	  c = Y + 4717;
+	  c = -c;
+	  c = c / 4;
+	  c = -c;
+	  b = c - 1182;
+        };
+    }
+  else b = (Y/400) - (Y/100) + (Y/4);
+  //     { b = -2 + floor((Y+4716)/4) - 1179;}
+  // else {b = floor(Y/400) - floor(Y/100) + floor(Y/4);};
+   
+  mjd = 365.0 * Y - 679004.0;
+  mjd = mjd + b + int(30.6001 * (M + 1)) + D + (((double)h) + 60.0*((double)m) + 60.0*60.0*((double)s)) / 24.0;
+   
+  
 }
 
 /*

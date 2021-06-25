@@ -25,7 +25,8 @@
 #include <gsl_sf_pow_int.h>
 #include <gsl_sf_exp.h>
 #include <gsl_errno.h> 
-#include <gsl_math.h> 
+#include <gsl_math.h>
+#include <gsl/gsl_spline.h>
 // #include <gsl_roots.h>
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
@@ -65,11 +66,11 @@ int main(int argc, char *argv[]){
 
   
  
-  sight.t.set();
+  sight.t.enter();
   sight.t.print();
 
   // cout << "\nSet the index error...\n";
-  // sight.index_error.set();
+  // sight.index_error.enter();
   // sight.index_error.print();
 
   sight.get_coordinates();
@@ -93,7 +94,7 @@ int main(int argc, char *argv[]){
     catalog[i].print();
   }
   */
-  //sight.body.set();
+  //sight.body.enter();
   
   cout << "\n";
   return(0);

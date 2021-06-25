@@ -1,4 +1,4 @@
-#include <iostream>
+ #include <iostream>
 #include <cstdio>
 #include <cmath>
 #include <vector>
@@ -66,12 +66,9 @@ int main(int argc, char *argv[]){
 
   
  
-  sight.t.enter();
-  sight.t.print();
+  sight.t.enter("UTC time of sight");
 
-  // cout << "\nSet the index error...\n";
-  // sight.index_error.enter();
-  // sight.index_error.print();
+  sight.index_error.enter("index error");
 
   sight.get_coordinates();
 

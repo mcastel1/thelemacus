@@ -58,8 +58,8 @@ class Time{
 public:  int Y, M, D, h, m;
   double s, mjd;
   bool check_Y(void), check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
-  void enter(void);
-  void print(void);
+  void enter(const char*);
+  void print(const char*);
   void to_mjd(void);
   
 };
@@ -68,8 +68,8 @@ class Distance{
 
  public:
   double value;
-  void set(double);
-  void print(void);
+  void set(const char*, double);
+  void print(const char*);
 
 };
 
@@ -79,9 +79,9 @@ public:
  
   double value;
   void normalize(void);
-  void enter(void);
-  void set(double);
-  void print(void);
+  void enter(const char*);
+  void set(const char*, double);
+  void print(const char*);
   
 };
 
@@ -101,21 +101,21 @@ public:
 };
 
 
-void Distance::set(double x){
+void Distance::set(const char* name, double x){
 
   if(x>=0.0){
     value = x;
-    print(); 
+    print(name); 
   }
   else{
-    cout << "Entered value is not valid!\n";
+    cout << "Entered value of " << name << "is not valid!\n";
   }
   
 }
 
-void Distance::print(void){
+void Distance::print(const char* name){
 
-    cout << "Value is " << value << " nm.\n";
+    cout << name << " is " << value << " nm.\n";
  
 }
 
@@ -194,31 +194,31 @@ void Sight::get_coordinates(void){
   }
 
   //add minus sign because in JPL convention longitude is positive when it is W
-  GHA.set(-gsl_spline_eval(interpolation_GHA, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
-  d.set(gsl_spline_eval(interpolation_d, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
-  r.set(gsl_spline_eval(interpolation_r, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
+  GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
+  d.set("d", gsl_spline_eval(interpolation_d, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
+  r.set("r", gsl_spline_eval(interpolation_r, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
   
 }
 
-void Angle::set(double x){
+void Angle::set(const char* name, double x){
 
   value = x;
   normalize();
-  print();
+  print(name);
   
 }
 
-void Angle::enter(void){
+void Angle::enter(const char* name){
 
   string s;
   int ad;
   double am;
   bool check;
   
-  cout << "Enter angle s adadad amam:\n";
+  cout << "Enter " << name << " [s adadad amam]:\n";
 
   do{
-    cout << "Enter s: ";
+    cout << "\tEnter s: ";
     cin >> s;
     
     if((s=="+") || (s=="-")){check = true;}
@@ -231,7 +231,7 @@ void Angle::enter(void){
 
   
   do{
-    cout << "Enter adadad: ";
+    cout << "\tEnter adadad: ";
     cin >> ad;
     
     if((abs(ad) >= 0) && (abs(ad) < 360)){check = true;}
@@ -243,7 +243,7 @@ void Angle::enter(void){
   }while(!check);
   
   do{
-    cout << "Enter amam: ";
+    cout << "\tEnter amam: ";
     cin >> am;
 
     if((am >= 0.0) && (am < 60.0)){check = true;}
@@ -257,6 +257,7 @@ void Angle::enter(void){
   value = k*(ad + am/60.0);
   if(s=="-"){value*=-1.0;}
   normalize();
+  print(name);
 
 
 }
@@ -268,10 +269,10 @@ void Angle::normalize(void){
 }
 
 
-void Angle::print(void){
+void Angle::print(const char* name){
 
   normalize();
-  cout << "Value is " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
+  cout << name << " is " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
 
 }
 
@@ -343,9 +344,9 @@ bool Time::check_s(void){
 
 };
 
-void Time::print(void){
+void Time::print(const char* name){
 
-  cout << "Time is " << Y << " ";
+  cout << name << " is " << Y << " ";
   if(M<10){cout << 0;}
   cout << M << " ";
   if(D<10){cout << 0;}
@@ -355,7 +356,7 @@ void Time::print(void){
   if(m<10){cout << 0;}
   cout << m << "-";
   if(s<10.0){cout << 0;}
-  cout << s << " UTC, " << mjd << " MJD\n";
+  cout << s << ", " << mjd << " MJD\n";
   flush(cout);
 
 };
@@ -363,41 +364,42 @@ void Time::print(void){
 
 
 
-void Time::enter(void) {
+void Time::enter(const char* name) {
 
-  cout << "\nEnter UTC time YYYY MM DD hh-mm-s:\n";
+  cout << "\nEnter " << name << " [YYYY MM DD hh-mm-s]\n";
 
   do{
-    cout << "Enter YYYY: ";
+    cout << "\tEnter YYYY: ";
     cin >> Y;
   }while(!check_Y());
   
   do{
-    cout << "Enter MM: ";
+    cout << "\tEnter MM: ";
     cin >> M;
   }while(!check_M());
 
   do{
-    cout << "Enter DD: ";
+    cout << "\tEnter DD: ";
     cin >> D;
   }while(!(check_D()));
 
   do{
-    cout << "Enter hh: ";
+    cout << "\tEnter hh: ";
     cin >> h;
   }while(!(check_h()));
 
   do{
-    cout << "Enter mm: ";
+    cout << "\tEnter mm: ";
     cin >> m;
   }while(!(check_m()));
 
   do{
-    cout << "Enter ss: ";
+    cout << "\tEnter ss: ";
     cin >> s;
   }while(!(check_s()));
 
   to_mjd();
+  print(name);
 
 }
 

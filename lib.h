@@ -1,6 +1,6 @@
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
-#define Y_min 2021
+#define Y_min 0000
 #define Y_max 2021
 
 class Body{
@@ -50,10 +50,11 @@ void Body::set(void){
 class Time{
 
 public:  int Y, M, D, h, m;
-  double s;
+  double s, mjd;
   bool check_Y(void), check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
   void set(void);
   void print(void);
+  void to_mjd(void);
   
 };
 
@@ -227,8 +228,8 @@ void Time::print(void){
   cout << h << "-";
   if(m<10){cout << 0;}
   cout << m << "-";
-  if(m<10.0){cout << 0;}
-  cout << s << " UTC.\n";
+  if(s<10.0){cout << 0;}
+  cout << s << " UTC, " << mjd << " MJD\n";
   flush(cout);
 
 };
@@ -270,43 +271,49 @@ void Time::set (void) {
     cin >> s;
   }while(!(check_s()));
 
+  to_mjd();
+
 }
 
-/*
-  void Sight::set_index_error (void) {
-
-  cout << "\nEnter index error +- ddd\260 mm':";
-
-  cout << "\nEnter +-: ";
-  cin >> t.index_error;
-
-  do{
-  cout << "\nEnter MM: ";
-  cin >> t.M;
-  }while(!t.check_M());
-
-  do{
-  cout << "\nEnter DD: ";
-  cin >> t.D;
-  }while(!(t.check_D()));
-
-  do{
-  cout << "\nEnter hh: ";
-  cin >> t.h;
-  }while(!(t.check_h()));
-
-  do{
-  cout << "\nEnter mm: ";
-  cin >> t.m;
-  }while(!(t.check_m()));
-
-  do{
-  cout << "\nEnter ss: ";
-  cin >> t.s;
-  }while(!(t.check_s()));
-
-  }
-
-*/
+void Time:: to_mjd(void)
+  
+  /*
+    Modified Julian Date ( MJD = Julian Date - 2400000.5)
+    valid for every date
+    Julian Calendar up to 4-OCT-1582,
+    Gregorian Calendar from 15-OCT-1582.
+  */
+{
+  
+  long int b, c;
+  int Yt = Y, Mt = M, Dt = D;
+   
+  mjd = 10000.0 * Yt + 100.0 * Mt + Dt;
+  if (Mt <= 2)
+    {
+      Mt = Mt + 12;
+      Yt = Yt - 1;
+    };
+  if (mjd <= 15821004.1)
+    {
+      b = ((Yt+4716)/4) - 1181;
+      if (Yt < -4716)
+        {
+	  c = Yt + 4717;
+	  c = -c;
+	  c = c / 4;
+	  c = -c;
+	  b = c - 1182;
+        };
+    }
+  else b = (Yt/400) - (Yt/100) + (Yt/4);
+  //     { b = -2 + floor((Yt+4716)/4) - 1179;}
+  // else {b = floor(Yt/400) - floor(Yt/100) + floor(Yt/4);};
+   
+  mjd = 365.0 * Yt - 679004.0;
+  mjd = mjd + b + int(30.6001 * (Mt + 1)) + Dt + (((double)h) + 60.0*((double)m) + 60.0*60.0*((double)s)) / 24.0;
+   
+  
+}
 
 

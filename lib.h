@@ -1,7 +1,10 @@
+#define my_precision 16
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
-#define Y_min 0000
+#define Y_min 2021
 #define Y_max 2021
+#define mjd_min 59215.0
+
 
 class Body{
 
@@ -79,7 +82,42 @@ public:
   Angle index_error;
   Body body;
 
+  void get_coordinates(void);
+
 };
+
+
+void Sight::get_coordinates(void){
+
+  ifstream infile;
+  stringstream filename, line_ins;
+  string line;
+  unsigned int l;
+
+  filename << "data/sun.txt";
+  infile.open(filename.str().c_str());
+  if(!infile){
+    cout << "Error opening file " << filename.str().c_str() << endl;
+    flush(cout);
+  }
+
+  cout << "\nMJD = " << t.mjd;
+  cout << "\nMJD0 = " << mjd_min;
+  cout << "\ndiff = " << (t.mjd)-mjd_min;
+  cin >>l ;
+  
+  
+    for(l=0; l<(unsigned int)(24.0*((t.mjd)-mjd_min)); l++){
+    line.clear();
+    getline(infile, line);
+    line_ins << line;
+    cout << line << "\n";
+  }
+  
+  infile.close();
+
+}
+
 
 
 void Angle::set(void){
@@ -311,7 +349,8 @@ void Time:: to_mjd(void)
   // else {b = floor(Yt/400) - floor(Yt/100) + floor(Yt/4);};
    
   mjd = 365.0 * Yt - 679004.0;
-  mjd = mjd + b + int(30.6001 * (Mt + 1)) + Dt + (((double)h) + 60.0*((double)m) + 60.0*60.0*((double)s)) / 24.0;
+  //comment this out if you want to include hours, minutes and seconds in mjd
+  mjd = mjd + b + int(30.6001 * (Mt + 1)) + Dt + (((double)h) + ((double)m)/60.0 + ((double)s)/(60.0*60.0)) / 24.0;
    
   
 }

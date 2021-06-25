@@ -41,6 +41,8 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
+  cout.precision(my_precision);
+
   unsigned int i;
   /*
     int options;
@@ -66,9 +68,13 @@ int main(int argc, char *argv[]){
   sight.t.set();
   sight.t.print();
 
-  cout << "\nSet the index error...\n";
-  sight.index_error.set();
-  sight.index_error.print();
+  // cout << "\nSet the index error...\n";
+  // sight.index_error.set();
+  // sight.index_error.print();
+
+  sight.get_coordinates();
+
+  
 
   /*
   catalog[0].type = find(body_type.begin(), body_type.end(), "sun");

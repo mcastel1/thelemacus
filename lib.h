@@ -127,7 +127,7 @@ bool Time::check_s(void){
 
 void Time::print(void){
 
-  cout << "\nTime is " << Y << " ";
+  cout << "Time is " << Y << " ";
   if(M<10){cout << 0;}
   cout << M << " ";
   if(D<10){cout << 0;}

@@ -23,22 +23,32 @@ class Atmosphere{
 double Atmosphere::T(double z){
 
   double x = 0.0;
-  unsigned int i;
+  //cout << "z = " << z << "\n";
 
   if(z < h[4]){
 
-    i=0;
-    do{   
-      i++;
-    }while(!(z>=h[i-1]) && (z<h[i]));
+    unsigned int i;
+    bool check = true;
+    
+    for(i=0, check=true; (i<4) && check; i++){
+      if((z>=h[i]) && (z<h[i+1])){check=false;}
+    }
     i--;
+    //cout << "i = " << i << "\n";
   
     switch(i){
 
     case 0: x = T0+alpha*z;
+      break;
+      
     case 1: x = T0+alpha*h[1];
+      break;
+      
     case 2: x = T0+alpha*h[1] + beta*(z-h[2]);
+      break;
+      
     case 3: x = T0+alpha*h[1] + beta*(h[3]-h[2]) + gamma*(z-h[3]);
+      break;
     
     }
 
@@ -57,21 +67,28 @@ double Atmosphere::T(double z){
 double Atmosphere::n(double z){
 
   unsigned int i;
-  double x = 0.0;
-  
-  i=0;
-  do{   
-    i++;
-  }while(!(z>=h[i-1]) && (z<h[i]));
+  double x = 0.0;  
+  bool check = true;
+    
+  for(i=0, check=true; (i<4) && check; i++){
+    if((z>=h[i]) && (z<h[i+1])){check=false;}
+  }
   i--;
   
   switch(i){
 
   case 0: x = pow(1.0+alpha*z/T0, -B/alpha);
+    break;
+    
   case 1: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(z-h[1])/(T0+alpha*h[1]));
+    break;
+    
   case 2: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow(1.0+beta/(T0+alpha*h[1])*(z-h[2]), -B/beta);
+    break;
+    
   case 3: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow((T0+alpha*h[1] + beta*(h[3]-h[2]))/(T0+alpha*h[1]), -B/beta)
       * pow(1.0+gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]))*(z-h[3]), -B/gamma);
+    break;
     
   }
 
@@ -95,6 +112,11 @@ void Atmosphere::set(void){
     h[2] = 20.0/nm;
     h[3] = 51.0/nm;
     h[4] = 71.0/nm;
+
+    for(int i=0; i<4+1; i++){
+
+      cout << "\t\t" << i << " " << h[i] << "\n";
+    }
 
   
 }

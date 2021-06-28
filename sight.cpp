@@ -64,7 +64,10 @@ int main(int argc, char *argv[]){
 
   Atmosphere atm;
   atm.set();
-  cout << "n = " << atm.n(0.) << "\n";
+
+  for(double z=0.0; z<38.0; z+=.1){
+    cout << "\n" << z <<" " << atm.n(z)-1. ;
+  }
 
   return 0;
   Sight sight;

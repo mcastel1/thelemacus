@@ -8,6 +8,98 @@
 //one nautical mile in kilometers
 #define nm 1.852
 
+//lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
+
+class Atmosphere{
+
+ public:
+  double A, B, P_dry_0, alpha, beta, gamma, T0;
+  vector<double> h; 
+  void set(void);
+  double T(double), n(double);
+ 
+};
+
+double Atmosphere::T(double z){
+
+  double x = 0.0;
+  unsigned int i;
+
+  if(z < h[4]){
+
+    i=0;
+    do{   
+      i++;
+    }while(!(z>=h[i-1]) && (z<h[i]));
+    i--;
+  
+    switch(i){
+
+    case 0: x = T0+alpha*z;
+    case 1: x = T0+alpha*h[1];
+    case 2: x = T0+alpha*h[1] + beta*(z-h[2]);
+    case 3: x = T0+alpha*h[1] + beta*(h[3]-h[2]) + gamma*(z-h[3]);
+    
+    }
+
+  }else{
+
+    cout << "Value of z is not valid!\n";
+    x=0;
+
+  }
+
+  return x;
+  
+  
+}
+
+double Atmosphere::n(double z){
+
+  unsigned int i;
+  double x = 0.0;
+  
+  i=0;
+  do{   
+    i++;
+  }while(!(z>=h[i-1]) && (z<h[i]));
+  i--;
+  
+  switch(i){
+
+  case 0: x = pow(1.0+alpha*z/T0, -B/alpha);
+  case 1: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(z-h[1])/(T0+alpha*h[1]));
+  case 2: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow(1.0+beta/(T0+alpha*h[1])*(z-h[2]), -B/beta);
+  case 3: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow((T0+alpha*h[1] + beta*(h[3]-h[2]))/(T0+alpha*h[1]), -B/beta)
+      * pow(1.0+gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]))*(z-h[3]), -B/gamma);
+    
+  }
+
+  return (A*P_dry_0/T(z)*x/(1e6)+1.0);
+
+
+}
+
+void Atmosphere::set(void){
+
+
+
+    cout << "Atmosphere model: US 1976.\n";
+
+    A = 0.7933516713545163, B = 34.16*nm, P_dry_0 = 101325.0, alpha = -6.5*nm, beta = 2.8*nm, gamma = -2.8*nm, T0 = 288.15;
+
+    h.resize(4+1);
+    
+    h[0] = 0.0;
+    h[1] = 11.0/nm;
+    h[2] = 20.0/nm;
+    h[3] = 51.0/nm;
+    h[4] = 71.0/nm;
+
+  
+}
+
+
 class Distance{
 
  public:

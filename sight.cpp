@@ -61,7 +61,12 @@ int main(int argc, char *argv[]){
 		
     }
   */
-    
+
+  Atmosphere atm;
+  atm.set();
+  cout << "n = " << atm.n(0.) << "\n";
+
+  return 0;
   Sight sight;
 
   

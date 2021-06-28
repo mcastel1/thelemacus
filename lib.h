@@ -5,19 +5,70 @@
 #define Y_max 2021
 #define mjd_min 59215.0
 #define N 24.0
+#define epsrel (1e-7)
 //one nautical mile in kilometers
 #define nm 1.852
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
+class Length{
+
+ public:
+  double value;
+  void set(const char*, double);
+  void enter(const char*);
+  void print(const char*);
+
+};
+
+
+
+class Angle{
+
+public:
+ 
+  double value;
+  void normalize(void);
+  void enter(const char*);
+  void set(const char*, double);
+  void print(const char*);
+  
+};
+
+class Limb{
+
+ public:
+  char value;
+  void enter(const char*);
+  void print(const char*);
+
+};
+
+
+
+class Body{
+
+ public:
+  vector<string>::iterator name, type;
+  Length radius;
+  void enter(void), print(void);
+  
+};
+
+
+
+
 class Atmosphere{
 
  public:
+  Length earth_radius;
+  Angle *H_a;
   double A, B, P_dry_0, alpha, beta, gamma, T0;
-  vector<double> h; 
+  vector<double> h;
   void set(void);
-  double T(double), n(double);
- 
+  double T(double), n(double), dTdz(double), dndz(double);
+  static double dH(double, void*);
+
 };
 
 double Atmosphere::T(double z){
@@ -25,7 +76,7 @@ double Atmosphere::T(double z){
   double x = 0.0;
   //cout << "z = " << z << "\n";
 
-  if(z < h[4]){
+  if(z <= h[4]){
 
     unsigned int i;
     bool check = true;
@@ -64,6 +115,51 @@ double Atmosphere::T(double z){
   
 }
 
+double Atmosphere::dTdz(double z){
+
+  double x = 0.0;
+  //cout << "z = " << z << "\n";
+
+  if(z <= h[4]){
+
+    unsigned int i;
+    bool check = true;
+    
+    for(i=0, check=true; (i<4) && check; i++){
+      if((z>=h[i]) && (z<h[i+1])){check=false;}
+    }
+    i--;
+    //cout << "i = " << i << "\n";
+  
+    switch(i){
+
+    case 0: x = alpha;
+      break;
+      
+    case 1: x = 0.0;
+      break;
+      
+    case 2: x = beta*z;
+      break;
+      
+    case 3: x = gamma*z;
+      break;
+    
+    }
+
+  }else{
+
+    cout << "Value of z is not valid!\n";
+    x=0.0;
+
+  }
+
+  return x;
+  
+  
+}
+
+
 double Atmosphere::n(double z){
 
   unsigned int i;
@@ -97,6 +193,55 @@ double Atmosphere::n(double z){
 
 }
 
+double Atmosphere::dndz(double z){
+
+  unsigned int i;
+  double x = 0.0;  
+  bool check = true;
+    
+  for(i=0, check=true; (i<4) && check; i++){
+    if((z>=h[i]) && (z<h[i+1])){check=false;}
+  }
+  i--;
+
+  /*
+x**n = exp(nlogx)
+d/dz(x**n) = x**n n/x x' = n x**(n-1)x'
+   */
+  
+  
+  switch(i){
+
+  case 0: x = -B/alpha*pow(1.0+alpha*z/T0, -B/alpha-1.0) * alpha/T0;
+    break;
+    
+  case 1: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(z-h[1])/(T0+alpha*h[1])) * (-B/(T0+alpha*h[1]));
+    break;
+    
+  case 2: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow(1.0+beta/(T0+alpha*h[1])*(z-h[2]), -B/beta-1.0) * (-B/beta) *beta/(T0+alpha*h[1]);
+    break;
+    
+  case 3: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow((T0+alpha*h[1] + beta*(h[3]-h[2]))/(T0+alpha*h[1]), -B/beta)
+      * pow(1.0+gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]))*(z-h[3]), -B/gamma-1.0) * (-B/gamma) * gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]));
+    break;
+    
+  }
+
+  return (-1.0/T(z)*dTdz(z)*n(z) + A*P_dry_0/T(z)*x/(1e6));
+
+
+}
+
+
+double Atmosphere::dH(double z, void* atmosphere){
+
+  Atmosphere* a = (Atmosphere*)atmosphere;
+  
+  return( -((*a).earth_radius.value)*((*a).n(0.0))*cos((*((*a).H_a)).value)*((*a).dndz)(z)/((*a).n)(z)/sqrt(gsl_pow_2((((*a).earth_radius.value)+z)*((*a).n)(z))-gsl_pow_2(((*a).earth_radius.value)*((*a).n)(0.0)*cos((*((*a).H_a)).value))));
+
+  
+}
+
 void Atmosphere::set(void){
 
 
@@ -104,6 +249,7 @@ void Atmosphere::set(void){
     cout << "Atmosphere model: US 1976.\n";
 
     A = 0.7933516713545163, B = 34.16*nm, P_dry_0 = 101325.0, alpha = -6.5*nm, beta = 2.8*nm, gamma = -2.8*nm, T0 = 288.15;
+    earth_radius.value = 6371.0/nm;
 
     h.resize(4+1);
     
@@ -122,47 +268,6 @@ void Atmosphere::set(void){
 }
 
 
-class Distance{
-
- public:
-  double value;
-  void set(const char*, double);
-  void enter(const char*);
-  void print(const char*);
-
-};
-
-class Angle{
-
-public:
- 
-  double value;
-  void normalize(void);
-  void enter(const char*);
-  void set(const char*, double);
-  void print(const char*);
-  
-};
-
-class Limb{
-
- public:
-  char value;
-  void enter(const char*);
-  void print(const char*);
-
-};
-
-
-
-class Body{
-
- public:
-  vector<string>::iterator name, type;
-  Distance radius;
-  void enter(void), print(void);
-  
-};
 
 void Body::print(void){
 
@@ -215,17 +320,36 @@ class Sight{
 
 public:
   Time t;
-  Angle index_error, GHA, d;
-  Distance r, height_of_eye;
+  Angle index_error, GHA, d, H_a;
+  Length r, height_of_eye;
   Body body;
   Limb limb;
 
   void get_coordinates(void);
+  void correct_for_refraction(Atmosphere);
 
 };
 
+void Sight::correct_for_refraction(Atmosphere atmosphere){
 
-void Distance::set(const char* name, double x){
+  gsl_integration_workspace * w = gsl_integration_workspace_alloc (1000);
+  gsl_function F;
+  double result, error;
+
+  
+  F.function = &(Atmosphere::dH);
+  F.params = &atmosphere;
+  (atmosphere.H_a) = &H_a;
+  
+  gsl_integration_qags (&F, (atmosphere.h)[0], (atmosphere.h)[(atmosphere.h).size()-1], 0.0, epsrel, 1000, w, &result, &error);
+
+  printf ("result = % .18f\n", result);
+  
+  gsl_integration_workspace_free(w);
+
+}
+
+void Length::set(const char* name, double x){
 
   if(x>=0.0){
     value = x;
@@ -237,7 +361,7 @@ void Distance::set(const char* name, double x){
   
 }
 
-void Distance::enter(const char* name){
+void Length::enter(const char* name){
 
     cout << "Enter " << name << " [m]:\n";
 
@@ -251,7 +375,7 @@ void Distance::enter(const char* name){
   
 }
 
-void Distance::print(const char* name){
+void Length::print(const char* name){
 
     cout << name << " is " << value << " nm.\n";
  

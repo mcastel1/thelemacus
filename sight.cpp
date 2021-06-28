@@ -26,7 +26,8 @@
 #include <gsl_sf_exp.h>
 #include <gsl_errno.h> 
 #include <gsl_math.h>
-#include <gsl/gsl_spline.h>
+#include <gsl_spline.h>
+#include <gsl_integration.h>
 // #include <gsl_roots.h>
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
@@ -62,17 +63,19 @@ int main(int argc, char *argv[]){
     }
   */
 
+  Sight sight;
   Atmosphere atm;
   atm.set();
 
-  for(double z=0.0; z<38.0; z+=.1){
-    cout << "\n" << z <<" " << atm.n(z)-1. ;
-  }
 
-  return 0;
-  Sight sight;
+  cout << "\n\t\t" << atm.T(atm.h[4]);
+  for(double z=0.0; z<38.0; z+=.1){
+   cout << "\n" << z <<" " << atm.T(z) ;
+   }
 
   
+  sight.H_a.enter("Apparent altitude");
+  sight.correct_for_refraction(atm);
  
   sight.t.enter("UTC time of sight");
   sight.index_error.enter("index error");

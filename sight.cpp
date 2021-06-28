@@ -68,9 +68,9 @@ int main(int argc, char *argv[]){
   atm.set();
 
 
-  cout << "\n\t\t" << atm.T(atm.h[4]);
-  for(double z=0.0; z<38.0; z+=.1){
-   cout << "\n" << z <<" " << atm.T(z) ;
+  //cout << "\n\t\t" << atm.n(atm.h[4]);
+  for(double z=0.0; z<38.0; z+=1){
+   cout << "\n" << z <<" " << atm.dndz(z) ;
    }
 
   

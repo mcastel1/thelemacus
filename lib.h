@@ -227,7 +227,13 @@ d/dz(x**n) = x**n n/x x' = n x**(n-1)x'
     
   }
 
-  return (-1.0/T(z)*dTdz(z)*n(z) + A*P_dry_0/T(z)*x/(1e6));
+  /*
+n = N/10^6+1
+n' = N'/10^6 = -1/T T' N / 10^6 + A P/T x / 10^6 
+   */
+  
+
+  return (-1.0/T(z)*dTdz(z)*(n(z)-1.0) + A*P_dry_0/T(z)*x/(1e6));
 
 
 }
@@ -320,7 +326,7 @@ class Sight{
 
 public:
   Time t;
-  Angle index_error, GHA, d, H_a;
+  Angle index_error, GHA, d, H_a, dH_refraction;
   Length r, height_of_eye;
   Body body;
   Limb limb;
@@ -336,14 +342,12 @@ void Sight::correct_for_refraction(Atmosphere atmosphere){
   gsl_function F;
   double result, error;
 
-  
   F.function = &(Atmosphere::dH);
   F.params = &atmosphere;
   (atmosphere.H_a) = &H_a;
   
-  gsl_integration_qags (&F, (atmosphere.h)[0], (atmosphere.h)[(atmosphere.h).size()-1], 0.0, epsrel, 1000, w, &result, &error);
-
-  printf ("result = % .18f\n", result);
+  gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
+  dH_refraction.set("Altitude correction", -result);
   
   gsl_integration_workspace_free(w);
 

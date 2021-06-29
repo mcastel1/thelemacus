@@ -13,7 +13,10 @@
 //mac
 /*
   clear; clear; g++ sight.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o sight.o -Wall -DHAVE_INLINE
-  ./lib.o
+  clear; clear; g++ sight.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o sight.o -Wall -DHAVE_INLINE -g
+
+  ./sight.o
+  valgrind ./sight.o
 */
 
 // #include <gsl_rng.h>
@@ -64,10 +67,8 @@ int main(int argc, char *argv[]){
   */
 
   Sight sight;
-  Atmosphere atm;
-  atm.set();
 
-
+  
   //cout << "\n\t\t" << atm.n(atm.h[4]);
   // for(double z=0.0; z<38.0; z+=1){
   //  cout << "\n" << z <<" " << atm.dndz(z) ;
@@ -75,7 +76,7 @@ int main(int argc, char *argv[]){
 
   
   sight.H_a.enter("Apparent altitude");
-  sight.correct_for_refraction(atm);
+  sight.correct_for_refraction();
  
   sight.t.enter("UTC time of sight");
   sight.index_error.enter("index error");

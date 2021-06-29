@@ -22,6 +22,17 @@ class Length{
 };
 
 
+class Time{
+
+public:  int Y, M, D, h, m;
+  double s, mjd;
+  bool check_Y(void), check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
+  void enter(const char*);
+  void print(const char*);
+  void to_mjd(void);
+  
+};
+
 
 class Angle{
 
@@ -67,9 +78,26 @@ class Atmosphere{
   vector<double> h;
   void set(void);
   double T(double), n(double), dTdz(double), dndz(double);
-  static double dH(double, void*);
 
 };
+
+class Sight{
+
+public:
+  Time t;
+  Angle index_error, GHA, d, H_a, dH_refraction;
+  Length r, height_of_eye;
+  Atmosphere atmosphere;
+  Body body;
+  Limb limb;
+
+  Sight();
+  static double dH(double, void*);
+  void get_coordinates(void);
+  void correct_for_refraction(void);
+
+};
+
 
 double Atmosphere::T(double z){
 
@@ -239,11 +267,11 @@ n' = N'/10^6 = -1/T T' N / 10^6 + A P/T x / 10^6
 }
 
 
-double Atmosphere::dH(double z, void* atmosphere){
+double Sight::dH(double z, void* sight){
 
-  Atmosphere* a = (Atmosphere*)atmosphere;
+  Sight* a = (Sight*)sight;
   
-  return( -((*a).earth_radius.value)*((*a).n(0.0))*cos((*((*a).H_a)).value)*((*a).dndz)(z)/((*a).n)(z)/sqrt(gsl_pow_2((((*a).earth_radius.value)+z)*((*a).n)(z))-gsl_pow_2(((*a).earth_radius.value)*((*a).n)(0.0)*cos((*((*a).H_a)).value))));
+  return( -(((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n(0.0))*cos(((*a).H_a).value)*(((*a).atmosphere).dndz)(z)/(((*a).atmosphere).n)(z)/sqrt(gsl_pow_2(((((*a).atmosphere).earth_radius.value)+z)*(((*a).atmosphere).n)(z))-gsl_pow_2((((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n)(0.0)*cos(((*a).H_a).value))));
 
   
 }
@@ -265,10 +293,9 @@ void Atmosphere::set(void){
     h[3] = 51.0/nm;
     h[4] = 71.0/nm;
 
-    for(int i=0; i<4+1; i++){
-
-      cout << "\t\t" << i << " " << h[i] << "\n";
-    }
+    /* for(int i=0; i<4+1; i++){ */
+    /*   cout << "\t\t" << i << " " << h[i] << "\n"; */
+    /* } */
 
   
 }
@@ -311,41 +338,29 @@ void Body::enter(void){
 
 
 
-class Time{
 
-public:  int Y, M, D, h, m;
-  double s, mjd;
-  bool check_Y(void), check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
-  void enter(const char*);
-  void print(const char*);
-  void to_mjd(void);
+
+Sight::Sight(void){
+
+  atmosphere.set();
   
-};
+}
 
-class Sight{
-
-public:
-  Time t;
-  Angle index_error, GHA, d, H_a, dH_refraction;
-  Length r, height_of_eye;
-  Body body;
-  Limb limb;
-
-  void get_coordinates(void);
-  void correct_for_refraction(Atmosphere);
-
-};
-
-void Sight::correct_for_refraction(Atmosphere atmosphere){
+void Sight::correct_for_refraction(void){
 
   gsl_integration_workspace * w = gsl_integration_workspace_alloc (1000);
   gsl_function F;
   double result, error;
 
-  F.function = &(Atmosphere::dH);
-  F.params = &atmosphere;
-  (atmosphere.H_a) = &H_a;
+  F.function = &dH;
+  F.params = &(*this);
+
   
+  /* cout << "Value = " << dH(1.0, &(*this)); */
+  /* cin >> result; */
+
+  
+
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
   dH_refraction.set("Altitude correction", -result);
   

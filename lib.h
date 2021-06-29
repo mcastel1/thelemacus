@@ -184,8 +184,6 @@ double Atmosphere::n(double z){
 	}
       }
     }
-    i--;
-    cout << "i = " << i << "\n";
 
     /*
 int_0^z dz/(t_n+lambda_n*(z-h_n)) = log()
@@ -353,7 +351,7 @@ void Sight::correct_for_refraction(void){
   
 
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  DH_refraction.set("Altitude correction", -result);
+  DH_refraction.set("Altitude correction", result);
   
   gsl_integration_workspace_free(w);
 

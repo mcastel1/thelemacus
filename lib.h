@@ -5,7 +5,7 @@
 #define Y_max 2021
 #define mjd_min 59215.0
 #define N 24.0
-#define epsrel (1e-7)
+#define epsrel (1e-12)
 //one nautical mile in kilometers
 #define nm 1.852
 
@@ -139,10 +139,10 @@ double Atmosphere::dTdz(double z){
     case 1: x = 0.0;
       break;
       
-    case 2: x = beta*z;
+    case 2: x = beta;
       break;
       
-    case 3: x = gamma*z;
+    case 3: x = gamma;
       break;
     
     }

@@ -69,9 +69,9 @@ int main(int argc, char *argv[]){
 
 
   //cout << "\n\t\t" << atm.n(atm.h[4]);
-  for(double z=0.0; z<38.0; z+=1){
-   cout << "\n" << z <<" " << atm.dndz(z) ;
-   }
+  // for(double z=0.0; z<38.0; z+=1){
+  //  cout << "\n" << z <<" " << atm.dndz(z) ;
+  //  }
 
   
   sight.H_a.enter("Apparent altitude");

@@ -98,7 +98,7 @@ class Atmosphere{
   double A, B, P_dry_0, alpha, beta, gamma, T0;
   vector<double> h, lambda, t;
   void set(void);
-  double T(double), n(double), dTdz(double), dndz(double);
+  double T(Length), n(Length), dTdz(Length), dndz(Length);
 
 };
 
@@ -106,7 +106,7 @@ class Sight{
 
 public:
   Time t;
-  Angle index_error, GHA, d, H_a, DH_refraction;
+  Angle index_error, GHA, d, H_a, DH_refraction, DH_dip;
   Length r, height_of_eye;
   Atmosphere atmosphere;
   Body body;
@@ -115,24 +115,25 @@ public:
   Sight();
   static double dH_refraction(double, void*);
   void get_coordinates(void);
+  void correct_for_dip(void);
   void correct_for_refraction(void);
 
 };
 
 
-double Atmosphere::T(double z){
+double Atmosphere::T(Length z){
 
   double x = 0.0;
-  //cout << "z = " << z << "\n";
+  //cout << "z = " << (z.value) << "\n";
 
-  if(z <= h[n_layers]){
+  if((z.value) <= h[n_layers]){
 
     unsigned int i;
     bool check = true;
     
     for(i=0, check=true; (i<n_layers) && check; i++){
-      if((z>=h[i]) && (z<h[i+1])){
-	x=t[i] +lambda[i]*(z-h[i]);
+      if(((z.value)>=h[i]) && ((z.value)<h[i+1])){
+	x=t[i] +lambda[i]*((z.value)-h[i]);
 	check=false;
       }
     }
@@ -150,18 +151,18 @@ double Atmosphere::T(double z){
   
 }
 
-double Atmosphere::dTdz(double z){
+double Atmosphere::dTdz(Length z){
 
   double x = 0.0;
-  //cout << "z = " << z << "\n";
+  //cout << "z = " << (z.value) << "\n";
 
-  if(z <= h[n_layers]){
+  if((z.value) <= h[n_layers]){
 
     unsigned int i;
     bool check = true;
     
     for(i=0, check=true; (i<n_layers) && check; i++){
-      if((z>=h[i]) && (z<h[i+1])){
+      if(((z.value)>=h[i]) && ((z.value)<h[i+1])){
 	x=lambda[i];
 	check=false;
       }
@@ -180,21 +181,21 @@ double Atmosphere::dTdz(double z){
 }
 
 
-double Atmosphere::n(double z){
+double Atmosphere::n(Length z){
 
   double x = 0.0;  
 
-  if(z <= h[n_layers]){
+  if((z.value) <= h[n_layers]){
 
     unsigned int i;
     bool check = true;
     
     for(i=0, x=0.0, check=true; (i<n_layers) && check; i++){
-      if((z>=h[i]) && (z<h[i+1])){
+      if(((z.value)>=h[i]) && ((z.value)<h[i+1])){
 	if(lambda[i] != 0.0){
-	  x-=B/lambda[i]*log((t[i]+lambda[i]*(z-h[i]))/t[i]);
+	  x-=B/lambda[i]*log((t[i]+lambda[i]*((z.value)-h[i]))/t[i]);
 	}else{
-	  x-=B*(z-h[i])/t[i];
+	  x-=B*((z.value)-h[i])/t[i];
 	}
 	check=false;
       }else{
@@ -245,7 +246,7 @@ int_0^z dz/(t_n+lambda_n*(z-h_n)) = log()
 
 }
 
-double Atmosphere::dndz(double z){
+double Atmosphere::dndz(Length z){
 
 
   return (-1.0/T(z)*dTdz(z)*(n(z)-1.0) - (n(z)-1.0)*B/T(z));
@@ -257,8 +258,11 @@ double Atmosphere::dndz(double z){
 double Sight::dH_refraction(double z, void* sight){
 
   Sight* a = (Sight*)sight;
+  Length z_Length, zero_Length;
+  z_Length.value = z;
+  zero_Length.value = 0.0;
   
-  return( -(((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n(0.0))*cos(((*a).H_a).value)*(((*a).atmosphere).dndz)(z)/(((*a).atmosphere).n)(z)/sqrt(gsl_pow_2(((((*a).atmosphere).earth_radius.value)+z)*(((*a).atmosphere).n)(z))-gsl_pow_2((((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n)(0.0)*cos(((*a).H_a).value))));
+  return( -(((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n(zero_Length))*cos(((*a).H_a).value)*(((*a).atmosphere).dndz)(z_Length)/(((*a).atmosphere).n)(z_Length)/sqrt(gsl_pow_2(((((*a).atmosphere).earth_radius.value)+z)*(((*a).atmosphere).n)(z_Length))-gsl_pow_2((((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n)(zero_Length)*cos(((*a).H_a).value))));
 
   
 }
@@ -355,6 +359,18 @@ Sight::Sight(void){
   atmosphere.set();
   
 }
+
+//this function simplifies the atmosphere between z=0 and z=eight of eye as a single layer, where within this layer the index of refracion is independent of z. Refine this in the future. 
+void Sight::correct_for_dip(void){
+
+  Length zero_Length;
+  zero_Length.value = 0.0;
+
+  DH_refraction.set("Dip correction",
+		    -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ));
+
+}
+
 
 void Sight::correct_for_refraction(void){
 

@@ -78,18 +78,20 @@ int main(int argc, char *argv[]){
     }
     outfile.close();
   */
-  Angle a, b;
-  a.set("First angle", 5.6 );
-  b.set("Second angle", 4.2);
-  (a/.1).print("Sum angle");
+  // Angle a, b;
+  // a.set("First angle", 5.6 );
+  // b.set("Second angle", 4.2);
+  // (a/.1).print("Sum angle");
 
 
-  sight.H_a.enter("Apparent altitude");
+  sight.height_of_eye.enter("height of eye");
+  sight.correct_for_dip();
+  
+  sight.H_a.enter("apparent altitude");
   sight.correct_for_refraction();
 
   // sight.t.enter("UTC time of sight");
   // sight.index_error.enter("index error");
-  // sight.height_of_eye.enter("height of eye");
   // sight.limb.enter("limb");
 
   

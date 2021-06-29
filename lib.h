@@ -73,7 +73,6 @@ class Atmosphere{
 
  public:
   Length earth_radius;
-  Angle *H_a;
   double A, B, P_dry_0, alpha, beta, gamma, T0;
   vector<double> h;
   void set(void);

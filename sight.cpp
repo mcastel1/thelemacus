@@ -1,4 +1,4 @@
- #include <iostream>
+#include <iostream>
 #include <cstdio>
 #include <cmath>
 #include <vector>
@@ -68,46 +68,51 @@ int main(int argc, char *argv[]){
 
   Sight sight;
 
-  
-  //cout << "\n\t\t" << atm.n(atm.h[4]);
-  // for(double z=0.0; z<38.0; z+=1){
-  //  cout << "\n" << z <<" " << atm.dndz(z) ;
-  //  }
+  /*
+  ofstream outfile;
+  outfile.open("data_test.dat");
+  outfile.precision(20);
+  for(double z=0.0; z<sight.atmosphere.h[sight.atmosphere.n_layers]-.1; z+=.01){
+    outfile << "\n" << z << " " << (sight.atmosphere.T(z+0.01)-sight.atmosphere.T(z))/0.01 << "\t" << sight.atmosphere.dTdz(z)
+	    << " " << (sight.atmosphere.n(z+0.01)-sight.atmosphere.n(z))/0.01 << "\t" << sight.atmosphere.dndz(z);
+  }
+      outfile.close();
+  */
 
   
   sight.H_a.enter("Apparent altitude");
   sight.correct_for_refraction();
  
-  sight.t.enter("UTC time of sight");
-  sight.index_error.enter("index error");
-  sight.height_of_eye.enter("height of eye");
-  sight.limb.enter("limb");
+    // sight.t.enter("UTC time of sight");
+    // sight.index_error.enter("index error");
+    // sight.height_of_eye.enter("height of eye");
+    // sight.limb.enter("limb");
 
   
-  sight.get_coordinates();
+    // sight.get_coordinates();
 
   
 
-  /*
-  catalog[0].type = find(body_type.begin(), body_type.end(), "sun");
-  catalog[0].name = find(body_name.begin(), body_name.end(), "sun");
+    /*
+      catalog[0].type = find(body_type.begin(), body_type.end(), "sun");
+      catalog[0].name = find(body_name.begin(), body_name.end(), "sun");
 
-  catalog[1].type = find(body_type.begin(), body_type.end(), "moon");
-  catalog[1].name = find(body_name.begin(), body_name.end(), "moon");
+      catalog[1].type = find(body_type.begin(), body_type.end(), "moon");
+      catalog[1].name = find(body_name.begin(), body_name.end(), "moon");
 
-  catalog[2].type = find(body_type.begin(), body_type.end(), "planet");
-  catalog[2].name = find(body_name.begin(), body_name.end(), "jupiter");
+      catalog[2].type = find(body_type.begin(), body_type.end(), "planet");
+      catalog[2].name = find(body_name.begin(), body_name.end(), "jupiter");
 
-  catalog[3].type = find(body_type.begin(), body_type.end(), "star");
-  catalog[3].name = find(body_name.begin(), body_name.end(), "vega");
+      catalog[3].type = find(body_type.begin(), body_type.end(), "star");
+      catalog[3].name = find(body_name.begin(), body_name.end(), "vega");
 
-  for(unsigned int i=0; i<catalog.size(); i++){
-    catalog[i].print();
-  }
-  */
-  //sight.body.enter();
+      for(unsigned int i=0; i<catalog.size(); i++){
+      catalog[i].print();
+      }
+    */
+    //sight.body.enter();
   
-  cout << "\n";
-  return(0);
+    cout << "\n";
+    return(0);
 	
 }

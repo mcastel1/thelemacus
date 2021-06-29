@@ -73,8 +73,9 @@ class Atmosphere{
 
  public:
   Length earth_radius;
+  unsigned int n_layers;
   double A, B, P_dry_0, alpha, beta, gamma, T0;
-  vector<double> h;
+  vector<double> h, lambda, t;
   void set(void);
   double T(double), n(double), dTdz(double), dndz(double);
 
@@ -84,14 +85,14 @@ class Sight{
 
 public:
   Time t;
-  Angle index_error, GHA, d, H_a, dH_refraction;
+  Angle index_error, GHA, d, H_a, DH_refraction;
   Length r, height_of_eye;
   Atmosphere atmosphere;
   Body body;
   Limb limb;
 
   Sight();
-  static double dH(double, void*);
+  static double dH_refraction(double, void*);
   void get_coordinates(void);
   void correct_for_refraction(void);
 
@@ -103,37 +104,23 @@ double Atmosphere::T(double z){
   double x = 0.0;
   //cout << "z = " << z << "\n";
 
-  if(z <= h[4]){
+  if(z <= h[n_layers]){
 
     unsigned int i;
     bool check = true;
     
-    for(i=0, check=true; (i<4) && check; i++){
-      if((z>=h[i]) && (z<h[i+1])){check=false;}
+    for(i=0, check=true; (i<n_layers) && check; i++){
+      if((z>=h[i]) && (z<h[i+1])){
+	x=t[i] +lambda[i]*(z-h[i]);
+	check=false;
+      }
     }
-    i--;
     //cout << "i = " << i << "\n";
   
-    switch(i){
-
-    case 0: x = T0+alpha*z;
-      break;
-      
-    case 1: x = T0+alpha*h[1];
-      break;
-      
-    case 2: x = T0+alpha*h[1] + beta*(z-h[2]);
-      break;
-      
-    case 3: x = T0+alpha*h[1] + beta*(h[3]-h[2]) + gamma*(z-h[3]);
-      break;
-    
-    }
-
   }else{
 
     cout << "Value of z is not valid!\n";
-    x=0;
+    x=-1.0;
 
   }
 
@@ -147,37 +134,22 @@ double Atmosphere::dTdz(double z){
   double x = 0.0;
   //cout << "z = " << z << "\n";
 
-  if(z <= h[4]){
+  if(z <= h[n_layers]){
 
     unsigned int i;
     bool check = true;
     
-    for(i=0, check=true; (i<4) && check; i++){
-      if((z>=h[i]) && (z<h[i+1])){check=false;}
+    for(i=0, check=true; (i<n_layers) && check; i++){
+      if((z>=h[i]) && (z<h[i+1])){
+	x=lambda[i];
+	check=false;
+      }
     }
-    i--;
-    //cout << "i = " << i << "\n";
   
-    switch(i){
-
-    case 0: x = alpha;
-      break;
-      
-    case 1: x = 0.0;
-      break;
-      
-    case 2: x = beta;
-      break;
-      
-    case 3: x = gamma;
-      break;
-    
-    }
-
   }else{
 
     cout << "Value of z is not valid!\n";
-    x=0.0;
+    x=-1.0;
 
   }
 
@@ -189,84 +161,81 @@ double Atmosphere::dTdz(double z){
 
 double Atmosphere::n(double z){
 
-  unsigned int i;
   double x = 0.0;  
-  bool check = true;
+
+  if(z <= h[n_layers]){
+
+    unsigned int i;
+    bool check = true;
     
-  for(i=0, check=true; (i<4) && check; i++){
-    if((z>=h[i]) && (z<h[i+1])){check=false;}
-  }
-  i--;
+    for(i=0, x=0.0, check=true; (i<n_layers) && check; i++){
+      if((z>=h[i]) && (z<h[i+1])){
+	if(lambda[i] != 0.0){
+	  x-=B/lambda[i]*log((t[i]+lambda[i]*(z-h[i]))/t[i]);
+	}else{
+	  x-=B*(z-h[i])/t[i];
+	}
+	check=false;
+      }else{
+	if(lambda[i] != 0.0){
+	  x-=B/lambda[i]*log((t[i]+lambda[i]*(h[i+1]-h[i]))/t[i]);
+	}else{
+	  x-=B*(h[i+1]-h[i])/t[i];
+	}
+      }
+    }
+    i--;
+    cout << "i = " << i << "\n";
+
+    /*
+int_0^z dz/(t_n+lambda_n*(z-h_n)) = log()
+     */
   
-  switch(i){
+  }else{
 
-  case 0: x = pow(1.0+alpha*z/T0, -B/alpha);
-    break;
-    
-  case 1: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(z-h[1])/(T0+alpha*h[1]));
-    break;
-    
-  case 2: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow(1.0+beta/(T0+alpha*h[1])*(z-h[2]), -B/beta);
-    break;
-    
-  case 3: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow((T0+alpha*h[1] + beta*(h[3]-h[2]))/(T0+alpha*h[1]), -B/beta)
-      * pow(1.0+gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]))*(z-h[3]), -B/gamma);
-    break;
-    
+    cout << "Value of z is not valid!\n";
+    x=-1.0;
+
   }
 
-  return (A*P_dry_0/T(z)*x/(1e6)+1.0);
+  
+  /* for(i=0, check=true; (i<4) && check; i++){ */
+  /*   if((z>=h[i]) && (z<h[i+1])){check=false;} */
+  /* } */
+  /* i--; */
+  
+  /* switch(i){ */
+
+  /* case 0: x = pow(1.0+alpha*z/T0, -B/alpha); */
+  /*   break; */
+    
+  /* case 1: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(z-h[1])/(T0+alpha*h[1])); */
+  /*   break; */
+    
+  /* case 2: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow(1.0+beta/(T0+alpha*h[1])*(z-h[2]), -B/beta); */
+  /*   break; */
+    
+  /* case 3: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow((T0+alpha*h[1] + beta*(h[3]-h[2]))/(T0+alpha*h[1]), -B/beta) */
+  /*     * pow(1.0+gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]))*(z-h[3]), -B/gamma); */
+  /*   break; */
+    
+  /* } */
+
+  return (A*P_dry_0/T(z)*exp(x)/(1e6)+1.0);
 
 
 }
 
 double Atmosphere::dndz(double z){
 
-  unsigned int i;
-  double x = 0.0;  
-  bool check = true;
-    
-  for(i=0, check=true; (i<4) && check; i++){
-    if((z>=h[i]) && (z<h[i+1])){check=false;}
-  }
-  i--;
 
-  /*
-x**n = exp(nlogx)
-d/dz(x**n) = x**n n/x x' = n x**(n-1)x'
-   */
-  
-  
-  switch(i){
-
-  case 0: x = -B/alpha*pow(1.0+alpha*z/T0, -B/alpha-1.0) * alpha/T0;
-    break;
-    
-  case 1: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(z-h[1])/(T0+alpha*h[1])) * (-B/(T0+alpha*h[1]));
-    break;
-    
-  case 2: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow(1.0+beta/(T0+alpha*h[1])*(z-h[2]), -B/beta-1.0) * (-B/beta) *beta/(T0+alpha*h[1]);
-    break;
-    
-  case 3: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow((T0+alpha*h[1] + beta*(h[3]-h[2]))/(T0+alpha*h[1]), -B/beta)
-      * pow(1.0+gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]))*(z-h[3]), -B/gamma-1.0) * (-B/gamma) * gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]));
-    break;
-    
-  }
-
-  /*
-n = N/10^6+1
-n' = N'/10^6 = -1/T T' N / 10^6 + A P/T x / 10^6 
-   */
-  
-
-  return (-1.0/T(z)*dTdz(z)*(n(z)-1.0) + A*P_dry_0/T(z)*x/(1e6));
+  return (-1.0/T(z)*dTdz(z)*(n(z)-1.0) - (n(z)-1.0)*B/T(z));
 
 
 }
 
 
-double Sight::dH(double z, void* sight){
+double Sight::dH_refraction(double z, void* sight){
 
   Sight* a = (Sight*)sight;
   
@@ -277,24 +246,47 @@ double Sight::dH(double z, void* sight){
 
 void Atmosphere::set(void){
 
+  unsigned int i;
+  double x;
+  bool check;
+  
+  cout << "Atmosphere model: US 1976.\n";
 
+  n_layers = 7;
+  A = 0.7933516713545163, B = 34.16*nm, P_dry_0 = 101325.0, alpha = -6.5*nm, beta = 2.8*nm, gamma = -2.8*nm, T0 = 288.15;
+  earth_radius.value = 6371.0/nm;
 
-    cout << "Atmosphere model: US 1976.\n";
-
-    A = 0.7933516713545163, B = 34.16*nm, P_dry_0 = 101325.0, alpha = -6.5*nm, beta = 2.8*nm, gamma = -2.8*nm, T0 = 288.15;
-    earth_radius.value = 6371.0/nm;
-
-    h.resize(4+1);
+  h.resize(n_layers+1);
+  lambda.resize(n_layers);
+  t.resize(n_layers);
     
-    h[0] = 0.0;
-    h[1] = 11.0/nm;
-    h[2] = 20.0/nm;
-    h[3] = 51.0/nm;
-    h[4] = 71.0/nm;
+  h[0] = 0.0;
+  h[1] = 11.0/nm;
+  h[2] = 20.0/nm;
+  h[3] = 32.0/nm;
+  h[4] = 47.0/nm;
+  h[5] = 51.0/nm;
+  h[6] = 71.0/nm;
+  h[7] = 84.8520/nm;
 
-    /* for(int i=0; i<4+1; i++){ */
-    /*   cout << "\t\t" << i << " " << h[i] << "\n"; */
-    /* } */
+  lambda[0] = -6.5*nm;
+  lambda[1] = 0.0*nm;
+  lambda[2] = 1.0*nm;
+  lambda[3] = 2.8*nm;
+  lambda[4] = 0.0*nm;
+  lambda[5] = -2.8*nm;
+  lambda[6] = -2.0*nm;
+
+
+  for(i=0, x=T0, check=true; (i<n_layers) && check; i++){
+    t[i] = x;
+    x+=lambda[i]*(h[i+1]-h[i]);
+  }
+  
+
+  /* for(int i=0; i<4+1; i++){ */
+  /*   cout << "\t\t" << i << " " << h[i] << "\n"; */
+  /* } */
 
   
 }
@@ -351,17 +343,17 @@ void Sight::correct_for_refraction(void){
   gsl_function F;
   double result, error;
 
-  F.function = &dH;
+  F.function = &dH_refraction;
   F.params = &(*this);
 
   
-  /* cout << "Value = " << dH(1.0, &(*this)); */
+  /* cout << "Value = " << dH_refraction(1.0, &(*this)); */
   /* cin >> result; */
 
   
 
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  dH_refraction.set("Altitude correction", -result);
+  DH_refraction.set("Altitude correction", -result);
   
   gsl_integration_workspace_free(w);
 

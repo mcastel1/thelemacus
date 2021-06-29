@@ -43,8 +43,29 @@ public:
   void enter(const char*);
   void set(const char*, double);
   void print(const char*);
+
+  Angle operator + (const Angle&), operator / (const double&);
   
 };
+
+Angle Angle::operator+ (const Angle& angle){
+  Angle temp;
+
+  temp.value = value +angle.value;
+  temp.normalize();
+
+  return temp;
+}
+
+Angle Angle::operator/ (const double& x){
+  Angle temp;
+
+  temp.value = value/x;
+  temp.normalize();
+
+  return temp;
+}
+
 
 class Limb{
 

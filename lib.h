@@ -27,7 +27,7 @@ class Length{
 
 class Time{
 
-public:  int Y, M, D, h, m;
+ public:  int Y, M, D, h, m;
   double s, mjd;
   bool check_Y(void), check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
   void enter(const char*);
@@ -39,7 +39,7 @@ public:  int Y, M, D, h, m;
 
 class Angle{
 
-public:
+ public:
  
   double value;
   void normalize(void);
@@ -137,7 +137,7 @@ class Atmosphere{
 
 class Sight{
 
-public:
+ public:
   Time t;
   Angle index_error, GHA, d, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
@@ -170,10 +170,11 @@ void Sight::compute_DH_parallax_and_limb(void){
 
   H_i = H_a + DH_refraction;
   H_i.print("intermediate altitude");
-  
-  if(limb.value == 'l'){H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));}
-  else{
 
+  switch(limb.value){
+    
+  case''u'':
+    
     int status;
     int iter = 0;
     double x = 0.0, x_lo = 0.0, x_hi = 2.0*M_PI;
@@ -211,6 +212,22 @@ void Sight::compute_DH_parallax_and_limb(void){
 
     H_o.value = (x_lo+x_hi)/2.0;
     gsl_root_fsolver_free (s);
+
+    break;
+
+  case ''l'':
+    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
+    break;
+
+  case ''c'':
+    H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
+    break;
+    
+  }
+    
+  if(limb.value == 'l'){}
+  else{
+
  
   }
 
@@ -303,8 +320,8 @@ double Atmosphere::n(Length z){
     }
 
     /*
-int_0^z dz/(t_n+lambda_n*(z-h_n)) = log()
-     */
+      int_0^z dz/(t_n+lambda_n*(z-h_n)) = log()
+    */
   
   }else{
 
@@ -474,7 +491,7 @@ void Sight::compute_DH_dip(void){
   zero_Length.value = 0.0;
 
   DH_dip.set("Dip correction",
-		    -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ));
+	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ));
 
 }
 
@@ -515,21 +532,21 @@ void Length::set(const char* name, double x){
 
 void Length::enter(const char* name){
 
-    cout << "Enter " << name << " [m]:\n";
+  cout << "Enter " << name << " [m]:\n";
 
-    do{
-      cin >> value;    
-    }while(value < 0.0);
-    //convert to nautical miles
-    value/=(1e3*nm);
+  do{
+    cin >> value;    
+  }while(value < 0.0);
+  //convert to nautical miles
+  value/=(1e3*nm);
     
-    print(name); 
+  print(name); 
   
 }
 
 void Length::print(const char* name){
 
-    cout << name << " is " << value << " nm.\n";
+  cout << name << " is " << value << " nm.\n";
  
 }
 
@@ -636,11 +653,11 @@ void Angle::enter(const char* name){
     cin >> s;
     
     if((s=="+") || (s=="-")){check = true;}
-     else{
-       cout << "Entered value is not valid! Try again.\n";
-       flush(cout);
-       check = false;
-     }
+    else{
+      cout << "Entered value is not valid! Try again.\n";
+      flush(cout);
+      check = false;
+    }
   }while(!check);
 
   
@@ -649,11 +666,11 @@ void Angle::enter(const char* name){
     cin >> ad;
     
     if((abs(ad) >= 0) && (abs(ad) < 360)){check = true;}
-     else{
-       cout << "Entered value is not valid! Try again.\n";
-       flush(cout);
-       check = false;
-     }
+    else{
+      cout << "Entered value is not valid! Try again.\n";
+      flush(cout);
+      check = false;
+    }
   }while(!check);
   
   do{
@@ -693,12 +710,12 @@ void Angle::print(const char* name){
 void Limb::enter(const char* name){
 
   bool check;
-  cout << "Enter " << name << " [u/l]:\n";
+  cout << "Enter " << name << " [u/l/c]:\n";
 
   do{
     cin >> value;
     
-    if((value=='u') || (value=='l')){check = true;}
+    if((value=='u') || (value=='l') || (value=='c'){check = true;}
      else{
        cout << "Entered value is not valid! Try again.\n";
        flush(cout);

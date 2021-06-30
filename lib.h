@@ -161,21 +161,22 @@ void Sight::compute_H_a(void){
 
   compute_DH_dip();
   H_a = H_s-index_error+DH_dip;
+  H_a.print("apparent altitude");
   
 }
 
-
+//here replace R -> R+height of eye for better precision
 void Sight::compute_DH_parallax_and_limb(void){
 
   H_i = H_a + DH_refraction;
   H_i.print("intermediate altitude");
   
-  if(limb.value == 'l'){H_o.value = H_i.value + asin(((atmosphere.earth_radius.value)+(height_of_eye.value)*cos(H_i.value)-(body.radius.value))/(r.value));}
+  if(limb.value == 'l'){H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));}
   else{
 
     int status;
     int iter = 0;
-    double x = 0.0, x_lo = 0.0, x_hi = 0.0;
+    double x = 0.0, x_lo = 0.0, x_hi = 2.0*M_PI;
     gsl_function F;
     const gsl_root_fsolver_type *T;
     gsl_root_fsolver *s;
@@ -185,7 +186,7 @@ void Sight::compute_DH_parallax_and_limb(void){
 
     T = gsl_root_fsolver_brent;
     s = gsl_root_fsolver_alloc (T);
-    gsl_root_fsolver_set(s, &F, 0.0, M_PI);
+    gsl_root_fsolver_set(s, &F, x_lo, x_hi);
  
     printf ("using %s method\n", gsl_root_fsolver_name (s));
     printf ("%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", "root", "err", "err(est)");
@@ -207,6 +208,8 @@ void Sight::compute_DH_parallax_and_limb(void){
     }
     while((status == GSL_CONTINUE) && (iter < max_iter));
 
+
+    H_o.value = (x_lo+x_hi)/2.0;
     gsl_root_fsolver_free (s);
  
   }

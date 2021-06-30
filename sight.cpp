@@ -86,15 +86,15 @@ int main(int argc, char *argv[]){
   sight.height_of_eye.enter("height of eye");
 
   sight.compute_H_a();
-  
   sight.compute_DH_refraction();
 
-  // sight.t.enter("UTC time of sight");
-  // sight.index_error.enter("index error");
-  // sight.limb.enter("limb");
+  sight.t.enter("UTC time of sight");
+  sight.limb.enter("limb");
+  sight.get_coordinates();
+
+
 
   
-  // sight.get_coordinates();
 
   
   

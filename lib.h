@@ -166,6 +166,9 @@ void Sight::compute_H_a(void){
 
 void Sight::compute_DH_parallax_and_limb(void){
 
+  Angle H = H_a + DH_refraction;
+  if(limb.value == 'l'){H_o.value = H.value + asin(((atmosphere.earth_radius.value)+(height_of_eye.value)*cos(H.value)-(body.radius.value))/(r.value));}
+  //else{H_o.value = H.value + asin((body.radius.value) / sqrt(gsl_pow_2((r.value))+gsl_pow_2(atmosphere.earth_radius.value)-2.0*(r.value)*(atmosphere.earth_radius.value)*sin())}
 
 }
 
@@ -435,7 +438,7 @@ void Sight::compute_DH_refraction(void){
   
 
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  DH_refraction.set("Altitude correction", result);
+  DH_refraction.set("Refraction correction", result);
   
   gsl_integration_workspace_free(w);
 

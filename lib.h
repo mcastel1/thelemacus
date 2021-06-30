@@ -82,10 +82,9 @@ class Limb{
 class Body{
 
  public:
-  Catalog* catalog;
   string name, type;
   Length radius;
-  void enter(void), print(void);
+  void enter(Catalog), print(void);
   
 };
 
@@ -349,12 +348,12 @@ void Body::print(void){
 
   cout << "Name: " << name << "\n";
   cout << "Type: " << type << "\n";
-  radius.print("apparent radius");
+  radius.print("radius");
   
 }
 
 
-void Body::enter(void){
+void Body::enter(Catalog catalog){
 
   unsigned int i;
   bool check;
@@ -362,9 +361,9 @@ void Body::enter(void){
   
   do{
     cout << "Enter name of body:";
-    cin >> name;
+    cin >> s;
 
-    for(i=0, check=true; (i<(*catalog).list.size()) && check; i++){if((((*catalog).list)[i]).name == s){check=false;}}
+    for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name == s){check=false;}}
     if(check){cout << "Body not found in catalog!\n";}
       
   }while(check);
@@ -372,7 +371,7 @@ void Body::enter(void){
   cout << "Body found in catalog.\n";
   
   i--;
-  (*this) = ((*catalog).list)[i];
+  (*this) = (catalog.list)[i];
   print();
   
 }

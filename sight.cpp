@@ -76,6 +76,8 @@ int main(int argc, char *argv[]){
   catalog.add("planet","jupiter",0.0/nm);
   catalog.add("star","vega",0.0/nm);
 
+  Body body;
+  body.enter(catalog);
 
 
 

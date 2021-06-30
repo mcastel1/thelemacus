@@ -6,6 +6,7 @@
 #define mjd_min 59215.0
 #define N 24.0
 #define epsrel (1e-12)
+#define max_iter (1e2)
 //one nautical mile in kilometers
 #define nm 1.852
 
@@ -138,14 +139,14 @@ class Sight{
 
 public:
   Time t;
-  Angle index_error, GHA, d, H_s, H_a, H_o, DH_refraction, DH_dip, DH_parallax_and_limb;
+  Angle index_error, GHA, d, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
   Body body;
   Limb limb;
 
   Sight();
-  static double dH_refraction(double, void*);
+  static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
   void get_coordinates(void);
   void compute_DH_dip(void);
   void compute_DH_refraction(void);
@@ -166,9 +167,49 @@ void Sight::compute_H_a(void){
 
 void Sight::compute_DH_parallax_and_limb(void){
 
-  Angle H = H_a + DH_refraction;
-  if(limb.value == 'l'){H_o.value = H.value + asin(((atmosphere.earth_radius.value)+(height_of_eye.value)*cos(H.value)-(body.radius.value))/(r.value));}
-  //else{H_o.value = H.value + asin((body.radius.value) / sqrt(gsl_pow_2((r.value))+gsl_pow_2(atmosphere.earth_radius.value)-2.0*(r.value)*(atmosphere.earth_radius.value)*sin())}
+  H_i = H_a + DH_refraction;
+  H_i.print("intermediate altitude");
+  
+  if(limb.value == 'l'){H_o.value = H_i.value + asin(((atmosphere.earth_radius.value)+(height_of_eye.value)*cos(H_i.value)-(body.radius.value))/(r.value));}
+  else{
+
+    int status;
+    int iter = 0;
+    double x = 0.0, x_lo = 0.0, x_hi = 0.0;
+    gsl_function F;
+    const gsl_root_fsolver_type *T;
+    gsl_root_fsolver *s;
+
+    F.function = &rhs_DH_parallax_and_limb;
+    F.params = &(*this);
+
+    T = gsl_root_fsolver_brent;
+    s = gsl_root_fsolver_alloc (T);
+    gsl_root_fsolver_set(s, &F, 0.0, M_PI);
+ 
+    printf ("using %s method\n", gsl_root_fsolver_name (s));
+    printf ("%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", "root", "err", "err(est)");
+
+    iter = 0;
+    do{
+      
+      iter++;
+      status = gsl_root_fsolver_iterate (s);
+      
+      x = gsl_root_fsolver_root(s);
+      x_lo = gsl_root_fsolver_x_lower(s);
+      x_hi = gsl_root_fsolver_x_upper(s);
+      status = gsl_root_test_interval (x_lo, x_hi, 0.0, epsrel);
+      if(status == GSL_SUCCESS){
+	printf ("Converged:\n");
+      }
+      printf ("%5d [%.7f, %.7f] %.7f %+.7f\n", iter, x_lo, x_hi, x, x_hi - x_lo);
+    }
+    while((status == GSL_CONTINUE) && (iter < max_iter));
+
+    gsl_root_fsolver_free (s);
+ 
+  }
 
 }
 
@@ -315,6 +356,19 @@ double Sight::dH_refraction(double z, void* sight){
   
   return( -(((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n(zero_Length))*cos(((*a).H_a).value)*(((*a).atmosphere).dndz)(z_Length)/(((*a).atmosphere).n)(z_Length)/sqrt(gsl_pow_2(((((*a).atmosphere).earth_radius.value)+z)*(((*a).atmosphere).n)(z_Length))-gsl_pow_2((((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n)(zero_Length)*cos(((*a).H_a).value))));
 
+  
+}
+
+
+double Sight::rhs_DH_parallax_and_limb(double h, void* sight){
+
+  Sight* a = (Sight*)sight;
+
+  //  (((*a).atmosphere).earth_radius.value)      R
+  //(((*a).body).radius.value)                   r
+  //(((*a).r).value)          d
+  
+  return( -(((*a).H_i).value) + h + asin( (((*a).body).radius.value)/sqrt(gsl_pow_2((((*a).r).value) )+gsl_pow_2((((*a).atmosphere).earth_radius.value))-2.0*(((*a).r).value) *(((*a).atmosphere).earth_radius.value)*sin(h)) ) - atan( ((((*a).atmosphere).earth_radius.value)*cos(h))/((((*a).r).value) -(((*a).atmosphere).earth_radius.value)*sin(h)) ) );
   
 }
 

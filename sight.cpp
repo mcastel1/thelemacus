@@ -31,7 +31,7 @@
 #include <gsl_math.h>
 #include <gsl_spline.h>
 #include <gsl_integration.h>
-// #include <gsl_roots.h>
+#include <gsl_roots.h>
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
 
@@ -92,8 +92,8 @@ int main(int argc, char *argv[]){
   sight.limb.enter("limb");
   sight.get_coordinates();
 
-
-
+  sight.compute_DH_parallax_and_limb();
+  sight.H_o.print("observed altitude");
   
 
   

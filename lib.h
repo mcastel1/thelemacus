@@ -171,11 +171,11 @@ void Sight::compute_DH_parallax_and_limb(void){
   H_i = H_a + DH_refraction;
   H_i.print("intermediate altitude");
 
-  switch(limb.value){
+  switch((limb.value)){
     
-  case''u'':
-    
-    int status;
+  case 'u':
+    {
+    int status = 0;
     int iter = 0;
     double x = 0.0, x_lo = 0.0, x_hi = 2.0*M_PI;
     gsl_function F;
@@ -214,22 +214,22 @@ void Sight::compute_DH_parallax_and_limb(void){
     gsl_root_fsolver_free (s);
 
     break;
-
-  case ''l'':
+    }
+  case 'l':
+    {
     H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
-    break;
 
-  case ''c'':
+    break;
+    }
+  case 'c':
+    {
     H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
-    break;
-    
-  }
-    
-  if(limb.value == 'l'){}
-  else{
 
- 
+    break;
+    }
   }
+    
+
 
 }
 
@@ -715,7 +715,7 @@ void Limb::enter(const char* name){
   do{
     cin >> value;
     
-    if((value=='u') || (value=='l') || (value=='c'){check = true;}
+    if((value=='u') || (value=='l') || (value=='c')){check = true;}
      else{
        cout << "Entered value is not valid! Try again.\n";
        flush(cout);

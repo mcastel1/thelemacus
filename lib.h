@@ -11,6 +11,8 @@
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
+class Catalog;
+
 class Length{
 
  public:
@@ -77,17 +79,39 @@ class Limb{
 };
 
 
-
 class Body{
 
  public:
-  vector<string>::iterator name, type;
+  Catalog* catalog;
+  string name, type;
   Length radius;
   void enter(void), print(void);
   
 };
 
 
+class Catalog{
+
+ public:
+  vector<Body> list;
+  void add(string, string, double);
+
+};
+
+void Catalog::add(string type, string name, double radius){
+
+  Body body;
+  
+  body.type = type;
+  body.name = name;
+  body.radius.value = radius;
+  
+  list.push_back(body);
+  
+  cout << "Added body to catalog:\n";
+  body.print();
+
+}
 
 
 class Atmosphere{
@@ -106,7 +130,7 @@ class Sight{
 
 public:
   Time t;
-  Angle index_error, GHA, d, H_a, DH_refraction, DH_dip;
+  Angle index_error, GHA, d, H_a, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
   Body body;
@@ -117,9 +141,14 @@ public:
   void get_coordinates(void);
   void correct_for_dip(void);
   void correct_for_refraction(void);
-
+  void correct_for_parallax_and_limb(void);
+  
 };
 
+void Sight::correct_for_parallax_and_limb(void){
+
+
+}
 
 double Atmosphere::T(Length z){
 
@@ -318,37 +347,36 @@ void Atmosphere::set(void){
 
 void Body::print(void){
 
-  cout << "Name: " << *name << "\n";
-  cout << "Type: " << *type << "\n";
-
-}
-
-/*
-void Body::enter(void){
-
-  bool check;
-  string s;
-
-
-
-  do{
-    cout << "Enter name of body:";
-    cin >> s;
-    name = find(body_name.begin(), body_name.end(), s);
-    
-    if(name!=body_name.end()){check = true;}
-    else{
-      cout << "Entered value is not valid! Try again.\n";
-      flush(cout);
-      check = false;
-    }
-  }while(!check);
-
-  print();
-
+  cout << "Name: " << name << "\n";
+  cout << "Type: " << type << "\n";
+  radius.print("apparent radius");
   
 }
-*/
+
+
+void Body::enter(void){
+
+  unsigned int i;
+  bool check;
+  string s;
+  
+  do{
+    cout << "Enter name of body:";
+    cin >> name;
+
+    for(i=0, check=true; (i<(*catalog).list.size()) && check; i++){if((((*catalog).list)[i]).name == s){check=false;}}
+    if(check){cout << "Body not found in catalog!\n";}
+      
+  }while(check);
+
+  cout << "Body found in catalog.\n";
+  
+  i--;
+  (*this) = ((*catalog).list)[i];
+  print();
+  
+}
+
 
 
 

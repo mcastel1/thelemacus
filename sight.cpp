@@ -38,6 +38,8 @@
 
 using namespace std;
 
+
+
 #include "lib.h"
 
 
@@ -66,7 +68,19 @@ int main(int argc, char *argv[]){
     }
   */
 
+  Catalog catalog;
   Sight sight;
+
+  catalog.add("sun","sun",695700.0/nm);
+  catalog.add("moon","moon",1737.4/nm);
+  catalog.add("planet","jupiter",0.0/nm);
+  catalog.add("star","vega",0.0/nm);
+
+
+
+
+
+
 
   /*
     ofstream outfile;
@@ -98,24 +112,8 @@ int main(int argc, char *argv[]){
   // sight.get_coordinates();
 
   
-
-  /*
-    catalog[0].type = find(body_type.begin(), body_type.end(), "sun");
-    catalog[0].name = find(body_name.begin(), body_name.end(), "sun");
-
-    catalog[1].type = find(body_type.begin(), body_type.end(), "moon");
-    catalog[1].name = find(body_name.begin(), body_name.end(), "moon");
-
-    catalog[2].type = find(body_type.begin(), body_type.end(), "planet");
-    catalog[2].name = find(body_name.begin(), body_name.end(), "jupiter");
-
-    catalog[3].type = find(body_type.begin(), body_type.end(), "star");
-    catalog[3].name = find(body_name.begin(), body_name.end(), "vega");
-
-    for(unsigned int i=0; i<catalog.size(); i++){
-    catalog[i].print();
-    }
-  */
+  
+  
   //sight.body.enter();
   
   cout << "\n";

@@ -153,6 +153,7 @@ class Sight{
   void compute_DH_parallax_and_limb(void);
 
   void compute_H_a(void);
+  void compute_H_o(void);
   
 };
 
@@ -162,6 +163,16 @@ void Sight::compute_H_a(void){
   compute_DH_dip();
   H_a = H_s-index_error+DH_dip;
   H_a.print("apparent altitude");
+  
+}
+
+
+void Sight::compute_H_o(void){
+
+  compute_DH_refraction();
+  compute_DH_parallax_and_limb();
+  H_o = H_a + DH_refraction + DH_parallax_and_limb;
+  H_o.print("observed altitude");
   
 }
 
@@ -210,27 +221,28 @@ void Sight::compute_DH_parallax_and_limb(void){
     while((status == GSL_CONTINUE) && (iter < max_iter));
 
 
-    H_o.value = (x_lo+x_hi)/2.0;
+    //H_o.value = (x_lo+x_hi)/2.0;
+    DH_parallax_and_limb.value = (x_lo+x_hi)/2.0 - (H_i.value);
     gsl_root_fsolver_free (s);
 
     break;
     }
   case 'l':
     {
-    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
-
+      //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
+      DH_parallax_and_limb.value = asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
     break;
     }
   case 'c':
     {
-    H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
-
+      //H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
+      DH_parallax_and_limb.value = asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
     break;
     }
   }
-    
 
-
+  DH_parallax_and_limb.print("parallax and limb correction");
+   
 }
 
 double Atmosphere::T(Length z){

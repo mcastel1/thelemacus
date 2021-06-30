@@ -46,7 +46,7 @@ public:
   void set(const char*, double);
   void print(const char*);
 
-  Angle operator + (const Angle&), operator / (const double&);
+  Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
   
 };
 
@@ -54,6 +54,15 @@ Angle Angle::operator+ (const Angle& angle){
   Angle temp;
 
   temp.value = value +angle.value;
+  temp.normalize();
+
+  return temp;
+}
+
+Angle Angle::operator- (const Angle& angle){
+  Angle temp;
+
+  temp.value = value -angle.value;
   temp.normalize();
 
   return temp;
@@ -129,7 +138,7 @@ class Sight{
 
 public:
   Time t;
-  Angle index_error, GHA, d, H_a, DH_refraction, DH_dip, DH_parallax_and_limb;
+  Angle index_error, GHA, d, H_s, H_a, H_o, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
   Body body;
@@ -138,13 +147,24 @@ public:
   Sight();
   static double dH_refraction(double, void*);
   void get_coordinates(void);
-  void correct_for_dip(void);
-  void correct_for_refraction(void);
-  void correct_for_parallax_and_limb(void);
+  void compute_DH_dip(void);
+  void compute_DH_refraction(void);
+  void compute_DH_parallax_and_limb(void);
+
+  void compute_H_a(void);
   
 };
 
-void Sight::correct_for_parallax_and_limb(void){
+
+void Sight::compute_H_a(void){
+
+  compute_DH_dip();
+  H_a = H_s-index_error+DH_dip;
+  
+}
+
+
+void Sight::compute_DH_parallax_and_limb(void){
 
 
 }
@@ -388,18 +408,18 @@ Sight::Sight(void){
 }
 
 //this function simplifies the atmosphere between z=0 and z=eight of eye as a single layer, where within this layer the index of refracion is independent of z. Refine this in the future. 
-void Sight::correct_for_dip(void){
+void Sight::compute_DH_dip(void){
 
   Length zero_Length;
   zero_Length.value = 0.0;
 
-  DH_refraction.set("Dip correction",
+  DH_dip.set("Dip correction",
 		    -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ));
 
 }
 
 
-void Sight::correct_for_refraction(void){
+void Sight::compute_DH_refraction(void){
 
   gsl_integration_workspace * w = gsl_integration_workspace_alloc (1000);
   gsl_function F;

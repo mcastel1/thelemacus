@@ -76,35 +76,18 @@ int main(int argc, char *argv[]){
   catalog.add("planet","jupiter",0.0/nm);
   catalog.add("star","vega",0.0/nm);
 
-  Body body;
-  body.enter(catalog);
+ 
+  sight.body.enter(catalog);
 
 
 
-
-
-
-  /*
-    ofstream outfile;
-    outfile.open("data_test.dat");
-    outfile.precision(20);
-    for(double z=0.0; z<sight.atmosphere.h[sight.atmosphere.n_layers]-.1; z+=.01){
-    outfile << "\n" << z << " " << (sight.atmosphere.T(z+0.01)-sight.atmosphere.T(z))/0.01 << "\t" << sight.atmosphere.dTdz(z)
-    << " " << (sight.atmosphere.n(z+0.01)-sight.atmosphere.n(z))/0.01 << "\t" << sight.atmosphere.dndz(z);
-    }
-    outfile.close();
-  */
-  // Angle a, b;
-  // a.set("First angle", 5.6 );
-  // b.set("Second angle", 4.2);
-  // (a/.1).print("Sum angle");
-
-
+  sight.H_s.enter("sextant altitude");
+  sight.index_error.enter("index error");
   sight.height_of_eye.enter("height of eye");
-  sight.correct_for_dip();
+
+  sight.compute_H_a();
   
-  sight.H_a.enter("apparent altitude");
-  sight.correct_for_refraction();
+  sight.compute_DH_refraction();
 
   // sight.t.enter("UTC time of sight");
   // sight.index_error.enter("index error");
@@ -116,7 +99,6 @@ int main(int argc, char *argv[]){
   
   
   
-  //sight.body.enter();
   
   cout << "\n";
   return(0);

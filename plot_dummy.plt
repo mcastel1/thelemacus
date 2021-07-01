@@ -132,38 +132,6 @@ plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlin
 
 
 
-#GPS position
-#set key bottom left
-lambda0 = -(2.0 + 24./60. + 26.53/60.**2.)
-phi0 = 48.0 + 51./60. + 19.06/60.**2.
-set object circle at xe(lambda0),ye(phi0) size dx lw 3 fillcolor rgb 'black' 
-
-
-
-
-#-----------Sun raz blanchard
-#set key at xe(lambda_min), ye(phi_max)
-#set key top right
-#lambdaAP = (1.0 + 15.3/60.)
-#phiAP = 50.0
-#l = 29.1 * dx
-#Z = 254.9  
-#replot [-60.*180.*dx:60.*180.*dx] xe(lambdaAP)+l*sin(Z*k)-t*cos(Z*k), ye(phiAP)+l*cos(Z*k)+t*sin(Z*k) ti "Sun"  linecolor rgb "red"
-
-#plot circle of equal altitude 
-#set key bottom right
-#cH1 = (90.0-(41. + 46.5/60.))*k
-#d1 = (22. + 36.9/60.)*k
-#GHA1 = (53. + 15.3/60.)*k
-#replot [0.:2.*pi] xe(K*Lambda(t, d1, GHA1, cH1)), ye(K*Phi(t, d1, GHA1, cH1)) ti "Circle"  linecolor rgb "blue"
-
-#GPS position
-#set key bottom left
-#lambda0 = (1.+43.8066/60.)
-#phi0 = 49.0 + 50.9459/60.
-#pl [0:2.0*pi] xe(lambda0)+dx*cos(t), ye(phi0)+dx*sin(t) ti "GPS" lw 3 linecolor rgb "green"
-#set object circle at xe(lambda0),ye(phi0) size 1e3*dx fillcolor rgb 'yellow' 
-
 dummy_line
 
 #unset parametric
@@ -175,7 +143,7 @@ while(1){
 
 	if(GPVAL_DATA_X_MAX!=x_max_old){
 
-	print "Recalculating tics ... ";
+#	print "Recalculating tics ... ";
 
 	lambda_min = lambda_inv(GPVAL_DATA_X_MAX);
 	lambda_max = lambda_inv(GPVAL_DATA_X_MIN);
@@ -186,14 +154,14 @@ while(1){
 	phi_span = phi_max - phi_min;
 	lambda_span = lambda_max - lambda_min;
 	
-	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
-	print "phi in [" , phi_min , " , " , phi_max , "]";
+#	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
+#	print "phi in [" , phi_min , " , " , phi_max , "]";
 
-	print "Determining dlambda ...";
+#	print "Determining dlambda ...";
 	
 	dlambda=1.0;
 	while(N*dlambda<lambda_span){
-		print dlambda;
+#		print dlambda;
 		if(dlambda == 1.0){dlambda = dlambda + 4.0;}
 		else{dlambda = dlambda + 5.0;}
 	}
@@ -201,14 +169,14 @@ while(1){
 		   if(dlambda == 5.0){dlambda = dlambda - 4.0;}
 		   else{dlambda = dlambda - 5.0;}
 	}
-	print "... dlambda = " , dlambda;
+#	print "... dlambda = " , dlambda;
 
-	print "Determining dphi ...";
-	print "phi_span = ", phi_span;
+#	print "Determining dphi ...";
+#	print "phi_span = ", phi_span;
 
 	dphi=1.0;
 	while(N*dphi<phi_span){
-		print dphi;
+#		print dphi;
 		if(dphi == 1.0){dphi = dphi + 4.0;}
 		else{dphi = dphi + 5.0;}
 	}
@@ -216,11 +184,11 @@ while(1){
 		   if(dphi == 5.0){dphi = dphi - 4.0;}
 		   else{dphi = dphi - 5.0;}
 	}
-	print "... dphi = " , dphi;
+#	print "... dphi = " , dphi;
 
 
 
-	print "Setting xtics at dlambda intervals:";
+#	print "Setting xtics at dlambda intervals:";
 
 	set format x "";     
 	set xtics ();
@@ -229,7 +197,7 @@ while(1){
 		set xtics add (label_deg(lambda) xe(lambda));
 
 		
-		print lambda;
+#		print lambda;
 		lambda = lambda + dlambda;
 	}
 
@@ -242,14 +210,14 @@ while(1){
 	#}
 
 
-	print "Setting ytics at dphi intervals:";
+#	print "Setting ytics at dphi intervals:";
 	
 	set format y "";     
 	set ytics ();
 	phi = (int(phi_min/dphi))*dphi;
 	while(phi<phi_max){
 		set ytics add (label_deg(phi) ye(phi));
-		print phi;
+#		print phi;
 		phi = phi + dphi;
 	}
 

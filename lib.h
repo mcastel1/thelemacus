@@ -33,6 +33,7 @@ class Time{
   void enter(const char*);
   void print(const char*);
   void to_mjd(void);
+  stringstream to_string(void);
   
 };
 
@@ -138,7 +139,7 @@ class Atmosphere{
 class Sight{
 
  public:
-  Time t;
+  Time time;
   Angle index_error, GHA, d, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
@@ -588,8 +589,8 @@ void Sight::get_coordinates(void){
   /* cout << "\ndiff = " << (t.mjd)-mjd_min; */
   /* cin >>l ; */
 
-  l_min = (unsigned int)(24.0*((t.mjd)-mjd_min))-(unsigned int)(N/2.0);
-  l_max = (unsigned int)(24.0*((t.mjd)-mjd_min))+(unsigned int)(N/2.0);
+  l_min = (unsigned int)(24.0*((time.mjd)-mjd_min))-(unsigned int)(N/2.0);
+  l_max = (unsigned int)(24.0*((time.mjd)-mjd_min))+(unsigned int)(N/2.0);
 
   /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
   
@@ -638,9 +639,9 @@ void Sight::get_coordinates(void){
   }
 
   //add minus sign because in JPL convention longitude is positive when it is W
-  GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
-  d.set("d", gsl_spline_eval(interpolation_d, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
-  r.set("r", gsl_spline_eval(interpolation_r, (t.mjd)-mjd_min-((double)l_min)/24.0, acc));
+  GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+  d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+  r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
   
 }
 
@@ -815,20 +816,44 @@ bool Time::check_s(void){
 
 };
 
+stringstream Time::to_string(void){
+
+  stringstream output;
+  
+  output << Y << " ";
+  if(M<10){output << 0;}
+  output << M << " ";
+  if(D<10){output << 0;}
+  output << D << " ";
+  if(h<10){output << 0;}
+  output << h << "-";
+  if(m<10){output << 0;}
+  output << m << "-";
+  if(s<10.0){output << 0;}
+  output << s << " UTC";
+  //output << " (" << mjd << " MJD)\n";
+
+  return output;
+  
+}
+
+
 void Time::print(const char* name){
 
-  cout << name << " is " << Y << " ";
-  if(M<10){cout << 0;}
-  cout << M << " ";
-  if(D<10){cout << 0;}
-  cout << D << " ";
-  if(h<10){cout << 0;}
-  cout << h << "-";
-  if(m<10){cout << 0;}
-  cout << m << "-";
-  if(s<10.0){cout << 0;}
-  cout << s << " (" << mjd << " MJD)\n";
-  flush(cout);
+  cout << name << " is " << to_string().str().c_str() << "\n";
+
+  /*      << Y << " "; */
+  /* if(M<10){cout << 0;} */
+  /* cout << M << " "; */
+  /* if(D<10){cout << 0;} */
+  /* cout << D << " "; */
+  /* if(h<10){cout << 0;} */
+  /* cout << h << "-"; */
+  /* if(m<10){cout << 0;} */
+  /* cout << m << "-"; */
+  /* if(s<10.0){cout << 0;} */
+  /* cout << s */
+  /*   << " (" << mjd << " MJD)\n"; */
 
 };
 

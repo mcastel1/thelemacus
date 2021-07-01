@@ -34,7 +34,7 @@ set multiplot
 
 set size ratio -1
 set ticscale 3,1
-set samples 1e3
+set samples 1e4
 #increments in degrees
 increment_phi = 20.0;
 increment_lambda = 60.0;

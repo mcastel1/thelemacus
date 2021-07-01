@@ -123,7 +123,7 @@ label_min(x) = sprintf("%.f'",x)
 
 
 #coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every 1e2 w d linecolor rgb "gray" noti
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every 1e1 w d linecolor rgb "gray" noti
 
 
 

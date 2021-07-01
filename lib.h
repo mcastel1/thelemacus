@@ -136,6 +136,46 @@ class Atmosphere{
 
 };
 
+class Answer{
+
+ public:
+  char value;
+  void enter(const char*);
+  void print(const char*);
+
+};
+
+void Answer::enter(const char* name){
+
+  bool check;
+  
+  cout << "Enter " << name << " [y/n]:\n";
+
+  do{
+
+    cin >> value;
+    
+    if((value=='y') || (value=='n')){
+      check = true;
+    }
+    else{
+      cout << "Entered value is not valid! Try again.\n";
+      flush(cout);
+      check = false;
+    }
+  }while(!check);
+
+  print(name);
+
+}
+
+void Answer::print(const char* name){
+
+  cout << name << " is " << value << "\n";
+  
+}
+
+
 class Sight{
 
  public:
@@ -145,6 +185,7 @@ class Sight{
   Atmosphere atmosphere;
   Body body;
   Limb limb;
+  Answer artificial_horizon;
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -161,9 +202,15 @@ class Sight{
 
 void Sight::compute_H_a(void){
 
-  compute_DH_dip();
-  H_a = H_s-index_error+DH_dip;
-  H_a.print("apparent altitude");
+  if(artificial_horizon.value == 'y'){
+    H_a = (H_s-index_error)/2.0;
+    H_a.print("apparent altitude");
+
+  }else{
+    compute_DH_dip();
+    H_a = H_s-index_error+DH_dip;
+    H_a.print("apparent altitude");
+  }
   
 }
 
@@ -526,7 +573,7 @@ void Sight::compute_DH_refraction(void){
   
 
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  DH_refraction.set("Refraction correction", result);
+  DH_refraction.set("refraction correction", result);
   
   gsl_integration_workspace_free(w);
 

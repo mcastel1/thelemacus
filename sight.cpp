@@ -95,8 +95,11 @@ int main(int argc, char *argv[]){
 
   sight.H_s.enter("sextant altitude");
   sight.index_error.enter("index error");
-  sight.height_of_eye.enter("height of eye");
+  sight.artificial_horizon.enter("artificial horizon");
 
+  if(sight.artificial_horizon.value == 'n'){
+    sight.height_of_eye.enter("height of eye");
+  }
   sight.compute_H_a();
 
   sight.time.enter("UTC time of sight");
@@ -106,7 +109,7 @@ int main(int argc, char *argv[]){
   sight.compute_H_o();
 
   command << "rm plot.plt; sed 's/dummy_line/"
-    << "replot [0.:2.*pi] xe(K*Lambda(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << ")), ye(K*Phi(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << ")) w d ti \"" << sight.body.name << " " << sight.time.to_string().str().c_str() << "\""  
+    << "replot [0.:2.*pi] xe(K*Lambda(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << ")), ye(K*Phi(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << ")) w l ti \"" << sight.body.name << " " << sight.time.to_string().str().c_str() << "\""  
 	  << "/g' plot_dummy.plt >> plot.plt; gnuplot 'plot.plt'";
   
   system(command.str().c_str());

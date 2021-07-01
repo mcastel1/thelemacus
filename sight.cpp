@@ -70,6 +70,7 @@ int main(int argc, char *argv[]){
 
   Catalog catalog;
   Sight sight;
+  stringstream command, plot;
 
   catalog.add("sun","sun",695700.0/nm);
   catalog.add("moon","moon",1737.4/nm);
@@ -93,8 +94,12 @@ int main(int argc, char *argv[]){
 
   sight.compute_H_o();
 
+  command << "sed 's/dummy_line/"
+	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << ")), ye(K*Phi(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << "))"
+	  << "/g' plot_dummy.plt";
   
-  
+  system(command.str().c_str());
+
   
   
   cout << "\n";

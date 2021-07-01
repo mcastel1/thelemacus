@@ -177,6 +177,7 @@ void Sight::compute_H_o(void){
 }
 
 //here replace R -> R+height of eye for better precision
+//check that for r = 0 the upper and lower limb give the same result
 void Sight::compute_DH_parallax_and_limb(void){
 
   H_i = H_a + DH_refraction;

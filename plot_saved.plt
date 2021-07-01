@@ -34,7 +34,7 @@ set multiplot
 
 set size ratio -1
 set ticscale 3,1
-set samples 1e3
+#set samples 1e3
 #increments in degrees
 increment_phi = 20.0;
 increment_lambda = 60.0;
@@ -164,7 +164,59 @@ set object circle at xe(lambda0),ye(phi0) size dx lw 3 fillcolor rgb 'black'
 #pl [0:2.0*pi] xe(lambda0)+dx*cos(t), ye(phi0)+dx*sin(t) ti "GPS" lw 3 linecolor rgb "green"
 #set object circle at xe(lambda0),ye(phi0) size 1e3*dx fillcolor rgb 'yellow' 
 
-dummy_line
+#------------Sun raz blanchard
+
+#-----------Sun
+#plot circle of equal altitude 
+set key top right
+cH2 = (90.0-(54. + 12.4/60.))*k
+d2 = (13. + 21.5/60.)*k
+GHA2 = (3. + 27.8/60.)*k
+#------------Sun
+
+
+#-----------Moon
+#plot circle of equal altitude 
+set key bottom left
+cH3 = (90.0-(43. + 17.7/60.))*k
+d3 = (2. + 48.4/60.)*k
+GHA3 = (7. + 1.3/60.)*k
+#------------Moon
+
+
+#-----------Arcturus almanac
+#plot circle of equal altitude 
+#set key bottom right
+cH4 = (90.0-(58. + 7.5/60.))*k
+d4 = (19. + 4.3/60.)*k
+GHA4 = (343. + 20.7/60.)*k
+#------------Arcturus almanac
+
+
+
+#-----------Arcturus jpl
+#plot circle of equal altitude 
+#set key bottom right
+cH5 = (90.0-(58. + 7.5/60.))*k
+d5 = (19. + 4.86388344533168/60.)*k
+GHA5 = (343. + 20.65204696889282/60.)*k
+#------------Arcturus jpl
+
+#-----------Moon June 21 2021 21-49-28.99 UTC 
+#plot circle of equal altitude 
+set key bottom left
+cH6 = (90.0-(24. + 12.6/60.))*k
+d6 = -(16. + 10.1/60.)*k
+GHA6 = (8. + 57.8/60.)*k
+#------------Moon June 21 2021 21-49-28.99 UTC 
+
+
+replot [0.:2.*pi] xe(K*Lambda(t, d2, GHA2, cH2)), ye(K*Phi(t, d2, GHA2, cH2)) ti "Sun"  linecolor rgb "pink",\
+      [0.:2.*pi] xe(K*Lambda(t, d4, GHA4, cH4)), ye(K*Phi(t, d4, GHA4, cH4)) ti "Arcturus"  linecolor rgb "orange",\
+       [0.:2.*pi] xe(K*Lambda(t, d3, GHA3, cH3)), ye(K*Phi(t, d3, GHA3, cH3)) ti "Moon"  linecolor rgb "blue",\
+       [0.:2.*pi] xe(K*Lambda(t, d5, GHA5, cH5)), ye(K*Phi(t, d5, GHA5, cH5)) ti "Arcturus JPL"  linecolor rgb "purple",\
+       [0.:2.*pi] xe(K*Lambda(t, d6, GHA6, cH6)), ye(K*Phi(t, d6, GHA6, cH6)) ti "Moon June 21 2021 21-49-28.99 UTC"  linecolor rgb "#5FEA0"
+
 
 #unset parametric
 unset multiplot

@@ -95,6 +95,7 @@ class Body{
  public:
   string name, type;
   Length radius;
+  Angle RA, d; 
   void enter(Catalog), print(void);
   
 };
@@ -104,9 +105,66 @@ class Catalog{
 
  public:
   vector<Body> list;
+  Catalog(const char*);
   void add(string, string, double);
+  void print(void);
 
 };
+
+Catalog::Catalog(const char* filename){
+
+  ifstream infile;
+  string line;
+  stringstream line_ins;
+  Body temp;
+
+  infile.open(filename);
+  if(!infile){
+    cout << "Error opening file " << filename << endl;
+    flush(cout);
+  }else{
+
+    getline(infile, line);
+
+    line.clear();
+    line_ins.clear();
+    getline(infile, line);
+
+    while(!infile.eof()){
+
+      line_ins << line;
+      line_ins >>  temp.type >> temp.name >> temp.radius.value >> temp.RA.value >> temp.d.value;
+      temp.RA.normalize();
+      temp.d.normalize();
+      
+      list.push_back(temp);
+      /* cout << line << " - " << type << " " << name << " " << r.value << "\n"; */
+
+      line.clear();
+      line_ins.clear();
+      getline(infile, line);
+
+    }
+  
+  
+    infile.close();
+
+  }
+
+}
+
+void Catalog::print(void){
+
+  unsigned int i;
+  for(i=0; i<list.size(); i++){
+    
+    cout << "Body #" << i << "\n";
+    list[i].print();
+
+  }
+
+
+}
 
 void Catalog::add(string type, string name, double radius){
 
@@ -518,10 +576,15 @@ void Atmosphere::set(void){
 
 void Body::print(void){
 
-  cout << "Name: " << name << "\n";
-  cout << "Type: " << type << "\n";
-  radius.print("radius");
-  
+  cout << "Type: " << type << "\nName: " << name << "\n";
+  if((radius.value) != 0.0){
+    radius.print("Radius");
+  }
+  if(type == "star"){
+    RA.print("Right ascension");
+    d.print("Declination");
+  }
+ 
 }
 
 

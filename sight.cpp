@@ -35,6 +35,10 @@
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
 
+/*notes
+- how do the jpl data files deal with the potential insertion of leap seconds in the future?
+
+ */
 
 using namespace std;
 
@@ -69,15 +73,17 @@ int main(int argc, char *argv[]){
   */
 
   
-  Catalog catalog;
+  Catalog catalog("data/catalog.txt");
+  catalog.print();
+  
   Sight sight;
 
     
-  catalog.add("sun","sun",695700.0/nm);
-  catalog.add("moon","moon",1737.4/nm);
-  catalog.add("planet","jupiter",69911.0/nm);
-  catalog.add("star","vega",0.0/nm);
-  catalog.add("star","arcturus",0.0/nm);
+  // catalog.add("sun","sun",695700.0/nm);
+  // catalog.add("moon","moon",1737.4/nm);
+  // catalog.add("planet","jupiter",69911.0/nm);
+  // catalog.add("star","vega",0.0/nm);
+  // catalog.add("star","arcturus",0.0/nm);
 
  
   sight.body.enter(catalog);

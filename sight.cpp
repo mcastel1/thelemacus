@@ -71,16 +71,6 @@ int main(int argc, char *argv[]){
   
   Catalog catalog;
   Sight sight;
-  stringstream command, plot;
-
-  // cout << "This is an apostrophe: \047\n";
-  
-  command.precision(my_precision);
-
-  
-
-  // command << "echo \33";
-  // system(command.str().c_str());
 
     
   catalog.add("sun","sun",695700.0/nm);
@@ -91,8 +81,6 @@ int main(int argc, char *argv[]){
 
  
   sight.body.enter(catalog);
-
-
 
   sight.H_s.enter("sextant altitude");
   sight.index_error.enter("index error");
@@ -109,12 +97,7 @@ int main(int argc, char *argv[]){
 
   sight.compute_H_o();
 
-  command << "rm plot.plt; sed 's/dummy_line/"
-    << "replot [0.:2.*pi] xe(K*Lambda(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << ")), ye(K*Phi(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - sight.H_o.value << ")) w l ti \"" << sight.body.name << " " << sight.time.to_string().str().c_str() << "\""  
-	  << "/g' plot_dummy.plt >> plot.plt; gnuplot 'plot.plt'";
-  
-  system(command.str().c_str());
-
+  sight.plot();
   
   
   cout << "\n";

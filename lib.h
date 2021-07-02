@@ -186,6 +186,8 @@ class Sight{
   Body body;
   Limb limb;
   Answer artificial_horizon;
+  stringstream command;
+
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -196,9 +198,21 @@ class Sight{
 
   void compute_H_a(void);
   void compute_H_o(void);
+
+  void plot(void);
   
 };
 
+void Sight::plot(void){
+
+  command << "rm plot.plt; sed 's/dummy_line/"
+	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")), ye(K*Phi(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")) w l ti \"" << body.name << " " << time.to_string().str().c_str() << "\""  
+	  << "/g' plot_dummy.plt >> plot.plt; gnuplot 'plot.plt'";
+  
+  system(command.str().c_str());
+
+
+}
 
 void Sight::compute_H_a(void){
 
@@ -540,6 +554,8 @@ void Body::enter(Catalog catalog){
 
 
 Sight::Sight(void){
+
+  command.precision(my_precision);
 
   atmosphere.set();
   

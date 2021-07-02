@@ -34,7 +34,7 @@ set multiplot
 
 set size ratio -1
 set ticscale 3,1
-set samples 1e3
+#set samples 1e3
 #increments in degrees
 increment_phi = 20.0;
 increment_lambda = 60.0;
@@ -217,7 +217,6 @@ replot [0.:2.*pi] xe(K*Lambda(t, d2, GHA2, cH2)), ye(K*Phi(t, d2, GHA2, cH2)) ti
        [0.:2.*pi] xe(K*Lambda(t, d5, GHA5, cH5)), ye(K*Phi(t, d5, GHA5, cH5)) ti "Arcturus JPL"  linecolor rgb "purple",\
        [0.:2.*pi] xe(K*Lambda(t, d6, GHA6, cH6)), ye(K*Phi(t, d6, GHA6, cH6)) ti "Moon June 21 2021 21-49-28.99 UTC"  linecolor rgb "#5FEA0"
 
-replot [0.:2.*pi] xe(K*Lambda(t, 0.2331688508680168, 0.06032763526726793, 0.6247101067361519)), ye(K*Phi(t, 0.2331688508680168, 0.06032763526726793, 0.6247101067361519)) w l ti "sun 2021 04 25 12-11-46.91 UTC"
 
 
 #unset parametric

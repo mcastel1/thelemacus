@@ -624,7 +624,7 @@ void Sight::get_coordinates(void){
     *interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
 
 
-  filename << "data/sun.txt";
+  filename << "data/" << body.name << ".txt";
   infile.open(filename.str().c_str());
   if(!infile){
     cout << "Error opening file " << filename.str().c_str() << endl;

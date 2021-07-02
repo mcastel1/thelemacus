@@ -134,11 +134,15 @@ Catalog::Catalog(const char* filename){
 
       line_ins << line;
       line_ins >>  temp.type >> temp.name >> temp.radius.value >> temp.RA.value >> temp.d.value;
+
+      temp.RA.value *= k;
+      temp.d.value *= k;
+      
       temp.RA.normalize();
       temp.d.normalize();
       
       list.push_back(temp);
-      /* cout << line << " - " << type << " " << name << " " << r.value << "\n"; */
+      cout << line << "-----" << temp.RA.value << "\t" << temp.d.value << "\n";
 
       line.clear();
       line_ins.clear();
@@ -703,7 +707,12 @@ void Sight::get_coordinates(void){
     *interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
 
 
-  filename << "data/" << body.name << ".txt";
+  if((body.type) != "star"){
+    filename << "data/" << body.name << ".txt";
+  }else{
+    filename << "data/j2000_to_itrf93.txt";
+  }
+  
   infile.open(filename.str().c_str());
   if(!infile){
     cout << "Error opening file " << filename.str().c_str() << endl;
@@ -745,8 +754,8 @@ void Sight::get_coordinates(void){
 
       //convert to radians and nm
       for(l=0; l<N; l++){
-    
-	GHA_tab[l]*=k; 
+	//add minus sign because in JPL convention longitude is positive when it is E
+	GHA_tab[l]*=(-1.0)*k; 
 	d_tab[l]*=k;
 	r_tab[l]/=nm;
       }
@@ -754,8 +763,8 @@ void Sight::get_coordinates(void){
       //remove discontinuous jumps in GHA to allow for interpolation
       for(sum=0.0, l=0; l<N-1; l++){
 	//cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
-	if(((GHA_tab[l]-sum) < 0.0) && (GHA_tab[l+1] > 0.0)){
-	  sum -= 2.0*M_PI;
+	if(((GHA_tab[l]-sum) > 0.0) && (GHA_tab[l+1] < 0.0)){
+	  sum += 2.0*M_PI;
 	}
 	GHA_tab[l+1] += sum;
       }
@@ -770,34 +779,66 @@ void Sight::get_coordinates(void){
 	cout << mjd_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
-      //add minus sign because in JPL convention longitude is positive when it is W
-      GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
       d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
       r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
 
     }else{
 
       //if the body is a star
-      Angle phi3, phi2, phi1;
+      double phi3, phi2, phi1;
 
       for(; l<l_max; l++){
+	
 	line.clear();
 	line_ins.clear();
 	getline(infile, line);
 	line_ins << line;
 	cout << line << "\n";
-	line_ins >> dummy >> dummy >> dummy >> (phi3.value) >> (phi2.value) >> (phi1.value);
+	line_ins >> dummy >> dummy >> dummy >> phi3 >> phi2 >> phi1;
 
-	(phi1.value)*=k;
-	(phi2.value)*=k;
-	(phi3.value)*=k;
+	phi1*=k;
+	phi2*=k;
+	phi3*=k;
 	
+	d_tab[l-l_min] = asin(cos(phi2)*sin((body.d.value)) - cos((body.d.value))*cos(phi1)*sin((body.RA.value))*sin(phi2) + cos((body.RA.value))*cos((body.d.value))*sin(phi1)*sin(phi2));
+	
+	GHA_tab[l-l_min] = atan((-cos(phi3)* sin((body.d.value))* sin(phi2) -  cos((body.RA.value)) * cos((body.d.value)) * (-cos(phi2) *cos(phi3) * sin(phi1) - cos(phi1) * sin(phi3)) - cos((body.d.value)) * sin((body.RA.value)) * (cos(phi1) * cos(phi2) * cos(phi3) - sin(phi1) * sin(phi3)))/( sin((body.d.value)) * sin(phi2) * sin(phi3) + cos((body.d.value)) * sin((body.RA.value)) * (cos(phi3) * sin(phi1) +  cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA.value)) * cos((body.d.value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))));
+	if(( sin((body.d.value)) * sin(phi2) * sin(phi3) + cos((body.d.value)) * sin((body.RA.value)) * (cos(phi3) * sin(phi1) +  cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA.value)) * cos((body.d.value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))) < 0.0){
+	  GHA_tab[l-l_min] += M_PI;
+	}
+	GHA_tab[l-l_min] = GHA_tab[l-l_min] - 2.0*M_PI*floor(GHA_tab[l-l_min]/(2.0*M_PI));
+
+	  
 	mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
       }
 
+
       infile.close();
 
+ 
 
+      //remove discontinuous jumps in GHA to allow for interpolation
+      for(sum=0.0, l=0; l<N-1; l++){
+	//cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
+	if(((GHA_tab[l]-sum) > M_PI) && (GHA_tab[l+1] < M_PI)){
+	  sum += 2.0*M_PI;
+	}
+	GHA_tab[l+1] += sum;
+      }
+
+      cout << "Read values:\n";
+      for(l=0; l<N; l++){
+	cout << mjd_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
+      }
+
+      gsl_spline_init(interpolation_GHA, mjd_tab, GHA_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_d, mjd_tab, d_tab, (unsigned int)N);
+
+      
+      //add minus sign because in JPL convention longitude is positive when it is W
+      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+      d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
 
     }
 

@@ -696,7 +696,7 @@ void Sight::get_coordinates(void){
   stringstream filename, line_ins;
   string line, dummy;
   unsigned int l, l_min, l_max;
-  double mjd_int[(unsigned int)N], GHA_int[(unsigned int)N], d_int[(unsigned int)N], r_int[(unsigned int)N], sum;
+  double mjd_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], r_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
   gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
     *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
@@ -731,8 +731,8 @@ void Sight::get_coordinates(void){
       getline(infile, line);
       line_ins << line;
       cout << line << "\n";
-      line_ins >> dummy >> dummy >> dummy >> GHA_int[l-l_min] >> d_int[l-l_min] >> r_int[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
-      mjd_int[l-l_min] = ((double)(l-l_min))/24.0;
+      line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
+      mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
     }
 
     infile.close();
@@ -740,28 +740,28 @@ void Sight::get_coordinates(void){
     //convert to radians and nm
     for(l=0; l<N; l++){
     
-      GHA_int[l]*=k; 
-      d_int[l]*=k;
-      r_int[l]/=nm;
+      GHA_tab[l]*=k; 
+      d_tab[l]*=k;
+      r_tab[l]/=nm;
     }
 
     //remove discontinuous jumps in GHA to allow for interpolation
     for(sum=0.0, l=0; l<N-1; l++){
-      //cout << GHA_int[l] << " " << d_int[l] << " " << r_int[l] << "\n";
-      if(((GHA_int[l]-sum) < 0.0) && (GHA_int[l+1] > 0.0)){
+      //cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
+      if(((GHA_tab[l]-sum) < 0.0) && (GHA_tab[l+1] > 0.0)){
 	sum -= 2.0*M_PI;
       }
-      GHA_int[l+1] += sum;
+      GHA_tab[l+1] += sum;
     }
 
-    gsl_spline_init(interpolation_GHA, mjd_int, GHA_int, (unsigned int)N);
-    gsl_spline_init(interpolation_d, mjd_int, d_int, (unsigned int)N);
-    gsl_spline_init(interpolation_r, mjd_int, r_int, (unsigned int)N);
+    gsl_spline_init(interpolation_GHA, mjd_tab, GHA_tab, (unsigned int)N);
+    gsl_spline_init(interpolation_d, mjd_tab, d_tab, (unsigned int)N);
+    gsl_spline_init(interpolation_r, mjd_tab, r_tab, (unsigned int)N);
 
   
     cout << "Read values:\n";
     for(l=0; l<N; l++){
-      cout << mjd_int[l] << " " << GHA_int[l] << " " << d_int[l] << " " << r_int[l] << "\n";
+      cout << mjd_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
     }
 
     //add minus sign because in JPL convention longitude is positive when it is W

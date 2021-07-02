@@ -307,65 +307,73 @@ void Sight::compute_DH_parallax_and_limb(void){
   H_i = H_a + DH_refraction;
   H_i.print("intermediate altitude");
 
-  switch((limb.value)){
+  if(body.type != "star"){
+
+    switch((limb.value)){
     
-  case 'u':
-    {
-    int status = 0;
-    int iter = 0;
-    double x = 0.0, x_lo = 0.0, x_hi = 2.0*M_PI;
-    gsl_function F;
-    const gsl_root_fsolver_type *T;
-    gsl_root_fsolver *s;
+    case 'u':
+      {
+	int status = 0;
+	int iter = 0;
+	double x = 0.0, x_lo = 0.0, x_hi = 2.0*M_PI;
+	gsl_function F;
+	const gsl_root_fsolver_type *T;
+	gsl_root_fsolver *s;
 
-    F.function = &rhs_DH_parallax_and_limb;
-    F.params = &(*this);
+	F.function = &rhs_DH_parallax_and_limb;
+	F.params = &(*this);
 
-    T = gsl_root_fsolver_brent;
-    s = gsl_root_fsolver_alloc (T);
-    gsl_root_fsolver_set(s, &F, x_lo, x_hi);
+	T = gsl_root_fsolver_brent;
+	s = gsl_root_fsolver_alloc (T);
+	gsl_root_fsolver_set(s, &F, x_lo, x_hi);
  
-    printf ("using %s method\n", gsl_root_fsolver_name (s));
-    printf ("%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", "root", "err", "err(est)");
+	printf ("using %s method\n", gsl_root_fsolver_name (s));
+	printf ("%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", "root", "err", "err(est)");
 
-    iter = 0;
-    do{
+	iter = 0;
+	do{
       
-      iter++;
-      status = gsl_root_fsolver_iterate (s);
+	  iter++;
+	  status = gsl_root_fsolver_iterate (s);
       
-      x = gsl_root_fsolver_root(s);
-      x_lo = gsl_root_fsolver_x_lower(s);
-      x_hi = gsl_root_fsolver_x_upper(s);
-      status = gsl_root_test_interval (x_lo, x_hi, 0.0, epsrel);
-      if(status == GSL_SUCCESS){
-	printf ("Converged:\n");
+	  x = gsl_root_fsolver_root(s);
+	  x_lo = gsl_root_fsolver_x_lower(s);
+	  x_hi = gsl_root_fsolver_x_upper(s);
+	  status = gsl_root_test_interval (x_lo, x_hi, 0.0, epsrel);
+	  if(status == GSL_SUCCESS){
+	    printf ("Converged:\n");
+	  }
+	  printf ("%5d [%.7f, %.7f] %.7f %+.7f\n", iter, x_lo, x_hi, x, x_hi - x_lo);
+	}
+	while((status == GSL_CONTINUE) && (iter < max_iter));
+
+
+	//H_o.value = (x_lo+x_hi)/2.0;
+	DH_parallax_and_limb.value = (x_lo+x_hi)/2.0 - (H_i.value);
+	gsl_root_fsolver_free (s);
+
+	break;
       }
-      printf ("%5d [%.7f, %.7f] %.7f %+.7f\n", iter, x_lo, x_hi, x, x_hi - x_lo);
+    case 'l':
+      {
+	//    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
+	DH_parallax_and_limb.value = asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
+	break;
+      }
+    case 'c':
+      {
+	//H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
+	DH_parallax_and_limb.value = asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
+	break;
+      }
     }
-    while((status == GSL_CONTINUE) && (iter < max_iter));
 
+  }else{
 
-    //H_o.value = (x_lo+x_hi)/2.0;
-    DH_parallax_and_limb.value = (x_lo+x_hi)/2.0 - (H_i.value);
-    gsl_root_fsolver_free (s);
+    DH_parallax_and_limb.value = 0.0;
 
-    break;
-    }
-  case 'l':
-    {
-      //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
-      DH_parallax_and_limb.value = asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
-    break;
-    }
-  case 'c':
-    {
-      //H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
-      DH_parallax_and_limb.value = asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
-    break;
-    }
   }
-
+  
   DH_parallax_and_limb.print("parallax and limb correction");
    
 }
@@ -931,11 +939,11 @@ void Limb::enter(const char* name){
     cin >> value;
     
     if((value=='u') || (value=='l') || (value=='c')){check = true;}
-     else{
-       cout << "Entered value is not valid! Try again.\n";
-       flush(cout);
-       check = false;
-     }
+    else{
+      cout << "Entered value is not valid! Try again.\n";
+      flush(cout);
+      check = false;
+    }
   }while(!check);
   
   print(name);

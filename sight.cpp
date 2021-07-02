@@ -74,7 +74,6 @@ int main(int argc, char *argv[]){
 
   
   Catalog catalog("data/catalog.txt");
-  return 0;
   catalog.print();
   
   Sight sight;

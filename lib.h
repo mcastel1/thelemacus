@@ -142,7 +142,7 @@ Catalog::Catalog(const char* filename){
       temp.d.normalize();
       
       list.push_back(temp);
-      cout << line << "-----" << temp.RA.value << "\t" << temp.d.value << "\n";
+      /* cout << line << "-----" << temp.RA.value << "\t" << temp.d.value << "\n"; */
 
       line.clear();
       line_ins.clear();

@@ -696,7 +696,7 @@ void Sight::get_coordinates(void){
   stringstream filename, line_ins;
   string line, dummy;
   unsigned int l, l_min, l_max;
-  double mjd_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], r_tab[(unsigned int)N], sum;
+  double mjd_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
   gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
     *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
@@ -725,49 +725,81 @@ void Sight::get_coordinates(void){
       getline(infile, line);
     }
 
-    for(; l<l_max; l++){
-      line.clear();
-      line_ins.clear();
-      getline(infile, line);
-      line_ins << line;
-      cout << line << "\n";
-      line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
-      mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
-    }
+    if((body.type) != "star"){
 
-    infile.close();
+      //if the body is not a star
 
-    //convert to radians and nm
-    for(l=0; l<N; l++){
-    
-      GHA_tab[l]*=k; 
-      d_tab[l]*=k;
-      r_tab[l]/=nm;
-    }
-
-    //remove discontinuous jumps in GHA to allow for interpolation
-    for(sum=0.0, l=0; l<N-1; l++){
-      //cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
-      if(((GHA_tab[l]-sum) < 0.0) && (GHA_tab[l+1] > 0.0)){
-	sum -= 2.0*M_PI;
+      double r_tab[(unsigned int)N];
+      
+      for(; l<l_max; l++){
+	line.clear();
+	line_ins.clear();
+	getline(infile, line);
+	line_ins << line;
+	cout << line << "\n";
+	line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
+	mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
       }
-      GHA_tab[l+1] += sum;
-    }
 
-    gsl_spline_init(interpolation_GHA, mjd_tab, GHA_tab, (unsigned int)N);
-    gsl_spline_init(interpolation_d, mjd_tab, d_tab, (unsigned int)N);
-    gsl_spline_init(interpolation_r, mjd_tab, r_tab, (unsigned int)N);
+      infile.close();
+
+      //convert to radians and nm
+      for(l=0; l<N; l++){
+    
+	GHA_tab[l]*=k; 
+	d_tab[l]*=k;
+	r_tab[l]/=nm;
+      }
+
+      //remove discontinuous jumps in GHA to allow for interpolation
+      for(sum=0.0, l=0; l<N-1; l++){
+	//cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
+	if(((GHA_tab[l]-sum) < 0.0) && (GHA_tab[l+1] > 0.0)){
+	  sum -= 2.0*M_PI;
+	}
+	GHA_tab[l+1] += sum;
+      }
+
+      gsl_spline_init(interpolation_GHA, mjd_tab, GHA_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_d, mjd_tab, d_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_r, mjd_tab, r_tab, (unsigned int)N);
 
   
-    cout << "Read values:\n";
-    for(l=0; l<N; l++){
-      cout << mjd_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
-    }
+      cout << "Read values:\n";
+      for(l=0; l<N; l++){
+	cout << mjd_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
+      }
 
-    //add minus sign because in JPL convention longitude is positive when it is W
-    GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
-    d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
-    r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+      //add minus sign because in JPL convention longitude is positive when it is W
+      GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+      d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+      r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+
+    }else{
+
+      //if the body is a star
+      Angle phi3, phi2, phi1;
+
+      for(; l<l_max; l++){
+	line.clear();
+	line_ins.clear();
+	getline(infile, line);
+	line_ins << line;
+	cout << line << "\n";
+	line_ins >> dummy >> dummy >> dummy >> (phi3.value) >> (phi2.value) >> (phi1.value);
+
+	(phi1.value)*=k;
+	(phi2.value)*=k;
+	(phi3.value)*=k;
+	
+	mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
+      }
+
+      infile.close();
+
+
+
+    }
 
   }
   

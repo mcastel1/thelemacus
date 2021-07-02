@@ -708,66 +708,68 @@ void Sight::get_coordinates(void){
   if(!infile){
     cout << "Error opening file " << filename.str().c_str() << endl;
     flush(cout);
-  }
+  }else{
 
-  /* cout << "\nMJD = " << t.mjd; */
-  /* cout << "\nMJD0 = " << mjd_min; */
-  /* cout << "\ndiff = " << (t.mjd)-mjd_min; */
-  /* cin >>l ; */
+    /* cout << "\nMJD = " << t.mjd; */
+    /* cout << "\nMJD0 = " << mjd_min; */
+    /* cout << "\ndiff = " << (t.mjd)-mjd_min; */
+    /* cin >>l ; */
 
-  l_min = (unsigned int)(24.0*((time.mjd)-mjd_min))-(unsigned int)(N/2.0);
-  l_max = (unsigned int)(24.0*((time.mjd)-mjd_min))+(unsigned int)(N/2.0);
+    l_min = (unsigned int)(24.0*((time.mjd)-mjd_min))-(unsigned int)(N/2.0);
+    l_max = (unsigned int)(24.0*((time.mjd)-mjd_min))+(unsigned int)(N/2.0);
 
-  /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
+    /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
   
-  for(l=0; l<l_min; l++){
-    line.clear();
-    getline(infile, line);
-  }
-
-  for(; l<l_max; l++){
-    line.clear();
-    line_ins.clear();
-    getline(infile, line);
-    line_ins << line;
-    cout << line << "\n";
-    line_ins >> dummy >> dummy >> dummy >> GHA_int[l-l_min] >> d_int[l-l_min] >> r_int[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
-    mjd_int[l-l_min] = ((double)(l-l_min))/24.0;
-  }
-
-  infile.close();
-
-  //convert to radians and nm
-  for(l=0; l<N; l++){
-    
-    GHA_int[l]*=k; 
-    d_int[l]*=k;
-    r_int[l]/=nm;
-  }
-
-  //remove discontinuous jumps in GHA to allow for interpolation
-  for(sum=0.0, l=0; l<N-1; l++){
-    //cout << GHA_int[l] << " " << d_int[l] << " " << r_int[l] << "\n";
-    if(((GHA_int[l]-sum) < 0.0) && (GHA_int[l+1] > 0.0)){
-      sum -= 2.0*M_PI;
+    for(l=0; l<l_min; l++){
+      line.clear();
+      getline(infile, line);
     }
-    GHA_int[l+1] += sum;
-  }
 
-  gsl_spline_init(interpolation_GHA, mjd_int, GHA_int, (unsigned int)N);
-  gsl_spline_init(interpolation_d, mjd_int, d_int, (unsigned int)N);
-  gsl_spline_init(interpolation_r, mjd_int, r_int, (unsigned int)N);
+    for(; l<l_max; l++){
+      line.clear();
+      line_ins.clear();
+      getline(infile, line);
+      line_ins << line;
+      cout << line << "\n";
+      line_ins >> dummy >> dummy >> dummy >> GHA_int[l-l_min] >> d_int[l-l_min] >> r_int[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
+      mjd_int[l-l_min] = ((double)(l-l_min))/24.0;
+    }
+
+    infile.close();
+
+    //convert to radians and nm
+    for(l=0; l<N; l++){
+    
+      GHA_int[l]*=k; 
+      d_int[l]*=k;
+      r_int[l]/=nm;
+    }
+
+    //remove discontinuous jumps in GHA to allow for interpolation
+    for(sum=0.0, l=0; l<N-1; l++){
+      //cout << GHA_int[l] << " " << d_int[l] << " " << r_int[l] << "\n";
+      if(((GHA_int[l]-sum) < 0.0) && (GHA_int[l+1] > 0.0)){
+	sum -= 2.0*M_PI;
+      }
+      GHA_int[l+1] += sum;
+    }
+
+    gsl_spline_init(interpolation_GHA, mjd_int, GHA_int, (unsigned int)N);
+    gsl_spline_init(interpolation_d, mjd_int, d_int, (unsigned int)N);
+    gsl_spline_init(interpolation_r, mjd_int, r_int, (unsigned int)N);
 
   
-  cout << "Read values:\n";
-  for(l=0; l<N; l++){
-    cout << mjd_int[l] << " " << GHA_int[l] << " " << d_int[l] << " " << r_int[l] << "\n";
-  }
+    cout << "Read values:\n";
+    for(l=0; l<N; l++){
+      cout << mjd_int[l] << " " << GHA_int[l] << " " << d_int[l] << " " << r_int[l] << "\n";
+    }
 
-  //add minus sign because in JPL convention longitude is positive when it is W
-  GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
-  d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
-  r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+    //add minus sign because in JPL convention longitude is positive when it is W
+    GHA.set("GHA", -gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+    d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+    r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+
+  }
   
 }
 

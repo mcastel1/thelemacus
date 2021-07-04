@@ -98,7 +98,9 @@ int main(int argc, char *argv[]){
   sight.compute_H_a();
 
   sight.time.enter("UTC time of sight");
-  sight.limb.enter("limb");
+  if(sight.body.type != "star"){
+    sight.limb.enter("limb");
+  }
   sight.get_coordinates();
 
   sight.compute_H_o();

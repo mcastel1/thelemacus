@@ -17,6 +17,9 @@
 
   ./sight.o
   valgrind ./sight.o
+  valgrind --leak-check==full ./sight.o
+
+
 */
 
 // #include <gsl_rng.h>
@@ -37,7 +40,7 @@
 
 /*notes
 - how do the jpl data files deal with the potential insertion of leap seconds in the future?
-
+- this code does not work if there are leapseconds in the time lapse covered by the ephemeride files
  */
 
 using namespace std;

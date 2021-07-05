@@ -12,7 +12,8 @@ K = 360.0/(2.0*pi);
 k = 1.0/K;
 N = 12.0;
 #coastlines are plotted every S lines
-S = 1e4;
+S = 1e3;
+M = 1e2;
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
 
@@ -36,7 +37,7 @@ set multiplot
 
 set size ratio -1
 set ticscale 3,1
-set samples 1e4
+set samples S
 #increments in degrees
 increment_phi = 20.0;
 increment_lambda = 60.0;
@@ -82,9 +83,7 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 
 
 set xrange [xe(lambda_max):xe(lambda_min)]
-#set x2range [xe(lambda_max):xe(lambda_min)]
 set yrange [ye(phi_min):ye(phi_max)]
-#set y2range [ye(phi_min):ye(phi_max)]
 
 
 
@@ -125,7 +124,7 @@ label_min(x) = sprintf("%.f'",x)
 
 
 #coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every S w d linecolor rgb "gray" noti
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every M w d linecolor rgb "gray" noti
 
 
 
@@ -145,6 +144,10 @@ while(1){
 
 	if(GPVAL_DATA_X_MAX!=x_max_old){
 
+
+	unset arrow;
+	
+
 #	print "Recalculating tics ... ";
 
 	lambda_min = lambda_inv(GPVAL_DATA_X_MAX);
@@ -152,7 +155,11 @@ while(1){
 	
 	phi_min = phi_inv(GPVAL_DATA_Y_MIN);
 	phi_max = phi_inv(GPVAL_DATA_Y_MAX);
-	
+
+	set xrange [xe(lambda_max):xe(lambda_min)]
+	set yrange [ye(phi_min):ye(phi_max)]
+
+
 	phi_span = phi_max - phi_min;
 	lambda_span = lambda_max - lambda_min;
 	
@@ -197,13 +204,18 @@ while(1){
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	while(lambda<lambda_max){
 		set xtics add (label_deg(lambda) xe(lambda));
+		set arrow from first xe(lambda), graph 0 to first xe(lambda), graph 1 nohead  linecolor "blue"
 
 		
 #		print lambda;
 		lambda = lambda + dlambda;
+
 	}
 
-	replot for [lambda in list((int(lambda_min/dlambda))*dlambda,lambda_max,dlambda)] 'lat.dat' u (xe(lambda)):(ye($1)) noti w l linecolor rgb 'gray' lt 1
+	#replot for [lambda in list((int(lambda_min/dlambda))*dlambda,lambda_max,dlambda)] 'lat.dat' u (xe(lambda)):(ye($1)) noti w l linecolor rgb 'gray' lt 1
+
+
+
  
 	#if(dlambda == 1.0){
 	#	print "Setting mxtics";
@@ -219,11 +231,14 @@ while(1){
 	phi = (int(phi_min/dphi))*dphi;
 	while(phi<phi_max){
 		set ytics add (label_deg(phi) ye(phi));
+		set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "red"
 #		print phi;
 		phi = phi + dphi;
+
+
 	}
 
-	replot for [phi in list((int(phi_min/dphi))*dphi,phi_max,dphi)] 'lon.dat' u (xe($1)):(ye(phi)) noti w l linecolor rgb 'gray' lt 1
+	#replot for [phi in list((int(phi_min/dphi))*dphi,phi_max,dphi)] 'lon.dat' u (xe($1)):(ye(phi)) noti w l linecolor rgb 'gray' lt 1
 
 
 	refresh;

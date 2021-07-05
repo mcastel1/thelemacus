@@ -368,13 +368,14 @@ void Sight::compute_DH_parallax_and_limb(void){
       }
     }
 
+    DH_parallax_and_limb.print("parallax and limb correction");
+
   }else{
 
     DH_parallax_and_limb.value = 0.0;
 
   }
   
-  DH_parallax_and_limb.print("parallax and limb correction");
    
 }
 

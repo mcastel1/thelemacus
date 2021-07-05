@@ -18,26 +18,53 @@ class File{
 
  public:
   ifstream value;
-  int open(const char*);
-
+  const char *name;
+  void set_name(const char*);
+  int open(void);
+  void close(void);
+  void remove(void);
   
 };
 
-int File::open(const char* filename){
+void File::remove(void){
+
+  stringstream command;
+
+  command << "rm -rf " << name  << "> /dev/null 2>&1";
+  system(command.str().c_str());
+
   
-  value.open(filename);
+}
+
+void File::set_name(const char* filename){
+
+  name = filename;
+  
+}
+
+int File::open(void){
+
+  value.open(name);
   
   if(!value){
     
-    cout << "Error opening file " << filename << "!\n";
+    cout << "Error opening file " << name << "!\n";
     return 0;
     
   }else{
     
-    cout << "File " << filename << " opened.\n";
+    cout << "File " << name << " opened.\n";
     return 1;
      
   }
+
+}
+
+void File::close(void){
+  
+  value.close();
+  cout << "File " << name << " closed.\n";
+     
 
 }
 
@@ -146,8 +173,8 @@ Catalog::Catalog(const char* filename){
   Body temp;
 
 
-  
-  if(file.open(filename)==1){
+  file.set_name(filename);
+  if(file.open()==1){
 
     getline((file.value), line);
 
@@ -176,7 +203,7 @@ Catalog::Catalog(const char* filename){
     }
   
   
-    (file.value).close();
+    file.close();
 
   }
 
@@ -292,26 +319,33 @@ class Sight{
 
 void Sight::plot(void){
 
-  File file;
+  File file_id, file_gnuplot;
   stringstream line_ins;
   string line;
 
-  command << "rm plot.plt; sed 's/dummy_line/"
+  file_id.set_name("job_id.txt");
+  file_gnuplot.set_name("plot.plt");
+
+  
+  command << "sed 's/dummy_line/"
 	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")), ye(K*Phi(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")) w l ti \"" << body.name << " " << time.to_string().str().c_str() << "\""  
-	  << "/g' plot_dummy.plt >> plot.plt;";
+	  << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
   //delete job_id.txt file, run gnuplot and write the relative job ID to job_id.txt
-  command << "rm job_id.txt > /dev/null 2>&1 \n gnuplot 'plot.plt' & \n echo $! >> job_id.txt";
+  command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name;
+
+  file_gnuplot.remove();
+  file_id.remove();
   
   system(command.str().c_str());
 
-  if(file.open("job_id.txt")==1){
+  if(file_id.open()==1){
   
-      getline(file.value, line);
+      getline(file_id.value, line);
       line_ins << line;
       line_ins >> job_id;
   }
 
-  file.value.close();
+  file_id.close();
 
   cout << "\nJob id = "<< job_id;
   
@@ -748,7 +782,7 @@ void Sight::get_coordinates(void){
 
   File file;
   stringstream filename, line_ins;
-  string line, dummy;
+  string line, dummy, temp;
   unsigned int l, l_min, l_max;
   double mjd_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
@@ -761,9 +795,12 @@ void Sight::get_coordinates(void){
     filename << "data/" << body.name << ".txt";
   }else{
     filename << "data/j2000_to_itrf93.txt";
-  }
+  }  
+  temp = filename.str();
+
   
-  if(file.open(filename.str().c_str())==1){
+  file.set_name(temp.c_str()); 
+  if(file.open()==1){
 
     /* cout << "\nMJD = " << t.mjd; */
     /* cout << "\nMJD0 = " << mjd_min; */
@@ -796,7 +833,7 @@ void Sight::get_coordinates(void){
 	mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
       }
 
-      (file.value).close();
+      file.close();
 
       //convert to radians and nm
       for(l=0; l<N; l++){
@@ -860,7 +897,7 @@ void Sight::get_coordinates(void){
       }
 
 
-      (file.value).close();
+      file.close();
 
  
 

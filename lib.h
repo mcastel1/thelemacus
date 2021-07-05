@@ -322,6 +322,7 @@ void Sight::plot(void){
   File file_id, file_gnuplot;
   stringstream line_ins;
   string line;
+  Answer answer;
 
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
@@ -347,7 +348,16 @@ void Sight::plot(void){
 
   file_id.close();
 
-  cout << "\nJob id = "<< job_id;
+  cout << "\nJob id = "<< job_id << "\nDo you want to quit the plot?";
+  cin >> answer.value;
+  if((answer.value)=='y'){
+
+    command.str("");
+    command << "kill -9 " << job_id;
+    system(command.str().c_str());
+
+  }
+
   
 }
 

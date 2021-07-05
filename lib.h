@@ -14,6 +14,33 @@
 
 class Catalog;
 
+class File{
+
+ public:
+  ifstream value;
+  int open(const char*);
+
+  
+};
+
+int File::open(const char* filename){
+  
+  value.open(filename);
+  
+  if(!value){
+    
+    cout << "Error opening file " << filename << "!\n";
+    return 0;
+    
+  }else{
+    
+    cout << "File " << filename << " opened.\n";
+    return 1;
+     
+  }
+
+}
+
 class Length{
 
  public:
@@ -113,24 +140,22 @@ class Catalog{
 
 Catalog::Catalog(const char* filename){
 
-  ifstream infile;
+  File file;
   string line;
   stringstream line_ins;
   Body temp;
 
-  infile.open(filename);
-  if(!infile){
-    cout << "Error opening file " << filename << endl;
-    flush(cout);
-  }else{
 
-    getline(infile, line);
+  
+  if(file.open(filename)==1){
+
+    getline((file.value), line);
 
     line.clear();
     line_ins.clear();
-    getline(infile, line);
+    getline((file.value), line);
 
-    while(!infile.eof()){
+    while(!(file.value).eof()){
 
       line_ins << line;
       line_ins >>  temp.type >> temp.name >> temp.radius.value >> temp.RA.value >> temp.d.value;
@@ -146,12 +171,12 @@ Catalog::Catalog(const char* filename){
 
       line.clear();
       line_ins.clear();
-      getline(infile, line);
+      getline((file.value), line);
 
     }
   
   
-    infile.close();
+    (file.value).close();
 
   }
 
@@ -249,7 +274,7 @@ class Sight{
   Limb limb;
   Answer artificial_horizon;
   stringstream command;
-
+  unsigned int job_id;
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -267,13 +292,29 @@ class Sight{
 
 void Sight::plot(void){
 
+  File file;
+  stringstream line_ins;
+  string line;
+
   command << "rm plot.plt; sed 's/dummy_line/"
 	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")), ye(K*Phi(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")) w l ti \"" << body.name << " " << time.to_string().str().c_str() << "\""  
-	  << "/g' plot_dummy.plt >> plot.plt; rm output.txt &\n gnuplot 'plot.plt' & \n echo $! >> output.txt";
+	  << "/g' plot_dummy.plt >> plot.plt;";
+  //delete job_id.txt file, run gnuplot and write the relative job ID to job_id.txt
+  command << "rm job_id.txt > /dev/null 2>&1 \n gnuplot 'plot.plt' & \n echo $! >> job_id.txt";
   
   system(command.str().c_str());
 
+  if(file.open("job_id.txt")==1){
+  
+      getline(file.value, line);
+      line_ins << line;
+      line_ins >> job_id;
+  }
 
+  file.value.close();
+
+  cout << "\nJob id = "<< job_id;
+  
 }
 
 void Sight::compute_H_a(void){
@@ -705,7 +746,7 @@ void Length::print(const char* name){
 
 void Sight::get_coordinates(void){
 
-  ifstream infile;
+  File file;
   stringstream filename, line_ins;
   string line, dummy;
   unsigned int l, l_min, l_max;
@@ -722,11 +763,7 @@ void Sight::get_coordinates(void){
     filename << "data/j2000_to_itrf93.txt";
   }
   
-  infile.open(filename.str().c_str());
-  if(!infile){
-    cout << "Error opening file " << filename.str().c_str() << endl;
-    flush(cout);
-  }else{
+  if(file.open(filename.str().c_str())==1){
 
     /* cout << "\nMJD = " << t.mjd; */
     /* cout << "\nMJD0 = " << mjd_min; */
@@ -740,7 +777,7 @@ void Sight::get_coordinates(void){
   
     for(l=0; l<l_min; l++){
       line.clear();
-      getline(infile, line);
+      getline((file.value), line);
     }
 
     if((body.type) != "star"){
@@ -752,14 +789,14 @@ void Sight::get_coordinates(void){
       for(; l<l_max; l++){
 	line.clear();
 	line_ins.clear();
-	getline(infile, line);
+	getline((file.value), line);
 	line_ins << line;
 	cout << line << "\n";
 	line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
 	mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
       }
 
-      infile.close();
+      (file.value).close();
 
       //convert to radians and nm
       for(l=0; l<N; l++){
@@ -801,7 +838,7 @@ void Sight::get_coordinates(void){
 	
 	line.clear();
 	line_ins.clear();
-	getline(infile, line);
+	getline((file.value), line);
 	line_ins << line;
 	cout << line << "\n";
 	line_ins >> dummy >> dummy >> dummy >> phi3 >> phi2 >> phi1;
@@ -823,7 +860,7 @@ void Sight::get_coordinates(void){
       }
 
 
-      infile.close();
+      (file.value).close();
 
  
 

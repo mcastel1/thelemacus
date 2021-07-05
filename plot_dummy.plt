@@ -11,6 +11,8 @@ reset
 K = 360.0/(2.0*pi);
 k = 1.0/K;
 N = 12.0;
+#coastlines are plotted every S lines
+S = 1e4;
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
 
@@ -123,7 +125,7 @@ label_min(x) = sprintf("%.f'",x)
 
 
 #coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every 1e1 w d linecolor rgb "gray" noti
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every S w d linecolor rgb "gray" noti
 
 
 

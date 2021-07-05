@@ -329,7 +329,7 @@ void Sight::plot(void){
 
   
   command << "sed 's/dummy_line/"
-	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")), ye(K*Phi(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")) w l ti \"" << body.name << " " << time.to_string().str().c_str() << "\""  
+	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")), ye(K*Phi(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")) w d ti \"" << body.name << " " << time.to_string().str().c_str() << "\""  
 	  << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
   //delete job_id.txt file, run gnuplot and write the relative job ID to job_id.txt
   command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name;

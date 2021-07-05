@@ -269,7 +269,7 @@ void Sight::plot(void){
 
   command << "rm plot.plt; sed 's/dummy_line/"
 	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")), ye(K*Phi(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")) w l ti \"" << body.name << " " << time.to_string().str().c_str() << "\""  
-	  << "/g' plot_dummy.plt >> plot.plt; gnuplot 'plot.plt'";
+	  << "/g' plot_dummy.plt >> plot.plt; rm output.txt &\n gnuplot 'plot.plt' & \n echo $! >> output.txt";
   
   system(command.str().c_str());
 

@@ -313,9 +313,27 @@ class Sight{
   void compute_H_o(void);
 
   void enter(Catalog);
+  void print(void);
   void reduce(void);
   
 };
+
+void Sight::print(void){
+
+
+  body.print();
+  if(body.type != "star"){
+    limb.print("limb");
+  }
+  H_s.print("sextant altitude");
+  index_error.print("index error");
+  artificial_horizon.print("artificial horizon");
+  if(artificial_horizon.value == 'n'){
+    height_of_eye.print("height of eye");
+  }
+  time.print("UTC time of sight");
+
+}
 
 class Plot{
   
@@ -323,8 +341,13 @@ class Plot{
   File file_id, file_gnuplot;
   unsigned int job_id;
   stringstream command;
+  vector<Sight> sight_list;
 
   Plot();
+  ~Plot();
+  void add(Catalog catalog);
+  void remove(unsigned int);
+  void print(void);
   void show(Sight);
 
 };
@@ -337,6 +360,44 @@ Plot::Plot(){
   file_gnuplot.set_name("plot.plt");
   
 }
+
+Plot::~Plot(){
+
+  file_gnuplot.remove();
+  file_id.remove();
+  
+}
+
+void Plot::print(void){
+
+  for(unsigned int i=0; i<sight_list.size(); i++){
+    cout << "Sight #" << i << ":\n";
+    (sight_list[i]).print();
+  }
+
+}
+
+void Plot::add(Catalog catalog){
+
+  Sight sight;
+  
+  sight.enter(catalog);
+  sight.reduce();
+  sight.print();
+  
+  sight_list.push_back(sight);
+  cout << "Sight added as sight #" << sight_list.size()-1 << ".\n";
+
+  //sight.~Sight();
+
+}
+
+void Plot::remove(unsigned int i){
+
+  sight_list.erase(sight_list.begin()+i);
+  cout << "Sight #" << i << " removed.\n";
+
+}
   
 
 void Plot::show(Sight sight){
@@ -344,18 +405,20 @@ void Plot::show(Sight sight){
   stringstream line_ins;
   string line;
   Answer answer;
-  
+
+  //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/dummy_line/"
 	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - (sight.H_o.value) << ")), ye(K*Phi(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - (sight.H_o.value) << ")) smo csp ti \"" << sight.body.name << " " << sight.time.to_string().str().c_str() << "\""  
 	  << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
   //delete job_id.txt file, run gnuplot and write the relative job ID to job_id.txt
   command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name;
 
-  file_gnuplot.remove();
+  //file_gnuplot.remove();
   file_id.remove();
   
   system(command.str().c_str());
 
+  //read the job id from file_id
   if(file_id.open()==1){
       getline(file_id.value, line);
       line_ins << line;

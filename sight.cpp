@@ -79,16 +79,17 @@ int main(int argc, char *argv[]){
   Catalog catalog("data/catalog.txt");
   catalog.print();
   
-  Sight sight;
   Plot plot;
+  plot.add(catalog);
 
 
-  sight.enter(catalog); 
-  sight.reduce();
+  // sight.enter(catalog); 
+  // sight.reduce();
 
-
-  plot.show(sight);
+  plot.print();
+  plot.show(plot.sight_list[0]);
   
+  //plot.~Plot();
   
   cout << "\n";
   return(0);

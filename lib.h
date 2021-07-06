@@ -348,7 +348,7 @@ class Plot{
   void add(Catalog catalog);
   void remove(unsigned int);
   void print(void);
-  void show(Sight);
+  void show(void);
 
 };
 
@@ -400,21 +400,25 @@ void Plot::remove(unsigned int i){
 }
   
 
-void Plot::show(Sight sight){
+void Plot::show(void){
 
-  stringstream line_ins;
+  stringstream line_ins, plot_command;
   string line;
   Answer answer;
+  unsigned int i;
+
+  file_gnuplot.remove();
+  file_id.remove();
+
+  for(i=0, plot_command.str(""); i<sight_list.size(); i++){
+    plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << "\"\\\n";
+  }
 
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "sed 's/dummy_line/"
-	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - (sight.H_o.value) << ")), ye(K*Phi(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - (sight.H_o.value) << ")) smo csp ti \"" << sight.body.name << " " << sight.time.to_string().str().c_str() << "\""  
-	  << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
+  command << "sed 's/dummy_line/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
   //delete job_id.txt file, run gnuplot and write the relative job ID to job_id.txt
   command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name;
 
-  //file_gnuplot.remove();
-  file_id.remove();
   
   system(command.str().c_str());
 

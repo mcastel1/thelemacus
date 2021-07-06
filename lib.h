@@ -313,9 +313,35 @@ class Sight{
   void compute_H_a(void);
   void compute_H_o(void);
 
+  void enter(Catalog);
+  void reduce(void);
   void plot(void);
   
 };
+
+void Sight::enter(Catalog catalog){
+
+  body.enter(catalog);
+  if(body.type != "star"){
+    limb.enter("limb");
+  }
+  H_s.enter("sextant altitude");
+  index_error.enter("index error");
+  artificial_horizon.enter("artificial horizon");
+  if(artificial_horizon.value == 'n'){
+    height_of_eye.enter("height of eye");
+  }
+  time.enter("UTC time of sight");
+  
+}
+
+void Sight::reduce(void){
+
+  compute_H_a();
+  get_coordinates();
+  compute_H_o();
+  
+}
 
 void Sight::plot(void){
 

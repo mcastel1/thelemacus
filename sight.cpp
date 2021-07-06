@@ -88,23 +88,8 @@ int main(int argc, char *argv[]){
   // catalog.add("star","vega",0.0/nm);
   // catalog.add("star","arcturus",0.0/nm);
 
- 
-  sight.body.enter(catalog);
-  if(sight.body.type != "star"){
-    sight.limb.enter("limb");
-  }
-  sight.H_s.enter("sextant altitude");
-  sight.index_error.enter("index error");
-  sight.artificial_horizon.enter("artificial horizon");
-  if(sight.artificial_horizon.value == 'n'){
-    sight.height_of_eye.enter("height of eye");
-  }
-  sight.time.enter("UTC time of sight");
-
-  sight.compute_H_a();
-  sight.get_coordinates();
-  sight.compute_H_o();
-
+  sight.enter(catalog); 
+  sight.reduce();
   sight.plot();
   
   

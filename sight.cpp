@@ -80,17 +80,14 @@ int main(int argc, char *argv[]){
   catalog.print();
   
   Sight sight;
+  Plot plot;
 
-    
-  // catalog.add("sun","sun",695700.0/nm);
-  // catalog.add("moon","moon",1737.4/nm);
-  // catalog.add("planet","jupiter",69911.0/nm);
-  // catalog.add("star","vega",0.0/nm);
-  // catalog.add("star","arcturus",0.0/nm);
 
   sight.enter(catalog); 
   sight.reduce();
-  sight.plot();
+
+
+  plot.show(sight);
   
   
   cout << "\n";

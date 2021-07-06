@@ -290,6 +290,7 @@ void Answer::print(const char* name){
 }
 
 
+
 class Sight{
 
  public:
@@ -300,8 +301,6 @@ class Sight{
   Body body;
   Limb limb;
   Answer artificial_horizon;
-  stringstream command;
-  unsigned int job_id;
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -315,9 +314,67 @@ class Sight{
 
   void enter(Catalog);
   void reduce(void);
-  void plot(void);
   
 };
+
+class Plot{
+  
+ public:
+  File file_id, file_gnuplot;
+  unsigned int job_id;
+  stringstream command;
+
+  Plot();
+  void show(Sight);
+
+};
+
+Plot::Plot(){
+
+  command.precision(my_precision);
+
+  file_id.set_name("job_id.txt");
+  file_gnuplot.set_name("plot.plt");
+  
+}
+  
+
+void Plot::show(Sight sight){
+
+  stringstream line_ins;
+  string line;
+  Answer answer;
+  
+  command << "sed 's/dummy_line/"
+	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - (sight.H_o.value) << ")), ye(K*Phi(t, " << sight.d.value << ", " << sight.GHA.value << ", " << M_PI/2.0 - (sight.H_o.value) << ")) smo csp ti \"" << sight.body.name << " " << sight.time.to_string().str().c_str() << "\""  
+	  << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
+  //delete job_id.txt file, run gnuplot and write the relative job ID to job_id.txt
+  command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name;
+
+  file_gnuplot.remove();
+  file_id.remove();
+  
+  system(command.str().c_str());
+
+  if(file_id.open()==1){
+      getline(file_id.value, line);
+      line_ins << line;
+      line_ins >> job_id;
+  }
+
+  file_id.close();
+
+  cout << "\nJob id = "<< job_id << "\nDo you want to quit the plot?";
+  cin >> answer.value;
+  if((answer.value)=='y'){
+
+    command.str("");
+    command << "kill -9 " << job_id;
+    system(command.str().c_str());
+
+  }
+
+}
 
 void Sight::enter(Catalog catalog){
 
@@ -343,49 +400,6 @@ void Sight::reduce(void){
   
 }
 
-void Sight::plot(void){
-
-  File file_id, file_gnuplot;
-  stringstream line_ins;
-  string line;
-  Answer answer;
-
-  file_id.set_name("job_id.txt");
-  file_gnuplot.set_name("plot.plt");
-
-  
-  command << "sed 's/dummy_line/"
-	  << "replot [0.:2.*pi] xe(K*Lambda(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")), ye(K*Phi(t, " << d.value << ", " << GHA.value << ", " << M_PI/2.0 - H_o.value << ")) smo csp ti \"" << body.name << " " << time.to_string().str().c_str() << "\""  
-	  << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
-  //delete job_id.txt file, run gnuplot and write the relative job ID to job_id.txt
-  command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name;
-
-  file_gnuplot.remove();
-  file_id.remove();
-  
-  system(command.str().c_str());
-
-  if(file_id.open()==1){
-  
-      getline(file_id.value, line);
-      line_ins << line;
-      line_ins >> job_id;
-  }
-
-  file_id.close();
-
-  cout << "\nJob id = "<< job_id << "\nDo you want to quit the plot?";
-  cin >> answer.value;
-  if((answer.value)=='y'){
-
-    command.str("");
-    command << "kill -9 " << job_id;
-    system(command.str().c_str());
-
-  }
-
-  
-}
 
 void Sight::compute_H_a(void){
 
@@ -741,8 +755,6 @@ void Body::enter(Catalog catalog){
 
 
 Sight::Sight(void){
-
-  command.precision(my_precision);
 
   atmosphere.set();
   

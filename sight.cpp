@@ -13,11 +13,7 @@
 //mac
 /*
   clear; clear; g++ sight.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o sight.o -Wall -DHAVE_INLINE
-  clear; clear; g++ sight.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o sight.o -Wall -DHAVE_INLINE -g -Wno-unused-but-set-variable
   clear; clear; g++ sight.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o sight.o -Wall -DHAVE_INLINE -g
-
-
-
 
   ./sight.o
   valgrind ./sight.o
@@ -43,9 +39,9 @@
 // #include <gsl_complex_math.h>
 
 /*notes
-  - how do the jpl data files deal with the potential insertion of leap seconds in the future?
-  - this code does not work if there are leapseconds in the time lapse covered by the ephemeride files
-*/
+- how do the jpl data files deal with the potential insertion of leap seconds in the future?
+- this code does not work if there are leapseconds in the time lapse covered by the ephemeride files
+ */
 
 using namespace std;
 
@@ -78,7 +74,7 @@ int main(int argc, char *argv[]){
 		
     }
   */
-  
+
   Answer answer;
   Catalog catalog("data/catalog.txt");
   Plot plot;

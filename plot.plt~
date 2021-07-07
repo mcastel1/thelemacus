@@ -123,11 +123,6 @@ label_min(x) = sprintf("%.f'",x)
 #load 'rose.plt'
 
 
-#GPS position
-lambda0 = -(2.0 + 24./60. + 26.07/(60.**2.))
-phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
-set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
-
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every M w d linecolor rgb "gray" noti
 
@@ -138,7 +133,9 @@ plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlin
 
 
 
-dummy_line
+replot [0.:2.*pi] xe(K*Lambda(t, 0.333006, 1.03041, 0.984857)), ye(K*Phi(t, 0.333006, 1.03041, 0.984857)) smo csp ti "arcturus 2021 07 07 23-08-16.819 UTC"
+replot [0.:2.*pi] xe(K*Lambda(t, 0.333006, 1.15052, 1.06038)), ye(K*Phi(t, 0.333006, 1.15052, 1.06038)) smo csp ti "arcturus 2021 07 07 23-35-43.941 UTC"
+
 
 #unset parametric
 unset multiplot

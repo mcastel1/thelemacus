@@ -129,7 +129,7 @@ phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
 set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
 
 #coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every M w d linecolor rgb "gray" noti
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every M w d linecolor rgb "black" noti
 
 
 
@@ -209,7 +209,7 @@ while(1){
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	while(lambda<lambda_max){
 		set xtics add (label_deg(lambda) xe(lambda));
-		set arrow from first xe(lambda), graph 0 to first xe(lambda), graph 1 nohead  linecolor "blue"
+		set arrow from first xe(lambda), graph 0 to first xe(lambda), graph 1 nohead  linecolor "gray"
 
 		
 #		print lambda;
@@ -236,7 +236,7 @@ while(1){
 	phi = (int(phi_min/dphi))*dphi;
 	while(phi<phi_max){
 		set ytics add (label_deg(phi) ye(phi));
-		set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "red"
+		set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray"
 #		print phi;
 		phi = phi + dphi;
 

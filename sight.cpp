@@ -75,6 +75,15 @@ int main(int argc, char *argv[]){
     }
   */
 
+  Time a,b;
+  a.enter("Time a");
+  a.to_mjd();
+  b.mjd = a.mjd;
+  b.to_utc();
+  b.print("Time b");
+  return 0;
+
+  
   Answer answer;
   Catalog catalog("data/catalog.txt");
   Plot plot;

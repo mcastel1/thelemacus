@@ -1,7 +1,8 @@
 #define my_precision 16
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
-#define Y_min 2021
+//check that these values are covered by ephemerides data
+#define Y_min 0
 #define Y_max 2021
 #define mjd_min 59215.0
 #define N 24.0
@@ -13,6 +14,31 @@
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 class Catalog;
+
+class Chrono{
+
+ public:
+  unsigned int h, m;
+  double s;
+  bool check_h(void), check_m(void), check_s(void);
+
+};
+
+class Time{
+
+ public:
+  int Y, M, D;
+  Chrono chrono;
+  double s, mjd;
+  bool check_Y(void), check_M(void), check_D(void);
+  void enter(const char*);
+  void print(const char*);
+  void to_mjd(void);
+  void to_utc(void);
+  stringstream to_string(void);
+  
+};
+
 
 class File{
 
@@ -79,19 +105,6 @@ class Length{
 };
 
 
-class Time{
-
- public:
-  int Y, M, D, h, m;
-  double s, mjd;
-  bool check_Y(void), check_M(void), check_D(void), check_h(void), check_m(void), check_s(void);
-  void enter(const char*);
-  void print(const char*);
-  void to_mjd(void);
-  void to_utc(void);
-  stringstream to_string(void);
-  
-};
 
 
 class Angle{
@@ -426,14 +439,14 @@ void Plot::show(void){
 
   //read the job id from file_id
   if(file_id.open()==1){
-      getline(file_id.value, line);
-      line_ins << line;
-      line_ins >> job_id;
+    getline(file_id.value, line);
+    line_ins << line;
+    line_ins >> job_id;
   }
 
   file_id.close();
 
-  cout << "\nJob id = "<< job_id << "\nDo you want to quit the plot?";
+  cout << "\nJob id = "<< job_id << "\nDo you want to quit the plot? [y/n]";
   cin >> answer.value;
   if((answer.value)=='y'){
 
@@ -1184,7 +1197,7 @@ bool Time::check_D(void){
 
 };
 
-bool Time::check_h(void){
+bool Chrono::check_h(void){
 
   if((h >= 0) && (h < 24)){return true;}
   else{
@@ -1195,7 +1208,7 @@ bool Time::check_h(void){
 
 };
 
-bool Time::check_m(void){
+bool Chrono::check_m(void){
 
   if((m >= 0) && (m < 60)){return true;}
   else{
@@ -1206,7 +1219,7 @@ bool Time::check_m(void){
 
 };
 
-bool Time::check_s(void){
+bool Chrono::check_s(void){
 
   if((s >= 0.0) && (s < 60.0)){return true;}
   else{
@@ -1226,12 +1239,12 @@ stringstream Time::to_string(void){
   output << M << " ";
   if(D<10){output << 0;}
   output << D << " ";
-  if(h<10){output << 0;}
-  output << h << "-";
-  if(m<10){output << 0;}
-  output << m << "-";
-  if(s<10.0){output << 0;}
-  output << s << " UTC";
+  if((chrono.h)<10){output << 0;}
+  output << (chrono.h) << "-";
+  if((chrono.m)<10){output << 0;}
+  output << (chrono.m) << "-";
+  if((chrono.s)<10.0){output << 0;}
+  output << (chrono.s) << " UTC";
   //output << " (" << mjd << " MJD)\n";
 
   return output;
@@ -1282,18 +1295,18 @@ void Time::enter(const char* name) {
 
   do{
     cout << "\tEnter hh: ";
-    cin >> h;
-  }while(!(check_h()));
+    cin >> (chrono.h);
+  }while(!(chrono.check_h()));
 
   do{
     cout << "\tEnter mm: ";
-    cin >> m;
-  }while(!(check_m()));
+    cin >> (chrono.m);
+  }while(!(chrono.check_m()));
 
   do{
     cout << "\tEnter ss: ";
-    cin >> s;
-  }while(!(check_s()));
+    cin >> (chrono.s);
+  }while(!(chrono.check_s()));
 
   to_mjd();
   print(name);
@@ -1302,85 +1315,93 @@ void Time::enter(const char* name) {
 
 void Time:: to_utc(void){
   //int &day, int &month, int &year, double &hour)
-  145   /*
-  146     Calculate the calendar date from the Modified Julian Date
-  147 
-  148     INPUT :
-  149            mjd : Modified Julian Date (Julian Date - 2400000.5)
-  150 
-  151     OUTPUT :
-  152            day, month, year : corresponding date
-  153            hour : corresponding hours of the above date
-  154    */
-  155  {
-      int Yt, Mt, Dt;
-      double ht;
+  /*
+    Calculate the calendar date from the Modified Julian Date
+   
+    INPUT :
+    mjd : Modified Julian Date (Julian Date - 2400000.5)
+   
+    OUTPUT :
+    day, month, year : corresponding date
+    hour : corresponding hours of the above date
+  */
+   
+  int Yt, Mt, Dt;
+  double ht;
 
-  156   long int b, c, d, e, f, jd0;
-  157 
-  158   jd0 = long(mjd +  2400001.0);
-  159   if (jd0 < 2299161) c = jd0 + 1524;    /* Julian calendar */
-  160   else
-  161    {                                /* Gregorian calendar */
-  162     b = long (( jd0 - 1867216.25) / 36524.25);
-  163     c = jd0 + b - (b/4) + 1525;
-  164    };
-  165 
-  166   if (mjd < -2400001.0)  // special case for year < -4712
-  167    {
-  168     if (mjd == floor(mjd)) jd0 = jd0 + 1;
-  169     c = long((-jd0 - 0.1)/ 365.25);
-  170     c = c + 1;
-  171     Yt = -4712 - c;
-  172     d = c / 4;
-  173     d = c * 365 + d;  // number of days from JAN 1, -4712
-  174     f = d + jd0;  // day of the year
-  175     if ((c % 4) == 0) e = 61;
-  176     else e = 60;
-  177     if (f == 0)
-  178      {
-  179       Yt = Yt - 1;
-  180       Mt = 12;
-  181       Dt = 31;
-  182       f = 500;  // set as a marker
-  183      };
-  184     if (f < e)
-  185      {
-  186       if (f < 32)
-  187        {
-  188          Mt = 1;
-  189          Dt = f;
-  190        }
-  191       else
-  192        {
-  193          Mt = 2;
-  194          Dt = f - 31;
-  195        };
-  196      }
-  197     else
-  198      {
-  199        if (f < 500)
-  200         {
-  201          f = f - e;
-  202          Mt = long((f + 123.0) / 30.6001);
-  203          Dt = f - long(Mt * 30.6001) + 123;
-  204          Mt = Mt - 1;
-  205         };
-  206      };
-  207    }
-  208   else   // normal case
-  209    {
-  210     d = long ((c - 122.1) / 365.25);
-  211     e = 365 * d + (d/4);
-  212     f = long ((c - e) / 30.6001);
-  213     Dt = c - e - long(30.6001 * f);
-  214     Mt = f - 1 - 12 * (f / 14);
-  215     Yt = d - 4715 - ((7 + Mt) / 10);
-  216    };
-  217 
-  218   ht = 24.0 * (mjd - floor(mjd));
-  219  }
-  
+  long int b, c, d, e, f, jd0;
+   
+  jd0 = long(mjd +  2400001.0);
+  if (jd0 < 2299161) c = jd0 + 1524;    /* Julian calendar */
+  else
+    {                                /* Gregorian calendar */
+      b = long (( jd0 - 1867216.25) / 36524.25);
+      c = jd0 + b - (b/4) + 1525;
+    };
+   
+  if (mjd < -2400001.0)  // special case for year < -4712
+    {
+      if (mjd == floor(mjd)) jd0 = jd0 + 1;
+      c = long((-jd0 - 0.1)/ 365.25);
+      c = c + 1;
+      Yt = -4712 - c;
+      d = c / 4;
+      d = c * 365 + d;  // number of days from JAN 1, -4712
+      f = d + jd0;  // day of the year
+      if ((c % 4) == 0) e = 61;
+      else e = 60;
+      if (f == 0)
+        {
+	  Yt = Yt - 1;
+	  Mt = 12;
+	  Dt = 31;
+	  f = 500;  // set as a marker
+        };
+      if (f < e)
+        {
+	  if (f < 32)
+	    {
+	      Mt = 1;
+	      Dt = f;
+	    }
+	  else
+	    {
+	      Mt = 2;
+	      Dt = f - 31;
+	    };
+        }
+      else
+        {
+          if (f < 500)
+	    {
+	      f = f - e;
+	      Mt = long((f + 123.0) / 30.6001);
+	      Dt = f - long(Mt * 30.6001) + 123;
+	      Mt = Mt - 1;
+	    };
+        };
+    }
+  else   // normal case
+    {
+      d = long ((c - 122.1) / 365.25);
+      e = 365 * d + (d/4);
+      f = long ((c - e) / 30.6001);
+      Dt = c - e - long(30.6001 * f);
+      Mt = f - 1 - 12 * (f / 14);
+      Yt = d - 4715 - ((7 + Mt) / 10);
+    };
+   
+  ht = 24.0 * (mjd - floor(mjd));
+    
+
+  Y = ((unsigned int)Yt);
+  M = ((unsigned int)Mt);
+  D = ((unsigned int)Dt);
+
+  (chrono.h) = (unsigned int)(floor(ht));
+  (chrono.m) = floor((ht-floor(ht))*60.0);
+  (chrono.s) = (((ht-floor(ht))*60.0) - floor((ht-floor(ht))*60.0))*60.0;
+
 }
 
 void Time:: to_mjd(void)
@@ -1420,7 +1441,7 @@ void Time:: to_mjd(void)
    
   mjd = 365.0 * Yt - 679004.0;
   //comment this out if you want to include hours, minutes and seconds in mjd
-  mjd = mjd + b + int(30.6001 * (Mt + 1)) + Dt + (((double)h) + ((double)m)/60.0 + ((double)s)/(60.0*60.0)) / 24.0;
+  mjd = mjd + b + int(30.6001 * (Mt + 1)) + Dt + (((double)(chrono.h)) + ((double)(chrono.m))/60.0 + ((double)(chrono.s))/(60.0*60.0)) / 24.0;
    
   
 }

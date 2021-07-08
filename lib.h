@@ -33,12 +33,21 @@ class Time{
   bool check_Y(void), check_M(void), check_D(void);
   void enter(const char*);
   void print(const char*);
+  
   void to_mjd(void);
   void to_utc(void);
+  void add(Chrono);
+  
   stringstream to_string(void);
   
 };
 
+void Time::add(Chrono chrono_in){
+
+  mjd += (((double)(chrono_in.h)) + ((double)(chrono_in.m))/60.0 + ((double)(chrono_in.s))/(60.0*60.0))/24.0;
+  to_utc();
+
+}
 
 class File{
 

@@ -16,6 +16,16 @@
 
 class Catalog;
 
+class Answer{
+
+ public:
+  char value;
+  void enter(const char*);
+  void print(const char*);
+
+};
+
+
 class Chrono{
 
  public:
@@ -311,14 +321,6 @@ class Atmosphere{
 
 };
 
-class Answer{
-
- public:
-  char value;
-  void enter(const char*);
-  void print(const char*);
-
-};
 
 void Answer::enter(const char* name){
 
@@ -516,7 +518,25 @@ void Sight::enter(Catalog catalog){
   if(artificial_horizon.value == 'n'){
     height_of_eye.enter("height of eye");
   }
-  time.enter("UTC time of sight");
+
+
+  Answer stopwatch; // stopwatch = 'n' -> time is in format UTC time. stopwatch  = 'y' -> master clock UTC time + stopwatch reading
+
+  stopwatch.enter("use of stopwatch reading");
+  if(stopwatch.value == 'n'){
+    
+    time.enter("UTC time of sight");
+    
+  }else{
+    
+    Chrono temp;
+    
+    time.enter("master-clock UTC time");
+    temp.enter("stopwatch reading");
+    time.add(temp);
+    time.print("UTC time of sight");
+    
+  }
   
 }
 
@@ -963,8 +983,7 @@ void Sight::get_coordinates(void){
   double mjd_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
   gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
-    *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
-    *interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
+    *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
 
 
   if((body.type) != "star"){
@@ -998,6 +1017,8 @@ void Sight::get_coordinates(void){
       //if the body is not a star
 
       double r_tab[(unsigned int)N];
+      gsl_spline *interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
+
       
       for(; l<l_max; l++){
 	line.clear();
@@ -1041,6 +1062,8 @@ void Sight::get_coordinates(void){
       GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
       d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
       r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+
+      gsl_spline_free(interpolation_r);
 
     }else{
 
@@ -1102,6 +1125,10 @@ void Sight::get_coordinates(void){
     }
 
   }
+
+  gsl_interp_accel_free(acc);
+  gsl_spline_free(interpolation_GHA);
+  gsl_spline_free(interpolation_d);
   
 }
 

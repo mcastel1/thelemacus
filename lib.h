@@ -20,7 +20,11 @@ class Chrono{
  public:
   unsigned int h, m;
   double s;
+
   bool check_h(void), check_m(void), check_s(void);
+  void print(const char*);
+  void enter(const char*);
+  stringstream to_string(void);
 
 };
 
@@ -1237,7 +1241,54 @@ bool Chrono::check_s(void){
     return false;
   }
 
+}
+
+stringstream Chrono::to_string(void){
+
+  stringstream output;
+  
+  if(h<10){output << 0;}
+  output << h << "-";
+  if(m<10){output << 0;}
+  output << m << "-";
+  if(s<10.0){output << 0;}
+  output << s;
+
+  return output;
+  
+}
+
+
+void Chrono::print(const char* name){
+
+  cout << name << " is " << to_string().str().c_str() << "\n";
+
 };
+
+void Chrono::enter(const char* name) {
+
+  cout << "Enter " << name << " [hh-mm-ss]\n";
+
+  do{
+    cout << "\tEnter hh: ";
+    cin >> h;
+  }while(!check_h());
+
+  do{
+    cout << "\tEnter mm: ";
+    cin >> m;
+  }while(!check_m());
+
+  do{
+    cout << "\tEnter ss: ";
+    cin >> s;
+  }while(!check_s());
+
+  print(name);
+
+}
+
+
 
 stringstream Time::to_string(void){
 
@@ -1248,12 +1299,8 @@ stringstream Time::to_string(void){
   output << M << " ";
   if(D<10){output << 0;}
   output << D << " ";
-  if((chrono.h)<10){output << 0;}
-  output << (chrono.h) << "-";
-  if((chrono.m)<10){output << 0;}
-  output << (chrono.m) << "-";
-  if((chrono.s)<10.0){output << 0;}
-  output << (chrono.s) << " UTC";
+  output << chrono.to_string().str().c_str();
+  output << " UTC";
   //output << " (" << mjd << " MJD)\n";
 
   return output;
@@ -1265,27 +1312,13 @@ void Time::print(const char* name){
 
   cout << name << " is " << to_string().str().c_str() << "\n";
 
-  /*      << Y << " "; */
-  /* if(M<10){cout << 0;} */
-  /* cout << M << " "; */
-  /* if(D<10){cout << 0;} */
-  /* cout << D << " "; */
-  /* if(h<10){cout << 0;} */
-  /* cout << h << "-"; */
-  /* if(m<10){cout << 0;} */
-  /* cout << m << "-"; */
-  /* if(s<10.0){cout << 0;} */
-  /* cout << s */
-  /*   << " (" << mjd << " MJD)\n"; */
-
 };
-
 
 
 
 void Time::enter(const char* name) {
 
-  cout << "Enter " << name << " [YYYY MM DD hh-mm-ss]\n";
+  cout << "Enter " << name << " [YYYY MM DD]\n";
 
   do{
     cout << "\tEnter YYYY: ";
@@ -1302,21 +1335,8 @@ void Time::enter(const char* name) {
     cin >> D;
   }while(!(check_D()));
 
-  do{
-    cout << "\tEnter hh: ";
-    cin >> (chrono.h);
-  }while(!(chrono.check_h()));
-
-  do{
-    cout << "\tEnter mm: ";
-    cin >> (chrono.m);
-  }while(!(chrono.check_m()));
-
-  do{
-    cout << "\tEnter ss: ";
-    cin >> (chrono.s);
-  }while(!(chrono.check_s()));
-
+  chrono.enter("");
+  
   to_mjd();
   print(name);
 

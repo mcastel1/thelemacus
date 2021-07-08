@@ -41,7 +41,6 @@
 /*notes
 - how do the jpl data files deal with the potential insertion of leap seconds in the future?
 - this code does not work if there are leapseconds in the time lapse covered by the ephemeride files
-- in Time::enter(), you should include check that D lies in the right interval .This requires a knowledge of bisextile years
  */
 
 using namespace std;
@@ -76,6 +75,7 @@ int main(int argc, char *argv[]){
     }
   */
 
+  /*
   Time A;
   Chrono a;
   A.enter("Time A");
@@ -83,6 +83,7 @@ int main(int argc, char *argv[]){
   A.add(a);
   A.print("Time A+a");
   return 0;
+  */
   
   Answer answer;
   Catalog catalog("data/catalog.txt");
@@ -106,7 +107,7 @@ int main(int argc, char *argv[]){
   plot.show();
   
   //plot.~Plot();
-  
+
   cout << "\n";
   return(0);
 	

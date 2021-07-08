@@ -11,6 +11,7 @@
 //one nautical mile in kilometers
 #define nm 1.852
 
+
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 class Catalog;
@@ -33,6 +34,7 @@ class Time{
  public:
   int Y, M, D;
   bool Y_is_leap_year;
+  vector<unsigned int> days_per_month;
   Chrono chrono;
   double s, mjd;
   bool check_Y(void), check_M(void), check_D(void);
@@ -1232,7 +1234,7 @@ bool Time::check_M(void){
 
 bool Time::check_D(void){
 
-  if((D >= 1) && (D <= 31)){return true;}
+  if((D >= 1) && (D <= ((int)days_per_month[M-1]))){return true;}
   else{
     cout << "Entered value is not valid! Try again.\n";
     flush(cout);
@@ -1298,7 +1300,7 @@ void Chrono::print(const char* name){
 
 void Chrono::enter(const char* name) {
 
-  cout << "Enter " << name << " [hh-mm-ss]\n";
+  cout << "Enter hour of " << name << " [hh-mm-ss]\n";
 
   do{
     cout << "\tEnter hh: ";
@@ -1358,9 +1360,11 @@ void Time::enter(const char* name) {
   
   check_leap_year();
   if(Y_is_leap_year){
+    days_per_month = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     cout << "Entered a leap year\n";
   }else{
-   cout << "Entered a common year\n";
+    days_per_month = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    cout << "Entered a common year\n";
   }
   
   do{

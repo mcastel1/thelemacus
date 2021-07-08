@@ -41,6 +41,7 @@
 /*notes
 - how do the jpl data files deal with the potential insertion of leap seconds in the future?
 - this code does not work if there are leapseconds in the time lapse covered by the ephemeride files
+- in Time::enter(), you should include check that D lies in the right interval .This requires a knowledge of bisextile years
  */
 
 using namespace std;
@@ -75,13 +76,13 @@ int main(int argc, char *argv[]){
     }
   */
 
-  // Time a,b;
-  // a.enter("Time a");
-  // a.to_mjd();
-  // b.mjd = a.mjd;
-  // b.to_utc();
-  // b.print("Time b");
-  // return 0;
+  Time A;
+  Chrono a;
+  A.enter("Time A");
+  a.enter("Chrono a");
+  A.add(a);
+  A.print("Time A+a");
+  return 0;
 
   
   Answer answer;

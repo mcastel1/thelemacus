@@ -1284,7 +1284,7 @@ void Chrono::enter(const char* name) {
     cin >> s;
   }while(!check_s());
 
-  print(name);
+  //print(name);
 
 }
 
@@ -1318,7 +1318,7 @@ void Time::print(const char* name){
 
 void Time::enter(const char* name) {
 
-  cout << "Enter " << name << " [YYYY MM DD]\n";
+  cout << "Enter date of " << name << " [YYYY MM DD]\n";
 
   do{
     cout << "\tEnter YYYY: ";
@@ -1335,7 +1335,7 @@ void Time::enter(const char* name) {
     cin >> D;
   }while(!(check_D()));
 
-  chrono.enter("");
+  chrono.enter(name);
   
   to_mjd();
   print(name);

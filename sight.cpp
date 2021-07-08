@@ -83,7 +83,6 @@ int main(int argc, char *argv[]){
   A.add(a);
   A.print("Time A+a");
   return 0;
-
   
   Answer answer;
   Catalog catalog("data/catalog.txt");

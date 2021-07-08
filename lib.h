@@ -32,6 +32,7 @@ class Time{
 
  public:
   int Y, M, D;
+  bool Y_is_leap_year;
   Chrono chrono;
   double s, mjd;
   bool check_Y(void), check_M(void), check_D(void);
@@ -40,11 +41,41 @@ class Time{
   
   void to_mjd(void);
   void to_utc(void);
+  void check_leap_year(void);
   void add(Chrono);
   
   stringstream to_string(void);
   
 };
+
+void Time::check_leap_year(void){
+
+  if((Y % 4)!=0){
+    
+    Y_is_leap_year = false;
+    
+  }else{
+    
+    if((Y % 100)!=0){
+
+      Y_is_leap_year = true;
+
+    }else{
+      if((Y % 400)!=0){
+	
+	Y_is_leap_year = false;
+
+      }else{
+	
+	Y_is_leap_year = true;
+	
+      }
+      
+    }
+    
+  }
+  
+}
 
 void Time::add(Chrono chrono_in){
 
@@ -1324,6 +1355,13 @@ void Time::enter(const char* name) {
     cout << "\tEnter YYYY: ";
     cin >> Y;
   }while(!check_Y());
+  
+  check_leap_year();
+  if(Y_is_leap_year){
+    cout << "Entered a leap year\n";
+  }else{
+   cout << "Entered a common year\n";
+  }
   
   do{
     cout << "\tEnter MM: ";

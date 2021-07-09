@@ -460,8 +460,9 @@ void Plot::menu(void){
   case 2:{
 
     do{
-      cout << "Which sight do you want to delete? [sight #]\n";
+
       print("\t");
+      cout << "Which sight do you want to delete? [sight #]\n";
       cin >> i;
 
       if(!((0<=i) && (i<sight_list.size()))){
@@ -498,7 +499,7 @@ Plot::Plot(Catalog* cata){
   catalog = cata;
   job_id = -1;
 
-  gnuplot_command.precision(my_precision);
+  plot_command.precision(my_precision);
   command.precision(my_precision);
 
   file_id.set_name("job_id.txt");
@@ -1240,7 +1241,7 @@ void Angle::enter(const char* name){
   double am;
   bool check;
   
-  cout << "Enter " << name << " [s adadad amam]:\n";
+  cout << "Enter " << name << " [s ddd mm.m]:\n";
 
   do{
     cout << "\tEnter s: ";

@@ -497,6 +497,8 @@ Plot::Plot(Catalog* cata){
 
   catalog = cata;
   job_id = -1;
+
+  gnuplot_command.precision(my_precision);
   command.precision(my_precision);
 
   file_id.set_name("job_id.txt");

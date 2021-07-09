@@ -402,26 +402,90 @@ void Sight::print(const char* prefix){
 class Plot{
   
  public:
+  Catalog* catalog;
   File file_id, file_gnuplot;
   unsigned int job_id;
   stringstream command;
   vector<Sight> sight_list;
+  vector<string> choices;
 
-  Plot();
+  Plot(Catalog*);
   //~Plot();
-  void add(Catalog catalog);
+  void add(void);
   void remove(unsigned int);
   void print(const char*);
   void show(void);
+  void menu(void);
 
 };
 
-Plot::Plot(){
+void Plot::menu(void){
 
+  unsigned i;
+  bool check;
+
+  do{
+    
+    cout << "What do you want to do? [choice #]\n";
+    for(i=0; i<choices.size(); i++){
+      cout << "\t(" << i+1 << ") " << choices[i] << "\n";
+    }
+    cin >> i;
+    
+    if(!((0<i) && (i<choices.size()+1))){
+      
+      cout << "Enterd value is not valid!\n";
+      check = true;
+      
+    }else{
+      
+      check = false;
+      
+    }
+    
+  }while(check);
+  
+  
+  switch(i){
+
+  case 1:{
+    add(); 
+  }
+    break;
+    
+  case 2:{
+    cout << "I don't know what to do\n";
+  }
+    break;
+
+  case 3:{
+    cout << "I don't know what to do\n";
+  }
+    break;
+
+  case 4:{
+    cout << "I don't know what to do\n";
+  }
+    break;
+
+  }
+
+  print("");
+  show();
+  menu();  
+    
+}
+
+Plot::Plot(Catalog* cata){
+
+  catalog = cata;
+  
   command.precision(my_precision);
 
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
+
+  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point"};
   
 }
 
@@ -444,11 +508,11 @@ void Plot::print(const char* prefix){
 
 }
 
-void Plot::add(Catalog catalog){
+void Plot::add(){
 
   Sight sight;
   
-  sight.enter(catalog);
+  sight.enter((*catalog));
   sight.reduce();
   sight.print("\t");
   

@@ -85,24 +85,18 @@ int main(int argc, char *argv[]){
   return 0;
   */
   
-  Answer answer;
   Catalog catalog("data/catalog.txt");
-  Plot plot;
+  Plot plot(&catalog);
 
   catalog.print("\t");
   
- 
-  do{
-    plot.add(catalog);
-    answer.enter("whether you want to add another sight");
-  }while((answer.value)=='y');
+
+  plot.menu();
 
 
   // sight.enter(catalog); 
   // sight.reduce();
 
-  plot.print("");
-  plot.show();
   
 
   cout << "\n";

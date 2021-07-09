@@ -464,6 +464,7 @@ void Plot::menu(void){
       print("\t");
       cout << "Which sight do you want to delete? [sight #]\n";
       cin >> i;
+      i--;
 
       if(!((0<=i) && (i<sight_list.size()))){
 	cout << "Enterd value is not valid!\n";
@@ -475,7 +476,7 @@ void Plot::menu(void){
     }while(check);
     
     remove(i);
-      print("\t");
+    print("\t");
   show();
   menu();  
 
@@ -521,10 +522,17 @@ Plot::~Plot(){
 void Plot::print(const char* prefix){
 
   cout << "Sights in the plot:\n";
+
+  char* temp = new char [strlen(prefix)+1];
+  strcpy(temp+1, prefix);
+  temp[0] = '\t';
+  
   for(unsigned int i=0; i<sight_list.size(); i++){
-    cout << "Sight #" << i << ":\n";
-    (sight_list[i]).print(prefix);
+    cout << "\tSight #" << i+1 << ":\n";
+    (sight_list[i]).print(temp);
   }
+
+  delete [] temp;
 
 }
 
@@ -546,7 +554,7 @@ void Plot::add(){
 void Plot::remove(unsigned int i){
 
   sight_list.erase(sight_list.begin()+i);
-  cout << "Sight #" << i << " removed.\n";
+  cout << "Sight #" << i+1 << " removed.\n";
 
 }
   

@@ -4,7 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <strstream>
-#include <string>
+#include <string.h>
 #include <sstream>
 #include <algorithm>
 #include <list>

@@ -450,6 +450,10 @@ void Plot::menu(void){
 
   case 1:{
     add();
+      print("\t");
+  show();
+  menu();  
+
   }
     break;
     
@@ -470,25 +474,22 @@ void Plot::menu(void){
     }while(check);
     
     remove(i);
+      print("\t");
+  show();
+  menu();  
+
    
   }
     break;
 
   case 3:{
-    cout << "I don't know what to do\n";
+    cout << "Fair winds, following seas...\n";
   }
     break;
 
-  case 4:{
-    cout << "I don't know what to do\n";
-  }
-    break;
 
   }
 
-  print("\t");
-  show();
-  menu();  
     
 }
 
@@ -501,7 +502,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
 
-  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point"};
+  choices = {"Add a sight", "Delete a sight"/*, "Add a point", "Delete a point"*/, "Exit"};
   
 }
 

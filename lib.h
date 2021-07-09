@@ -404,8 +404,8 @@ class Plot{
  public:
   Catalog* catalog;
   File file_id, file_gnuplot;
-  unsigned int job_id;
-  stringstream command;
+  int job_id;
+  stringstream command, plot_command;
   vector<Sight> sight_list;
   vector<string> choices;
 
@@ -449,12 +449,24 @@ void Plot::menu(void){
   switch(i){
 
   case 1:{
-    add(); 
+    add();
+    print("\t");
+    show();
   }
     break;
     
   case 2:{
-    cout << "I don't know what to do\n";
+
+    cout << "Which sight do you want to delete? [sight #]\n";
+    print("\t");
+
+    cin >> i;
+
+    remove(i);
+    print("\t");
+    show();
+
+    
   }
     break;
 
@@ -479,7 +491,7 @@ void Plot::menu(void){
 Plot::Plot(Catalog* cata){
 
   catalog = cata;
-  
+  job_id = -1;
   command.precision(my_precision);
 
   file_id.set_name("job_id.txt");
@@ -533,13 +545,25 @@ void Plot::remove(unsigned int i){
 
 void Plot::show(void){
 
-  stringstream line_ins, plot_command;
+  stringstream line_ins;
   string line;
-  Answer answer;
   unsigned int i;
 
-  file_gnuplot.remove();
+  //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped. 
+  if(job_id != -1){
+    
+    command.str("");
+    command << "kill -9 " << job_id;
+    system(command.str().c_str());
+    
+  }
+
   file_id.remove();
+  file_gnuplot.remove();
+
+  plot_command.str("");
+  command.str("");
+
 
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
     plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << "\"\\\n";
@@ -561,18 +585,10 @@ void Plot::show(void){
   }
 
   file_id.close();
-
+  file_id.remove();
+  
   cout << "\nJob id = "<< job_id << "\n";
   
-  answer.enter("whether you want to quit the plot");
-  if((answer.value)=='y'){
-
-    command.str("");
-    command << "kill -9 " << job_id;
-    system(command.str().c_str());
-
-  }
-
 }
 
 void Sight::enter(Catalog catalog){

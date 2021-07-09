@@ -10,6 +10,8 @@
 #define max_iter (1e2)
 //one nautical mile in kilometers
 #define nm 1.852
+#define RED     "\033[31m"      /* Red */
+#define RESET   "\033[0m"
 
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
@@ -327,17 +329,17 @@ void Answer::enter(const char* name){
 
   bool check;
   
-  cout << "Enter " << name << " [y/n]:\n";
 
   do{
 
+    cout << "Enter " << name << " [y/n]:\n";
     cin >> value;
     
     if((value=='y') || (value=='n')){
       check = true;
     }
     else{
-      cout << "Entered value is not valid! Try again.\n";
+      cout << RED << "Entered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -434,7 +436,7 @@ void Plot::menu(void){
     
     if(!((0<i) && (i<choices.size()+1))){
       
-      cout << "Enterd value is not valid!\n";
+      cout << RED << "Enterd value is not valid!\n" << RESET;
       check = true;
       
     }else{
@@ -467,7 +469,7 @@ void Plot::menu(void){
       i--;
 
       if(!((0<=i) && (i<sight_list.size()))){
-	cout << "Enterd value is not valid!\n";
+	cout << RED << "Enterd value is not valid!\n" << RESET;
 	check = true;
       }
       else{
@@ -773,7 +775,7 @@ double Atmosphere::T(Length z){
   
   }else{
 
-    cout << "Value of z is not valid!\n";
+    cout << RED << "Value of z is not valid!\n" << RESET;
     x=-1.0;
 
   }
@@ -802,7 +804,7 @@ double Atmosphere::dTdz(Length z){
   
   }else{
 
-    cout << "Value of z is not valid!\n";
+    cout << RED << "Value of z is not valid!\n"<< RESET;
     x=-1.0;
 
   }
@@ -845,7 +847,7 @@ double Atmosphere::n(Length z){
   
   }else{
 
-    cout << "Value of z is not valid!\n";
+    cout << RED << "Value of z is not valid!\n" << RESET;
     x=-1.0;
 
   }
@@ -987,11 +989,9 @@ void Body::enter(Catalog catalog){
     cin >> s;
 
     for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name == s){check=false;}}
-    if(check){cout << "Body not found in catalog!\n";}
+    if(check){cout << RED << "Body not found in catalog!\n" << RESET;}
       
   }while(check);
-
-  cout << "Body found in catalog.\n";
   
   i--;
   (*this) = (catalog.list)[i];
@@ -1051,21 +1051,27 @@ void Length::set(const char* name, double x){
     print(name, ""); 
   }
   else{
-    cout << "Entered value of " << name << "is not valid!\n";
+    cout << RED << "Entered value of " << name << "is not valid!\n" << RESET;
   }
   
 }
 
 void Length::enter(const char* name){
 
-  cout << "Enter " << name << " [m]:\n";
+  bool check;
 
   do{
     
+    cout << "Enter " << name << " [m]:\n";
     cin >> value;
-    cout << "\x1b[40mEntered value of " << name << "is not valid!\x1b[0m\n";
+    if(value < 0.0){
+      cout << RED << "Entered value of " << name << " is not valid!\n" << RESET;
+      check = true;
+    }else{
+      check = false;
+    }
 
-  }while(value < 0.0);
+  }while(check);
   //convert to nautical miles
   value/=(1e3*nm);
     
@@ -1260,7 +1266,7 @@ void Angle::enter(const char* name){
     
     if((s=="+") || (s=="-")){check = true;}
     else{
-      cout << "Entered value is not valid! Try again.\n";
+      cout << RED << "Entered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -1268,24 +1274,24 @@ void Angle::enter(const char* name){
 
   
   do{
-    cout << "\tEnter adadad: ";
+    cout << "\tEnter ddd: ";
     cin >> ad;
     
     if((abs(ad) >= 0) && (abs(ad) < 360)){check = true;}
     else{
-      cout << "Entered value is not valid! Try again.\n";
+      cout << RED << "Entered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
   }while(!check);
   
   do{
-    cout << "\tEnter amam: ";
+    cout << "\tEnter mm: ";
     cin >> am;
 
     if((am >= 0.0) && (am < 60.0)){check = true;}
     else{
-      cout << "Entered value is not valid! Try again.\n";
+      cout << RED << "Entered value is not valid!.\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -1316,14 +1322,14 @@ void Angle::print(const char* name, const char* prefix){
 void Limb::enter(const char* name){
 
   bool check;
-  cout << "Enter " << name << " [u/l/c]:\n";
 
   do{
+    cout << "Enter " << name << " [u/l/c]:\n";
     cin >> value;
     
     if((value=='u') || (value=='l') || (value=='c')){check = true;}
     else{
-      cout << "Entered value is not valid! Try again.\n";
+      cout << RED << "Entered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -1345,7 +1351,7 @@ bool Time::check_Y(void){
 
   if((Y >= Y_min) && (Y <= Y_max)){return true;}
   else{
-    cout << "Entered value is not valid! Try again.\n";
+    cout << RED << "Entered value is not valid!\n" << RESET;
     flush(cout);
     return false;
   }
@@ -1357,7 +1363,7 @@ bool Time::check_M(void){
 
   if((M >= 1) && (M <= 12)){return true;}
   else{
-    cout << "Entered value is not valid! Try again.\n";
+    cout << RED << "Entered value is not valid!\n" << RESET;
     flush(cout);
     return false;
   }
@@ -1368,8 +1374,7 @@ bool Time::check_D(void){
 
   if((D >= 1) && (D <= ((int)days_per_month[M-1]))){return true;}
   else{
-    cout << "Entered value is not valid! Try again.\n";
-    flush(cout);
+    cout << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
@@ -1379,8 +1384,7 @@ bool Chrono::check_h(void){
 
   if((h >= 0) && (h < 24)){return true;}
   else{
-    cout << "Entered value is not valid! Try again.\n";
-    flush(cout);
+    cout << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
@@ -1390,8 +1394,7 @@ bool Chrono::check_m(void){
 
   if((m >= 0) && (m < 60)){return true;}
   else{
-    cout << "Entered value is not valid! Try again.\n";
-    flush(cout);
+    cout << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
@@ -1401,8 +1404,7 @@ bool Chrono::check_s(void){
 
   if((s >= 0.0) && (s < 60.0)){return true;}
   else{
-    cout << "Entered value is not valid! Try again.\n";
-    flush(cout);
+    cout << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 

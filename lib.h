@@ -22,7 +22,7 @@ class Answer{
 
  public:
   char value;
-  void enter(const char*);
+  void enter(const char*, const char*);
   void print(const char*, const char*);
 
 };
@@ -33,7 +33,7 @@ class Angle{
  
   double value;
   void normalize(void);
-  void enter(const char*);
+  void enter(const char*, const char*);
   void set(const char*, double);
   void print(const char*, const char*);
 
@@ -48,7 +48,7 @@ class Point{
   //latitude and longitude of the point
   Angle phi, lambda;
 
-  void enter(const char*);
+  void enter(const char*, const char*);
   void print(const char*, const char*);
 
 };
@@ -62,7 +62,7 @@ class Chrono{
 
   bool check_h(void), check_m(void), check_s(void);
   void print(const char*, const char*);
-  void enter(const char*);
+  void enter(const char*, const char*);
   stringstream to_string(void);
 
 };
@@ -76,7 +76,7 @@ class Time{
   Chrono chrono;
   double s, mjd;
   bool check_Y(void), check_M(void), check_D(void);
-  void enter(const char*);
+  void enter(const char*, const char*);
   void print(const char*, const char*);
   
   void to_mjd(void);
@@ -184,7 +184,7 @@ class Length{
  public:
   double value;
   void set(const char*, double);
-  void enter(const char*);
+  void enter(const char*, const char*);
   void print(const char*, const char*);
 
 };
@@ -225,7 +225,7 @@ class Limb{
 
  public:
   char value;
-  void enter(const char*);
+  void enter(const char*, const char*);
   void print(const char*, const char*);
 
 };
@@ -237,7 +237,7 @@ class Body{
   string name, type;
   Length radius;
   Angle RA, d; 
-  void enter(Catalog), print(const char*);
+  void enter(Catalog, const char*), print(const char*);
   
 };
 
@@ -345,27 +345,26 @@ class Atmosphere{
 };
 
 
-void Answer::enter(const char* name){
+void Answer::enter(const char* name, const char* prefix){
 
   bool check;
   
-
   do{
 
-    cout << "Enter " << name << " [y/n]:\n";
+    cout << prefix << "Enter " << name << " [y/n]:\n";
     cin >> value;
     
     if((value=='y') || (value=='n')){
       check = true;
     }
     else{
-      cout << RED << "Entered value is not valid!\n" << RESET;
+      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
   }while(!check);
 
-  print(name, "");
+  print(name, prefix);
 
 }
 
@@ -398,7 +397,7 @@ class Sight{
   void compute_H_a(void);
   void compute_H_o(void);
 
-  void enter(Catalog);
+  void enter(Catalog, const char*);
   void print(const char*);
   void reduce(void);
   
@@ -562,7 +561,7 @@ void Plot::add(){
 
   Sight sight;
   
-  sight.enter((*catalog));
+  sight.enter((*catalog), "");
   sight.reduce();
   sight.print("\t");
   
@@ -629,33 +628,33 @@ void Plot::show(void){
   
 }
 
-void Sight::enter(Catalog catalog){
+void Sight::enter(Catalog catalog, const char* prefix){
 
-  body.enter(catalog);
+  body.enter(catalog, prefix);
   if(body.type != "star"){
-    limb.enter("limb");
+    limb.enter("limb", prefix);
   }
-  H_s.enter("sextant altitude");
-  index_error.enter("index error");
-  artificial_horizon.enter("artificial horizon");
+  H_s.enter("sextant altitude", prefix);
+  index_error.enter("index error", prefix);
+  artificial_horizon.enter("artificial horizon", prefix);
   if(artificial_horizon.value == 'n'){
-    height_of_eye.enter("height of eye");
+    height_of_eye.enter("height of eye", prefix);
   }
 
 
   Answer stopwatch; // stopwatch = 'n' -> time is in format UTC time. stopwatch  = 'y' -> master clock UTC time + stopwatch reading
 
-  stopwatch.enter("use of stopwatch reading");
+  stopwatch.enter("use of stopwatch reading", prefix);
   if(stopwatch.value == 'n'){
     
-    time.enter("UTC time of sight");
+    time.enter("UTC time of sight", prefix);
     
   }else{
     
     Chrono temp;
     
-    time.enter("master-clock UTC time");
-    temp.enter("stopwatch reading");
+    time.enter("master-clock UTC time", prefix);
+    temp.enter("stopwatch reading", prefix);
     time.add(temp);
     time.print("UTC time of sight", "");
     
@@ -998,14 +997,14 @@ void Body::print(const char* prefix){
 }
 
 
-void Body::enter(Catalog catalog){
+void Body::enter(Catalog catalog, const char* prefix){
 
   unsigned int i;
   bool check;
   string s;
   
   do{
-    cout << "Enter name of body:";
+    cout << prefix << "Enter name of body:";
     cin >> s;
 
     for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name == s){check=false;}}
@@ -1076,16 +1075,16 @@ void Length::set(const char* name, double x){
   
 }
 
-void Length::enter(const char* name){
+void Length::enter(const char* name, const char* prefix){
 
   bool check;
 
   do{
     
-    cout << "Enter " << name << " [m]:\n";
+    cout << prefix << "Enter " << name << " [m]:\n";
     cin >> value;
     if(value < 0.0){
-      cout << RED << "Entered value of " << name << " is not valid!\n" << RESET;
+      cout << prefix << RED << "Entered value of " << name << " is not valid!\n" << RESET;
       check = true;
     }else{
       check = false;
@@ -1095,7 +1094,7 @@ void Length::enter(const char* name){
   //convert to nautical miles
   value/=(1e3*nm);
     
-  print(name, ""); 
+  print(name, prefix); 
   
 }
 
@@ -1271,22 +1270,22 @@ void Angle::set(const char* name, double x){
   
 }
 
-void Angle::enter(const char* name){
+void Angle::enter(const char* name, const char* prefix){
 
   string s;
   int ad;
   double am;
   bool check;
   
-  cout << "Enter " << name << " [s ddd mm.m]:\n";
+  cout << prefix << "Enter " << name << " [s ddd mm.m]:\n";
 
   do{
-    cout << "\tEnter s: ";
+    cout << prefix << "\tEnter s: ";
     cin >> s;
     
     if((s=="+") || (s=="-")){check = true;}
     else{
-      cout << RED << "Entered value is not valid!\n" << RESET;
+      cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -1294,24 +1293,24 @@ void Angle::enter(const char* name){
 
   
   do{
-    cout << "\tEnter ddd: ";
+    cout << prefix << "\tEnter ddd: ";
     cin >> ad;
     
     if((abs(ad) >= 0) && (abs(ad) < 360)){check = true;}
     else{
-      cout << RED << "Entered value is not valid!\n" << RESET;
+      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
   }while(!check);
   
   do{
-    cout << "\tEnter mm: ";
+    cout << prefix << "\tEnter mm: ";
     cin >> am;
 
     if((am >= 0.0) && (am < 60.0)){check = true;}
     else{
-      cout << RED << "Entered value is not valid!.\n" << RESET;
+      cout << prefix << RED << "Entered value is not valid!.\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -1320,35 +1319,53 @@ void Angle::enter(const char* name){
   value = k*(ad + am/60.0);
   if(s=="-"){value*=-1.0;}
   normalize();
-  print(name, "");
+  print(name, prefix);
 
 
 }
 
-void Point::enter(const char* name){
+void Point::enter(const char* name, const char* prefix){
 
   bool check;
-  
+  char* new_prefix = new char[strlen(prefix)+1];
+
+  //prepend \t to prefix
+  new_prefix[0] = '\t';
+  strcpy(new_prefix+1, prefix);    
+
+  cout << prefix << "Enter " << name << ":\n";
+
   do{
-    phi.enter("latitude");
+    phi.enter("latitude", new_prefix);
     if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
-      cout << RED << "Entered value is not valid!\n" << RESET;
+      cout << new_prefix << RED << "Entered value is not valid!\n" << RESET;
       check = true;
     }else{
       check = false;
     }
   }while(check);
   
-  lambda.enter("longitude");
+  lambda.enter("longitude", new_prefix);
+  delete[] new_prefix;
+
   
 }
 
 void Point::print(const char* name, const char* prefix){
 
-  
-  phi.print("latitude", prefix);
-  lambda.print("longitude", prefix);
-  
+  char* new_prefix = new char[strlen(prefix)+1];
+
+  //prepend \t to prefix
+  new_prefix[0] = '\t';
+  strcpy(new_prefix+1, prefix);    
+
+  cout << prefix << name << " is:\n";
+
+  phi.print("latitude", new_prefix);
+  lambda.print("longitude", new_prefix);
+
+  delete[] new_prefix;
+
 }
 
 
@@ -1366,22 +1383,22 @@ void Angle::print(const char* name, const char* prefix){
 
 }
 
-void Limb::enter(const char* name){
+void Limb::enter(const char* name, const char* prefix){
 
   bool check;
 
   do{
-    cout << "Enter " << name << " [u/l/c]:\n";
+    cout << prefix << "Enter " << name << " [u/l/c]:\n";
     cin >> value;
     
     if((value=='u') || (value=='l') || (value=='c')){check = true;}
     else{
-      cout << RED << "Entered value is not valid!\n" << RESET;
+      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
       check = false;
     }
   }while(!check);
   
-  print(name, "");
+  print(name, prefix);
   
 }
 
@@ -1478,26 +1495,24 @@ void Chrono::print(const char* name, const char* prefix){
 
 };
 
-void Chrono::enter(const char* name) {
+void Chrono::enter(const char* name, const char* prefix) {
 
-  cout << "Enter hour of " << name << " [hh-mm-ss]\n";
+  cout << prefix << "Enter hour of " << name << " [hh-mm-ss]\n";
 
   do{
-    cout << "\tEnter hh: ";
+    cout << prefix << "\tEnter hh: ";
     cin >> h;
   }while(!check_h());
 
   do{
-    cout << "\tEnter mm: ";
+    cout << prefix << "\tEnter mm: ";
     cin >> m;
   }while(!check_m());
 
   do{
-    cout << "\tEnter ss: ";
+    cout << prefix << "\tEnter ss: ";
     cin >> s;
   }while(!check_s());
-
-  //print(name);
 
 }
 
@@ -1529,38 +1544,38 @@ void Time::print(const char* name, const char* prefix){
 
 
 
-void Time::enter(const char* name) {
+void Time::enter(const char* name, const char* prefix) {
 
-  cout << "Enter date of " << name << " [YYYY MM DD]\n";
+  cout << prefix << "Enter date of " << name << " [YYYY MM DD]\n";
 
   do{
-    cout << "\tEnter YYYY: ";
+    cout << prefix << "\tEnter YYYY: ";
     cin >> Y;
   }while(!check_Y());
   
   check_leap_year();
   if(Y_is_leap_year){
     days_per_month = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << "Entered a leap year\n";
+    cout << prefix << "Entered a leap year\n";
   }else{
     days_per_month = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << "Entered a common year\n";
+    cout << prefix << "Entered a common year\n";
   }
   
   do{
-    cout << "\tEnter MM: ";
+    cout << prefix << "\tEnter MM: ";
     cin >> M;
   }while(!check_M());
 
   do{
-    cout << "\tEnter DD: ";
+    cout << prefix << "\tEnter DD: ";
     cin >> D;
   }while(!(check_D()));
 
-  chrono.enter(name);
+  chrono.enter(name, prefix);
   
   to_mjd();
-  print(name, "");
+  print(name, prefix);
 
 }
 

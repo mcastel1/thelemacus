@@ -95,8 +95,6 @@ int main(int argc, char *argv[]){
   do{
     plot.add(catalog);
     answer.enter("whether you want to add another sight");
-    cin >> answer.value;
-    answer.print("whether you want to add another sight", "");
   }while((answer.value)=='y');
 
 

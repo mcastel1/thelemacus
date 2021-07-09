@@ -820,7 +820,7 @@ void Atmosphere::set(void){
   double x;
   bool check;
   
-  cout << "Atmosphere model: US 1976.\n";
+  //cout << "Atmosphere model: US 1976.\n";
 
   n_layers = 7;
   A = 0.7933516713545163, B = 34.16*nm, P_dry_0 = 101325.0, alpha = -6.5*nm, beta = 2.8*nm, gamma = -2.8*nm, T0 = 288.15;

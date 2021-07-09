@@ -112,6 +112,7 @@ void File::remove(void){
 
   stringstream command;
 
+  command.str("");
   command << "rm -rf " << name  << "> /dev/null 2>&1";
   system(command.str().c_str());
 
@@ -407,7 +408,7 @@ class Plot{
   vector<Sight> sight_list;
 
   Plot();
-  ~Plot();
+  //~Plot();
   void add(Catalog catalog);
   void remove(unsigned int);
   void print(const char*);
@@ -424,12 +425,14 @@ Plot::Plot(){
   
 }
 
+/*
 Plot::~Plot(){
 
-  file_gnuplot.remove();
+  //file_gnuplot.remove();
   file_id.remove();
   
 }
+*/
 
 void Plot::print(const char* prefix){
 
@@ -495,7 +498,7 @@ void Plot::show(void){
 
   file_id.close();
 
-  cout << "\nJob id = "<< job_id;
+  cout << "\nJob id = "<< job_id << "\n";
   
   answer.enter("whether you want to quit the plot");
   if((answer.value)=='y'){

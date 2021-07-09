@@ -104,7 +104,6 @@ int main(int argc, char *argv[]){
   plot.print("");
   plot.show();
   
-  plot.~Plot();
 
   cout << "\n";
   return(0);

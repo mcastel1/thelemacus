@@ -397,7 +397,7 @@ class Sight{
   void compute_H_a(void);
   void compute_H_o(void);
 
-  void enter(Catalog, const char*);
+  void enter(Catalog, const char*, const char*);
   void print(const char*, const char*);
   void reduce(void);
   
@@ -569,7 +569,7 @@ void Plot::add_sight(){
 
   Sight sight;
   
-  sight.enter((*catalog), "");
+  sight.enter((*catalog), "new sight", "");
   sight.reduce();
   sight.print("", "\t");
   
@@ -584,7 +584,7 @@ void Plot::add_point(){
 
   Point point;
   
-  point.enter("", "");
+  point.enter("new point", "");
   
   point_list.push_back(point);
   cout << "Point added as point #" << point_list.size() << ".\n";
@@ -649,37 +649,47 @@ void Plot::show(void){
   
 }
 
-void Sight::enter(Catalog catalog, const char* prefix){
+void Sight::enter(Catalog catalog, const char* name, const char* prefix){
 
-  body.enter(catalog, prefix);
+  char* new_prefix = new char[strlen(prefix)+1];
+
+  //append \t to prefix
+  strcpy(new_prefix, prefix);    
+  new_prefix[strlen(prefix)] = '\t';
+
+  cout << prefix << "Enter " << name << ":\n";
+  
+  body.enter(catalog, new_prefix);
   if(body.type != "star"){
-    limb.enter("limb", prefix);
+    limb.enter("limb", new_prefix);
   }
-  H_s.enter("sextant altitude", prefix);
-  index_error.enter("index error", prefix);
-  artificial_horizon.enter("artificial horizon", prefix);
+  H_s.enter("sextant altitude", new_prefix);
+  index_error.enter("index error", new_prefix);
+  artificial_horizon.enter("artificial horizon", new_prefix);
   if(artificial_horizon.value == 'n'){
-    height_of_eye.enter("height of eye", prefix);
+    height_of_eye.enter("height of eye", new_prefix);
   }
 
 
   Answer stopwatch; // stopwatch = 'n' -> time is in format UTC time. stopwatch  = 'y' -> master clock UTC time + stopwatch reading
 
-  stopwatch.enter("use of stopwatch reading", prefix);
+  stopwatch.enter("use of stopwatch reading", new_prefix);
   if(stopwatch.value == 'n'){
     
-    time.enter("UTC time of sight", prefix);
+    time.enter("UTC time of sight", new_prefix);
     
   }else{
     
     Chrono temp;
     
-    time.enter("master-clock UTC time", prefix);
-    temp.enter("stopwatch reading", prefix);
+    time.enter("master-clock UTC time", new_prefix);
+    temp.enter("stopwatch reading", new_prefix);
     time.add(temp);
     time.print("UTC time of sight", "");
     
   }
+
+  delete [] new_prefix;
   
 }
 
@@ -1023,19 +1033,25 @@ void Body::enter(Catalog catalog, const char* prefix){
   unsigned int i;
   bool check;
   string s;
+  char* new_prefix = new char[strlen(prefix)+1];
+
+  //append \t to prefix
+  strcpy(new_prefix, prefix);    
+  new_prefix[strlen(prefix)] = '\t';
+
   
   do{
     cout << prefix << "Enter name of body:";
     cin >> s;
 
     for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name == s){check=false;}}
-    if(check){cout << RED << "Body not found in catalog!\n" << RESET;}
+    if(check){cout << prefix << RED << "Body not found in catalog!\n" << RESET;}
       
   }while(check);
   
   i--;
   (*this) = (catalog.list)[i];
-  print("\t");
+  print(new_prefix);
   
 }
 
@@ -1590,10 +1606,10 @@ void Time::enter(const char* name, const char* prefix) {
   check_leap_year();
   if(Y_is_leap_year){
     days_per_month = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << prefix << "Entered a leap year\n";
+    cout << new_prefix << "Entered a leap year\n";
   }else{
     days_per_month = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << prefix << "Entered a common year\n";
+    cout << new_prefix << "Entered a common year\n";
   }
   
   do{

@@ -75,10 +75,11 @@ int main(int argc, char *argv[]){
     }
   */
 
-
+  /*
   Point a;
   a.enter("Position", "");
   a.print("Entered position", "");
+  */
   
   Catalog catalog("data/catalog.txt");
   Plot plot(&catalog);

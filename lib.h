@@ -299,13 +299,20 @@ Catalog::Catalog(const char* filename){
 void Catalog::print(const char* prefix){
 
   unsigned int i;
+  char* new_prefix = new char[strlen(prefix)+1];
+
+  //prepend \t to prefix
+  new_prefix[0] = '\t';
+  strcpy(new_prefix+1, prefix);    
+
   for(i=0; i<list.size(); i++){
     
     cout << prefix << "Body #" << i << "\n";
-    list[i].print(prefix);
+    list[i].print(new_prefix);
 
   }
 
+  delete[] new_prefix;
 
 }
 

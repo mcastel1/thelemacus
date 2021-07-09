@@ -60,7 +60,7 @@ class Chrono{
   unsigned int h, m;
   double s;
 
-  bool check_h(void), check_m(void), check_s(void);
+  bool check_h(const char*), check_m(const char*), check_s(const char*);
   void print(const char*, const char*);
   void enter(const char*, const char*);
   stringstream to_string(void);
@@ -75,7 +75,7 @@ class Time{
   vector<unsigned int> days_per_month;
   Chrono chrono;
   double s, mjd;
-  bool check_Y(void), check_M(void), check_D(void);
+  bool check_Y(const char*), check_M(const char*), check_D(const char*);
   void enter(const char*, const char*);
   void print(const char*, const char*);
   
@@ -566,7 +566,7 @@ void Plot::add(){
   sight.print("\t");
   
   sight_list.push_back(sight);
-  cout << "Sight added as sight #" << sight_list.size()-1 << ".\n";
+  cout << "Sight added as sight #" << sight_list.size() << ".\n";
 
   //sight.~Sight();
 
@@ -1298,7 +1298,7 @@ void Angle::enter(const char* name, const char* prefix){
     
     if((abs(ad) >= 0) && (abs(ad) < 360)){check = true;}
     else{
-      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
+      cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -1310,7 +1310,7 @@ void Angle::enter(const char* name, const char* prefix){
 
     if((am >= 0.0) && (am < 60.0)){check = true;}
     else{
-      cout << prefix << RED << "Entered value is not valid!.\n" << RESET;
+      cout << prefix << RED << "\tEntered value is not valid!.\n" << RESET;
       flush(cout);
       check = false;
     }
@@ -1410,64 +1410,63 @@ void Limb::print(const char* name, const char* prefix){
 }
 
 
-bool Time::check_Y(void){
+bool Time::check_Y(const char* prefix){
 
   if((Y >= Y_min) && (Y <= Y_max)){return true;}
   else{
-    cout << RED << "Entered value is not valid!\n" << RESET;
-    flush(cout);
+    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
 };
 
 
-bool Time::check_M(void){
+bool Time::check_M(const char* prefix){
 
   if((M >= 1) && (M <= 12)){return true;}
   else{
-    cout << RED << "Entered value is not valid!\n" << RESET;
+    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     flush(cout);
     return false;
   }
 
 };
 
-bool Time::check_D(void){
+bool Time::check_D(const char* prefix){
 
   if((D >= 1) && (D <= ((int)days_per_month[M-1]))){return true;}
   else{
-    cout << RED << "Entered value is not valid!\n" << RESET;
+    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
 };
 
-bool Chrono::check_h(void){
+bool Chrono::check_h(const char* prefix){
 
   if((h >= 0) && (h < 24)){return true;}
   else{
-    cout << RED << "Entered value is not valid!\n" << RESET;
+    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
 };
 
-bool Chrono::check_m(void){
+bool Chrono::check_m(const char* prefix){
 
   if((m >= 0) && (m < 60)){return true;}
   else{
-    cout << RED << "Entered value is not valid!\n" << RESET;
+    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
 };
 
-bool Chrono::check_s(void){
+bool Chrono::check_s(const char* prefix){
 
   if((s >= 0.0) && (s < 60.0)){return true;}
   else{
-    cout << RED << "Entered value is not valid!\n" << RESET;
+    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     return false;
   }
 
@@ -1497,23 +1496,31 @@ void Chrono::print(const char* name, const char* prefix){
 
 void Chrono::enter(const char* name, const char* prefix) {
 
+  char* new_prefix = new char[strlen(prefix)+1];
+
+  //append \t to prefix
+  strcpy(new_prefix, prefix);    
+  new_prefix[strlen(prefix)] = '\t';
+
   cout << prefix << "Enter hour of " << name << " [hh-mm-ss]\n";
 
   do{
     cout << prefix << "\tEnter hh: ";
     cin >> h;
-  }while(!check_h());
+  }while(!check_h(new_prefix));
 
   do{
     cout << prefix << "\tEnter mm: ";
     cin >> m;
-  }while(!check_m());
+  }while(!check_m(new_prefix));
 
   do{
     cout << prefix << "\tEnter ss: ";
     cin >> s;
-  }while(!check_s());
+  }while(!check_s(new_prefix));
 
+  delete [] new_prefix;
+  
 }
 
 
@@ -1546,12 +1553,18 @@ void Time::print(const char* name, const char* prefix){
 
 void Time::enter(const char* name, const char* prefix) {
 
+  char* new_prefix = new char[strlen(prefix)+1];
+
+  //append \t to prefix
+  strcpy(new_prefix, prefix);    
+  new_prefix[strlen(prefix)] = '\t';
+
   cout << prefix << "Enter date of " << name << " [YYYY MM DD]\n";
 
   do{
     cout << prefix << "\tEnter YYYY: ";
     cin >> Y;
-  }while(!check_Y());
+  }while(!check_Y(new_prefix));
   
   check_leap_year();
   if(Y_is_leap_year){
@@ -1565,17 +1578,19 @@ void Time::enter(const char* name, const char* prefix) {
   do{
     cout << prefix << "\tEnter MM: ";
     cin >> M;
-  }while(!check_M());
+  }while(!check_M(new_prefix));
 
   do{
     cout << prefix << "\tEnter DD: ";
     cin >> D;
-  }while(!(check_D()));
+  }while(!(check_D(new_prefix)));
 
   chrono.enter(name, prefix);
   
   to_mjd();
   print(name, prefix);
+
+  delete [] new_prefix;
 
 }
 

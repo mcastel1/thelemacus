@@ -498,7 +498,6 @@ void Plot::show(void){
   cout << "\nJob id = "<< job_id;
   
   answer.enter("whether you want to quit the plot");
-  cin >> answer.value;
   if((answer.value)=='y'){
 
     command.str("");

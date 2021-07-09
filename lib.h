@@ -432,7 +432,7 @@ class Plot{
 
   Plot(Catalog*);
   //~Plot();
-  void add(void);
+  void add_sight(void);
   void remove(unsigned int);
   void print(const char*);
   void show(void);
@@ -470,10 +470,10 @@ void Plot::menu(void){
   switch(i){
 
   case 1:{
-    add();
-      print("\t");
-  show();
-  menu();  
+    add_sight();
+    print("\t");
+    show();
+    menu();  
 
   }
     break;
@@ -527,7 +527,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
 
-  choices = {"Add a sight", "Delete a sight"/*, "Add a point", "Delete a point"*/, "Exit"};
+  choices = {"Add a sight", "Delete a sight", "Add a position", "Delete a position", "Exit"};
   
 }
 
@@ -557,7 +557,7 @@ void Plot::print(const char* prefix){
 
 }
 
-void Plot::add(){
+void Plot::add_sight(){
 
   Sight sight;
   

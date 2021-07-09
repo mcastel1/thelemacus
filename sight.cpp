@@ -17,7 +17,7 @@
 
   ./sight.o
   valgrind ./sight.o
-  valgrind --leak-check==full ./sight.o
+  valgrind --leak-check=full ./sight.o
 
 
 */
@@ -89,21 +89,21 @@ int main(int argc, char *argv[]){
   Catalog catalog("data/catalog.txt");
   Plot plot;
 
-  catalog.print();
+  catalog.print("\t");
   
  
   do{
     plot.add(catalog);
-    cout << "Do you want to add another sight? [y/n]";
+    answer.enter("whether you want to add another sight");
     cin >> answer.value;
-    answer.print("answer");
+    answer.print("whether you want to add another sight", "");
   }while((answer.value)=='y');
 
 
   // sight.enter(catalog); 
   // sight.reduce();
 
-  plot.print();
+  plot.print("");
   plot.show();
   
   //plot.~Plot();

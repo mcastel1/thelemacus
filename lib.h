@@ -21,7 +21,7 @@ class Answer{
  public:
   char value;
   void enter(const char*);
-  void print(const char*);
+  void print(const char*, const char*);
 
 };
 
@@ -33,7 +33,7 @@ class Chrono{
   double s;
 
   bool check_h(void), check_m(void), check_s(void);
-  void print(const char*);
+  void print(const char*, const char*);
   void enter(const char*);
   stringstream to_string(void);
 
@@ -49,7 +49,7 @@ class Time{
   double s, mjd;
   bool check_Y(void), check_M(void), check_D(void);
   void enter(const char*);
-  void print(const char*);
+  void print(const char*, const char*);
   
   void to_mjd(void);
   void to_utc(void);
@@ -156,7 +156,7 @@ class Length{
   double value;
   void set(const char*, double);
   void enter(const char*);
-  void print(const char*);
+  void print(const char*, const char*);
 
 };
 
@@ -171,7 +171,7 @@ class Angle{
   void normalize(void);
   void enter(const char*);
   void set(const char*, double);
-  void print(const char*);
+  void print(const char*, const char*);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
   
@@ -210,7 +210,7 @@ class Limb{
  public:
   char value;
   void enter(const char*);
-  void print(const char*);
+  void print(const char*, const char*);
 
 };
 
@@ -221,7 +221,7 @@ class Body{
   string name, type;
   Length radius;
   Angle RA, d; 
-  void enter(Catalog), print(void);
+  void enter(Catalog), print(const char*);
   
 };
 
@@ -232,7 +232,7 @@ class Catalog{
   vector<Body> list;
   Catalog(const char*);
   void add(string, string, double);
-  void print(void);
+  void print(const char*);
 
 };
 
@@ -280,13 +280,13 @@ Catalog::Catalog(const char* filename){
 
 }
 
-void Catalog::print(void){
+void Catalog::print(const char* prefix){
 
   unsigned int i;
   for(i=0; i<list.size(); i++){
     
-    cout << "Body #" << i << "\n";
-    list[i].print();
+    cout << prefix << "Body #" << i << "\n";
+    list[i].print(prefix);
 
   }
 
@@ -304,7 +304,7 @@ void Catalog::add(string type, string name, double radius){
   list.push_back(body);
   
   cout << "Added body to catalog:\n";
-  body.print();
+  body.print("\t");
 
 }
 
@@ -342,13 +342,13 @@ void Answer::enter(const char* name){
     }
   }while(!check);
 
-  print(name);
+  print(name, "");
 
 }
 
-void Answer::print(const char* name){
+void Answer::print(const char* name, const char* prefix){
 
-  cout << name << " is " << value << "\n";
+  cout << prefix << name << " is " << value << "\n";
   
 }
 
@@ -376,25 +376,25 @@ class Sight{
   void compute_H_o(void);
 
   void enter(Catalog);
-  void print(void);
+  void print(const char*);
   void reduce(void);
   
 };
 
-void Sight::print(void){
+void Sight::print(const char* prefix){
 
 
-  body.print();
+  body.print(prefix);
   if(body.type != "star"){
-    limb.print("limb");
+    limb.print("limb", prefix);
   }
-  H_s.print("sextant altitude");
-  index_error.print("index error");
-  artificial_horizon.print("artificial horizon");
+  H_s.print("sextant altitude", prefix);
+  index_error.print("index error", prefix);
+  artificial_horizon.print("artificial horizon", prefix);
   if(artificial_horizon.value == 'n'){
-    height_of_eye.print("height of eye");
+    height_of_eye.print("height of eye", prefix);
   }
-  time.print("UTC time of sight");
+  time.print("UTC time of sight", prefix);
 
 }
 
@@ -410,7 +410,7 @@ class Plot{
   ~Plot();
   void add(Catalog catalog);
   void remove(unsigned int);
-  void print(void);
+  void print(const char*);
   void show(void);
 
 };
@@ -431,11 +431,12 @@ Plot::~Plot(){
   
 }
 
-void Plot::print(void){
+void Plot::print(const char* prefix){
 
+  cout << "Sights in the plot:\n";
   for(unsigned int i=0; i<sight_list.size(); i++){
     cout << "Sight #" << i << ":\n";
-    (sight_list[i]).print();
+    (sight_list[i]).print(prefix);
   }
 
 }
@@ -446,7 +447,7 @@ void Plot::add(Catalog catalog){
   
   sight.enter(catalog);
   sight.reduce();
-  sight.print();
+  sight.print("\t");
   
   sight_list.push_back(sight);
   cout << "Sight added as sight #" << sight_list.size()-1 << ".\n";
@@ -494,7 +495,9 @@ void Plot::show(void){
 
   file_id.close();
 
-  cout << "\nJob id = "<< job_id << "\nDo you want to quit the plot? [y/n]";
+  cout << "\nJob id = "<< job_id;
+  
+  answer.enter("whether you want to quit the plot");
   cin >> answer.value;
   if((answer.value)=='y'){
 
@@ -534,7 +537,7 @@ void Sight::enter(Catalog catalog){
     time.enter("master-clock UTC time");
     temp.enter("stopwatch reading");
     time.add(temp);
-    time.print("UTC time of sight");
+    time.print("UTC time of sight", "");
     
   }
   
@@ -553,12 +556,12 @@ void Sight::compute_H_a(void){
 
   if(artificial_horizon.value == 'y'){
     H_a = (H_s-index_error)/2.0;
-    H_a.print("apparent altitude");
+    H_a.print("apparent altitude", "");
 
   }else{
     compute_DH_dip();
     H_a = H_s-index_error+DH_dip;
-    H_a.print("apparent altitude");
+    H_a.print("apparent altitude", "");
   }
   
 }
@@ -569,7 +572,7 @@ void Sight::compute_H_o(void){
   compute_DH_refraction();
   compute_DH_parallax_and_limb();
   H_o = H_a + DH_refraction + DH_parallax_and_limb;
-  H_o.print("observed altitude");
+  H_o.print("observed altitude", "");
   
 }
 
@@ -578,7 +581,7 @@ void Sight::compute_H_o(void){
 void Sight::compute_DH_parallax_and_limb(void){
 
   H_i = H_a + DH_refraction;
-  H_i.print("intermediate altitude");
+  H_i.print("intermediate altitude", "");
 
   if(body.type != "star"){
 
@@ -641,7 +644,7 @@ void Sight::compute_DH_parallax_and_limb(void){
       }
     }
 
-    DH_parallax_and_limb.print("parallax and limb correction");
+    DH_parallax_and_limb.print("parallax and limb correction", "");
 
   }else{
 
@@ -860,15 +863,16 @@ void Atmosphere::set(void){
 
 
 
-void Body::print(void){
+void Body::print(const char* prefix){
 
-  cout << "Type: " << type << "\nName: " << name << "\n";
+  cout << prefix << "Type: " << type << "\n";
+  cout << prefix << "Name: " << name << "\n";
   if((radius.value) != 0.0){
-    radius.print("Radius");
+    radius.print("Radius", prefix);
   }
   if(type == "star"){
-    RA.print("Right ascension");
-    d.print("Declination");
+    RA.print("Right ascension", prefix);
+    d.print("Declination", prefix);
   }
  
 }
@@ -893,7 +897,7 @@ void Body::enter(Catalog catalog){
   
   i--;
   (*this) = (catalog.list)[i];
-  print();
+  print("\t");
   
 }
 
@@ -946,7 +950,7 @@ void Length::set(const char* name, double x){
 
   if(x>=0.0){
     value = x;
-    print(name); 
+    print(name, ""); 
   }
   else{
     cout << "Entered value of " << name << "is not valid!\n";
@@ -964,13 +968,13 @@ void Length::enter(const char* name){
   //convert to nautical miles
   value/=(1e3*nm);
     
-  print(name); 
+  print(name, ""); 
   
 }
 
-void Length::print(const char* name){
+void Length::print(const char* name, const char* prefix){
 
-  cout << name << " is " << value << " nm.\n";
+  cout << prefix << name << " is " << value << " nm.\n";
  
 }
 
@@ -1136,7 +1140,7 @@ void Angle::set(const char* name, double x){
 
   value = x;
   normalize();
-  print(name);
+  print(name, "");
   
 }
 
@@ -1189,7 +1193,7 @@ void Angle::enter(const char* name){
   value = k*(ad + am/60.0);
   if(s=="-"){value*=-1.0;}
   normalize();
-  print(name);
+  print(name, "");
 
 
 }
@@ -1201,10 +1205,10 @@ void Angle::normalize(void){
 }
 
 
-void Angle::print(const char* name){
+void Angle::print(const char* name, const char* prefix){
 
   normalize();
-  cout << name << " is " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
+  cout << prefix << name << " is " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
 
 }
 
@@ -1224,14 +1228,14 @@ void Limb::enter(const char* name){
     }
   }while(!check);
   
-  print(name);
+  print(name, "");
   
 }
 
 
-void Limb::print(const char* name){
+void Limb::print(const char* name, const char* prefix){
 
-  cout << name << " is " << value << "\n";
+  cout << prefix << name << " is " << value << "\n";
   
 }
 
@@ -1319,9 +1323,9 @@ stringstream Chrono::to_string(void){
 }
 
 
-void Chrono::print(const char* name){
+void Chrono::print(const char* name, const char* prefix){
 
-  cout << name << " is " << to_string().str().c_str() << "\n";
+  cout << prefix << name << " is " << to_string().str().c_str() << "\n";
 
 };
 
@@ -1368,9 +1372,9 @@ stringstream Time::to_string(void){
 }
 
 
-void Time::print(const char* name){
+void Time::print(const char* name, const char* prefix){
 
-  cout << name << " is " << to_string().str().c_str() << "\n";
+  cout << prefix << name << " is " << to_string().str().c_str() << "\n";
 
 };
 
@@ -1407,7 +1411,7 @@ void Time::enter(const char* name) {
   chrono.enter(name);
   
   to_mjd();
-  print(name);
+  print(name, "");
 
 }
 

@@ -450,23 +450,27 @@ void Plot::menu(void){
 
   case 1:{
     add();
-    print("\t");
-    show();
   }
     break;
     
   case 2:{
 
-    cout << "Which sight do you want to delete? [sight #]\n";
-    print("\t");
+    do{
+      cout << "Which sight do you want to delete? [sight #]\n";
+      print("\t");
+      cin >> i;
 
-    cin >> i;
-
-    remove(i);
-    print("\t");
-    show();
-
+      if(!((0<=i) && (i<sight_list.size()))){
+	cout << "Enterd value is not valid!\n";
+	check = true;
+      }
+      else{
+	check=false;
+      }
+    }while(check);
     
+    remove(i);
+   
   }
     break;
 
@@ -482,7 +486,7 @@ void Plot::menu(void){
 
   }
 
-  print("");
+  print("\t");
   show();
   menu();  
     

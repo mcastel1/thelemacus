@@ -1061,7 +1061,10 @@ void Length::enter(const char* name){
   cout << "Enter " << name << " [m]:\n";
 
   do{
-    cin >> value;    
+    
+    cin >> value;
+    cout << "\x1b[40mEntered value of " << name << "is not valid!\x1b[0m\n";
+
   }while(value < 0.0);
   //convert to nautical miles
   value/=(1e3*nm);

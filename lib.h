@@ -398,13 +398,14 @@ class Sight{
   void compute_H_o(void);
 
   void enter(Catalog, const char*);
-  void print(const char*);
+  void print(const char*, const char*);
   void reduce(void);
   
 };
 
-void Sight::print(const char* prefix){
+void Sight::print(const char* name, const char* prefix){
 
+  cout << prefix << name << ":\n";
 
   body.print(prefix);
   if(body.type != "star"){
@@ -428,11 +429,13 @@ class Plot{
   int job_id;
   stringstream command, plot_command;
   vector<Sight> sight_list;
+  vector<Point> point_list;
   vector<string> choices;
 
   Plot(Catalog*);
   //~Plot();
   void add_sight(void);
+  void add_point(void);
   void remove(unsigned int);
   void print(const char*);
   void show(void);
@@ -527,7 +530,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
 
-  choices = {"Add a sight", "Delete a sight", "Add a position", "Delete a position", "Exit"};
+  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point", "Exit"};
   
 }
 
@@ -542,15 +545,20 @@ Plot::~Plot(){
 
 void Plot::print(const char* prefix){
 
-  cout << "Sights in the plot:\n";
 
   char* temp = new char [strlen(prefix)+1];
   strcpy(temp+1, prefix);
   temp[0] = '\t';
   
+  cout << "Sights in the plot:\n";
   for(unsigned int i=0; i<sight_list.size(); i++){
     cout << "\tSight #" << i+1 << ":\n";
-    (sight_list[i]).print(temp);
+    (sight_list[i]).print("", temp);
+  }
+  cout << "Points in the plot:\n";
+  for(unsigned int i=0; i<point_list.size(); i++){
+    cout << "\tPoint #" << i+1 << ":\n";
+    (point_list[i]).print("", temp);
   }
 
   delete [] temp;
@@ -563,7 +571,7 @@ void Plot::add_sight(){
   
   sight.enter((*catalog), "");
   sight.reduce();
-  sight.print("\t");
+  sight.print("", "\t");
   
   sight_list.push_back(sight);
   cout << "Sight added as sight #" << sight_list.size() << ".\n";
@@ -571,6 +579,19 @@ void Plot::add_sight(){
   //sight.~Sight();
 
 }
+
+void Plot::add_point(){
+
+  Point point;
+  
+  point.enter("", "");
+  
+  point_list.push_back(point);
+  cout << "Point added as point #" << point_list.size() << ".\n";
+
+ 
+}
+
 
 void Plot::remove(unsigned int i){
 

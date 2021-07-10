@@ -299,7 +299,7 @@ Catalog::Catalog(const char* filename){
 void Catalog::print(const char* prefix){
 
   unsigned int i;
-  char* new_prefix = new char[strlen(prefix)+1];
+  char new_prefix [strlen(prefix)+1];
 
   //prepend \t to prefix
   new_prefix[0] = '\t';
@@ -311,8 +311,6 @@ void Catalog::print(const char* prefix){
     list[i].print(new_prefix);
 
   }
-
-  delete[] new_prefix;
 
 }
 

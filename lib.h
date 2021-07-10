@@ -27,6 +27,33 @@ class Answer{
 
 };
 
+class String{
+
+ public:
+  string value;
+  
+  void enter(const char*, const char*);
+  void print(const char*, const char*);
+
+};
+
+void String::enter(const char* name, const char* prefix){
+
+  cout << prefix << "Enter " << name << ":\n";
+  cin >> value;
+
+  print(name, prefix);
+
+}
+
+void String::print(const char* name, const char* prefix){
+
+  cout << prefix << name << " is " << value << "\n";
+  
+}
+
+
+
 class Angle{
 
  public:
@@ -47,7 +74,8 @@ class Point{
  public:
   //latitude and longitude of the point
   Angle phi, lambda;
-
+  String label;
+  
   void enter(const char*, const char*);
   void print(const char*, const char*);
 
@@ -653,7 +681,7 @@ void Plot::show(void){
   
   plot_command.str("");
   for(i=0; i<point_list.size(); i++){
-    plot_command << "set object circle at xe(K*" << (point_list[i]).lambda.value << "),ye(K*" << (point_list[i]).phi.value << ") radius char 1 fillcolor rgb \"green\" fillstyle solid noborder\\\n";
+    plot_command << "replot \"+\" u (xe(K*" << (point_list[i]).lambda.value << ")):(ye(K*" << (point_list[i]).phi.value << ")) w p ps 2 ti \"" << (point_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << file_gnuplot.name << "\n";
@@ -1410,6 +1438,7 @@ void Point::enter(const char* name, const char* prefix){
   }while(check);
   
   lambda.enter("longitude", new_prefix);
+  label.enter("label", new_prefix);
   
 }
 

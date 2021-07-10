@@ -635,7 +635,6 @@ void Plot::show(void){
 
   file_id.remove();
   file_gnuplot.remove();
-
   
   command.str("");
 
@@ -646,22 +645,22 @@ void Plot::show(void){
     plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) w d ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << "\"\\\n";
   }  
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> " << file_gnuplot.name << "\n";
+  command << "sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> plot_temp.plt \n";
 
+
+  
   //replace line with point plots
   
   plot_command.str("");
   for(i=0; i<point_list.size(); i++){
-    plot_command << "set object circle at xe(K*" << (point_list[i]).lambda.value << "),ye(K*" << (point_list[i]).phi.value << ") radius char 1 fillstyle solid noborder\\\n";
+    plot_command << "set object circle at xe(K*" << (point_list[i]).lambda.value << "),ye(K*" << (point_list[i]).phi.value << ") radius char 1 fillcolor rgb \"green\" fillstyle solid noborder\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' " << file_gnuplot.name << " >> " << file_gnuplot.name << "\n";
+  command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << file_gnuplot.name << "\n";
 
 
-  command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name;
-
-
-
+  command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name << "\n";
+  command << "rm -rf plot_temp.plt";
   
   system(command.str().c_str());
 

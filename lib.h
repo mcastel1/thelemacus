@@ -463,6 +463,7 @@ class Plot{
   void add_sight(void);
   void add_point(void);
   void remove_sight(unsigned int);
+  void remove_point(unsigned int);
   void print(const char*);
   void show(void);
   void menu(void);
@@ -640,11 +641,34 @@ void Plot::add_point(){
 
 void Plot::remove_sight(unsigned int i){
 
+  stringstream name;
+
+  name.str("");
+  name << "Sight to be removed: Sight #" << i+1;
+  
+  (sight_list[i]).print(name.str().c_str(), "\t");
+  
   sight_list.erase(sight_list.begin()+i);
-  cout << "Sight #" << i+1 << " removed.\n";
+  
+  cout << "Sigh removed.\n";
 
 }
+
+void Plot::remove_point(unsigned int i){
+
+  stringstream name;
+
+  name.str("");
+  name << "Point to be removed: Point #" << i+1;
   
+  (point_list[i]).print(name.str().c_str(), "\t");
+  
+  point_list.erase(point_list.begin()+i);
+  
+  cout << "Point removed.\n";
+
+}
+
 
 void Plot::show(void){
 

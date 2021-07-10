@@ -76,13 +76,9 @@ int main(int argc, char *argv[]){
   */
 
   /*
-  Time A;
-  Chrono a;
-  A.enter("Time A");
-  a.enter("Chrono a");
-  A.add(a);
-  A.print("Time A+a");
-  return 0;
+  Point a;
+  a.enter("Position", "");
+  a.print("Entered position", "");
   */
   
   Catalog catalog("data/catalog.txt");

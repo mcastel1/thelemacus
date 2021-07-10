@@ -558,8 +558,7 @@ Plot::~Plot(){
 
 void Plot::print(const char* prefix){
 
-
-  char* temp = new char [strlen(prefix)+1];
+  char temp [strlen(prefix)+1];
   strcpy(temp+1, prefix);
   temp[0] = '\t';
   
@@ -574,7 +573,6 @@ void Plot::print(const char* prefix){
     (point_list[i]).print("", temp);
   }
 
-  delete [] temp;
 
 }
 
@@ -677,7 +675,7 @@ void Plot::show(void){
 
 void Sight::enter(Catalog catalog, const char* name, const char* prefix){
 
-  char* new_prefix = new char[strlen(prefix)+1];
+  char new_prefix [strlen(prefix)+1];
 
   //append \t to prefix
   strcpy(new_prefix, prefix);    
@@ -714,8 +712,6 @@ void Sight::enter(Catalog catalog, const char* name, const char* prefix){
     time.print("UTC time of sight", "");
     
   }
-
-  delete [] new_prefix;
   
 }
 
@@ -1059,7 +1055,7 @@ void Body::enter(Catalog catalog, const char* prefix){
   unsigned int i;
   bool check;
   string s;
-  char* new_prefix = new char[strlen(prefix)+1];
+  char new_prefix [strlen(prefix)+1];
 
   //append \t to prefix
   strcpy(new_prefix, prefix);    
@@ -1390,7 +1386,7 @@ void Angle::enter(const char* name, const char* prefix){
 void Point::enter(const char* name, const char* prefix){
 
   bool check;
-  char* new_prefix = new char[strlen(prefix)+1];
+  char new_prefix [strlen(prefix)+1];
 
   //prepend \t to prefix
   new_prefix[0] = '\t';
@@ -1409,14 +1405,12 @@ void Point::enter(const char* name, const char* prefix){
   }while(check);
   
   lambda.enter("longitude", new_prefix);
-  delete[] new_prefix;
-
   
 }
 
 void Point::print(const char* name, const char* prefix){
 
-  char* new_prefix = new char[strlen(prefix)+1];
+  char new_prefix [strlen(prefix)+1];
 
   //prepend \t to prefix
   new_prefix[0] = '\t';
@@ -1426,8 +1420,6 @@ void Point::print(const char* name, const char* prefix){
 
   phi.print("latitude", new_prefix);
   lambda.print("longitude", new_prefix);
-
-  delete[] new_prefix;
 
 }
 
@@ -1559,7 +1551,7 @@ void Chrono::print(const char* name, const char* prefix){
 
 void Chrono::enter(const char* name, const char* prefix) {
 
-  char* new_prefix = new char[strlen(prefix)+1];
+  char new_prefix [strlen(prefix)+1];
 
   //append \t to prefix
   strcpy(new_prefix, prefix);    
@@ -1581,8 +1573,6 @@ void Chrono::enter(const char* name, const char* prefix) {
     cout << prefix << "\tEnter ss: ";
     cin >> s;
   }while(!check_s(new_prefix));
-
-  delete [] new_prefix;
   
 }
 
@@ -1616,7 +1606,7 @@ void Time::print(const char* name, const char* prefix){
 
 void Time::enter(const char* name, const char* prefix) {
 
-  char* new_prefix = new char[strlen(prefix)+1];
+  char new_prefix [strlen(prefix)+1];
 
   //append \t to prefix
   strcpy(new_prefix, prefix);    
@@ -1652,8 +1642,6 @@ void Time::enter(const char* name, const char* prefix) {
   
   to_mjd();
   print(name, prefix);
-
-  delete [] new_prefix;
 
 }
 

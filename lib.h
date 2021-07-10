@@ -558,19 +558,25 @@ Plot::~Plot(){
 
 void Plot::print(const char* prefix){
 
-  char temp [strlen(prefix)+1];
-  strcpy(temp+1, prefix);
-  temp[0] = '\t';
+  char new_prefix [strlen(prefix)+1];
+  stringstream name;
+  unsigned int i;
+  
+  strcpy(new_prefix+1, prefix);
+  new_prefix[0] = '\t';
   
   cout << "Sights in the plot:\n";
-  for(unsigned int i=0; i<sight_list.size(); i++){
-    cout << "\tSight #" << i+1 << ":\n";
-    (sight_list[i]).print("", temp);
+  for(i=0; i<sight_list.size(); i++){
+    name.str("");
+    name <<  "Sight #" << i+1;
+    (sight_list[i]).print(name.str().c_str(), new_prefix);
   }
+  
   cout << "Points in the plot:\n";
-  for(unsigned int i=0; i<point_list.size(); i++){
-    cout << "\tPoint #" << i+1 << ":\n";
-    (point_list[i]).print("", temp);
+  for(i=0; i<point_list.size(); i++){
+    name.str("");
+    name << "Point #" << i+1;
+    (point_list[i]).print(name.str().c_str(), new_prefix);
   }
 
 

@@ -462,7 +462,7 @@ class Plot{
   //~Plot();
   void add_sight(void);
   void add_point(void);
-  void remove(unsigned int);
+  void remove_sight(unsigned int);
   void print(const char*);
   void show(void);
   void menu(void);
@@ -525,7 +525,7 @@ void Plot::menu(void){
       }
     }while(check);
     
-    remove(i);
+    remove_sight(i);
     print("\t");
   show();
   menu();  
@@ -638,7 +638,7 @@ void Plot::add_point(){
 }
 
 
-void Plot::remove(unsigned int i){
+void Plot::remove_sight(unsigned int i){
 
   sight_list.erase(sight_list.begin()+i);
   cout << "Sight #" << i+1 << " removed.\n";

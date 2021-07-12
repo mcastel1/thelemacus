@@ -1239,7 +1239,7 @@ void Length::set(string name, double x){
     print(name, ""); 
   }
   else{
-    cout << RED << "Entered value of " << name << "is not valid!\n" << RESET;
+    cout << RED << "Entered value of " << name << " is not valid!\n" << RESET;
   }
   
 }

@@ -424,6 +424,7 @@ class Sight{
 
  public:
   Time time;
+  Chrono TAI_minus_UTC;
   Angle index_error, GHA, d, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;

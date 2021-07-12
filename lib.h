@@ -4,7 +4,8 @@
 //check that these values are covered by ephemerides data
 #define Y_min 0
 #define Y_max 2021
-#define mjd_min 59215.0
+//mjd_min corresponds to Jan 1 2016
+#define mjd_min 57388.0
 #define N 24.0
 #define epsrel (1e-12)
 #define max_iter (1e2)
@@ -125,7 +126,7 @@ class Time{
   void enter(string, string);
   void print(string, string);
   
-  void to_mjd(void);
+  void to_MJD(void);
   void to_TAI(void);
   void check_leap_year(void);
   void add(Chrono);
@@ -1743,7 +1744,7 @@ void Time::enter(string name, string prefix) {
 
   chrono.enter(name, prefix);
   
-  to_mjd();
+  to_MJD();
   print(name, prefix);
 
 }
@@ -1839,7 +1840,7 @@ void Time:: to_TAI(void){
 
 }
 
-void Time:: to_mjd(void)
+void Time:: to_MJD(void)
   
   /*
     Modified Julian Date ( MJD = Julian Date - 2400000.5)

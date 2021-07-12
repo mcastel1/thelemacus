@@ -2,10 +2,13 @@
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //check that these values are covered by ephemerides data
-#define Y_min 0
-#define Y_max 2021
+#define Y_min 2016
+#define Y_max 2017
 //mjd_min corresponds to Jan 1 2016
 #define mjd_min 57388.0
+//NASA's webgeocalc datafiles show L lines per day
+#define L 24.0
+//the time window in which interpolation is made has a width of N lines in NASA's webgeocalc files
 #define N 24.0
 #define epsrel (1e-12)
 #define max_iter (1e2)
@@ -1298,11 +1301,14 @@ void Sight::get_coordinates(void){
     /* cout << "\ndiff = " << (t.mjd)-mjd_min; */
     /* cin >>l ; */
 
-    l_min = (unsigned int)(24.0*((time.mjd)-mjd_min))-(unsigned int)(N/2.0);
-    l_max = (unsigned int)(24.0*((time.mjd)-mjd_min))+(unsigned int)(N/2.0);
+    //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
+    l_min = (unsigned int)(L*((time.mjd)-mjd_min))-(unsigned int)(N/2.0);
+    //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
+    l_max = (unsigned int)(L*((time.mjd)-mjd_min))+(unsigned int)(N/2.0);
 
     /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
-  
+
+    //dummy read of file data
     for(l=0; l<l_min; l++){
       line.clear();
       getline((file.value), line);

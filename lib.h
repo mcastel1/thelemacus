@@ -58,7 +58,7 @@ void String::enter(string name, string prefix){
   
   cout << prefix << "Enter " << name << ":\n";
 
-  getline(cin, value);
+  getline(cin >> ws, value);
 
   print(name, prefix);
 
@@ -747,7 +747,7 @@ void Plot::show(void){
   
   plot_command.str("");
   for(i=0; i<point_list.size(); i++){
-    plot_command << "replot \"+\" u (xe(K*" << ((point_list[i]).lambda.value - M_PI) << ")):(ye(K*" << (point_list[i]).phi.value << ")) w p ps 2 lw 2 ti \"" << (point_list[i]).label.value << "\"\\\n";
+    plot_command << "replot \"+\" u (xe(K*" << ((point_list[i]).lambda.value - M_PI) << ")):(ye(K*" << (point_list[i]).phi.value << ")) w p  lw 2 ti \"" << (point_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << file_gnuplot.name << "\n";

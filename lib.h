@@ -808,10 +808,11 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     Chrono temp;
     
     time.enter("master-clock UTC time", new_prefix.str());
-    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization", new_prefix.str());
     temp.enter("stopwatch reading", new_prefix.str());
     time.add(temp);
-    time.print("UTC time of sight", "");
+    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization", new_prefix.str());
+    time.add(TAI_minus_UTC);
+    time.print("TAI time of sight", "");
     
   }
   
@@ -1692,7 +1693,6 @@ stringstream Time::to_string(void){
   if(D<10){output << 0;}
   output << D << " ";
   output << chrono.to_string().str().c_str();
-  output << " UTC";
   //output << " (" << mjd << " MJD)\n";
 
   return output;

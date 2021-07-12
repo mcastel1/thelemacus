@@ -55,8 +55,10 @@ class String{
 
 void String::enter(string name, string prefix){
 
+  
   cout << prefix << "Enter " << name << ":\n";
-  cin >> value;
+
+  getline(cin, value);
 
   print(name, prefix);
 

@@ -812,7 +812,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     Chrono temp;
     
     time.enter("master-clock UTC time", new_prefix.str());
-    temp.enter("stopwatch reading", new_prefix.str());
+    temp.enter("hour of stopwatch reading", new_prefix.str());
     time.add(temp);
     TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization", new_prefix.str());
     time.add(TAI_minus_UTC);
@@ -1675,7 +1675,7 @@ void Chrono::enter(string name, string prefix) {
   //append \t to prefix
   new_prefix << prefix << "\t";
   
-  cout << prefix << "Enter hour of " << name << " [hh-mm-ss]\n";
+  cout << prefix << "Enter " << name << " [hh-mm-ss]\n";
 
   do{
     cout << prefix << "\tEnter hh: ";
@@ -1728,7 +1728,7 @@ void Time::enter(string name, string prefix) {
   //append \t to prefix
   new_prefix << prefix << "\t";
   
-  cout << prefix << "Enter date of " << name << " [YYYY MM DD]\n";
+  cout << prefix << "Enter " << name << " [YYYY MM DD]\n";
 
   do{
     cout << prefix << "\tEnter YYYY: ";

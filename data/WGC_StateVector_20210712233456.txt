@@ -1,3 +1,25 @@
+State Vector Calculation
+
+
+Calculation Inputs
+
+Calculation type     = State Vector
+Target type          = Object
+Target               = SUN
+Observer type        = Object
+Observer             = earth
+Reference frame      = ITRF93
+Light propagation    = No correction
+Time system          = UTC
+Time format          = Calendar date and time
+Time range           = Jan 1 2016 00:00:00 to Dec 31 2017 00:00:00
+Step                 = 1 hours
+State representation = Planetocentric
+
+
+State Vector Results
+
+UTC calendar date               Longitude (deg)  Latitude (deg)  Radius (km)         d Longitude/dt (deg/s)  d Latitude/dt (deg/s)  d Radius/dt (km/s)  Speed (km/s)    Time at Target                  Light Time (s)
 2016-01-01 00:00:00.000000 UTC    -179.22567130    -23.05863992  147101624.63444580             -0.00416529         8.89742467E-07         -0.01744263   9839.59650703  2016-01-01 00:00:00.000000 UTC    490.67820323
 2016-01-01 01:00:00.000000 UTC     165.77928281    -23.05543081  147101562.53993937             -0.00416529         8.93044443E-07         -0.01705443   9839.82694197  2016-01-01 01:00:00.000000 UTC    490.67799611
 2016-01-01 02:00:00.000000 UTC     150.78423680    -23.05221039  147101501.84174060             -0.00416529         8.96025590E-07         -0.01666691   9840.05841975  2016-01-01 02:00:00.000000 UTC    490.67779364
@@ -17519,3 +17541,10 @@
 2017-12-30 21:59:59.000000 UTC    -149.28641418    -23.10122676  147102743.96038720             -0.00416529         8.38681980E-07         -0.03827198   9836.54841760  2017-12-30 21:59:59.000000 UTC    490.68193690
 2017-12-30 22:59:59.000000 UTC    -164.28144959    -23.09820032  147102607.01995265             -0.00416529         8.42619396E-07         -0.03780592   9836.76094544  2017-12-30 22:59:59.000000 UTC    490.68148012
 2017-12-30 23:59:59.000000 UTC    -179.27648508    -23.09516031  147102471.75860742             -0.00416529         8.46214781E-07         -0.03733915   9836.97454148  2017-12-30 23:59:59.000000 UTC    490.68102894
+
+
+Kernels Used
+
+pds/wgc/mk/ground_stations_v0013.tm
+pds/wgc/mk/solar_system_v0039.tm
+pds/wgc/mk/latest_lsk_v0004.tm

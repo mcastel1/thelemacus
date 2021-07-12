@@ -38,8 +38,8 @@ class Answer{
 
  public:
   char value;
-  void enter(const char*, const char*);
-  void print(const char*, const char*);
+  void enter(string, string);
+  void print(string, string);
 
 };
 
@@ -76,9 +76,9 @@ class Angle{
  
   double value;
   void normalize(void);
-  void enter(const char*, const char*);
-  void set(const char*, double);
-  void print(const char*, const char*);
+  void enter(string, string);
+  void set(string, double);
+  void print(string, string);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
   
@@ -92,8 +92,8 @@ class Point{
   Angle phi, lambda;
   String label;
   
-  void enter(const char*, const char*);
-  void print(const char*, const char*);
+  void enter(string, string);
+  void print(string, string);
 
 };
 
@@ -104,9 +104,9 @@ class Chrono{
   unsigned int h, m;
   double s;
 
-  bool check_h(const char*), check_m(const char*), check_s(const char*);
-  void print(const char*, const char*);
-  void enter(const char*, const char*);
+  bool check_h(string), check_m(string), check_s(string);
+  void print(string, string);
+  void enter(string, string);
   stringstream to_string(void);
 
 };
@@ -119,9 +119,9 @@ class Time{
   vector<unsigned int> days_per_month;
   Chrono chrono;
   double s, mjd;
-  bool check_Y(const char*), check_M(const char*), check_D(const char*);
-  void enter(const char*, const char*);
-  void print(const char*, const char*);
+  bool check_Y(string), check_M(string), check_D(string);
+  void enter(string, string);
+  void print(string, string);
   
   void to_mjd(void);
   void to_utc(void);
@@ -172,8 +172,8 @@ class File{
 
  public:
   ifstream value;
-  const char *name;
-  void set_name(const char*);
+  string name;
+  void set_name(string);
   int open(void);
   void close(void);
   void remove(void);
@@ -191,7 +191,7 @@ void File::remove(void){
   
 }
 
-void File::set_name(const char* filename){
+void File::set_name(string filename){
 
   name = filename;
   
@@ -227,9 +227,9 @@ class Length{
 
  public:
   double value;
-  void set(const char*, double);
-  void enter(const char*, const char*);
-  void print(const char*, const char*);
+  void set(string, double);
+  void enter(string, string);
+  void print(string, string);
 
 };
 
@@ -269,8 +269,8 @@ class Limb{
 
  public:
   char value;
-  void enter(const char*, const char*);
-  void print(const char*, const char*);
+  void enter(string, string);
+  void print(string, string);
 
 };
 
@@ -281,7 +281,7 @@ class Body{
   string name, type;
   Length radius;
   Angle RA, d; 
-  void enter(Catalog, const char*), print(const char*);
+  void enter(Catalog, string), print(string);
   
 };
 
@@ -290,13 +290,13 @@ class Catalog{
 
  public:
   vector<Body> list;
-  Catalog(const char*);
+  Catalog(string);
   void add(string, string, double);
-  void print(const char*);
+  void print(string);
 
 };
 
-Catalog::Catalog(const char* filename){
+Catalog::Catalog(string filename){
 
   File file;
   string line;
@@ -340,7 +340,7 @@ Catalog::Catalog(const char* filename){
 
 }
 
-void Catalog::print(const char* prefix){
+void Catalog::print(string prefix){
 
   unsigned int i;
   char new_prefix [strlen(prefix)+1];
@@ -387,7 +387,7 @@ class Atmosphere{
 };
 
 
-void Answer::enter(const char* name, const char* prefix){
+void Answer::enter(string name, string prefix){
 
   bool check;
   
@@ -410,7 +410,7 @@ void Answer::enter(const char* name, const char* prefix){
 
 }
 
-void Answer::print(const char* name, const char* prefix){
+void Answer::print(string name, string prefix){
 
   cout << prefix << name << " is " << value << "\n";
   
@@ -439,13 +439,13 @@ class Sight{
   void compute_H_a(void);
   void compute_H_o(void);
 
-  void enter(Catalog, const char*, const char*);
-  void print(const char*, const char*);
+  void enter(Catalog, string, string);
+  void print(string, string);
   void reduce(void);
   
 };
 
-void Sight::print(const char* name, const char* prefix){
+void Sight::print(string name, string prefix){
 
   cout << prefix << name << ":\n";
 
@@ -480,7 +480,7 @@ class Plot{
   void add_point(void);
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
-  void print(const char*);
+  void print(string);
   void show(void);
   void menu(void);
 
@@ -601,7 +601,7 @@ Plot::~Plot(){
 }
 */
 
-void Plot::print(const char* prefix){
+void Plot::print(string prefix){
 
   char new_prefix [strlen(prefix)+1];
   stringstream name;
@@ -746,25 +746,26 @@ void Plot::show(void){
   
 }
 
-void Sight::enter(Catalog catalog, const char* name, const char* prefix){
+void Sight::enter(Catalog catalog, string name, string prefix){
 
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
 
   //append \t to prefix
-  strcpy(new_prefix, prefix);    
-  new_prefix[strlen(prefix)] = '\t';
-
+  //strcpy(new_prefix, prefix);    
+  //new_prefix[strlen(prefix)] = '\t';
+  new_prefix << prefix << "\t";
+  
   cout << prefix << "Enter " << name << ":\n";
   
-  body.enter(catalog, new_prefix);
+  body.enter(catalog, new_prefix.str());
   if(body.type != "star"){
-    limb.enter("limb", new_prefix);
+    limb.enter("limb", new_prefix.str());
   }
-  H_s.enter("sextant altitude", new_prefix);
-  index_error.enter("index error", new_prefix);
-  artificial_horizon.enter("artificial horizon", new_prefix);
+  H_s.enter("sextant altitude", new_prefix.str());
+  index_error.enter("index error", new_prefix.str());
+  artificial_horizon.enter("artificial horizon", new_prefix.str());
   if(artificial_horizon.value == 'n'){
-    height_of_eye.enter("height of eye", new_prefix);
+    height_of_eye.enter("height of eye", new_prefix.str());
   }
 
 
@@ -1108,7 +1109,7 @@ void Atmosphere::set(void){
 
 
 
-void Body::print(const char* prefix){
+void Body::print(string prefix){
 
   cout << prefix << "Type: " << type << "\n";
   cout << prefix << "Name: " << name << "\n";
@@ -1123,7 +1124,7 @@ void Body::print(const char* prefix){
 }
 
 
-void Body::enter(Catalog catalog, const char* prefix){
+void Body::enter(Catalog catalog, string prefix){
 
   unsigned int i;
   bool check;
@@ -1195,7 +1196,7 @@ void Sight::compute_DH_refraction(void){
 
 }
 
-void Length::set(const char* name, double x){
+void Length::set(string name, double x){
 
   if(x>=0.0){
     value = x;
@@ -1207,7 +1208,7 @@ void Length::set(const char* name, double x){
   
 }
 
-void Length::enter(const char* name, const char* prefix){
+void Length::enter(string name, string prefix){
 
   bool check;
 
@@ -1230,7 +1231,7 @@ void Length::enter(const char* name, const char* prefix){
   
 }
 
-void Length::print(const char* name, const char* prefix){
+void Length::print(string name, string prefix){
 
   cout << prefix << name << " is " << value << " nm.\n";
  
@@ -1394,7 +1395,7 @@ void Sight::get_coordinates(void){
   
 }
 
-void Angle::set(const char* name, double x){
+void Angle::set(string name, double x){
 
   value = x;
   normalize();
@@ -1402,7 +1403,7 @@ void Angle::set(const char* name, double x){
   
 }
 
-void Angle::enter(const char* name, const char* prefix){
+void Angle::enter(string name, string prefix){
 
   string s;
   int ad;
@@ -1456,7 +1457,7 @@ void Angle::enter(const char* name, const char* prefix){
 
 }
 
-void Point::enter(const char* name, const char* prefix){
+void Point::enter(string name, string prefix){
 
   bool check;
   char new_prefix [strlen(prefix)+1];
@@ -1482,7 +1483,7 @@ void Point::enter(const char* name, const char* prefix){
   
 }
 
-void Point::print(const char* name, const char* prefix){
+void Point::print(string name, string prefix){
 
   char new_prefix [strlen(prefix)+1];
 
@@ -1507,14 +1508,14 @@ void Angle::normalize(void){
 }
 
 
-void Angle::print(const char* name, const char* prefix){
+void Angle::print(string name, string prefix){
 
   normalize();
   cout << prefix << name << " is " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
 
 }
 
-void Limb::enter(const char* name, const char* prefix){
+void Limb::enter(string name, string prefix){
 
   bool check;
 
@@ -1534,14 +1535,14 @@ void Limb::enter(const char* name, const char* prefix){
 }
 
 
-void Limb::print(const char* name, const char* prefix){
+void Limb::print(string name, string prefix){
 
   cout << prefix << name << " is " << value << "\n";
   
 }
 
 
-bool Time::check_Y(const char* prefix){
+bool Time::check_Y(string prefix){
 
   if((Y >= Y_min) && (Y <= Y_max)){return true;}
   else{
@@ -1552,7 +1553,7 @@ bool Time::check_Y(const char* prefix){
 };
 
 
-bool Time::check_M(const char* prefix){
+bool Time::check_M(string prefix){
 
   if((M >= 1) && (M <= 12)){return true;}
   else{
@@ -1563,7 +1564,7 @@ bool Time::check_M(const char* prefix){
 
 };
 
-bool Time::check_D(const char* prefix){
+bool Time::check_D(string prefix){
 
   if((D >= 1) && (D <= ((int)days_per_month[M-1]))){return true;}
   else{
@@ -1573,7 +1574,7 @@ bool Time::check_D(const char* prefix){
 
 };
 
-bool Chrono::check_h(const char* prefix){
+bool Chrono::check_h(string prefix){
 
   if((h >= 0) && (h < 24)){return true;}
   else{
@@ -1583,7 +1584,7 @@ bool Chrono::check_h(const char* prefix){
 
 };
 
-bool Chrono::check_m(const char* prefix){
+bool Chrono::check_m(string prefix){
 
   if((m >= 0) && (m < 60)){return true;}
   else{
@@ -1593,7 +1594,7 @@ bool Chrono::check_m(const char* prefix){
 
 };
 
-bool Chrono::check_s(const char* prefix){
+bool Chrono::check_s(string prefix){
 
   if((s >= 0.0) && (s < 60.0)){return true;}
   else{
@@ -1619,13 +1620,13 @@ stringstream Chrono::to_string(void){
 }
 
 
-void Chrono::print(const char* name, const char* prefix){
+void Chrono::print(string name, string prefix){
 
   cout << prefix << name << " is " << to_string().str().c_str() << "\n";
 
 };
 
-void Chrono::enter(const char* name, const char* prefix) {
+void Chrono::enter(string name, string prefix) {
 
   char new_prefix [strlen(prefix)+1];
 
@@ -1672,7 +1673,7 @@ stringstream Time::to_string(void){
 }
 
 
-void Time::print(const char* name, const char* prefix){
+void Time::print(string name, string prefix){
 
   cout << prefix << name << " is " << to_string().str().c_str() << "\n";
 
@@ -1680,7 +1681,7 @@ void Time::print(const char* name, const char* prefix){
 
 
 
-void Time::enter(const char* name, const char* prefix) {
+void Time::enter(string name, string prefix) {
 
   char new_prefix [strlen(prefix)+1];
 

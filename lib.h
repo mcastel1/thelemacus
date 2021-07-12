@@ -808,6 +808,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     Chrono temp;
     
     time.enter("master-clock UTC time", new_prefix.str());
+    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization", new_prefix.str());
     temp.enter("stopwatch reading", new_prefix.str());
     time.add(temp);
     time.print("UTC time of sight", "");

@@ -1,3 +1,26 @@
+Frame Transformation Calculation
+
+
+Calculation Inputs
+
+Calculation type       = Frame Transformation (from Frame 1 to Frame 2)
+Frame 1                = j2000
+Frame 2                = ITRF93
+Time system            = UTC
+Time format            = Calendar date and time
+Time range             = Jan 1 2016 00:00:00 to Dec 31 2017 00:00:00
+Step                   = 1 hours
+Light propagation      = No correction
+Orientation form       = Euler angles
+Rotation order         = R = [Angle3]z * [Angle2]x * [Angle1]z
+Angular units          = Degrees
+Angular velocity form  = Not included
+Angular velocity units = Degrees/second
+
+
+Frame Transformation Results
+
+UTC calendar date               Angle 3 (deg)  Angle 2 (deg)  Angle 1 (deg)
 2016-01-01 00:00:00.000000 UTC    11.75029841     0.08893637    88.13606324
 2016-01-01 01:00:00.000000 UTC    26.80171571     0.08894607    88.12571277
 2016-01-01 02:00:00.000000 UTC    41.85122173     0.08895966    88.11727358
@@ -17519,3 +17542,10 @@
 2017-12-30 21:59:59.000000 UTC   -19.40889951     0.09883747    88.70648694
 2017-12-30 22:59:59.000000 UTC    -4.35719054     0.09883913    88.69584497
 2017-12-30 23:59:59.000000 UTC    10.69408994     0.09884547    88.68563148
+
+
+Kernels Used
+
+pds/wgc/mk/ground_stations_v0013.tm
+pds/wgc/mk/solar_system_v0039.tm
+pds/wgc/mk/latest_lsk_v0004.tm

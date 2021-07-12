@@ -75,11 +75,12 @@ int main(int argc, char *argv[]){
     }
   */
 
+  /*
   Time t;
   t.enter("sample", "");
   t.to_MJD();
   cout << "MJD = " << t.MJD << "\n";
-  
+  */
   
   /*
   Point a;

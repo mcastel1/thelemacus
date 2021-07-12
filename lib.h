@@ -126,7 +126,7 @@ class Time{
   void print(string, string);
   
   void to_mjd(void);
-  void to_utc(void);
+  void to_TAI(void);
   void check_leap_year(void);
   void add(Chrono);
   
@@ -166,7 +166,7 @@ void Time::check_leap_year(void){
 void Time::add(Chrono chrono_in){
 
   mjd += (((double)(chrono_in.h)) + ((double)(chrono_in.m))/60.0 + ((double)(chrono_in.s))/(60.0*60.0))/24.0;
-  to_utc();
+  to_TAI();
 
 }
 
@@ -1748,7 +1748,7 @@ void Time::enter(string name, string prefix) {
 
 }
 
-void Time:: to_utc(void){
+void Time:: to_TAI(void){
   //int &day, int &month, int &year, double &hour)
   /*
     Calculate the calendar date from the Modified Julian Date

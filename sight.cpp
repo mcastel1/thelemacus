@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
   Time t;
   t.enter("sample", "");
   t.to_MJD();
-  cout << "mjd = " << t.mjd << "\n";
+  cout << "MJD = " << t.MJD << "\n";
   
   
   /*

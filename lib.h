@@ -1,11 +1,11 @@
-#define my_precision 16
+#define my_precision 32
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //check that these values are covered by ephemerides data
 #define Y_min 2016
 #define Y_max 2017
-//mjd_min corresponds to Jan 1 2016
-#define mjd_min 57388.0
+//MJD_min corresponds to Jan 1 2016 00-00-00.00 UTC (= Jan 1 2016 00-00-26.00 TAI) 
+#define MJD_min 57388.000300925923511385917663574
 //NASA's webgeocalc datafiles show L lines per day
 #define L 24.0
 //the time window in which interpolation is made has a width of N lines in NASA's webgeocalc files
@@ -124,7 +124,7 @@ class Time{
   bool Y_is_leap_year;
   vector<unsigned int> days_per_month;
   Chrono chrono;
-  double s, mjd;
+  double s, MJD;
   bool check_Y(string), check_M(string), check_D(string);
   void enter(string, string);
   void print(string, string);
@@ -169,7 +169,7 @@ void Time::check_leap_year(void){
 
 void Time::add(Chrono chrono_in){
 
-  mjd += (((double)(chrono_in.h)) + ((double)(chrono_in.m))/60.0 + ((double)(chrono_in.s))/(60.0*60.0))/24.0;
+  MJD += (((double)(chrono_in.h)) + ((double)(chrono_in.m))/60.0 + ((double)(chrono_in.s))/(60.0*60.0))/24.0;
   to_TAI();
 
 }
@@ -1279,7 +1279,7 @@ void Sight::get_coordinates(void){
   stringstream filename, line_ins;
   string line, dummy, temp;
   unsigned int l, l_min, l_max;
-  double mjd_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
+  double MJD_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
   gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
     *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
@@ -1296,15 +1296,15 @@ void Sight::get_coordinates(void){
   file.set_name(temp.c_str()); 
   if(file.open()==1){
 
-    /* cout << "\nMJD = " << t.mjd; */
-    /* cout << "\nMJD0 = " << mjd_min; */
-    /* cout << "\ndiff = " << (t.mjd)-mjd_min; */
+    /* cout << "\nMJD = " << t.MJD; */
+    /* cout << "\nMJD0 = " << MJD_min; */
+    /* cout << "\ndiff = " << (t.MJD)-MJD_min; */
     /* cin >>l ; */
 
     //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-    l_min = (unsigned int)(L*((time.mjd)-mjd_min))-(unsigned int)(N/2.0);
+    l_min = (unsigned int)(L*((time.MJD)-MJD_min))-(unsigned int)(N/2.0);
     //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-    l_max = (unsigned int)(L*((time.mjd)-mjd_min))+(unsigned int)(N/2.0);
+    l_max = (unsigned int)(L*((time.MJD)-MJD_min))+(unsigned int)(N/2.0);
 
     /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
 
@@ -1320,26 +1320,30 @@ void Sight::get_coordinates(void){
 
       double r_tab[(unsigned int)N];
       gsl_spline *interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
-
-      
+     
       for(; l<l_max; l++){
+	
 	line.clear();
 	line_ins.clear();
+	
 	getline((file.value), line);
 	line_ins << line;
 	cout << line << "\n";
 	line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
-	mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
+	
+	MJD_tab[l-l_min] = ((double)(l-l_min))/L;
       }
 
       file.close();
 
       //convert to radians and nm
       for(l=0; l<N; l++){
+	
 	//add minus sign because in JPL convention longitude is positive when it is E
 	GHA_tab[l]*=(-1.0)*k; 
 	d_tab[l]*=k;
 	r_tab[l]/=nm;
+	
       }
 
       //remove discontinuous jumps in GHA to allow for interpolation
@@ -1351,19 +1355,19 @@ void Sight::get_coordinates(void){
 	GHA_tab[l+1] += sum;
       }
 
-      gsl_spline_init(interpolation_GHA, mjd_tab, GHA_tab, (unsigned int)N);
-      gsl_spline_init(interpolation_d, mjd_tab, d_tab, (unsigned int)N);
-      gsl_spline_init(interpolation_r, mjd_tab, r_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)N);
 
   
       cout << "Read values:\n";
       for(l=0; l<N; l++){
-	cout << mjd_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
+	cout << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
-      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
-      d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
-      r.set("r", gsl_spline_eval(interpolation_r, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
+      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
+      r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
 
       gsl_spline_free(interpolation_r);
 
@@ -1394,7 +1398,7 @@ void Sight::get_coordinates(void){
 	GHA_tab[l-l_min] = GHA_tab[l-l_min] - 2.0*M_PI*floor(GHA_tab[l-l_min]/(2.0*M_PI));
 
 	  
-	mjd_tab[l-l_min] = ((double)(l-l_min))/24.0;
+	MJD_tab[l-l_min] = ((double)(l-l_min))/24.0;
       }
 
 
@@ -1413,16 +1417,16 @@ void Sight::get_coordinates(void){
 
       cout << "Read values:\n";
       for(l=0; l<N; l++){
-	cout << mjd_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
+	cout << MJD_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
       }
 
-      gsl_spline_init(interpolation_GHA, mjd_tab, GHA_tab, (unsigned int)N);
-      gsl_spline_init(interpolation_d, mjd_tab, d_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N);
+      gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N);
 
       
       //add minus sign because in JPL convention longitude is positive when it is W
-      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
-      d.set("d", gsl_spline_eval(interpolation_d, (time.mjd)-mjd_min-((double)l_min)/24.0, acc));
+      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
+      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
 
     }
 
@@ -1700,7 +1704,7 @@ stringstream Time::to_string(void){
   if(D<10){output << 0;}
   output << D << " ";
   output << chrono.to_string().str().c_str();
-  //output << " (" << mjd << " MJD)\n";
+  //output << " (" << MJD << " MJD)\n";
 
   return output;
   
@@ -1761,7 +1765,7 @@ void Time:: to_TAI(void){
     Calculate the calendar date from the Modified Julian Date
    
     INPUT :
-    mjd : Modified Julian Date (Julian Date - 2400000.5)
+    MJD : Modified Julian Date (Julian Date - 2400000.5)
    
     OUTPUT :
     day, month, year : corresponding date
@@ -1773,7 +1777,7 @@ void Time:: to_TAI(void){
 
   long int b, c, d, e, f, jd0;
    
-  jd0 = long(mjd +  2400001.0);
+  jd0 = long(MJD +  2400001.0);
   if (jd0 < 2299161) c = jd0 + 1524;    /* Julian calendar */
   else
     {                                /* Gregorian calendar */
@@ -1781,9 +1785,9 @@ void Time:: to_TAI(void){
       c = jd0 + b - (b/4) + 1525;
     };
    
-  if (mjd < -2400001.0)  // special case for year < -4712
+  if (MJD < -2400001.0)  // special case for year < -4712
     {
-      if (mjd == floor(mjd)) jd0 = jd0 + 1;
+      if (MJD == floor(MJD)) jd0 = jd0 + 1;
       c = long((-jd0 - 0.1)/ 365.25);
       c = c + 1;
       Yt = -4712 - c;
@@ -1833,7 +1837,7 @@ void Time:: to_TAI(void){
       Yt = d - 4715 - ((7 + Mt) / 10);
     };
    
-  ht = 24.0 * (mjd - floor(mjd));
+  ht = 24.0 * (MJD - floor(MJD));
     
 
   Y = ((unsigned int)Yt);
@@ -1859,13 +1863,13 @@ void Time:: to_MJD(void)
   long int b, c;
   int Yt = Y, Mt = M, Dt = D;
    
-  mjd = 10000.0 * Yt + 100.0 * Mt + Dt;
+  MJD = 10000.0 * Yt + 100.0 * Mt + Dt;
   if (Mt <= 2)
     {
       Mt = Mt + 12;
       Yt = Yt - 1;
     };
-  if (mjd <= 15821004.1)
+  if (MJD <= 15821004.1)
     {
       b = ((Yt+4716)/4) - 1181;
       if (Yt < -4716)
@@ -1881,9 +1885,9 @@ void Time:: to_MJD(void)
   //     { b = -2 + floor((Yt+4716)/4) - 1179;}
   // else {b = floor(Yt/400) - floor(Yt/100) + floor(Yt/4);};
    
-  mjd = 365.0 * Yt - 679004.0;
-  //comment this out if you want to include hours, minutes and seconds in mjd
-  mjd = mjd + b + int(30.6001 * (Mt + 1)) + Dt + (((double)(chrono.h)) + ((double)(chrono.m))/60.0 + ((double)(chrono.s))/(60.0*60.0)) / 24.0;
+  MJD = 365.0 * Yt - 679004.0;
+  //comment this out if you want to include hours, minutes and seconds in MJD
+  MJD = MJD + b + int(30.6001 * (Mt + 1)) + Dt + (((double)(chrono.h)) + ((double)(chrono.m))/60.0 + ((double)(chrono.s))/(60.0*60.0)) / 24.0;
    
   
 }

@@ -487,7 +487,7 @@ class Plot{
 
 void Plot::menu(void){
 
-  unsigned i;
+  unsigned int i;
   bool check;
 
   do{
@@ -561,6 +561,28 @@ void Plot::menu(void){
     break;
 
   case 4:{
+
+    do{
+
+      print("\t");
+      cout << "Which point do you want to delete? [point #]\n";
+      cin >> i;
+      i--;
+
+      if(!((0<=i) && (i<point_list.size()))){
+	cout << RED << "Enterd value is not valid!\n" << RESET;
+	check = true;
+      }
+      else{
+	check=false;
+      }
+    }while(check);
+    
+    remove_point(i);
+    print("\t");
+    show();
+    menu();  
+
   }
     break;
 

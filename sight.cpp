@@ -39,9 +39,10 @@
 // #include <gsl_complex_math.h>
 
 /*notes
-- how do the jpl data files deal with the potential insertion of leap seconds in the future?
-- this code does not work if there are leapseconds in the time lapse covered by the ephemeride files
- */
+- add rotation of sight
+- split Time into Date and Chrono objects
+- change date and time format do YYYY-DD-MM hh:mm:ss.s, which is nicer.
+*/
 
 using namespace std;
 

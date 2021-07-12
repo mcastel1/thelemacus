@@ -48,12 +48,12 @@ class String{
  public:
   string value;
   
-  void enter(const char*, const char*);
-  void print(const char*, const char*);
+  void enter(string, string);
+  void print(string, string);
 
 };
 
-void String::enter(const char* name, const char* prefix){
+void String::enter(string name, string prefix){
 
   cout << prefix << "Enter " << name << ":\n";
   cin >> value;
@@ -62,7 +62,7 @@ void String::enter(const char* name, const char* prefix){
 
 }
 
-void String::print(const char* name, const char* prefix){
+void String::print(string name, string prefix){
 
   cout << prefix << name << " is " << value << "\n";
   
@@ -343,16 +343,15 @@ Catalog::Catalog(string filename){
 void Catalog::print(string prefix){
 
   unsigned int i;
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
 
   //prepend \t to prefix
-  new_prefix[0] = '\t';
-  strcpy(new_prefix+1, prefix);    
-
+  new_prefix << "\t" << prefix;
+  
   for(i=0; i<list.size(); i++){
     
     cout << prefix << "Body #" << i << "\n";
-    list[i].print(new_prefix);
+    list[i].print(new_prefix.str());
 
   }
 
@@ -603,25 +602,24 @@ Plot::~Plot(){
 
 void Plot::print(string prefix){
 
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
   stringstream name;
   unsigned int i;
   
-  strcpy(new_prefix+1, prefix);
-  new_prefix[0] = '\t';
+  new_prefix << "\t" << prefix;
   
   cout << "Sights in the plot:\n";
   for(i=0; i<sight_list.size(); i++){
     name.str("");
     name <<  "Sight #" << i+1;
-    (sight_list[i]).print(name.str().c_str(), new_prefix);
+    (sight_list[i]).print(name.str().c_str(), new_prefix.str());
   }
   
   cout << "Points in the plot:\n";
   for(i=0; i<point_list.size(); i++){
     name.str("");
     name << "Point #" << i+1;
-    (point_list[i]).print(name.str().c_str(), new_prefix);
+    (point_list[i]).print(name.str().c_str(), new_prefix.str());
   }
 
 
@@ -771,17 +769,17 @@ void Sight::enter(Catalog catalog, string name, string prefix){
 
   Answer stopwatch; // stopwatch = 'n' -> time is in format UTC time. stopwatch  = 'y' -> master clock UTC time + stopwatch reading
 
-  stopwatch.enter("use of stopwatch reading", new_prefix);
+  stopwatch.enter("use of stopwatch reading", new_prefix.str());
   if(stopwatch.value == 'n'){
     
-    time.enter("UTC time of sight", new_prefix);
+    time.enter("UTC time of sight", new_prefix.str());
     
   }else{
     
     Chrono temp;
     
-    time.enter("master-clock UTC time", new_prefix);
-    temp.enter("stopwatch reading", new_prefix);
+    time.enter("master-clock UTC time", new_prefix.str());
+    temp.enter("stopwatch reading", new_prefix.str());
     time.add(temp);
     time.print("UTC time of sight", "");
     
@@ -1129,11 +1127,9 @@ void Body::enter(Catalog catalog, string prefix){
   unsigned int i;
   bool check;
   string s;
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
 
-  //append \t to prefix
-  strcpy(new_prefix, prefix);    
-  new_prefix[strlen(prefix)] = '\t';
+  new_prefix << prefix << "\t";
 
   
   do{
@@ -1147,7 +1143,7 @@ void Body::enter(Catalog catalog, string prefix){
   
   i--;
   (*this) = (catalog.list)[i];
-  print(new_prefix);
+  print(new_prefix.str());
   
 }
 
@@ -1460,43 +1456,40 @@ void Angle::enter(string name, string prefix){
 void Point::enter(string name, string prefix){
 
   bool check;
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
 
-  //prepend \t to prefix
-  new_prefix[0] = '\t';
-  strcpy(new_prefix+1, prefix);    
+  new_prefix << "\t" << prefix;    
 
   cout << prefix << "Enter " << name << ":\n";
 
   do{
-    phi.enter("latitude", new_prefix);
+    phi.enter("latitude", new_prefix.str());
     if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
-      cout << new_prefix << RED << "Entered value is not valid!\n" << RESET;
+      cout << new_prefix.str() << RED << "Entered value is not valid!\n" << RESET;
       check = true;
     }else{
       check = false;
     }
   }while(check);
   
-  lambda.enter("longitude", new_prefix);
-  label.enter("label", new_prefix);
+  lambda.enter("longitude", new_prefix.str());
+  label.enter("label", new_prefix.str());
   
 }
 
 void Point::print(string name, string prefix){
 
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
 
   //prepend \t to prefix
-  new_prefix[0] = '\t';
-  strcpy(new_prefix+1, prefix);    
+  new_prefix << "\t" << prefix;
 
   cout << prefix << name << " is:\n";
 
-  phi.print("latitude", new_prefix);
-  lambda.print("longitude", new_prefix);
+  phi.print("latitude", new_prefix.str());
+  lambda.print("longitude", new_prefix.str());
 
-  label.print("label", new_prefix);
+  label.print("label", new_prefix.str());
 
 }
 
@@ -1628,28 +1621,27 @@ void Chrono::print(string name, string prefix){
 
 void Chrono::enter(string name, string prefix) {
 
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
 
   //append \t to prefix
-  strcpy(new_prefix, prefix);    
-  new_prefix[strlen(prefix)] = '\t';
-
+  new_prefix << prefix << "\t";
+  
   cout << prefix << "Enter hour of " << name << " [hh-mm-ss]\n";
 
   do{
     cout << prefix << "\tEnter hh: ";
     cin >> h;
-  }while(!check_h(new_prefix));
+  }while(!check_h(new_prefix.str()));
 
   do{
     cout << prefix << "\tEnter mm: ";
     cin >> m;
-  }while(!check_m(new_prefix));
+  }while(!check_m(new_prefix.str()));
 
   do{
     cout << prefix << "\tEnter ss: ";
     cin >> s;
-  }while(!check_s(new_prefix));
+  }while(!check_s(new_prefix.str()));
   
 }
 
@@ -1683,37 +1675,36 @@ void Time::print(string name, string prefix){
 
 void Time::enter(string name, string prefix) {
 
-  char new_prefix [strlen(prefix)+1];
+  stringstream new_prefix;
 
   //append \t to prefix
-  strcpy(new_prefix, prefix);    
-  new_prefix[strlen(prefix)] = '\t';
-
+  new_prefix << prefix << "\t";
+  
   cout << prefix << "Enter date of " << name << " [YYYY MM DD]\n";
 
   do{
     cout << prefix << "\tEnter YYYY: ";
     cin >> Y;
-  }while(!check_Y(new_prefix));
+  }while(!check_Y(new_prefix.str()));
   
   check_leap_year();
   if(Y_is_leap_year){
     days_per_month = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << new_prefix << "Entered a leap year\n";
+    cout << new_prefix.str() << "Entered a leap year\n";
   }else{
     days_per_month = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << new_prefix << "Entered a common year\n";
+    cout << new_prefix.str() << "Entered a common year\n";
   }
   
   do{
     cout << prefix << "\tEnter MM: ";
     cin >> M;
-  }while(!check_M(new_prefix));
+  }while(!check_M(new_prefix.str()));
 
   do{
     cout << prefix << "\tEnter DD: ";
     cin >> D;
-  }while(!(check_D(new_prefix)));
+  }while(!(check_D(new_prefix.str())));
 
   chrono.enter(name, prefix);
   

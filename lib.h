@@ -1332,6 +1332,7 @@ void Sight::get_coordinates(void){
 	line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
 	
 	MJD_tab[l-l_min] = ((double)(l-l_min))/L;
+	
       }
 
       file.close();
@@ -1365,9 +1366,9 @@ void Sight::get_coordinates(void){
 	cout << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
-      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
-      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
-      r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
+      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc));
 
       gsl_spline_free(interpolation_r);
 
@@ -1380,6 +1381,7 @@ void Sight::get_coordinates(void){
 	
 	line.clear();
 	line_ins.clear();
+	
 	getline((file.value), line);
 	line_ins << line;
 	cout << line << "\n";
@@ -1398,9 +1400,9 @@ void Sight::get_coordinates(void){
 	GHA_tab[l-l_min] = GHA_tab[l-l_min] - 2.0*M_PI*floor(GHA_tab[l-l_min]/(2.0*M_PI));
 
 	  
-	MJD_tab[l-l_min] = ((double)(l-l_min))/24.0;
+	MJD_tab[l-l_min] = ((double)(l-l_min))/L;
+	
       }
-
 
       file.close();
 
@@ -1425,8 +1427,8 @@ void Sight::get_coordinates(void){
 
       
       //add minus sign because in JPL convention longitude is positive when it is W
-      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
-      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/24.0, acc));
+      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
 
     }
 

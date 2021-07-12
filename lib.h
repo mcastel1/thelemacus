@@ -281,7 +281,7 @@ class Body{
   string name, type;
   Length radius;
   Angle RA, d; 
-  void enter(Catalog, string), print(string);
+  void enter(Catalog, string), print(string, string);
   
 };
 
@@ -343,15 +343,16 @@ Catalog::Catalog(string filename){
 void Catalog::print(string prefix){
 
   unsigned int i;
-  stringstream new_prefix;
+  stringstream new_prefix, name;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
   
   for(i=0; i<list.size(); i++){
-    
-    cout << prefix << "Body #" << i << "\n";
-    list[i].print(new_prefix.str());
+
+    name.str("");
+    name << "Body #" << i;
+    (list[i]).print(name.str(), new_prefix.str());
 
   }
 
@@ -368,7 +369,7 @@ void Catalog::add(string type, string name, double radius){
   list.push_back(body);
   
   cout << "Added body to catalog:\n";
-  body.print("\t");
+  body.print("body", "\t");
 
 }
 
@@ -446,19 +447,22 @@ class Sight{
 
 void Sight::print(string name, string prefix){
 
+  stringstream new_prefix;
+  new_prefix << "\t" << prefix;    
+
   cout << prefix << name << ":\n";
 
-  body.print(prefix);
+  body.print("body", new_prefix.str());
   if(body.type != "star"){
-    limb.print("limb", prefix);
+    limb.print("limb", new_prefix.str());
   }
-  H_s.print("sextant altitude", prefix);
-  index_error.print("index error", prefix);
-  artificial_horizon.print("artificial horizon", prefix);
+  H_s.print("sextant altitude", new_prefix.str());
+  index_error.print("index error", new_prefix.str());
+  artificial_horizon.print("artificial horizon", new_prefix.str());
   if(artificial_horizon.value == 'n'){
-    height_of_eye.print("height of eye", prefix);
+    height_of_eye.print("height of eye", new_prefix.str());
   }
-  time.print("UTC time of sight", prefix);
+  time.print("UTC time of sight", new_prefix.str());
 
 }
 
@@ -653,7 +657,7 @@ void Plot::add_sight(){
   
   sight.enter((*catalog), "new sight", "");
   sight.reduce();
-  sight.print("", "\t");
+  sight.print("Sight", "");
   
   sight_list.push_back(sight);
   cout << "Sight added as sight #" << sight_list.size() << ".\n";
@@ -741,7 +745,7 @@ void Plot::show(void){
   
   plot_command.str("");
   for(i=0; i<point_list.size(); i++){
-    plot_command << "replot \"+\" u (xe(K*" << (point_list[i]).lambda.value << ")):(ye(K*" << (point_list[i]).phi.value << ")) w p ps 1 lw 2 ti \"" << (point_list[i]).label.value << "\"\\\n";
+    plot_command << "replot \"+\" u (xe(K*" << (point_list[i]).lambda.value << ")):(ye(K*" << (point_list[i]).phi.value << ")) w p ps 4 lw 2 ti \"" << (point_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << file_gnuplot.name << "\n";
@@ -1129,16 +1133,21 @@ void Atmosphere::set(void){
 
 
 
-void Body::print(string prefix){
+void Body::print(string name_in, string prefix){
 
-  cout << prefix << "Type: " << type << "\n";
-  cout << prefix << "Name: " << name << "\n";
+  stringstream new_prefix;
+  new_prefix << prefix << "\t";
+  
+  cout << prefix << name_in << ":\n";
+  
+  cout << new_prefix.str() << "Type: " << type << "\n";
+  cout << new_prefix.str() << "Name: " << name << "\n";
   if((radius.value) != 0.0){
-    radius.print("Radius", prefix);
+    radius.print("Radius", new_prefix.str());
   }
   if(type == "star"){
-    RA.print("Right ascension", prefix);
-    d.print("Declination", prefix);
+    RA.print("Right ascension", new_prefix.str());
+    d.print("Declination", new_prefix.str());
   }
  
 }
@@ -1165,7 +1174,7 @@ void Body::enter(Catalog catalog, string prefix){
   
   i--;
   (*this) = (catalog.list)[i];
-  print(new_prefix.str());
+  print("body", prefix);
   
 }
 
@@ -1506,7 +1515,7 @@ void Point::print(string name, string prefix){
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
-  cout << prefix << name << " is:\n";
+  cout << prefix << name << ":\n";
 
   phi.print("latitude", new_prefix.str());
   lambda.print("longitude", new_prefix.str());

@@ -103,6 +103,34 @@ class Point{
 
 };
 
+class Date{
+
+  int Y, M, D;
+  bool Y_is_leap_year;
+  vector<unsigned int> days_per_month;
+
+  bool check_Y(string), check_M(string), check_D(string);
+  void check_leap_year(void);
+
+};
+
+class Time{
+
+ public:
+  Chrono chrono;
+  //is s used?
+  double s, MJD;
+  void enter(string, string);
+  void print(string, string);
+  
+  void to_MJD(void);
+  void to_TAI(void);
+  void add(Chrono);
+  
+  stringstream to_string(void);
+  
+};
+
 
 class Chrono{
 
@@ -117,26 +145,6 @@ class Chrono{
 
 };
 
-class Time{
-
- public:
-  int Y, M, D;
-  bool Y_is_leap_year;
-  vector<unsigned int> days_per_month;
-  Chrono chrono;
-  double s, MJD;
-  bool check_Y(string), check_M(string), check_D(string);
-  void enter(string, string);
-  void print(string, string);
-  
-  void to_MJD(void);
-  void to_TAI(void);
-  void check_leap_year(void);
-  void add(Chrono);
-  
-  stringstream to_string(void);
-  
-};
 
 void Time::check_leap_year(void){
 

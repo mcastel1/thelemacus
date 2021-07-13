@@ -110,6 +110,9 @@ class Date{
   bool Y_is_leap_year;
   vector<unsigned int> days_per_month;
 
+  void print(string, string);
+  void enter(string, string);
+  stringstream to_string(void);
   bool check_Y(string), check_M(string), check_D(string);
   void check_leap_year(void);
 
@@ -1669,6 +1672,53 @@ stringstream Chrono::to_string(void){
   output << m << "-";
   if(s<10.0){output << 0;}
   output << s;
+
+  return output;
+  
+}
+
+void Date::print(string name, string prefix){
+
+  cout << prefix << name << " is " << to_string().str().c_str() << "\n";
+
+};
+
+void Date::enter(string name, string prefix) {
+
+  stringstream new_prefix;
+
+  //append \t to prefix
+  new_prefix << prefix << "\t";
+  
+  cout << prefix << "Enter " << name << " [YYYY-MM-DD]\n";
+
+  do{
+    cout << prefix << "\tEnter YYYY: ";
+    cin >> Y;
+  }while(!check_Y(new_prefix.str()));
+
+  do{
+    cout << prefix << "\tEnter MM: ";
+    cin >> M;
+  }while(!check_M(new_prefix.str()));
+
+  do{
+    cout << prefix << "\tEnter DD: ";
+    cin >> D;
+  }while(!check_D(new_prefix.str()));
+  
+}
+
+
+stringstream Date::to_string(void){
+
+  stringstream output;
+  
+  output << Y << "-";
+  if(M<10){output << 0;}
+  output << M << "-";
+  if(D<10){output << 0;}
+  output << D << "-";
 
   return output;
   

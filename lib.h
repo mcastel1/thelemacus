@@ -639,7 +639,7 @@ void Plot::menu(void){
     file.open("in");
     line.clear();
     getline(file.value, line);
-    line.append(".txt");
+    line.append(".saved");
     file.close();
     
     command.str("");
@@ -648,7 +648,7 @@ void Plot::menu(void){
  
     file.name = line;
     file.open("out");
-    file.value << "data";
+    file.value << "Here I should write all the data to be saved! :)";
     file.close();
     
     cout << "Fair winds, following seas...\n";

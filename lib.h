@@ -651,6 +651,7 @@ void Plot::menu(void){
     file.name = line;
     file.open("out");
     file.value << "Here I should write all the data to be saved! :)";
+    print("", file.value);
     file.close();
     
     cout << "Fair winds, following seas...\n";

@@ -763,7 +763,7 @@ void Plot::show(void){
   
   plot_command.str("");
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
-    plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) w d ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << "\"\\\n";
+    plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) w d ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << " TAI\"\\\n";
   }  
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> plot_temp.plt \n";
@@ -838,7 +838,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     time.add(stopwatch);
     TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
     time.add(TAI_minus_UTC);
-    time.print("TAI date and hour of sight", "");
+    time.print("TAI date and hour of sight", new_prefix.str());
     
   }
   

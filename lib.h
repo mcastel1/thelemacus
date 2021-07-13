@@ -443,13 +443,15 @@ class Sight{
 
  public:
   Time time;
-  Chrono TAI_minus_UTC;
+  //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
+  Chrono TAI_minus_UTC, stopwatch;
   Angle index_error, GHA, d, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
   Body body;
   Limb limb;
-  Answer artificial_horizon;
+  // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading
+  Answer artificial_horizon, use_stopwatch; 
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -815,10 +817,9 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   }
 
 
-  Answer stopwatch; // stopwatch = 'n' -> time is in format UTC time. stopwatch  = 'y' -> master clock UTC time + stopwatch reading
 
-  stopwatch.enter("use of stopwatch reading", new_prefix.str());
-  if(stopwatch.value == 'n'){
+  use_stopwatch.enter("use of stopwatch reading", new_prefix.str());
+  if(use_stopwatch.value == 'n'){
     
     time.enter("master-clock date and hour", new_prefix.str());
     TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
@@ -826,12 +827,10 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     time.print("TAI time of sight", "");
     
   }else{
-    
-    Chrono temp;
-    
+        
     time.enter("master-clock date and hour", new_prefix.str());
-    temp.enter("stopwatch reading", new_prefix.str());
-    time.add(temp);
+    stopwatch.enter("stopwatch reading", new_prefix.str());
+    time.add(stopwatch);
     TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
     time.add(TAI_minus_UTC);
     time.print("TAI time of sight", "");

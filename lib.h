@@ -820,16 +820,19 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   stopwatch.enter("use of stopwatch reading", new_prefix.str());
   if(stopwatch.value == 'n'){
     
-    time.enter("UTC time of sight", new_prefix.str());
+    time.enter("master-clock date and hour", new_prefix.str());
+    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
+    time.add(TAI_minus_UTC);
+    time.print("TAI time of sight", "");
     
   }else{
     
     Chrono temp;
     
-    time.enter("master-clock UTC time", new_prefix.str());
-    temp.enter("hour of stopwatch reading", new_prefix.str());
+    time.enter("master-clock date and hour", new_prefix.str());
+    temp.enter("stopwatch reading", new_prefix.str());
     time.add(temp);
-    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization", new_prefix.str());
+    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
     time.add(TAI_minus_UTC);
     time.print("TAI time of sight", "");
     
@@ -1667,9 +1670,9 @@ stringstream Chrono::to_string(void){
   stringstream output;
   
   if(h<10){output << 0;}
-  output << h << "-";
+  output << h << ":";
   if(m<10){output << 0;}
-  output << m << "-";
+  output << m << ":";
   if(s<10.0){output << 0;}
   output << s;
 
@@ -1697,6 +1700,15 @@ void Date::enter(string name, string prefix) {
     cin >> Y;
   }while(!check_Y(new_prefix.str()));
 
+  check_leap_year();
+  if((Y_is_leap_year)){
+    (days_per_month) = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    cout << new_prefix.str() << "Entered a leap year\n";
+  }else{
+    (days_per_month) = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    cout << new_prefix.str() << "Entered a common year\n";
+  }
+
   do{
     cout << prefix << "\tEnter MM: ";
     cin >> M;
@@ -1718,7 +1730,7 @@ stringstream Date::to_string(void){
   if(M<10){output << 0;}
   output << M << "-";
   if(D<10){output << 0;}
-  output << D << "-";
+  output << D;
 
   return output;
   
@@ -1785,33 +1797,10 @@ void Time::enter(string name, string prefix) {
   //append \t to prefix
   new_prefix << prefix << "\t";
   
-  cout << prefix << "Enter " << name << " [YYYY MM DD]\n";
-
-  do{
-    cout << prefix << "\tEnter YYYY: ";
-    cin >> date.Y;
-  }while(!(date.check_Y(new_prefix.str())));
+  cout << prefix << "Enter master-clock date and hour\n";
   
-  date.check_leap_year();
-  if((date.Y_is_leap_year)){
-    (date.days_per_month) = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << new_prefix.str() << "Entered a leap year\n";
-  }else{
-    (date.days_per_month) = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    cout << new_prefix.str() << "Entered a common year\n";
-  }
-  
-  do{
-    cout << prefix << "\tEnter MM: ";
-    cin >> (date.M);
-  }while(!(date.check_M(new_prefix.str())));
-
-  do{
-    cout << prefix << "\tEnter DD: ";
-    cin >> (date.D);
-  }while(!(date.check_D(new_prefix.str())));
-
-  chrono.enter(name, prefix);
+  date.enter("date", new_prefix.str());
+  chrono.enter("hour", new_prefix.str());
   
   to_MJD();
   print(name, prefix);

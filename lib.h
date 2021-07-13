@@ -192,10 +192,10 @@ void Time::add(Chrono chrono_in){
 class File{
 
  public:
-  ifstream value;
+  fstream value;
   string name;
   void set_name(string);
-  int open(void);
+  int open(string);
   void close(void);
   void remove(void);
   
@@ -218,18 +218,24 @@ void File::set_name(string filename){
   
 }
 
-int File::open(void){
+int File::open(string mode){
 
-  value.open(name);
+  if(mode =="in"){
+    value.open(name, ios::in);
+  }else{
+    value.open(name, ios::out);
+  }
+  
+  cout << "Opening " << name << "in mode " <<  mode << "...\n";
   
   if(!value){
     
-    cout << "Error opening file " << name << "!\n";
+    cout << "... error opening file " << name << "!\n";
     return 0;
     
   }else{
     
-    cout << "File " << name << " opened.\n";
+    cout << "... file " << name << " opened.\n";
     return 1;
      
   }
@@ -326,7 +332,7 @@ Catalog::Catalog(string filename){
 
 
   file.set_name(filename);
-  if(file.open()==1){
+  if(file.open("in")==1){
 
     getline((file.value), line);
 
@@ -622,13 +628,30 @@ void Plot::menu(void){
     
   case 5:{
 
+    File file;
+    string line;
 
-    File saved_sight;
     command.str("");
     command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
     system(command.str().c_str());
 
-   
+    file.name = "output.out";
+    file.open("out");
+
+    line.clear();
+    getline(file.value, line);
+
+    file.close();
+    command.str("");
+    command << "rm -rf output.out";
+    system(command.str().c_str());
+ 
+
+    line.append(".txt");
+    file.name = line;
+    file.value.open(file.name, ios::out);
+    file.value << "data";
+    file.close();
     
     cout << "Fair winds, following seas...\n";
   }
@@ -795,7 +818,7 @@ void Plot::show(void){
   system(command.str().c_str());
 
   //read the job id from file_id
-  if(file_id.open()==1){
+  if(file_id.open("in")==1){
     getline(file_id.value, line);
     line_ins << line;
     line_ins >> job_id;
@@ -1325,7 +1348,7 @@ void Sight::get_coordinates(void){
 
   
   file.set_name(temp.c_str()); 
-  if(file.open()==1){
+  if(file.open("in")==1){
 
     /* cout << "\nMJD = " << t.MJD; */
     /* cout << "\nMJD0 = " << MJD_min; */

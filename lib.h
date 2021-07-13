@@ -227,16 +227,16 @@ int File::open(string mode){
     value.open(name, ios::out);
   }
   
-  cout << "Opening " << name << " in mode " <<  mode << "... ";
+  cout << "Opening " << name << " in mode '" <<  mode << "' ... ";
   
   if(!value){
     
-    cout << "error opening file " << name << "!\n";
+    cout << RED << "Frror opening file " << name << "!\n" << RESET;
     return 0;
     
   }else{
     
-    cout << "file " << name << " opened.\n";
+    cout << "File " << name << " opened.\n";
     return 1;
      
   }
@@ -650,7 +650,6 @@ void Plot::menu(void){
  
     file.name = line;
     file.open("out");
-    file.value << "Here I should write all the data to be saved! :)";
     print("", file.value);
     file.close();
     
@@ -1324,7 +1323,7 @@ void Length::enter(string name, string prefix){
 
 void Length::print(string name, string prefix, ostream& ostr){
 
-  cout << prefix << name << " is " << value << " nm.\n";
+  ostr << prefix << name << " is " << value << " nm.\n";
  
 }
 

@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
   Catalog catalog("data/catalog.txt");
   Plot plot(&catalog);
 
-  catalog.print("\t");
+  catalog.print("\t", cout);
   
 
   plot.menu();

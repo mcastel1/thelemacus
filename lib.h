@@ -453,7 +453,8 @@ class Sight{
   Time time;
   //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
   Chrono TAI_minus_UTC, stopwatch;
-  Angle index_error, GHA, d, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
+  Point GP;
+  Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
   Body body;
@@ -795,7 +796,7 @@ void Plot::show(void){
   
   plot_command.str("");
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
-    plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).d.value << ", " << (sight_list[i]).GHA.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) w d ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << " TAI\"\\\n";
+    plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) w d ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << " TAI\"\\\n";
   }  
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> plot_temp.plt \n";
@@ -1421,8 +1422,8 @@ void Sight::get_coordinates(void){
       }
 
       
-      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
-      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
       r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc));
 
       gsl_spline_free(interpolation_r);
@@ -1482,8 +1483,8 @@ void Sight::get_coordinates(void){
 
       
       //add minus sign because in JPL convention longitude is positive when it is W
-      GHA.set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
-      d.set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
 
     }
 

@@ -105,6 +105,7 @@ class Point{
 
 class Date{
 
+ public:
   int Y, M, D;
   bool Y_is_leap_year;
   vector<unsigned int> days_per_month;
@@ -113,24 +114,6 @@ class Date{
   void check_leap_year(void);
 
 };
-
-class Time{
-
- public:
-  Chrono chrono;
-  //is s used?
-  double s, MJD;
-  void enter(string, string);
-  void print(string, string);
-  
-  void to_MJD(void);
-  void to_TAI(void);
-  void add(Chrono);
-  
-  stringstream to_string(void);
-  
-};
-
 
 class Chrono{
 
@@ -146,7 +129,28 @@ class Chrono{
 };
 
 
-void Time::check_leap_year(void){
+
+class Time{
+
+ public:
+  Date date;
+  Chrono chrono;
+  //is s used?
+  double s, MJD;
+  void enter(string, string);
+  void print(string, string);
+  
+  void to_MJD(void);
+  void to_TAI(void);
+  void add(Chrono);
+  
+  stringstream to_string(void);
+  
+};
+
+
+
+void Date::check_leap_year(void){
 
   if((Y % 4)!=0){
     
@@ -1593,7 +1597,7 @@ void Limb::print(string name, string prefix){
 }
 
 
-bool Time::check_Y(string prefix){
+bool Date::check_Y(string prefix){
 
   if((Y >= Y_min) && (Y <= Y_max)){return true;}
   else{
@@ -1604,7 +1608,7 @@ bool Time::check_Y(string prefix){
 };
 
 
-bool Time::check_M(string prefix){
+bool Date::check_M(string prefix){
 
   if((M >= 1) && (M <= 12)){return true;}
   else{
@@ -1615,7 +1619,7 @@ bool Time::check_M(string prefix){
 
 };
 
-bool Time::check_D(string prefix){
+bool Date::check_D(string prefix){
 
   if((D >= 1) && (D <= ((int)days_per_month[M-1]))){return true;}
   else{
@@ -1709,11 +1713,11 @@ stringstream Time::to_string(void){
 
   stringstream output;
   
-  output << Y << " ";
-  if(M<10){output << 0;}
-  output << M << " ";
-  if(D<10){output << 0;}
-  output << D << " ";
+  output << date.Y << " ";
+  if((date.M)<10){output << 0;}
+  output << date.M << " ";
+  if((date.D)<10){output << 0;}
+  output << date.D << " ";
   output << chrono.to_string().str().c_str();
   //output << " (" << MJD << " MJD)\n";
 
@@ -1741,27 +1745,27 @@ void Time::enter(string name, string prefix) {
 
   do{
     cout << prefix << "\tEnter YYYY: ";
-    cin >> Y;
-  }while(!check_Y(new_prefix.str()));
+    cin >> date.Y;
+  }while(!(date.check_Y(new_prefix.str())));
   
-  check_leap_year();
-  if(Y_is_leap_year){
-    days_per_month = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  date.check_leap_year();
+  if((date.Y_is_leap_year)){
+    (date.days_per_month) = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     cout << new_prefix.str() << "Entered a leap year\n";
   }else{
-    days_per_month = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    (date.days_per_month) = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     cout << new_prefix.str() << "Entered a common year\n";
   }
   
   do{
     cout << prefix << "\tEnter MM: ";
-    cin >> M;
-  }while(!check_M(new_prefix.str()));
+    cin >> (date.M);
+  }while(!(date.check_M(new_prefix.str())));
 
   do{
     cout << prefix << "\tEnter DD: ";
-    cin >> D;
-  }while(!(check_D(new_prefix.str())));
+    cin >> (date.D);
+  }while(!(date.check_D(new_prefix.str())));
 
   chrono.enter(name, prefix);
   
@@ -1851,9 +1855,9 @@ void Time:: to_TAI(void){
   ht = 24.0 * (MJD - floor(MJD));
     
 
-  Y = ((unsigned int)Yt);
-  M = ((unsigned int)Mt);
-  D = ((unsigned int)Dt);
+  (date.Y) = ((unsigned int)Yt);
+  (date.M) = ((unsigned int)Mt);
+  (date.D) = ((unsigned int)Dt);
 
   (chrono.h) = (unsigned int)(floor(ht));
   (chrono.m) = floor((ht-floor(ht))*60.0);
@@ -1872,7 +1876,7 @@ void Time:: to_MJD(void)
 {
   
   long int b, c;
-  int Yt = Y, Mt = M, Dt = D;
+  int Yt = (date.Y), Mt = (date.M), Dt = (date.D);
    
   MJD = 10000.0 * Yt + 100.0 * Mt + Dt;
   if (Mt <= 2)

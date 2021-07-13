@@ -55,6 +55,7 @@ class String{
   
   void enter(string, string);
   void print(string, string, ostream&);
+  void set(string, string);
 
 };
 
@@ -73,6 +74,13 @@ void String::print(string name, string prefix, ostream& ostr){
 
   ostr << prefix << name << " is " << value << "\n";
   
+}
+
+void String::set(string name, string prefix){
+
+  value = name;
+  print(name, prefix, cout);
+
 }
 
 
@@ -844,6 +852,8 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   cout << prefix << "Enter " << name << ":\n";
   
   body.enter(catalog, new_prefix.str());
+  GP.label.set("geographic position", new_prefix.str());
+
   if(body.type != "star"){
     limb.enter("limb", new_prefix.str());
   }

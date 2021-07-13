@@ -486,7 +486,12 @@ void Sight::print(string name, string prefix){
   if(artificial_horizon.value == 'n'){
     height_of_eye.print("height of eye", new_prefix.str());
   }
-  time.print("UTC time of sight", new_prefix.str());
+  use_stopwatch.print("use of stopwatch", new_prefix.str());
+  if(use_stopwatch.value == 'y'){
+    stopwatch.print("stopwatch", new_prefix.str());
+  }
+  TAI_minus_UTC.print("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
+  time.print("TAI date and hour of sight", new_prefix.str());
 
 }
 
@@ -818,7 +823,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
 
 
 
-  use_stopwatch.enter("use of stopwatch reading", new_prefix.str());
+  use_stopwatch.enter("use of stopwatch", new_prefix.str());
   if(use_stopwatch.value == 'n'){
     
     time.enter("master-clock date and hour", new_prefix.str());
@@ -833,7 +838,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     time.add(stopwatch);
     TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
     time.add(TAI_minus_UTC);
-    time.print("TAI time of sight", "");
+    time.print("TAI date and hour of sight", "");
     
   }
   

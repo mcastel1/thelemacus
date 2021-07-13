@@ -621,6 +621,15 @@ void Plot::menu(void){
 
     
   case 5:{
+
+
+    File saved_sight;
+    command.str("");
+    command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
+    system(command.str().c_str());
+
+   
+    
     cout << "Fair winds, following seas...\n";
   }
     break;

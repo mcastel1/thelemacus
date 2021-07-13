@@ -1,3 +1,5 @@
+##to kill all processes which match the pattern 'gnuplot' in the process name, type pkill -9 gnuplot
+
 reset 
 #set term epslatex  
 #set output "chart4.tex"

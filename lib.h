@@ -226,16 +226,16 @@ int File::open(string mode){
     value.open(name, ios::out);
   }
   
-  cout << "Opening " << name << "in mode " <<  mode << "...\n";
+  cout << "Opening " << name << " in mode " <<  mode << "... ";
   
   if(!value){
     
-    cout << "... error opening file " << name << "!\n";
+    cout << "error opening file " << name << "!\n";
     return 0;
     
   }else{
     
-    cout << "... file " << name << " opened.\n";
+    cout << "file " << name << " opened.\n";
     return 1;
      
   }
@@ -636,20 +636,18 @@ void Plot::menu(void){
     system(command.str().c_str());
 
     file.name = "output.out";
-    file.open("out");
-
+    file.open("in");
     line.clear();
     getline(file.value, line);
-
+    line.append(".txt");
     file.close();
+    
     command.str("");
     command << "rm -rf output.out";
     system(command.str().c_str());
  
-
-    line.append(".txt");
     file.name = line;
-    file.value.open(file.name, ios::out);
+    file.open("out");
     file.value << "data";
     file.close();
     

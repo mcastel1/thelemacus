@@ -1762,15 +1762,9 @@ void Chrono::enter(string name, string prefix) {
 stringstream Time::to_string(void){
 
   stringstream output;
-  
-  output << date.Y << " ";
-  if((date.M)<10){output << 0;}
-  output << date.M << " ";
-  if((date.D)<10){output << 0;}
-  output << date.D << " ";
-  output << chrono.to_string().str().c_str();
-  //output << " (" << MJD << " MJD)\n";
 
+  output << date.to_string().str() << " " << chrono.to_string().str();
+ 
   return output;
   
 }

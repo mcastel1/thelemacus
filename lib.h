@@ -672,7 +672,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
 
-  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point", "Exit"};
+  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point", "Save and exit"};
   
 }
 

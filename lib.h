@@ -214,8 +214,8 @@ class File{
 
 void File::count_lines(string prefix){
 
-  stringstream command;
-  string dummy;
+  stringstream command, line_ins;
+  string line, dummy;
   File file_number_of_lines;
 
   file_number_of_lines.set_name("output.out");

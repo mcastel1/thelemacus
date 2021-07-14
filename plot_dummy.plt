@@ -1,10 +1,4 @@
-##to kill all processes which match the pattern 'gnuplot' in the process name, type pkill -9 gnuplot
-
 reset 
-#set term epslatex  
-#set output "chart4.tex"
-#unset te
-#set te x11
 
 #notes:
 #- using webgeocals improves agreement between circle of equal altitude and true position by ~ 100 m
@@ -21,7 +15,7 @@ clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
 
 #Mercator for the sphere
 #MINUS SIGN ADDED BY HAND TO FLIP THE MAP
-xe(lambda) =  (-1.0) * (lambda)*k
+xe(lambda) =  (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k
 ye(phi) = (log(1./cos(phi*k) + tan(phi*k)))
 lambda_inv(xe) = -xe*K
 phi_inv(ye) = K*atan(sinh(ye))	

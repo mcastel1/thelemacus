@@ -82,8 +82,9 @@ lambda0 = 360.0 -(2.0 + 24./60. + 26.07/(60.**2.))
 phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
 set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
 
+#sign
 #coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1 + 180.0)):(ye($2)) every M w d linecolor rgb "black" noti
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every M w d linecolor rgb "black" noti
 
 
 

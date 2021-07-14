@@ -1,9 +1,6 @@
 #define my_precision 32
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
-//check that these values are covered by ephemerides data
-#define Y_min 2016
-#define Y_max 2025
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
 #define MJD_min 57388.000300925923511385917663574
 //NASA's webgeocalc datafiles show L lines per day
@@ -1759,12 +1756,14 @@ void Limb::print(string name, string prefix, ostream& ostr){
 
 bool Date::check_Y(string prefix){
 
-  if((Y >= Y_min) && (Y <= Y_max)){return true;}
-  else{
-    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-    return false;
-  }
+  /* if((Y >= Y_min) && (Y <= Y_max)){return true;} */
+  /* else{ */
+  /*   cout << prefix << RED << "Entered value is not valid!\n" << RESET; */
+  /*   return false; */
+  /* } */
 
+  return true;
+  
 };
 
 

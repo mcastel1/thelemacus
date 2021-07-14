@@ -40,6 +40,7 @@
 
 /*notes
 - add rotation of sight
+- in check_Y, check_M, ... check entered characters so as to make sure that the number entered is an integer
 - throw error message if entered time lies out of data file span
 - make sure that running code cannot enter into infinite loop if weird values are entered from keyboard
 - include keyboard escape sequence to terminate code at any time

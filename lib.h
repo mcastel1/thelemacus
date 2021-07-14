@@ -1565,15 +1565,26 @@ void Angle::enter(string name, string prefix){
 
     cout << prefix << "\tEnter ddd: ";
     cin >> s;
-    ad = stoi(s, NULL, 10);
-   
-    if((abs(ad) >= 0) && (abs(ad) < 360) && /*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of("0123456789")) == (std::string::npos))){check = true;}
-    else{
-      cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
-      flush(cout);
+
+    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of("0123456789")) == (std::string::npos))){
+    
+      ad = stoi(s, NULL, 10);  
+      if((abs(ad) >= 0) && (abs(ad) < 360)){
+	check = true;
+      }else{
+	check = false;
+      }
+      
+    }else{
       check = false;
     }
+
+    if(!check){
+     cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+    }
+    
   }while(!check);
+  
   
   do{
 
@@ -1581,14 +1592,24 @@ void Angle::enter(string name, string prefix){
 
     cout << prefix << "\tEnter mm: ";
     cin >> s;
-    am = stod(s);
 
-    if((am >= 0.0) && (am < 60.0) &&  ((s.find_first_not_of("0123456789.")) == (std::string::npos))){check = true;}
-    else{
-      cout << prefix << RED << "\tEntered value is not valid!.\n" << RESET;
-      flush(cout);
+    if(((s.find_first_not_of("0123456789.")) == (std::string::npos))){
+      
+      am = stod(s);
+      if((am >= 0.0) && (am < 60.0)){
+	check = true;
+      }else{
+	check=false;
+      }
+      
+    }else{
       check = false;
     }
+
+    if(!check){
+      cout << prefix << RED << "\tEntered value is not valid!.\n" << RESET;
+    }
+ 
   }while(!check);
 
   value = k*(ad + am/60.0);

@@ -141,22 +141,24 @@ while(1){
 
 
 
-#	print "Setting xtics at dlambda intervals:";
+	print "Setting xtics at dlambda intervals:";
 
 	set format x "";     
 	set xtics ();
+
 	lambda= (int(lambda_min/dlambda))*dlambda;
-	while(lambda<lambda_max){
-		set xtics add (label_deg(lambda) xe(lambda));
-		set arrow from first xe(lambda), graph 0 to first xe(lambda), graph 1 nohead  linecolor "gray"
+	x = xe(lambda);
+	while(x < GPVAL_DATA_X_MAX){
+		set xtics add (label_deg(lambda_inv(x)) x);
+		set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray"
 
 		
-#		print lambda;
-		lambda = lambda + dlambda;
+		print lambda_inv(x);
+		x = x + dlambda*k;
+		#lambda = lambda + dlambda;
 
 	}
 
-	#replot for [lambda in list((int(lambda_min/dlambda))*dlambda,lambda_max,dlambda)] 'lat.dat' u (xe(lambda)):(ye($1)) noti w l linecolor rgb 'gray' lt 1
 
 
 

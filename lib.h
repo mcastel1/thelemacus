@@ -233,7 +233,7 @@ void File::count_lines(string prefix){
 
   file_number_of_lines.close();  
 
-  cout << prefix << "Number of lines in file " << name << " is " << number_of_lines;
+  cout << prefix << "Number of lines in file " << name << " is " << number_of_lines << "\n";
 
   
 }

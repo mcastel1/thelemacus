@@ -40,8 +40,6 @@
 
 /*notes
 - add rotation of sight
-- split Time into Date and Chrono objects
-- change date and time format do YYYY-DD-MM hh:mm:ss.s, which is nicer.
 */
 
 using namespace std;

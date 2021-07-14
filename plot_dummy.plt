@@ -1,6 +1,7 @@
 reset 
 
 #notes:
+#to kill all gnuplot processes type: pkill -9 gnuplot
 #- using webgeocals improves agreement between circle of equal altitude and true position by ~ 100 m
 #do not use stellarium to compute hour angle and declination: they are calculated with the reference frame sitting on the surface of the earth at the observer's location! 
 #here 0 <= lambda < 360.0, and it grows in the W direction

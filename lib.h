@@ -19,19 +19,19 @@
 
 
 /*
- void youprint(string input, string prefix)
-{
+  void youprint(string input, string prefix)
+  {
   cout << prefix << input << endl;
-}
+  }
 
 
-void myprint(string input, string prefix)
-{
+  void myprint(string input, string prefix)
+  {
   cout << prefix << input << endl;
   stringstream new_prefix;
   new_prefix << "--" << prefix;
   youprint(input, new_prefix.str());
-}
+  }
 */
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
@@ -575,26 +575,33 @@ void Plot::menu(void){
     
   case 2:{
 
-    do{
+    if(sight_list.size() > 0){
 
-      print("\t", cout);
-      cout << "Which sight do you want to delete? [sight #]\n";
-      cin >> i;
-      i--;
+      do{
 
-      if(!((0<=i) && (i<sight_list.size()))){
-	cout << RED << "Enterd value is not valid!\n" << RESET;
-	check = true;
-      }
-      else{
-	check=false;
-      }
-    }while(check);
+	print("\t", cout);
+	cout << "Which sight do you want to delete? [sight #]\n";
+	cin >> i;
+	i--;
+
+	if(!((0<=i) && (i<sight_list.size()))){
+	  cout << RED << "Enterd value is not valid!\n" << RESET;
+	  check = true;
+	}
+	else{
+	  check=false;
+	}
+      }while(check);
     
-    remove_sight(i);
-    print("\t", cout);
-  show();
-  menu();  
+      remove_sight(i);
+      print("\t", cout);
+      show();
+
+    }else{
+      cout << RED << "There are no sights to delete!\n" << RESET;
+    }
+
+    menu();  
 
    
   }
@@ -612,25 +619,32 @@ void Plot::menu(void){
 
   case 4:{
 
-    do{
+    if(point_list.size() > 0){
 
-      print("\t", cout);
-      cout << "Which point do you want to delete? [point #]\n";
-      cin >> i;
-      i--;
+      do{
 
-      if(!((0<=i) && (i<point_list.size()))){
-	cout << RED << "Enterd value is not valid!\n" << RESET;
-	check = true;
-      }
-      else{
-	check=false;
-      }
-    }while(check);
+	print("\t", cout);
+	cout << "Which point do you want to delete? [point #]\n";
+	cin >> i;
+	i--;
+
+	if(!((0<=i) && (i<point_list.size()))){
+	  cout << RED << "Enterd value is not valid!\n" << RESET;
+	  check = true;
+	}
+	else{
+	  check=false;
+	}
+      }while(check);
     
-    remove_point(i);
-    print("\t", cout);
-    show();
+      remove_point(i);
+      print("\t", cout);
+      show();
+
+    }else{
+      cout << RED << "There are no points to delete!\n" << RESET;
+    }
+    
     menu();  
 
   }
@@ -693,12 +707,12 @@ Plot::Plot(Catalog* cata){
 }
 
 /*
-Plot::~Plot(){
+  Plot::~Plot(){
 
   //file_gnuplot.remove();
   file_id.remove();
   
-}
+  }
 */
 
 void Plot::print(string prefix, ostream& ostr){

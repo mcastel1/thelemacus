@@ -663,9 +663,7 @@ void Plot::menu(void){
     file.close();
 
     command.str("");
-    /* replace(line.begin(), line.end(), ' ', '\,'); // replace all ' ' with '\,' */
     command << "mv plot.plt " << "'plot " << line.c_str() << "'";
-    cout << "I will run command " << command.str() << "\n";
     system(command.str().c_str());
     
     

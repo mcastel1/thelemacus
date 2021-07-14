@@ -20,9 +20,11 @@ clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
 xe(lambda) =  (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k
 ye(phi) = (log(1./cos(phi*k) + tan(phi*k)))
 lambda_inv(xe) = ( ((xe <= 0.0) & (xe > -pi)) ? -xe*K: -xe*K + 360.0 )
+#given xe, this returns the corresponding lambda in non-standard format, i.e., lying in the interval [-pi, pi)
+lambda_inv_pm(xe) = -xe*K 
 phi_inv(ye) = K*atan(sinh(ye))	
 
-myf(x,y)=sprintf("%g\260 %g' %s , %g\260 %g' %s", myint(abs(phi_inv(y))), (abs(phi_inv(y)) - myint(abs(phi_inv(y))))*60.0, (phi_inv(y) > 0.0 ? 'N': 'S'), myint(abs(lambda_inv(x))), (abs(lambda_inv(x)) - myint(abs(lambda_inv(x))))*60.0, (((0.0 <= lambda_inv(x)) & (lambda_inv(x) < 180.0)) ? 'W': 'E'))
+myf(x,y)=sprintf("%g\260 %g' %s , %g\260 %g' %s", myint(abs(phi_inv(y))), (abs(phi_inv(y)) - myint(abs(phi_inv(y))))*60.0, (phi_inv(y) > 0.0 ? 'N': 'S'), myint(abs(lambda_inv_pm(x))), (abs(lambda_inv_pm(x)) - myint(abs(lambda_inv_pm(x))))*60.0, ((lambda_inv_pm(x) > 0.0) ? 'W': 'E'))
 set mouse mouseformat function myf(x, y)
 set mouse mouseformat 8
 

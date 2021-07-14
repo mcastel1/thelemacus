@@ -78,10 +78,11 @@ phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
 set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
 
 #coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "#696969" noti
 
-#sight_plots
-#point_plots
+
+replot "+" u (xe(K*(6.2474060575137020379088426125236))):(ye(K*(0.57683131778412588541726790936082))) w p  lw 2 ti "gray dimmed!!"
+
 
 #unset parametric
 unset multiplot

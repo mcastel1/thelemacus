@@ -62,8 +62,7 @@ class String{
 void String::enter(string name, string prefix){
 
   
-  cout << prefix << "Enter " << name << ":\n";
-
+  cout << prefix << "Enter " << name << ":";
   getline(cin >> ws, value);
 
   print(name, prefix, cout);
@@ -430,7 +429,7 @@ void Answer::enter(string name, string prefix){
   
   do{
 
-    cout << prefix << "Enter " << name << " [y/n]:\n";
+    cout << prefix << "Enter " << name << " [y/n]:";
     cin >> value;
     
     if((value=='y') || (value=='n')){
@@ -1334,8 +1333,9 @@ void Length::enter(string name, string prefix){
 
   do{
     
-    cout << prefix << "Enter " << name << " [m]:\n";
+    cout << prefix << "Enter " << name << " [m]:";
     cin >> value;
+    
     if(value < 0.0){
       cout << prefix << RED << "Entered value of " << name << " is not valid!\n" << RESET;
       check = true;
@@ -1647,7 +1647,7 @@ void Limb::enter(string name, string prefix){
   bool check;
 
   do{
-    cout << prefix << "Enter " << name << " [u/l/c]:\n";
+    cout << prefix << "Enter " << name << " [u/l/c]:";
     cin >> value;
     
     if((value=='u') || (value=='l') || (value=='c')){check = true;}
@@ -1762,7 +1762,7 @@ void Date::enter(string name, string prefix) {
   cout << prefix << "Enter " << name << " [YYYY-MM-DD]\n";
 
   do{
-    cout << prefix << "\tEnter YYYY: ";
+    cout << prefix << "\tEnter YYYY:";
     cin >> Y;
   }while(!check_Y(new_prefix.str()));
 
@@ -1776,12 +1776,12 @@ void Date::enter(string name, string prefix) {
   }
 
   do{
-    cout << prefix << "\tEnter MM: ";
+    cout << prefix << "\tEnter MM:";
     cin >> M;
   }while(!check_M(new_prefix.str()));
 
   do{
-    cout << prefix << "\tEnter DD: ";
+    cout << prefix << "\tEnter DD:";
     cin >> D;
   }while(!check_D(new_prefix.str()));
   

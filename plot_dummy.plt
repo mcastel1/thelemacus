@@ -141,7 +141,7 @@ while(1){
 
 
 
-	print "Setting xtics at dlambda intervals:";
+#	print "Setting xtics at dlambda intervals:";
 
 	set format x "";     
 	set xtics ();
@@ -153,7 +153,7 @@ while(1){
 		set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray"
 
 		
-		print lambda_inv(x);
+#		print lambda_inv(x);
 		x = x + dlambda*k;
 		#lambda = lambda + dlambda;
 

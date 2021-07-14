@@ -40,6 +40,7 @@
 
 /*notes
 - add rotation of sight
+- throw error message if entered time lies out of data file span
 */
 
 using namespace std;

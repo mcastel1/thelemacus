@@ -3,7 +3,7 @@
 #define K (1.0/k)
 //check that these values are covered by ephemerides data
 #define Y_min 2016
-#define Y_max 2017
+#define Y_max 2025
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
 #define MJD_min 57388.000300925923511385917663574
 //NASA's webgeocalc datafiles show L lines per day

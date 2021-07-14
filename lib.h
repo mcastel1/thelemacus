@@ -916,23 +916,35 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   }
 
 
+  //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
+  l_min = (unsigned int)(L*((time.MJD)-MJD_min))-(unsigned int)(N/2.0);
+  //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
+  l_max = (unsigned int)(L*((time.MJD)-MJD_min))+(unsigned int)(N/2.0);
 
-  use_stopwatch.enter("use of stopwatch", new_prefix.str());
-  if(use_stopwatch.value == 'n'){
-    
+  do{
+  
+    use_stopwatch.enter("use of stopwatch", new_prefix.str());
     time.enter("master-clock date and hour", new_prefix.str());
-    
-  }else{
+
+    if(use_stopwatch.value == 'y'){
         
-    time.enter("master-clock date and hour", new_prefix.str());
-    stopwatch.enter("stopwatch reading", new_prefix.str());
-    time.add(stopwatch);
+      stopwatch.enter("stopwatch reading", new_prefix.str());
+      time.add(stopwatch);
     
-  }
+    }
 
-  TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
-  time.add(TAI_minus_UTC);
-  time.print("TAI date and hour of sight", new_prefix.str(), cout);
+    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
+    time.add(TAI_minus_UTC);
+    time.print("TAI date and hour of sight", new_prefix.str(), cout);
+
+    if((l_min >= 0) && (l_max < number_of_lines)){
+      check = true;
+    }else{
+      check = false;
+      cout << RED << "Time lies outside interval of NASA's JPL data files!\n" << RESET;
+    }
+
+  }while(!check);
 
 }
 

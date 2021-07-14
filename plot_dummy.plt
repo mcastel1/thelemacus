@@ -3,6 +3,7 @@ reset
 #notes:
 #- using webgeocals improves agreement between circle of equal altitude and true position by ~ 100 m
 #do not use stellarium to compute hour angle and declination: they are calculated with the reference frame sitting on the surface of the earth at the observer's location! 
+#here 0 <= lambda < 360.0, and it grows in the W direction
 #notes
 K = 360.0/(2.0*pi);
 k = 1.0/K;
@@ -29,8 +30,6 @@ set mouse mouseformat 8
 set parametric
 set multiplot
 
-
-
 set size ratio -1
 set ticscale 3,1
 set samples S
@@ -41,7 +40,6 @@ list(start,end,increment)=system(sprintf("seq %g %g %g", start, increment, end))
 
 
 #set tics scale 0
-#here lambda is positive if W, negative if E
 
 
 Phi(t, d, GHA, cH) =pi/2.-acos(cos(cH) * sin(d)-cos(d) * cos(t) * sin(cH))

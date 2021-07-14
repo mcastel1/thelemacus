@@ -93,7 +93,7 @@ while(1){
 	unset arrow;
 	
 
-	print "Recalculating tics ... ";
+	#print "Recalculating tics ... ";
 
 	lambda_min = lambda_inv(GPVAL_DATA_X_MIN);
 	lambda_max = lambda_inv(GPVAL_DATA_X_MAX);
@@ -107,14 +107,14 @@ while(1){
 	phi_span = phi_max - phi_min;
 	lambda_span = -(-(GPVAL_DATA_X_MAX - GPVAL_DATA_X_MIN)*K);
 	
-	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
-	print "phi in [" , phi_min , " , " , phi_max , "]";
+	#print "lambda in [" , lambda_min , " , " , lambda_max , "]";
+	#print "phi in [" , phi_min , " , " , phi_max , "]";
 
-	print "Determining dlambda ...";
+	#print "Determining dlambda ...";
 	
 	dlambda=1.0;
 	while(N*dlambda<lambda_span){
-#		print dlambda;
+#		#print dlambda;
 		if(dlambda == 1.0){dlambda = dlambda + 4.0;}
 		else{dlambda = dlambda + 5.0;}
 	}
@@ -122,7 +122,7 @@ while(1){
 		   if(dlambda == 5.0){dlambda = dlambda - 4.0;}
 		   else{dlambda = dlambda - 5.0;}
 	}
-	print "... dlambda = " , dlambda;
+	#print "... dlambda = " , dlambda;
 
 #	print "Determining dphi ...";
 #	print "phi_span = ", phi_span;
@@ -184,7 +184,6 @@ while(1){
 
 	}
 
-	#replot for [phi in list((int(phi_min/dphi))*dphi,phi_max,dphi)] 'lon.dat' u (xe($1)):(ye(phi)) noti w l linecolor rgb 'gray' lt 1
 
 
 	refresh;
@@ -195,10 +194,3 @@ while(1){
 
     	pause 1e-1      # waiting time in seconds
 }
-
-
-
-
-
-
-

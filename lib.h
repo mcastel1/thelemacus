@@ -894,7 +894,7 @@ void Plot::show(void){
 void Sight::enter(Catalog catalog, string name, string prefix){
 
   stringstream new_prefix, string;
-  unsigned int l_min, l_max;
+  int l_min, l_max;
   File file;
   bool check;
 
@@ -945,12 +945,12 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     time.print("TAI date and hour of sight", new_prefix.str(), cout);
 
     //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-    l_min = (unsigned int)(L*((time.MJD)-MJD_min))-(unsigned int)(N/2.0);
+    l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
     //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-    l_max = (unsigned int)(L*((time.MJD)-MJD_min))+(unsigned int)(N/2.0);
+    l_max = (int)(L*((time.MJD)-MJD_min))+(int)(N/2.0);
 
     //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored 
-    if((l_min >= 0) && (l_max < file.number_of_lines)){
+    if((l_min >= 0) && (l_max < (int)(file.number_of_lines))){
       check = true;
     }else{
       check = false;
@@ -1418,7 +1418,7 @@ void Sight::get_coordinates(void){
   File file;
   stringstream filename, line_ins;
   string line, dummy, temp;
-  unsigned int l, l_min, l_max;
+  int l, l_min, l_max;
   double MJD_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
   gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
@@ -1442,9 +1442,9 @@ void Sight::get_coordinates(void){
     /* cin >>l ; */
 
     //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-    l_min = (unsigned int)(L*((time.MJD)-MJD_min))-(unsigned int)(N/2.0);
+    l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
     //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-    l_max = (unsigned int)(L*((time.MJD)-MJD_min))+(unsigned int)(N/2.0);
+    l_max = (int)(L*((time.MJD)-MJD_min))+(int)(N/2.0);
 
     /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
 

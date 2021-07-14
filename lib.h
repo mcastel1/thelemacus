@@ -650,7 +650,7 @@ void Plot::menu(void){
     file.open("in");
     line.clear();
     getline(file.value, line);
-    line.append(".saved");
+    line.append(".sav");
     file.close();
     
     command.str("");
@@ -661,6 +661,13 @@ void Plot::menu(void){
     file.open("out");
     print("", file.value);
     file.close();
+
+    command.str("");
+    /* replace(line.begin(), line.end(), ' ', '\,'); // replace all ' ' with '\,' */
+    command << "mv plot.plt " << "'plot " << line.c_str() << "'";
+    cout << "I will run command " << command.str() << "\n";
+    system(command.str().c_str());
+    
     
     cout << "Fair winds, following seas...\n";
   }

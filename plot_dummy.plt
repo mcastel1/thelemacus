@@ -56,7 +56,7 @@ lambda_max = 180.0 + epsilon
 phi_min = -80.0
 phi_max = 80.0
 
-set xrange [xe(lambda_max):xe(lambda_min)]
+set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
 
 dx = ye((phi_min+phi_max)/2.0+1./60.) -  ye((phi_min+phi_max)/2.0)
@@ -68,30 +68,14 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
 label_deg(x) = sprintf("%.f\260", x)
 
-#Compass rose
-#rho=xe(lambda_min)-xe(lambda_min+0.75) 
-#drho = dx
-#x0 = xe((lambda_min+lambda_max)/2.)
-#y0 = ye((phi_min+phi_max)/2.)
-#theta=1
-#load 'rose.plt'
-
 
 #GPS position
 lambda0 = 360.0 -(2.0 + 24./60. + 26.07/(60.**2.))
 phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
 set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
 
-#sign
 #coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every M w d linecolor rgb "black" noti
-
-
-
-#replot for [lambda in list(lambda_min,lambda_max,increment_lambda)] 'lat_min.dat' u (xe(lambda)):(ye($1)) noti w l linecolor rgb 'gray' lt 1,\
-     for [phi in list(phi_min,phi_max,increment_phi)] 'lon_min.dat' u (xe($1)):(ye(phi)) noti w l linecolor rgb 'gray' lt 1
-
-
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "black" noti
 
 #sight_plots
 #point_plots
@@ -99,7 +83,7 @@ plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlin
 #unset parametric
 unset multiplot
 
-x_max_old = 0.0;
+x_max_old = xe(lambda_max);
 
 while(1){
 
@@ -109,25 +93,24 @@ while(1){
 	unset arrow;
 	
 
-#	print "Recalculating tics ... ";
+	print "Recalculating tics ... ";
 
-	lambda_min = lambda_inv(GPVAL_DATA_X_MAX);
-	lambda_max = lambda_inv(GPVAL_DATA_X_MIN);
+	lambda_min = lambda_inv(GPVAL_DATA_X_MIN);
+	lambda_max = lambda_inv(GPVAL_DATA_X_MAX);
 	
 	phi_min = phi_inv(GPVAL_DATA_Y_MIN);
 	phi_max = phi_inv(GPVAL_DATA_Y_MAX);
 
-	set xrange [xe(lambda_max):xe(lambda_min)]
+	set xrange [xe(lambda_min):xe(lambda_max)]
 	set yrange [ye(phi_min):ye(phi_max)]
 
-
 	phi_span = phi_max - phi_min;
-	lambda_span = lambda_max - lambda_min;
+	lambda_span = -(-(GPVAL_DATA_X_MAX - GPVAL_DATA_X_MIN)*K);
 	
-#	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
-#	print "phi in [" , phi_min , " , " , phi_max , "]";
+	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
+	print "phi in [" , phi_min , " , " , phi_max , "]";
 
-#	print "Determining dlambda ...";
+	print "Determining dlambda ...";
 	
 	dlambda=1.0;
 	while(N*dlambda<lambda_span){
@@ -139,7 +122,7 @@ while(1){
 		   if(dlambda == 5.0){dlambda = dlambda - 4.0;}
 		   else{dlambda = dlambda - 5.0;}
 	}
-#	print "... dlambda = " , dlambda;
+	print "... dlambda = " , dlambda;
 
 #	print "Determining dphi ...";
 #	print "phi_span = ", phi_span;

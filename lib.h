@@ -893,7 +893,10 @@ void Plot::show(void){
 
 void Sight::enter(Catalog catalog, string name, string prefix){
 
-  stringstream new_prefix;
+  stringstream new_prefix, string;
+  unsigned int l_min, l_max;
+  File file;
+  bool check;
 
   //append \t to prefix
   //strcpy(new_prefix, prefix);    
@@ -915,12 +918,16 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     height_of_eye.enter("height of eye", new_prefix.str());
   }
 
-
-  //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-  l_min = (unsigned int)(L*((time.MJD)-MJD_min))-(unsigned int)(N/2.0);
-  //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-  l_max = (unsigned int)(L*((time.MJD)-MJD_min))+(unsigned int)(N/2.0);
-
+  //file is the file where that data relative to body are stored: I count the number of lines in this file and store them in file.number_of_lines
+  string.clear();
+  if((body.type) != "star"){
+    string << "data/" << body.name << ".txt";
+  }else{
+    string << "data/j2000_to_itrf93.txt";
+  }  
+  file.set_name(string.str()); 
+  file.count_lines(prefix);
+  
   do{
   
     use_stopwatch.enter("use of stopwatch", new_prefix.str());
@@ -937,7 +944,13 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     time.add(TAI_minus_UTC);
     time.print("TAI date and hour of sight", new_prefix.str(), cout);
 
-    if((l_min >= 0) && (l_max < number_of_lines)){
+    //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
+    l_min = (unsigned int)(L*((time.MJD)-MJD_min))-(unsigned int)(N/2.0);
+    //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
+    l_max = (unsigned int)(L*((time.MJD)-MJD_min))+(unsigned int)(N/2.0);
+
+    //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored 
+    if((l_min >= 0) && (l_max < file.number_of_lines)){
       check = true;
     }else{
       check = false;

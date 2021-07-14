@@ -11,6 +11,7 @@ N = 12.0;
 #coastlines are plotted every S lines
 S = 1e3;
 M = 1e2;
+epsilon=1e-12
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
 
@@ -47,66 +48,24 @@ Lambda(t, d, GHA, cH) = -(atan((-sin(GHA) * (cos(d)* cos(cH)+cos(t) * sin(d) * s
 
 
 
-myeps=1e-6
 
 
-
-lambda_min_deg = -180.0
-lambda_min_min = 0.0
-lambda_max_deg = 180.0
-lambda_max_min = 0.0
-phi_min_deg = -80.0
-phi_min_min = 0.0
-phi_max_deg = 80.0
-phi_max_min = 00.0
-
-
-phi_min = phi_min_deg + phi_min_min/60.
-phi_max = phi_max_deg + phi_max_min/60.
-lambda_min = lambda_min_deg + lambda_min_min/60.
-lambda_max = lambda_max_deg + lambda_max_min/60.
-
-#set x2tics 1e2
-#set ytics 1e2
-#set y2tics 1e2
- 
-
-dx = ye((phi_min+phi_max)/2.0+1./60.) -  ye((phi_min+phi_max)/2.0)
-set style arrow 1 nohead ls 1 lw 1 linecolor rgb 'black'
-set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
-
+#angles are in degrees
+lambda_min = 180.0 - epsilon
+lambda_max = 180.0 + epsilon
+phi_min = -80.0
+phi_max = 80.0
 
 set xrange [xe(lambda_max):xe(lambda_min)]
 set yrange [ye(phi_min):ye(phi_max)]
 
+dx = ye((phi_min+phi_max)/2.0+1./60.) -  ye((phi_min+phi_max)/2.0)
 
+set style arrow 1 nohead ls 1 lw 1 linecolor rgb 'black'
+set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 
 
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
-#label_deg(n) = sprintf("\\scalebox{0.8}{$\\ang{%d}$}",n)
-label_deg(x) = sprintf("%.f\260", x)
-label_deg_min(m, n) = sprintf("$\\ang{%d} \\ang{;%d;}$",m,n)
-#label_min(n) = sprintf("$\\ang{;%d;}$",n)
-label_min(x) = sprintf("%.f'",x)
-
-#lambda=lambda_min
-#i=0
-#load 'meridians_min.plt'
-
-
-
-#phi=phi_min
-#i=0
-#load 'parallels_min.plt'
-
-
-#phi=phi_min
-#i=0
-#load 'parallels_seconds.plt'
-
-#lambda=lambda_min
-#i=0
-#load 'meridians_seconds.plt'
 
 #Compass rose
 #rho=xe(lambda_min)-xe(lambda_min+0.75) 
@@ -118,11 +77,11 @@ label_min(x) = sprintf("%.f'",x)
 
 
 #GPS position
-lambda0 = -(2.0 + 24./60. + 26.07/(60.**2.))
+lambda0 = 360.0 -(2.0 + 24./60. + 26.07/(60.**2.))
 phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
 set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
 
-
+#sign
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1)):(ye($2)) every M w d linecolor rgb "black" noti
 

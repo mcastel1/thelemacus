@@ -14,7 +14,7 @@
 #define max_iter (1e3)
 //one nautical mile in kilometers
 #define nm 1.852
-#define RED     "\033[31m"      /* Red */
+#define RED     "\033[1;31m"      /* Red */
 #define RESET   "\033[0m"
 
 

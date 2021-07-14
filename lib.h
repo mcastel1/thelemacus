@@ -202,12 +202,42 @@ class File{
  public:
   fstream value;
   string name;
+  unsigned int number_of_lines;
+  
   void set_name(string);
   int open(string);
   void close(void);
   void remove(void);
+  void count_lines(string);
   
 };
+
+void File::count_lines(string prefix){
+
+  stringstream command;
+  string dummy;
+  File file_number_of_lines;
+
+  file_number_of_lines.set_name("output.out");
+  file_number_of_lines.remove();
+  
+  command.str("");
+  command << "wc -l " << name  << " >> " << file_number_of_lines.name;
+  system(command.str().c_str());
+
+  file_number_of_lines.open("in");
+  
+  getline((file_number_of_lines.value), line); 
+  line_ins << line;
+  line_ins >> number_of_lines >> dummy;
+
+  file_number_of_lines.close();  
+
+  cout << prefix << "Number of lines in file " << name << " is " << number_of_lines;
+
+  
+}
+
 
 void File::remove(void){
 

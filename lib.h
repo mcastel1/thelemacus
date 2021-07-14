@@ -540,11 +540,12 @@ void Plot::menu(void){
   bool check;
 
   do{
-    
-    cout << "What do you want to do? [choice #]\n";
+
+    cout << "You can:\n";
     for(i=0; i<choices.size(); i++){
       cout << "\t(" << i+1 << ") " << choices[i] << "\n";
     }
+    cout << "What do you want to do? [choice #]";
     cin >> i;
     
     if(!((0<i) && (i<choices.size()+1))){

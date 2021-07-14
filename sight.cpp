@@ -42,7 +42,6 @@
 - add rotation of sight
 - throw error message if entered time lies out of data file span
 - make sure that running code cannot enter into infinite loop if weird values are entered from keyboard
-- do not make mv plot.plt ... on choice 5 if there is no plot.plt
 - change ad in Angle from int to unsigned int
 */
 

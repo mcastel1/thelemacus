@@ -676,10 +676,12 @@ void Plot::menu(void){
     print("", file.value);
     file.close();
 
-    command.str("");
-    command << "mv plot.plt " << "'plot " << line.c_str() << "'";
-    system(command.str().c_str());
-    
+    //if plot.plt has been filled, here I save it
+    if((sight_list.size() != 0) || (point_list.size() !=0)){
+      command.str("");
+      command << "mv plot.plt " << "'plot " << line.c_str() << "'";
+      system(command.str().c_str());
+    }
     
     cout << "Fair winds, following seas...\n";
   }

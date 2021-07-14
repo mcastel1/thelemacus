@@ -66,6 +66,7 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 
 
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
+label_deg(x) = sprintf("%.f\260", x)
 
 #Compass rose
 #rho=xe(lambda_min)-xe(lambda_min+0.75) 

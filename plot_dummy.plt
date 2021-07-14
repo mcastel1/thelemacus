@@ -44,7 +44,7 @@ list(start,end,increment)=system(sprintf("seq %g %g %g", start, increment, end))
 
 
 Phi(t, d, GHA, cH) =pi/2.-acos(cos(cH) * sin(d)-cos(d) * cos(t) * sin(cH))
-Lambda(t, d, GHA, cH) = -(atan((-sin(GHA) * (cos(d)* cos(cH)+cos(t) * sin(d) * sin(cH))+cos(GHA) * sin(cH) * sin(t))/(cos(d) * cos(GHA) * cos(cH)+sin(cH)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(cH) +  sin(cH) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 :((-sin(GHA) * (cos(d)* cos(cH)+cos(t) * sin(d) * sin(cH))+cos(GHA) * sin(cH) * sin(t)) >0.0 ? pi : -pi)))
+Lambda(t, d, GHA, cH) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(cH)+cos(t) * sin(d) * sin(cH))+cos(GHA) * sin(cH) * sin(t))/(cos(d) * cos(GHA) * cos(cH)+sin(cH)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(cH) +  sin(cH) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
 
 
 

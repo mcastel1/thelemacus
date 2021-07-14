@@ -891,21 +891,19 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   if(use_stopwatch.value == 'n'){
     
     time.enter("master-clock date and hour", new_prefix.str());
-    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
-    time.add(TAI_minus_UTC);
-    time.print("TAI time of sight", "", cout);
     
   }else{
         
     time.enter("master-clock date and hour", new_prefix.str());
     stopwatch.enter("stopwatch reading", new_prefix.str());
     time.add(stopwatch);
-    TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
-    time.add(TAI_minus_UTC);
-    time.print("TAI date and hour of sight", new_prefix.str(), cout);
     
   }
-  
+
+  TAI_minus_UTC.enter("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str());
+  time.add(TAI_minus_UTC);
+  time.print("TAI date and hour of sight", new_prefix.str(), cout);
+
 }
 
 void Sight::reduce(void){

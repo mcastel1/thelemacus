@@ -930,8 +930,8 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   
   do{
   
-    use_stopwatch.enter("use of stopwatch", new_prefix.str());
     time.enter("master-clock date and hour", new_prefix.str());
+    use_stopwatch.enter("use of stopwatch", new_prefix.str());
 
     if(use_stopwatch.value == 'y'){
         

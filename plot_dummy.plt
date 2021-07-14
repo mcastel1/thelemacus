@@ -17,7 +17,7 @@ clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
 #MINUS SIGN ADDED BY HAND TO FLIP THE MAP
 xe(lambda) =  (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k
 ye(phi) = (log(1./cos(phi*k) + tan(phi*k)))
-lambda_inv(xe) = -xe*K
+lambda_inv(xe) = ( ((xe <= 0.0) & (xe > -pi)) ? -xe*K: -xe*K + 360.0 )
 phi_inv(ye) = K*atan(sinh(ye))	
 
 myf(x,y)=sprintf("%g\260 %g' %s , %g\260 %g' %s", myint(abs(phi_inv(y))), (abs(phi_inv(y)) - myint(abs(phi_inv(y))))*60.0, (phi_inv(y) > 0.0 ? 'N': 'S'), myint(abs(lambda_inv(x))), (abs(lambda_inv(x)) - myint(abs(lambda_inv(x))))*60.0, (lambda_inv(x) > 0.0 ? 'W': 'E'))

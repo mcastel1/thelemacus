@@ -121,7 +121,7 @@ class Date{
   void print(string, string, ostream&);
   void enter(string, string);
   stringstream to_string(void);
-  bool check_M(string), check_D(string);
+  bool check_D(string);
   void check_leap_year(void);
 
 };
@@ -1758,16 +1758,6 @@ void Limb::print(string name, string prefix, ostream& ostr){
 
 
 
-bool Date::check_M(string prefix){
-
-  if((M >= 1) && (M <= 12)){return true;}
-  else{
-    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-    flush(cout);
-    return false;
-  }
-
-};
 
 bool Date::check_D(string prefix){
 
@@ -1874,9 +1864,29 @@ void Date::enter(string name, string prefix) {
   }
 
   do{
+
+    s.clear();
+
     cout << prefix << "\tEnter MM:";
-    cin >> M;
-  }while(!check_M(new_prefix.str()));
+    cin >> s;
+
+    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
+    
+      M = stoi(s, NULL, 10);
+
+      if((M >= 1) && (M <= 12)){
+	check = true;
+      }else{
+	cout << prefix << RED << "Entered value is not valid!\n" << RESET;
+	flush(cout);
+	check = false;
+      }
+
+    }else{
+      check = false;
+    }
+
+  }while(!check);
 
   do{
     cout << prefix << "\tEnter DD:";

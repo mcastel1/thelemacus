@@ -155,8 +155,8 @@ class Point{
 class Date{
 
  public:
-  unsigned int Y;
-  int M, D;
+  unsigned int Y, M;
+  int D;
   bool Y_is_leap_year;
   vector<unsigned int> days_per_month;
 
@@ -1849,30 +1849,7 @@ void Date::enter(string name, string prefix) {
     cout << new_prefix.str() << "Entered a common year\n";
   }
 
-  do{
-
-    s.clear();
-
-    cout << prefix << "\tEnter MM:";
-    cin >> s;
-
-    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
-    
-      M = stoi(s, NULL, 10);
-
-      if((M >= 1) && (M <= 12)){
-	check = true;
-      }else{
-	cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-	check = false;
-      }
-
-    }else{
-      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-      check = false;
-    }
-
-  }while(!check);
+  enter_unsigned_int(&M, true, 1, 12, "MM", prefix);
 
   do{
 

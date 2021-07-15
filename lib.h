@@ -1887,15 +1887,8 @@ void Chrono::enter(string name, string prefix) {
   
   cout << prefix << "Enter " << name << " [hh-mm-ss]\n";
 
-  do{
-    cout << prefix << "\tEnter hh: ";
-    cin >> h;
-  }while(!check_h(new_prefix.str()));
-
-  do{
-    cout << prefix << "\tEnter mm: ";
-    cin >> m;
-  }while(!check_m(new_prefix.str()));
+  enter_unsigned_int(&h, true, 0, 24-1, "hh", new_prefix.str());
+  enter_unsigned_int(&m, true, 0, 60-1, "mm", new_prefix.str());
 
   do{
     cout << prefix << "\tEnter ss: ";

@@ -954,7 +954,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
       check = true;
     }else{
       check = false;
-      cout << RED << "Time lies outside interval of NASA's JPL data files!\n" << RESET;
+      cout << prefix << RED << "Time lies outside interval of NASA's JPL data files!\n" << RESET;
     }
 
   }while(!check);

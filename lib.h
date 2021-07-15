@@ -36,6 +36,46 @@
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
+//this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, max]
+void enter_unsigned_int(int* i, bool check_interval, unsigned int min, unsigned int max, string name, string prefix){
+
+  string s;
+
+  do{
+    
+    s.clear();
+
+    cout << prefix << "Enter " << name << ":";
+    cin >> s;
+
+    if(/*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
+    
+      (*i) = stoi(s, NULL, 10);
+      
+      if(check_interval){
+	
+	if(((*i) >= min) && ((*i) <= max)){
+	  check = true;
+	}else{
+	  check = false;
+	}
+	
+      }else{
+	check = true;
+      }
+      
+    }else{
+      check = false;
+    }
+
+    if(!check){
+     cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+    }
+    
+  }while(!check);
+
+}
+
 class Catalog;
 
 class Answer{

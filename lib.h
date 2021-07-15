@@ -37,9 +37,10 @@
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 //this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, max]
-void enter_unsigned_int(int* i, bool check_interval, unsigned int min, unsigned int max, string name, string prefix){
+void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int max, string name, string prefix){
 
   string s;
+  book check;
 
   do{
     
@@ -1650,34 +1651,10 @@ void Angle::enter(string name, string prefix){
     }
   }while(!check);
 
-  
-  do{
-    
-    s.clear();
 
-    cout << prefix << "\tEnter ddd: ";
-    cin >> s;
 
-    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
+  enter_unsigned_int(ad, true, 0, 360-1, "ddd", prefix);
     
-      ad = stoi(s, NULL, 10);  
-      if((abs(ad) >= 0) && (abs(ad) < 360)){
-	check = true;
-      }else{
-	check = false;
-      }
-      
-    }else{
-      check = false;
-    }
-
-    if(!check){
-     cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
-    }
-    
-  }while(!check);
-  
-  
   do{
 
     s.clear();

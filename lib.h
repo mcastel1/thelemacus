@@ -121,7 +121,7 @@ class Date{
   void print(string, string, ostream&);
   void enter(string, string);
   stringstream to_string(void);
-  bool check_Y(string), check_M(string), check_D(string);
+  bool check_M(string), check_D(string);
   void check_leap_year(void);
 
 };
@@ -1757,18 +1757,6 @@ void Limb::print(string name, string prefix, ostream& ostr){
 }
 
 
-bool Date::check_Y(string prefix){
-
-  /* if((Y >= Y_min) && (Y <= Y_max)){return true;} */
-  /* else{ */
-  /*   cout << prefix << RED << "Entered value is not valid!\n" << RESET; */
-  /*   return false; */
-  /* } */
-
-  return true;
-  
-};
-
 
 bool Date::check_M(string prefix){
 
@@ -1845,17 +1833,37 @@ void Date::print(string name, string prefix, ostream& ostr){
 void Date::enter(string name, string prefix) {
 
   stringstream new_prefix;
+  string s;
+  bool check;
 
   //append \t to prefix
   new_prefix << prefix << "\t";
   
+
   cout << prefix << "Enter " << name << " [YYYY-MM-DD]\n";
-
+  
   do{
-    cout << prefix << "\tEnter YYYY:";
-    cin >> Y;
-  }while(!check_Y(new_prefix.str()));
+    
+    s.clear();
 
+    cout << prefix << "\tEnter YYYY:";
+    cin >> s;
+
+    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
+    
+      Y = stoi(s, NULL, 10);  
+      check = true;
+      
+    }else{
+      check = false;
+    }
+
+    if(!check){
+     cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+    }
+    
+  }while(!check);
+ 
   check_leap_year();
   if((Y_is_leap_year)){
     (days_per_month) = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};

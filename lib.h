@@ -40,7 +40,7 @@
 void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int max, string name, string prefix){
 
   string s;
-  book check;
+  bool check;
 
   do{
     
@@ -1631,7 +1631,7 @@ void Angle::set(string name, double x){
 void Angle::enter(string name, string prefix){
 
   string s;
-  int ad;
+  unsigned int ad;
   double am;
   bool check;
   
@@ -1653,7 +1653,7 @@ void Angle::enter(string name, string prefix){
 
 
 
-  enter_unsigned_int(ad, true, 0, 360-1, "ddd", prefix);
+  enter_unsigned_int(&ad, true, 0, 360-1, "ddd", prefix);
     
   do{
 
@@ -1681,7 +1681,7 @@ void Angle::enter(string name, string prefix){
  
   }while(!check);
 
-  value = k*(ad + am/60.0);
+  value = k*(((double)ad) + am/60.0);
   if(s=="-"){value*=-1.0;}
   normalize();
   print(name, prefix, cout);

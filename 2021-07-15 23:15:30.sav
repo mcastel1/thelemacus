@@ -1,0 +1,14 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type: sun
+			Name: sun
+			Radius is 375648 nm.
+		limb is l
+		sextant altitude is 359° 43.543'
+		index error is 0° 2.32543'
+		artificial horizon is y
+		use of stopwatch is n
+		TAI - UTC at time of master-clock synchronization with UTC is 00:00:00
+		TAI date and hour of sight is 2021-12-31 23:59:33
+Points in the plot:

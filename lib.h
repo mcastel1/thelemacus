@@ -36,8 +36,8 @@
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
-//this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, max]
-void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int max, string name, string prefix){
+//this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
+void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, string name, string prefix){
 
   string s;
   bool check;
@@ -55,7 +55,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
       
       if(check_interval){
 	
-	if(((*i) >= min) && ((*i) <= max)){
+	if(((*i) >= min) && ((*i) < sup)){
 	  check = true;
 	}else{
 	  check = false;
@@ -1656,7 +1656,7 @@ void Angle::enter(string name, string prefix){
 
 
 
-  enter_unsigned_int(&ad, true, 0, 360-1, "ddd", new_prefix.str());
+  enter_unsigned_int(&ad, true, 0, 360, "ddd", new_prefix.str());
     
   do{
 
@@ -1850,9 +1850,9 @@ void Date::enter(string name, string prefix) {
     cout << new_prefix.str() << "Entered a common year\n";
   }
 
-  enter_unsigned_int(&M, true, 1, 12, "MM", prefix);
+  enter_unsigned_int(&M, true, 1, 12+1, "MM", prefix);
   
-  enter_unsigned_int(&D, true, 1, days_per_month[M-1], "DD", prefix);
+  enter_unsigned_int(&D, true, 1, days_per_month[M-1]+1, "DD", prefix);
 
 }
 
@@ -1887,8 +1887,8 @@ void Chrono::enter(string name, string prefix) {
   
   cout << prefix << "Enter " << name << " [hh-mm-ss]\n";
 
-  enter_unsigned_int(&h, true, 0, 24-1, "hh", new_prefix.str());
-  enter_unsigned_int(&m, true, 0, 60-1, "mm", new_prefix.str());
+  enter_unsigned_int(&h, true, 0, 24, "hh", new_prefix.str());
+  enter_unsigned_int(&m, true, 0, 60, "mm", new_prefix.str());
 
   do{
     cout << prefix << "\tEnter ss: ";

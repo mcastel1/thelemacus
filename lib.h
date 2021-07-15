@@ -467,7 +467,6 @@ void Answer::enter(string name, string prefix){
     }
     else{
       cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-      flush(cout);
       check = false;
     }
   }while(!check);
@@ -1608,7 +1607,6 @@ void Angle::enter(string name, string prefix){
     if((s=="+") || (s=="-")){check = true;}
     else{
       cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
-      flush(cout);
       check = false;
     }
   }while(!check);
@@ -1878,11 +1876,11 @@ void Date::enter(string name, string prefix) {
 	check = true;
       }else{
 	cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-	flush(cout);
 	check = false;
       }
 
     }else{
+      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
       check = false;
     }
 

@@ -13,7 +13,7 @@
 #define nm 1.852
 #define RED     "\033[1;31m"      /* Red */
 #define RESET   "\033[0m"
-
+#define chars_unsigned_int "0123456789"
 
 /*
   void youprint(string input, string prefix)
@@ -1618,7 +1618,7 @@ void Angle::enter(string name, string prefix){
     cout << prefix << "\tEnter ddd: ";
     cin >> s;
 
-    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of("0123456789")) == (std::string::npos))){
+    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
     
       ad = stoi(s, NULL, 10);  
       if((abs(ad) >= 0) && (abs(ad) < 360)){

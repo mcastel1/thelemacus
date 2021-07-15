@@ -155,8 +155,7 @@ class Point{
 class Date{
 
  public:
-  unsigned int Y, M;
-  int D;
+  unsigned int Y, M, D;
   bool Y_is_leap_year;
   vector<unsigned int> days_per_month;
 
@@ -1632,10 +1631,13 @@ void Angle::set(string name, double x){
 void Angle::enter(string name, string prefix){
 
   string s;
+  stringstream new_prefix;
   unsigned int ad;
   double am;
   bool check;
-  
+
+  new_prefix << "\t" << prefix;    
+
   cout << prefix << "Enter " << name << " [s ddd mm.m]:\n";
 
   do{
@@ -1654,7 +1656,7 @@ void Angle::enter(string name, string prefix){
 
 
 
-  enter_unsigned_int(&ad, true, 0, 360-1, "ddd", prefix);
+  enter_unsigned_int(&ad, true, 0, 360-1, "ddd", new_prefix.str());
     
   do{
 
@@ -1830,7 +1832,6 @@ void Date::enter(string name, string prefix) {
 
   stringstream new_prefix;
   string s;
-  bool check;
 
   //append \t to prefix
   new_prefix << prefix << "\t";
@@ -1850,31 +1851,9 @@ void Date::enter(string name, string prefix) {
   }
 
   enter_unsigned_int(&M, true, 1, 12, "MM", prefix);
-
-  do{
-
-    s.clear();
-
-    cout << prefix << "\tEnter DD:";
-    cin >> s;
-
-    if(/*here I check whether the entered valus is an integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
-    
-      D = stoi(s, NULL, 10);
-
-      if((D >= 1) && (D <= ((int)days_per_month[M-1]))){check = true;}
-      else{
-	cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-	check = false;
-      }
-
-    }else{
-      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-      check = false;
-    }
-    
-  }while(!check);
   
+  enter_unsigned_int(&D, true, 1, days_per_month[M-1], "DD", prefix);
+
 }
 
 

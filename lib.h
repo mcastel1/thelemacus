@@ -16,7 +16,7 @@
 //all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
-#define chars_positive_double "0123456789."
+#define chars_double "0123456789."
 
 /*
   void youprint(string input, string prefix)
@@ -76,6 +76,49 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
   }while(!check);
 
 }
+
+
+//this function asks the user to enter a double from keyboard and checks whether the entered value contains the allowed chars for double and, if check_interval = true, that the entered value lies in [min, sup)
+void enter_double(double* x, bool check_interval, double min, double sup, string name, string prefix){
+
+  string s;
+  bool check;
+
+  do{
+    
+    s.clear();
+
+    cout << prefix << "Enter " << name << ":";
+    cin >> s;
+
+    if(/*here I check whether the quantity entered in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))){
+
+      (*x) = stod(s);
+      
+      if(check_interval){
+	
+	if(((*x) >= min) && ((*x) < sup)){
+	  check = true;
+	}else{
+	  check = false;
+	}
+	
+      }else{
+	check = true;
+      }
+      
+    }else{
+      check = false;
+    }
+
+    if(!check){
+     cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+    }
+    
+  }while(!check);
+
+}
+
 
 class Catalog;
 
@@ -1657,33 +1700,8 @@ void Angle::enter(string name, string prefix){
 
 
   enter_unsigned_int(&ad, true, 0, 360, "ddd", new_prefix.str());
-    
-  do{
-
-    s.clear();
-
-    cout << prefix << "\tEnter mm: ";
-    cin >> s;
-
-    if(((s.find_first_not_of(chars_positive_double)) == (std::string::npos))){
-      
-      am = stod(s);
-      if((am >= 0.0) && (am < 60.0)){
-	check = true;
-      }else{
-	check=false;
-      }
-      
-    }else{
-      check = false;
-    }
-
-    if(!check){
-      cout << prefix << RED << "\tEntered value is not valid!.\n" << RESET;
-    }
+  enter_double(&am, true, 0.0, 60.0, "mm.m", new_prefix.str());
  
-  }while(!check);
-
   value = k*(((double)ad) + am/60.0);
   if(s=="-"){value*=-1.0;}
   normalize();

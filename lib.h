@@ -215,7 +215,6 @@ class Chrono{
   unsigned int h, m;
   double s;
 
-  bool check_h(string), check_m(string), check_s(string);
   void print(string, string, ostream&);
   void enter(string, string);
   stringstream to_string(void);
@@ -1794,37 +1793,6 @@ void Limb::print(string name, string prefix, ostream& ostr){
 
 
 
-
-bool Chrono::check_h(string prefix){
-
-  if((h >= 0) && (h < 24)){return true;}
-  else{
-    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-    return false;
-  }
-
-};
-
-bool Chrono::check_m(string prefix){
-
-  if((m >= 0) && (m < 60)){return true;}
-  else{
-    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-    return false;
-  }
-
-};
-
-bool Chrono::check_s(string prefix){
-
-  if((s >= 0.0) && (s < 60.0)){return true;}
-  else{
-    cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-    return false;
-  }
-
-}
-
 stringstream Chrono::to_string(void){
 
   stringstream output;
@@ -1907,12 +1875,8 @@ void Chrono::enter(string name, string prefix) {
 
   enter_unsigned_int(&h, true, 0, 24, "hh", new_prefix.str());
   enter_unsigned_int(&m, true, 0, 60, "mm", new_prefix.str());
-
-  do{
-    cout << prefix << "\tEnter ss: ";
-    cin >> s;
-  }while(!check_s(new_prefix.str()));
-  
+  enter_double(&s, true, 0.0, 60.0, "ss.s", new_prefix.str());
+ 
 }
 
 

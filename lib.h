@@ -13,7 +13,10 @@
 #define nm 1.852
 #define RED     "\033[1;31m"      /* Red */
 #define RESET   "\033[0m"
+//all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
+//all possible chars that can enter in a non-negative double
+#define chars_positive_double "0123456789."
 
 /*
   void youprint(string input, string prefix)
@@ -1645,7 +1648,7 @@ void Angle::enter(string name, string prefix){
     cout << prefix << "\tEnter mm: ";
     cin >> s;
 
-    if(((s.find_first_not_of("0123456789.")) == (std::string::npos))){
+    if(((s.find_first_not_of(chars_positive_double)) == (std::string::npos))){
       
       am = stod(s);
       if((am >= 0.0) && (am < 60.0)){

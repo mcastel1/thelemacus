@@ -653,8 +653,6 @@ class Plot{
 void Plot::menu(void){
 
   unsigned int i;
-  bool check;
-
 
   cout << "You can:\n";
   for(i=0; i<choices.size(); i++){
@@ -679,22 +677,13 @@ void Plot::menu(void){
 
     if(sight_list.size() > 0){
 
-      do{
+ 
+      print("\t", cout);
 
-	print("\t", cout);
-	cout << "Which sight do you want to delete? [sight #]\n";
-	cin >> i;
-	i--;
-
-	if(!((0<=i) && (i<sight_list.size()))){
-	  cout << RED << "Enterd value is not valid!\n" << RESET;
-	  check = true;
-	}
-	else{
-	  check=false;
-	}
-      }while(check);
-    
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", "");
+	
+      i--;
+   
       remove_sight(i);
       print("\t", cout);
       show();
@@ -723,22 +712,13 @@ void Plot::menu(void){
 
     if(point_list.size() > 0){
 
-      do{
 
-	print("\t", cout);
-	cout << "Which point do you want to delete? [point #]\n";
-	cin >> i;
-	i--;
+      print("\t", cout);
 
-	if(!((0<=i) && (i<point_list.size()))){
-	  cout << RED << "Enterd value is not valid!\n" << RESET;
-	  check = true;
-	}
-	else{
-	  check=false;
-	}
-      }while(check);
-    
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", "");
+
+      i--;
+	
       remove_point(i);
       print("\t", cout);
       show();

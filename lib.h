@@ -542,12 +542,14 @@ void Answer::enter(string name, string prefix){
   
   do{
 
-    cout << prefix << "Enter " << name << " [y/n]:";
-    //cin >> value;
-    getline(cin >> ws, temp);
-    value = temp[0];
+    temp.clear();
     
-    if(((value=='y') || (value=='n')) && (temp.size() == 1)){
+    cout << prefix << "Enter " << name << " [y/n]:";
+
+    getline(cin >> ws, temp);
+    
+    if(((temp[0]=='y') || (temp[0]=='n')) && (temp.size() == 1)){
+      value = temp[0];
       check = true;
     }
     else{
@@ -1396,6 +1398,9 @@ void Body::enter(Catalog catalog, string prefix){
 
   
   do{
+
+    s.clear();
+    
     cout << prefix << "Enter name of body:";
     getline(cin >> ws, s);
 

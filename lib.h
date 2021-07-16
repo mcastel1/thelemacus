@@ -547,7 +547,7 @@ void Answer::enter(string name, string prefix){
     getline(cin >> ws, temp);
     value = temp[0];
     
-    if((value=='y') || (value=='n')){
+    if(((value=='y') || (value=='n')) && (temp.size() == 1)){
       check = true;
     }
     else{

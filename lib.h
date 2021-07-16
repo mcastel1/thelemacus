@@ -655,27 +655,13 @@ void Plot::menu(void){
   unsigned int i;
   bool check;
 
-  do{
 
-    cout << "You can:\n";
-    for(i=0; i<choices.size(); i++){
-      cout << "\t(" << i+1 << ") " << choices[i] << "\n";
-    }
-    cout << "What do you want to do? [choice #]";
-    cin >> i;
-    
-    if(!((0<i) && (i<choices.size()+1))){
-      
-      cout << RED << "Enterd value is not valid!\n" << RESET;
-      check = true;
-      
-    }else{
-      
-      check = false;
-      
-    }
-    
-  }while(check);
+  cout << "You can:\n";
+  for(i=0; i<choices.size(); i++){
+    cout << "\t(" << i+1 << ") " << choices[i] << "\n";
+  }
+  enter_unsigned_int(&i, true, 1, choices.size()+1, "choice #", "");
+
   
   
   switch(i){

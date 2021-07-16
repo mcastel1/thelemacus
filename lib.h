@@ -47,7 +47,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
     s.clear();
 
     cout << prefix << "Enter " << name << ":";
-    cin >> s;
+    getline(cin >> ws, s);
 
     if(/*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
     
@@ -89,7 +89,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
     s.clear();
 
     cout << prefix << "Enter " << name << ":";
-    cin >> s;
+    getline(cin >> ws, s);
 
     if(/*here I check whether the quantity entered in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))){
 
@@ -1394,7 +1394,7 @@ void Body::enter(Catalog catalog, string prefix){
   
   do{
     cout << prefix << "Enter name of body:";
-    cin >> s;
+    getline(cin >> ws, s);
 
     for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name == s){check=false;}}
     if(check){cout << prefix << RED << "Body not found in catalog!\n" << RESET;}

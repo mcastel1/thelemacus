@@ -112,7 +112,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
     }
 
     if(!check){
-     cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+     cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     }
     
   }while(!check);
@@ -1438,23 +1438,28 @@ void Length::set(string name, double x){
   
 }
 
+//enter a length in meters
 void Length::enter(string name, string prefix){
 
   bool check;
+  stringstream temp;
+
+  temp.clear();
+  temp << name << " [m]";
 
   do{
     
-    cout << prefix << "Enter " << name << " [m]:";
-    cin >> value;
+    enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
     
     if(value < 0.0){
-      cout << prefix << RED << "Entered value of " << name << " is not valid!\n" << RESET;
+      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
       check = true;
     }else{
       check = false;
     }
 
   }while(check);
+    
   //convert to nautical miles
   value/=(1e3*nm);
     

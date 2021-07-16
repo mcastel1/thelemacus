@@ -538,11 +538,14 @@ class Atmosphere{
 void Answer::enter(string name, string prefix){
 
   bool check;
+  string temp;
   
   do{
 
     cout << prefix << "Enter " << name << " [y/n]:";
-    cin >> value;
+    //cin >> value;
+    getline(cin >> ws, temp);
+    value = temp[0];
     
     if((value=='y') || (value=='n')){
       check = true;

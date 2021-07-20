@@ -176,7 +176,14 @@ while(1){
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	x = xe(lambda);
 	while(x < GPVAL_X_MAX){
-		set xtics add (label_deg_min(lambda_inv(x)) x);
+	#I use the following identities for lambda and the fact that delta = floor(delta) to obtain a value of lambda which is exacly an 'integer multiple' of dllambda, so as to avoid xlabels of the form '10 degrees 0'
+	#delta = (lambda - (int(lambda_min/dlambda))*dlambda)/dlambda;
+	#delta = floor(delta) because delta is an integer, and lambda = delta * dlambda + int(lambda_min/dlambda)*dlambda = ( floor(delta) + int(lambda_min/dlambda) ) * dlambda =
+	#( floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda ) + int(lambda_min/dlambda) ) * dlambda; 
+ 
+		lambda = ( floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda ) + int(lambda_min/dlambda) ) * dlambda;
+
+		set xtics add (label_deg_min(lambda) x);
 		set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray"
 
 		

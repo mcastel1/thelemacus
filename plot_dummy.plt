@@ -9,12 +9,18 @@ reset
 K = 360.0/(2.0*pi);
 k = 1.0/K;
 N = 12.0;
-#coastlines are plotted every S lines
+#circles of equal altitude are plotted with S points
 S = 1e3;
+#coastlines are plotted every M lines
 M = 1e2;
 epsilon=1e-12
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
+#extracts degrees and minutes from floating-point angle in degree format
+degrees(x) = floor(x);
+minutes(x) = (x - floor(x))*60.0;
+
+
 
 #Mercator for the sphere
 #MINUS SIGN ADDED BY HAND TO FLIP THE MAP
@@ -35,6 +41,8 @@ set parametric
 set multiplot
 
 set size ratio -1
+set bmargin 6
+set xtics rotate by 45 offset 0,graph -0.09
 set ticscale 3,1
 set samples S
 #increments in degrees
@@ -70,6 +78,8 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
 label_deg(x) = sprintf("%.f\260", x)
+#if the arcminutes are zero, I print out only the degrees for clarity
+label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprintf("%.f\260 %.f'", degrees(x), minutes(x)) ) 
 
 
 #GPS position
@@ -86,77 +96,98 @@ plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlin
 #unset parametric
 unset multiplot
 
-x_max_old = xe(lambda_max);
+#set this value to x_max_old to begin with, in such a way that the commands under 	if(GPVAL_X_MAX!=x_max_old){ ... } are executed the first time. 
+x_max_old = 0.0;
 
 while(1){
 
-	if(GPVAL_DATA_X_MAX!=x_max_old){
+	if(GPVAL_X_MAX!=x_max_old){
 
 
 	unset arrow;
 	
 
-	#print "Recalculating tics ... ";
+	print "Recalculating tics ... ";
 
-	lambda_min = lambda_inv(GPVAL_DATA_X_MIN);
-	lambda_max = lambda_inv(GPVAL_DATA_X_MAX);
+	lambda_min = lambda_inv(GPVAL_X_MIN);
+	lambda_max = lambda_inv(GPVAL_X_MAX);
 	
-	phi_min = phi_inv(GPVAL_DATA_Y_MIN);
-	phi_max = phi_inv(GPVAL_DATA_Y_MAX);
+	phi_min = phi_inv(GPVAL_Y_MIN);
+	phi_max = phi_inv(GPVAL_Y_MAX);
 
 	set xrange [xe(lambda_min):xe(lambda_max)]
 	set yrange [ye(phi_min):ye(phi_max)]
 
 	phi_span = phi_max - phi_min;
-	lambda_span = -(-(GPVAL_DATA_X_MAX - GPVAL_DATA_X_MIN)*K);
+	lambda_span = -(-(GPVAL_X_MAX - GPVAL_X_MIN)*K);
 	
-	#print "lambda in [" , lambda_min , " , " , lambda_max , "]";
-	#print "phi in [" , phi_min , " , " , phi_max , "]";
+	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
+	print "phi in [" , phi_min , " , " , phi_max , "]";
 
-	#print "Determining dlambda ...";
-	
-	dlambda=1.0;
+	print "x in [" , GPVAL_X_MIN , " , " , GPVAL_X_MAX , "]";
+	print "y in [" , GPVAL_Y_MIN , " , " , GPVAL_Y_MAX , "]";
+
+
+	print "Determining dlambda ...";
+
+	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+	if(lambda_span > 1.0){gamma = 1.0;}
+	else{gamma = 60.0;}
+
+	dlambda=1.0/gamma;
 	while(N*dlambda<lambda_span){
-#		#print dlambda;
-		if(dlambda == 1.0){dlambda = dlambda + 4.0;}
-		else{dlambda = dlambda + 5.0;}
+	print dlambda;
+	if(dlambda == 1.0/gamma){dlambda = dlambda + 4.0/gamma;}
+	else{dlambda = dlambda + 5.0/gamma;}
 	}
-	if(dlambda > 1.0){
-		   if(dlambda == 5.0){dlambda = dlambda - 4.0;}
-		   else{dlambda = dlambda - 5.0;}
+	if(dlambda > 1.0/gamma){
+		   if(dlambda == 5.0/gamma){dlambda = dlambda - 4.0/gamma;}
+		   else{dlambda = dlambda - 5.0/gamma;}
 	}
-	#print "... dlambda = " , dlambda;
+	print "... dlambda = " , dlambda;
 
-#	print "Determining dphi ...";
-#	print "phi_span = ", phi_span;
 
-	dphi=1.0;
+	print "Determining dphi ...";
+	print "phi_span = ", phi_span;
+
+	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+	if(phi_span > 1.0){gamma = 1.0;}
+	else{gamma = 60.0;}
+	
+	dphi=1.0/gamma;
 	while(N*dphi<phi_span){
-#		print dphi;
-		if(dphi == 1.0){dphi = dphi + 4.0;}
-		else{dphi = dphi + 5.0;}
+		print dphi;
+		if(dphi == 1.0/gamma){dphi = dphi + 4.0/gamma;}
+		else{dphi = dphi + 5.0/gamma;}
 	}
-	if(dphi > 1.0){
-		   if(dphi == 5.0){dphi = dphi - 4.0;}
-		   else{dphi = dphi - 5.0;}
+	if(dphi > 1.0/gamma){
+		   if(dphi == 5.0/gamma){dphi = dphi - 4.0/gamma;}
+		   else{dphi = dphi - 5.0/gamma;}
 	}
-#	print "... dphi = " , dphi;
+	print "... dphi = " , dphi;
 
 
 
-#	print "Setting xtics at dlambda intervals:";
+	print "Setting xtics at dlambda intervals:";
 
 	set format x "";     
 	set xtics ();
 
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	x = xe(lambda);
-	while(x < GPVAL_DATA_X_MAX){
-		set xtics add (label_deg(lambda_inv(x)) x);
+	while(x < GPVAL_X_MAX){
+	#I use the following identities for lambda and the fact that delta = floor(delta) to obtain a value of lambda which is exacly an 'integer multiple' of dllambda, so as to avoid xlabels of the form '10 degrees 0'
+	#delta = (lambda - (int(lambda_min/dlambda))*dlambda)/dlambda;
+	#delta = floor(delta) because delta is an integer, and lambda = delta * dlambda + int(lambda_min/dlambda)*dlambda = ( floor(delta) + int(lambda_min/dlambda) ) * dlambda =
+	#( floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda ) + int(lambda_min/dlambda) ) * dlambda; 
+ 
+		lambda = ( floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda ) + int(lambda_min/dlambda) ) * dlambda;
+
+		set xtics add (label_deg_min(lambda) x);
 		set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray"
 
 		
-#		print lambda_inv(x);
+		print lambda_inv(x);
 		x = x + dlambda*k;
 		#lambda = lambda + dlambda;
 
@@ -173,15 +204,15 @@ while(1){
 	#}
 
 
-#	print "Setting ytics at dphi intervals:";
+	print "Setting ytics at dphi intervals:";
 	
 	set format y "";     
 	set ytics ();
 	phi = (int(phi_min/dphi))*dphi;
 	while(phi<phi_max){
-		set ytics add (label_deg(phi) ye(phi));
+		set ytics add (label_deg_min(phi) ye(phi));
 		set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray"
-#		print phi;
+		print phi;
 		phi = phi + dphi;
 
 
@@ -190,7 +221,7 @@ while(1){
 
 
 	refresh;
-	x_max_old = GPVAL_DATA_X_MAX;
+	x_max_old = GPVAL_X_MAX;
 
 	}
 

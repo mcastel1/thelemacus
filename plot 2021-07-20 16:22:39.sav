@@ -89,8 +89,9 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+
+replot "+" u (xe(K*(0.018325957145940461462396697811528))):(ye(K*(0.76910842371216792123789218749152))) w p  lw 2 ti "+fdsgs"
+
 
 #unset parametric
 unset multiplot
@@ -210,11 +211,6 @@ while(1){
 
 	}
 
-#coastlines
-plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
-
-#sight_plots
-#point_plots
 
 
 	refresh;

@@ -40,6 +40,7 @@
 
 /*notes
 - add rotation of sight
+- include sight reduction for meridian passage!
 - make sure that running code cannot enter into infinite loop if weird values are entered from keyboard
 - include keyboard escape sequence to terminate code at any time
 */

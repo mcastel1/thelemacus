@@ -11,7 +11,7 @@ k = 1.0/K;
 N = 12.0;
 #coastlines are plotted every S lines
 S = 1e3;
-M = 1e2;
+M = 1e0;
 epsilon=1e-12
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
@@ -80,8 +80,10 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+replot [0.:2.*pi] xe(K*Lambda(t, 0.36602726443397715083705179495155, 4.7571020009708551157245892682113, 1.2817810140280396780099181341939)), ye(K*Phi(t, 0.36602726443397715083705179495155, 4.7571020009708551157245892682113, 1.2817810140280396780099181341939)) smo csp ti "sun 2021-07-18 06:16:59 TAI"
+
+replot "+" u (xe(K*(0.020061977975257487549765045287131))):(ye(K*(0.86539009367485242307793669169769))) w p  lw 2 ti "GPS position 06:16:22"
+
 
 #unset parametric
 unset multiplot
@@ -96,7 +98,7 @@ while(1){
 	unset arrow;
 	
 
-	print "Recalculating tics ... ";
+	#print "Recalculating tics ... ";
 
 	lambda_min = lambda_inv(GPVAL_DATA_X_MIN);
 	lambda_max = lambda_inv(GPVAL_DATA_X_MAX);
@@ -110,54 +112,41 @@ while(1){
 	phi_span = phi_max - phi_min;
 	lambda_span = -(-(GPVAL_DATA_X_MAX - GPVAL_DATA_X_MIN)*K);
 	
-	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
-	print "phi in [" , phi_min , " , " , phi_max , "]";
+	#print "lambda in [" , lambda_min , " , " , lambda_max , "]";
+	#print "phi in [" , phi_min , " , " , phi_max , "]";
 
-	print "x in [" , GPVAL_DATA_X_MIN , " , " , GPVAL_DATA_X_MAX , "]";
-	print "y in [" , GPVAL_DATA_Y_MIN , " , " , GPVAL_DATA_Y_MAX , "]";
-
-
-	print "Determining dlambda ...";
-
-	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-	if(lambda_span > 1.0){gamma = 1.0;}
-	else{gamma = 60.0;}
-
-	dlambda=1.0/gamma;
-	while(N*dlambda<lambda_span){
-	print dlambda;
-	if(dlambda == 1.0/gamma){dlambda = dlambda + 4.0/gamma;}
-	else{dlambda = dlambda + 5.0/gamma;}
-	}
-	if(dlambda > 1.0/gamma){
-		   if(dlambda == 5.0/gamma){dlambda = dlambda - 4.0/gamma;}
-		   else{dlambda = dlambda - 5.0/gamma;}
-	}
-	print "... dlambda = " , dlambda;
-
-
-	print "Determining dphi ...";
-	print "phi_span = ", phi_span;
-
-	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-	if(phi_span > 1.0){gamma = 1.0;}
-	else{gamma = 60.0;}
+	#print "Determining dlambda ...";
 	
-	dphi=1.0/gamma;
+	dlambda=1.0;
+	while(N*dlambda<lambda_span){
+#		#print dlambda;
+		if(dlambda == 1.0){dlambda = dlambda + 4.0;}
+		else{dlambda = dlambda + 5.0;}
+	}
+	if(dlambda > 1.0){
+		   if(dlambda == 5.0){dlambda = dlambda - 4.0;}
+		   else{dlambda = dlambda - 5.0;}
+	}
+	#print "... dlambda = " , dlambda;
+
+#	print "Determining dphi ...";
+#	print "phi_span = ", phi_span;
+
+	dphi=1.0;
 	while(N*dphi<phi_span){
-		print dphi;
-		if(dphi == 1.0/gamma){dphi = dphi + 4.0/gamma;}
-		else{dphi = dphi + 5.0/gamma;}
+#		print dphi;
+		if(dphi == 1.0){dphi = dphi + 4.0;}
+		else{dphi = dphi + 5.0;}
 	}
-	if(dphi > 1.0/gamma){
-		   if(dphi == 5.0/gamma){dphi = dphi - 4.0/gamma;}
-		   else{dphi = dphi - 5.0/gamma;}
+	if(dphi > 1.0){
+		   if(dphi == 5.0){dphi = dphi - 4.0;}
+		   else{dphi = dphi - 5.0;}
 	}
-	print "... dphi = " , dphi;
+#	print "... dphi = " , dphi;
 
 
 
-	print "Setting xtics at dlambda intervals:";
+#	print "Setting xtics at dlambda intervals:";
 
 	set format x "";     
 	set xtics ();
@@ -169,7 +158,7 @@ while(1){
 		set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray"
 
 		
-		print lambda_inv(x);
+#		print lambda_inv(x);
 		x = x + dlambda*k;
 		#lambda = lambda + dlambda;
 
@@ -186,7 +175,7 @@ while(1){
 	#}
 
 
-	print "Setting ytics at dphi intervals:";
+#	print "Setting ytics at dphi intervals:";
 	
 	set format y "";     
 	set ytics ();
@@ -194,7 +183,7 @@ while(1){
 	while(phi<phi_max){
 		set ytics add (label_deg(phi) ye(phi));
 		set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray"
-		print phi;
+#		print phi;
 		phi = phi + dphi;
 
 

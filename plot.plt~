@@ -80,8 +80,9 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+
+replot "+" u (xe(K*(0.065158958741121639213211835794937))):(ye(K*(0.29576349504295951220456117880531))) w p  lw 2 ti "scemo"
+
 
 #unset parametric
 unset multiplot
@@ -112,10 +113,6 @@ while(1){
 	
 	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
 	print "phi in [" , phi_min , " , " , phi_max , "]";
-
-	print "x in [" , GPVAL_DATA_X_MIN , " , " , GPVAL_DATA_X_MAX , "]";
-	print "y in [" , GPVAL_DATA_Y_MIN , " , " , GPVAL_DATA_Y_MAX , "]";
-
 
 	print "Determining dlambda ...";
 

@@ -41,6 +41,9 @@ set parametric
 set multiplot
 
 set size ratio -1
+set lmargin at screen 0.1
+set rmargin at screen 1
+set tmargin at screen 0.99
 set bmargin 6
 set xtics rotate by 45 offset 0,graph -0.09
 set ticscale 3,1
@@ -90,8 +93,9 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+
+replot "+" u (xe(K*(0.070976722914436060629661540133384))):(ye(K*(0.070976722914436060629661540133384))) w p  lw 2 ti "dsgfd"
+
 
 #unset parametric
 unset multiplot
@@ -175,7 +179,7 @@ while(1){
 
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	x = xe(lambda);
-	while(x <= GPVAL_X_MAX){
+	while(x < GPVAL_X_MAX){
 	#I use the following identities for lambda and the fact that delta = floor(delta) to obtain a value of lambda which is exacly an 'integer multiple' of dllambda, so as to avoid xlabels of the form '10 degrees 0'
 	#delta = (lambda - (int(lambda_min/dlambda))*dlambda)/dlambda;
 	#delta = floor(delta) because delta is an integer, and lambda = delta * dlambda + int(lambda_min/dlambda)*dlambda = ( floor(delta) + int(lambda_min/dlambda) ) * dlambda =
@@ -183,10 +187,8 @@ while(1){
  
 		lambda = ( floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda ) + int(lambda_min/dlambda) ) * dlambda;
 
-		if(x >= GPVAL_X_MIN){
-			  set xtics add (label_deg_min(lambda) x);
-			  set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray";
-		}
+		set xtics add (label_deg_min(lambda) x);
+		set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray"
 
 		
 		print lambda_inv(x);
@@ -211,11 +213,9 @@ while(1){
 	set format y "";     
 	set ytics ();
 	phi = (int(phi_min/dphi))*dphi;
-	while(phi<=phi_max){
-		if(phi >= phi_min){
-		       set ytics add (label_deg_min(phi) ye(phi));
-		       set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray";
-		}
+	while(phi<phi_max){
+		set ytics add (label_deg_min(phi) ye(phi));
+		set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray"
 		print phi;
 		phi = phi + dphi;
 

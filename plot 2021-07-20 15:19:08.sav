@@ -15,10 +15,11 @@ M = 1e2;
 epsilon=1e-12
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
+set bmargin 6
+
 #extracts degrees and minutes from floating-point angle in degree format
 degrees(x) = floor(x);
 minutes(x) = (x - floor(x))*60.0;
-
 
 
 #Mercator for the sphere
@@ -40,8 +41,6 @@ set parametric
 set multiplot
 
 set size ratio -1
-set bmargin 6
-set xtics rotate by 45 offset 0,graph -0.09
 set ticscale 3,1
 set samples S
 #increments in degrees
@@ -88,8 +87,9 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+
+replot "+" u (xe(K*(0.57683131778412588541726790936082))):(ye(K*(5.9873519989665480167673194955569))) w p  lw 2 ti "e"
+
 
 #unset parametric
 unset multiplot
@@ -172,8 +172,10 @@ while(1){
 
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	x = xe(lambda);
+		 set xtics rotate by 45 offset 0,graph -0.09
+
 	while(x < GPVAL_DATA_X_MAX){
-		set xtics add (label_deg_min(lambda_inv(x)) x);
+		set xtics add (label_deg_min(lambda_inv(x)) x)  ;
 		set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray"
 
 		

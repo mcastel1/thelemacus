@@ -9,8 +9,9 @@ reset
 K = 360.0/(2.0*pi);
 k = 1.0/K;
 N = 12.0;
-#coastlines are plotted every M lines
+#circles of equal altitude are plotted with S points
 S = 1e3;
+#coastlines are plotted every M lines
 M = 1e2;
 epsilon=1e-12
 myint(x) = x>0.0 ? int(x) : int(x)-1.0

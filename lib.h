@@ -750,11 +750,21 @@ case 5:{
   if(sight_list.size() + point_list.size() > 0){
   
     File file;
+    stringstream temp;
     
-    file.enter_name("\t");
-    file.open("out","\t");
+    file.name.enter("name of file (without extension)", "\t");
+    //add the extension .sav to name of file
+    temp.str("");
+    temp << file.name.value << ".sav";
+    file.set_name(temp.str());
+
+    file.open("out","\t");    
     print("\t", file.value);
     file.close("\t");
+
+    command.str("");
+    command << "mv plot.plt " << "'plot " << temp.str() << "'";
+    system(command.str().c_str());
 
   }else{    
       cout << RED << "There are no sights nor points to save!\n" << RESET;

@@ -79,7 +79,7 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
 label_deg(x) = sprintf("%.f\260", x)
 #this prints the arcminutes only of angle x
-label_min(x) = sprintf("%.f'", minutes(x)) ) 
+label_min(x) = sprintf("%.f'", minutes(x) ) 
 #if the arcminutes are zero, I print out only the degrees for clarity
 label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprintf("%.f\260 %.f'", degrees(x), minutes(x)) ) 
 

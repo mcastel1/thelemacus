@@ -963,7 +963,7 @@ void Plot::show(string prefix){
   file_id.close("\t");
   file_id.remove();
   
-  cout << prefix << "\nJob id = "<< job_id << "\n";
+  cout << prefix << "Job id = "<< job_id << "\n";
   
 }
 

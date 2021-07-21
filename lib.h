@@ -654,7 +654,7 @@ class Plot{
   Plot(Catalog*);
   //~Plot();
   void add_sight(string);
-  void add_point(void);
+  void add_point(string);
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
   void print(string, ostream&);
@@ -713,7 +713,7 @@ void Plot::menu(void){
 
   case 3:{
 
-    add_point();
+    add_point("\t");
     print("\t", cout);
     show();
     menu();  
@@ -832,14 +832,14 @@ void Plot::print(string prefix, ostream& ostr){
   
   new_prefix << "\t" << prefix;
   
-  ostr << "Sights in the plot:\n";
+  ostr << prefix << "Sights in the plot:\n";
   for(i=0; i<sight_list.size(); i++){
     name.str("");
     name <<  "Sight #" << i+1;
     (sight_list[i]).print(name.str().c_str(), new_prefix.str(), ostr);
   }
   
-  ostr << "Points in the plot:\n";
+  ostr << prefix << "Points in the plot:\n";
   for(i=0; i<point_list.size(); i++){
     name.str("");
     name << "Point #" << i+1;
@@ -863,14 +863,14 @@ void Plot::add_sight(string prefix){
 
 }
 
-void Plot::add_point(){
+void Plot::add_point(string prefix){
 
   Point point;
   
   point.enter("new point", "");
   
   point_list.push_back(point);
-  cout << "Point added as point #" << point_list.size() << ".\n";
+  cout << prefix << "Point added as point #" << point_list.size() << ".\n";
 
  
 }
@@ -1761,7 +1761,7 @@ void Point::print(string name, string prefix, ostream& ostr){
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
-  ostr << prefix << name << ":\n";
+  ostr << new_prefix.str() << name << ":\n";
 
   phi.print("latitude", new_prefix.str(), ostr);
   lambda.print("longitude", new_prefix.str(), ostr);

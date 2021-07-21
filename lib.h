@@ -747,13 +747,20 @@ void Plot::menu(void){
 
 case 5:{
 
+  if(sight_list.size() + point_list.size() > 0){
+  
     File file;
+    
     file.enter_name("\t");
     file.open("out","\t");
+    print("\t", file.value);
     file.close("\t");
 
+  }else{    
+      cout << RED << "There are no sights nor points to save!\n" << RESET;
+  }
+  menu();
     
-    cout << "Fair winds, following seas...\n";
   }
     break;
     

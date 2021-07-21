@@ -732,8 +732,16 @@ void Plot::menu(void){
   }
     break;
 
+case 5:{
+
+    File file;
     
-  case 5:{
+    cout << "Fair winds, following seas...\n";
+  }
+    break;
+    
+    
+  case 6:{
 
     File file;
     string line;
@@ -786,7 +794,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
 
-  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point", "Save and exit"};
+  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point", "Save to file", "Exit"};
   
 }
 

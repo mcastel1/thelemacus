@@ -658,7 +658,7 @@ class Plot{
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
   void print(string, ostream&);
-  void show(void);
+  void show(string);
   void menu(void);
 
 };
@@ -680,7 +680,7 @@ void Plot::menu(void){
   case 1:{
     add_sight("\t");
     print("\t", cout);
-    show();
+    show("\t");
     menu();  
 
   }
@@ -699,7 +699,7 @@ void Plot::menu(void){
    
       remove_sight(i);
       print("\t", cout);
-      show();
+      show("\t");
 
     }else{
       cout << RED << "There are no sights to delete!\n" << RESET;
@@ -715,7 +715,7 @@ void Plot::menu(void){
 
     add_point("\t");
     print("\t", cout);
-    show();
+    show("\t");
     menu();  
 
   }
@@ -734,7 +734,7 @@ void Plot::menu(void){
 	
       remove_point(i);
       print("\t", cout);
-      show();
+      show("\t");
 
     }else{
       cout << RED << "There are no points to delete!\n" << RESET;
@@ -867,7 +867,7 @@ void Plot::add_point(string prefix){
 
   Point point;
   
-  point.enter("new point", "");
+  point.enter("new point", prefix);
   
   point_list.push_back(point);
   cout << prefix << "Point added as point #" << point_list.size() << ".\n";
@@ -907,7 +907,7 @@ void Plot::remove_point(unsigned int i){
 }
 
 
-void Plot::show(void){
+void Plot::show(string prefix){
 
   stringstream line_ins;
   string line;
@@ -963,7 +963,7 @@ void Plot::show(void){
   file_id.close("\t");
   file_id.remove();
   
-  cout << "\nJob id = "<< job_id << "\n";
+  cout << prefix << "\nJob id = "<< job_id << "\n";
   
 }
 

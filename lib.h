@@ -791,7 +791,7 @@ case 5:{
     file.close("");
 
     //if plot.plt has been filled, here I save it
-    if((sight_list.size() != 0) || (point_list.size() !=0)){
+    if(sight_list.size() + point_list.size() >0){
       command.str("");
       command << "mv plot.plt " << "'plot " << line.c_str() << "'";
       system(command.str().c_str());

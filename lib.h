@@ -602,11 +602,11 @@ class Sight{
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
   void get_coordinates(string);
   void compute_DH_dip(string);
-  void compute_DH_refraction(void);
+  void compute_DH_refraction(string);
   void compute_DH_parallax_and_limb(void);
 
   void compute_H_a(string);
-  void compute_H_o(void);
+  void compute_H_o(string);
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
@@ -1046,7 +1046,7 @@ void Sight::reduce(string prefix){
   
   compute_H_a(new_prefix.str());
   get_coordinates(new_prefix.str());
-  compute_H_o();
+  compute_H_o(new_prefix.str());
   
 }
 
@@ -1066,12 +1066,16 @@ void Sight::compute_H_a(string prefix){
 }
 
 
-void Sight::compute_H_o(void){
+void Sight::compute_H_o(string prefix){
 
-  compute_DH_refraction();
-  compute_DH_parallax_and_limb();
+  stringstream new_prefix;
+  
+  new_prefix << prefix << "\t";
+ 
+  compute_DH_refraction(new_prefix.str());
+  compute_DH_parallax_and_limb(new_prefix.str());
   H_o = H_a + DH_refraction + DH_parallax_and_limb;
-  H_o.print("observed altitude", "", cout);
+  H_o.print("observed altitude", new_prefix.str(), cout);
   
 }
 
@@ -1433,11 +1437,15 @@ void Sight::compute_DH_dip(string prefix){
 }
 
 
-void Sight::compute_DH_refraction(void){
+void Sight::compute_DH_refraction(string prefix){
 
   gsl_integration_workspace * w = gsl_integration_workspace_alloc (1000);
   gsl_function F;
   double result, error;
+  stringstream new_prefix;
+
+  new_prefix << "\t" << prefix;    
+
 
   F.function = &dH_refraction;
   F.params = &(*this);
@@ -1449,7 +1457,7 @@ void Sight::compute_DH_refraction(void){
   
 
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  DH_refraction.set("refraction correction", result, "");
+  DH_refraction.set("refraction correction", result, new_prefix.str());
   
   gsl_integration_workspace_free(w);
 

@@ -19,6 +19,7 @@ clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
 #extracts degrees and minutes from floating-point angle in degree format
 degrees(x) = floor(x);
 minutes(x) = (x - floor(x))*60.0;
+is_int(x) = ((( abs(x - floor(x)) < epsilon ) || ( abs(x - ceil(x)) < epsilon)) ? 1 : 0)
 
 
 
@@ -77,7 +78,7 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 
 
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
-label_deg(x) = sprintf("%.f\260", x)
+label_deg(x) = sprintf("%.f\260   ", x)
 #this prints the arcminutes only of angle x
 label_min(x) = sprintf("%.f'", minutes(x) ) 
 #if the arcminutes are zero, I print out only the degrees for clarity
@@ -186,7 +187,13 @@ while(1){
 		lambda = ( floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda ) + int(lambda_min/dlambda) ) * dlambda;
 
 		if(x >= GPVAL_X_MIN){
-			  set xtics add (label_deg_min(lambda) x);
+
+		          if(is_int(lambda) == 1){
+		       		      set xtics add (label_deg(lambda) x);
+		          }else{
+		       		      set xtics add (label_min(lambda) x);
+		          }
+
 			  set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray";
 		}
 
@@ -215,7 +222,11 @@ while(1){
 	phi = (int(phi_min/dphi))*dphi;
 	while(phi<=phi_max){
 		if(phi >= phi_min){
-		       set ytics add (label_deg_min(phi) ye(phi));
+		       if(is_int(phi) == 1){
+		       		      set ytics add (label_deg(phi) ye(phi));
+		       }else{
+		       		      set ytics add (label_min(phi) ye(phi));
+		       }
 		       set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray";
 		}
 		print phi;

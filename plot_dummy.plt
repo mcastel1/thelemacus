@@ -110,7 +110,7 @@ while(1){
 	unset arrow;
 	
 
-	print "Recalculating tics ... ";
+	#print "Recalculating tics ... ";
 
 	lambda_min = lambda_inv(GPVAL_X_MIN);
 	lambda_max = lambda_inv(GPVAL_X_MAX);
@@ -124,14 +124,14 @@ while(1){
 	phi_span = phi_max - phi_min;
 	lambda_span = -(-(GPVAL_X_MAX - GPVAL_X_MIN)*K);
 	
-	print "lambda in [" , lambda_min , " , " , lambda_max , "]";
-	print "phi in [" , phi_min , " , " , phi_max , "]";
+	#print "lambda in [" , lambda_min , " , " , lambda_max , "]";
+	#print "phi in [" , phi_min , " , " , phi_max , "]";
 
-	print "x in [" , GPVAL_X_MIN , " , " , GPVAL_X_MAX , "]";
-	print "y in [" , GPVAL_Y_MIN , " , " , GPVAL_Y_MAX , "]";
+	#print "x in [" , GPVAL_X_MIN , " , " , GPVAL_X_MAX , "]";
+	#print "y in [" , GPVAL_Y_MIN , " , " , GPVAL_Y_MAX , "]";
 
 
-	print "Determining dlambda ...";
+	#print "Determining dlambda ...";
 
 	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
 	if(lambda_span > 1.0){gamma = 1.0;}
@@ -139,7 +139,7 @@ while(1){
 
 	dlambda=1.0/gamma;
 	while(N*dlambda<lambda_span){
-	print dlambda;
+	#print dlambda;
 	if(dlambda == 1.0/gamma){dlambda = dlambda + 4.0/gamma;}
 	else{dlambda = dlambda + 5.0/gamma;}
 	}
@@ -147,11 +147,11 @@ while(1){
 		   if(dlambda == 5.0/gamma){dlambda = dlambda - 4.0/gamma;}
 		   else{dlambda = dlambda - 5.0/gamma;}
 	}
-	print "... dlambda = " , dlambda;
+	#print "... dlambda = " , dlambda;
 
 
-	print "Determining dphi ...";
-	print "phi_span = ", phi_span;
+	#print "Determining dphi ...";
+	#print "phi_span = ", phi_span;
 
 	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
 	if(phi_span > 1.0){gamma = 1.0;}
@@ -159,7 +159,7 @@ while(1){
 	
 	dphi=1.0/gamma;
 	while(N*dphi<phi_span){
-		print dphi;
+		#print dphi;
 		if(dphi == 1.0/gamma){dphi = dphi + 4.0/gamma;}
 		else{dphi = dphi + 5.0/gamma;}
 	}
@@ -167,11 +167,11 @@ while(1){
 		   if(dphi == 5.0/gamma){dphi = dphi - 4.0/gamma;}
 		   else{dphi = dphi - 5.0/gamma;}
 	}
-	print "... dphi = " , dphi;
+	#print "... dphi = " , dphi;
 
 
 
-	print "Setting xtics at dlambda intervals:";
+	#print "Setting xtics at dlambda intervals:";
 
 	set format x "";     
 	set xtics ();
@@ -198,7 +198,7 @@ while(1){
 		}
 
 		
-		print lambda_inv(x);
+		#print lambda_inv(x);
 		x = x + dlambda*k;
 		#lambda = lambda + dlambda;
 
@@ -215,7 +215,7 @@ while(1){
 	#}
 
 
-	print "Setting ytics at dphi intervals:";
+	#print "Setting ytics at dphi intervals:";
 	
 	set format y "";     
 	set ytics ();
@@ -229,7 +229,7 @@ while(1){
 		       }
 		       set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray";
 		}
-		print phi;
+		#print phi;
 		phi = phi + dphi;
 
 

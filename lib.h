@@ -288,8 +288,8 @@ class File{
   
   void set_name(string);
   void enter_name(string);
-  int open(string);
-  void close(void);
+  int open(string, string);
+  void close(string);
   void remove(void);
   void count_lines(string);
   
@@ -306,6 +306,11 @@ void File::count_lines(string prefix){
   stringstream command, line_ins;
   string line, dummy;
   File file_number_of_lines;
+  stringstream new_prefix;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
 
   file_number_of_lines.set_name("output.out");
   file_number_of_lines.remove();
@@ -314,13 +319,13 @@ void File::count_lines(string prefix){
   command << "wc -l " << (name.value)  << " >> " << ((file_number_of_lines.name).value);
   system(command.str().c_str());
 
-  file_number_of_lines.open("in");
+  file_number_of_lines.open("in", new_prefix.str());
   
   getline((file_number_of_lines.value), line); 
   line_ins << line;
   line_ins >> number_of_lines >> dummy;
 
-  file_number_of_lines.close();  
+  file_number_of_lines.close(new_prefix.str());  
 
   cout << prefix << "Number of lines in file " << (name.value) << " is " << number_of_lines << "\n";
 
@@ -345,7 +350,8 @@ void File::set_name(string filename){
   
 }
 
-int File::open(string mode){
+int File::open(string mode, string prefix){
+
 
   if(mode =="in"){
     value.open(name.value, ios::in);
@@ -353,11 +359,11 @@ int File::open(string mode){
     value.open(name.value, ios::out);
   }
   
-  cout << "Opening " << (name.value) << " in mode '" <<  mode << "' ... ";
+  cout << prefix << "Opening " << (name.value) << " in mode '" <<  mode << "' ... ";
   
   if(!value){
     
-    cout << RED << "Frror opening file " << (name.value) << "!\n" << RESET;
+    cout << RED << "\nError opening file " << (name.value) << "!\n" << RESET;
     return 0;
     
   }else{
@@ -369,10 +375,10 @@ int File::open(string mode){
 
 }
 
-void File::close(void){
+void File::close(string prefix){
   
   value.close();
-  cout << "File " << (name.value) << " closed.\n";
+  cout << prefix << "File " << (name.value) << " closed.\n";
      
 
 }
@@ -460,7 +466,7 @@ Catalog::Catalog(string filename){
 
 
   file.set_name(filename);
-  if(file.open("in")==1){
+  if(file.open("in", "")==1){
 
     getline((file.value), line);
 
@@ -489,7 +495,7 @@ Catalog::Catalog(string filename){
     }
   
   
-    file.close();
+    file.close("");
 
   }
 
@@ -742,6 +748,10 @@ void Plot::menu(void){
 case 5:{
 
     File file;
+    file.enter_name("\t");
+    file.open("out","\t");
+    file.close("\t");
+
     
     cout << "Fair winds, following seas...\n";
   }
@@ -758,20 +768,20 @@ case 5:{
     system(command.str().c_str());
 
     ((file.name).value) = "output.out";
-    file.open("in");
+    file.open("in", "");
     line.clear();
     getline(file.value, line);
     line.append(".sav");
-    file.close();
+    file.close("");
     
     command.str("");
     command << "rm -rf output.out";
     system(command.str().c_str());
  
     ((file.name).value) = line;
-    file.open("out");
+    file.open("out", "");
     print("", file.value);
-    file.close();
+    file.close("");
 
     //if plot.plt has been filled, here I save it
     if((sight_list.size() != 0) || (point_list.size() !=0)){
@@ -945,13 +955,13 @@ void Plot::show(void){
   system(command.str().c_str());
 
   //read the job id from file_id
-  if(file_id.open("in")==1){
+  if(file_id.open("in", "\t")==1){
     getline(file_id.value, line);
     line_ins << line;
     line_ins >> job_id;
   }
 
-  file_id.close();
+  file_id.close("\t");
   file_id.remove();
   
   cout << "\nJob id = "<< job_id << "\n";
@@ -993,7 +1003,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     string << "data/j2000_to_itrf93.txt";
   }  
   file.set_name(string.str()); 
-  file.count_lines(prefix);
+  file.count_lines(new_prefix.str());
   
   do{
   
@@ -1509,7 +1519,7 @@ void Sight::get_coordinates(void){
 
   
   file.set_name(temp.c_str()); 
-  if(file.open("in")==1){
+  if(file.open("in", "\t")==1){
 
     /* cout << "\nMJD = " << t.MJD; */
     /* cout << "\nMJD0 = " << MJD_min; */
@@ -1550,7 +1560,7 @@ void Sight::get_coordinates(void){
 	
       }
 
-      file.close();
+      file.close("\t");
 
       //convert to radians and nm
       for(l=0; l<N; l++){
@@ -1620,7 +1630,7 @@ void Sight::get_coordinates(void){
 	
       }
 
-      file.close();
+      file.close("\t");
 
  
 

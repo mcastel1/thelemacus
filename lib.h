@@ -601,7 +601,7 @@ class Sight{
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
   void get_coordinates(string);
-  void compute_DH_dip(void);
+  void compute_DH_dip(string);
   void compute_DH_refraction(void);
   void compute_DH_parallax_and_limb(void);
 
@@ -1422,13 +1422,13 @@ Sight::Sight(void){
 }
 
 //this function simplifies the atmosphere between z=0 and z=eight of eye as a single layer, where within this layer the index of refracion is independent of z. Refine this in the future. 
-void Sight::compute_DH_dip(void){
+void Sight::compute_DH_dip(string prefix){
 
   Length zero_Length;
   zero_Length.value = 0.0;
 
   DH_dip.set("Dip correction",
-	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ));
+	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ), prefix);
 
 }
 

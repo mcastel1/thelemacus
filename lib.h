@@ -283,16 +283,23 @@ class File{
 
  public:
   fstream value;
-  string name;
+  String name;
   unsigned int number_of_lines;
   
   void set_name(string);
+  void enter_name(string);
   int open(string);
   void close(void);
   void remove(void);
   void count_lines(string);
   
 };
+
+void File::enter_name(string prefix){
+
+  name.enter("name of file", prefix);
+  
+}
 
 void File::count_lines(string prefix){
 
@@ -304,7 +311,7 @@ void File::count_lines(string prefix){
   file_number_of_lines.remove();
   
   command.str("");
-  command << "wc -l " << name  << " >> " << file_number_of_lines.name;
+  command << "wc -l " << (name.value)  << " >> " << ((file_number_of_lines.name).value);
   system(command.str().c_str());
 
   file_number_of_lines.open("in");
@@ -315,7 +322,7 @@ void File::count_lines(string prefix){
 
   file_number_of_lines.close();  
 
-  cout << prefix << "Number of lines in file " << name << " is " << number_of_lines << "\n";
+  cout << prefix << "Number of lines in file " << (name.value) << " is " << number_of_lines << "\n";
 
   
 }
@@ -326,7 +333,7 @@ void File::remove(void){
   stringstream command;
 
   command.str("");
-  command << "rm -rf " << name  << "> /dev/null 2>&1";
+  command << "rm -rf " << (name.value) << "> /dev/null 2>&1";
   system(command.str().c_str());
 
   
@@ -334,28 +341,28 @@ void File::remove(void){
 
 void File::set_name(string filename){
 
-  name = filename;
+  (name.value) = filename;
   
 }
 
 int File::open(string mode){
 
   if(mode =="in"){
-    value.open(name, ios::in);
+    value.open(name.value, ios::in);
   }else{
-    value.open(name, ios::out);
+    value.open(name.value, ios::out);
   }
   
-  cout << "Opening " << name << " in mode '" <<  mode << "' ... ";
+  cout << "Opening " << (name.value) << " in mode '" <<  mode << "' ... ";
   
   if(!value){
     
-    cout << RED << "Frror opening file " << name << "!\n" << RESET;
+    cout << RED << "Frror opening file " << (name.value) << "!\n" << RESET;
     return 0;
     
   }else{
     
-    cout << "File " << name << " opened.\n";
+    cout << "File " << (name.value) << " opened.\n";
     return 1;
      
   }
@@ -365,7 +372,7 @@ int File::open(string mode){
 void File::close(void){
   
   value.close();
-  cout << "File " << name << " closed.\n";
+  cout << "File " << (name.value) << " closed.\n";
      
 
 }
@@ -750,7 +757,7 @@ case 5:{
     command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
     system(command.str().c_str());
 
-    file.name = "output.out";
+    ((file.name).value) = "output.out";
     file.open("in");
     line.clear();
     getline(file.value, line);
@@ -761,7 +768,7 @@ case 5:{
     command << "rm -rf output.out";
     system(command.str().c_str());
  
-    file.name = line;
+    ((file.name).value) = line;
     file.open("out");
     print("", file.value);
     file.close();
@@ -929,10 +936,10 @@ void Plot::show(void){
     plot_command << "replot \"+\" u (xe(K*(" << (point_list[i]).lambda.value << "))):(ye(K*(" << (point_list[i]).phi.value << "))) w p  lw 2 ti \"" << (point_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << file_gnuplot.name << "\n";
+  command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
 
 
-  command << "gnuplot '" << file_gnuplot.name << "' & \n echo $! >> " << file_id.name << "\n";
+  command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";
   
   system(command.str().c_str());

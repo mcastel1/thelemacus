@@ -1,0 +1,15 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type: star
+			Name: vega
+			Right ascension is 279° 13.9261'
+			Declination is 38° 46.939'
+		sextant altitude is 5° 4'
+		index error is 1° 1'
+		artificial horizon is n
+		height of eye is 0.00107991 nm.
+		use of stopwatch is n
+		TAI - UTC at time of master-clock synchronization with UTC is 02:02:02
+		TAI date and hour of sight is 2022-02-02 04:04:04
+Points in the plot:

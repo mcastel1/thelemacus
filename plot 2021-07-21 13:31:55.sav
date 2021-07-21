@@ -8,7 +8,7 @@ reset
 #notes
 K = 360.0/(2.0*pi);
 k = 1.0/K;
-N = 6.0;
+N = 12.0;
 #circles of equal altitude are plotted with S points
 S = 1e3;
 #coastlines are plotted every M lines
@@ -93,8 +93,9 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+replot [0.:2.*pi] xe(K*Lambda(t, 5.9962069351996376553870504721999, 4.6723162036455834211778892495204, 1.5179274675753853252047065325314)), ye(K*Phi(t, 5.9962069351996376553870504721999, 4.6723162036455834211778892495204, 1.5179274675753853252047065325314)) smo csp ti "sun 2021-02-03 06:05:05 TAI"
+
+
 
 #unset parametric
 unset multiplot
@@ -243,5 +244,5 @@ while(1){
 	}
 
 
-    	pause 1e-1      # waiting time in seconds
+    	pause 1      # waiting time in seconds
 }

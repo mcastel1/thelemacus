@@ -603,7 +603,7 @@ class Sight{
   void get_coordinates(string);
   void compute_DH_dip(string);
   void compute_DH_refraction(string);
-  void compute_DH_parallax_and_limb(void);
+  void compute_DH_parallax_and_limb(string);
 
   void compute_H_a(string);
   void compute_H_o(string);
@@ -653,7 +653,7 @@ class Plot{
 
   Plot(Catalog*);
   //~Plot();
-  void add_sight(void);
+  void add_sight(string);
   void add_point(void);
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
@@ -678,7 +678,7 @@ void Plot::menu(void){
   switch(i){
 
   case 1:{
-    add_sight();
+    add_sight("\t");
     print("\t", cout);
     show();
     menu();  
@@ -849,18 +849,17 @@ void Plot::print(string prefix, ostream& ostr){
 
 }
 
-void Plot::add_sight(){
+void Plot::add_sight(string prefix){
 
   Sight sight;
   
-  sight.enter((*catalog), "new sight", "");
-  sight.reduce("");
-  sight.print("Sight", "", cout);
+  sight.enter((*catalog), "new sight", prefix);
+  sight.reduce(prefix);
+  sight.print("Sight", prefix, cout);
   
   sight_list.push_back(sight);
-  cout << "Sight added as sight #" << sight_list.size() << ".\n";
+  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
 
-  //sight.~Sight();
 
 }
 
@@ -1081,10 +1080,14 @@ void Sight::compute_H_o(string prefix){
 
 //here replace R -> R+height of eye for better precision
 //check that for r = 0 the upper and lower limb give the same result
-void Sight::compute_DH_parallax_and_limb(void){
+void Sight::compute_DH_parallax_and_limb(string prefix){
+
+  stringstream new_prefix;
+  
+  new_prefix << prefix << "\t";
 
   H_i = H_a + DH_refraction;
-  H_i.print("intermediate altitude", "", cout);
+  H_i.print("intermediate altitude", prefix, cout);
 
   if(body.type != "star"){
 
@@ -1106,9 +1109,10 @@ void Sight::compute_DH_parallax_and_limb(void){
 	s = gsl_root_fsolver_alloc (T);
 	gsl_root_fsolver_set(s, &F, x_lo, x_hi);
  
-	printf("using %s method\n", gsl_root_fsolver_name (s));
-	printf("%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", "root", "err", "err(est)");
-
+	cout << new_prefix.str() << "Using " << gsl_root_fsolver_name(s) << " method\n";
+	
+	cout << new_prefix.str() << "iter" <<  "[lower" <<  ", upper] " <<  "root " <<  "err " <<  "err(est)\n";
+	
 	iter = 0;
 	do{
       
@@ -1120,9 +1124,10 @@ void Sight::compute_DH_parallax_and_limb(void){
 	  x_hi = gsl_root_fsolver_x_upper(s);
 	  status = gsl_root_test_interval (x_lo, x_hi, 0.0, epsrel);
 	  if(status == GSL_SUCCESS){
-	    printf ("Converged:\n");
+	    cout << new_prefix.str() << "Converged.\n";
 	  }
-	  printf("%5d [%.7f, %.7f] %.7f %+.7f\n", iter, x_lo, x_hi, x, x_hi - x_lo);
+	  cout << new_prefix.str() << iter << " [" << x_lo << ", " << x_hi << "] " << x << " " << x_hi-x_lo << "\n";
+	  //printf("%5d [%.7f, %.7f] %.7f %+.7f\n", iter, x_lo, x_hi, x, x_hi - x_lo);
 	}
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
@@ -1147,7 +1152,7 @@ void Sight::compute_DH_parallax_and_limb(void){
       }
     }
 
-    DH_parallax_and_limb.print("parallax and limb correction", "", cout);
+    DH_parallax_and_limb.print("parallax and limb correction", prefix, cout);
 
   }else{
 
@@ -1442,9 +1447,7 @@ void Sight::compute_DH_refraction(string prefix){
   gsl_integration_workspace * w = gsl_integration_workspace_alloc (1000);
   gsl_function F;
   double result, error;
-  stringstream new_prefix;
 
-  new_prefix << "\t" << prefix;    
 
 
   F.function = &dH_refraction;
@@ -1457,24 +1460,20 @@ void Sight::compute_DH_refraction(string prefix){
   
 
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  DH_refraction.set("refraction correction", result, new_prefix.str());
+  DH_refraction.set("refraction correction", result, prefix);
   
   gsl_integration_workspace_free(w);
 
 }
 
 void Length::set(string name, double x, string prefix){
-
-  stringstream new_prefix;
-
-  new_prefix << "\t" << prefix;    
   
   if(x>=0.0){
     value = x;
-    print(name, new_prefix.str(), cout); 
+    print(name, prefix, cout); 
   }
   else{
-    cout << new_prefix.str() << RED << "Entered value of " << name << " is not valid!\n" << RESET;
+    cout << prefix << RED << "Entered value of " << name << " is not valid!\n" << RESET;
   }
   
 }

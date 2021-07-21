@@ -1,0 +1,14 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type: star
+			Name: arcturus
+			Right ascension is 213° 54.7989'
+			Declination is 19° 10.6949'
+		sextant altitude is 2° 59'
+		index error is 358° 59'
+		artificial horizon is y
+		use of stopwatch is n
+		TAI - UTC at time of master-clock synchronization with UTC is 03:04:03
+		TAI date and hour of sight is 2021-02-03 05:06:06
+Points in the plot:

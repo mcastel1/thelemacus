@@ -600,17 +600,17 @@ class Sight{
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
-  void get_coordinates(void);
+  void get_coordinates(string);
   void compute_DH_dip(void);
   void compute_DH_refraction(void);
   void compute_DH_parallax_and_limb(void);
 
-  void compute_H_a(void);
+  void compute_H_a(string);
   void compute_H_o(void);
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
-  void reduce(void);
+  void reduce(string);
   
 };
 
@@ -854,7 +854,7 @@ void Plot::add_sight(){
   Sight sight;
   
   sight.enter((*catalog), "new sight", "");
-  sight.reduce();
+  sight.reduce("");
   sight.print("Sight", "", cout);
   
   sight_list.push_back(sight);
@@ -1038,25 +1038,29 @@ void Sight::enter(Catalog catalog, string name, string prefix){
 
 }
 
-void Sight::reduce(void){
+void Sight::reduce(string prefix){
 
-  compute_H_a();
-  get_coordinates();
+  stringstream new_prefix;
+  
+  new_prefix << prefix << "\t";
+  
+  compute_H_a(new_prefix.str());
+  get_coordinates(new_prefix.str());
   compute_H_o();
   
 }
 
 
-void Sight::compute_H_a(void){
-
+void Sight::compute_H_a(string prefix){
+  
   if(artificial_horizon.value == 'y'){
     H_a = (H_s-index_error)/2.0;
-    H_a.print("apparent altitude", "", cout);
+    H_a.print("apparent altitude", prefix, cout);
 
   }else{
     compute_DH_dip();
     H_a = H_s-index_error+DH_dip;
-    H_a.print("apparent altitude", "", cout);
+    H_a.print("apparent altitude", prefix, cout);
   }
   
 }
@@ -1498,17 +1502,19 @@ void Length::print(string name, string prefix, ostream& ostr){
  
 }
 
-void Sight::get_coordinates(void){
+void Sight::get_coordinates(string prefix){
 
   File file;
-  stringstream filename, line_ins;
+  stringstream filename, line_ins, new_prefix;
   string line, dummy, temp;
   int l, l_min, l_max;
   double MJD_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
   gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
     *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
-
+ 
+  new_prefix << "\t" << prefix;    
+  
 
   if((body.type) != "star"){
     filename << "data/" << body.name << ".txt";
@@ -1519,7 +1525,7 @@ void Sight::get_coordinates(void){
 
   
   file.set_name(temp.c_str()); 
-  if(file.open("in", "\t")==1){
+  if(file.open("in", new_prefix.str())==1){
 
     /* cout << "\nMJD = " << t.MJD; */
     /* cout << "\nMJD0 = " << MJD_min; */
@@ -1553,14 +1559,14 @@ void Sight::get_coordinates(void){
 	
 	getline((file.value), line);
 	line_ins << line;
-	cout << line << "\n";
+	cout << new_prefix.str() << line << "\n";
 	line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
 	
 	MJD_tab[l-l_min] = ((double)(l-l_min))/L;
 	
       }
 
-      file.close("\t");
+      file.close(new_prefix.str());
 
       //convert to radians and nm
       for(l=0; l<N; l++){
@@ -1588,7 +1594,7 @@ void Sight::get_coordinates(void){
   
       cout << "Read values:\n";
       for(l=0; l<N; l++){
-	cout << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
+	cout << new_prefix.str() << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
       
@@ -1610,7 +1616,7 @@ void Sight::get_coordinates(void){
 	
 	getline((file.value), line);
 	line_ins << line;
-	cout << line << "\n";
+	cout << new_prefix.str() << line << "\n";
 	line_ins >> dummy >> dummy >> dummy >> phi3 >> phi2 >> phi1;
 
 	phi1*=k;
@@ -1630,7 +1636,7 @@ void Sight::get_coordinates(void){
 	
       }
 
-      file.close("\t");
+      file.close(new_prefix.str());
 
  
 
@@ -1643,9 +1649,9 @@ void Sight::get_coordinates(void){
 	GHA_tab[l+1] += sum;
       }
 
-      cout << "Read values:\n";
+      cout << new_prefix.str() << "Read values:\n";
       for(l=0; l<N; l++){
-	cout << MJD_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
+	cout << new_prefix.str() << MJD_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
       }
 
       gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N);

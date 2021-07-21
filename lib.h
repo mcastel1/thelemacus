@@ -1761,7 +1761,7 @@ void Point::print(string name, string prefix, ostream& ostr){
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
-  ostr << new_prefix.str() << name << ":\n";
+  ostr << prefix << name << ":\n";
 
   phi.print("latitude", new_prefix.str(), ostr);
   lambda.print("longitude", new_prefix.str(), ostr);

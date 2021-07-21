@@ -175,7 +175,7 @@ class Angle{
   double value;
   void normalize(void);
   void enter(string, string);
-  void set(string, double);
+  void set(string, double, string);
   void print(string, string, ostream&);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
@@ -387,7 +387,7 @@ class Length{
 
  public:
   double value;
-  void set(string, double);
+  void set(string, double, string);
   void enter(string, string);
   void print(string, string, ostream&);
 
@@ -1058,7 +1058,7 @@ void Sight::compute_H_a(string prefix){
     H_a.print("apparent altitude", prefix, cout);
 
   }else{
-    compute_DH_dip();
+    compute_DH_dip(prefix);
     H_a = H_s-index_error+DH_dip;
     H_a.print("apparent altitude", prefix, cout);
   }
@@ -1449,20 +1449,24 @@ void Sight::compute_DH_refraction(void){
   
 
   gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  DH_refraction.set("refraction correction", result);
+  DH_refraction.set("refraction correction", result, "");
   
   gsl_integration_workspace_free(w);
 
 }
 
-void Length::set(string name, double x){
+void Length::set(string name, double x, string prefix){
 
+  stringstream new_prefix;
+
+  new_prefix << "\t" << prefix;    
+  
   if(x>=0.0){
     value = x;
-    print(name, "", cout); 
+    print(name, new_prefix.str(), cout); 
   }
   else{
-    cout << RED << "Entered value of " << name << " is not valid!\n" << RESET;
+    cout << new_prefix.str() << RED << "Entered value of " << name << " is not valid!\n" << RESET;
   }
   
 }
@@ -1592,15 +1596,15 @@ void Sight::get_coordinates(string prefix){
       gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)N);
 
   
-      cout << "Read values:\n";
+      cout << new_prefix.str() << "Read values:\n";
       for(l=0; l<N; l++){
 	cout << new_prefix.str() << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
       
-      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
-      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
-      r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
+      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
+      r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
 
       gsl_spline_free(interpolation_r);
 
@@ -1659,8 +1663,8 @@ void Sight::get_coordinates(string prefix){
 
       
       //add minus sign because in JPL convention longitude is positive when it is W
-      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc));
-      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc));
+      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
+      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
 
     }
 
@@ -1672,11 +1676,11 @@ void Sight::get_coordinates(string prefix){
   
 }
 
-void Angle::set(string name, double x){
+void Angle::set(string name, double x, string prefix){
 
   value = x;
   normalize();
-  print(name, "", cout);
+  print(name, prefix, cout);
   
 }
 

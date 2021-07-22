@@ -412,10 +412,13 @@ class Length{
   void set(string, double, string);
   void enter(string, string);
   void print(string, string, ostream&);
+  void read_from_file(string, File&, string);
 
 };
 
+void Length::read_from_file(string name, File& file, string prefix){
 
+}
 
 
 

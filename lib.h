@@ -155,7 +155,7 @@ void String::enter(string name, string prefix){
 
 void String::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " is " << value << "\n";
+  ostr << prefix << name << " = " << value << "\n";
   
 }
 
@@ -327,7 +327,7 @@ void File::count_lines(string prefix){
 
   file_number_of_lines.close(new_prefix.str());  
 
-  cout << prefix << "Number of lines in file " << (name.value) << " is " << number_of_lines << "\n";
+  cout << prefix << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
 
   
 }
@@ -577,7 +577,7 @@ void Answer::enter(string name, string prefix){
 
 void Answer::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " is " << value << "\n";
+  ostr << prefix << name << " = " << value << "\n";
   
 }
 
@@ -1395,8 +1395,8 @@ void Body::print(string name_in, string prefix, ostream& ostr){
   
   ostr << prefix << name_in << ":\n";
   
-  ostr << new_prefix.str() << "Type: " << type << "\n";
-  ostr << new_prefix.str() << "Name: " << name << "\n";
+  ostr << new_prefix.str() << "Type = " << type << "\n";
+  ostr << new_prefix.str() << "Name = " << name << "\n";
   if((radius.value) != 0.0){
     radius.print("Radius", new_prefix.str(), ostr);
   }
@@ -1526,7 +1526,7 @@ void Length::enter(string name, string prefix){
 
 void Length::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " is " << value << " nm.\n";
+  ostr << prefix << name << " = " << value << " nm.\n";
  
 }
 
@@ -1798,7 +1798,7 @@ void Angle::normalize(void){
 void Angle::print(string name, string prefix, ostream& ostr){
 
   normalize();
-  ostr << prefix << name << " is " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
+  ostr << prefix << name << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
 
 }
 
@@ -1824,7 +1824,7 @@ void Limb::enter(string name, string prefix){
 
 void Limb::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " is " << value << "\n";
+  ostr << prefix << name << " = " << value << "\n";
   
 }
 
@@ -1848,7 +1848,7 @@ stringstream Chrono::to_string(void){
 
 void Date::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " is " << to_string().str().c_str() << "\n";
+  ostr << prefix << name << " = " << to_string().str().c_str() << "\n";
 
 };
 
@@ -1898,7 +1898,7 @@ stringstream Date::to_string(void){
 
 void Chrono::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " is " << to_string().str().c_str() << "\n";
+  ostr << prefix << name << " = " << to_string().str().c_str() << "\n";
 
 };
 
@@ -1932,7 +1932,7 @@ stringstream Time::to_string(void){
 
 void Time::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " is " << to_string().str().c_str() << "\n";
+  ostr << prefix << name << " = " << to_string().str().c_str() << "\n";
 
 };
 

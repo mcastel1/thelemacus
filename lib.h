@@ -610,12 +610,12 @@ class Sight{
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
-  void read(File);
+  void read_from_file(File&);
   void reduce(string);
   
 };
 
-void Sight::read(File file){
+void Sight::read_from_file(File& file){
 
   string line;
   size_t pos = 0;
@@ -707,7 +707,7 @@ void Plot::read_from_file(String filename, string prefix){
   cout << "Found  Sight # at position " << pos << "\n";
   
   //read the sight block
-  sight.read(file);
+  sight.read_from_file(file);
 
   
   file.close(prefix);

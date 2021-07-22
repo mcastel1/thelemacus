@@ -443,8 +443,35 @@ class Body{
   Angle RA, d; 
   void enter(Catalog, string);
   void print(string, string, ostream&);
+  void read_from_file(File&);
   
 };
+
+void Body::read_from_file(File& file){
+
+  string line;
+  size_t pos = 0;
+
+  
+  //read first line with no information
+  getline(file.value, line);
+
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+  type = line.substr(pos+3, line.size() - (pos+3));
+  cout << "read type = " << type << "\n";
+
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+  name = line.substr(pos+3, line.size() - (pos+3));
+  cout << "read name = " << name << "\n";
+
+  
+}
 
 
 class Catalog{
@@ -617,17 +644,9 @@ class Sight{
 
 void Sight::read_from_file(File& file){
 
-  string line;
-  size_t pos = 0;
 
-  //read first line with no information
-  getline(file.value, line);
-
-  line.clear();
-  getline(file.value, line);
-  pos = line.find(" = ");
-
-  cout << "read " << line.substr(pos+3, line.size() - (pos+3)) << "\n";
+  body.read_from_file(file);
+  
 
 
 }

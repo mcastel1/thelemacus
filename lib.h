@@ -123,16 +123,6 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
 class Catalog;
 class File;
 
-class Answer{
-
- public:
-  char value;
-  void enter(string, string);
-  //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
-  void print(string, string, ostream&);
-
-};
-
 class String{
 
  public:
@@ -143,6 +133,52 @@ class String{
   void set(string, string);
 
 };
+
+
+class Answer{
+
+ public:
+  char value;
+  void enter(string, string);
+  //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
+  void print(string, string, ostream&);
+  void read_from_file(string, File&, string);
+
+};
+
+class File{
+
+ public:
+  fstream value;
+  String name;
+  unsigned int number_of_lines;
+  
+  void set_name(string);
+  void enter_name(string);
+  int open(string, string);
+  void close(string);
+  void remove(void);
+  void count_lines(string);
+  
+};
+
+
+void Answer::read_from_file(string name, File& file, string prefix){
+
+  string line;
+  size_t pos;
+
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+  value = line[pos+3];
+
+  print(name, prefix, cout);
+
+  
+}
+
 
 void String::enter(string name, string prefix){
 
@@ -184,21 +220,6 @@ class Angle{
   
 };
 
-class File{
-
- public:
-  fstream value;
-  String name;
-  unsigned int number_of_lines;
-  
-  void set_name(string);
-  void enter_name(string);
-  int open(string, string);
-  void close(string);
-  void remove(void);
-  void count_lines(string);
-  
-};
 
 
 void Angle::read_from_file(string name, File& file, string prefix){
@@ -479,11 +500,7 @@ class Limb{
 void Limb::read_from_file(string name, File& file, string prefix){
 
   string line;
-  stringstream new_prefix;
   size_t pos;
-
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix;
 
   line.clear();
   getline(file.value, line);
@@ -491,7 +508,7 @@ void Limb::read_from_file(string name, File& file, string prefix){
 
   value = line[pos+3];
   
-  print("limb", new_prefix.str(), cout);
+  print(name, prefix, cout);
 
   
 }
@@ -518,7 +535,7 @@ void Body::read_from_file(string name, File& file, string prefix){
 
   size_t pos = 0;
 
-  cout << prefix << "Reading " << name << ":\n";
+  cout << prefix << name << ":\n";
   
   //read first line with no information
   getline(file.value, line);
@@ -731,7 +748,9 @@ void Sight::read_from_file(File& file, string prefix){
   }
   H_s.read_from_file("sextant altitude", file, new_prefix.str());
   index_error.read_from_file("index error", file, new_prefix.str());
-
+  artificial_horizon.read_from_file("artificial horizon", file, new_prefix.str());
+  height_of_eye.read_from_file("height of eye", file, new_prefix.str());
+  use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
 
 }
 

@@ -418,6 +418,22 @@ class Length{
 
 void Length::read_from_file(string name, File& file, string prefix){
 
+  string line;
+  stringstream new_prefix;
+  size_t pos1, pos2;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  line.clear();
+  getline(file.value, line);
+  pos1 = line.find(" = ");
+  pos2 = line.find(" nm");
+
+  value = stod(line.substr(pos1+3, pos2).c_str());
+  
+  print("radius", new_prefix.str(), cout);
+
 }
 
 
@@ -468,11 +484,11 @@ class Body{
   Angle RA, d; 
   void enter(Catalog, string);
   void print(string, string, ostream&);
-  void read_from_file(File&, string);
+  void read_from_file(string, File&, string);
   
 };
 
-void Body::read_from_file(File& file, string prefix){
+void Body::read_from_file(string name, File& file, string prefix){
 
   string line;
   stringstream new_prefix;
@@ -482,6 +498,7 @@ void Body::read_from_file(File& file, string prefix){
 
   size_t pos = 0;
 
+  cout << prefix << "Reading " << name << ":\n";
   
   //read first line with no information
   getline(file.value, line);
@@ -491,14 +508,14 @@ void Body::read_from_file(File& file, string prefix){
   pos = line.find(" = ");
 
   type = line.substr(pos+3, line.size() - (pos+3));
-  cout << new_prefix.str() << "read type = " << type << "\n";
+  cout << new_prefix.str() << "Type = " << type << "\n";
 
   line.clear();
   getline(file.value, line);
   pos = line.find(" = ");
 
   name = line.substr(pos+3, line.size() - (pos+3));
-  cout << new_prefix.str() << "read name = " << name << "\n";
+  cout << new_prefix.str() << "Name = " << name << "\n";
 
   RA.read_from_file("right ascension", file, new_prefix.str());
   d.read_from_file("declination", file, new_prefix.str());
@@ -682,9 +699,9 @@ void Sight::read_from_file(File& file, string prefix){
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
-  body.read_from_file(file, new_prefix.str());
-  Hs.read_from_file(file, new_prefix.str());
-  index_error.read_from_file(file, new_prefix.str());
+  body.read_from_file("body", file, new_prefix.str());
+  H_s.read_from_file("sextant altitude", file, new_prefix.str());
+  index_error.read_from_file("index error", file, new_prefix.str());
 
 
 }

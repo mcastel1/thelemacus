@@ -610,12 +610,12 @@ class Sight{
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
-  void read_from_file(File);
+  void read(File);
   void reduce(string);
   
 };
 
-void Sight::read_from_file(File file){
+void Sight::read(File file){
 
   string line;
   size_t pos = 0;
@@ -685,6 +685,7 @@ class Plot{
 void Plot::read_from_file(String filename, string prefix){
 
   File file;
+  Sight sight;
   stringstream line_ins;
   string line;
   size_t pos;
@@ -702,15 +703,12 @@ void Plot::read_from_file(String filename, string prefix){
     pos = line.find("Sight #");
   }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
 
-  //read the sight block
-  getline(file.value, line);
-
-  line.clear();
-  getline(file.value, line);
-  pos = line.find(" = ");
-
 
   cout << "Found  Sight # at position " << pos << "\n";
+  
+  //read the sight block
+  sight.read(file);
+
   
   file.close(prefix);
   

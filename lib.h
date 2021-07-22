@@ -657,7 +657,7 @@ class Plot{
   void add_point(string);
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
-  void read_from_file(string);
+  void read_from_file(string, string);
   void print(string, ostream&);
   void show(string);
   void menu(void);
@@ -669,14 +669,21 @@ void Plot::read_from_file(string filename, string prefix){
   File file;
   stringstream line_ins;
   string line;
+  /* double dummy; */
 
 
   file.set_name(filename);
   file.open("in", prefix);
 
-  getline(file.value, line);
-  line_ins << line;
-  line_ins >> xxxx;
+  do{
+    line.clear();
+    line_ins.clear();
+
+    getline(file.value, line);
+
+    line_ins << line;
+  }while(/*here I check whether the line_ins contains the characters #, which means that a block relative to a new sight starts*/ ((line.find('#')) == (std::string::npos)));
+
  
   
   file.close(prefix);

@@ -627,6 +627,8 @@ void Sight::read_from_file(File file){
   getline(file.value, line);
   pos = line.find(" = ");
 
+  cout << "read " << line.substr(pos+3, line.size() - (pos+3)) << "\n";
+
 
 }
 
@@ -828,8 +830,12 @@ case 5:{
   case 6:{
 
     String filename;
-    filename.enter("name of file", "\t");
-
+    stringstream line_ins;
+    
+    filename.enter("name of file (without extension)", "\t");
+    line_ins << filename.value << ".sav"; 
+    filename.value = line_ins.str();
+    
     read_from_file(filename, "\t");
     
     menu();  

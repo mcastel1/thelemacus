@@ -669,22 +669,30 @@ void Plot::read_from_file(String filename, string prefix){
   File file;
   stringstream line_ins;
   string line;
+  size_t pos;
   /* double dummy; */
-
 
   file.set_name(filename.value);
   file.open("in", prefix);
 
   do{
     line.clear();
-    line_ins.clear();
-
     getline(file.value, line);
 
-    line_ins << line;
-  }while(/*here I check whether the line_ins contains the characters #, which means that a block relative to a new sight starts*/ ((line.find('#')) == (std::string::npos)));
+    //line_ins << line;
 
- 
+    pos = line.find("Sight #");
+  }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
+
+  //read the sight block
+  getline(file.value, line);
+
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+
+  cout << "Found  Sight # at position " << pos << "\n";
   
   file.close(prefix);
   
@@ -801,7 +809,13 @@ case 5:{
   }
     break;
 
-      case 6:{
+  case 6:{
+
+    String filename;
+    filename.enter("name of file", "\t");
+
+    read_from_file(filename, "\t");
+    
     menu();  
 
   }

@@ -1,15 +1,15 @@
 	Sights in the plot:
 		Sight #1:
 			body:
-				Type = star
-				Name = vega
-				Right ascension = 279° 13.9261'
-				Declination = 38° 46.939'
-			sextant altitude = 34° 3'
-			index error = 358° 59'
+				Type = sun
+				Name = sun
+				Radius = 375648 nm.
+			limb = l
+			sextant altitude = 44° 4'
+			index error = 1° 1'
 			artificial horizon = n
 			height of eye = 0.00161987 nm.
 			use of stopwatch = n
-			TAI - UTC at time of master-clock synchronization with UTC = 03:02:03
-			TAI date and hour of sight = 2023-02-03 06:04:06
+			TAI - UTC at time of master-clock synchronization with UTC = 02:02:02
+			TAI date and hour of sight = 2021-02-02 04:04:04
 	Points in the plot:

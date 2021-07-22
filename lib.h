@@ -213,7 +213,7 @@ void Angle::read_from_file(string name, File& file, string prefix){
   pos2 = line.find("° ");
   pos3 = line.find("'");
   
-  value = k*(stod(line.substr(pos1+3, pos2).c_str()) + stod(line.substr(pos2+2, pos3))/60.0);
+  value = k*(stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str()) + stod(line.substr(pos2+2, pos3 - (pos2+2)))/60.0);
 
   print(name, prefix, cout);
   
@@ -430,9 +430,9 @@ void Length::read_from_file(string name, File& file, string prefix){
   pos1 = line.find(" = ");
   pos2 = line.find(" nm");
 
-  value = stod(line.substr(pos1+3, pos2).c_str());
+  value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
   
-  print("radius", new_prefix.str(), cout);
+  print("radius", prefix, cout);
 
 }
 
@@ -472,9 +472,29 @@ class Limb{
   char value;
   void enter(string, string);
   void print(string, string, ostream&);
-
+  void read_from_file(string, File&, string);
+  
 };
 
+void Limb::read_from_file(string name, File& file, string prefix){
+
+  string line;
+  stringstream new_prefix;
+  size_t pos;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+  value = line[pos+3];
+  
+  print("limb", new_prefix.str(), cout);
+
+  
+}
 
 class Body{
 
@@ -503,22 +523,28 @@ void Body::read_from_file(string name, File& file, string prefix){
   //read first line with no information
   getline(file.value, line);
 
+  //read type
   line.clear();
   getline(file.value, line);
   pos = line.find(" = ");
-
   type = line.substr(pos+3, line.size() - (pos+3));
   cout << new_prefix.str() << "Type = " << type << "\n";
 
+
+  //read name
   line.clear();
   getline(file.value, line);
   pos = line.find(" = ");
-
   name = line.substr(pos+3, line.size() - (pos+3));
   cout << new_prefix.str() << "Name = " << name << "\n";
 
-  RA.read_from_file("right ascension", file, new_prefix.str());
-  d.read_from_file("declination", file, new_prefix.str());
+
+  if(type == "star"){
+    RA.read_from_file("right ascension", file, new_prefix.str());
+    d.read_from_file("declination", file, new_prefix.str());
+  }else{
+    radius.read_from_file("radius", file, new_prefix.str());
+  }
   
 }
 
@@ -700,6 +726,9 @@ void Sight::read_from_file(File& file, string prefix){
   new_prefix << "\t" << prefix;
 
   body.read_from_file("body", file, new_prefix.str());
+  if(body.type != "star"){
+    limb.read_from_file("limb", file, new_prefix.str());
+  }
   H_s.read_from_file("sextant altitude", file, new_prefix.str());
   index_error.read_from_file("index error", file, new_prefix.str());
 

@@ -178,7 +178,7 @@ class Angle{
   void enter(string, string);
   void set(string, double, string);
   void print(string, string, ostream&);
-  void read_from_file(File&);
+  void read_from_file(string, File&, string);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
   
@@ -201,7 +201,7 @@ class File{
 };
 
 
-void Angle::read_from_file(File& file){
+void Angle::read_from_file(string name, File& file, string prefix){
 
   string line;
   size_t pos1, pos2, pos3;
@@ -215,7 +215,7 @@ void Angle::read_from_file(File& file){
   
   value = k*(stod(line.substr(pos1+3, pos2).c_str()) + stod(line.substr(pos2+2, pos3))/60.0);
 
-  print("read angle", "\t", cout);
+  print(name, prefix, cout);
   
 }
 
@@ -465,13 +465,18 @@ class Body{
   Angle RA, d; 
   void enter(Catalog, string);
   void print(string, string, ostream&);
-  void read_from_file(File&);
+  void read_from_file(File&, string);
   
 };
 
-void Body::read_from_file(File& file){
+void Body::read_from_file(File& file, string prefix){
 
   string line;
+  stringstream new_prefix;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
   size_t pos = 0;
 
   
@@ -483,17 +488,17 @@ void Body::read_from_file(File& file){
   pos = line.find(" = ");
 
   type = line.substr(pos+3, line.size() - (pos+3));
-  cout << "read type = " << type << "\n";
+  cout << new_prefix.str() << "read type = " << type << "\n";
 
   line.clear();
   getline(file.value, line);
   pos = line.find(" = ");
 
   name = line.substr(pos+3, line.size() - (pos+3));
-  cout << "read name = " << name << "\n";
+  cout << new_prefix.str() << "read name = " << name << "\n";
 
-  RA.read_from_file(file);
-  
+  RA.read_from_file("right ascension", file, new_prefix.str());
+  d.read_from_file("declination", file, new_prefix.str());
   
 }
 
@@ -661,16 +666,22 @@ class Sight{
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
-  void read_from_file(File&);
+  void read_from_file(File&, string);
   void reduce(string);
   
 };
 
-void Sight::read_from_file(File& file){
+void Sight::read_from_file(File& file, string prefix){
 
 
-  body.read_from_file(file);
-  
+  stringstream new_prefix;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  body.read_from_file(file, new_prefix.str());
+  Hs.read_from_file(file, new_prefix.str());
+  index_error.read_from_file(file, new_prefix.str());
 
 
 }
@@ -729,9 +740,14 @@ void Plot::read_from_file(String filename, string prefix){
 
   File file;
   Sight sight;
-  stringstream line_ins;
+  stringstream line_ins, new_prefix;
   string line;
   size_t pos;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  
   /* double dummy; */
 
   file.set_name(filename.value);
@@ -747,10 +763,10 @@ void Plot::read_from_file(String filename, string prefix){
   }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
 
 
-  cout << "Found  Sight # at position " << pos << "\n";
+  cout << prefix << "Found  Sight # at position " << pos << "\n";
   
   //read the sight block
-  sight.read_from_file(file);
+  sight.read_from_file(file, new_prefix.str());
 
   
   file.close(prefix);

@@ -610,9 +610,25 @@ class Sight{
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
+  void read_from_file(File);
   void reduce(string);
   
 };
+
+void Sight::read_from_file(File file){
+
+  string line;
+  size_t pos = 0;
+
+  //read first line with no information
+  getline(file.value, line);
+
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+
+}
 
 void Sight::print(string name, string prefix, ostream& ostr){
 

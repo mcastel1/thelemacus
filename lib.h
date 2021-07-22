@@ -657,14 +657,14 @@ class Plot{
   void add_point(string);
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
-  void read_from_file(string, string);
+  void read_from_file(String, string);
   void print(string, ostream&);
   void show(string);
   void menu(void);
 
 };
 
-void Plot::read_from_file(string filename, string prefix){
+void Plot::read_from_file(String filename, string prefix){
 
   File file;
   stringstream line_ins;
@@ -672,7 +672,7 @@ void Plot::read_from_file(string filename, string prefix){
   /* double dummy; */
 
 
-  file.set_name(filename);
+  file.set_name(filename.value);
   file.open("in", prefix);
 
   do{

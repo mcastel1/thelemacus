@@ -121,6 +121,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
 
 
 class Catalog;
+class File;
 
 class Answer{
 
@@ -177,10 +178,46 @@ class Angle{
   void enter(string, string);
   void set(string, double, string);
   void print(string, string, ostream&);
+  void read_from_file(File&);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
   
 };
+
+class File{
+
+ public:
+  fstream value;
+  String name;
+  unsigned int number_of_lines;
+  
+  void set_name(string);
+  void enter_name(string);
+  int open(string, string);
+  void close(string);
+  void remove(void);
+  void count_lines(string);
+  
+};
+
+
+void Angle::read_from_file(File& file){
+
+  string line;
+  size_t pos1, pos2, pos3;
+
+  line.clear();
+  getline(file.value, line);
+
+  pos1 = line.find(" = ");
+  pos2 = line.find("° ");
+  pos3 = line.find("'");
+  
+  value = k*(stod(line.substr(pos1+3, pos2).c_str()) + stod(line.substr(pos2+2, pos3))/60.0);
+
+  print("read angle", "\t", cout);
+  
+}
 
 
 class Point{
@@ -279,21 +316,6 @@ void Time::add(Chrono chrono_in){
 
 }
 
-class File{
-
- public:
-  fstream value;
-  String name;
-  unsigned int number_of_lines;
-  
-  void set_name(string);
-  void enter_name(string);
-  int open(string, string);
-  void close(string);
-  void remove(void);
-  void count_lines(string);
-  
-};
 
 void File::enter_name(string prefix){
 
@@ -470,6 +492,8 @@ void Body::read_from_file(File& file){
   name = line.substr(pos+3, line.size() - (pos+3));
   cout << "read name = " << name << "\n";
 
+  RA.read_from_file(file);
+  
   
 }
 

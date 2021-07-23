@@ -416,6 +416,8 @@ void Time::read_from_file(string name, File& file, string prefix){
   //read dummy line
   getline(file.value, line);
 
+  cout << prefix << name << ":\n";
+  
   //read
   date.read_from_file(name, file, new_prefix.str());
   chrono.read_from_file(name, file, new_prefix.str());
@@ -841,8 +843,9 @@ void Sight::read_from_file(File& file, string prefix){
   H_s.read_from_file("sextant altitude", file, new_prefix.str());
   index_error.read_from_file("index error", file, new_prefix.str());
   artificial_horizon.read_from_file("artificial horizon", file, new_prefix.str());
-  height_of_eye.read_from_file("height of eye", file, new_prefix.str());
-
+  if((artificial_horizon.value) == 'n'){
+    height_of_eye.read_from_file("height of eye", file, new_prefix.str());
+  }
   master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
   
   use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());

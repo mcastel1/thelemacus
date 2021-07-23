@@ -17,6 +17,8 @@
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
 #define chars_double "0123456789."
+#define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+#define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 
 /*
   void youprint(string input, string prefix)
@@ -2230,10 +2232,10 @@ void Date::enter(string name, string prefix) {
  
   check_leap_year();
   if((Y_is_leap_year)){
-    (days_per_month) = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    (days_per_month) = days_per_month_leap;
     cout << new_prefix.str() << "Entered a leap year\n";
   }else{
-    (days_per_month) = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    (days_per_month) = days_per_month_common;
     cout << new_prefix.str() << "Entered a common year\n";
   }
 

@@ -728,7 +728,7 @@ void Answer::print(string name, string prefix, ostream& ostr){
 class Sight{
 
  public:
-  Time time;
+  Time master_clock_date_and_hour, time;
   //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
   Chrono TAI_minus_UTC, stopwatch;
   Point GP;
@@ -773,8 +773,18 @@ void Sight::read_from_file(File& file, string prefix){
   index_error.read_from_file("index error", file, new_prefix.str());
   artificial_horizon.read_from_file("artificial horizon", file, new_prefix.str());
   height_of_eye.read_from_file("height of eye", file, new_prefix.str());
+
+  master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
+  
   use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
   TAI_minus_UTC.read_from_file("TAI - UTC", file, new_prefix.str());
+  
+
+  time = master_clock_date_and_hour;
+  if(use_stopwatch.value == 'y'){
+    time.add(stopwatch);
+  }
+  time.add(TAI_minus_UTC);
 
 }
 
@@ -795,12 +805,12 @@ void Sight::print(string name, string prefix, ostream& ostr){
   if(artificial_horizon.value == 'n'){
     height_of_eye.print("height of eye", new_prefix.str(), ostr);
   }
+  master_clock_date_and_hour.print("master-clock date and hour of sight", new_prefix.str(), ostr);
   use_stopwatch.print("use of stopwatch", new_prefix.str(), ostr);
   if(use_stopwatch.value == 'y'){
     stopwatch.print("stopwatch", new_prefix.str(), ostr);
   }
   TAI_minus_UTC.print("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str(), ostr);
-  time.print("TAI date and hour of sight", new_prefix.str(), ostr);
 
 }
 
@@ -1241,7 +1251,8 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   
   do{
   
-    time.enter("master-clock date and hour", new_prefix.str());
+    master_clock_date_and_hour.enter("master-clock date and hour of sight", new_prefix.str());
+    time = master_clock_date_and_hour;
     use_stopwatch.enter("use of stopwatch", new_prefix.str());
 
     if(use_stopwatch.value == 'y'){

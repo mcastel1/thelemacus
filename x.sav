@@ -5,13 +5,13 @@
 				Name = sun
 				Radius = 375648 nm.
 			limb = l
-			sextant altitude = 66° 6.45'
-			index error = 358° 57.455'
+			sextant altitude = 66° 3.45738'
+			index error = 1° 0.352376'
 			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2023-02-04
+				hour of master-clock date and hour of sight = 03:06:03.4573480673899998905085340084042
 			use of stopwatch = y
-			hour of stopwatch = 02:06:04.6500000000000003552713678800501
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 06:03:06.5300000000000002486899575160351
-			TAI date and hour of sight:
-				date of TAI date and hour of sight = 2023-02-05
-				hour of TAI date and hour of sight = 12:16:11.726000052876770496368408203125
+			hour of stopwatch = 04:02:05.453489576048900389082518813666
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 05:06:45.547987068739999472199997399002
 	Points in the plot:

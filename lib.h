@@ -422,6 +422,9 @@ void Time::read_from_file(string name, File& file, string prefix){
   date.read_from_file(name, file, new_prefix.str());
   chrono.read_from_file(name, file, new_prefix.str());
 
+  to_MJD();
+  print(name, prefix, cout);
+  
 }
 
 void Time::add(Chrono chrono_in){

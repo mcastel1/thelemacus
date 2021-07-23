@@ -264,7 +264,7 @@ class Date{
 
   void print(string, string, ostream&);
   void enter(string, string);
-  void read_from_file(string, File&, string);
+  bool read_from_file(string, File&, string);
   stringstream to_string(void);
   void check_leap_year(void);
 
@@ -278,7 +278,7 @@ class Chrono{
 
   void print(string, string, ostream&);
   void enter(string, string);
-  void read_from_file(string, File&, string);
+  bool read_from_file(string, File&, string);
   stringstream to_string(void);
 
 };
@@ -299,11 +299,12 @@ class Chrono{
 
 
 
-void Chrono::read_from_file(string name, File& file, string prefix){
+bool Chrono::read_from_file(string name, File& file, string prefix){
 
   string line;
   stringstream new_prefix;
-
+  bool check = true;
+  
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
@@ -315,10 +316,38 @@ void Chrono::read_from_file(string name, File& file, string prefix){
   pos = line.find(" = ");
 
   h = stoi(line.substr(pos+3, 2).c_str(), NULL, 10);
-  m = stoi(line.substr(pos+3+3, 2).c_str(), NULL, 10);
-  s = stod(line.substr(pos+3+3+3, line.size() - (pos+3+3+3)).c_str());
+  if(!((0 <= h) && (h < 24))){
+    
+    check = false;
+    cout << prefix << RED << "\tValue of hh is not valid!\n" << RESET;
+    
+  }else{
+    
+    m = stoi(line.substr(pos+3+3, 2).c_str(), NULL, 10);   
+    if(!((0 <= m) && (m < 60))){
+      
+      check = false;
+      cout << prefix << RED << "\tValue of mm is not valid!\n" << RESET;
+      
+    }else{
 
-  print(name, prefix, cout);
+      s = stod(line.substr(pos+3+3+3, line.size() - (pos+3+3+3)).c_str());
+      if(!((0.0 <= s) && (s < 60.0))){
+
+	check = false;
+	cout << prefix << RED << "\tValue of mm is not valid!\n" << RESET;
+
+      }else{
+
+	  print(name, prefix, cout);
+
+      }
+	  
+    }
+
+  }
+
+  return check;
 
 }
 
@@ -332,7 +361,7 @@ class Time{
   double s, MJD;
   void enter(string, string);
   void print(string, string, ostream&);
-  void read_from_file(string, File&, string);
+  bool read_from_file(string, File&, string);
   
   void to_MJD(void);
   void to_TAI(void);
@@ -346,11 +375,12 @@ class Time{
 
 
 
-
-void Date::read_from_file(string name, File& file, string prefix){
+//this function returns true if the date read is consistent, false if it is not 
+bool Date::read_from_file(string name, File& file, string prefix){
 
   string line;
   stringstream new_prefix;
+  bool check = true;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
@@ -363,11 +393,37 @@ void Date::read_from_file(string name, File& file, string prefix){
   pos = line.find(" = ");
 
   Y = stoi(line.substr(pos+3, 4).c_str(), NULL, 10);
+
+  check_leap_year();
+  if((Y_is_leap_year)){
+    (days_per_month) = days_per_month_leap;
+    cout << new_prefix.str() << "YYYY is a leap year\n";
+  }else{
+    (days_per_month) = days_per_month_common;
+    cout << new_prefix.str() << "YYYY is a common year\n";
+  }
+  
   M = stoi(line.substr(pos+3+5, 2).c_str(), NULL, 10);
-  D = stoi(line.substr(pos+3+5+3, 2).c_str());
 
-  print(name, prefix, cout);
+  if(!((1<=M) && (M < 12+1))){
+    check = false;
+    cout << new_prefix.str() << RED << "\tValue of MM is not valid!\n" << RESET;
+  }else{
 
+    D = stoi(line.substr(pos+3+5+3, 2).c_str());
+
+    if(!((1<=D) && (D < days_per_month[M-1]+1))){
+      check = false;
+      cout << new_prefix.str() << RED << "\tValue of DD is not valid!\n" << RESET;
+    }
+    else{
+      print(name, prefix, cout);
+    }
+
+  }
+  
+  return check;
+  
 }
 
 
@@ -407,10 +463,11 @@ void Date::check_leap_year(void){
   
 }
 
-void Time::read_from_file(string name, File& file, string prefix){
+bool Time::read_from_file(string name, File& file, string prefix){
 
   string line;
   stringstream new_prefix;
+  bool check = true;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
@@ -421,11 +478,26 @@ void Time::read_from_file(string name, File& file, string prefix){
   cout << prefix << name << ":\n";
   
   //read
-  date.read_from_file(name, file, new_prefix.str());
-  chrono.read_from_file(name, file, new_prefix.str());
+  if(!(date.read_from_file(name, file, new_prefix.str()))){
+    
+    check = false;
+    
+  }else{
+    
+    if(!(chrono.read_from_file(name, file, new_prefix.str()))){
 
-  to_MJD();
-  print(name, prefix, cout);
+      check = false;
+
+    }else{
+      
+      to_MJD();
+      print(name, prefix, cout);
+      
+    }
+    
+  }
+
+  return check;
   
 }
 
@@ -838,6 +910,7 @@ bool Sight::read_from_file(File& file, string prefix){
 
   stringstream new_prefix;
   string line;
+  bool check;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
@@ -853,24 +926,33 @@ bool Sight::read_from_file(File& file, string prefix){
     height_of_eye.read_from_file("height of eye", file, new_prefix.str());
   }
   
-  master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
-  time = master_clock_date_and_hour;
+  if(master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str())){
+
+    check = true;
+    time = master_clock_date_and_hour;
  
-  use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
+    use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
 
-  if(use_stopwatch.value == 'y'){
+    if(use_stopwatch.value == 'y'){
+      
+      stopwatch.read_from_file("stopwatch", file, new_prefix.str());
+      time.add(stopwatch);
 
-    stopwatch.read_from_file("stopwatch", file, new_prefix.str());
-    time.add(stopwatch);
+    }
+  
+    TAI_minus_UTC.read_from_file("TAI - UTC at time of master-clock synchronization with UTC", file, new_prefix.str());
+    time.add(TAI_minus_UTC);
+    time.print("TAI date and hour of sight", new_prefix.str(), cout);
+    
+  }else{
 
+    check = false;
+    cout << prefix << RED << "\tMaster-clock date and hour is not valid!\n" << RESET;
+    
   }
-  
-  TAI_minus_UTC.read_from_file("TAI - UTC at time of master-clock synchronization with UTC", file, new_prefix.str());
-  time.add(TAI_minus_UTC);
-  time.print("TAI date and hour of sight", new_prefix.str(), cout);
-  
+
   //returns true only if the date and hour of sight falls within the time window covered by JPL data files
-  return check_data_time_interval(prefix);
+  return (check && check_data_time_interval(prefix));
   
 }
 
@@ -2220,10 +2302,10 @@ void Date::enter(string name, string prefix) {
   check_leap_year();
   if((Y_is_leap_year)){
     (days_per_month) = days_per_month_leap;
-    cout << new_prefix.str() << "Entered a leap year\n";
+    cout << new_prefix.str() << "YYYY is a leap year\n";
   }else{
     (days_per_month) = days_per_month_common;
-    cout << new_prefix.str() << "Entered a common year\n";
+    cout << new_prefix.str() << "YYYY is a common year\n";
   }
 
   enter_unsigned_int(&M, true, 1, 12+1, "MM", prefix);

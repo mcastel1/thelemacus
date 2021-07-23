@@ -859,6 +859,9 @@ void Sight::read_from_file(File& file, string prefix){
   }
   time.add(TAI_minus_UTC);
 
+  time.print("TAI date and hour of sight", new_prefix.str(), cout);
+  
+
 }
 
 void Sight::print(string name, string prefix, ostream& ostr){
@@ -942,7 +945,11 @@ void Plot::read_from_file(String filename, string prefix){
   
   //read the sight block
   sight.read_from_file(file, new_prefix.str());
-
+  sight.reduce(prefix);
+  sight.print("New sight", prefix, cout);
+  
+  sight_list.push_back(sight);
+  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
   
   file.close(prefix);
   
@@ -1069,7 +1076,9 @@ case 5:{
     filename.value = line_ins.str();
     
     read_from_file(filename, "\t");
-    
+    print("\t", cout);
+    show("\t");
+ 
     menu();  
 
   }

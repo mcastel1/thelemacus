@@ -262,6 +262,7 @@ class Date{
 
   void print(string, string, ostream&);
   void enter(string, string);
+  void read_from_file(string, File&, string);
   stringstream to_string(void);
   void check_leap_year(void);
 
@@ -279,6 +280,22 @@ class Chrono{
   stringstream to_string(void);
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Chrono::read_from_file(string name, File& file, string prefix){
 
@@ -313,6 +330,7 @@ class Time{
   double s, MJD;
   void enter(string, string);
   void print(string, string, ostream&);
+  void read_from_file(string, File&, string);
   
   void to_MJD(void);
   void to_TAI(void);
@@ -321,6 +339,40 @@ class Time{
   stringstream to_string(void);
   
 };
+
+
+
+
+
+
+void Date::read_from_file(string name, File& file, string prefix){
+
+  string line;
+  stringstream new_prefix;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  size_t pos = 0;
+
+  //read type
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+  Y = stoi(line.substr(pos+3, 4).c_str(), NULL, 10);
+  M = stoi(line.substr(pos+3+5, 2).c_str(), NULL, 10);
+  D = stoi(line.substr(pos+3+5+3, 2).c_str());
+
+  print(name, prefix, cout);
+
+}
+
+
+
+
+
+
 
 
 
@@ -351,6 +403,23 @@ void Date::check_leap_year(void){
     
   }
   
+}
+
+void Time::read_from_file(string name, File& file, string prefix){
+
+  string line;
+  stringstream new_prefix;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  //read dummy line
+  getline(file.value, line);
+
+  //read
+  date.read_from_file(name, file, new_prefix.str());
+  chrono.read_from_file(name, file, new_prefix.str());
+
 }
 
 void Time::add(Chrono chrono_in){

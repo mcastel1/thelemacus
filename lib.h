@@ -630,7 +630,7 @@ void Body::read_from_file(string name, File& file, string prefix){
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
-  size_t pos = 0;
+  size_t pos;
 
   cout << prefix << name << ":\n";
   
@@ -649,8 +649,8 @@ void Body::read_from_file(string name, File& file, string prefix){
   line.clear();
   getline(file.value, line);
   pos = line.find(" = ");
-  name = line.substr(pos+3, line.size() - (pos+3));
-  cout << new_prefix.str() << "Name = " << name << "\n";
+  ((*this).name) = line.substr(pos+3, line.size() - (pos+3));
+  cout << new_prefix.str() << "Name = " << ((*this).name) << "\n";
 
 
   if(type == "star"){
@@ -837,6 +837,7 @@ bool Sight::read_from_file(File& file, string prefix){
   stringstream new_prefix, string;
   bool check;
   int l_min, l_max;
+  File data_file;
 
 
   //prepend \t to prefix
@@ -853,15 +854,15 @@ bool Sight::read_from_file(File& file, string prefix){
     height_of_eye.read_from_file("height of eye", file, new_prefix.str());
   }
 
-  //file is the file where that data relative to body are stored: I count the number of lines in this file and store them in file.number_of_lines
+  //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in file.number_of_lines
   string.clear();
   if((body.type) != "star"){
     string << "data/" << body.name << ".txt";
   }else{
     string << "data/j2000_to_itrf93.txt";
-  }  
-  file.set_name(string.str()); 
-  file.count_lines(new_prefix.str());
+  }
+  data_file.set_name(string.str()); 
+  data_file.count_lines(new_prefix.str());
 
   
   master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
@@ -1108,7 +1109,6 @@ case 5:{
 
     String filename;
     stringstream line_ins;
-    bool check;
     
     filename.enter("name of file (without extension)", "\t");
     line_ins << filename.value << ".sav"; 

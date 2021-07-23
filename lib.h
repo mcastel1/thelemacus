@@ -295,6 +295,11 @@ void Chrono::read_from_file(string name, File& file, string prefix){
   getline(file.value, line);
   pos = line.find(" = ");
 
+  h = stoi(line.substr(pos+3, 2).c_str(), NULL, 10);
+  m = stoi(line.substr(pos+3+3, 2).c_str(), NULL, 10);
+  s = stod(line.substr(pos+3+3+3, line.size() - (pos+3+3+3)).c_str());
+
+  print(name, prefix, cout);
 
 }
 
@@ -769,6 +774,7 @@ void Sight::read_from_file(File& file, string prefix){
   artificial_horizon.read_from_file("artificial horizon", file, new_prefix.str());
   height_of_eye.read_from_file("height of eye", file, new_prefix.str());
   use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
+  TAI_minus_UTC.read_from_file("TAI - UTC", file, new_prefix.str());
 
 }
 

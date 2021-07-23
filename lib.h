@@ -830,18 +830,14 @@ class Sight{
   void print(string, string, ostream&);
   bool read_from_file(File&, string);
   void reduce(string);
+  bool check_data_time_interval(string);
   
 };
 
 bool Sight::read_from_file(File& file, string prefix){
 
-
-  stringstream new_prefix, temp;
+  stringstream new_prefix;
   string line;
-  bool check;
-  int l_min, l_max;
-  File data_file;
-
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
@@ -856,17 +852,6 @@ bool Sight::read_from_file(File& file, string prefix){
   if((artificial_horizon.value) == 'n'){
     height_of_eye.read_from_file("height of eye", file, new_prefix.str());
   }
-
-  //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
-  temp.clear();
-  if((body.type) != "star"){
-    temp << "data/" << body.name << ".txt";
-  }else{
-    temp << "data/j2000_to_itrf93.txt";
-  }
-  data_file.set_name(temp.str()); 
-  data_file.count_lines(new_prefix.str());
-
   
   master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
   time = master_clock_date_and_hour;
@@ -884,6 +869,32 @@ bool Sight::read_from_file(File& file, string prefix){
   time.add(TAI_minus_UTC);
   time.print("TAI date and hour of sight", new_prefix.str(), cout);
   
+  //returns true only if the date and hour of sight falls within the time window covered by JPL data files
+  return check_data_time_interval(prefix);
+  
+}
+
+bool Sight::check_data_time_interval(string prefix){
+  
+  int l_min, l_max;
+  stringstream temp, new_prefix;
+  File data_file;
+  bool check;
+  
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  
+  //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
+  temp.clear();
+  if((body.type) != "star"){
+    temp << "data/" << body.name << ".txt";
+  }else{
+    temp << "data/j2000_to_itrf93.txt";
+  }
+  data_file.set_name(temp.str()); 
+  data_file.count_lines(new_prefix.str());
+
   //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
   l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
   //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
@@ -898,6 +909,7 @@ bool Sight::read_from_file(File& file, string prefix){
   }
 
   return check;
+
   
 }
 
@@ -983,7 +995,7 @@ bool Plot::read_from_file(String filename, string prefix){
   
       //read the sight block
       Sight sight;
-      check = (sight.read_from_file(file, prefix));
+      check = sight.read_from_file(file, prefix);
       if(check){
 	sight.reduce(prefix);
 	sight.print("New sight", prefix, cout);
@@ -1347,10 +1359,8 @@ void Plot::show(string prefix){
 
 void Sight::enter(Catalog catalog, string name, string prefix){
 
-  stringstream new_prefix, string;
-  int l_min, l_max;
+  stringstream new_prefix;
   File file;
-  bool check;
 
   //append \t to prefix
   //strcpy(new_prefix, prefix);    
@@ -1371,16 +1381,6 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   if(artificial_horizon.value == 'n'){
     height_of_eye.enter("height of eye", new_prefix.str());
   }
-
-  //file is the file where that data relative to body are stored: I count the number of lines in this file and store them in file.number_of_lines
-  string.clear();
-  if((body.type) != "star"){
-    string << "data/" << body.name << ".txt";
-  }else{
-    string << "data/j2000_to_itrf93.txt";
-  }  
-  file.set_name(string.str()); 
-  file.count_lines(new_prefix.str());
   
   do{
   
@@ -1400,20 +1400,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     time.add(TAI_minus_UTC);
     time.print("TAI date and hour of sight", new_prefix.str(), cout);
 
-    //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-    l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
-    //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-    l_max = (int)(L*((time.MJD)-MJD_min))+(int)(N/2.0);
-
-    //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored 
-    if((l_min >= 0) && (l_max < (int)(file.number_of_lines))){
-      check = true;
-    }else{
-      check = false;
-      cout << prefix << RED << "Time lies outside interval of NASA's JPL data files!\n" << RESET;
-    }
-
-  }while(!check);
+  }while(!check_data_time_interval(prefix));
 
 }
 

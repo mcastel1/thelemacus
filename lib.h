@@ -910,7 +910,7 @@ bool Sight::read_from_file(File& file, string prefix){
 
   stringstream new_prefix;
   string line;
-  bool check;
+  bool check = true;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
@@ -926,33 +926,31 @@ bool Sight::read_from_file(File& file, string prefix){
     height_of_eye.read_from_file("height of eye", file, new_prefix.str());
   }
   
-  if(master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str())){
-
-    check = true;
-    time = master_clock_date_and_hour;
- 
-    use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
-
-    if(use_stopwatch.value == 'y'){
-      
-      stopwatch.read_from_file("stopwatch", file, new_prefix.str());
-      time.add(stopwatch);
-
-    }
-  
-    TAI_minus_UTC.read_from_file("TAI - UTC at time of master-clock synchronization with UTC", file, new_prefix.str());
-    time.add(TAI_minus_UTC);
-    time.print("TAI date and hour of sight", new_prefix.str(), cout);
+  check &= master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
+  if(!check){
     
-  }else{
-
-    check = false;
     cout << prefix << RED << "\tMaster-clock date and hour is not valid!\n" << RESET;
     
   }
+  time = master_clock_date_and_hour;
+ 
+  use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
 
+  if(use_stopwatch.value == 'y'){
+      
+    stopwatch.read_from_file("stopwatch", file, new_prefix.str());
+    time.add(stopwatch);
+
+  }
+  
+  TAI_minus_UTC.read_from_file("TAI - UTC at time of master-clock synchronization with UTC", file, new_prefix.str());
+  time.add(TAI_minus_UTC);
+  time.print("TAI date and hour of sight", new_prefix.str(), cout);
+
+  check &= check_data_time_interval(prefix);
+  
   //returns true only if the date and hour of sight falls within the time window covered by JPL data files
-  return (check && check_data_time_interval(prefix));
+  return check;
   
 }
 
@@ -1058,42 +1056,52 @@ bool Plot::read_from_file(String filename, string prefix){
 
  
   file.set_name(filename.value);
-  file.open("in", prefix);
-
-  //read dummy line
-  getline(file.value, line);
-
   
-  line.clear();
-  //read dummy line
-  getline(file.value, line);
-  pos = line.find("Points in the plot:");
-  
-  if(pos == (string::npos)){
-  
-    do{
+  if(!(file.open("in", prefix))){
     
-      cout << prefix << "Found new sight!\n";
-  
-      //read the sight block
-      Sight sight;
-      check = sight.read_from_file(file, prefix);
-      if(check){
-	sight.reduce(prefix);
-	sight.print("New sight", prefix, cout);
+    check = false;
     
-	sight_list.push_back(sight);
-	cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
-      }
+  }else{
 
-      line.clear();
-      getline(file.value, line);
-      pos = line.find("Points in the plot:");
+    //read dummy line
+    getline(file.value, line);
+
+  
+    line.clear();
+    //read dummy line
+    getline(file.value, line);
+    pos = line.find("Points in the plot:");
+  
+    if(pos == (string::npos)){
+  
+      do{
+    
+	cout << prefix << "Found new sight!\n";
+  
+	//read the sight block
+	Sight sight;
+	
+	if(sight.read_from_file(file, prefix)){
+	  
+	  sight.reduce(prefix);
+	  sight.print("New sight", prefix, cout);
+    
+	  sight_list.push_back(sight);
+	  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+	  
+	}
+
+	line.clear();
+	getline(file.value, line);
+	pos = line.find("Points in the plot:");
  
-    }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
+      }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
+
+    }
+    
+    file.close(prefix);
 
   }
-  file.close(prefix);
 
   return check;
   

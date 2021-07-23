@@ -854,7 +854,7 @@ bool Sight::read_from_file(File& file, string prefix){
     height_of_eye.read_from_file("height of eye", file, new_prefix.str());
   }
 
-  //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in file.number_of_lines
+  //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
   string.clear();
   if((body.type) != "star"){
     string << "data/" << body.name << ".txt";
@@ -887,7 +887,7 @@ bool Sight::read_from_file(File& file, string prefix){
   l_max = (int)(L*((time.MJD)-MJD_min))+(int)(N/2.0);
 
   //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored 
-  if((l_min >= 0) && (l_max < (int)(file.number_of_lines))){
+  if((l_min >= 0) && (l_max < (int)(data_file.number_of_lines))){
     check = true;
   }else{
     check = false;

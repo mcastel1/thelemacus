@@ -976,10 +976,10 @@ bool Plot::read_from_file(String filename, string prefix){
   }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
 
 
-  cout << prefix << "Found  Sight # at position " << pos << "\n";
+  cout << prefix << "Found new sight!\n";
   
   //read the sight block
-  check = (sight.read_from_file(file, new_prefix.str()));
+  check = (sight.read_from_file(file, prefix));
   if(check){
     sight.reduce(prefix);
     sight.print("New sight", prefix, cout);

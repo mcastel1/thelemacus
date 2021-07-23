@@ -2053,6 +2053,8 @@ stringstream Chrono::to_string(void){
 
   stringstream output;
   
+  output.precision(my_precision);
+  
   if(h<10){output << 0;}
   output << h << ":";
   if(m<10){output << 0;}

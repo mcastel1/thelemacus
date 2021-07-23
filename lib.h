@@ -849,6 +849,7 @@ void Sight::read_from_file(File& file, string prefix){
   master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
   
   use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
+  stopwatch.read_from_file("stopwatch", file, new_prefix.str());
   TAI_minus_UTC.read_from_file("TAI - UTC", file, new_prefix.str());
   
 

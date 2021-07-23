@@ -275,10 +275,28 @@ class Chrono{
 
   void print(string, string, ostream&);
   void enter(string, string);
+  void read_from_file(string, File&, string);
   stringstream to_string(void);
 
 };
 
+void Chrono::read_from_file(string name, File& file, string prefix){
+
+  string line;
+  stringstream new_prefix;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  size_t pos = 0;
+
+  //read type
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+
+}
 
 
 class Time{

@@ -2068,7 +2068,7 @@ stringstream Chrono::to_string(void){
 
 void Date::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " = " << to_string().str().c_str() << "\n";
+  ostr << prefix << "date of " << name << " = " << to_string().str().c_str() << "\n";
 
 };
 
@@ -2118,7 +2118,7 @@ stringstream Date::to_string(void){
 
 void Chrono::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " = " << to_string().str().c_str() << "\n";
+  ostr << prefix << "hour of " << name << " = " << to_string().str().c_str() << "\n";
 
 };
 
@@ -2152,8 +2152,16 @@ stringstream Time::to_string(void){
 
 void Time::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " = " << to_string().str().c_str() << "\n";
+  stringstream new_prefix;
 
+  //append \t to prefix
+  new_prefix << prefix << "\t";
+  
+  ostr << prefix << name << ":\n";
+
+  date.print(name, new_prefix.str(), ostr);
+  chrono.print(name, new_prefix.str(), ostr);
+  
 };
 
 

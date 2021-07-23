@@ -834,7 +834,8 @@ class Sight{
 bool Sight::read_from_file(File& file, string prefix){
 
 
-  stringstream new_prefix, string;
+  stringstream new_prefix, temp;
+  string line;
   bool check;
   int l_min, l_max;
   File data_file;
@@ -855,13 +856,13 @@ bool Sight::read_from_file(File& file, string prefix){
   }
 
   //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
-  string.clear();
+  temp.clear();
   if((body.type) != "star"){
-    string << "data/" << body.name << ".txt";
+    temp << "data/" << body.name << ".txt";
   }else{
-    string << "data/j2000_to_itrf93.txt";
+    temp << "data/j2000_to_itrf93.txt";
   }
-  data_file.set_name(string.str()); 
+  data_file.set_name(temp.str()); 
   data_file.count_lines(new_prefix.str());
 
   
@@ -951,43 +952,51 @@ class Plot{
 bool Plot::read_from_file(String filename, string prefix){
 
   File file;
-  Sight sight;
   stringstream line_ins, new_prefix;
   string line;
   size_t pos;
-  bool check;
+  bool check = true;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
-  
-  /* double dummy; */
-
+ 
   file.set_name(filename.value);
   file.open("in", prefix);
 
-  do{
-    line.clear();
-    getline(file.value, line);
+  //read dummy line
+  getline(file.value, line);
 
-    //line_ins << line;
-
-    pos = line.find("Sight #");
-  }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
-
-
-  cout << prefix << "Found new sight!\n";
   
-  //read the sight block
-  check = (sight.read_from_file(file, prefix));
-  if(check){
-    sight.reduce(prefix);
-    sight.print("New sight", prefix, cout);
+  line.clear();
+  //read dummy line
+  getline(file.value, line);
+  pos = line.find("Points in the plot:");
+  
+  if(pos == (string::npos)){
+  
+    do{
     
-    sight_list.push_back(sight);
-    cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
-  }
+      cout << prefix << "Found new sight!\n";
   
+      //read the sight block
+      Sight sight;
+      check = (sight.read_from_file(file, prefix));
+      if(check){
+	sight.reduce(prefix);
+	sight.print("New sight", prefix, cout);
+    
+	sight_list.push_back(sight);
+	cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+      }
+
+      line.clear();
+      getline(file.value, line);
+      pos = line.find("Points in the plot:");
+ 
+    }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
+
+  }
   file.close(prefix);
 
   return check;

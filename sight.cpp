@@ -44,6 +44,7 @@
 - make sure that running code cannot enter into infinite loop if weird values are entered from keyboard
 - include keyboard escape sequence to terminate code at any time
 - if phi_span < 1 degree, add one label on the y axis where you show both degrees and arcminutes
+- when reading Date from file, check that M variable lies in the correct interval according to the number of days of february
 */
 
 using namespace std;

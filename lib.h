@@ -826,15 +826,18 @@ class Sight{
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
-  void read_from_file(File&, string);
+  bool read_from_file(File&, string);
   void reduce(string);
   
 };
 
-void Sight::read_from_file(File& file, string prefix){
+bool Sight::read_from_file(File& file, string prefix){
 
 
-  stringstream new_prefix;
+  stringstream new_prefix, string;
+  bool check;
+  int l_min, l_max;
+
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
@@ -849,22 +852,49 @@ void Sight::read_from_file(File& file, string prefix){
   if((artificial_horizon.value) == 'n'){
     height_of_eye.read_from_file("height of eye", file, new_prefix.str());
   }
+
+  //file is the file where that data relative to body are stored: I count the number of lines in this file and store them in file.number_of_lines
+  string.clear();
+  if((body.type) != "star"){
+    string << "data/" << body.name << ".txt";
+  }else{
+    string << "data/j2000_to_itrf93.txt";
+  }  
+  file.set_name(string.str()); 
+  file.count_lines(new_prefix.str());
+
+  
   master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
-  
-  use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
-  stopwatch.read_from_file("stopwatch", file, new_prefix.str());
-  TAI_minus_UTC.read_from_file("TAI - UTC", file, new_prefix.str());
-  
-
   time = master_clock_date_and_hour;
-  if(use_stopwatch.value == 'y'){
-    time.add(stopwatch);
-  }
-  time.add(TAI_minus_UTC);
+ 
+  use_stopwatch.read_from_file("use of stopwatch", file, new_prefix.str());
 
+  if(use_stopwatch.value == 'y'){
+
+    stopwatch.read_from_file("stopwatch", file, new_prefix.str());
+    time.add(stopwatch);
+
+  }
+  
+  TAI_minus_UTC.read_from_file("TAI - UTC at time of master-clock synchronization with UTC", file, new_prefix.str());
+  time.add(TAI_minus_UTC);
   time.print("TAI date and hour of sight", new_prefix.str(), cout);
   
+  //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
+  l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
+  //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
+  l_max = (int)(L*((time.MJD)-MJD_min))+(int)(N/2.0);
 
+  //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored 
+  if((l_min >= 0) && (l_max < (int)(file.number_of_lines))){
+    check = true;
+  }else{
+    check = false;
+    cout << prefix << RED << "Time lies outside interval of NASA's JPL data files!\n" << RESET;
+  }
+
+  return check;
+  
 }
 
 void Sight::print(string name, string prefix, ostream& ostr){
@@ -910,20 +940,21 @@ class Plot{
   void add_point(string);
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
-  void read_from_file(String, string);
+  bool read_from_file(String, string);
   void print(string, ostream&);
   void show(string);
   void menu(void);
 
 };
 
-void Plot::read_from_file(String filename, string prefix){
+bool Plot::read_from_file(String filename, string prefix){
 
   File file;
   Sight sight;
   stringstream line_ins, new_prefix;
   string line;
   size_t pos;
+  bool check;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
@@ -947,14 +978,18 @@ void Plot::read_from_file(String filename, string prefix){
   cout << prefix << "Found  Sight # at position " << pos << "\n";
   
   //read the sight block
-  sight.read_from_file(file, new_prefix.str());
-  sight.reduce(prefix);
-  sight.print("New sight", prefix, cout);
-  
-  sight_list.push_back(sight);
-  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+  check = (sight.read_from_file(file, new_prefix.str()));
+  if(check){
+    sight.reduce(prefix);
+    sight.print("New sight", prefix, cout);
+    
+    sight_list.push_back(sight);
+    cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+  }
   
   file.close(prefix);
+
+  return check;
   
 }
 
@@ -1073,14 +1108,16 @@ case 5:{
 
     String filename;
     stringstream line_ins;
+    bool check;
     
     filename.enter("name of file (without extension)", "\t");
     line_ins << filename.value << ".sav"; 
     filename.value = line_ins.str();
     
-    read_from_file(filename, "\t");
-    print("\t", cout);
-    show("\t");
+    if(read_from_file(filename, "\t")){
+      print("\t", cout);
+      show("\t");
+    }
  
     menu();  
 
@@ -1338,6 +1375,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   
     master_clock_date_and_hour.enter("master-clock date and hour of sight", new_prefix.str());
     time = master_clock_date_and_hour;
+    
     use_stopwatch.enter("use of stopwatch", new_prefix.str());
 
     if(use_stopwatch.value == 'y'){

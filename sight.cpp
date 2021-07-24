@@ -46,6 +46,7 @@
 - if phi_span < 1 degree, add one label on the y axis where you show both degrees and arcminutes
 - when reading Date from file, check that M variable lies in the correct interval according to the number of days of february
 - replace string with String everywhere
+- all functions ..read_from_file shouuld return a bool to signal whether the reading was successful or not
 
 */
 

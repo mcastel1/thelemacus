@@ -132,19 +132,8 @@ class String{
   
   void enter(string, string);
   void print(string, string, ostream&);
-  void set(string, string);
-
-};
-
-
-class Answer{
-
- public:
-  char value;
-  void enter(string, string);
-  //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
-  void print(string, string, ostream&);
   void read_from_file(string, File&, string);
+  void set(string, string);
 
 };
 
@@ -163,6 +152,37 @@ class File{
   void count_lines(string);
   
 };
+
+
+void String::read_from_file(string name, File& file, string prefix){
+
+  string line;
+  size_t pos;
+
+  line.clear();
+  getline(file.value, line);
+  pos = line.find(" = ");
+
+  //read the string after ' = ' until the end of line string and store it into value
+  value = line.substr(pos+3, line.size() - (pos+3)).c_str();
+
+  print(name, prefix, cout);
+
+  
+}
+
+
+class Answer{
+
+ public:
+  char value;
+  void enter(string, string);
+  //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
+  void print(string, string, ostream&);
+  void read_from_file(string, File&, string);
+
+};
+
 
 
 void Answer::read_from_file(string name, File& file, string prefix){
@@ -252,23 +272,20 @@ class Point{
   
   void enter(string, string);
   void print(string, string, ostream&);
-  bool read_from_file(File&, string);
+  void read_from_file(File&, string);
 
 };
 
-bool Point::read_from_file(File& file, string prefix){
+void Point::read_from_file(File& file, string prefix){
 
   stringstream new_prefix;
-  bool check = true;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
   phi.read_from_file("latitude", file, new_prefix.str());
   lambda.read_from_file("longitude", file, new_prefix.str());
-
-
-
+  label.read_from_file("label", file, new_prefix.str());
 
 }
 

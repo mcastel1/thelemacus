@@ -1090,46 +1090,45 @@ bool Plot::read_from_file(String filename, string prefix){
     
   }else{
 
-    //read dummy line
+    //read dummy text line '	Sights in the plot:"
     getline(file.value, line);
 
   
     line.clear();
-    //read dummy line
+    //read dummyt text line 
     getline(file.value, line);
-    pos = line.find("Points in the plot:");
+    pos = line.find("Sight #");
 
     //if I have not find 'Points in the plot" then there is still some sight to read, and I read it
-    if(pos == (string::npos)){
   
-      do{
+    while(pos != (string::npos)){
     
-	cout << prefix << "Found new sight!\n";
+      cout << prefix << "Found new sight!\n";
   
-	//read the sight block
-	Sight sight;
+      //read the sight block
+      Sight sight;
 
-	//if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
-	check &= (sight.read_from_file(file, prefix));
-	if(check){
+      //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
+      check &= (sight.read_from_file(file, prefix));
+      if(check){
 	  
-	  sight.reduce(prefix);
-	  sight.print("New sight", prefix, cout);
+	sight.reduce(prefix);
+	sight.print("New sight", prefix, cout);
     
-	  sight_list.push_back(sight);
-	  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+	sight_list.push_back(sight);
+	cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
 	  
-	}else{
-	  cout << prefix << RED << "Error reading a sight: this sight will be ignored!\n" << RESET;
-	}
+      }else{
+	cout << prefix << RED << "Error reading a sight: this sight will be ignored!\n" << RESET;
+      }
 
-	line.clear();
-	getline(file.value, line);
-	pos = line.find("Points in the plot:");
+      line.clear();
+      //read dummyt text line 
+      getline(file.value, line);
+      pos = line.find("Sight #");
  
-      }while(/*here I check whether the line_ins contains "Points in the plot:", which means that a block relative to a new sight starts*/ pos == (string::npos));
-
     }
+    
     
     file.close(prefix);
 

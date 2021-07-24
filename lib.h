@@ -1869,12 +1869,12 @@ void Body::print(string name_in, string prefix, ostream& ostr){
   
   ostr << new_prefix.str() << "Type = " << type << "\n";
   ostr << new_prefix.str() << "Name = " << name << "\n";
-  if((radius.value) != 0.0){
-    radius.print("Radius", new_prefix.str(), ostr);
-  }
+  
   if(type == "star"){
     RA.print("Right ascension", new_prefix.str(), ostr);
     d.print("Declination", new_prefix.str(), ostr);
+  }else{
+    radius.print("Radius", new_prefix.str(), ostr);
   }
  
 }

@@ -99,8 +99,11 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+replot [0.:2.*pi] xe(K*Lambda(t, 5.99267440104978454940010124119, 4.945475285879973093017270002747, 0.86912879096880457652218865405302)), ye(K*Phi(t, 5.99267440104978454940010124119, 4.945475285879973093017270002747, 0.86912879096880457652218865405302)) smo csp ti "sun 2024-02-03 07:07:35.6674883700907230377197265625 TAI"
+replot [0.:2.*pi] xe(K*Lambda(t, 0.67720818769543411619338257878553, 4.7747989481977821668579053948633, 1.1692164002683167467466773814522)), ye(K*Phi(t, 0.67720818769543411619338257878553, 4.7747989481977821668579053948633, 1.1692164002683167467466773814522)) smo csp ti "vega 2023-02-02 04:04:03.99999962188303470611572265625 TAI"
+
+replot "+" u (xe(K*(5.8986310953235019383100734557956))):(ye(K*(5.8811778028035588405941780365538))) w p  lw 2 ti "fjdsij djklsd"
+
 
 #unset parametric
 unset multiplot
@@ -139,19 +142,19 @@ while(1){
 
 	#print "Determining dlambda ...";
 
-	#gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-	if(lambda_span > 1.0){gamma_lambda = 1.0;}
-	else{gamma_lambda = 60.0;}
+	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+	if(lambda_span > 1.0){gamma = 1.0;}
+	else{gamma = 60.0;}
 
-	dlambda=1.0/gamma_lambda;
+	dlambda=1.0/gamma;
 	while(N*dlambda<lambda_span){
 	#print dlambda;
-	if(dlambda == 1.0/gamma_lambda){dlambda = dlambda + 4.0/gamma_lambda;}
-	else{dlambda = dlambda + 5.0/gamma_lambda;}
+	if(dlambda == 1.0/gamma){dlambda = dlambda + 4.0/gamma;}
+	else{dlambda = dlambda + 5.0/gamma;}
 	}
-	if(dlambda > 1.0/gamma_lambda){
-		   if(dlambda == 5.0/gamma_lambda){dlambda = dlambda - 4.0/gamma_lambda;}
-		   else{dlambda = dlambda - 5.0/gamma_lambda;}
+	if(dlambda > 1.0/gamma){
+		   if(dlambda == 5.0/gamma){dlambda = dlambda - 4.0/gamma;}
+		   else{dlambda = dlambda - 5.0/gamma;}
 	}
 	#print "... dlambda = " , dlambda;
 
@@ -159,19 +162,19 @@ while(1){
 	#print "Determining dphi ...";
 	#print "phi_span = ", phi_span;
 
-	#gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-	if(phi_span > 1.0){gamma_phi = 1.0;}
-	else{gamma_phi = 60.0;}
+	#gamma is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+	if(phi_span > 1.0){gamma = 1.0;}
+	else{gamma = 60.0;}
 	
-	dphi=1.0/gamma_phi;
+	dphi=1.0/gamma;
 	while(N*dphi<phi_span){
 		#print dphi;
-		if(dphi == 1.0/gamma_phi){dphi = dphi + 4.0/gamma_phi;}
-		else{dphi = dphi + 5.0/gamma_phi;}
+		if(dphi == 1.0/gamma){dphi = dphi + 4.0/gamma;}
+		else{dphi = dphi + 5.0/gamma;}
 	}
-	if(dphi > 1.0/gamma_phi){
-		   if(dphi == 5.0/gamma_phi){dphi = dphi - 4.0/gamma_phi;}
-		   else{dphi = dphi - 5.0/gamma_phi;}
+	if(dphi > 1.0/gamma){
+		   if(dphi == 5.0/gamma){dphi = dphi - 4.0/gamma;}
+		   else{dphi = dphi - 5.0/gamma;}
 	}
 	#print "... dphi = " , dphi;
 
@@ -200,18 +203,7 @@ while(1){
 		       		      set xtics add (label_min(lambda) x);
 		          }
 
-			  if(gamma_lambda == 60.0){
-			  	   i=0.0;
-			 	   while(i<10.0){
-					set arrow from first x + (i/10.0)*dlambda*k, graph 0 to first x + (i/10.0)*dlambda*k, graph 0.05 nohead  linecolor "orange";
-					i=i+1.0;
-			 	   }
-		          }
-
-
 			  set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray";
-
-
 		}
 
 		
@@ -242,9 +234,19 @@ while(1){
 		       if(is_int(phi) == 1){
 		       		      set ytics add (label_deg(phi) ye(phi));
 		       }else{
+					print "\nlabel = ", label_min(phi);
+		       			print "\nye = " , ye(phi);
 		       		      set ytics add (label_min(phi) ye(phi));
 		       }
 		       set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray";
+		}
+
+		if(gamma == 60.0){
+			 i=0.0;
+			 while(i<10.0){
+				set arrow from graph 0,first ye(phi + i/10.0/60.0) to graph 0.1, first ye(phi + i/10.0/60.0) nohead  linecolor "red";
+				i=i+1.0;
+			 }
 		}
 		#print phi;
 		phi = phi + dphi;

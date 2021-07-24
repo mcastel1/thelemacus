@@ -252,8 +252,25 @@ class Point{
   
   void enter(string, string);
   void print(string, string, ostream&);
+  bool read_from_file(File&, string);
 
 };
+
+bool Point::read_from_file(File& file, string prefix){
+
+  stringstream new_prefix;
+  bool check = true;
+
+  //prepend \t to prefix
+  new_prefix << "\t" << prefix;
+
+  phi.read_from_file("latitude", file, new_prefix.str());
+  lambda.read_from_file("longitude", file, new_prefix.str());
+
+
+
+
+}
 
 class Date{
 

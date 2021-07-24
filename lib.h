@@ -315,38 +315,37 @@ bool Chrono::read_from_file(string name, File& file, string prefix){
   getline(file.value, line);
   pos = line.find(" = ");
 
+  //read hours
   h = stoi(line.substr(pos+3, 2).c_str(), NULL, 10);
   if(!((0 <= h) && (h < 24))){
     
-    check = false;
+    check &= false;
     cout << prefix << RED << "\tValue of hh is not valid!\n" << RESET;
     
-  }else{
-    
-    m = stoi(line.substr(pos+3+3, 2).c_str(), NULL, 10);   
-    if(!((0 <= m) && (m < 60))){
+  }
+
+  //read minutes
+  m = stoi(line.substr(pos+3+3, 2).c_str(), NULL, 10);   
+  if(!((0 <= m) && (m < 60))){
       
-      check = false;
-      cout << prefix << RED << "\tValue of mm is not valid!\n" << RESET;
+    check &= false;
+    cout << prefix << RED << "\tValue of mm is not valid!\n" << RESET;
       
-    }else{
+  }
+  
+  //read seconds
+  s = stod(line.substr(pos+3+3+3, line.size() - (pos+3+3+3)).c_str());
+  if(!((0.0 <= s) && (s < 60.0))){
 
-      s = stod(line.substr(pos+3+3+3, line.size() - (pos+3+3+3)).c_str());
-      if(!((0.0 <= s) && (s < 60.0))){
-
-	check = false;
-	cout << prefix << RED << "\tValue of mm is not valid!\n" << RESET;
-
-      }else{
-
-	  print(name, prefix, cout);
-
-      }
-	  
-    }
+    check &= false;
+    cout << prefix << RED << "\tValue of mm is not valid!\n" << RESET;
 
   }
 
+  if(check){
+    print(name, prefix, cout);
+  }
+	  
   return check;
 
 }
@@ -406,22 +405,21 @@ bool Date::read_from_file(string name, File& file, string prefix){
   M = stoi(line.substr(pos+3+5, 2).c_str(), NULL, 10);
 
   if(!((1<=M) && (M < 12+1))){
-    check = false;
+    check &= false;
     cout << new_prefix.str() << RED << "\tValue of MM is not valid!\n" << RESET;
-  }else{
+  }
 
-    D = stoi(line.substr(pos+3+5+3, 2).c_str());
+  D = stoi(line.substr(pos+3+5+3, 2).c_str());
 
-    if(!((1<=D) && (D < days_per_month[M-1]+1))){
-      check = false;
-      cout << new_prefix.str() << RED << "\tValue of DD is not valid!\n" << RESET;
-    }
-    else{
-      print(name, prefix, cout);
-    }
-
+  if(!((1<=D) && (D < days_per_month[M-1]+1))){
+    check &= false;
+    cout << prefix << RED << "\tValue of DD is not valid!\n" << RESET;
   }
   
+  if(check){
+    print(name, prefix, cout);
+  }
+ 
   return check;
   
 }
@@ -477,26 +475,22 @@ bool Time::read_from_file(string name, File& file, string prefix){
 
   cout << prefix << name << ":\n";
   
-  //read
-  if(!(date.read_from_file(name, file, new_prefix.str()))){
-    
-    check = false;
-    
-  }else{
-    
-    if(!(chrono.read_from_file(name, file, new_prefix.str()))){
-
-      check = false;
-
-    }else{
-      
-      to_MJD();
-      print(name, prefix, cout);
-      
-    }
-    
+  //read date
+  if(!(date.read_from_file(name, file, new_prefix.str()))){ 
+    check &= false;
   }
 
+  //read chrono
+  if(!(chrono.read_from_file(name, file, new_prefix.str()))){
+    check &= false;
+  }
+
+  to_MJD();
+
+  if(check){
+    print(name, prefix, cout);
+  }
+   
   return check;
   
 }
@@ -928,9 +922,7 @@ bool Sight::read_from_file(File& file, string prefix){
   
   check &= master_clock_date_and_hour.read_from_file("master-clock date and hour of sight", file, new_prefix.str());
   if(!check){
-    
     cout << prefix << RED << "\tMaster-clock date and hour is not valid!\n" << RESET;
-    
   }
   time = master_clock_date_and_hour;
  
@@ -947,9 +939,9 @@ bool Sight::read_from_file(File& file, string prefix){
   time.add(TAI_minus_UTC);
   time.print("TAI date and hour of sight", new_prefix.str(), cout);
 
+  //check whether the date and hour of sight falls within the time window covered by JPL data files
   check &= check_data_time_interval(prefix);
   
-  //returns true only if the date and hour of sight falls within the time window covered by JPL data files
   return check;
   
 }
@@ -1059,7 +1051,7 @@ bool Plot::read_from_file(String filename, string prefix){
   
   if(!(file.open("in", prefix))){
     
-    check = false;
+    check &= false;
     
   }else{
 
@@ -1071,7 +1063,8 @@ bool Plot::read_from_file(String filename, string prefix){
     //read dummy line
     getline(file.value, line);
     pos = line.find("Points in the plot:");
-  
+
+    //if I have not find 'Points in the plot" then there is still some sight to read, and I read it
     if(pos == (string::npos)){
   
       do{
@@ -1080,8 +1073,10 @@ bool Plot::read_from_file(String filename, string prefix){
   
 	//read the sight block
 	Sight sight;
-	
-	if(sight.read_from_file(file, prefix)){
+
+	//if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
+	check &= (sight.read_from_file(file, prefix));
+	if(check){
 	  
 	  sight.reduce(prefix);
 	  sight.print("New sight", prefix, cout);
@@ -1089,13 +1084,15 @@ bool Plot::read_from_file(String filename, string prefix){
 	  sight_list.push_back(sight);
 	  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
 	  
+	}else{
+	  cout << prefix << RED << "Error reading a sight: this sight will be ignored!\n" << RESET;
 	}
 
 	line.clear();
 	getline(file.value, line);
 	pos = line.find("Points in the plot:");
  
-      }while(/*here I check whether the line_ins contains 'Sight #', which means that a block relative to a new sight starts*/ pos == (string::npos));
+      }while(/*here I check whether the line_ins contains "Points in the plot:", which means that a block relative to a new sight starts*/ pos == (string::npos));
 
     }
     
@@ -1227,11 +1224,11 @@ case 5:{
     line_ins << filename.value << ".sav"; 
     filename.value = line_ins.str();
     
-    if(read_from_file(filename, "\t")){
-      print("\t", cout);
-      show("\t");
-    }
- 
+    read_from_file(filename, "\t");
+    
+    print("\t", cout);
+    show("\t");
+    
     menu();  
 
   }

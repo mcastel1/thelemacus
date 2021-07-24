@@ -900,6 +900,7 @@ class Sight{
   
 };
 
+//this function returns true if the reading operation has been performed without errors, false otherwise
 bool Sight::read_from_file(File& file, string prefix){
 
   stringstream new_prefix;

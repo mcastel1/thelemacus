@@ -1090,17 +1090,17 @@ bool Plot::read_from_file(String filename, string prefix){
     
   }else{
 
+    //1. Here I read sights
+    
     //read dummy text line '	Sights in the plot:"
     getline(file.value, line);
 
-  
     line.clear();
     //read dummyt text line 
     getline(file.value, line);
     pos = line.find("Sight #");
 
-    //if I have not find 'Points in the plot" then there is still some sight to read, and I read it
-  
+    //if I have found 'Sight #' in the line above, then I proceed and read the relative sight
     while(pos != (string::npos)){
     
       cout << prefix << "Found new sight!\n";
@@ -1128,7 +1128,36 @@ bool Plot::read_from_file(String filename, string prefix){
       pos = line.find("Sight #");
  
     }
+
+    //2. Here I read points
+
+    line.clear();
+    //read dummy text line 
+    getline(file.value, line);
+    pos = line.find("Point #");
+
+    //if I have found 'Point #' in the line above, then I proceed and read the relative point
+    while(pos != (string::npos)){
     
+      cout << prefix << "Found new point!\n";
+  
+      //read the point block
+      Point point;
+
+      point.read_from_file(file, prefix);
+	  
+      point.print("New point", prefix, cout);
+    
+      point_list.push_back(point);
+      cout << prefix << "Point added as point #" << point_list.size() << ".\n";
+	  
+      line.clear();
+      //read dummyt text line 
+      getline(file.value, line);
+      pos = line.find("Point #");
+ 
+    }
+
     
     file.close(prefix);
 

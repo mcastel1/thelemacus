@@ -101,8 +101,12 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+replot [0.:2.*pi] xe(K*Lambda(t, 5.99267440104978454940010124119, 4.945475285879973093017270002747, 0.86912879096880457652218865405302)), ye(K*Phi(t, 5.99267440104978454940010124119, 4.945475285879973093017270002747, 0.86912879096880457652218865405302)) smo csp ti "sun 2024-02-03 07:07:35.6674883700907230377197265625 TAI"
+replot [0.:2.*pi] xe(K*Lambda(t, 0.67720818769543411619338257878553, 4.7747989481977821668579053948633, 1.1692164002683167467466773814522)), ye(K*Phi(t, 0.67720818769543411619338257878553, 4.7747989481977821668579053948633, 1.1692164002683167467466773814522)) smo csp ti "vega 2023-02-02 04:04:03.99999962188303470611572265625 TAI"
+
+replot "+" u (xe(K*(5.8986310953235019383100734557956))):(ye(K*(5.8811778028035588405941780365538))) w p  lw 2 ti "fjdsij djklsd"
+replot "+" u (xe(K*(0.66264333934051378172114254994085))):(ye(K*(2.3905192988149002175646273826715))) w p  lw 2 ti "second point! I hope that ... "
+
 
 #unset parametric
 unset multiplot
@@ -204,8 +208,7 @@ while(1){
 
 			  if(gamma_lambda == 60.0){
 			  	   i=0.0;
-				   #plot the custom-made xtics from x to the next x (x + dlambda*k)
-				   while(x + (i/10.0)*dlambda*k <  x + dlambda*k){
+			 	   while(i<10.0){
 					if(x + (i/10.0)*dlambda*k <= GPVAL_X_MAX){
 					     #set custom-made minor xtics every tenths (i/10.0) of arcminutes (1.0/60.0) 
 					     set arrow from first x + (i/10.0)*dlambda*k, graph 0 to first x + (i/10.0)*dlambda*k, graph mtics_size nohead  linecolor "blue";
@@ -253,9 +256,8 @@ while(1){
 
 		       if(gamma_phi == 60.0){
 			  	   i=0.0;
-				   #plot the custom-made ytics from phi to the next phi (phi + dphi)
-			 	   while(phi + (i/10.0)*1.0/60.0 < phi + dphi){
-					if(phi + (i/10.0)*1.0/60.0 <= phi_max){
+			 	   while(i<10.0){
+					if(phi + (i/10.0)*1.0/60. <= phi_max){
 						#set custom-made minor ytics every tenths (i/10.0) of arcminutes (1.0/60.0) 
 		       	 		       set arrow from graph 0,first ye(phi + (i/10.0)*1.0/60.0) to graph mtics_size, first ye(phi + (i/10.0)*1.0/60.0) nohead  linecolor "blue";
 					}

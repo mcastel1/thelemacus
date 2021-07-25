@@ -47,7 +47,7 @@
 - when reading Date from file, check that M variable lies in the correct interval according to the number of days of february
 - replace string with String everywhere
 - all functions ..read_from_file shouuld return a bool to signal whether the reading was successful or not
-
+- minor x and y tics should span the whole x and y axis (they don't span the beginning of the x  y axis, add a loop to do this)
 */
 
 using namespace std;

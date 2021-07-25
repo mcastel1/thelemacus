@@ -101,8 +101,12 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+replot [0.:2.*pi] xe(K*Lambda(t, 5.99267440104978454940010124119, 4.945475285879973093017270002747, 0.86912879096880457652218865405302)), ye(K*Phi(t, 5.99267440104978454940010124119, 4.945475285879973093017270002747, 0.86912879096880457652218865405302)) smo csp ti "sun 2024-02-03 07:07:35.6674883700907230377197265625 TAI"
+replot [0.:2.*pi] xe(K*Lambda(t, 0.67720818769543411619338257878553, 4.7747989481977821668579053948633, 1.1692164002683167467466773814522)), ye(K*Phi(t, 0.67720818769543411619338257878553, 4.7747989481977821668579053948633, 1.1692164002683167467466773814522)) smo csp ti "vega 2023-02-02 04:04:03.99999962188303470611572265625 TAI"
+
+replot "+" u (xe(K*(5.8986310953235019383100734557956))):(ye(K*(5.8811778028035588405941780365538))) w p  lw 2 ti "fjdsij djklsd"
+replot "+" u (xe(K*(0.66264333934051378172114254994085))):(ye(K*(0.64519004682057057298294466818334))) w p  lw 2 ti "second point! I hope that ... "
+
 
 #unset parametric
 unset multiplot
@@ -187,8 +191,11 @@ while(1){
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	x = xe(lambda);
 	while(x <= GPVAL_X_MAX){
+	#I use the following identities for lambda and the fact that delta = floor(delta) to obtain a value of lambda which is exacly an 'integer multiple' of dllambda, so as to avoid xlabels of the form '10 degrees 0'
+	#delta = (lambda - (int(lambda_min/dlambda))*dlambda)/dlambda;
+	#delta = floor(delta) because delta is an integer, and lambda = delta * dlambda + int(lambda_min/dlambda)*dlambda = floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda )*dlambda + int(lambda_min/dlambda)*dlambda ; 
  
-		lambda = lambda_inv(x);
+		lambda = floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda )*dlambda + int(lambda_min/dlambda)*dlambda;
 
 		if(x >= GPVAL_X_MIN){
 
@@ -201,10 +208,10 @@ while(1){
 			  if(gamma_lambda == 60.0){
 			  	   i=0.0;
 				   #plot the custom-made xtics from x to the next x (x + dlambda*k)
-				   while(x + (i/10.0)*1.0/60.0*k <  x + dlambda*k){
-					if(x + (i/10.0)*1.0/60.0*k <= GPVAL_X_MAX){
+				   while(x + (i/10.0)*dlambda*k <  x + dlambda*k){
+					if(x + (i/10.0)*dlambda*k <= GPVAL_X_MAX){
 					     #set custom-made minor xtics every tenths (i/10.0) of arcminutes (1.0/60.0) 
-					     set arrow from first x + (i/10.0)*1.0/60.0*k, graph 0 to first x + (i/10.0)*1.0/60.0*k, graph mtics_size nohead  linecolor "blue";
+					     set arrow from first x + (i/10.0)*dlambda*k, graph 0 to first x + (i/10.0)*dlambda*k, graph mtics_size nohead  linecolor "blue";
 					}
 					i=i+1.0;
 			 	   }

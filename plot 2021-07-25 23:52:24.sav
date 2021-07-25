@@ -101,8 +101,9 @@ set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fi
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+replot [0.:2.*pi] xe(K*Lambda(t, 6.1572889974161144621689345513005, 5.9726369694469045867890599765815, 0.80780153755744610322153675951995)), ye(K*Phi(t, 6.1572889974161144621689345513005, 5.9726369694469045867890599765815, 0.80780153755744610322153675951995)) smo csp ti "sun 2023-03-02 11:01:27.695007096044719219207763671875 TAI"
+
+
 
 #unset parametric
 unset multiplot

@@ -1,0 +1,32 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type = sun
+			Name = sun
+			Radius = 375648 nm.
+		limb = u
+		sextant altitude = 89° 2'
+		index error = 1° 2'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2023-03-02
+			hour of master-clock date and hour of sight = 02:03:02.3425434599999999107922121766023
+		use of stopwatch = y
+		hour of stopwatch = 05:04:22
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 03:54:03.3524633499999998420548763533588
+	Sight #2:
+		body:
+			Type = sun
+			Name = sun
+			Radius = 375648 nm.
+		limb = u
+		sextant altitude = 89° 2'
+		index error = 1° 2'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2023-03-02
+			hour of master-clock date and hour of sight = 02:03:02.3425434599999999107922121766023
+		use of stopwatch = y
+		hour of stopwatch = 05:04:22
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 03:54:03.3524633499999998420548763533588
+Points in the plot:

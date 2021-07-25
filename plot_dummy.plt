@@ -109,7 +109,7 @@ x_max_old = 0.0;
 
 while(1){
 
-	if(GPVAL_DATA_X_MAX!=x_max_old){
+	if(GPVAL_X_MAX!=x_max_old){
 
 
 	unset arrow;
@@ -118,23 +118,23 @@ while(1){
 
 	#print "Recalculating tics ... ";
 
-	lambda_min = lambda_inv(GPVAL_DATA_X_MIN);
-	lambda_max = lambda_inv(GPVAL_DATA_X_MAX);
+	lambda_min = lambda_inv(GPVAL_X_MIN);
+	lambda_max = lambda_inv(GPVAL_X_MAX);
 	
-	phi_min = phi_inv(GPVAL_DATA_Y_MIN);
-	phi_max = phi_inv(GPVAL_DATA_Y_MAX);
+	phi_min = phi_inv(GPVAL_Y_MIN);
+	phi_max = phi_inv(GPVAL_Y_MAX);
 
 	set xrange [xe(lambda_min):xe(lambda_max)]
 	set yrange [ye(phi_min):ye(phi_max)]
 
 	phi_span = phi_max - phi_min;
-	lambda_span = -(-(GPVAL_DATA_X_MAX - GPVAL_DATA_X_MIN)*K);
+	lambda_span = -(-(GPVAL_X_MAX - GPVAL_X_MIN)*K);
 	
 	#print "lambda in [" , lambda_min , " , " , lambda_max , "]";
 	#print "phi in [" , phi_min , " , " , phi_max , "]";
 
-	#print "x in [" , GPVAL_DATA_X_MIN , " , " , GPVAL_DATA_X_MAX , "]";
-	#print "y in [" , GPVAL_DATA_Y_MIN , " , " , GPVAL_DATA_Y_MAX , "]";
+	#print "x in [" , GPVAL_X_MIN , " , " , GPVAL_X_MAX , "]";
+	#print "y in [" , GPVAL_Y_MIN , " , " , GPVAL_Y_MAX , "]";
 
 
 	#print "Determining dlambda ...";
@@ -184,7 +184,7 @@ while(1){
 
 	lambda= (int(lambda_min/dlambda))*dlambda;
 	x = xe(lambda);
-	while(x <= GPVAL_DATA_X_MAX){
+	while(x <= GPVAL_X_MAX){
 	#I use the following identities for lambda and the fact that delta = floor(delta) to obtain a value of lambda which is exacly an 'integer multiple' of dllambda, so as to avoid xlabels of the form '10 degrees 0'
 	#delta = (lambda - (int(lambda_min/dlambda))*dlambda)/dlambda;
 	#delta = floor(delta) because delta is an integer, and lambda = delta * dlambda + int(lambda_min/dlambda)*dlambda = ( floor(delta) + int(lambda_min/dlambda) ) * dlambda =
@@ -192,7 +192,7 @@ while(1){
  
 		lambda = ( floor( (lambda_inv(x) - (int(lambda_min/dlambda))*dlambda)/dlambda ) + int(lambda_min/dlambda) ) * dlambda;
 
-		if(x >= GPVAL_DATA_X_MIN){
+		if(x >= GPVAL_X_MIN){
 
 		          if(is_int(lambda) == 1){
 		       		      set xtics add (label_deg(lambda) x);
@@ -255,7 +255,7 @@ while(1){
 
 
 	refresh;
-	x_max_old = GPVAL_DATA_X_MAX;
+	x_max_old = GPVAL_X_MAX;
 
 	}
 

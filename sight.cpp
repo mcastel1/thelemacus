@@ -47,6 +47,7 @@
 - when reading Date from file, check that M variable lies in the correct interval according to the number of days of february
 - replace string with String everywhere
 - all functions ..read_from_file shouuld return a bool to signal whether the reading was successful or not
+- add a label String to sight object, to write notes about the sight 
 */
 
 using namespace std;

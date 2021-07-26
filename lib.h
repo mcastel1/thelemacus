@@ -12,6 +12,7 @@
 //one nautical mile in kilometers
 #define nm 1.852
 #define RED     "\033[1;31m"      /* Red */
+#define YELLOW     "\033[1;33m"      /* Red */
 #define RESET   "\033[0m"
 //all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
@@ -206,7 +207,11 @@ void String::enter(string name, string prefix){
 
   
   cout << prefix << "Enter " << name << ":";
-  getline(cin >> ws, value);
+  getline(cin, value);
+
+  if(value.empty()){
+    cout << prefix << YELLOW << "Entered an empty " << name << ".\n" << RESET;
+  }
 
   print(name, prefix, cout);
 

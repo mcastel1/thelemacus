@@ -1,4 +1,7 @@
-#define my_precision 32
+//this is the high precision used for storing data and making calculations with it 
+#define data_precision 32
+//this is the low precision used for displaying data
+#define display_precision 2
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
@@ -158,7 +161,7 @@ class File{
 
 File::File(){
 
-  value.precision(my_precision);
+  value.precision(data_precision);
   
 }
 
@@ -1373,8 +1376,8 @@ Plot::Plot(Catalog* cata){
   catalog = cata;
   job_id = -1;
 
-  plot_command.precision(my_precision);
-  command.precision(my_precision);
+  plot_command.precision(data_precision);
+  command.precision(data_precision);
 
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
@@ -2396,7 +2399,7 @@ stringstream Chrono::to_string(void){
 
   stringstream output;
   
-  output.precision(my_precision);
+  output.precision(data_precision);
   
   if(h<10){output << 0;}
   output << h << ":";

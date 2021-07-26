@@ -144,7 +144,8 @@ class File{
   fstream value;
   String name;
   unsigned int number_of_lines;
-  
+
+  File();
   void set_name(string);
   void enter_name(string);
   int open(string, string);
@@ -154,6 +155,12 @@ class File{
   
 };
 
+
+File::File(){
+
+  value.precision(my_precision);
+  
+}
 
 void String::read_from_file(string name, File& file, string prefix){
 

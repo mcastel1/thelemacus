@@ -1100,7 +1100,7 @@ bool Plot::read_from_file(String filename, string prefix){
  
   file.set_name(filename.value);
   
-  if(!(file.open("in", prefix))){
+  if(!(file.open("in", new_prefix.str()))){
     
     check &= false;
     
@@ -1119,22 +1119,22 @@ bool Plot::read_from_file(String filename, string prefix){
     //if I have found 'Sight #' in the line above, then I proceed and read the relative sight
     while(pos != (string::npos)){
     
-      cout << prefix << "Found new sight!\n";
+      cout << new_prefix.str() << "Found new sight!\n";
   
       //read the sight block
       Sight sight;
 
       //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
-      check &= (sight.read_from_file(file, prefix));
+      check &= (sight.read_from_file(file, new_prefix.str()));
       if(check){
 	  
-	check &= (sight.reduce(prefix));
+	check &= (sight.reduce(new_prefix.str()));
 
 	if(check){
-	  sight.print("New sight", prefix, cout);
+	  sight.print("New sight", new_prefix.str(), cout);
     
 	  sight_list.push_back(sight);
-	  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+	  cout << new_prefix.str() << "Sight added as sight #" << sight_list.size() << ".\n";
 	}
 	  
       }
@@ -1156,17 +1156,17 @@ bool Plot::read_from_file(String filename, string prefix){
     //if I have found 'Point #' in the line above, then I proceed and read the relative point
     while(pos != (string::npos)){
     
-      cout << prefix << "Found new point!\n";
+      cout << new_prefix.str() << "Found new point!\n";
   
       //read the point block
       Point point;
 
-      point.read_from_file(file, prefix);
+      point.read_from_file(file, new_prefix.str());
 	  
-      point.print("New point", prefix, cout);
+      point.print("New point", new_prefix.str(), cout);
     
       point_list.push_back(point);
-      cout << prefix << "Point added as point #" << point_list.size() << ".\n";
+      cout << new_prefix.str() << "Point added as point #" << point_list.size() << ".\n";
 	  
       line.clear();
       //read dummyt text line 
@@ -1176,7 +1176,7 @@ bool Plot::read_from_file(String filename, string prefix){
     }
 
     
-    file.close(prefix);
+    file.close(new_prefix.str());
 
   }
 
@@ -2022,6 +2022,8 @@ bool Sight::compute_DH_refraction(string prefix){
   
 
   status = gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
+  //status = GSL_FAILURE
+
   if(status == GSL_SUCCESS){
     DH_refraction.set("refraction correction", result, prefix);
   }else{

@@ -2189,8 +2189,14 @@ void Sight::get_coordinates(string prefix){
 	cout << new_prefix.str() << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
+      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.lambda).value)) != GSL_SUCCESS){
+	check &= false; 
+      }else{
+	(GP.lambda).normalize();
+	(GP.lambda).print("GHA", new_prefix.str(), cout);
+      }	
+      //(GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
       
-      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
       (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
       r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
 

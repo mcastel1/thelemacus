@@ -1180,6 +1180,10 @@ bool Plot::read_from_file(String filename, string prefix){
 
   }
 
+  if(!check){
+    cout << prefix << RED << "There was an error while reading file!\n" << RESET;
+  }
+  
   return check;
   
 }
@@ -1304,10 +1308,8 @@ case 5:{
     line_ins << filename.value << ".sav"; 
     filename.value = line_ins.str();
     
-    if(!read_from_file(filename, "\t")){
-      cout << RED << "There was an error while reading file!\n" << RESET;
-    }
-    
+    read_from_file(filename, "\t");
+        
     print("\t", cout);
     show("\t");
     

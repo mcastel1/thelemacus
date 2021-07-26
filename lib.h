@@ -919,7 +919,8 @@ class Sight{
   Body body;
   Limb limb;
   // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading
-  Answer artificial_horizon, use_stopwatch; 
+  Answer artificial_horizon, use_stopwatch;
+  String label;
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -1556,6 +1557,8 @@ void Sight::enter(Catalog catalog, string name, string prefix){
     time.print("TAI date and hour of sight", new_prefix.str(), cout);
 
   }while(!check_data_time_interval(prefix));
+
+  label.enter("label", new_prefix.str());
 
 }
 

@@ -2102,8 +2102,8 @@ void Sight::get_coordinates(string prefix){
   int l, l_min, l_max;
   double MJD_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
-  gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)),
-    *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
+  gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)), *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
+  bool check = true;
  
   new_prefix << "\t" << prefix;    
   

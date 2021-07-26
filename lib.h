@@ -2179,9 +2179,9 @@ void Sight::get_coordinates(string prefix){
 	GHA_tab[l+1] += sum;
       }
 
-      gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N);
-      gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N);
-      gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)N);
+      if(gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;};
+      if(gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
+      if(gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
 
   
       cout << new_prefix.str() << "Read values:\n";

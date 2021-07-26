@@ -273,6 +273,7 @@ class Point{
  public:
   //latitude and longitude of the point
   Angle phi, lambda;
+  //label to add a note about the point
   String label;
   
   void enter(string, string);
@@ -920,6 +921,7 @@ class Sight{
   Limb limb;
   // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading
   Answer artificial_horizon, use_stopwatch;
+  //label to add a note about the sight
   String label;
 
   Sight();
@@ -982,6 +984,8 @@ bool Sight::read_from_file(File& file, string prefix){
 
   //check whether the date and hour of sight falls within the time window covered by JPL data files
   check &= check_data_time_interval(prefix);
+
+  label.read_from_file("label", file, new_prefix.str());
   
   return check;
   

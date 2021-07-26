@@ -329,7 +329,7 @@ class Chrono{
   void print(string, string, ostream&);
   void enter(string, string);
   bool read_from_file(string, File&, string);
-  stringstream to_string(void);
+  stringstream to_string(unsigned int);
 
 };
 
@@ -416,7 +416,7 @@ class Time{
   void to_TAI(void);
   void add(Chrono);
   
-  stringstream to_string(void);
+  stringstream to_string(unsigned int);
   
 };
 
@@ -1507,7 +1507,7 @@ void Plot::show(string prefix){
   
   plot_command.str("");
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
-    plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string().str().c_str() << " TAI\"\\\n";
+    plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
   }  
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> plot_temp.plt \n";
@@ -2395,11 +2395,11 @@ void Limb::print(string name, string prefix, ostream& ostr){
 
 
 
-stringstream Chrono::to_string(void){
+stringstream Chrono::to_string(unsigned int precision){
 
   stringstream output;
   
-  output.precision(data_precision);
+  output.precision(precision);
   
   if(h<10){output << 0;}
   output << h << ":";
@@ -2464,10 +2464,18 @@ stringstream Date::to_string(void){
 
 void Chrono::print(string name, string prefix, ostream& ostr){
 
-  ostr << prefix << "hour of " << name << " = " << to_string().str().c_str() << "\n";
+  unsigned int precision;
+
+  //if I am printing to terminal, I print with display_precision. Otherwise, I print with data_precision
+  if(ostr.rdbuf() == cout.rdbuf()){
+    precision = display_precision;
+  }else{
+    precision = data_precision;
+  }
+  
+  ostr << prefix << "hour of " << name << " = " << to_string(precision).str().c_str() << "\n";
 
 };
-
 void Chrono::enter(string name, string prefix) {
 
   stringstream new_prefix;
@@ -2485,11 +2493,11 @@ void Chrono::enter(string name, string prefix) {
 
 
 
-stringstream Time::to_string(void){
+stringstream Time::to_string(unsigned int precision){
 
   stringstream output;
 
-  output << date.to_string().str() << " " << chrono.to_string().str();
+  output << date.to_string().str() << " " << chrono.to_string(precision).str();
  
   return output;
   

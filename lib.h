@@ -928,16 +928,16 @@ class Sight{
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
   void get_coordinates(string);
   void compute_DH_dip(string);
-  void compute_DH_refraction(string);
+  bool compute_DH_refraction(string);
   void compute_DH_parallax_and_limb(string);
 
   void compute_H_a(string);
-  void compute_H_o(string);
+  bool compute_H_o(string);
 
   void enter(Catalog, string, string);
   void print(string, string, ostream&);
   bool read_from_file(File&, string);
-  void reduce(string);
+  bool reduce(string);
   bool check_data_time_interval(string);
   
 };
@@ -986,6 +986,10 @@ bool Sight::read_from_file(File& file, string prefix){
   check &= check_data_time_interval(prefix);
 
   label.read_from_file("label", file, new_prefix.str());
+
+  if(!check){
+    cout << prefix << RED << "Error reading sight!\n" << RESET;
+  }
   
   return check;
   
@@ -1071,7 +1075,7 @@ class Plot{
 
   Plot(Catalog*);
   //~Plot();
-  void add_sight(string);
+  bool add_sight(string);
   void add_point(string);
   void remove_sight(unsigned int);
   void remove_point(unsigned int);
@@ -1124,16 +1128,17 @@ bool Plot::read_from_file(String filename, string prefix){
       check &= (sight.read_from_file(file, prefix));
       if(check){
 	  
-	sight.reduce(prefix);
-	sight.print("New sight", prefix, cout);
-    
-	sight_list.push_back(sight);
-	cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
-	  
-      }else{
-	cout << prefix << RED << "Error reading a sight: this sight will be ignored!\n" << RESET;
-      }
+	check &= (sight.reduce(prefix));
 
+	if(check){
+	  sight.print("New sight", prefix, cout);
+    
+	  sight_list.push_back(sight);
+	  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+	}
+	  
+      }
+      
       line.clear();
       //read dummyt text line 
       getline(file.value, line);
@@ -1299,7 +1304,9 @@ case 5:{
     line_ins << filename.value << ".sav"; 
     filename.value = line_ins.str();
     
-    read_from_file(filename, "\t");
+    if(!read_from_file(filename, "\t")){
+      cout << RED << "There was an error while reading file!\n" << RESET;
+    }
     
     print("\t", cout);
     show("\t");
@@ -1401,18 +1408,23 @@ void Plot::print(string prefix, ostream& ostr){
 
 }
 
-void Plot::add_sight(string prefix){
+bool Plot::add_sight(string prefix){
 
   Sight sight;
+  bool check = true;
   
   sight.enter((*catalog), "new sight", prefix);
-  sight.reduce(prefix);
-  sight.print("Sight", prefix, cout);
+  check &= (sight.reduce(prefix));
+
+  if(check){
+    sight.print("Sight", prefix, cout);
   
-  sight_list.push_back(sight);
-  cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+    sight_list.push_back(sight);
+    cout << prefix << "Sight added as sight #" << sight_list.size() << ".\n";
+  }
 
-
+  return check;
+  
 }
 
 void Plot::add_point(string prefix){
@@ -1568,15 +1580,22 @@ void Sight::enter(Catalog catalog, string name, string prefix){
 
 }
 
-void Sight::reduce(string prefix){
+bool Sight::reduce(string prefix){
 
   stringstream new_prefix;
+  bool check = true;
   
   new_prefix << prefix << "\t";
   
   compute_H_a(new_prefix.str());
   get_coordinates(new_prefix.str());
-  compute_H_o(new_prefix.str());
+  check &= compute_H_o(new_prefix.str());
+
+  if(!check){
+     cout << prefix << RED << "Sight cannot be reduced!\n" << RESET;
+  }
+
+  return check;
   
 }
 
@@ -1596,16 +1615,24 @@ void Sight::compute_H_a(string prefix){
 }
 
 
-void Sight::compute_H_o(string prefix){
+bool Sight::compute_H_o(string prefix){
 
   stringstream new_prefix;
+  bool check = true;
   
   new_prefix << prefix << "\t";
  
-  compute_DH_refraction(new_prefix.str());
-  compute_DH_parallax_and_limb(new_prefix.str());
-  H_o = H_a + DH_refraction + DH_parallax_and_limb;
-  H_o.print("observed altitude", new_prefix.str(), cout);
+  check &= compute_DH_refraction(new_prefix.str());
+
+  if(check){
+    compute_DH_parallax_and_limb(new_prefix.str());
+    H_o = H_a + DH_refraction + DH_parallax_and_limb;
+    H_o.print("observed altitude", new_prefix.str(), cout);
+  }else{
+     cout << prefix << RED << "H_o cannot be computed!\n" << RESET;
+  }
+
+  return check;
   
 }
 
@@ -1973,11 +2000,13 @@ void Sight::compute_DH_dip(string prefix){
 }
 
 
-void Sight::compute_DH_refraction(string prefix){
+bool Sight::compute_DH_refraction(string prefix){
 
   gsl_integration_workspace * w = gsl_integration_workspace_alloc (1000);
   gsl_function F;
   double result, error;
+  int status;
+  bool check = true;
 
 
 
@@ -1990,11 +2019,18 @@ void Sight::compute_DH_refraction(string prefix){
 
   
 
-  gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
-  DH_refraction.set("refraction correction", result, prefix);
+  status = gsl_integration_qags (&F, (atmosphere.h)[(atmosphere.h).size()-1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
+  if(status == GSL_SUCCESS){
+    DH_refraction.set("refraction correction", result, prefix);
+  }else{
+    check &= false;
+    cout << prefix << RED << "GSL integration failed!\n" << RESET;
+  }
   
   gsl_integration_workspace_free(w);
-
+  
+  return check;
+  
 }
 
 void Length::set(string name, double x, string prefix){

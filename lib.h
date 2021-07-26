@@ -1050,6 +1050,8 @@ void Sight::print(string name, string prefix, ostream& ostr){
   }
   TAI_minus_UTC.print("TAI - UTC at time of master-clock synchronization with UTC", new_prefix.str(), ostr);
 
+  label.print("label", new_prefix.str(), ostr);
+
 }
 
 class Plot{

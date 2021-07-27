@@ -1621,12 +1621,8 @@ void Plot::show(string prefix){
       while((status == GSL_CONTINUE) && (iter < max_iter));
 
       t_m.value = (x_lo+x_hi)/2.0;
-      //t_p is  determined from t_m: The result depends on whether we are in the first or second case of the if() above. 
-      if((sight_list[i]).GP.lambda.value < M_PI){
-	t_p.value = M_PI - (t_m.value);
-      }else{
-	t_p.value = 2.0*M_PI - (t_m.value);
-      }
+      //t_p is  determined from t_m 
+      t_p.value = M_PI - (t_m.value);
       
       t_p.print("t_+", new_prefix.str(), cout);
       t_m.print("t_-", new_prefix.str(), cout);

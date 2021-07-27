@@ -1558,6 +1558,15 @@ void Plot::show(string prefix){
 
     if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
       cout << prefix << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
+
+      if((sight_list[i]).GP.lambda.value < M_PI){
+	//in this case, the two values of t, t+ and t-, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+
+	
+      }else{
+	//in this case, the two values of t, t+ and t-, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
+
+      }
     }
     
     plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";

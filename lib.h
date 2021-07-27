@@ -1600,7 +1600,7 @@ void Plot::show(string prefix){
       //solve to determine t_m
       
       cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
-      cout << new_prefix.str() << "iter" <<  "[lower" <<  ", upper] " <<  "root " <<  "err " <<  "err(est)\n";
+      cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
 
       iter = 0;
 
@@ -1807,7 +1807,7 @@ void Sight::compute_DH_parallax_and_limb(string prefix){
  
 	cout << new_prefix.str() << "Using " << gsl_root_fsolver_name(s) << " method\n";
 	
-	cout << new_prefix.str() << "iter" <<  "[lower" <<  ", upper] " <<  "root " <<  "err " <<  "err(est)\n";
+	cout << new_prefix.str() << "iter" <<  "[lower" <<  ", upper] " <<  "root " << "err(est)\n";
 	
 	iter = 0;
 	do{

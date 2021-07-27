@@ -949,7 +949,7 @@ class Sight{
   String label;
 
   Sight();
-  static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
+  static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*), lambda_circle_of_equal_altitude_minus_pi(double, void*);
   bool get_coordinates(string);
   void compute_DH_dip(string);
   bool compute_DH_refraction(string);
@@ -1520,8 +1520,19 @@ void Plot::show(string prefix){
   stringstream line_ins, new_prefix;
   string line;
   unsigned int i;
-  Angle t_min, t_max;
+  Angle t_min, t_max, t_p, t_m;
   Point p_min, p_max;
+  int status, iter = 0;
+  double x, x_lo, x_hi;
+  gsl_function F;
+  const gsl_root_fsolver_type *T;
+  gsl_root_fsolver *s;
+
+  
+  T = gsl_root_fsolver_brent;
+  s = gsl_root_fsolver_alloc (T);
+
+
 
   new_prefix << prefix << "\t";
 
@@ -1546,6 +1557,8 @@ void Plot::show(string prefix){
 
     cout << "Sight # " << i+1 << "\n";
 
+
+
     //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
     t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
     t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
@@ -1560,13 +1573,55 @@ void Plot::show(string prefix){
       cout << prefix << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
 
       if((sight_list[i]).GP.lambda.value < M_PI){
-	//in this case, the two values of t, t+ and t-, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+	//here I select an interval where I know that there will be t_m
+	x_lo = 0.0;
+	x_hi = (t_max.value);
 
-	
       }else{
-	//in this case, the two values of t, t+ and t-, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
-
+	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
+	//here I select an interval where I know that there will be t_m
+	x_lo = M_PI;
+	x_hi = (t_min.value);
+	
       }
+
+      F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
+      F.params = &(sight_list[i]);
+      gsl_root_fsolver_set(s, &F, x_lo, x_hi);
+
+      cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
+      cout << new_prefix.str() << "iter" <<  "[lower" <<  ", upper] " <<  "root " <<  "err " <<  "err(est)\n";
+
+      iter = 0;
+
+      do{
+      
+	iter++;
+	status = gsl_root_fsolver_iterate(s);
+      
+	x = gsl_root_fsolver_root(s);
+	x_lo = gsl_root_fsolver_x_lower(s);
+	x_hi = gsl_root_fsolver_x_upper(s);
+	status = gsl_root_test_interval(x_lo, x_hi, 0.0, epsrel);
+	if(status == GSL_SUCCESS){
+	  cout << new_prefix.str() << "Converged:\n";
+	}
+	cout << new_prefix.str() << iter << " [" << x_lo << ", " << x_hi << "] " << x << " " << x_hi-x_lo << "\n";
+      }
+      while((status == GSL_CONTINUE) && (iter < max_iter));
+
+      t_m.value = (x_lo+x_hi)/2.0;
+      //t_p is easily determined as a function of t_m. The result depends on whether we are in the first or second case of the if() above. 
+      if((sight_list[i]).GP.lambda.value < M_PI){
+	t_p.value = M_PI - (t_m.value);
+      }else{
+	t_p.value = 2.0*M_PI - (t_m.value);
+      }
+      
+      t_p.print("t_+", new_prefix.str(), cout);
+      t_m.print("t_-", new_prefix.str(), cout);
+      
     }
     
     plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
@@ -1759,7 +1814,7 @@ void Sight::compute_DH_parallax_and_limb(string prefix){
 	    cout << new_prefix.str() << "Converged.\n";
 	  }
 	  cout << new_prefix.str() << iter << " [" << x_lo << ", " << x_hi << "] " << x << " " << x_hi-x_lo << "\n";
-	  //printf("%5d [%.7f, %.7f] %.7f %+.7f\n", iter, x_lo, x_hi, x, x_hi - x_lo);
+
 	}
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
@@ -1937,6 +1992,18 @@ double Sight::dH_refraction(double z, void* sight){
   zero_Length.value = 0.0;
   
   return( -(((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n(zero_Length))*cos(((*a).H_a).value)*(((*a).atmosphere).dndz)(z_Length)/(((*a).atmosphere).n)(z_Length)/sqrt(gsl_pow_2(((((*a).atmosphere).earth_radius.value)+z)*(((*a).atmosphere).n)(z_Length))-gsl_pow_2((((*a).atmosphere).earth_radius.value)*(((*a).atmosphere).n)(zero_Length)*cos(((*a).H_a).value))));
+
+  
+}
+
+double Sight::lambda_circle_of_equal_altitude_minus_pi(double x, void* sight){
+
+  Sight* a = (Sight*)sight;
+  
+  Angle t;
+  (t.value) = x;
+  
+  return(((*a).circle_of_equal_altitude(t).lambda.value) - M_PI);
 
   
 }

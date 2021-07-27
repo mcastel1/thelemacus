@@ -1556,8 +1556,8 @@ void Plot::show(string prefix){
     p_max.print("p_max", new_prefix.str(), cout);
     p_min.print("p_min", new_prefix.str(), cout);
 
-    if((p_min.lambda.value < M_PI) && (p_max.lambda.value > M_PI)){
-      cout << prefix << YELLOW << "Circle of equal altitude is cut!" << RESET;
+    if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
+      cout << prefix << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
     }
     
     plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";

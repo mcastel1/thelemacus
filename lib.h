@@ -1571,6 +1571,7 @@ void Plot::show(string prefix){
 
     if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
       cout << prefix << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
+      //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
 
       if((sight_list[i]).GP.lambda.value < M_PI){
 	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
@@ -1590,6 +1591,9 @@ void Plot::show(string prefix){
       F.params = &(sight_list[i]);
       gsl_root_fsolver_set(s, &F, x_lo, x_hi);
 
+
+      //solve to determine t_m
+      
       cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
       cout << new_prefix.str() << "iter" <<  "[lower" <<  ", upper] " <<  "root " <<  "err " <<  "err(est)\n";
 
@@ -1612,7 +1616,7 @@ void Plot::show(string prefix){
       while((status == GSL_CONTINUE) && (iter < max_iter));
 
       t_m.value = (x_lo+x_hi)/2.0;
-      //t_p is easily determined as a function of t_m. The result depends on whether we are in the first or second case of the if() above. 
+      //t_p is  determined from t_m: The result depends on whether we are in the first or second case of the if() above. 
       if((sight_list[i]).GP.lambda.value < M_PI){
 	t_p.value = M_PI - (t_m.value);
       }else{

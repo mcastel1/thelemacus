@@ -1502,6 +1502,7 @@ void Plot::show(string prefix){
   stringstream line_ins;
   string line;
   unsigned int i;
+  Angle t_min, t_max;
 
   //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped. 
   if(job_id != -1){
@@ -1521,6 +1522,10 @@ void Plot::show(string prefix){
   
   plot_command.str("");
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
+
+    t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), prefix);
+    t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), prefix);
+    
     plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
   }  
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude

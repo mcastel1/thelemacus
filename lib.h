@@ -1,7 +1,7 @@
 //this is the high precision used for storing data and making calculations with it 
 #define data_precision 32
 //this is the low precision used for displaying data
-#define display_precision 4
+#define display_precision 8
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
@@ -1573,15 +1573,19 @@ void Plot::show(string prefix){
       cout << prefix << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
       //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
 
-      if((sight_list[i]).GP.lambda.value < M_PI){
+      if((sight_list[i]).GP.lambda.value > M_PI){
 	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
 	//here I select an interval where I know that there will be t_m
+
+	cout << prefix << "Case I:\n";
 	x_lo = 0.0;
 	x_hi = (t_max.value);
 
       }else{
 	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
 	//here I select an interval where I know that there will be t_m
+
+	cout << prefix << "Case II:\n";
 	x_lo = M_PI;
 	x_hi = (t_min.value);
 	
@@ -1591,7 +1595,8 @@ void Plot::show(string prefix){
       F.params = &(sight_list[i]);
       gsl_root_fsolver_set(s, &F, x_lo, x_hi);
 
-
+      cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo) << " " << GSL_FN_EVAL(&F,x_hi) << "\n";
+      
       //solve to determine t_m
       
       cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
@@ -2007,7 +2012,7 @@ double Sight::lambda_circle_of_equal_altitude_minus_pi(double x, void* sight){
   Angle t;
   (t.value) = x;
   
-  return(((*a).circle_of_equal_altitude(t).lambda.value) - M_PI);
+  return((((*a).circle_of_equal_altitude(t)).lambda.value) - M_PI);
 
   
 }

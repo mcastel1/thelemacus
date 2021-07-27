@@ -94,15 +94,16 @@ label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprin
 
 
 #GPS position
-lambda0 = 360.0 -(2.0 + 24./60. + 26.07/(60.**2.))
-phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
-set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
+#lambda0 = 360.0 -(2.0 + 24./60. + 26.07/(60.**2.))
+#phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
+#set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
 
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
 #sight_plots
 #point_plots
+
 
 #unset parametric
 unset multiplot
@@ -293,8 +294,15 @@ while(1){
 	}
 
 
+	clear;
 
-	refresh;
+	set multiplot	
+	#coastlines
+	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
+
+	#sight_plots
+	#point_plots
+
 	x_max_old = GPVAL_X_MAX;
 
 	}

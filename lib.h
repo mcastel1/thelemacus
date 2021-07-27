@@ -1517,10 +1517,13 @@ void Plot::remove_point(unsigned int i){
 
 void Plot::show(string prefix){
 
-  stringstream line_ins;
+  stringstream line_ins, new_prefix;
   string line;
   unsigned int i;
   Angle t_min, t_max;
+  Point p_min, p_max;
+
+  new_prefix << prefix << "\t";
 
   //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped. 
   if(job_id != -1){
@@ -1541,8 +1544,21 @@ void Plot::show(string prefix){
   plot_command.str("");
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
 
-    t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), prefix);
-    t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), prefix);
+    cout << "Sight # " << i+1 << "\n";
+
+    //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
+    t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
+    t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
+
+    p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
+    p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
+
+    p_max.print("p_max", new_prefix.str(), cout);
+    p_min.print("p_min", new_prefix.str(), cout);
+
+    if((p_min.lambda.value < M_PI) && (p_max.lambda.value > M_PI)){
+      cout << prefix << YELLOW << "Circle of equal altitude is cut!" << RESET;
+    }
     
     plot_command << "replot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
   }  

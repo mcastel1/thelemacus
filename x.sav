@@ -3,10 +3,10 @@
 			body:
 				Type = moon
 				Name = moon
-				Radius = 938.12099999999998090061126276851 nm.
+				Radius = 938.121 nm.
 			limb = u
-			sextant altitude = 47° 57.799999999999869260136620141566'
-			index error = 0° 1.8999999999999996891375531049562'
+			sextant altitude = 47° 57.8'
+			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
 				date of master-clock date and hour of sight = 2021-06-21
@@ -19,10 +19,10 @@
 			body:
 				Type = moon
 				Name = moon
-				Radius = 938.12099999999998090061126276851 nm.
+				Radius = 938.121 nm.
 			limb = u
-			sextant altitude = 47° 13.500000000000085265128291212022'
-			index error = 0° 1.8999999999999996891375531049562'
+			sextant altitude = 47° 13.5'
+			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
 				date of master-clock date and hour of sight = 2021-06-21
@@ -35,10 +35,10 @@
 			body:
 				Type = star
 				Name = arcturus
-				Right ascension = 213° 54.79890000000068539520725607872'
-				Declination = 19° 10.694899999999947226569929625839'
-			sextant altitude = 67° 13.399999999999749888957012444735'
-			index error = 0° 1.8999999999999996891375531049562'
+				Right ascension = 213° 54.7989'
+				Declination = 19° 10.6949'
+			sextant altitude = 67° 13.4'
+			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
 				date of master-clock date and hour of sight = 2021-07-06
@@ -53,8 +53,8 @@
 				Name = sun
 				Radius = 375648 nm.
 			limb = l
-			sextant altitude = 53° 16.800000000000068212102632969618'
-			index error = 0° 1.8999999999999996891375531049562'
+			sextant altitude = 53° 16.8'
+			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
 				date of master-clock date and hour of sight = 2021-07-08
@@ -69,8 +69,8 @@
 				Name = sun
 				Radius = 375648 nm.
 			limb = u
-			sextant altitude = 54° 28.60000000000042064129956997931'
-			index error = 0° 1.8999999999999996891375531049562'
+			sextant altitude = 54° 28.6'
+			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
 				date of master-clock date and hour of sight = 2021-07-20
@@ -85,8 +85,8 @@
 				Name = sun
 				Radius = 375648 nm.
 			limb = u
-			sextant altitude = 56° 12.900000000000204636307898908854'
-			index error = 0° 1.8999999999999996891375531049562'
+			sextant altitude = 56° 12.9'
+			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
 				date of master-clock date and hour of sight = 2021-07-20

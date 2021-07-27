@@ -950,7 +950,7 @@ class Sight{
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
-  void get_coordinates(string);
+  bool get_coordinates(string);
   void compute_DH_dip(string);
   bool compute_DH_refraction(string);
   void compute_DH_parallax_and_limb(string);
@@ -1614,7 +1614,7 @@ bool Sight::reduce(string prefix){
   new_prefix << prefix << "\t";
   
   compute_H_a(new_prefix.str());
-  get_coordinates(new_prefix.str());
+  check &= get_coordinates(new_prefix.str());
   check &= compute_H_o(new_prefix.str());
 
   if(!check){
@@ -2102,7 +2102,7 @@ void Length::print(string name, string prefix, ostream& ostr){
  
 }
 
-void Sight::get_coordinates(string prefix){
+bool Sight::get_coordinates(string prefix){
 
   File file;
   stringstream filename, line_ins, new_prefix;
@@ -2145,7 +2145,9 @@ void Sight::get_coordinates(string prefix){
       getline((file.value), line);
     }
 
+
     if((body.type) != "star"){
+      //in this case I am getting the coordinate of a body with a non-zero size
 
       //if the body is not a star
 
@@ -2210,7 +2212,7 @@ void Sight::get_coordinates(string prefix){
 	check &= false; 
       }else{
 	(GP.phi).normalize();
-	(GP.phi).print("phi", new_prefix.str(), cout);
+	(GP.phi).print("d", new_prefix.str(), cout);
       }	
       //(GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
 
@@ -2227,7 +2229,9 @@ void Sight::get_coordinates(string prefix){
 
       gsl_spline_free(interpolation_r);
 
+
     }else{
+          //in this case I am getting the coordinate of a body with a zero size (a star)
 
       //if the body is a star
       double phi3, phi2, phi1;
@@ -2277,21 +2281,39 @@ void Sight::get_coordinates(string prefix){
 	cout << new_prefix.str() << MJD_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
       }
 
-      gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N);
-      gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N);
+      if(gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
+      if(gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
 
       
-      //add minus sign because in JPL convention longitude is positive when it is W
-      (GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
-      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
+      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.lambda).value)) != GSL_SUCCESS){
+	check &= false;
+      }else{
+	(GP.lambda).normalize();
+	(GP.lambda).print("GHA", new_prefix.str(), cout);
+      }
+
+      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
+	check &= false;
+      }else{
+	(GP.phi).normalize();
+	(GP.phi).print("d", new_prefix.str(), cout);
+      }
 
     }
 
+  }else{
+    check &= false;
   }
 
+  if(!check){
+     cout << prefix << RED << "Cannot obtain coordinates!\n" << RESET;
+  }
+  
   gsl_interp_accel_free(acc);
   gsl_spline_free(interpolation_GHA);
   gsl_spline_free(interpolation_d);
+
+  return check;
   
 }
 

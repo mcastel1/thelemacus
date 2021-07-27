@@ -963,8 +963,26 @@ class Sight{
   bool read_from_file(File&, string);
   bool reduce(string);
   bool check_data_time_interval(string);
-  
+
+  Point circle_of_equal_altitude(Angle);
+
+   
 };
+
+//For a given value of the parameter angle t, this function returns a Point which lies on the circle of equal altitude described by GP and H_o. By varying t, the whole circle can be traced. 
+Point Sight::circle_of_equal_altitude(Angle t){
+
+  Point p;
+
+  (p.phi.value) = M_PI/2.0-acos(cos(M_PI/2.0 - (H_o.value)) * sin((GP.phi.value)) - cos((GP.phi.value)) * cos((t.value)) * sin(M_PI/2.0 - (H_o.value)));
+  
+  (p.lambda.value) = -atan( (-sin((GP.lambda.value)) * (cos((GP.phi.value)) * cos(M_PI/2.0 - (H_o.value)) + cos((t.value)) * sin((GP.phi.value)) * sin(M_PI/2.0 - (H_o.value))) + cos((GP.lambda.value)) * sin(M_PI/2.0 - (H_o.value)) * sin((t.value)))
+			    / (cos((GP.phi.value)) * cos((GP.lambda.value)) * cos(M_PI/2.0 - (H_o.value)) + sin(M_PI/2.0 - (H_o.value)) * (cos((GP.lambda.value)) * cos((t.value)) * sin((GP.phi.value)) + sin((GP.lambda.value)) * sin((t.value)))) );
+  if( cos((GP.phi.value)) * cos((GP.lambda.value)) * cos(M_PI/2.0 - (H_o.value)) + sin(M_PI/2.0 - (H_o.value)) * (cos((GP.lambda.value)) * cos((t.value)) * sin((GP.phi.value)) + sin((GP.lambda.value)) * sin((t.value))) < 0.0){(p.lambda.value) += M_PI;}
+
+  return p;
+
+}
 
 //this function returns true if the reading operation has been performed without errors, false otherwise
 bool Sight::read_from_file(File& file, string prefix){

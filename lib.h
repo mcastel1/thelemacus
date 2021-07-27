@@ -649,8 +649,22 @@ class Length{
   void enter(string, string);
   void print(string, string, ostream&);
   void read_from_file(string, File&, string);
+  bool check_valid(string, string);
 
 };
+
+bool Length::check_valid(string name, string prefix){
+
+  bool check = true;
+  
+  if(value<0.0){
+    check &= false;
+    cout << prefix << RED << "Entered value of " << name << " is not valid!\n" << RESET;
+  }
+
+  return check;
+  
+}
 
 void Length::read_from_file(string name, File& file, string prefix){
 
@@ -2048,13 +2062,15 @@ bool Sight::compute_DH_refraction(string prefix){
 }
 
 void Length::set(string name, double x, string prefix){
+
+  stringstream new_prefix;
+
+  new_prefix << "\t" << prefix;    
   
-  if(x>=0.0){
-    value = x;
+  value = x;
+  
+  if(check_valid(name, new_prefix.str())){
     print(name, prefix, cout); 
-  }
-  else{
-    cout << prefix << RED << "Entered value of " << name << " is not valid!\n" << RESET;
   }
   
 }
@@ -2062,7 +2078,6 @@ void Length::set(string name, double x, string prefix){
 //enter a length in meters
 void Length::enter(string name, string prefix){
 
-  bool check;
   stringstream temp;
 
   temp.clear();
@@ -2072,14 +2087,7 @@ void Length::enter(string name, string prefix){
     
     enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
     
-    if(value < 0.0){
-      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
-      check = true;
-    }else{
-      check = false;
-    }
-
-  }while(check);
+  }while(!check_valid(name, prefix));
     
   //convert to nautical miles
   value/=(1e3*nm);
@@ -2196,9 +2204,26 @@ void Sight::get_coordinates(string prefix){
 	(GP.lambda).print("GHA", new_prefix.str(), cout);
       }	
       //(GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
-      
-      (GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
-      r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
+
+
+      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
+	check &= false; 
+      }else{
+	(GP.phi).normalize();
+	(GP.phi).print("phi", new_prefix.str(), cout);
+      }	
+      //(GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
+
+      if(gsl_spline_eval_e(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc, &(r.value)) != GSL_SUCCESS){
+	check &= false; 
+      }else{
+	if((r.check_valid("r", new_prefix.str()))){
+	  r.print("r", new_prefix.str(), cout);
+	}else{
+	  check &= false; 
+	}
+      }
+      //r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
 
       gsl_spline_free(interpolation_r);
 

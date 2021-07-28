@@ -1520,10 +1520,12 @@ void Plot::show(string prefix){
   stringstream line_ins, new_prefix;
   string line;
   unsigned int i;
+  //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi. 
   Angle t_min, t_max, t_p, t_m;
   Point p_min, p_max;
   int status, iter = 0;
-  double x, x_lo, x_hi;
+  //x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)
+  double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m;
   gsl_function F;
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;

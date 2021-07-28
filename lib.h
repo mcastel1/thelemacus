@@ -1575,56 +1575,98 @@ void Plot::show(string prefix){
 
       if((sight_list[i]).GP.lambda.value > M_PI){
 	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
-	//here I select an interval where I know that there will be t_m
 
 	cout << prefix << "Case I:\n";
-	x_lo = 0.0;
-	x_hi = (t_max.value);
+
+	// interval where I know that there will be t_p
+	x_lo_p = (t_max.value);
+	x_hi_p = M_PI;
+
+	//interval where I know that there will be t_m
+	x_lo_m = 0.0;
+	x_hi_m = (t_max.value);
 
       }else{
 	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
 	//here I select an interval where I know that there will be t_m
 
 	cout << prefix << "Case II:\n";
-	x_lo = M_PI;
-	x_hi = (t_min.value);
-	
+
+	// interval where I know that there will be t_p
+	x_lo_p = (t_min.value);
+	x_hi_p = 2.0*M_PI;
+
+	//interval where I know that there will be t_m
+	x_lo_m = M_PI;
+	x_hi_m = (t_min.value);
+
       }
 
       F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
       F.params = &(sight_list[i]);
-      gsl_root_fsolver_set(s, &F, x_lo, x_hi);
 
-      cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo) << " " << GSL_FN_EVAL(&F,x_hi) << "\n";
+
+
+      //solve for t_p
       
-      //solve to determine t_m
-      
+      gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
+
+      cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
+          
       cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
       cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
 
       iter = 0;
-
       do{
       
 	iter++;
 	status = gsl_root_fsolver_iterate(s);
       
 	x = gsl_root_fsolver_root(s);
-	x_lo = gsl_root_fsolver_x_lower(s);
-	x_hi = gsl_root_fsolver_x_upper(s);
-	status = gsl_root_test_interval(x_lo, x_hi, 0.0, epsrel);
+	x_lo_p = gsl_root_fsolver_x_lower(s);
+	x_hi_p = gsl_root_fsolver_x_upper(s);
+	status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
 	if(status == GSL_SUCCESS){
 	  cout << new_prefix.str() << "Converged:\n";
 	}
-	cout << new_prefix.str() << iter << " [" << x_lo << ", " << x_hi << "] " << x << " " << x_hi-x_lo << "\n";
+	cout << new_prefix.str() << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
       }
       while((status == GSL_CONTINUE) && (iter < max_iter));
 
-      t_m.value = (x_lo+x_hi)/2.0;
-      //t_p is  determined from t_m 
-      t_p.value = M_PI - (t_m.value);
-      
+      t_p.value = (x_lo_p+x_hi_p)/2.0;
       t_p.print("t_+", new_prefix.str(), cout);
+
+
+
+      
+
+      //solve for t_m
+      
+      gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
+
+      cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
+          
+      cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
+      cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+
+      iter = 0;
+      do{
+      
+	iter++;
+	status = gsl_root_fsolver_iterate(s);
+      
+	x = gsl_root_fsolver_root(s);
+	x_lo_m = gsl_root_fsolver_x_lower(s);
+	x_hi_m = gsl_root_fsolver_x_upper(s);
+	status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
+	if(status == GSL_SUCCESS){
+	  cout << new_prefix.str() << "Converged:\n";
+	}
+	cout << new_prefix.str() << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
+      }
+      while((status == GSL_CONTINUE) && (iter < max_iter));
+
+      t_m.value = (x_lo_m+x_hi_m)/2.0;
       t_m.print("t_-", new_prefix.str(), cout);
 
       plot_command << "plot [0.:" << t_m.value << "] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";

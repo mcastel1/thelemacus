@@ -14,8 +14,9 @@
 #define max_iter (1e3)
 //one nautical mile in kilometers
 #define nm 1.852
-#define RED     "\033[1;31m"      /* Red */
-#define YELLOW     "\033[1;33m"      /* Red */
+#define RED     "\033[1;31m"    
+#define YELLOW     "\033[1;33m"   
+#define CYAN "\033[1;36m"      
 #define RESET   "\033[0m"
 //all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
@@ -1393,7 +1394,7 @@ case 5:{
       system(command.str().c_str());
     }
     
-    cout << "Fair winds, following seas...\n";
+    cout << CYAN << "Fair winds, following seas...\n" << RESET;
   }
     break;
 

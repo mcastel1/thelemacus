@@ -1,0 +1,19 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type = star
+			Name = vega
+			Right ascension = 279° 13.926119999999855281203053891659'
+			Declination = 38° 46.938960000000093941707746125758'
+		sextant altitude = 2° 2.9999999999999893418589635984972'
+		index error = 3° 1.9999999999999928945726423989981'
+		artificial horizon = n
+		height of eye = 0.01259341252699784120816506316487 nm.
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2023-02-03
+			hour of master-clock date and hour of sight = 02:03:02
+		use of stopwatch = y
+		hour of stopwatch = 02:02:03
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 04:03:02
+		label = ciccio
+Points in the plot:

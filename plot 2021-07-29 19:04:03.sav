@@ -104,8 +104,11 @@ label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprin
 #coastlines
 plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-#sight_plots
-#point_plots
+
+
+ set key at graph key_x, graph key_y - 1*key_spacing
+plot "+" u (xe(K*(0.96138552964020984603621400310658))):(ye(K*(0.070685834705770347885511739605136))) w p lw 2 lt 1 ti "4gefhdf"
+
 
 
 #unset parametric
@@ -303,8 +306,11 @@ while(1){
 	#coastlines
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-	#sight_plots
-	#point_plots
+	
+	
+ set key at graph key_x, graph key_y - 1*key_spacing
+plot "+" u (xe(K*(0.96138552964020984603621400310658))):(ye(K*(0.070685834705770347885511739605136))) w p lw 2 lt 1 ti "4gefhdf"
+
 
 	x_max_old = GPVAL_X_MAX;
 

@@ -1,7 +1,7 @@
 //this is the high precision used for storing data and making calculations with it 
 #define data_precision 32
 //this is the low precision used for displaying data
-#define display_precision 8
+#define display_precision 4
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
@@ -1559,6 +1559,8 @@ void Plot::show(string prefix){
 
     cout << "Sight # " << i+1 << "\n";
 
+    //set the key in the correct position for the circle of equal altitude that will be plotted 
+    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(i+1)) << "*key_spacing\\\n";
 
 
     //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
@@ -1672,6 +1674,7 @@ void Plot::show(string prefix){
       t_m.print("t_-", new_prefix.str(), cout);
 
       //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+      
       plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
       
       plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " noti \\\n";

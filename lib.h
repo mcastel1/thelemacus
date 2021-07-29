@@ -1701,7 +1701,7 @@ void Plot::show(string prefix){
     //set the key in the correct position for the point that will be plotted 
     plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(sight_list.size()+i+1)) << "*key_spacing\\\n";
 
-    plot_command << "plot \"+\" u (xe(K*(" << (point_list[i]).lambda.value << "))):(ye(K*(" << (point_list[i]).phi.value << "))) w p  lw 2 ti \"" << (point_list[i]).label.value << "\"\\\n";
+    plot_command << "plot \"+\" u (xe(K*(" << (point_list[i]).lambda.value << "))):(ye(K*(" << (point_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (point_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";

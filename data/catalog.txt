@@ -5,3 +5,4 @@ planet			jupiter		37748.92008639309		      0.0	0.0
 star			vega		0.0				      279.232102	38.782316
 star			arcturus		0.0				213.913315		19.178249
 planet			saturn		31442.764578833692		      0.0	0.0
+star			capella		0.0				79.175833		46.000278

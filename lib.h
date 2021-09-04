@@ -1522,11 +1522,11 @@ void Plot::show(string prefix){
   string line;
   unsigned int i;
   //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi. 
-  Angle t_min, t_max, t_p, t_m;
+  Angle t_min, t_max, t_p, t_m, t_s;
   Point p_min, p_max;
   int status, iter = 0;
   //x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)
-  double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m;
+  double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
   gsl_function F;
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
@@ -1693,8 +1693,47 @@ void Plot::show(string prefix){
       }
       
     }else{
-      //in this case (sight_list[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t such that (sight_list[i]).GP.lambda.value = \pi and split the gnuplot plot command in two commands so as to avoid the horizontal line
+      //in this case (sight_list[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that (sight_list[i]).GP.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
+
+      // interval where I know that there will be t_s
+      x_lo_s = 0.0;
+      x_hi_s = 2.0*M_PI;
+
+      F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
+      F.params = &(sight_list[i]);
+
+      //solve for t_s
       
+      gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
+
+      cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
+      cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+
+      iter = 0;
+      do{
+      
+	iter++;
+	status = gsl_root_fsolver_iterate(s);
+      
+	x = gsl_root_fsolver_root(s);
+	x_lo_s = gsl_root_fsolver_x_lower(s);
+	x_hi_s = gsl_root_fsolver_x_upper(s);
+	status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
+	if(status == GSL_SUCCESS){
+	  cout << new_prefix.str() << "Converged:\n";
+	}
+	cout << new_prefix.str() << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
+      }
+      while((status == GSL_CONTINUE) && (iter < max_iter));
+
+      t_s.value = (x_lo_s+x_hi_s)/2.0;
+      t_s.print("t_*", new_prefix.str(), cout);
+
+      	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+      
+	plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
+      
+	plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " noti \\\n"; 
 
     }
     

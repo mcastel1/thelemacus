@@ -77,7 +77,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
     }
 
     if(!check){
-     cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+      cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
     }
     
   }while(!check);
@@ -119,7 +119,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
     }
 
     if(!check){
-     cout << prefix << RED << "Entered value is not valid!\n" << RESET;
+      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
     }
     
   }while(!check);
@@ -1313,31 +1313,31 @@ void Plot::menu(void){
   }
     break;
 
-case 5:{
+  case 5:{
 
-  if(sight_list.size() + point_list.size() > 0){
+    if(sight_list.size() + point_list.size() > 0){
   
-    File file;
-    stringstream temp;
+      File file;
+      stringstream temp;
     
-    file.name.enter("name of file (without extension)", "\t");
-    //add the extension .sav to name of file
-    temp.str("");
-    temp << file.name.value << ".sav";
-    file.set_name(temp.str());
+      file.name.enter("name of file (without extension)", "\t");
+      //add the extension .sav to name of file
+      temp.str("");
+      temp << file.name.value << ".sav";
+      file.set_name(temp.str());
 
-    file.open("out","\t");    
-    print("\t", file.value);
-    file.close("\t");
+      file.open("out","\t");    
+      print("\t", file.value);
+      file.close("\t");
 
-    command.str("");
-    command << "mv plot.plt " << "'plot " << temp.str() << "'";
-    system(command.str().c_str());
+      command.str("");
+      command << "mv plot.plt " << "'plot " << temp.str() << "'";
+      system(command.str().c_str());
 
-  }else{    
+    }else{    
       cout << RED << "There are no sights nor points to save!\n" << RESET;
-  }
-  menu();
+    }
+    menu();
     
   }
     break;
@@ -1563,135 +1563,132 @@ void Plot::show(string prefix){
     //set the key in the correct position for the circle of equal altitude that will be plotted 
     plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(i+1)) << "*key_spacing\\\n";
 
-
-    //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
-
-    (sight_list[i]).GP.phi.print("Angle phi which yields nan", new_prefix.str(), cout);
-    (sight_list[i]).GP.lambda.print("Angle lambda which yields nan", new_prefix.str(), cout);
-    (sight_list[i]).H_o.print("Angle H_o which yields nan", new_prefix.str(), cout);
-    cout << new_prefix.str() <<  "Argument of acos = " << -tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value));
+    //if abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (sight_list[i]).GP.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(sight_list[i]).GP.lambda_{t = t_{min}} and (sight_list[i]).GP.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output. 
+    if(abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0){
     
-    t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
-    t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
+      //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
+      t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
+      t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
 
-    p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
-    p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
+      p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
+      p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
 
-    p_max.print("p_max", new_prefix.str(), cout);
-    p_min.print("p_min", new_prefix.str(), cout);
+      p_max.print("p_max", new_prefix.str(), cout);
+      p_min.print("p_min", new_prefix.str(), cout);
 
-    if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
-      cout << prefix << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
-      //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
+      if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
+	cout << prefix << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
+	//in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
 
-      if((sight_list[i]).GP.lambda.value > M_PI){
-	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+	if((sight_list[i]).GP.lambda.value > M_PI){
+	  //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
 
-	cout << prefix << "Case I:\n";
+	  cout << prefix << "Case I:\n";
 
-	// interval where I know that there will be t_p
-	x_lo_p = (t_max.value);
-	x_hi_p = M_PI;
+	  // interval where I know that there will be t_p
+	  x_lo_p = (t_max.value);
+	  x_hi_p = M_PI;
 
-	//interval where I know that there will be t_m
-	x_lo_m = 0.0;
-	x_hi_m = (t_max.value);
+	  //interval where I know that there will be t_m
+	  x_lo_m = 0.0;
+	  x_hi_m = (t_max.value);
 
-      }else{
-	//in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
-	//here I select an interval where I know that there will be t_m
+	}else{
+	  //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
+	  //here I select an interval where I know that there will be t_m
 
-	cout << prefix << "Case II:\n";
+	  cout << prefix << "Case II:\n";
 
-	// interval where I know that there will be t_p
-	x_lo_p = (t_min.value);
-	x_hi_p = 2.0*M_PI;
+	  // interval where I know that there will be t_p
+	  x_lo_p = (t_min.value);
+	  x_hi_p = 2.0*M_PI;
 
-	//interval where I know that there will be t_m
-	x_lo_m = M_PI;
-	x_hi_m = (t_min.value);
+	  //interval where I know that there will be t_m
+	  x_lo_m = M_PI;
+	  x_hi_m = (t_min.value);
 
-      }
-
-      F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
-      F.params = &(sight_list[i]);
-
-
-
-      //solve for t_p
-      
-      gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
-
-      cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
-          
-      cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
-      cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-
-      iter = 0;
-      do{
-      
-	iter++;
-	status = gsl_root_fsolver_iterate(s);
-      
-	x = gsl_root_fsolver_root(s);
-	x_lo_p = gsl_root_fsolver_x_lower(s);
-	x_hi_p = gsl_root_fsolver_x_upper(s);
-	status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
-	if(status == GSL_SUCCESS){
-	  cout << new_prefix.str() << "Converged:\n";
 	}
-	cout << new_prefix.str() << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
-      }
-      while((status == GSL_CONTINUE) && (iter < max_iter));
 
-      t_p.value = (x_lo_p+x_hi_p)/2.0;
-      t_p.print("t_+", new_prefix.str(), cout);
+	F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
+	F.params = &(sight_list[i]);
 
 
 
+	//solve for t_p
       
+	gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
 
-      //solve for t_m
-      
-      gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
-
-      cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
+	cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
           
-      cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
-      cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+	cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
+	cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
 
-      iter = 0;
-      do{
+	iter = 0;
+	do{
       
-	iter++;
-	status = gsl_root_fsolver_iterate(s);
+	  iter++;
+	  status = gsl_root_fsolver_iterate(s);
       
-	x = gsl_root_fsolver_root(s);
-	x_lo_m = gsl_root_fsolver_x_lower(s);
-	x_hi_m = gsl_root_fsolver_x_upper(s);
-	status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
-	if(status == GSL_SUCCESS){
-	  cout << new_prefix.str() << "Converged:\n";
+	  x = gsl_root_fsolver_root(s);
+	  x_lo_p = gsl_root_fsolver_x_lower(s);
+	  x_hi_p = gsl_root_fsolver_x_upper(s);
+	  status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
+	  if(status == GSL_SUCCESS){
+	    cout << new_prefix.str() << "Converged:\n";
+	  }
+	  cout << new_prefix.str() << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
 	}
-	cout << new_prefix.str() << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
+	while((status == GSL_CONTINUE) && (iter < max_iter));
+
+	t_p.value = (x_lo_p+x_hi_p)/2.0;
+	t_p.print("t_+", new_prefix.str(), cout);
+
+
+
+      
+
+	//solve for t_m
+      
+	gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
+
+	cout << prefix << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
+          
+	cout << prefix << "Using " << gsl_root_fsolver_name(s) << " method\n";
+	cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+
+	iter = 0;
+	do{
+      
+	  iter++;
+	  status = gsl_root_fsolver_iterate(s);
+      
+	  x = gsl_root_fsolver_root(s);
+	  x_lo_m = gsl_root_fsolver_x_lower(s);
+	  x_hi_m = gsl_root_fsolver_x_upper(s);
+	  status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
+	  if(status == GSL_SUCCESS){
+	    cout << new_prefix.str() << "Converged:\n";
+	  }
+	  cout << new_prefix.str() << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
+	}
+	while((status == GSL_CONTINUE) && (iter < max_iter));
+
+	t_m.value = (x_lo_m+x_hi_m)/2.0;
+	t_m.print("t_-", new_prefix.str(), cout);
+
+	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+      
+	plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
+      
+	plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " noti \\\n";
+
+	plot_command << "plot [" << t_p.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " noti \\\n";
+
       }
-      while((status == GSL_CONTINUE) && (iter < max_iter));
-
-      t_m.value = (x_lo_m+x_hi_m)/2.0;
-      t_m.print("t_-", new_prefix.str(), cout);
-
-      //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-      
-      plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
-      
-      plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " noti \\\n";
-
-      plot_command << "plot [" << t_p.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " noti \\\n";
-
       
     }else{
     
-    plot_command << "plot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
+      plot_command << "plot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp lt " << i+1 << " ti \"" << (sight_list[i]).body.name << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI\"\\\n";
 
     }
     
@@ -1794,7 +1791,7 @@ bool Sight::reduce(string prefix){
   check &= compute_H_o(new_prefix.str());
 
   if(!check){
-     cout << prefix << RED << "Sight cannot be reduced!\n" << RESET;
+    cout << prefix << RED << "Sight cannot be reduced!\n" << RESET;
   }
 
   return check;
@@ -1831,7 +1828,7 @@ bool Sight::compute_H_o(string prefix){
     H_o = H_a + DH_refraction + DH_parallax_and_limb;
     H_o.print("observed altitude", new_prefix.str(), cout);
   }else{
-     cout << prefix << RED << "H_o cannot be computed!\n" << RESET;
+    cout << prefix << RED << "H_o cannot be computed!\n" << RESET;
   }
 
   return check;
@@ -2419,7 +2416,7 @@ bool Sight::get_coordinates(string prefix){
 
 
     }else{
-          //in this case I am getting the coordinate of a body with a zero size (a star)
+      //in this case I am getting the coordinate of a body with a zero size (a star)
 
       //if the body is a star
       double phi3, phi2, phi1;
@@ -2494,7 +2491,7 @@ bool Sight::get_coordinates(string prefix){
   }
 
   if(!check){
-     cout << prefix << RED << "Cannot obtain coordinates!\n" << RESET;
+    cout << prefix << RED << "Cannot obtain coordinates!\n" << RESET;
   }
   
   gsl_interp_accel_free(acc);

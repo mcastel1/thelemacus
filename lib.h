@@ -1564,7 +1564,13 @@ void Plot::show(string prefix){
     plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(i+1)) << "*key_spacing\\\n";
 
 
-    //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
+    //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
+
+    (sight_list[i]).GP.phi.print("Angle phi which yields nan", new_prefix.str(), cout);
+    (sight_list[i]).GP.lambda.print("Angle lambda which yields nan", new_prefix.str(), cout);
+    (sight_list[i]).H_o.print("Angle H_o which yields nan", new_prefix.str(), cout);
+    cout << new_prefix.str() <<  "Argument of acos = " << -tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value));
+    
     t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
     t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
 

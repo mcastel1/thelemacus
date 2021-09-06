@@ -447,7 +447,7 @@ bool Date::read_from_file(string name, File& file, string prefix){
   check_leap_year();
   if((Y_is_leap_year)){
     (days_per_month) = days_per_month_leap;
-    cout << new_prefix.str() << "YYYY is a leap year\n";
+    cout << new_prefix.str() << YELLOW << "YYYY is a leap year\n" << RESET;
   }else{
     (days_per_month) = days_per_month_common;
     cout << new_prefix.str() << "YYYY is a common year\n";
@@ -2717,7 +2717,7 @@ void Date::enter(string name, string prefix) {
   check_leap_year();
   if((Y_is_leap_year)){
     (days_per_month) = days_per_month_leap;
-    cout << new_prefix.str() << "YYYY is a leap year\n";
+    cout << new_prefix.str() << YELLOW << "YYYY is a leap year\n" << RESET;
   }else{
     (days_per_month) = days_per_month_common;
     cout << new_prefix.str() << "YYYY is a common year\n";

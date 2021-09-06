@@ -48,7 +48,6 @@
 - replace string with String everywhere
 - all functions ..read_from_file shouuld return a bool to signal whether the reading was successful or not
 - check whether H_o > 0, and if it is not, restart the procedure to enter the sight
-- remove nans when computing extrema of a circle of equal altitude
 - adjust the number of points of coastlines as a function of the plot scale: the larger the scale, the lesser points
 */
 

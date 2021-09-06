@@ -129,6 +129,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
 
 class Catalog;
 class File;
+class Length;
 
 class String{
 
@@ -305,6 +306,14 @@ void Point::read_from_file(File& file, string prefix){
   label.read_from_file("label", file, new_prefix.str());
 
 }
+
+class Route{
+
+ public:
+  Point start;
+  Angle alpha;
+
+};
 
 class Date{
 

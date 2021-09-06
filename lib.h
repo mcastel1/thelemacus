@@ -322,8 +322,11 @@ void Point::read_from_file(File& file, string prefix){
 class Route{
 
  public:
+  //starting point of the route
   Point start;
+  //the angle that the vector tangent to the route describes with the local meridian at start
   Angle alpha;
+  //the length of the route
   Length l;
   
 };

@@ -97,6 +97,10 @@ int main(int argc, char *argv[]){
   a.enter("Position", "");
   a.print("Entered position", "");
   */
+
+  Route route;
+  route.enter("path to cape horn", "");
+  return 0;
   
   Catalog catalog("data/catalog.txt");
   Plot plot(&catalog);

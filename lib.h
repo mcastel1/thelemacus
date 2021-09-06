@@ -328,8 +328,27 @@ class Route{
   Angle alpha;
   //the length of the route
   Length l;
+
+  void enter(string, string);
   
 };
+
+void Route::enter(string name, string prefix){
+
+  stringstream new_prefix;
+  string s;
+
+  //append \t to prefix
+  new_prefix << prefix << "\t";
+
+  cout << prefix << "Enter " << name << ":\n";
+
+  start.enter("starting point", new_prefix.str());
+  alpha.enter("starting heading", new_prefix.str());
+  l.enter("length", new_prefix.str());
+  
+}
+
 
 class Date{
 

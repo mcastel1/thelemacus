@@ -322,6 +322,7 @@ void Point::read_from_file(File& file, string prefix){
 class Route{
 
  public:
+  String type;
   //starting point of the route
   Point start;
   //the angle that the vector tangent to the route describes with the local meridian at start
@@ -343,6 +344,7 @@ void Route::enter(string name, string prefix){
 
   cout << prefix << "Enter " << name << ":\n";
 
+  type.enter("type [loxodrome/orthodrome]", new_prefix.str());
   start.enter("starting point", new_prefix.str());
   alpha.enter("starting heading", new_prefix.str());
   l.enter("length", new_prefix.str());

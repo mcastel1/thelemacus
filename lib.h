@@ -312,7 +312,8 @@ class Route{
  public:
   Point start;
   Angle alpha;
-
+  Length l;
+  
 };
 
 class Date{

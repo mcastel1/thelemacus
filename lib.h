@@ -129,7 +129,19 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
 
 class Catalog;
 class File;
-class Length;
+
+class Length{
+
+ public:
+  double value;
+  void set(string, double, string);
+  void enter(string, string);
+  void print(string, string, ostream&);
+  void read_from_file(string, File&, string);
+  bool check_valid(string, string);
+
+};
+
 
 class String{
 
@@ -652,17 +664,6 @@ void File::close(string prefix){
 
 }
 
-class Length{
-
- public:
-  double value;
-  void set(string, double, string);
-  void enter(string, string);
-  void print(string, string, ostream&);
-  void read_from_file(string, File&, string);
-  bool check_valid(string, string);
-
-};
 
 bool Length::check_valid(string name, string prefix){
 

@@ -331,10 +331,11 @@ class Route{
   Length l;
 
   void enter(string, string);
+  void print(string, string, ostream&);
   
 };
 
-void Route::enter(string name, string prefix){
+void Route::print(string name, string prefix, ostream& ostr){
 
   stringstream new_prefix;
   string s;
@@ -342,12 +343,40 @@ void Route::enter(string name, string prefix){
   //append \t to prefix
   new_prefix << prefix << "\t";
 
+  cout << prefix << "Route " << name << ":\n";
+
+  type.print("type", new_prefix.str(), ostr);
+  start.print("starting point", new_prefix.str(), ostr);
+  alpha.print("starting heading", new_prefix.str(), ostr);
+  l.print("length", new_prefix.str(), ostr);
+  
+}
+
+
+void Route::enter(string name, string prefix){
+
+  stringstream new_prefix;
+  string s;
+  bool check;
+
+  //append \t to prefix
+  new_prefix << prefix << "\t";
+
   cout << prefix << "Enter " << name << ":\n";
 
-  type.enter("type [loxodrome/orthodrome]", new_prefix.str());
+  do{
+    type.enter("type [l(=loxodrome)/o(=orthodrome)]", new_prefix.str());
+    check = ((type.value == "l") || (type.value == "o"));
+    if(!check){
+      cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
+    }
+  }while(!check);
   start.enter("starting point", new_prefix.str());
   alpha.enter("starting heading", new_prefix.str());
   l.enter("length", new_prefix.str());
+
+  
+  print(name, prefix, cout);
   
 }
 

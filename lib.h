@@ -321,7 +321,6 @@ class Route{
   Angle alpha;
   //the length of the route
   Length l;
-  String label;
 
   void enter(string, string);
   void print(string, string, ostream&);
@@ -350,7 +349,6 @@ void Point::transport(string prefix){
   route.start = (*this); 
   route.alpha.enter("starting heading", new_prefix.str());
   route.l.enter("length", new_prefix.str());
-  route.label.enter("label", new_prefix.str());
 
   route.print("transport", prefix, cout);
   
@@ -400,7 +398,7 @@ void Route::compute_end(string prefix){
     
   }
 
-  label_end << "End of " << label.value;
+  label_end << start.label.value << " transported";
   (end.label.value) = label_end.str();
 
 }
@@ -419,7 +417,6 @@ void Route::print(string name, string prefix, ostream& ostr){
   start.print("starting point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
   l.print("length", new_prefix.str(), ostr);
-  label.print("label", new_prefix.str(), ostr);
   
 }
 
@@ -445,7 +442,6 @@ void Route::enter(string name, string prefix){
   start.enter("starting point", new_prefix.str());
   alpha.enter("starting heading", new_prefix.str());
   l.enter("length", new_prefix.str());
-  label.enter("label", new_prefix.str());
   
 }
 

@@ -100,6 +100,9 @@ int main(int argc, char *argv[]){
 
   Route route;
   route.enter("path to cape horn", "");
+  Length s;
+  s.value = 1.0;
+  route.point(s).print("point at one nm from the start", "", cout);
   return 0;
   
   Catalog catalog("data/catalog.txt");

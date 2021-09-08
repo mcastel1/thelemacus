@@ -328,12 +328,20 @@ class Route{
   //the angle that the vector tangent to the route describes with the local meridian at start
   Angle alpha;
   //the length of the route
-  Length l;
+  Length L;
 
   void enter(string, string);
   void print(string, string, ostream&);
+  Point point(Length);
   
 };
+
+//returns a point on the Route at length l along the Route from start
+Point Route::point(Length l){
+
+  
+
+}
 
 void Route::print(string name, string prefix, ostream& ostr){
 
@@ -348,7 +356,7 @@ void Route::print(string name, string prefix, ostream& ostr){
   type.print("type", new_prefix.str(), ostr);
   start.print("starting point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
-  l.print("length", new_prefix.str(), ostr);
+  L.print("length", new_prefix.str(), ostr);
   
 }
 
@@ -373,7 +381,7 @@ void Route::enter(string name, string prefix){
   }while(!check);
   start.enter("starting point", new_prefix.str());
   alpha.enter("starting heading", new_prefix.str());
-  l.enter("length", new_prefix.str());
+  L.enter("length", new_prefix.str());
 
   
   print(name, prefix, cout);

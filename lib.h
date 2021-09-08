@@ -1254,7 +1254,8 @@ class Plot{
   bool add_sight(string);
   void add_point(string);
   void remove_sight(unsigned int);
-  void remove_point(unsigned int);
+  void transport_point(unsigned int, string);
+  void remove_point(unsigned int, string);
   bool read_from_file(String, string);
   void print(string, ostream&);
   void show(string);
@@ -1379,6 +1380,7 @@ void Plot::menu(void){
   switch(i){
 
   case 1:{
+    
     add_sight("\t");
     print("\t", cout);
     show("\t");
@@ -1394,7 +1396,7 @@ void Plot::menu(void){
  
       print("\t", cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", "");
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", "\t");
 	
       i--;
    
@@ -1422,18 +1424,44 @@ void Plot::menu(void){
   }
     break;
 
+    
   case 4:{
+
+    
+    if(point_list.size() > 0){
+
+      print("\t", cout);
+
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to transport", "\t");
+
+      i--;
+
+      transport_point(i, "\t");
+      print("\t", cout);
+      show("\t");
+
+    }else{
+      cout << RED << "There are no points to transport!\n" << RESET;
+    }
+    
+    menu();  
+
+
+  }
+    break;
+
+  case 5:{
 
     if(point_list.size() > 0){
 
 
       print("\t", cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", "");
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", "\t");
 
       i--;
 	
-      remove_point(i);
+      remove_point(i, "\t");
       print("\t", cout);
       show("\t");
 
@@ -1446,7 +1474,7 @@ void Plot::menu(void){
   }
     break;
 
-  case 5:{
+  case 6:{
 
     if(sight_list.size() + point_list.size() > 0){
   
@@ -1475,7 +1503,7 @@ void Plot::menu(void){
   }
     break;
 
-  case 6:{
+  case 7:{
 
     String filename;
     stringstream line_ins;
@@ -1495,7 +1523,7 @@ void Plot::menu(void){
     break;
     
     
-  case 7:{
+  case 8:{
 
     File file;
     string line;
@@ -1548,7 +1576,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
 
-  choices = {"Add a sight", "Delete a sight", "Add a point", "Delete a point", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Delete a sight", "Add a point", "Transport a point", "Delete a point", "Save to file", "Read from file", "Exit"};
   
 }
 
@@ -1633,18 +1661,35 @@ void Plot::remove_sight(unsigned int i){
 
 }
 
-void Plot::remove_point(unsigned int i){
+void Plot::remove_point(unsigned int i, string prefix){
 
   stringstream name;
 
   name.str("");
   name << "Point to be removed: Point #" << i+1;
   
-  (point_list[i]).print(name.str().c_str(), "\t", cout);
+  (point_list[i]).print(name.str().c_str(), prefix, cout);
   
   point_list.erase(point_list.begin()+i);
   
-  cout << "Point removed.\n";
+  cout << prefix << "Point removed.\n";
+
+}
+
+void Plot::transport_point(unsigned int i, string prefix){
+
+  stringstream name, new_prefix;
+
+  new_prefix << prefix << "\t";
+
+  name.str("");
+  name << "Point to be transported: Point #" << i+1;
+  
+  (point_list[i]).print(name.str().c_str(), new_prefix.str(), cout);
+  
+  (point_list[i]).transport(prefix);
+  
+  cout << prefix << "Point transported.\n";
 
 }
 

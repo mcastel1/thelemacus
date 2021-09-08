@@ -92,12 +92,13 @@ int main(int argc, char *argv[]){
   cout << "MJD = " << t.MJD << "\n";
   */
   
-  
+  /*
   Point a;
   a.enter("Position", "");
   a.print("Entered position", "", cout);
   a.transport("");
   return 0;
+  */
 
   /*
   Route route;

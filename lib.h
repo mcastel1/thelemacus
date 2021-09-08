@@ -331,6 +331,7 @@ class Route{
   Angle alpha;
   //the length of the route
   Length l;
+  String label;
 
   void enter(string, string);
   void print(string, string, ostream&);
@@ -342,15 +343,30 @@ class Route{
 Point Route::end(string prefix){
 
   Point p;
+  stringstream label_p;
+
+  if(type == "o"){
+
+    //end of orthodrome route
   
-  (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
-  (p.phi).normalize();
+    (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
+    (p.phi).normalize();
 
-  (p.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
+    (p.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
 
-  if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
+    if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
 
-  (p.lambda).normalize();
+    (p.lambda).normalize();
+
+  }else{
+
+    //end of loxodrome route
+
+    
+  }
+
+  label_p << "End of " << label.value;
+  (p.label.value) = label_p.str();
 
   p.print("end", prefix, cout);
 
@@ -372,6 +388,7 @@ void Route::print(string name, string prefix, ostream& ostr){
   start.print("starting point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
   l.print("length", new_prefix.str(), ostr);
+  label.print("label", new_prefix.str(), ostr);
   
 }
 
@@ -397,6 +414,7 @@ void Route::enter(string name, string prefix){
   start.enter("starting point", new_prefix.str());
   alpha.enter("starting heading", new_prefix.str());
   l.enter("length", new_prefix.str());
+  label.enter("label", new_prefix.str());
 
   
   print(name, prefix, cout);

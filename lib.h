@@ -1253,7 +1253,7 @@ class Plot{
   //~Plot();
   bool add_sight(string);
   void add_point(string);
-  void remove_sight(unsigned int);
+  void remove_sight(unsigned int, string);
   void transport_point(unsigned int, string);
   void remove_point(unsigned int, string);
   bool read_from_file(String, string);
@@ -1400,7 +1400,7 @@ void Plot::menu(void){
 	
       i--;
    
-      remove_sight(i);
+      remove_sight(i, "\t");
       print("\t", cout);
       show("\t");
 
@@ -1646,18 +1646,18 @@ void Plot::add_point(string prefix){
 }
 
 
-void Plot::remove_sight(unsigned int i){
+void Plot::remove_sight(unsigned int i, string prefix){
 
   stringstream name;
 
   name.str("");
   name << "Sight to be removed: Sight #" << i+1;
   
-  (sight_list[i]).print(name.str().c_str(), "\t", cout);
+  (sight_list[i]).print(name.str().c_str(), prefix, cout);
   
   sight_list.erase(sight_list.begin()+i);
   
-  cout << "Sigh removed.\n";
+  cout << prefix << "Sigh removed.\n";
 
 }
 

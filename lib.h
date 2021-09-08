@@ -2509,7 +2509,7 @@ void Length::enter(string name, string unit, string prefix){
 
 void Length::print(string name, string unit, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " = " << value;
+  ostr << prefix << name << " = ";
   if(unit == "nm"){
     ostr << value << " nm\n";
   }else{

@@ -307,7 +307,7 @@ class Point{
   void enter(string, string);
   void print(string, string, ostream&);
   void read_from_file(File&, string);
-  void transport(string, string);
+  void transport(string);
 
 };
 
@@ -329,7 +329,7 @@ class Route{
   
 };
 
-void Point::transport(string name, string prefix){
+void Point::transport(string prefix){
 
   Route route;
   stringstream new_prefix;
@@ -350,13 +350,14 @@ void Point::transport(string name, string prefix){
   route.start = (*this); 
   route.alpha.enter("starting heading", new_prefix.str());
   route.l.enter("length", new_prefix.str());
+  route.label.enter("label", new_prefix.str());
 
-  route.print("transport route", prefix, cout);
+  route.print("transport", prefix, cout);
   
   route.compute_end(new_prefix.str());
   (*this) = route.end;
 
-  print(name, new_prefix.str(), cout);
+  print("transported point", prefix, cout);
 
 }
 
@@ -402,8 +403,6 @@ void Route::compute_end(string prefix){
   label_end << "End of " << label.value;
   (end.label.value) = label_end.str();
 
-  end.print("end", prefix, cout);
-
 }
 
 void Route::print(string name, string prefix, ostream& ostr){
@@ -447,9 +446,6 @@ void Route::enter(string name, string prefix){
   alpha.enter("starting heading", new_prefix.str());
   l.enter("length", new_prefix.str());
   label.enter("label", new_prefix.str());
-
-  
-  print(name, prefix, cout);
   
 }
 

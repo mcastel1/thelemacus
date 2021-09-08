@@ -92,16 +92,19 @@ int main(int argc, char *argv[]){
   cout << "MJD = " << t.MJD << "\n";
   */
   
-  /*
+  
   Point a;
   a.enter("Position", "");
-  a.print("Entered position", "");
-  */
+  a.print("Entered position", "", cout);
+  a.transport("");
+  return 0;
 
+  /*
   Route route;
   route.enter("path to cape horn", "");
   route.compute_end("");
   return 0;
+  */
   
   Catalog catalog("data/catalog.txt");
   Plot plot(&catalog);

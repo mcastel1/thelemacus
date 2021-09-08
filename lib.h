@@ -294,6 +294,8 @@ void Angle::read_from_file(string name, File& file, string prefix){
 }
 
 
+
+
 class Point{
 
  public:
@@ -305,8 +307,58 @@ class Point{
   void enter(string, string);
   void print(string, string, ostream&);
   void read_from_file(File&, string);
+  void transport(string, string);
 
 };
+
+class Route{
+
+ public:
+  String type;
+  //starting point of the route
+  Point start, end;
+  //the angle that the vector tangent to the route describes with the local meridian at start
+  Angle alpha;
+  //the length of the route
+  Length l;
+  String label;
+
+  void enter(string, string);
+  void print(string, string, ostream&);
+  void compute_end(string);
+  
+};
+
+void Point::transport(string name, string prefix){
+
+  Route route;
+  stringstream new_prefix;
+  bool check;
+
+  //append \t to prefix
+  new_prefix << prefix << "\t";
+
+  cout << prefix << "Enter route:\n";
+
+  do{
+    route.type.enter("type [l(=loxodrome)/o(=orthodrome)]", new_prefix.str());
+    check = ((route.type.value == "l") || (route.type.value == "o"));
+    if(!check){
+      cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
+    }
+  }while(!check);
+  route.start = (*this); 
+  route.alpha.enter("starting heading", new_prefix.str());
+  route.l.enter("length", new_prefix.str());
+
+  route.print("transport route", prefix, cout);
+  
+  route.compute_end(new_prefix.str());
+  (*this) = route.end;
+
+  print(name, new_prefix.str(), cout);
+
+}
 
 void Point::read_from_file(File& file, string prefix){
 
@@ -321,42 +373,24 @@ void Point::read_from_file(File& file, string prefix){
 
 }
 
-class Route{
-
- public:
-  String type;
-  //starting point of the route
-  Point start;
-  //the angle that the vector tangent to the route describes with the local meridian at start
-  Angle alpha;
-  //the length of the route
-  Length l;
-  String label;
-
-  void enter(string, string);
-  void print(string, string, ostream&);
-  Point end(string);
-  
-};
 
 //returns a point on the Route at length l along the Route from start
-Point Route::end(string prefix){
+void Route::compute_end(string prefix){
 
-  Point p;
-  stringstream label_p;
+  stringstream label_end;
 
   if(type.value == "o"){
 
     //end of orthodrome route
   
-    (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
-    (p.phi).normalize();
+    (end.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
+    (end.phi).normalize();
 
-    (p.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
+    (end.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
 
-    if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
+    if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(end.lambda.value) += M_PI;}
 
-    (p.lambda).normalize();
+    (end.lambda).normalize();
 
   }else{
 
@@ -365,12 +399,10 @@ Point Route::end(string prefix){
     
   }
 
-  label_p << "End of " << label.value;
-  (p.label.value) = label_p.str();
+  label_end << "End of " << label.value;
+  (end.label.value) = label_end.str();
 
-  p.print("end", prefix, cout);
-
-  return p;
+  end.print("end", prefix, cout);
 
 }
 

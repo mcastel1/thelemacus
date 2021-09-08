@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
 
   Route route;
   route.enter("path to cape horn", "");
-  route.end("");
+  route.compute_end("");
   return 0;
   
   Catalog catalog("data/catalog.txt");

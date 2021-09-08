@@ -334,23 +334,25 @@ class Route{
 
   void enter(string, string);
   void print(string, string, ostream&);
-  Point point(Length);
+  Point end(string);
   
 };
 
 //returns a point on the Route at length l along the Route from start
-Point Route::point(Length s){
+Point Route::end(string prefix){
 
   Point p;
   
-  (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((s.value)/Re) + cos((s.value)/Re) * sin((start.phi.value)));
+  (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
   (p.phi).normalize();
 
-  (p.lambda.value) = -atan((cos((start.lambda.value)) * sin((s.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((s.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((s.value)/Re) * sin((start.phi.value))))/( cos((s.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((s.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
+  (p.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
 
-  if(cos((s.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((s.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
+  if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
 
   (p.lambda).normalize();
+
+  p.print("end", prefix, cout);
 
   return p;
 

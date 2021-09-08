@@ -137,8 +137,8 @@ class Length{
  public:
   double value;
   void set(string, double, string);
-  void enter(string, string);
-  void print(string, string, ostream&);
+  void enter(string, string, string);
+  void print(string, string, string, ostream&);
   void read_from_file(string, File&, string);
   bool check_valid(string, string);
 
@@ -348,7 +348,7 @@ void Point::transport(string prefix){
   }while(!check);
   route.start = (*this); 
   route.alpha.enter("starting heading", new_prefix.str());
-  route.l.enter("length", new_prefix.str());
+  route.l.enter("length", "nm", new_prefix.str());
 
   route.print("transport", prefix, cout);
   
@@ -416,7 +416,7 @@ void Route::print(string name, string prefix, ostream& ostr){
   type.print("type", new_prefix.str(), ostr);
   start.print("starting point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
-  l.print("length", new_prefix.str(), ostr);
+  l.print("length", "nm", new_prefix.str(), ostr);
   
 }
 
@@ -441,7 +441,7 @@ void Route::enter(string name, string prefix){
   }while(!check);
   start.enter("starting point", new_prefix.str());
   alpha.enter("starting heading", new_prefix.str());
-  l.enter("length", new_prefix.str());
+  l.enter("length", "nm", new_prefix.str());
   
 }
 
@@ -812,7 +812,7 @@ void Length::read_from_file(string name, File& file, string prefix){
 
   value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
   
-  print("radius", prefix, cout);
+  print("radius", "nm", prefix, cout);
 
 }
 
@@ -1221,7 +1221,7 @@ void Sight::print(string name, string prefix, ostream& ostr){
   index_error.print("index error", new_prefix.str(), ostr);
   artificial_horizon.print("artificial horizon", new_prefix.str(), ostr);
   if(artificial_horizon.value == 'n'){
-    height_of_eye.print("height of eye", new_prefix.str(), ostr);
+    height_of_eye.print("height of eye", "m", new_prefix.str(), ostr);
   }
   master_clock_date_and_hour.print("master-clock date and hour of sight", new_prefix.str(), ostr);
   use_stopwatch.print("use of stopwatch", new_prefix.str(), ostr);
@@ -1971,7 +1971,7 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   index_error.enter("index error", new_prefix.str());
   artificial_horizon.enter("artificial horizon", new_prefix.str());
   if(artificial_horizon.value == 'n'){
-    height_of_eye.enter("height of eye", new_prefix.str());
+    height_of_eye.enter("height of eye", "m", new_prefix.str());
   }
   
   do{
@@ -2373,7 +2373,7 @@ void Body::print(string name_in, string prefix, ostream& ostr){
     RA.print("Right ascension", new_prefix.str(), ostr);
     d.print("Declination", new_prefix.str(), ostr);
   }else{
-    radius.print("Radius", new_prefix.str(), ostr);
+    radius.print("Radius", "nm", new_prefix.str(), ostr);
   }
  
 }
@@ -2474,35 +2474,47 @@ void Length::set(string name, double x, string prefix){
   value = x;
   
   if(check_valid(name, new_prefix.str())){
-    print(name, prefix, cout); 
+    print(name, "nm", prefix, cout); 
   }
   
 }
 
 //enter a length in meters
-void Length::enter(string name, string prefix){
+void Length::enter(string name, string unit, string prefix){
 
   stringstream temp;
 
   temp.clear();
-  temp << name << " [m]";
+  temp << name;
+  if(unit == "nm"){
+    temp  << " [nm]";
+  }else{
+   temp << " [m]";
+  }
 
   do{
     
     enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
     
   }while(!check_valid(name, prefix));
-    
-  //convert to nautical miles
-  value/=(1e3*nm);
-    
-  print(name, prefix, cout); 
+
+  //if the length has been entered in units of m, convert it to nautical miles
+  if(unit == "m"){
+    value/=(1e3*nm);
+  }
+  
+  print(name, unit, prefix, cout); 
   
 }
 
-void Length::print(string name, string prefix, ostream& ostr){
+void Length::print(string name, string unit, string prefix, ostream& ostr){
 
-  ostr << prefix << name << " = " << value << " nm.\n";
+  ostr << prefix << name << " = " << value;
+  if(unit == "nm"){
+    ostr << value << " nm\n";
+  }else{
+    ostr << value*nm*1e3 << " m\n";
+  }
  
 }
 
@@ -2624,7 +2636,7 @@ bool Sight::get_coordinates(string prefix){
 	check &= false; 
       }else{
 	if((r.check_valid("r", new_prefix.str()))){
-	  r.print("r", new_prefix.str(), cout);
+	  r.print("r", "nm", new_prefix.str(), cout);
 	}else{
 	  check &= false; 
 	}

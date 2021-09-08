@@ -14,6 +14,8 @@
 #define max_iter (1e3)
 //one nautical mile in kilometers
 #define nm 1.852
+//earth radius
+#define Re (6371.0/nm)
 #define RED     "\033[1;31m"    
 #define YELLOW     "\033[1;33m"   
 #define CYAN "\033[1;36m"      
@@ -328,7 +330,7 @@ class Route{
   //the angle that the vector tangent to the route describes with the local meridian at start
   Angle alpha;
   //the length of the route
-  Length L;
+  Length l;
 
   void enter(string, string);
   void print(string, string, ostream&);
@@ -337,19 +339,20 @@ class Route{
 };
 
 //returns a point on the Route at length l along the Route from start
-Point Route::point(Length l){
-
+Point Route::point(Length s){
 
   Point p;
   
-  (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin(t) + cos(t) * sin((start.phi.value)));
+  (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((s.value)/Re) + cos((s.value)/Re) * sin((start.phi.value)));
   (p.phi).normalize();
 
-  (p.lambda.value) = -atan((cos((start.lambda.value)) * sin(t) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos(t) * cos((start.phi.value)) +  cos((alpha.value)) * sin(t) * sin((start.phi.value))))/( cos(t) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin(t) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
+  (p.lambda.value) = -atan((cos((start.lambda.value)) * sin((s.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((s.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((s.value)/Re) * sin((start.phi.value))))/( cos((s.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((s.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
 
-  if(cos(t) * cos((start.lambda.value)) * cos((start.phi.value)) + sin(t) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
+  if(cos((s.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((s.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
 
   (p.lambda).normalize();
+
+  return p;
 
 }
 
@@ -366,7 +369,7 @@ void Route::print(string name, string prefix, ostream& ostr){
   type.print("type", new_prefix.str(), ostr);
   start.print("starting point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
-  L.print("length", new_prefix.str(), ostr);
+  l.print("length", new_prefix.str(), ostr);
   
 }
 
@@ -391,7 +394,7 @@ void Route::enter(string name, string prefix){
   }while(!check);
   start.enter("starting point", new_prefix.str());
   alpha.enter("starting heading", new_prefix.str());
-  L.enter("length", new_prefix.str());
+  l.enter("length", new_prefix.str());
 
   
   print(name, prefix, cout);
@@ -2228,7 +2231,7 @@ void Atmosphere::set(void){
 
   n_layers = 7;
   A = 0.7933516713545163, B = 34.16*nm, P_dry_0 = 101325.0, alpha = -6.5*nm, beta = 2.8*nm, gamma = -2.8*nm, T0 = 288.15;
-  earth_radius.value = 6371.0/nm;
+  earth_radius.value = Re;
 
   h.resize(n_layers+1);
   lambda.resize(n_layers);

@@ -345,7 +345,7 @@ Point Route::end(string prefix){
   Point p;
   stringstream label_p;
 
-  if(type == "o"){
+  if(type.value == "o"){
 
     //end of orthodrome route
   

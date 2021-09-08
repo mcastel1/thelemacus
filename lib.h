@@ -339,7 +339,17 @@ class Route{
 //returns a point on the Route at length l along the Route from start
 Point Route::point(Length l){
 
+
+  Point p;
   
+  (p.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin(t) + cos(t) * sin((start.phi.value)));
+  (p.phi).normalize();
+
+  (p.lambda.value) = -atan((cos((start.lambda.value)) * sin(t) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos(t) * cos((start.phi.value)) +  cos((alpha.value)) * sin(t) * sin((start.phi.value))))/( cos(t) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin(t) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
+
+  if(cos(t) * cos((start.lambda.value)) * cos((start.phi.value)) + sin(t) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(p.lambda.value) += M_PI;}
+
+  (p.lambda).normalize();
 
 }
 

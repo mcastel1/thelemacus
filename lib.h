@@ -2921,7 +2921,7 @@ stringstream Angle::to_string(unsigned int precision){
   output.precision(precision);
 
   normalize();
-  output << floor(K*value - 360.0*floor(K*value/360.0)) << "d " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "m";
+  output << floor(K*value - 360.0*floor(K*value/360.0)) << "'\260' " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\\''";
 
   return output;
   

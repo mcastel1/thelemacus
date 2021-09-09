@@ -1,0 +1,26 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type = moon
+			Name = moon
+			Radius = 938.12099999999998090061126276851 nm
+		limb = u
+		sextant altitude = 47째 57.799999999999869260136620141566'
+		index error = 0째 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-06-21
+			hour of master-clock date and hour of sight = 21:01:20
+		use of stopwatch = y
+		hour of stopwatch = 00:37:35
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = my favorite sight
+Points in the plot:
+	Point #1:
+		latitude = 48째 53.179755628049463211937109008431'
+		longitude = 357째 34.42523605561859767476562410593'
+		label = BGC tr. w o, 22'{/Symbol �}' 2'\'', l = 2 nm
+	Point #2:
+		latitude = 48째 51.309166999999860081516089849174'
+		longitude = 357째 35.41566699999748379923403263092'
+		label = MP

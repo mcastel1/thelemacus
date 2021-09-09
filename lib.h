@@ -268,6 +268,7 @@ class Angle{
   void set(string, double, string);
   void print(string, string, ostream&);
   void read_from_file(string, File&, string);
+  stringstream to_string(unsigned int);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
   
@@ -354,7 +355,7 @@ void Point::transport(string prefix){
   
   route.compute_end(new_prefix.str());
 
-  temp_label << (*this).label.value << " transported with " << route.type.value << ", heading = " << route.alpha.value << ", length = " << route.l.value << " nm";
+  temp_label << (*this).label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", length = " << route.l.value << " nm";
   route.end.label.value = temp_label.str();
 
   (*this) = route.end;
@@ -2837,6 +2838,19 @@ void Angle::print(string name, string prefix, ostream& ostr){
   normalize();
   ostr << prefix << name << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
 
+}
+
+stringstream Angle::to_string(unsigned int precision){
+
+  stringstream output;
+  
+  output.precision(precision);
+
+  normalize();
+  output << floor(K*value - 360.0*floor(K*value/360.0)) << "d " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "m";
+
+  return output;
+  
 }
 
 void Limb::enter(string name, string prefix){

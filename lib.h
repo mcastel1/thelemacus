@@ -336,7 +336,6 @@ void Point::transport(string prefix){
 
   //append \t to prefix
   new_prefix << prefix << "\t";
-  temp_label.precision(display_precision);
 
   cout << prefix << "Enter route:\n";
 
@@ -355,7 +354,7 @@ void Point::transport(string prefix){
   
   route.compute_end(new_prefix.str());
 
-  temp_label << (*this).label.value << " tr., " << route.type.value << ", hdg = " << route.alpha.value << ", l = " << route.l.value << " nm";
+  temp_label << (*this).label.value << " transported with " << route.type.value << ", heading = " << route.alpha.value << ", length = " << route.l.value << " nm";
   route.end.label.value = temp_label.str();
 
   (*this) = route.end;

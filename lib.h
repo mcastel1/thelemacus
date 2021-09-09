@@ -331,7 +331,7 @@ class Route{
 void Point::transport(string prefix){
 
   Route route;
-  stringstream new_prefix;
+  stringstream new_prefix, temp_label;
   bool check;
 
   //append \t to prefix
@@ -353,6 +353,10 @@ void Point::transport(string prefix){
   route.print("transport", prefix, cout);
   
   route.compute_end(new_prefix.str());
+
+  temp_label << (*this).label.value << " transported with " << route.type.value << ", heading = " << route.alpha.value << ", length = " << route.l.value << " nm";
+  route.end.label.value = temp_label.str();
+
   (*this) = route.end;
 
   print("transported point", prefix, cout);

@@ -1101,8 +1101,45 @@ class Sight{
 
   Point circle_of_equal_altitude(Angle);
 
+  void transport(string);
+
    
 };
+
+void Sight::transport(string prefix){
+
+  Route route;
+  stringstream new_prefix, temp_label;
+  bool check;
+
+  //append \t to prefix
+  new_prefix << prefix << "\t";
+
+  cout << prefix << "Enter route:\n";
+
+  do{
+    route.type.enter("type [l(=loxodrome)/o(=orthodrome)]", new_prefix.str());
+    check = ((route.type.value == "l") || (route.type.value == "o"));
+    if(!check){
+      cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
+    }
+  }while(!check);
+  route.start = GP; 
+  route.alpha.enter("starting heading", new_prefix.str());
+  route.l.enter("length", "nm", new_prefix.str());
+
+  route.print("transport", prefix, cout);
+  
+  route.compute_end(new_prefix.str());
+
+  temp_label << label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
+  route.end.label.value = temp_label.str();
+
+  GP = route.end;
+
+  print("transported sight", prefix, cout);
+
+}
 
 //For a given value of the parameter angle t, this function returns a Point which lies on the circle of equal altitude described by GP and H_o. By varying t, the whole circle can be traced. 
 Point Sight::circle_of_equal_altitude(Angle t){

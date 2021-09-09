@@ -48,7 +48,7 @@
 - all functions ..read_from_file shouuld return a bool to signal whether the reading was successful or not
 - check whether H_o > 0, and if it is not, restart the procedure to enter the sight
 - adjust the number of points of coastlines as a function of the plot scale: the larger the scale, the lesser points
-- replace d and m in Angle::to_string with real degree symbol and ' symbol
+- replace d and m in Angle::to_string with real degree symbol and ' symbol (   {/Symbol \260} is the degree symbol in gnuplot)
 - when you want to transport or delete a sight, print out the sight list only (same for points)
 */
 

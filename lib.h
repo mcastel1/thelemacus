@@ -355,7 +355,7 @@ void Point::transport(string prefix){
   
   route.compute_end(new_prefix.str());
 
-  temp_label << (*this).label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", length = " << route.l.value << " nm";
+  temp_label << (*this).label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
   route.end.label.value = temp_label.str();
 
   (*this) = route.end;

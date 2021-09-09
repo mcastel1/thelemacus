@@ -356,7 +356,7 @@ void Point::transport(string prefix){
   route.compute_end(new_prefix.str());
 
   temp_label << label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
-  route.end.label.value = temp_label.str();
+  (route.end.label).set(temp_label.str(), prefix);
 
   (*this) = route.end;
 
@@ -1132,10 +1132,11 @@ void Sight::transport(string prefix){
   
   route.compute_end(new_prefix.str());
 
-  temp_label << label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
-  route.end.label.value = temp_label.str();
-
   GP = route.end;
+
+  //append 'translated to ...' to the label of sight, and make this the new label of sight
+  temp_label << label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
+  label.set(temp_label.str(), prefix);
 
   print("transported sight", prefix, cout);
 
@@ -1290,6 +1291,7 @@ class Plot{
   Plot(Catalog*);
   //~Plot();
   bool add_sight(string);
+  void transport_sight(unsigned int, string);
   void add_point(string);
   void remove_sight(unsigned int, string);
   void transport_point(unsigned int, string);
@@ -1426,16 +1428,38 @@ void Plot::menu(void){
 
   }
     break;
-    
+
+
   case 2:{
 
     if(sight_list.size() > 0){
 
+      print("\t", cout);
+
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to transport", "\t");	
+      i--;
+   
+      transport_sight(i, "\t");
+      print("\t", cout);
+      show("\t");
+
+    }else{
+      cout << RED << "There are no sights to transport!\n" << RESET;
+    }
+
+    menu();
+   
+  }
+    break;
+
+   
+  case 3:{
+
+    if(sight_list.size() > 0){
  
       print("\t", cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", "\t");
-	
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", "\t");	
       i--;
    
       remove_sight(i, "\t");
@@ -1447,12 +1471,11 @@ void Plot::menu(void){
     }
 
     menu();  
-
    
   }
     break;
 
-  case 3:{
+  case 4:{
 
     add_point("\t");
     print("\t", cout);
@@ -1463,15 +1486,13 @@ void Plot::menu(void){
     break;
 
     
-  case 4:{
-
+  case 5:{
     
     if(point_list.size() > 0){
 
       print("\t", cout);
 
       enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to transport", "\t");
-
       i--;
 
       transport_point(i, "\t");
@@ -1484,11 +1505,10 @@ void Plot::menu(void){
     
     menu();  
 
-
   }
     break;
 
-  case 5:{
+  case 6:{
 
     if(point_list.size() > 0){
 
@@ -1496,7 +1516,6 @@ void Plot::menu(void){
       print("\t", cout);
 
       enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", "\t");
-
       i--;
 	
       remove_point(i, "\t");
@@ -1512,7 +1531,7 @@ void Plot::menu(void){
   }
     break;
 
-  case 6:{
+  case 7:{
 
     if(sight_list.size() + point_list.size() > 0){
   
@@ -1541,7 +1560,7 @@ void Plot::menu(void){
   }
     break;
 
-  case 7:{
+  case 8:{
 
     String filename;
     stringstream line_ins;
@@ -1561,7 +1580,7 @@ void Plot::menu(void){
     break;
     
     
-  case 8:{
+  case 9:{
 
     File file;
     string line;
@@ -1614,7 +1633,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name("job_id.txt");
   file_gnuplot.set_name("plot.plt");
 
-  choices = {"Add a sight", "Delete a sight", "Add a point", "Transport a point", "Delete a point", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a point", "Transport a point", "Delete a point", "Save to file", "Read from file", "Exit"};
   
 }
 
@@ -1713,6 +1732,24 @@ void Plot::remove_point(unsigned int i, string prefix){
   cout << prefix << "Point removed.\n";
 
 }
+
+void Plot::transport_sight(unsigned int i, string prefix){
+
+  stringstream name, new_prefix;
+
+  new_prefix << prefix << "\t";
+
+  name.str("");
+  name << "Sight to be transported: Sight #" << i+1;
+  
+  (sight_list[i]).print(name.str().c_str(), new_prefix.str(), cout);
+  
+  (sight_list[i]).transport(prefix);
+  
+  cout << prefix << "Sight transported.\n";
+
+}
+
 
 void Plot::transport_point(unsigned int i, string prefix){
 

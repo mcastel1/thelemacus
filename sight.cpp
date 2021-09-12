@@ -50,6 +50,8 @@
 - adjust the number of points of coastlines as a function of the plot scale: the larger the scale, the lesser points
 - replace d and m in Angle::to_string with real degree symbol and ' symbol (   {/Symbol \260} is the degree symbol in gnuplot)
 - when you want to transport or delete a sight, print out the sight list only (same for points)
+- when you enter two commas in minutes in an angle	(Enter mm.m:33.3.33  ) the code does not complain: fix this
+
 */
 
 using namespace std;

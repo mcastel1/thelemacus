@@ -1989,10 +1989,10 @@ void Plot::show(string prefix){
 	plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
 
     }
-    
+     
   } 
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> plot_temp.plt \n";
+  command << "sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> plot_temp.plt \n";
 
 
   
@@ -2006,11 +2006,14 @@ void Plot::show(string prefix){
     plot_command << "plot \"+\" u (xe(K*(" << (point_list[i]).lambda.value << "))):(ye(K*(" << (point_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (point_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
+  command << "sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
 
 
   command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";
+
+  cout << "Plot comm : " << plot_command.str().c_str() << "\n";
+  cout << "System comm : " << command.str().c_str() << "\n";
   
   system(command.str().c_str());
 

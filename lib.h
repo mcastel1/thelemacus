@@ -100,7 +100,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
     cout << prefix << "Enter " << name << ":";
     getline(cin >> ws, s);
 
-    if(/*here I check whether the quantity entered in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))){
+    if((/*here I check whether the quantity entered in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the dot occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)){
 
       (*x) = stod(s);
       

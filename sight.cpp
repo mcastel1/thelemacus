@@ -49,7 +49,6 @@
 - check whether H_o > 0, and if it is not, restart the procedure to enter the sight
 - adjust the number of points of coastlines as a function of the plot scale: the larger the scale, the lesser points
 - when you want to transport or delete a sight, print out the sight list only (same for points)
-- when you enter two commas in minutes in an angle	(Enter mm.m:33.3.33  ) the code does not complain: fix this
 - when a sight is transported and it crosses the 180 degrees meridian, it is not shown properly 
 */
 

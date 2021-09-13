@@ -1148,11 +1148,16 @@ Point Sight::circle_of_equal_altitude(Angle t){
   Point p;
 
   (p.phi.value) = M_PI/2.0-acos(cos(M_PI/2.0 - (H_o.value)) * sin((GP.phi.value)) - cos((GP.phi.value)) * cos((t.value)) * sin(M_PI/2.0 - (H_o.value)));
+
+  (p.phi).normalize();
+
   
   (p.lambda.value) = -atan( (-sin((GP.lambda.value)) * (cos((GP.phi.value)) * cos(M_PI/2.0 - (H_o.value)) + cos((t.value)) * sin((GP.phi.value)) * sin(M_PI/2.0 - (H_o.value))) + cos((GP.lambda.value)) * sin(M_PI/2.0 - (H_o.value)) * sin((t.value)))
 			    / (cos((GP.phi.value)) * cos((GP.lambda.value)) * cos(M_PI/2.0 - (H_o.value)) + sin(M_PI/2.0 - (H_o.value)) * (cos((GP.lambda.value)) * cos((t.value)) * sin((GP.phi.value)) + sin((GP.lambda.value)) * sin((t.value)))) );
   if( cos((GP.phi.value)) * cos((GP.lambda.value)) * cos(M_PI/2.0 - (H_o.value)) + sin(M_PI/2.0 - (H_o.value)) * (cos((GP.lambda.value)) * cos((t.value)) * sin((GP.phi.value)) + sin((GP.lambda.value)) * sin((t.value))) < 0.0){(p.lambda.value) += M_PI;}
 
+  (p.lambda).normalize();
+  
   return p;
 
 }

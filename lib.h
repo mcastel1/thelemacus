@@ -1303,6 +1303,8 @@ class Plot{
   void remove_point(unsigned int, string);
   bool read_from_file(String, string);
   void print(string, ostream&);
+  void print_sights(string, ostream&);
+  void print_points(string, ostream&);
   void show(string);
   void menu(void);
 
@@ -1439,7 +1441,7 @@ void Plot::menu(void){
 
     if(sight_list.size() > 0){
 
-      print("\t", cout);
+      print_sights("\t", cout);
 
       enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to transport", "\t");	
       i--;
@@ -1462,7 +1464,7 @@ void Plot::menu(void){
 
     if(sight_list.size() > 0){
  
-      print("\t", cout);
+      print_sights("\t", cout);
 
       enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", "\t");	
       i--;
@@ -1495,7 +1497,7 @@ void Plot::menu(void){
     
     if(point_list.size() > 0){
 
-      print("\t", cout);
+      print_points("\t", cout);
 
       enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to transport", "\t");
       i--;
@@ -1518,7 +1520,7 @@ void Plot::menu(void){
     if(point_list.size() > 0){
 
 
-      print("\t", cout);
+      print_points("\t", cout);
 
       enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", "\t");
       i--;
@@ -1653,6 +1655,13 @@ Plot::Plot(Catalog* cata){
 
 void Plot::print(string prefix, ostream& ostr){
 
+  print_sights(prefix, ostr);
+  print_points(prefix, ostr);
+
+}
+
+void Plot::print_sights(string prefix, ostream& ostr){
+
   stringstream new_prefix;
   stringstream name;
   unsigned int i;
@@ -1666,6 +1675,17 @@ void Plot::print(string prefix, ostream& ostr){
     (sight_list[i]).print(name.str().c_str(), new_prefix.str(), ostr);
   }
   
+
+}
+
+void Plot::print_points(string prefix, ostream& ostr){
+
+  stringstream new_prefix;
+  stringstream name;
+  unsigned int i;
+  
+  new_prefix << "\t" << prefix;
+   
   ostr << prefix << "Points in the plot:\n";
   for(i=0; i<point_list.size(); i++){
     name.str("");
@@ -1675,6 +1695,10 @@ void Plot::print(string prefix, ostream& ostr){
 
 
 }
+
+
+
+
 
 bool Plot::add_sight(string prefix){
 

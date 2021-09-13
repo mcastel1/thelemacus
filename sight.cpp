@@ -48,8 +48,6 @@
 - all functions ..read_from_file shouuld return a bool to signal whether the reading was successful or not
 - check whether H_o > 0, and if it is not, restart the procedure to enter the sight
 - adjust the number of points of coastlines as a function of the plot scale: the larger the scale, the lesser points
-- when you want to transport or delete a sight, print out the sight list only (same for points)
-- when a sight is transported and it crosses the 180 degrees meridian, it is not shown properly 
 - when you transport a sight and save to file, in the saved file there is no trace of the fact that the sight has been transported 
 */
 

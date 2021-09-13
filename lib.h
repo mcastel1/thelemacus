@@ -1954,8 +1954,30 @@ void Plot::show(string prefix){
       //in this case (sight_list[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that (sight_list[i]).GP.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
 
       // interval where I know that there will be t_s
-      x_lo_s = 0.0;
-      x_hi_s = 2.0*M_PI;
+      if(sin(M_PI/2.0 - ((sight_list[i]).H_o.value))/cos(((sight_list[i]).GP.phi.value) - (M_PI/2.0 - ((sight_list[i]).H_o.value))) > 0.0){
+	//in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
+	if((sight_list[i]).GP.lambda.value < M_PI){
+	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
+	  x_lo_s = 0.0;
+	  x_hi_s = M_PI;
+	}else{
+	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
+	  x_lo_s = M_PI;
+	  x_hi_s = 2.0*M_PI;
+	}
+      }else{
+	//in this case lambda'(t = 0) < 0.0 -> lambda'(t) < 0.0  for all t
+	if((sight_list[i]).GP.lambda.value < M_PI){
+	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
+	  x_lo_s = M_PI;
+	  x_hi_s = 2.0*M_PI;
+	}else{
+	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
+	  x_lo_s = 0.0;
+	  x_hi_s = M_PI;
+	}
+
+      }
 
       F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
       F.params = &(sight_list[i]);

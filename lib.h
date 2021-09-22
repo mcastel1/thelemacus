@@ -167,7 +167,7 @@ class File{
   File();
   void set_name(string);
   void enter_name(string);
-  int open(string, string);
+  bool open(string, string);
   void close(string);
   void remove(void);
   void count_lines(string);
@@ -754,7 +754,7 @@ void File::set_name(string filename){
   
 }
 
-int File::open(string mode, string prefix){
+bool File::open(string mode, string prefix){
 
 
   if(mode =="in"){
@@ -949,7 +949,7 @@ Catalog::Catalog(string filename){
 
 
   file.set_name(filename);
-  if(file.open("in", "")==1){
+  if(file.open("in", "")){
 
     getline((file.value), line);
 
@@ -2066,7 +2066,7 @@ void Plot::show(string prefix){
   system(command.str().c_str());
 
   //read the job id from file_id
-  if(file_id.open("in", "\t")==1){
+  if(file_id.open("in", "\t")){
     getline(file_id.value, line);
     line_ins << line;
     line_ins >> job_id;
@@ -2671,7 +2671,7 @@ bool Sight::get_coordinates(string prefix){
 
   
   file.set_name(temp.c_str()); 
-  if(file.open("in", new_prefix.str())==1){
+  if(file.open("in", new_prefix.str())){
 
     /* cout << "\nMJD = " << t.MJD; */
     /* cout << "\nMJD0 = " << MJD_min; */

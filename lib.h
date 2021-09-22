@@ -763,11 +763,11 @@ int File::open(string mode, string prefix){
     value.open(name.value, ios::out);
   }
   
-  cout << prefix << "Opening " << (name.value) << " in mode '" <<  mode << "' ... ";
+  cout << prefix << "Opening " << (name.value) << " in mode '" <<  mode << "' ... \n";
   
   if(!value){
     
-    cout << RED << "\nError opening file " << (name.value) << "!\n" << RESET;
+    cout << prefix << RED << "Error opening file " << (name.value) << "!\n" << RESET;
     return 0;
     
   }else{
@@ -1576,11 +1576,11 @@ void Plot::menu(void){
     line_ins << filename.value << ".sav"; 
     filename.value = line_ins.str();
     
-    read_from_file(filename, "\t");
+    if(read_from_file(filename, "\t")){
+      print("\t", cout);
+      show("\t");
+    }
         
-    print("\t", cout);
-    show("\t");
-    
     menu();  
 
   }

@@ -400,6 +400,9 @@ void Route::compute_end(string prefix){
 
     //end of loxodrome route
 
+    //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); pm = true -> +1, pm = false -> -1
+    bool pm;
+
     
   }
 

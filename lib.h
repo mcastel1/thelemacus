@@ -405,14 +405,18 @@ void Route::compute_end(string prefix){
     double C;
     Angle t;
     
-    if(( M_PI/2.0 <= (alpha.value) < M_PI) || ( 3.0*M_PI/2.0 <= (alpha.value) < 2.0*M_PI)){pm = +1;}
+    if(( (M_PI/2.0 <= (alpha.value)) && ((alpha.value) < M_PI) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){pm = +1;}
     else{pm = -1;}
     C = gsl_pow_2(cos(alpha.value));
 
     t.value = -pm*sqrt((1.0-C)/C)
-      * log( sqrt((1.0+sin(start.phi))/(1.0-sin(start.phi))) * tan( -pm*sqrt(C)*(l.value)/(2.0*Re) + atan((1.0-sin(start.phi))/(1.0+sin(start.phi))) ) );
-    
+      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -pm*sqrt(C)*(l.value)/(2.0*Re) + atan((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value))) ) );
 
+    (end.phi.value) = asin( tanh( pm*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
+    (end.phi).normalize();
+
+    (end.lambda) = (start.lambda) + t;
+    (end.lambda).normalize();
     
   }
 

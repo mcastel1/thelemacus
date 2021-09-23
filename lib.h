@@ -400,8 +400,12 @@ void Route::compute_end(string prefix){
 
     //end of loxodrome route
 
-    //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); pm = true -> +1, pm = false -> -1
-    bool pm;
+    //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
+    int pm;
+    if(( M_PI/2.0 <= (alpha.value) < M_PI) || ( 3.0*M_PI/2.0 <= (alpha.value) < 2.0*M_PI)){pm = +1;}
+    else{pm = -1;}
+
+    
 
     
   }

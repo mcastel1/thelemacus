@@ -402,9 +402,15 @@ void Route::compute_end(string prefix){
 
     //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
     int pm;
+    double C;
+    Angle t;
+    
     if(( M_PI/2.0 <= (alpha.value) < M_PI) || ( 3.0*M_PI/2.0 <= (alpha.value) < 2.0*M_PI)){pm = +1;}
     else{pm = -1;}
+    C = gsl_pow_2(cos(alpha.value));
 
+    t.value = -pm*sqrt((1.0-C)/C)
+      * log( sqrt((1.0+sin(start.phi))/(1.0-sin(start.phi))) * tan( -pm*sqrt(C)*(l.value)/(2.0*Re) + atan((1.0-sin(start.phi))/(1.0+sin(start.phi))) ) );
     
 
     

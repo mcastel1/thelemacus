@@ -405,13 +405,18 @@ void Route::compute_end(string prefix){
     double C;
     Angle t;
     
-    if(( (M_PI/2.0 <= (alpha.value)) && ((alpha.value) < M_PI) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){pm = +1;}
+    if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (M_PI <= (alpha.value)) && ((alpha.value) < 3.0*M_PI/2.0) )){pm = +1;}
     else{pm = -1;}
+
+    
     C = gsl_pow_2(cos(alpha.value));
+    cout << "pm = " << pm << "\n";
 
+    cout << "C = " << C << "\n";
     t.value = -pm*sqrt((1.0-C)/C)
-      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -pm*sqrt(C)*(l.value)/(2.0*Re) + atan((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value))) ) );
-
+      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -pm*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
+    t.print("t", prefix, cout);
+    
     (end.phi.value) = asin( tanh( pm*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
     (end.phi).normalize();
 
@@ -436,7 +441,8 @@ void Route::print(string name, string prefix, ostream& ostr){
   cout << prefix << "Route " << name << ":\n";
 
   type.print("type", new_prefix.str(), ostr);
-  start.print("starting point", new_prefix.str(), ostr);
+  start.print("start point", new_prefix.str(), ostr);
+  end.print("end point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
   l.print("length", "nm", new_prefix.str(), ostr);
   

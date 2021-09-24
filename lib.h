@@ -401,26 +401,32 @@ void Route::compute_end(string prefix){
     //end of loxodrome route
 
     //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
-    int pm;
+    int sigma, tau;
     double C;
     Angle t;
-    
-    if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (M_PI <= (alpha.value)) && ((alpha.value) < 3.0*M_PI/2.0) )){pm = +1;}
-    else{pm = -1;}
 
+    //tau = +-_{notes}
+    if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
+    else{tau = -1;}
+
+    if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
+    else{sigma = +1;}
     
     C = gsl_pow_2(cos(alpha.value));
-    cout << "pm = " << pm << "\n";
 
+    cout << "sigma = " << sigma << "\n";
+    cout << "tau = " << tau << "\n";
     cout << "C = " << C << "\n";
-    t.value = -pm*sqrt((1.0-C)/C)
-      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -pm*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
+    
+    t.value = -tau*sqrt((1.0-C)/C)
+      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
+    
     t.print("t", prefix, cout);
     
-    (end.phi.value) = asin( tanh( pm*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
+    (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
     (end.phi).normalize();
 
-    (end.lambda) = (start.lambda) + t;
+    (end.lambda.value) = (start.lambda.value) + sigma*(t.value);
     (end.lambda).normalize();
     
   }

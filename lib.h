@@ -442,7 +442,7 @@ void Route::print(string name, string prefix, ostream& ostr){
 
   type.print("type", new_prefix.str(), ostr);
   start.print("start point", new_prefix.str(), ostr);
-  end.print("end point", new_prefix.str(), ostr);
+  //end.print("end point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
   l.print("length", "nm", new_prefix.str(), ostr);
   

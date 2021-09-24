@@ -400,6 +400,34 @@ void Route::compute_end(string prefix){
 
     //end of loxodrome route
 
+    //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
+    int sigma, tau;
+    double C;
+    Angle t;
+
+    //tau = +-_{notes}
+    if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
+    else{tau = -1;}
+
+    if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
+    else{sigma = +1;}
+    
+    C = gsl_pow_2(cos(alpha.value));
+
+    cout << "sigma = " << sigma << "\n";
+    cout << "tau = " << tau << "\n";
+    cout << "C = " << C << "\n";
+    
+    t.value = -tau*sqrt((1.0-C)/C)
+      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
+    
+    t.print("t", prefix, cout);
+    
+    (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
+    (end.phi).normalize();
+
+    (end.lambda.value) = (start.lambda.value) + sigma*(t.value);
+    (end.lambda).normalize();
     
   }
 
@@ -419,7 +447,8 @@ void Route::print(string name, string prefix, ostream& ostr){
   cout << prefix << "Route " << name << ":\n";
 
   type.print("type", new_prefix.str(), ostr);
-  start.print("starting point", new_prefix.str(), ostr);
+  start.print("start point", new_prefix.str(), ostr);
+  //end.print("end point", new_prefix.str(), ostr);
   alpha.print("starting heading", new_prefix.str(), ostr);
   l.print("length", "nm", new_prefix.str(), ostr);
   

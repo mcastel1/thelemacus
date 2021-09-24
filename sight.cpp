@@ -105,6 +105,7 @@ int main(int argc, char *argv[]){
   Route route;
   route.enter("path to cape horn", "");
   route.compute_end("");
+  route.print("path to cape horn", "", cout);
   return 0;
   */
   

@@ -414,14 +414,14 @@ void Route::compute_end(string prefix){
     
     C = gsl_pow_2(cos(alpha.value));
 
-    cout << "sigma = " << sigma << "\n";
-    cout << "tau = " << tau << "\n";
-    cout << "C = " << C << "\n";
+    /* cout << "sigma = " << sigma << "\n"; */
+    /* cout << "tau = " << tau << "\n"; */
+    /* cout << "C = " << C << "\n"; */
     
     t.value = -tau*sqrt((1.0-C)/C)
       * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
     
-    t.print("t", prefix, cout);
+    /* t.print("t", prefix, cout); */
     
     (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
     (end.phi).normalize();

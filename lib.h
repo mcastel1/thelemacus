@@ -149,13 +149,28 @@ class String{
 
  public:
   string value;
-  
+
+  String();
+  String(string);
   void enter(string, string);
   void print(string, string, ostream&);
   void read_from_file(string, File&, string);
   void set(string, string);
 
 };
+
+String::String(){
+
+  value = "";
+  
+}
+
+
+String::String(string s){
+
+  value = s;
+  
+}
 
 class File{
 

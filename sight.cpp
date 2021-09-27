@@ -109,10 +109,10 @@ int main(int argc, char *argv[]){
   return 0;
   */
   
-  Catalog catalog("data/catalog.txt");
+  Catalog catalog(String("data/catalog.txt"));
   Plot plot(&catalog);
 
-  catalog.print("\t", cout);
+  catalog.print(String("\t"), cout);
   
 
   plot.menu();

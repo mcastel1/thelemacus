@@ -279,10 +279,10 @@ class Angle{
  
   double value;
   void normalize(void);
-  void enter(string, string);
-  void set(string, double, string);
-  void print(String, string, ostream&);
-  void read_from_file(string, File&, string);
+  void enter(String, String);
+  void set(String, double, String);
+  void print(String, String, ostream&);
+  void read_from_file(String, File&, String);
   stringstream to_string(unsigned int);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
@@ -291,7 +291,7 @@ class Angle{
 
 
 
-void Angle::read_from_file(string name, File& file, string prefix){
+void Angle::read_from_file(String name, File& file, String prefix){
 
   string line;
   size_t pos1, pos2, pos3;
@@ -363,7 +363,7 @@ void Point::transport(string prefix){
     }
   }while(!check);
   route.start = (*this); 
-  route.alpha.enter("starting heading", new_prefix.str());
+  route.alpha.enter(String("starting heading"), new_prefix.str());
   route.l.enter("length", "nm", new_prefix.str());
 
   route.print("transport", prefix, cout);
@@ -386,8 +386,8 @@ void Point::read_from_file(File& file, string prefix){
   //prepend \t to prefix
   new_prefix << "\t" << prefix;
 
-  phi.read_from_file("latitude", file, new_prefix.str());
-  lambda.read_from_file("longitude", file, new_prefix.str());
+  phi.read_from_file(String("latitude"), file, new_prefix.str());
+  lambda.read_from_file(String("longitude"), file, new_prefix.str());
   label.read_from_file("label", file, new_prefix.str());
 
 }
@@ -489,7 +489,7 @@ void Route::enter(string name, string prefix){
     }
   }while(!check);
   start.enter("starting point", new_prefix.str());
-  alpha.enter("starting heading", new_prefix.str());
+  alpha.enter(String("starting heading"), new_prefix.str());
   l.enter("length", "nm", new_prefix.str());
   
 }
@@ -965,8 +965,8 @@ void Body::read_from_file(string name, File& file, string prefix){
 
 
   if(type == "star"){
-    RA.read_from_file("right ascension", file, new_prefix.str());
-    d.read_from_file("declination", file, new_prefix.str());
+    RA.read_from_file(String("right ascension"), file, new_prefix.str());
+    d.read_from_file(String("declination"), file, new_prefix.str());
   }else{
     radius.read_from_file("radius", file, new_prefix.str());
   }
@@ -1169,7 +1169,7 @@ void Sight::transport(string prefix){
     }
   }while(!check);
   route.start = GP; 
-  route.alpha.enter("starting heading", new_prefix.str());
+  route.alpha.enter(String("starting heading"), new_prefix.str());
   route.l.enter("length", "nm", new_prefix.str());
 
   route.print("transport", prefix, cout);
@@ -1220,8 +1220,8 @@ bool Sight::read_from_file(File& file, string prefix){
   if(body.type != "star"){
     limb.read_from_file("limb", file, new_prefix.str());
   }
-  H_s.read_from_file("sextant altitude", file, new_prefix.str());
-  index_error.read_from_file("index error", file, new_prefix.str());
+  H_s.read_from_file(String("sextant altitude"), file, new_prefix.str());
+  index_error.read_from_file(String("index error"), file, new_prefix.str());
   artificial_horizon.read_from_file("artificial horizon", file, new_prefix.str());
   if((artificial_horizon.value) == 'n'){
     height_of_eye.read_from_file("height of eye", file, new_prefix.str());
@@ -1893,8 +1893,8 @@ void Plot::show(string prefix){
     if(abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0){
     
       //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
-      t_max.set("t_{max}", acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
-      t_min.set("t_{min}", 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
+      t_max.set(String("t_{max}"), acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
+      t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix.str());
 
       p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
       p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
@@ -2141,8 +2141,8 @@ void Sight::enter(Catalog catalog, string name, string prefix){
   if(body.type != "star"){
     limb.enter("limb", new_prefix.str());
   }
-  H_s.enter("sextant altitude", new_prefix.str());
-  index_error.enter("index error", new_prefix.str());
+  H_s.enter(String("sextant altitude"), new_prefix.str());
+  index_error.enter(String("index error"), new_prefix.str());
   artificial_horizon.enter("artificial horizon", new_prefix.str());
   if(artificial_horizon.value == 'n'){
     height_of_eye.enter("height of eye", "m", new_prefix.str());
@@ -2598,7 +2598,7 @@ void Sight::compute_DH_dip(string prefix){
   Length zero_Length;
   zero_Length.value = 0.0;
 
-  DH_dip.set("Dip correction",
+  DH_dip.set(String("Dip correction"),
 	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ), prefix);
 
 }
@@ -2627,7 +2627,7 @@ bool Sight::compute_DH_refraction(string prefix){
   //status = GSL_FAILURE
 
   if(status == GSL_SUCCESS){
-    DH_refraction.set("refraction correction", result, prefix);
+    DH_refraction.set(String("refraction correction"), result, prefix);
   }else{
     check &= false;
     cout << prefix << RED << "GSL integration failed!\n" << RESET;
@@ -2907,7 +2907,7 @@ bool Sight::get_coordinates(string prefix){
   
 }
 
-void Angle::set(string name, double x, string prefix){
+void Angle::set(String name, double x, String prefix){
 
   value = x;
   normalize();
@@ -2915,7 +2915,7 @@ void Angle::set(string name, double x, string prefix){
   
 }
 
-void Angle::enter(string name, string prefix){
+void Angle::enter(String name, String prefix){
 
   string s;
   stringstream new_prefix;
@@ -2923,20 +2923,20 @@ void Angle::enter(string name, string prefix){
   double am;
   bool check;
 
-  new_prefix << "\t" << prefix;    
+  new_prefix << "\t" << prefix.value;    
 
-  cout << prefix << "Enter " << name << " [s ddd mm.m]:\n";
+  cout << prefix.value << "Enter " << name.value << " [s ddd mm.m]:\n";
 
   do{
     
     s.clear();
 
-    cout << prefix << "\tEnter s: ";
+    cout << prefix.value << "\tEnter s: ";
     cin >> s;
     
     if((s=="+") || (s=="-")){check = true;}
     else{
-      cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
       check = false;
     }
   }while(!check);
@@ -2964,7 +2964,7 @@ void Point::enter(string name, string prefix){
   cout << prefix << "Enter " << name << ":\n";
 
   do{
-    phi.enter("latitude", new_prefix.str());
+    phi.enter(String("latitude"), new_prefix.str());
     if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
       cout << new_prefix.str() << RED << "Entered value is not valid!\n" << RESET;
       check = true;
@@ -2973,7 +2973,7 @@ void Point::enter(string name, string prefix){
     }
   }while(check);
   
-  lambda.enter("longitude", new_prefix.str());
+  lambda.enter(String("longitude"), new_prefix.str());
   label.enter("label", new_prefix.str());
   
 }
@@ -3002,10 +3002,10 @@ void Angle::normalize(void){
 }
 
 
-void Angle::print(String name, string prefix, ostream& ostr){
+void Angle::print(String name, String prefix, ostream& ostr){
 
   normalize();
-  ostr << prefix << (name.value) << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
+  ostr << prefix.value << name.value << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
 
 }
 

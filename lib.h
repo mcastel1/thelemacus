@@ -281,7 +281,7 @@ class Angle{
   void normalize(void);
   void enter(string, string);
   void set(string, double, string);
-  void print(string, string, ostream&);
+  void print(String, string, ostream&);
   void read_from_file(string, File&, string);
   stringstream to_string(unsigned int);
 
@@ -464,7 +464,7 @@ void Route::print(string name, string prefix, ostream& ostr){
   type.print("type", new_prefix.str(), ostr);
   start.print("start point", new_prefix.str(), ostr);
   //end.print("end point", new_prefix.str(), ostr);
-  alpha.print("starting heading", new_prefix.str(), ostr);
+  alpha.print(String("starting heading"), new_prefix.str(), ostr);
   l.print("length", "nm", new_prefix.str(), ostr);
   
 }
@@ -1309,8 +1309,8 @@ void Sight::print(string name, string prefix, ostream& ostr){
   if(body.type != "star"){
     limb.print("limb", new_prefix.str(), ostr);
   }
-  H_s.print("sextant altitude", new_prefix.str(), ostr);
-  index_error.print("index error", new_prefix.str(), ostr);
+  H_s.print(String("sextant altitude"), new_prefix.str(), ostr);
+  index_error.print(String("index error"), new_prefix.str(), ostr);
   artificial_horizon.print("artificial horizon", new_prefix.str(), ostr);
   if(artificial_horizon.value == 'n'){
     height_of_eye.print("height of eye", "m", new_prefix.str(), ostr);
@@ -1967,7 +1967,7 @@ void Plot::show(string prefix){
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
 	t_p.value = (x_lo_p+x_hi_p)/2.0;
-	t_p.print("t_+", new_prefix.str(), cout);
+	t_p.print(String("t_+"), new_prefix.str(), cout);
 
 
 
@@ -2000,7 +2000,7 @@ void Plot::show(string prefix){
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
 	t_m.value = (x_lo_m+x_hi_m)/2.0;
-	t_m.print("t_-", new_prefix.str(), cout);
+	t_m.print(String("t_-"), new_prefix.str(), cout);
 
 	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
@@ -2075,7 +2075,7 @@ void Plot::show(string prefix){
       while((status == GSL_CONTINUE) && (iter < max_iter));
 
       t_s.value = (x_lo_s+x_hi_s)/2.0;
-      t_s.print("t_*", new_prefix.str(), cout);
+      t_s.print(String("t_*"), new_prefix.str(), cout);
 
       	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
@@ -2196,12 +2196,12 @@ void Sight::compute_H_a(string prefix){
   
   if(artificial_horizon.value == 'y'){
     H_a = (H_s-index_error)/2.0;
-    H_a.print("apparent altitude", prefix, cout);
+    H_a.print(String("apparent altitude"), prefix, cout);
 
   }else{
     compute_DH_dip(prefix);
     H_a = H_s-index_error+DH_dip;
-    H_a.print("apparent altitude", prefix, cout);
+    H_a.print(String("apparent altitude"), prefix, cout);
   }
   
 }
@@ -2219,7 +2219,7 @@ bool Sight::compute_H_o(string prefix){
   if(check){
     compute_DH_parallax_and_limb(new_prefix.str());
     H_o = H_a + DH_refraction + DH_parallax_and_limb;
-    H_o.print("observed altitude", new_prefix.str(), cout);
+    H_o.print(String("observed altitude"), new_prefix.str(), cout);
   }else{
     cout << prefix << RED << "H_o cannot be computed!\n" << RESET;
   }
@@ -2237,7 +2237,7 @@ void Sight::compute_DH_parallax_and_limb(string prefix){
   new_prefix << prefix << "\t";
 
   H_i = H_a + DH_refraction;
-  H_i.print("intermediate altitude", prefix, cout);
+  H_i.print(String("intermediate altitude"), prefix, cout);
 
   if(body.type != "star"){
 
@@ -2302,7 +2302,7 @@ void Sight::compute_DH_parallax_and_limb(string prefix){
       }
     }
 
-    DH_parallax_and_limb.print("parallax and limb correction", prefix, cout);
+    DH_parallax_and_limb.print(String("parallax and limb correction"), prefix, cout);
 
   }else{
 
@@ -2544,8 +2544,8 @@ void Body::print(string name_in, string prefix, ostream& ostr){
   ostr << new_prefix.str() << "Name = " << name << "\n";
   
   if(type == "star"){
-    RA.print("Right ascension", new_prefix.str(), ostr);
-    d.print("Declination", new_prefix.str(), ostr);
+    RA.print(String("Right ascension"), new_prefix.str(), ostr);
+    d.print(String("Declination"), new_prefix.str(), ostr);
   }else{
     radius.print("Radius", "nm", new_prefix.str(), ostr);
   }
@@ -2793,7 +2793,7 @@ bool Sight::get_coordinates(string prefix){
 	check &= false; 
       }else{
 	(GP.lambda).normalize();
-	(GP.lambda).print("GHA", new_prefix.str(), cout);
+	(GP.lambda).print(String("GHA"), new_prefix.str(), cout);
       }	
       //(GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
 
@@ -2802,7 +2802,7 @@ bool Sight::get_coordinates(string prefix){
 	check &= false; 
       }else{
 	(GP.phi).normalize();
-	(GP.phi).print("d", new_prefix.str(), cout);
+	(GP.phi).print(String("d"), new_prefix.str(), cout);
       }	
       //(GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix.str());
 
@@ -2879,14 +2879,14 @@ bool Sight::get_coordinates(string prefix){
 	check &= false;
       }else{
 	(GP.lambda).normalize();
-	(GP.lambda).print("GHA", new_prefix.str(), cout);
+	(GP.lambda).print(String("GHA"), new_prefix.str(), cout);
       }
 
       if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
 	check &= false;
       }else{
 	(GP.phi).normalize();
-	(GP.phi).print("d", new_prefix.str(), cout);
+	(GP.phi).print(String("d"), new_prefix.str(), cout);
       }
 
     }
@@ -2987,8 +2987,8 @@ void Point::print(string name, string prefix, ostream& ostr){
 
   ostr << prefix << name << ":\n";
 
-  phi.print("latitude", new_prefix.str(), ostr);
-  lambda.print("longitude", new_prefix.str(), ostr);
+  phi.print(String("latitude"), new_prefix.str(), ostr);
+  lambda.print(String("longitude"), new_prefix.str(), ostr);
 
   label.print("label", new_prefix.str(), ostr);
 
@@ -3002,10 +3002,10 @@ void Angle::normalize(void){
 }
 
 
-void Angle::print(string name, string prefix, ostream& ostr){
+void Angle::print(String name, string prefix, ostream& ostr){
 
   normalize();
-  ostr << prefix << name << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
+  ostr << prefix << (name.value) << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
 
 }
 

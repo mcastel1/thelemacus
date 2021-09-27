@@ -27,21 +27,6 @@
 #define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 
-/*
-  void youprint(string input, string prefix)
-  {
-  cout << prefix << input << endl;
-  }
-
-
-  void myprint(string input, string prefix)
-  {
-  cout << prefix << input << endl;
-  stringstream new_prefix;
-  new_prefix << "--" << prefix;
-  youprint(input, new_prefix.str());
-  }
-*/
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 

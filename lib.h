@@ -351,28 +351,29 @@ String String::append(String s){
 void Point::transport(String prefix){
 
   Route route;
-  stringstream new_prefix, temp_label;
+  stringstream temp_label;
   bool check;
+  String new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.append(String("\t"));
 
   cout << prefix.value << "Enter route:\n";
 
   do{
-    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), String(new_prefix.str()));
+    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
     check = ((route.type.value == "l") || (route.type.value == "o"));
     if(!check){
       cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
   route.start = (*this); 
-  route.alpha.enter(String("starting heading"), String(new_prefix.str()));
-  route.l.enter(String("length"), String("nm"), String(new_prefix.str()));
+  route.alpha.enter(String("starting heading"), new_prefix);
+  route.l.enter(String("length"), String("nm"), new_prefix);
 
   route.print(String("transport"), prefix, cout);
   
-  route.compute_end(String(new_prefix.str()));
+  route.compute_end(new_prefix);
 
   temp_label << label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
   (route.end.label).set(temp_label.str(), prefix);
@@ -390,9 +391,9 @@ void Point::read_from_file(File& file, String prefix){
   //prepend \t to prefix
   new_prefix << "\t" << prefix.value;
 
-  phi.read_from_file(String("latitude"), file, String(new_prefix.str()));
-  lambda.read_from_file(String("longitude"), file, String(new_prefix.str()));
-  label.read_from_file(String("label"), file, String(new_prefix.str()));
+  phi.read_from_file(String("latitude"), file, new_prefix);
+  lambda.read_from_file(String("longitude"), file, new_prefix);
+  label.read_from_file(String("label"), file, new_prefix);
 
 }
 
@@ -465,11 +466,11 @@ void Route::print(String name, String prefix, ostream& ostr){
 
   cout << prefix.value << "Route " << name.value << ":\n";
 
-  type.print(String("type"), String(new_prefix.str()), ostr);
-  start.print(String("start point"), String(new_prefix.str()), ostr);
-  //end.print("end point", String(new_prefix.str()), ostr);
-  alpha.print(String("starting heading"), String(new_prefix.str()), ostr);
-  l.print(String("length"), String("nm"), String(new_prefix.str()), ostr);
+  type.print(String("type"), new_prefix, ostr);
+  start.print(String("start point"), new_prefix, ostr);
+  //end.print("end point", new_prefix, ostr);
+  alpha.print(String("starting heading"), new_prefix, ostr);
+  l.print(String("length"), String("nm"), new_prefix, ostr);
   
 }
 
@@ -486,15 +487,15 @@ void Route::enter(String name, String prefix){
   cout << prefix.value << "Enter " << name.value << ":\n";
 
   do{
-    type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), String(new_prefix.str()));
+    type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
     check = ((type.value == "l") || (type.value == "o"));
     if(!check){
       cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
-  start.enter(String("starting point"), String(new_prefix.str()));
-  alpha.enter(String("starting heading"), String(new_prefix.str()));
-  l.enter(String("length"), String("nm"), String(new_prefix.str()));
+  start.enter(String("starting point"), new_prefix);
+  alpha.enter(String("starting heading"), new_prefix);
+  l.enter(String("length"), String("nm"), new_prefix);
   
 }
 
@@ -720,12 +721,12 @@ bool Time::read_from_file(String name, File& file, String prefix){
   cout << prefix.value << name.value << ":\n";
   
   //read date
-  if(!(date.read_from_file(name, file, String(new_prefix.str())))){ 
+  if(!(date.read_from_file(name, file, new_prefix))){ 
     check &= false;
   }
 
   //read chrono
-  if(!(chrono.read_from_file(name, file, String(new_prefix.str())))){
+  if(!(chrono.read_from_file(name, file, new_prefix))){
     check &= false;
   }
 
@@ -771,13 +772,13 @@ void File::count_lines(String prefix){
   command << "wc -l " << (name.value)  << " >> " << ((file_number_of_lines.name).value);
   system(command.str().c_str());
 
-  file_number_of_lines.open(String("in"), String(new_prefix.str()));
+  file_number_of_lines.open(String("in"), new_prefix);
   
   getline((file_number_of_lines.value), line); 
   line_ins << line;
   line_ins >> number_of_lines >> dummy;
 
-  file_number_of_lines.close(String(new_prefix.str()));  
+  file_number_of_lines.close(new_prefix);  
 
   cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
 
@@ -969,10 +970,10 @@ void Body::read_from_file(String name, File& file, String prefix){
 
 
   if(type.value == "star"){
-    RA.read_from_file(String("right ascension"), file, String(new_prefix.str()));
-    d.read_from_file(String("declination"), file, String(new_prefix.str()));
+    RA.read_from_file(String("right ascension"), file, new_prefix);
+    d.read_from_file(String("declination"), file, new_prefix);
   }else{
-    radius.read_from_file(String("radius"), file, String(new_prefix.str()));
+    radius.read_from_file(String("radius"), file, new_prefix);
   }
   
 }
@@ -1044,7 +1045,7 @@ void Catalog::print(String prefix, ostream& ostr){
 
     name.str("");
     name << "Body #" << i;
-    (list[i]).print(name.str(), String(new_prefix.str()), ostr);
+    (list[i]).print(name.str(), new_prefix, ostr);
 
   }
 
@@ -1166,19 +1167,19 @@ void Sight::transport(String prefix){
   cout << prefix.value << "Enter route:\n";
 
   do{
-    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), String(new_prefix.str()));
+    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
     check = ((route.type.value == "l") || (route.type.value == "o"));
     if(!check){
       cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
   route.start = GP; 
-  route.alpha.enter(String("starting heading"), String(new_prefix.str()));
-  route.l.enter(String("length"), String("nm"), String(new_prefix.str()));
+  route.alpha.enter(String("starting heading"), new_prefix);
+  route.l.enter(String("length"), String("nm"), new_prefix);
 
   route.print(String("transport"), prefix, cout);
   
-  route.compute_end(String(new_prefix.str()));
+  route.compute_end(new_prefix);
 
   GP = route.end;
 
@@ -1220,40 +1221,40 @@ bool Sight::read_from_file(File& file, String prefix){
   //prepend \t to prefix
   new_prefix << "\t" << prefix.value;
 
-  body.read_from_file(String("body"), file, String(new_prefix.str()));
+  body.read_from_file(String("body"), file, new_prefix);
   if(body.type.value != "star"){
-    limb.read_from_file(String("limb"), file, String(new_prefix.str()));
+    limb.read_from_file(String("limb"), file, new_prefix);
   }
-  H_s.read_from_file(String("sextant altitude"), file, String(new_prefix.str()));
-  index_error.read_from_file(String("index error"), file, String(new_prefix.str()));
-  artificial_horizon.read_from_file(String("artificial horizon"), file, String(new_prefix.str()));
+  H_s.read_from_file(String("sextant altitude"), file, new_prefix);
+  index_error.read_from_file(String("index error"), file, new_prefix);
+  artificial_horizon.read_from_file(String("artificial horizon"), file, new_prefix);
   if((artificial_horizon.value) == 'n'){
-    height_of_eye.read_from_file(String("height of eye"), file, String(new_prefix.str()));
+    height_of_eye.read_from_file(String("height of eye"), file, new_prefix);
   }
   
-  check &= master_clock_date_and_hour.read_from_file(String("master-clock date and hour of sight"), file, String(new_prefix.str()));
+  check &= master_clock_date_and_hour.read_from_file(String("master-clock date and hour of sight"), file, new_prefix);
   if(!check){
     cout << prefix.value << RED << "\tMaster-clock date and hour is not valid!\n" << RESET;
   }
   time = master_clock_date_and_hour;
  
-  use_stopwatch.read_from_file(String("use of stopwatch"), file, String(new_prefix.str()));
+  use_stopwatch.read_from_file(String("use of stopwatch"), file, new_prefix);
 
   if(use_stopwatch.value == 'y'){
       
-    stopwatch.read_from_file(String("stopwatch"), file, String(new_prefix.str()));
+    stopwatch.read_from_file(String("stopwatch"), file, new_prefix);
     time.add(stopwatch);
 
   }
   
-  TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file, String(new_prefix.str()));
+  TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file, new_prefix);
   time.add(TAI_minus_UTC);
-  time.print(String("TAI date and hour of sight"), String(new_prefix.str()), cout);
+  time.print(String("TAI date and hour of sight"), new_prefix, cout);
 
   //check whether the date and hour of sight falls within the time window covered by JPL data files
   check &= check_data_time_interval(prefix);
 
-  label.read_from_file(String("label"), file, String(new_prefix.str()));
+  label.read_from_file(String("label"), file, new_prefix);
 
   if(!check){
     cout << prefix.value << RED << "Error reading sight!\n" << RESET;
@@ -1282,7 +1283,7 @@ bool Sight::check_data_time_interval(String prefix){
     temp << "data/j2000_to_itrf93.txt";
   }
   data_file.set_name(temp.str()); 
-  data_file.count_lines(String(new_prefix.str()));
+  data_file.count_lines(new_prefix);
 
   //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
   l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
@@ -1309,24 +1310,24 @@ void Sight::print(String name, String prefix, ostream& ostr){
 
   ostr << prefix.value << name.value << ":\n";
 
-  body.print(String("body"), String(new_prefix.str()), ostr);
+  body.print(String("body"), new_prefix, ostr);
   if(body.type.value != "star"){
-    limb.print(String("limb"), String(new_prefix.str()), ostr);
+    limb.print(String("limb"), new_prefix, ostr);
   }
-  H_s.print(String("sextant altitude"), String(new_prefix.str()), ostr);
-  index_error.print(String("index error"), String(new_prefix.str()), ostr);
-  artificial_horizon.print(String("artificial horizon"), String(new_prefix.str()), ostr);
+  H_s.print(String("sextant altitude"), new_prefix, ostr);
+  index_error.print(String("index error"), new_prefix, ostr);
+  artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
   if(artificial_horizon.value == 'n'){
-    height_of_eye.print(String("height of eye"), String("m"), String(new_prefix.str()), ostr);
+    height_of_eye.print(String("height of eye"), String("m"), new_prefix, ostr);
   }
-  master_clock_date_and_hour.print(String("master-clock date and hour of sight"), String(new_prefix.str()), ostr);
-  use_stopwatch.print(String("use of stopwatch"), String(new_prefix.str()), ostr);
+  master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
+  use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);
   if(use_stopwatch.value == 'y'){
-    stopwatch.print(String("stopwatch"), String(new_prefix.str()), ostr);
+    stopwatch.print(String("stopwatch"), new_prefix, ostr);
   }
-  TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), String(new_prefix.str()), ostr);
+  TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix, ostr);
 
-  label.print(String("label"), String(new_prefix.str()), ostr);
+  label.print(String("label"), new_prefix, ostr);
 
 }
 
@@ -1372,7 +1373,7 @@ bool Plot::read_from_file(String filename, String prefix){
  
   file.set_name(filename.value);
   
-  if(!(file.open(String("in"), String(new_prefix.str())))){
+  if(!(file.open(String("in"), new_prefix))){
     
     check &= false;
     
@@ -1397,13 +1398,13 @@ bool Plot::read_from_file(String filename, String prefix){
       Sight sight;
 
       //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
-      check &= (sight.read_from_file(file, String(new_prefix.str())));
+      check &= (sight.read_from_file(file, new_prefix));
       if(check){
 	  
-	check &= (sight.reduce(String(new_prefix.str())));
+	check &= (sight.reduce(new_prefix));
 
 	if(check){
-	  sight.print(String("New sight"), String(new_prefix.str()), cout);
+	  sight.print(String("New sight"), new_prefix, cout);
     
 	  sight_list.push_back(sight);
 	  cout << new_prefix.str() << "Sight added as sight #" << sight_list.size() << ".\n";
@@ -1433,9 +1434,9 @@ bool Plot::read_from_file(String filename, String prefix){
       //read the point block
       Point point;
 
-      point.read_from_file(file, String(new_prefix.str()));
+      point.read_from_file(file, new_prefix);
 	  
-      point.print(String("New point"), String(new_prefix.str()), cout);
+      point.print(String("New point"), new_prefix, cout);
     
       point_list.push_back(point);
       cout << new_prefix.str() << "Point added as point #" << point_list.size() << ".\n";
@@ -1448,7 +1449,7 @@ bool Plot::read_from_file(String filename, String prefix){
     }
 
     
-    file.close(String(new_prefix.str()));
+    file.close(new_prefix);
 
   }
 
@@ -1720,7 +1721,7 @@ void Plot::print_sights(String prefix, ostream& ostr){
   for(i=0; i<sight_list.size(); i++){
     name.str("");
     name <<  "Sight #" << i+1;
-    (sight_list[i]).print(String(name.str().c_str()), String(new_prefix.str()), ostr);
+    (sight_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
   }
   
 
@@ -1738,7 +1739,7 @@ void Plot::print_points(String prefix, ostream& ostr){
   for(i=0; i<point_list.size(); i++){
     name.str("");
     name << "Point #" << i+1;
-    (point_list[i]).print(String(name.str().c_str()), String(new_prefix.str()), ostr);
+    (point_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
   }
 
 
@@ -1819,7 +1820,7 @@ void Plot::transport_sight(unsigned int i, String prefix){
   name.str("");
   name << "Sight to be transported: Sight #" << i+1;
   
-  (sight_list[i]).print(String(name.str().c_str()), String(new_prefix.str()), cout);
+  (sight_list[i]).print(String(name.str().c_str()), new_prefix, cout);
   
   (sight_list[i]).transport(prefix);
   
@@ -1837,7 +1838,7 @@ void Plot::transport_point(unsigned int i, String prefix){
   name.str("");
   name << "Point to be transported: Point #" << i+1;
   
-  (point_list[i]).print(String(name.str().c_str()), String(new_prefix.str()), cout);
+  (point_list[i]).print(String(name.str().c_str()), new_prefix, cout);
   
   (point_list[i]).transport(prefix);
   
@@ -1897,14 +1898,14 @@ void Plot::show(String prefix){
     if(abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0){
     
       //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
-      t_max.set(String("t_{max}"), acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), String(new_prefix.str()));
-      t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), String(new_prefix.str()));
+      t_max.set(String("t_{max}"), acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix);
+      t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix);
 
       p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
       p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
 
-      p_max.print(String("p_max"), String(new_prefix.str()), cout);
-      p_min.print(String("p_min"), String(new_prefix.str()), cout);
+      p_max.print(String("p_max"), new_prefix, cout);
+      p_min.print(String("p_min"), new_prefix, cout);
 
       if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
 	cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
@@ -1971,7 +1972,7 @@ void Plot::show(String prefix){
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
 	t_p.value = (x_lo_p+x_hi_p)/2.0;
-	t_p.print(String("t_+"), String(new_prefix.str()), cout);
+	t_p.print(String("t_+"), new_prefix, cout);
 
 
 
@@ -2004,7 +2005,7 @@ void Plot::show(String prefix){
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
 	t_m.value = (x_lo_m+x_hi_m)/2.0;
-	t_m.print(String("t_-"), String(new_prefix.str()), cout);
+	t_m.print(String("t_-"), new_prefix, cout);
 
 	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
@@ -2079,7 +2080,7 @@ void Plot::show(String prefix){
       while((status == GSL_CONTINUE) && (iter < max_iter));
 
       t_s.value = (x_lo_s+x_hi_s)/2.0;
-      t_s.print(String("t_*"), String(new_prefix.str()), cout);
+      t_s.print(String("t_*"), new_prefix, cout);
 
       	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
@@ -2139,40 +2140,40 @@ void Sight::enter(Catalog catalog, String name, String prefix){
   
   cout << prefix.value << "Enter " << name.value << ":\n";
   
-  body.enter(catalog, String(new_prefix.str()));
-  //GP.label.set("geographic position", String(new_prefix.str()));
+  body.enter(catalog, new_prefix);
+  //GP.label.set("geographic position", new_prefix);
 
   if(body.type.value != "star"){
-    limb.enter(String("limb"), String(new_prefix.str()));
+    limb.enter(String("limb"), new_prefix);
   }
-  H_s.enter(String("sextant altitude"), String(new_prefix.str()));
-  index_error.enter(String("index error"), String(new_prefix.str()));
-  artificial_horizon.enter(String("artificial horizon"), String(new_prefix.str()));
+  H_s.enter(String("sextant altitude"), new_prefix);
+  index_error.enter(String("index error"), new_prefix);
+  artificial_horizon.enter(String("artificial horizon"), new_prefix);
   if(artificial_horizon.value == 'n'){
-    height_of_eye.enter(String("height of eye"), String("m"), String(new_prefix.str()));
+    height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
   }
   
   do{
   
-    master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), String(new_prefix.str()));
+    master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
     time = master_clock_date_and_hour;
     
-    use_stopwatch.enter(String("use of stopwatch"), String(new_prefix.str()));
+    use_stopwatch.enter(String("use of stopwatch"), new_prefix);
 
     if(use_stopwatch.value == 'y'){
         
-      stopwatch.enter(String("stopwatch reading"), String(new_prefix.str()));
+      stopwatch.enter(String("stopwatch reading"), new_prefix);
       time.add(stopwatch);
     
     }
 
-    TAI_minus_UTC.enter(String("TAI - UTC at time of master-clock synchronization with UTC"), String(new_prefix.str()));
+    TAI_minus_UTC.enter(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix);
     time.add(TAI_minus_UTC);
-    time.print(String("TAI date and hour of sight"), String(new_prefix.str()), cout);
+    time.print(String("TAI date and hour of sight"), new_prefix, cout);
 
   }while(!check_data_time_interval(prefix));
 
-  label.enter(String("label"), String(new_prefix.str()));
+  label.enter(String("label"), new_prefix);
 
 }
 
@@ -2183,8 +2184,8 @@ bool Sight::reduce(String prefix){
   
   new_prefix << prefix.value << "\t";
   
-  compute_H_a(String(new_prefix.str()));
-  check &= get_coordinates(String(new_prefix.str()));
+  compute_H_a(new_prefix);
+  check &= get_coordinates(new_prefix);
   check &= compute_H_o(new_prefix.str());
 
   if(!check){
@@ -2218,12 +2219,12 @@ bool Sight::compute_H_o(String prefix){
   
   new_prefix << prefix.value << "\t";
  
-  check &= compute_DH_refraction(String(new_prefix.str()));
+  check &= compute_DH_refraction(new_prefix);
 
   if(check){
-    compute_DH_parallax_and_limb(String(new_prefix.str()));
+    compute_DH_parallax_and_limb(new_prefix);
     H_o = H_a + DH_refraction + DH_parallax_and_limb;
-    H_o.print(String("observed altitude"), String(new_prefix.str()), cout);
+    H_o.print(String("observed altitude"), new_prefix, cout);
   }else{
     cout << prefix.value << RED << "H_o cannot be computed!\n" << RESET;
   }
@@ -2551,7 +2552,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
     RA.print(String("Right ascension"), new_prefix.str(), ostr);
     d.print(String("Declination"), new_prefix.str(), ostr);
   }else{
-    radius.print(String("Radius"), String("nm"), String(new_prefix.str()), ostr);
+    radius.print(String("Radius"), String("nm"), new_prefix, ostr);
   }
  
 }
@@ -2651,7 +2652,7 @@ void Length::set(String name, double x, String prefix){
   
   value = x;
   
-  if(check_valid(name, String(new_prefix.str()))){
+  if(check_valid(name, new_prefix)){
     print(name, String("nm"), prefix, cout); 
   }
   
@@ -2719,7 +2720,7 @@ bool Sight::get_coordinates(String prefix){
 
   
   file.set_name(String(temp.c_str())); 
-  if(file.open(String("in"), String(new_prefix.str()))){
+  if(file.open(String("in"), new_prefix)){
 
     /* cout << "\nMJD = " << t.MJD; */
     /* cout << "\nMJD0 = " << MJD_min; */
@@ -2762,7 +2763,7 @@ bool Sight::get_coordinates(String prefix){
 	
       }
 
-      file.close(String(new_prefix.str()));
+      file.close(new_prefix);
 
       //convert to radians and nm
       for(l=0; l<N; l++){
@@ -2797,29 +2798,29 @@ bool Sight::get_coordinates(String prefix){
 	check &= false; 
       }else{
 	(GP.lambda).normalize();
-	(GP.lambda).print(String("GHA"), String(new_prefix.str()), cout);
+	(GP.lambda).print(String("GHA"), new_prefix, cout);
       }	
-      //(GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), String(new_prefix.str()));
+      //(GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
 
       if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
 	check &= false; 
       }else{
 	(GP.phi).normalize();
-	(GP.phi).print(String("d"), String(new_prefix.str()), cout);
+	(GP.phi).print(String("d"), new_prefix, cout);
       }	
-      //(GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), String(new_prefix.str()));
+      //(GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
       if(gsl_spline_eval_e(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc, &(r.value)) != GSL_SUCCESS){
 	check &= false; 
       }else{
-	if((r.check_valid(String("r"), String(new_prefix.str())))){
-	  r.print(String("r"), String("nm"), String(new_prefix.str()), cout);
+	if((r.check_valid(String("r"), new_prefix))){
+	  r.print(String("r"), String("nm"), new_prefix, cout);
 	}else{
 	  check &= false; 
 	}
       }
-      //r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc), String(new_prefix.str()));
+      //r.set("r", gsl_spline_eval(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
       gsl_spline_free(interpolation_r);
 
@@ -2857,7 +2858,7 @@ bool Sight::get_coordinates(String prefix){
 	
       }
 
-      file.close(String(new_prefix.str()));
+      file.close(new_prefix);
 
  
 
@@ -2883,14 +2884,14 @@ bool Sight::get_coordinates(String prefix){
 	check &= false;
       }else{
 	(GP.lambda).normalize();
-	(GP.lambda).print(String("GHA"), String(new_prefix.str()), cout);
+	(GP.lambda).print(String("GHA"), new_prefix, cout);
       }
 
       if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
 	check &= false;
       }else{
 	(GP.phi).normalize();
-	(GP.phi).print(String("d"), String(new_prefix.str()), cout);
+	(GP.phi).print(String("d"), new_prefix, cout);
       }
 
     }
@@ -2947,8 +2948,8 @@ void Angle::enter(String name, String prefix){
 
 
 
-  enter_unsigned_int(&ad, true, 0, 360, String("ddd"), String(new_prefix.str()));
-  enter_double(&am, true, 0.0, 60.0, String("mm.m"), String(new_prefix.str()));
+  enter_unsigned_int(&ad, true, 0, 360, String("ddd"), new_prefix);
+  enter_double(&am, true, 0.0, 60.0, String("mm.m"), new_prefix);
  
   value = k*(((double)ad) + am/60.0);
   if(s=="-"){value*=-1.0;}
@@ -2968,7 +2969,7 @@ void Point::enter(String name, String prefix){
   cout << prefix.value << "Enter " << name.value << ":\n";
 
   do{
-    phi.enter(String("latitude"), String(new_prefix.str()));
+    phi.enter(String("latitude"), new_prefix);
     if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
       cout << new_prefix.str() << RED << "Entered value is not valid!\n" << RESET;
       check = true;
@@ -2977,8 +2978,8 @@ void Point::enter(String name, String prefix){
     }
   }while(check);
   
-  lambda.enter(String("longitude"), String(new_prefix.str()));
-  label.enter(String("label"), String(new_prefix.str()));
+  lambda.enter(String("longitude"), new_prefix);
+  label.enter(String("label"), new_prefix);
   
 }
 
@@ -2991,10 +2992,10 @@ void Point::print(String name, String prefix, ostream& ostr){
 
   ostr << prefix.value << name.value << ":\n";
 
-  phi.print(String("latitude"), String(new_prefix.str()), ostr);
-  lambda.print(String("longitude"), String(new_prefix.str()), ostr);
+  phi.print(String("latitude"), new_prefix, ostr);
+  lambda.print(String("longitude"), new_prefix, ostr);
 
-  label.print(String("label"), String(new_prefix.str()), ostr);
+  label.print(String("label"), new_prefix, ostr);
 
 }
 
@@ -3145,9 +3146,9 @@ void Chrono::enter(String name, String prefix) {
   
   cout << prefix.value << "Enter " << name.value << " [hh-mm-ss]\n";
 
-  enter_unsigned_int(&h, true, 0, 24, String("hh"), String(new_prefix.str()));
-  enter_unsigned_int(&m, true, 0, 60, String("mm"), String(new_prefix.str()));
-  enter_double(&s, true, 0.0, 60.0, String("ss.s"), String(new_prefix.str()));
+  enter_unsigned_int(&h, true, 0, 24, String("hh"), new_prefix);
+  enter_unsigned_int(&m, true, 0, 60, String("mm"), new_prefix);
+  enter_double(&s, true, 0.0, 60.0, String("ss.s"), new_prefix);
  
 }
 
@@ -3173,8 +3174,8 @@ void Time::print(String name, String prefix, ostream& ostr){
   
   ostr << prefix.value << name.value << ":\n";
 
-  date.print(name, String(new_prefix.str()), ostr);
-  chrono.print(name, String(new_prefix.str()), ostr);
+  date.print(name, new_prefix, ostr);
+  chrono.print(name, new_prefix, ostr);
   
 };
 
@@ -3189,8 +3190,8 @@ void Time::enter(String name, String prefix) {
   
   cout << prefix.value << "Enter master-clock date and hour\n";
   
-  date.enter(String("date"), String(new_prefix.str()));
-  chrono.enter(String("hour"), String(new_prefix.str()));
+  date.enter(String("date"), new_prefix);
+  chrono.enter(String("hour"), new_prefix);
   
   to_MJD();
   print(name, prefix, cout);

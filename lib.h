@@ -2524,7 +2524,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
   stringstream new_prefix;
   new_prefix << prefix.value << "\t";
   
-  ostr << prefix.value << name_in << ":\n";
+  ostr << prefix.value << name_in.value << ":\n";
   
   ostr << new_prefix.str() << "Type = " << type.value << "\n";
   ostr << new_prefix.str() << "Name = " << name.value << "\n";

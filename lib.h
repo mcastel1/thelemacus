@@ -1453,7 +1453,7 @@ void Plot::menu(void){
   for(i=0; i<choices.size(); i++){
     cout << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
-  enter_unsigned_int(&i, true, 1, choices.size()+1, "choice #", String(""));
+  enter_unsigned_int(&i, true, 1, choices.size()+1, String("choice #"), String(""));
 
   
   
@@ -1476,7 +1476,7 @@ void Plot::menu(void){
 
       print_sights(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to transport", String("\t"));	
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to transport"), String("\t"));	
       i--;
    
       transport_sight(i, String("\t"));
@@ -1499,7 +1499,7 @@ void Plot::menu(void){
  
       print_sights(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", String("\t"));	
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), String("\t"));	
       i--;
    
       remove_sight(i, String("\t"));
@@ -1532,7 +1532,7 @@ void Plot::menu(void){
 
       print_points(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to transport", String("\t"));
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to transport"), String("\t"));
       i--;
 
       transport_point(i, String("\t"));
@@ -1555,7 +1555,7 @@ void Plot::menu(void){
 
       print_points(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", String("\t"));
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to delete"), String("\t"));
       i--;
 	
       remove_point(i, String("\t"));
@@ -2932,8 +2932,8 @@ void Angle::enter(String name, String prefix){
 
 
 
-  enter_unsigned_int(&ad, true, 0, 360, "ddd", String(new_prefix.str()));
-  enter_double(&am, true, 0.0, 60.0, "mm.m", String(new_prefix.str()));
+  enter_unsigned_int(&ad, true, 0, 360, String("ddd"), String(new_prefix.str()));
+  enter_double(&am, true, 0.0, 60.0, String("mm.m"), String(new_prefix.str()));
  
   value = k*(((double)ad) + am/60.0);
   if(s=="-"){value*=-1.0;}
@@ -3074,7 +3074,7 @@ void Date::enter(String name, String prefix) {
 
   cout << prefix.value << "Enter " << name.value << " [YYYY-MM-DD]\n";
 
-  enter_unsigned_int(&Y, false, 0, 0, "YYYY", prefix);
+  enter_unsigned_int(&Y, false, 0, 0, String("YYYY"), prefix);
  
   check_leap_year();
   if((Y_is_leap_year)){
@@ -3085,9 +3085,9 @@ void Date::enter(String name, String prefix) {
     cout << new_prefix.str() << "Entered a common year\n";
   }
 
-  enter_unsigned_int(&M, true, 1, 12+1, "MM", prefix);
+  enter_unsigned_int(&M, true, 1, 12+1, String("MM"), prefix);
   
-  enter_unsigned_int(&D, true, 1, days_per_month[M-1]+1, "DD", prefix);
+  enter_unsigned_int(&D, true, 1, days_per_month[M-1]+1, String("DD"), prefix);
 
 }
 
@@ -3130,9 +3130,9 @@ void Chrono::enter(String name, String prefix) {
   
   cout << prefix.value << "Enter " << name.value << " [hh-mm-ss]\n";
 
-  enter_unsigned_int(&h, true, 0, 24, "hh", String(new_prefix.str()));
-  enter_unsigned_int(&m, true, 0, 60, "mm", String(new_prefix.str()));
-  enter_double(&s, true, 0.0, 60.0, "ss.s", String(new_prefix.str()));
+  enter_unsigned_int(&h, true, 0, 24, String("hh"), String(new_prefix.str()));
+  enter_unsigned_int(&m, true, 0, 60, String("mm"), String(new_prefix.str()));
+  enter_double(&s, true, 0.0, 60.0, String("ss.s"), String(new_prefix.str()));
  
 }
 

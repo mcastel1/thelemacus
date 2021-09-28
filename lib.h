@@ -30,6 +30,25 @@
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
+class Catalog;
+class File;
+
+class String{
+
+ public:
+  string value;
+
+  String();
+  String(string);
+  void enter(String, String);
+  void print(String, String, ostream&);
+  void read_from_file(String, File&, String);
+  void set(String, String);
+
+};
+
+
+  
 //this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
 void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, string name, String prefix){
 
@@ -114,9 +133,6 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
 }
 
 
-class Catalog;
-class File;
-class String;
 
 class Length{
 
@@ -131,19 +147,6 @@ class Length{
 };
 
 
-class String{
-
- public:
-  string value;
-
-  String();
-  String(string);
-  void enter(String, String);
-  void print(String, String, ostream&);
-  void read_from_file(String, File&, String);
-  void set(String, String);
-
-};
 
 String::String(){
 

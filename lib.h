@@ -31,7 +31,7 @@
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 //this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, string name, string prefix){
+void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, string name, String prefix){
 
   string s;
   bool check;
@@ -40,7 +40,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
     
     s.clear();
 
-    cout << prefix << "Enter " << name << ":";
+    cout << prefix.value << "Enter " << name << ":";
     getline(cin >> ws, s);
 
     if(/*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
@@ -64,7 +64,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
     }
 
     if(!check){
-      cout << prefix << RED << "\tEntered value is not valid!\n" << RESET;
+      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
     }
     
   }while(!check);
@@ -73,7 +73,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
 
 
 //this function asks the user to enter a double from keyboard and checks whether the entered value contains the allowed chars for double and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_double(double* x, bool check_interval, double min, double sup, string name, string prefix){
+void enter_double(double* x, bool check_interval, double min, double sup, string name, String prefix){
 
   string s;
   bool check;
@@ -82,7 +82,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
     
     s.clear();
 
-    cout << prefix << "Enter " << name << ":";
+    cout << prefix.value << "Enter " << name << ":";
     getline(cin >> ws, s);
 
     if((/*here I check whether the quantity entered in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the dot occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)){
@@ -106,7 +106,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
     }
 
     if(!check){
-      cout << prefix << RED << "Entered value is not valid!\n" << RESET;
+      cout << prefix.value << RED << "Entered value is not valid!\n" << RESET;
     }
     
   }while(!check);
@@ -1450,7 +1450,7 @@ void Plot::menu(void){
   for(i=0; i<choices.size(); i++){
     cout << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
-  enter_unsigned_int(&i, true, 1, choices.size()+1, "choice #", "");
+  enter_unsigned_int(&i, true, 1, choices.size()+1, "choice #", String(""));
 
   
   
@@ -1473,7 +1473,7 @@ void Plot::menu(void){
 
       print_sights(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to transport", "\t");	
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to transport", String("\t"));	
       i--;
    
       transport_sight(i, String("\t"));
@@ -1496,7 +1496,7 @@ void Plot::menu(void){
  
       print_sights(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", "\t");	
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, "# of sight that you want to delete", String("\t"));	
       i--;
    
       remove_sight(i, String("\t"));
@@ -1529,7 +1529,7 @@ void Plot::menu(void){
 
       print_points(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to transport", "\t");
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to transport", String("\t"));
       i--;
 
       transport_point(i, String("\t"));
@@ -1552,7 +1552,7 @@ void Plot::menu(void){
 
       print_points(String("\t"), cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", "\t");
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, "# of point that you want to delete", String("\t"));
       i--;
 	
       remove_point(i, String("\t"));
@@ -3071,7 +3071,7 @@ void Date::enter(String name, String prefix) {
 
   cout << prefix.value << "Enter " << name.value << " [YYYY-MM-DD]\n";
 
-  enter_unsigned_int(&Y, false, 0, 0, "YYYY", prefix.value);
+  enter_unsigned_int(&Y, false, 0, 0, "YYYY", prefix);
  
   check_leap_year();
   if((Y_is_leap_year)){
@@ -3082,9 +3082,9 @@ void Date::enter(String name, String prefix) {
     cout << new_prefix.str() << "Entered a common year\n";
   }
 
-  enter_unsigned_int(&M, true, 1, 12+1, "MM", prefix.value);
+  enter_unsigned_int(&M, true, 1, 12+1, "MM", prefix);
   
-  enter_unsigned_int(&D, true, 1, days_per_month[M-1]+1, "DD", prefix.value);
+  enter_unsigned_int(&D, true, 1, days_per_month[M-1]+1, "DD", prefix);
 
 }
 
@@ -3127,8 +3127,8 @@ void Chrono::enter(String name, String prefix) {
   
   cout << prefix.value << "Enter " << name.value << " [hh-mm-ss]\n";
 
-  enter_unsigned_int(&h, true, 0, 24, "hh", new_prefix.str());
-  enter_unsigned_int(&m, true, 0, 60, "mm", new_prefix.str());
+  enter_unsigned_int(&h, true, 0, 24, "hh", String(new_prefix.str()));
+  enter_unsigned_int(&m, true, 0, 60, "mm", String(new_prefix.str()));
   enter_double(&s, true, 0.0, 60.0, "ss.s", new_prefix.str());
  
 }

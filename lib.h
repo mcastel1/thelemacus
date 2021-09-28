@@ -44,6 +44,7 @@ class String{
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
   void set(String, String);
+  String append(String);
 
 };
 
@@ -332,6 +333,20 @@ class Route{
   void compute_end(String);
   
 };
+
+String String::append(String s){
+
+  String output;
+  stringstream temp;
+  
+  //append \t to prefix
+  temp << value << s.value;
+
+  output.value = temp.str();
+  
+  return output;
+  
+}
 
 void Point::transport(String prefix){
 

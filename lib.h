@@ -50,7 +50,7 @@ class String{
 
   
 //this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, string name, String prefix){
+void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, String name, String prefix){
 
   string s;
   bool check;
@@ -59,7 +59,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
     
     s.clear();
 
-    cout << prefix.value << "Enter " << name << ":";
+    cout << prefix.value << "Enter " << name.value << ":";
     getline(cin >> ws, s);
 
     if(/*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
@@ -92,7 +92,7 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
 
 
 //this function asks the user to enter a double from keyboard and checks whether the entered value contains the allowed chars for double and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_double(double* x, bool check_interval, double min, double sup, string name, String prefix){
+void enter_double(double* x, bool check_interval, double min, double sup, String name, String prefix){
 
   string s;
   bool check;
@@ -101,7 +101,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, string
     
     s.clear();
 
-    cout << prefix.value << "Enter " << name << ":";
+    cout << prefix.value << "Enter " << name.value << ":";
     getline(cin >> ws, s);
 
     if((/*here I check whether the quantity entered in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the dot occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)){

@@ -2654,7 +2654,7 @@ void Length::enter(String name, String unit, String prefix){
 
   do{
     
-    enter_double(&value, false, 0.0, 0.0, temp.str(), prefix.value);
+    enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
     
   }while(!check_valid(name, prefix));
 
@@ -3129,7 +3129,7 @@ void Chrono::enter(String name, String prefix) {
 
   enter_unsigned_int(&h, true, 0, 24, "hh", String(new_prefix.str()));
   enter_unsigned_int(&m, true, 0, 60, "mm", String(new_prefix.str()));
-  enter_double(&s, true, 0.0, 60.0, "ss.s", new_prefix.str());
+  enter_double(&s, true, 0.0, 60.0, "ss.s", String(new_prefix.str()));
  
 }
 

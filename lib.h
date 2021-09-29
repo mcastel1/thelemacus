@@ -45,6 +45,7 @@ class String{
   void read_from_file(String, File&, String);
   void set(String, String);
   String prepend(String);
+  String append(String);
 
 };
 
@@ -66,7 +67,7 @@ class File{
 };
 
 
-bool get_hour_date(String& line, String prefix){
+bool get_date_hour(String &line, String prefix){
 
     File file;
     stringstream command;
@@ -81,6 +82,10 @@ bool get_hour_date(String& line, String prefix){
     line.value.clear();
     getline(file.value, line.value);
     file.close(String(""));
+
+    command.str("");
+    command << "rm -rf output.out";
+    system(command.str().c_str());
 
     if(!check){
       cout << prefix.value << RED << "\tI could not get hour and date!\n" << RESET;
@@ -370,6 +375,21 @@ String String::prepend(String s){
   return output;
   
 }
+
+String String::append(String s){
+
+  String output;
+  stringstream temp;
+  
+  //append \t to prefix
+  temp << s.value << value;
+
+  output.value = temp.str();
+  
+  return output;
+  
+}
+
 
 void Point::transport(String prefix){
 
@@ -1667,32 +1687,22 @@ void Plot::menu(void){
   case 9:{
 
     File file;
-    string line;
+    String line;
 
-    command.str("");
-    command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
-    system(command.str().c_str());
+    //get date and time, which will be used for filename 
+    get_date_hour(line, String(""));
+    line.append(String(".sav"));
 
-    ((file.name).value) = "output.out";
-    file.open(String("in"), String(""));
-    line.clear();
-    getline(file.value, line);
-    line.append(".sav");
-    file.close(String(""));
-    
-    command.str("");
-    command << "rm -rf output.out";
-    system(command.str().c_str());
- 
-    ((file.name).value) = line;
+    //print all plots to file with the filename above
+    ((file.name).value) = line.value;
     file.open(String("out"), String(""));
     print(String(""), file.value);
     file.close(String(""));
 
-    //if plot.plt has been filled, here I save it
+    //if plot.plt has been filled, here I save it with the name 'plot' + filename above
     if(sight_list.size() + point_list.size() >0){
       command.str("");
-      command << "mv plot.plt " << "'plot " << line.c_str() << "'";
+      command << "mv plot.plt " << "'plot " << line.value.c_str() << "'";
       system(command.str().c_str());
     }
     

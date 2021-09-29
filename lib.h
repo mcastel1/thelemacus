@@ -48,7 +48,47 @@ class String{
 
 };
 
+class File{
 
+ public:
+  fstream value;
+  String name;
+  unsigned int number_of_lines;
+
+  File();
+  void set_name(String);
+  void enter_name(String);
+  bool open(String, String);
+  void close(String);
+  void remove(void);
+  void count_lines(String);
+  
+};
+
+
+bool get_hour_date(String& line, String prefix){
+
+    File file;
+    stringstream command;
+    bool check;
+
+    command.str("");
+    command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
+    system(command.str().c_str());
+
+    ((file.name).value) = "output.out";
+    check = file.open(String("in"), String(""));
+    line.value.clear();
+    getline(file.value, line.value);
+    file.close(String(""));
+
+    if(!check){
+      cout << prefix.value << RED << "\tI could not get hour and date!\n" << RESET;
+    }
+    
+    return check;
+
+}
   
 //this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
 void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, String name, String prefix){
@@ -161,23 +201,6 @@ String::String(string s){
   value = s;
   
 }
-
-class File{
-
- public:
-  fstream value;
-  String name;
-  unsigned int number_of_lines;
-
-  File();
-  void set_name(String);
-  void enter_name(String);
-  bool open(String, String);
-  void close(String);
-  void remove(void);
-  void count_lines(String);
-  
-};
 
 
 File::File(){

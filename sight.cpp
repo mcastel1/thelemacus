@@ -50,6 +50,7 @@
 - adjust the number of points of coastlines as a function of the plot scale: the larger the scale, the lesser points
 - when you transport a sight and save to file, in the saved file there is no trace of the fact that the sight has been transported 
 - put variables which are always the same in file init, and choose this default value if pushing enter 
+- include option to automatically set site label to date and hour when sight has been enetered by pushing enter
 */
 
 using namespace std;

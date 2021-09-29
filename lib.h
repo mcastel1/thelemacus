@@ -44,7 +44,7 @@ class String{
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
   void set(String, String);
-  String append(String);
+  String prepend(String);
 
 };
 
@@ -334,7 +334,7 @@ class Route{
   
 };
 
-String String::append(String s){
+String String::prepend(String s){
 
   String output;
   stringstream temp;
@@ -356,7 +356,7 @@ void Point::transport(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.append(String("\t"));
+  new_prefix = prefix.prepend(String("\t"));
 
   cout << prefix.value << "Enter route:\n";
 
@@ -364,7 +364,7 @@ void Point::transport(String prefix){
     route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
     check = ((route.type.value == "l") || (route.type.value == "o"));
     if(!check){
-      cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
+      cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
   route.start = (*this); 
@@ -386,10 +386,10 @@ void Point::transport(String prefix){
 
 void Point::read_from_file(File& file, String prefix){
 
-  stringstream new_prefix;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   phi.read_from_file(String("latitude"), file, new_prefix);
   lambda.read_from_file(String("longitude"), file, new_prefix);
@@ -458,11 +458,10 @@ void Route::compute_end(String prefix){
 
 void Route::print(String name, String prefix, ostream& ostr){
 
-  stringstream new_prefix;
-  String s;
+  String s, new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.prepend(String("\t"));
 
   cout << prefix.value << "Route " << name.value << ":\n";
 
@@ -477,12 +476,12 @@ void Route::print(String name, String prefix, ostream& ostr){
 
 void Route::enter(String name, String prefix){
 
-  stringstream new_prefix;
   string s;
   bool check;
+  String new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.prepend(String("\t"));
 
   cout << prefix.value << "Enter " << name.value << ":\n";
 
@@ -490,7 +489,7 @@ void Route::enter(String name, String prefix){
     type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
     check = ((type.value == "l") || (type.value == "o"));
     if(!check){
-      cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
+      cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
   start.enter(String("starting point"), new_prefix);
@@ -709,12 +708,13 @@ void Date::check_leap_year(void){
 bool Time::read_from_file(String name, File& file, String prefix){
 
   string line;
-  stringstream new_prefix;
   bool check = true;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
+ 
   //read dummy line
   getline(file.value, line);
 
@@ -759,10 +759,10 @@ void File::count_lines(String prefix){
   stringstream command, line_ins;
   string line, dummy;
   File file_number_of_lines;
-  stringstream new_prefix;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
 
   file_number_of_lines.set_name(String("output.out"));
@@ -941,10 +941,10 @@ class Body{
 void Body::read_from_file(String name, File& file, String prefix){
 
   string line;
-  stringstream new_prefix;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   size_t pos;
 
@@ -958,7 +958,7 @@ void Body::read_from_file(String name, File& file, String prefix){
   getline(file.value, line);
   pos = line.find(" = ");
   type = line.substr(pos+3, line.size() - (pos+3));
-  cout << new_prefix.str() << "Type = " << type.value << "\n";
+  cout << new_prefix.value << "Type = " << type.value << "\n";
 
 
   //read name
@@ -966,7 +966,7 @@ void Body::read_from_file(String name, File& file, String prefix){
   getline(file.value, line);
   pos = line.find(" = ");
   ((*this).name) = line.substr(pos+3, line.size() - (pos+3));
-  cout << new_prefix.str() << "Name = " << ((*this).name).value << "\n";
+  cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
 
 
   if(type.value == "star"){
@@ -1036,10 +1036,11 @@ Catalog::Catalog(String filename){
 void Catalog::print(String prefix, ostream& ostr){
 
   unsigned int i;
-  stringstream new_prefix, name;
+  stringstream name;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
   
   for(i=0; i<list.size(); i++){
 
@@ -1158,11 +1159,12 @@ class Sight{
 void Sight::transport(String prefix){
 
   Route route;
-  stringstream new_prefix, temp_label;
+  stringstream temp_label;
   bool check;
+  String new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.prepend(String("\t"));
 
   cout << prefix.value << "Enter route:\n";
 
@@ -1170,7 +1172,7 @@ void Sight::transport(String prefix){
     route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
     check = ((route.type.value == "l") || (route.type.value == "o"));
     if(!check){
-      cout << new_prefix.str() << RED << "\tEntered value of type is not valid!\n" << RESET;
+      cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
   route.start = GP; 
@@ -1214,12 +1216,12 @@ Point Sight::circle_of_equal_altitude(Angle t){
 //this function returns true if the reading operation has been performed without errors, false otherwise
 bool Sight::read_from_file(File& file, String prefix){
 
-  stringstream new_prefix;
   string line;
   bool check = true;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   body.read_from_file(String("body"), file, new_prefix);
   if(body.type.value != "star"){
@@ -1267,12 +1269,13 @@ bool Sight::read_from_file(File& file, String prefix){
 bool Sight::check_data_time_interval(String prefix){
   
   int l_min, l_max;
-  stringstream temp, new_prefix;
+  stringstream temp;
   File data_file;
   bool check;
-  
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   
   //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
@@ -1305,8 +1308,10 @@ bool Sight::check_data_time_interval(String prefix){
 
 void Sight::print(String name, String prefix, ostream& ostr){
 
-  stringstream new_prefix;
-  new_prefix << "\t" << prefix.value;    
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   ostr << prefix.value << name.value << ":\n";
 
@@ -1362,14 +1367,14 @@ class Plot{
 bool Plot::read_from_file(String filename, String prefix){
 
   File file;
-  stringstream line_ins, new_prefix;
+  stringstream line_ins;
   string line;
   size_t pos;
   bool check = true;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
-
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
  
   file.set_name(filename.value);
   
@@ -1392,7 +1397,7 @@ bool Plot::read_from_file(String filename, String prefix){
     //if I have found 'Sight #' in the line above, then I proceed and read the relative sight
     while(pos != (string::npos)){
     
-      cout << new_prefix.str() << "Found new sight!\n";
+      cout << new_prefix.value << "Found new sight!\n";
   
       //read the sight block
       Sight sight;
@@ -1407,7 +1412,7 @@ bool Plot::read_from_file(String filename, String prefix){
 	  sight.print(String("New sight"), new_prefix, cout);
     
 	  sight_list.push_back(sight);
-	  cout << new_prefix.str() << "Sight added as sight #" << sight_list.size() << ".\n";
+	  cout << new_prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
 	}
 	  
       }
@@ -1429,7 +1434,7 @@ bool Plot::read_from_file(String filename, String prefix){
     //if I have found 'Point #' in the line above, then I proceed and read the relative point
     while(pos != (string::npos)){
     
-      cout << new_prefix.str() << "Found new point!\n";
+      cout << new_prefix.value << "Found new point!\n";
   
       //read the point block
       Point point;
@@ -1439,7 +1444,7 @@ bool Plot::read_from_file(String filename, String prefix){
       point.print(String("New point"), new_prefix, cout);
     
       point_list.push_back(point);
-      cout << new_prefix.str() << "Point added as point #" << point_list.size() << ".\n";
+      cout << new_prefix.value << "Point added as point #" << point_list.size() << ".\n";
 	  
       line.clear();
       //read dummyt text line 
@@ -1711,12 +1716,13 @@ void Plot::print(String prefix, ostream& ostr){
 
 void Plot::print_sights(String prefix, ostream& ostr){
 
-  stringstream new_prefix;
   stringstream name;
   unsigned int i;
-  
-  new_prefix << "\t" << prefix.value;
-  
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
+    
   ostr << prefix.value << "Sights in the plot:\n";
   for(i=0; i<sight_list.size(); i++){
     name.str("");
@@ -1729,11 +1735,12 @@ void Plot::print_sights(String prefix, ostream& ostr){
 
 void Plot::print_points(String prefix, ostream& ostr){
 
-  stringstream new_prefix;
   stringstream name;
   unsigned int i;
-  
-  new_prefix << "\t" << prefix.value;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
    
   ostr << prefix.value << "Points in the plot:\n";
   for(i=0; i<point_list.size(); i++){
@@ -1813,9 +1820,11 @@ void Plot::remove_point(unsigned int i, String prefix){
 
 void Plot::transport_sight(unsigned int i, String prefix){
 
-  stringstream name, new_prefix;
+  stringstream name;
+  String new_prefix;
 
-  new_prefix << prefix.value << "\t";
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   name.str("");
   name << "Sight to be transported: Sight #" << i+1;
@@ -1831,9 +1840,11 @@ void Plot::transport_sight(unsigned int i, String prefix){
 
 void Plot::transport_point(unsigned int i, String prefix){
 
-  stringstream name, new_prefix;
+  stringstream name;
+  String new_prefix;
 
-  new_prefix << prefix.value << "\t";
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   name.str("");
   name << "Point to be transported: Point #" << i+1;
@@ -1849,7 +1860,7 @@ void Plot::transport_point(unsigned int i, String prefix){
 
 void Plot::show(String prefix){
 
-  stringstream line_ins, new_prefix;
+  stringstream line_ins;
   string line;
   unsigned int i;
   //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi. 
@@ -1861,15 +1872,16 @@ void Plot::show(String prefix){
   gsl_function F;
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
+  String new_prefix;
 
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
   
   T = gsl_root_fsolver_brent;
   s = gsl_root_fsolver_alloc (T);
 
 
-
-  new_prefix << prefix.value << "\t";
-
+  
   //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped. 
   if(job_id != -1){
     
@@ -1952,7 +1964,7 @@ void Plot::show(String prefix){
 	cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
           
 	cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-	cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+	cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
 
 	iter = 0;
 	do{
@@ -1965,9 +1977,9 @@ void Plot::show(String prefix){
 	  x_hi_p = gsl_root_fsolver_x_upper(s);
 	  status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
 	  if(status == GSL_SUCCESS){
-	    cout << new_prefix.str() << "Converged:\n";
+	    cout << new_prefix.value << "Converged:\n";
 	  }
-	  cout << new_prefix.str() << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
+	  cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
 	}
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
@@ -1985,7 +1997,7 @@ void Plot::show(String prefix){
 	cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
           
 	cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-	cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+	cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
 
 	iter = 0;
 	do{
@@ -1998,9 +2010,9 @@ void Plot::show(String prefix){
 	  x_hi_m = gsl_root_fsolver_x_upper(s);
 	  status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
 	  if(status == GSL_SUCCESS){
-	    cout << new_prefix.str() << "Converged:\n";
+	    cout << new_prefix.value << "Converged:\n";
 	  }
-	  cout << new_prefix.str() << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
+	  cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
 	}
 	while((status == GSL_CONTINUE) && (iter < max_iter));
 
@@ -2060,7 +2072,7 @@ void Plot::show(String prefix){
       gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
 
       cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-      cout << new_prefix.str() << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+      cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
 
       iter = 0;
       do{
@@ -2073,9 +2085,9 @@ void Plot::show(String prefix){
 	x_hi_s = gsl_root_fsolver_x_upper(s);
 	status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
 	if(status == GSL_SUCCESS){
-	  cout << new_prefix.str() << "Converged:\n";
+	  cout << new_prefix.value << "Converged:\n";
 	}
-	cout << new_prefix.str() << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
+	cout << new_prefix.value << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
       }
       while((status == GSL_CONTINUE) && (iter < max_iter));
 
@@ -2130,13 +2142,11 @@ void Plot::show(String prefix){
 
 void Sight::enter(Catalog catalog, String name, String prefix){
 
-  stringstream new_prefix;
   File file;
+  String new_prefix;
 
   //append \t to prefix
-  //strcpy(new_prefix, prefix);    
-  //new_prefix[strlen(prefix)] = '\t';
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.prepend(String("\t"));
   
   cout << prefix.value << "Enter " << name.value << ":\n";
   
@@ -2179,14 +2189,15 @@ void Sight::enter(Catalog catalog, String name, String prefix){
 
 bool Sight::reduce(String prefix){
 
-  stringstream new_prefix;
   bool check = true;
-  
-  new_prefix << prefix.value << "\t";
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
   
   compute_H_a(new_prefix);
   check &= get_coordinates(new_prefix);
-  check &= compute_H_o(new_prefix.str());
+  check &= compute_H_o(new_prefix);
 
   if(!check){
     cout << prefix.value << RED << "Sight cannot be reduced!\n" << RESET;
@@ -2214,10 +2225,11 @@ void Sight::compute_H_a(String prefix){
 
 bool Sight::compute_H_o(String prefix){
 
-  stringstream new_prefix;
   bool check = true;
-  
-  new_prefix << prefix.value << "\t";
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
  
   check &= compute_DH_refraction(new_prefix);
 
@@ -2237,9 +2249,10 @@ bool Sight::compute_H_o(String prefix){
 //check that for r = 0 the upper and lower limb give the same result
 void Sight::compute_DH_parallax_and_limb(String prefix){
 
-  stringstream new_prefix;
-  
-  new_prefix << prefix.value << "\t";
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   H_i = H_a + DH_refraction;
   H_i.print(String("intermediate altitude"), prefix, cout);
@@ -2264,9 +2277,9 @@ void Sight::compute_DH_parallax_and_limb(String prefix){
 	s = gsl_root_fsolver_alloc (T);
 	gsl_root_fsolver_set(s, &F, x_lo, x_hi);
  
-	cout << new_prefix.str() << "Using " << gsl_root_fsolver_name(s) << " method\n";
+	cout << new_prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
 	
-	cout << new_prefix.str() << "iter" <<  "[lower" <<  ", upper] " <<  "root " << "err(est)\n";
+	cout << new_prefix.value << "iter" <<  "[lower" <<  ", upper] " <<  "root " << "err(est)\n";
 	
 	iter = 0;
 	do{
@@ -2279,9 +2292,9 @@ void Sight::compute_DH_parallax_and_limb(String prefix){
 	  x_hi = gsl_root_fsolver_x_upper(s);
 	  status = gsl_root_test_interval (x_lo, x_hi, 0.0, epsrel);
 	  if(status == GSL_SUCCESS){
-	    cout << new_prefix.str() << "Converged.\n";
+	    cout << new_prefix.value << "Converged.\n";
 	  }
-	  cout << new_prefix.str() << iter << " [" << x_lo << ", " << x_hi << "] " << x << " " << x_hi-x_lo << "\n";
+	  cout << new_prefix.value << iter << " [" << x_lo << ", " << x_hi << "] " << x << " " << x_hi-x_lo << "\n";
 
 	}
 	while((status == GSL_CONTINUE) && (iter < max_iter));
@@ -2540,17 +2553,19 @@ void Atmosphere::set(void){
 
 void Body::print(String name_in, String prefix, ostream& ostr){
 
-  stringstream new_prefix;
-  new_prefix << prefix.value << "\t";
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
   
   ostr << prefix.value << name_in.value << ":\n";
   
-  ostr << new_prefix.str() << "Type = " << type.value << "\n";
-  ostr << new_prefix.str() << "Name = " << name.value << "\n";
+  ostr << new_prefix.value << "Type = " << type.value << "\n";
+  ostr << new_prefix.value << "Name = " << name.value << "\n";
   
   if(type.value == "star"){
-    RA.print(String("Right ascension"), new_prefix.str(), ostr);
-    d.print(String("Declination"), new_prefix.str(), ostr);
+    RA.print(String("Right ascension"), new_prefix, ostr);
+    d.print(String("Declination"), new_prefix, ostr);
   }else{
     radius.print(String("Radius"), String("nm"), new_prefix, ostr);
   }
@@ -2563,9 +2578,10 @@ void Body::enter(Catalog catalog, String prefix){
   unsigned int i;
   bool check;
   string s;
-  stringstream new_prefix;
+  String new_prefix;
 
-  new_prefix << prefix.value << "\t";
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   
   do{
@@ -2646,9 +2662,10 @@ bool Sight::compute_DH_refraction(String prefix){
 
 void Length::set(String name, double x, String prefix){
 
-  stringstream new_prefix;
+  String new_prefix;
 
-  new_prefix << "\t" << prefix.value;    
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
   
   value = x;
   
@@ -2700,15 +2717,18 @@ void Length::print(String name, String unit, String prefix, ostream& ostr){
 bool Sight::get_coordinates(String prefix){
 
   File file;
-  stringstream filename, line_ins, new_prefix;
+  stringstream filename, line_ins;
   string line, dummy, temp;
   int l, l_min, l_max;
   double MJD_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
   gsl_interp_accel* acc = gsl_interp_accel_alloc ();
   gsl_spline *interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)), *interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
   bool check = true;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
  
-  new_prefix << "\t" << prefix.value;    
   
 
   if((body.type.value) != "star"){
@@ -2756,7 +2776,7 @@ bool Sight::get_coordinates(String prefix){
 	
 	getline((file.value), line);
 	line_ins << line;
-	cout << new_prefix.str() << line << "\n";
+	cout << new_prefix.value << line << "\n";
 	line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
 	
 	MJD_tab[l-l_min] = ((double)(l-l_min))/L;
@@ -2789,9 +2809,9 @@ bool Sight::get_coordinates(String prefix){
       if(gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
 
   
-      cout << new_prefix.str() << "Read values:\n";
+      cout << new_prefix.value << "Read values:\n";
       for(l=0; l<N; l++){
-	cout << new_prefix.str() << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
+	cout << new_prefix.value << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
       if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.lambda).value)) != GSL_SUCCESS){
@@ -2838,7 +2858,7 @@ bool Sight::get_coordinates(String prefix){
 	
 	getline((file.value), line);
 	line_ins << line;
-	cout << new_prefix.str() << line << "\n";
+	cout << new_prefix.value << line << "\n";
 	line_ins >> dummy >> dummy >> dummy >> phi3 >> phi2 >> phi1;
 
 	phi1*=k;
@@ -2871,9 +2891,9 @@ bool Sight::get_coordinates(String prefix){
 	GHA_tab[l+1] += sum;
       }
 
-      cout << new_prefix.str() << "Read values:\n";
+      cout << new_prefix.value << "Read values:\n";
       for(l=0; l<N; l++){
-	cout << new_prefix.str() << MJD_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
+	cout << new_prefix.value << MJD_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
       }
 
       if(gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
@@ -2923,12 +2943,14 @@ void Angle::set(String name, double x, String prefix){
 void Angle::enter(String name, String prefix){
 
   string s;
-  stringstream new_prefix;
   unsigned int ad;
   double am;
   bool check;
+  String new_prefix;
 
-  new_prefix << "\t" << prefix.value;    
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
+
 
   cout << prefix.value << "Enter " << name.value << " [s ddd mm.m]:\n";
 
@@ -2962,16 +2984,17 @@ void Angle::enter(String name, String prefix){
 void Point::enter(String name, String prefix){
 
   bool check;
-  stringstream new_prefix;
+  String new_prefix;
 
-  new_prefix << "\t" << prefix.value;    
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   cout << prefix.value << "Enter " << name.value << ":\n";
 
   do{
     phi.enter(String("latitude"), new_prefix);
     if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
-      cout << new_prefix.str() << RED << "Entered value is not valid!\n" << RESET;
+      cout << new_prefix.value << RED << "Entered value is not valid!\n" << RESET;
       check = true;
     }else{
       check = false;
@@ -2985,10 +3008,10 @@ void Point::enter(String name, String prefix){
 
 void Point::print(String name, String prefix, ostream& ostr){
 
-  stringstream new_prefix;
+  String new_prefix;
 
-  //prepend \t to prefix
-  new_prefix << "\t" << prefix.value;
+  //append \t to prefix
+  new_prefix = prefix.prepend(String("\t"));
 
   ostr << prefix.value << name.value << ":\n";
 
@@ -3081,12 +3104,12 @@ void Date::print(String name, String prefix, ostream& ostr){
 
 void Date::enter(String name, String prefix) {
 
-  stringstream new_prefix;
   string s;
+  String new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
-  
+  new_prefix = prefix.prepend(String("\t"));
+ 
 
   cout << prefix.value << "Enter " << name.value << " [YYYY-MM-DD]\n";
 
@@ -3095,10 +3118,10 @@ void Date::enter(String name, String prefix) {
   check_leap_year();
   if((Y_is_leap_year)){
     (days_per_month) = days_per_month_leap;
-    cout << new_prefix.str() << YELLOW << "Entered a leap year\n" << RESET;
+    cout << new_prefix.value << YELLOW << "Entered a leap year\n" << RESET;
   }else{
     (days_per_month) = days_per_month_common;
-    cout << new_prefix.str() << "Entered a common year\n";
+    cout << new_prefix.value << "Entered a common year\n";
   }
 
   enter_unsigned_int(&M, true, 1, 12+1, String("MM"), prefix);
@@ -3139,10 +3162,10 @@ void Chrono::print(String name, String prefix, ostream& ostr){
 };
 void Chrono::enter(String name, String prefix) {
 
-  stringstream new_prefix;
+  String new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.prepend(String("\t"));
   
   cout << prefix.value << "Enter " << name.value << " [hh-mm-ss]\n";
 
@@ -3167,10 +3190,10 @@ stringstream Time::to_string(unsigned int precision){
 
 void Time::print(String name, String prefix, ostream& ostr){
 
-  stringstream new_prefix;
+  String new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.prepend(String("\t"));
   
   ostr << prefix.value << name.value << ":\n";
 
@@ -3183,10 +3206,10 @@ void Time::print(String name, String prefix, ostream& ostr){
 
 void Time::enter(String name, String prefix) {
 
-  stringstream new_prefix;
+  String new_prefix;
 
   //append \t to prefix
-  new_prefix << prefix.value << "\t";
+  new_prefix = prefix.prepend(String("\t"));
   
   cout << prefix.value << "Enter master-clock date and hour\n";
   

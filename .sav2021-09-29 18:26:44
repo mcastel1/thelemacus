@@ -1,0 +1,210 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type = moon
+			Name = moon
+			Radius = 938.12099999999998090061126276851 nm
+		limb = u
+		sextant altitude = 47° 57.799999999999869260136620141566'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-06-21
+			hour of master-clock date and hour of sight = 21:01:20
+		use of stopwatch = y
+		hour of stopwatch = 00:37:35
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at BGC
+	Sight #2:
+		body:
+			Type = moon
+			Name = moon
+			Radius = 938.12099999999998090061126276851 nm
+		limb = u
+		sextant altitude = 47° 13.500000000000085265128291212022'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-06-21
+			hour of master-clock date and hour of sight = 21:01:20
+		use of stopwatch = y
+		hour of stopwatch = 00:48:08.9900000000000002131628207280301
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at BGC
+	Sight #3:
+		body:
+			Type = star
+			Name = arcturus
+			Right ascension = 213° 54.79890000000068539520725607872'
+			Declination = 19° 10.694899999999947226569929625839'
+		sextant altitude = 67° 13.399999999999749888957012444735'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-07-06
+			hour of master-clock date and hour of sight = 22:48:40
+		use of stopwatch = y
+		hour of stopwatch = 00:19:36.819000000000002614797267597169
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at BGC
+	Sight #4:
+		body:
+			Type = sun
+			Name = sun
+			Radius = 375648 nm
+		limb = l
+		sextant altitude = 53° 16.800000000000068212102632969618'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-07-08
+			hour of master-clock date and hour of sight = 06:56:00
+		use of stopwatch = y
+		hour of stopwatch = 00:01:46.826000000000000511590769747272
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at MP
+	Sight #5:
+		body:
+			Type = sun
+			Name = sun
+			Radius = 375648 nm
+		limb = u
+		sextant altitude = 54° 28.60000000000042064129956997931'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-07-20
+			hour of master-clock date and hour of sight = 07:05:55
+		use of stopwatch = y
+		hour of stopwatch = 00:01:49.371000000000002216893335571513
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at MP
+	Sight #6:
+		body:
+			Type = sun
+			Name = sun
+			Radius = 375648 nm
+		limb = u
+		sextant altitude = 56° 12.900000000000204636307898908854'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-07-20
+			hour of master-clock date and hour of sight = 07:11:20
+		use of stopwatch = y
+		hour of stopwatch = 00:01:36.073000000000000397903932025656
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at MP
+	Sight #7:
+		body:
+			Type = planet
+			Name = saturn
+			Radius = 31442.764578833692212356254458427 nm
+		limb = c
+		sextant altitude = 40° 23.700000000000187583282240666449'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-07-29
+			hour of master-clock date and hour of sight = 22:35:30
+		use of stopwatch = y
+		hour of stopwatch = 00:10:34.539000000000001477928890381008
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at BGC
+	Sight #8:
+		body:
+			Type = planet
+			Name = jupiter
+			Radius = 37748.920086393089150078594684601 nm
+		limb = c
+		sextant altitude = 40° 27.000000000000170530256582424045'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-07-29
+			hour of master-clock date and hour of sight = 22:55:35
+		use of stopwatch = y
+		hour of stopwatch = 00:02:35.731999999999999317878973670304
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight taken at BGC
+	Sight #9:
+		body:
+			Type = planet
+			Name = jupiter
+			Radius = 37748.920086393089150078594684601 nm
+		limb = c
+		sextant altitude = 41° 30.30000000000015347723092418164'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-07-29
+			hour of master-clock date and hour of sight = 23:01:05
+		use of stopwatch = y
+		hour of stopwatch = 00:02:11.618999999999999772626324556768
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at BGC
+	Sight #10:
+		body:
+			Type = planet
+			Name = jupiter
+			Radius = 37748.920086393089150078594684601 nm
+		limb = c
+		sextant altitude = 53° 33.700000000000045474735088646412'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-09-02
+			hour of master-clock date and hour of sight = 22:22:30
+		use of stopwatch = y
+		hour of stopwatch = 00:05:45.936999999999997612576407846063
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at MP
+	Sight #11:
+		body:
+			Type = planet
+			Name = jupiter
+			Radius = 37748.920086393089150078594684601 nm
+		limb = c
+		sextant altitude = 53° 53.599999999999852207110961899161'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-09-02
+			hour of master-clock date and hour of sight = 22:34:10
+		use of stopwatch = y
+		hour of stopwatch = 00:04:25.670999999999999374722392531112
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at MP
+	Sight #12:
+		body:
+			Type = star
+			Name = capella
+			Right ascension = 79° 10.549979999999834490154171362519'
+			Declination = 46° 0.016680000000093286871560849249363'
+		sextant altitude = 45° 15'
+		index error = 0° 1.8999999999999996891375531049562'
+		artificial horizon = y
+		master-clock date and hour of sight:
+			date of master-clock date and hour of sight = 2021-09-03
+			hour of master-clock date and hour of sight = 22:49:13
+		use of stopwatch = y
+		hour of stopwatch = 00:05:13.877000000000000667910171614494
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Sight was taken at MP
+Points in the plot:
+	Point #1:
+		latitude = 48° 51.179385474737415506751858629286'
+		longitude = 357° 35.178159790311838150955736637115'
+		label = Centre Sportif Maryse Hilsz (MH)
+	Point #2:
+		latitude = 48° 51.327167000000031293893698602915'
+		longitude = 357° 35.565500000000156433088704943657'
+		label = Baby Gym Campo (BGC)
+	Point #3:
+		latitude = 48° 51.309166999999860081516089849174'
+		longitude = 357° 35.41566699999748379923403263092'
+		label = My Place (MP)
+	Point #4:
+		latitude = 34° 2.9999999999998294697434175759554'
+		longitude = 4° 23.000000000000024868995751603507'
+		label = 2356345tfkl;

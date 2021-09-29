@@ -821,7 +821,7 @@ bool File::open(String mode, String prefix){
     
   }else{
     
-    cout << "File " << (name.value) << " opened.\n";
+    cout << prefix.value <<  "File " << (name.value) << " opened.\n";
     return 1;
      
   }

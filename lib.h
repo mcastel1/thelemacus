@@ -1410,7 +1410,7 @@ class Plot{
   void print_sights(String, ostream&);
   void print_points(String, ostream&);
   void show(String);
-  void menu(void);
+  void menu(String);
 
 };
 
@@ -1516,15 +1516,19 @@ bool Plot::read_from_file(String filename, String prefix){
   
 }
 
-void Plot::menu(void){
+void Plot::menu(String prefix){
 
+  String new_prefix;
   unsigned int i;
 
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+  
   cout << "You can:\n";
   for(i=0; i<choices.size(); i++){
     cout << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
-  enter_unsigned_int(&i, true, 1, choices.size()+1, String("choice #"), String(""));
+  enter_unsigned_int(&i, true, 1, choices.size()+1, String("choice #"), prefix);
 
   
   
@@ -1532,10 +1536,10 @@ void Plot::menu(void){
 
   case 1:{
     
-    add_sight(String("\t"));
-    print(String("\t"), cout);
-    show(String("\t"));
-    menu();  
+    add_sight(new_prefix);
+    print(new_prefix, cout);
+    show(new_prefix);
+    menu(prefix);  
 
   }
     break;
@@ -1545,20 +1549,20 @@ void Plot::menu(void){
 
     if(sight_list.size() > 0){
 
-      print_sights(String("\t"), cout);
+      print_sights(new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to transport"), String("\t"));	
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to transport"), new_prefix);	
       i--;
    
-      transport_sight(i, String("\t"));
-      print(String("\t"), cout);
-      show(String("\t"));
+      transport_sight(i, new_prefix);
+      print(new_prefix, cout);
+      show(new_prefix);
 
     }else{
       cout << RED << "There are no sights to transport!\n" << RESET;
     }
 
-    menu();
+    menu(prefix);
    
   }
     break;
@@ -1568,30 +1572,30 @@ void Plot::menu(void){
 
     if(sight_list.size() > 0){
  
-      print_sights(String("\t"), cout);
+      print_sights(new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), String("\t"));	
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), new_prefix);	
       i--;
    
-      remove_sight(i, String("\t"));
-      print(String("\t"), cout);
-      show(String("\t"));
+      remove_sight(i, new_prefix);
+      print(new_prefix, cout);
+      show(new_prefix);
 
     }else{
       cout << RED << "There are no sights to delete!\n" << RESET;
     }
 
-    menu();  
+    menu(prefix);  
    
   }
     break;
 
   case 4:{
 
-    add_point(String("\t"));
-    print(String("\t"), cout);
-    show(String("\t"));
-    menu();  
+    add_point(new_prefix);
+    print(new_prefix, cout);
+    show(new_prefix);
+    menu(prefix);  
 
   }
     break;
@@ -1601,20 +1605,20 @@ void Plot::menu(void){
     
     if(point_list.size() > 0){
 
-      print_points(String("\t"), cout);
+      print_points(new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to transport"), String("\t"));
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to transport"), new_prefix);
       i--;
 
-      transport_point(i, String("\t"));
-      print(String("\t"), cout);
-      show(String("\t"));
+      transport_point(i, new_prefix);
+      print(new_prefix, cout);
+      show(new_prefix);
 
     }else{
       cout << RED << "There are no points to transport!\n" << RESET;
     }
     
-    menu();  
+    menu(prefix);  
 
   }
     break;
@@ -1624,20 +1628,20 @@ void Plot::menu(void){
     if(point_list.size() > 0){
 
 
-      print_points(String("\t"), cout);
+      print_points(new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to delete"), String("\t"));
+      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to delete"), new_prefix);
       i--;
 	
-      remove_point(i, String("\t"));
-      print(String("\t"), cout);
-      show(String("\t"));
+      remove_point(i, new_prefix);
+      print(new_prefix, cout);
+      show(new_prefix);
 
     }else{
       cout << RED << "There are no points to delete!\n" << RESET;
     }
     
-    menu();  
+    menu(prefix);  
 
   }
     break;
@@ -1649,15 +1653,15 @@ void Plot::menu(void){
       File file;
       stringstream temp;
     
-      file.name.enter(String("name of file (without extension)"), String("\t"));
+      file.name.enter(String("name of file (without extension)"), new_prefix);
       //add the extension .sav to name of file
       temp.str("");
       temp << file.name.value << ".sav";
       file.set_name(temp.str());
 
-      file.open(String("out"),String("\t"));    
-      print(String("\t"), file.value);
-      file.close(String("\t"));
+      file.open(String("out"),new_prefix);    
+      print(new_prefix, file.value);
+      file.close(new_prefix);
 
       command.str("");
       command << "mv plot.plt " << "'plot " << temp.str() << "'";
@@ -1666,7 +1670,7 @@ void Plot::menu(void){
     }else{    
       cout << RED << "There are no sights nor points to save!\n" << RESET;
     }
-    menu();
+    menu(prefix);
     
   }
     break;
@@ -1676,16 +1680,16 @@ void Plot::menu(void){
     String filename;
     stringstream line_ins;
     
-    filename.enter(String("name of file (without extension)"), String("\t"));
+    filename.enter(String("name of file (without extension)"), new_prefix);
     line_ins << filename.value << ".sav"; 
     filename.value = line_ins.str();
     
-    if(read_from_file(filename, String("\t"))){
-      print(String("\t"), cout);
-      show(String("\t"));
+    if(read_from_file(filename, new_prefix)){
+      print(new_prefix, cout);
+      show(new_prefix);
     }
         
-    menu();  
+    menu(prefix);  
 
   }
     break;
@@ -1697,14 +1701,14 @@ void Plot::menu(void){
     String line;
 
     //get date and time, which will be used for filename 
-    get_date_hour(line, String(""));
+    get_date_hour(line, new_prefix);
     line = line.append(String(".sav"));
 
     //print all plots to file with the filename above
     ((file.name).value) = line.value;
-    file.open(String("out"), String(""));
-    print(String(""), file.value);
-    file.close(String(""));
+    file.open(String("out"), new_prefix);
+    print(new_prefix, file.value);
+    file.close(new_prefix);
 
     //if plot.plt has been filled, here I save it with the name 'plot' + filename above
     if(sight_list.size() + point_list.size() >0){
@@ -1713,7 +1717,7 @@ void Plot::menu(void){
       system(command.str().c_str());
     }
     
-    cout << CYAN << "Fair winds, following seas...\n" << RESET;
+    cout << prefix.value << CYAN << "Fair winds, following seas...\n" << RESET;
   }
     break;
 

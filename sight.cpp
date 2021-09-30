@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
   catalog.print(String("\t"), cout);
   
 
-  plot.menu();
+  plot.menu(String(""));
 
 
   // sight.enter(catalog); 

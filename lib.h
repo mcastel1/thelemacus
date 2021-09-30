@@ -80,10 +80,10 @@ bool get_date_hour(String &line, String prefix){
     system(command.str().c_str());
 
     ((file.name).value) = "output.out";
-    check &= file.open(String("in"), String(""));
+    check &= file.open(String("in"), prefix);
     line.value.clear();
     getline(file.value, line.value);
-    file.close(String(""));
+    file.close(prefix);
 
     command.str("");
     command << "rm -rf output.out";
@@ -266,12 +266,17 @@ void Answer::read_from_file(String name, File& file, String prefix){
 
 void String::enter(String name, String prefix){
 
-  
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
   cout << prefix.value << "Enter " << name.value << ":";
   getline(cin, value);
 
   if(value.empty()){
-    cout << prefix.value << YELLOW << "Entered an empty " << name.value << ".\n" << RESET;
+    get_date_hour((*this), new_prefix);
+    cout << prefix.value << YELLOW << "Entered an empty " << name.value << ", setting it to " << value << "\n" << RESET;
   }
 
   print(name, prefix, cout);

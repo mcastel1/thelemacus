@@ -1749,9 +1749,14 @@ Plot::Plot(Catalog* cata){
 
 void Plot::print(String prefix, ostream& ostr){
 
-  print_sights(prefix, ostr);
-  print_points(prefix, ostr);
+  if(sight_list.size()>0){
+    print_sights(prefix, ostr);
+  }
 
+  if(point_list.size()>0){
+    print_points(prefix, ostr);
+  }
+  
 }
 
 void Plot::print_sights(String prefix, ostream& ostr){

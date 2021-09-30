@@ -44,11 +44,58 @@ class String{
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
   void set(String, String);
+  String append(String);
   String prepend(String);
 
 };
 
+class File{
 
+ public:
+  fstream value;
+  String name;
+  unsigned int number_of_lines;
+
+  File();
+  void set_name(String);
+  void enter_name(String);
+  bool open(String, String);
+  void close(String);
+  void remove(void);
+  void count_lines(String);
+  
+};
+
+
+bool get_date_hour(String &line, String prefix){
+
+    File file;
+    stringstream command;
+    bool check;
+
+    check = true;
+
+    command.str("");
+    command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
+    system(command.str().c_str());
+
+    ((file.name).value) = "output.out";
+    check &= file.open(String("in"), prefix);
+    line.value.clear();
+    getline(file.value, line.value);
+    file.close(prefix);
+
+    command.str("");
+    command << "rm -rf output.out";
+    system(command.str().c_str());
+
+    if(!check){
+      cout << prefix.value << RED << "\tI could not get hour and date!\n" << RESET;
+    }
+    
+    return check;
+
+}
   
 //this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
 void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, String name, String prefix){
@@ -162,23 +209,6 @@ String::String(string s){
   
 }
 
-class File{
-
- public:
-  fstream value;
-  String name;
-  unsigned int number_of_lines;
-
-  File();
-  void set_name(String);
-  void enter_name(String);
-  bool open(String, String);
-  void close(String);
-  void remove(void);
-  void count_lines(String);
-  
-};
-
 
 File::File(){
 
@@ -236,12 +266,17 @@ void Answer::read_from_file(String name, File& file, String prefix){
 
 void String::enter(String name, String prefix){
 
-  
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
   cout << prefix.value << "Enter " << name.value << ":";
   getline(cin, value);
 
   if(value.empty()){
-    cout << prefix.value << YELLOW << "Entered an empty " << name.value << ".\n" << RESET;
+    get_date_hour((*this), new_prefix);
+    cout << prefix.value << YELLOW << "Entered an empty " << name.value << ", setting it to " << value << "\n" << RESET;
   }
 
   print(name, prefix, cout);
@@ -334,7 +369,7 @@ class Route{
   
 };
 
-String String::prepend(String s){
+String String::append(String s){
 
   String output;
   stringstream temp;
@@ -348,6 +383,21 @@ String String::prepend(String s){
   
 }
 
+String String::prepend(String s){
+
+  String output;
+  stringstream temp;
+  
+  //append \t to prefix
+  temp << s.value << value;
+
+  output.value = temp.str();
+  
+  return output;
+  
+}
+
+
 void Point::transport(String prefix){
 
   Route route;
@@ -356,7 +406,7 @@ void Point::transport(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   cout << prefix.value << "Enter route:\n";
 
@@ -389,7 +439,7 @@ void Point::read_from_file(File& file, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   phi.read_from_file(String("latitude"), file, new_prefix);
   lambda.read_from_file(String("longitude"), file, new_prefix);
@@ -461,7 +511,7 @@ void Route::print(String name, String prefix, ostream& ostr){
   String s, new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   cout << prefix.value << "Route " << name.value << ":\n";
 
@@ -481,7 +531,7 @@ void Route::enter(String name, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   cout << prefix.value << "Enter " << name.value << ":\n";
 
@@ -712,7 +762,7 @@ bool Time::read_from_file(String name, File& file, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
  
   //read dummy line
@@ -762,7 +812,7 @@ void File::count_lines(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
 
   file_number_of_lines.set_name(String("output.out"));
@@ -944,7 +994,7 @@ void Body::read_from_file(String name, File& file, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   size_t pos;
 
@@ -1040,7 +1090,7 @@ void Catalog::print(String prefix, ostream& ostr){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   for(i=0; i<list.size(); i++){
 
@@ -1164,7 +1214,7 @@ void Sight::transport(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   cout << prefix.value << "Enter route:\n";
 
@@ -1221,7 +1271,7 @@ bool Sight::read_from_file(File& file, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   body.read_from_file(String("body"), file, new_prefix);
   if(body.type.value != "star"){
@@ -1275,7 +1325,7 @@ bool Sight::check_data_time_interval(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   
   //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
@@ -1311,7 +1361,7 @@ void Sight::print(String name, String prefix, ostream& ostr){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   ostr << prefix.value << name.value << ":\n";
 
@@ -1374,7 +1424,7 @@ bool Plot::read_from_file(String filename, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
  
   file.set_name(filename.value);
   
@@ -1644,32 +1694,22 @@ void Plot::menu(void){
   case 9:{
 
     File file;
-    string line;
+    String line;
 
-    command.str("");
-    command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
-    system(command.str().c_str());
+    //get date and time, which will be used for filename 
+    get_date_hour(line, String(""));
+    line = line.append(String(".sav"));
 
-    ((file.name).value) = "output.out";
-    file.open(String("in"), String(""));
-    line.clear();
-    getline(file.value, line);
-    line.append(".sav");
-    file.close(String(""));
-    
-    command.str("");
-    command << "rm -rf output.out";
-    system(command.str().c_str());
- 
-    ((file.name).value) = line;
+    //print all plots to file with the filename above
+    ((file.name).value) = line.value;
     file.open(String("out"), String(""));
     print(String(""), file.value);
     file.close(String(""));
 
-    //if plot.plt has been filled, here I save it
+    //if plot.plt has been filled, here I save it with the name 'plot' + filename above
     if(sight_list.size() + point_list.size() >0){
       command.str("");
-      command << "mv plot.plt " << "'plot " << line.c_str() << "'";
+      command << "mv plot.plt " << "'plot " << line.value.c_str() << "'";
       system(command.str().c_str());
     }
     
@@ -1709,9 +1749,14 @@ Plot::Plot(Catalog* cata){
 
 void Plot::print(String prefix, ostream& ostr){
 
-  print_sights(prefix, ostr);
-  print_points(prefix, ostr);
+  if(sight_list.size()>0){
+    print_sights(prefix, ostr);
+  }
 
+  if(point_list.size()>0){
+    print_points(prefix, ostr);
+  }
+  
 }
 
 void Plot::print_sights(String prefix, ostream& ostr){
@@ -1721,7 +1766,7 @@ void Plot::print_sights(String prefix, ostream& ostr){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
     
   ostr << prefix.value << "Sights in the plot:\n";
   for(i=0; i<sight_list.size(); i++){
@@ -1740,7 +1785,7 @@ void Plot::print_points(String prefix, ostream& ostr){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
    
   ostr << prefix.value << "Points in the plot:\n";
   for(i=0; i<point_list.size(); i++){
@@ -1824,7 +1869,7 @@ void Plot::transport_sight(unsigned int i, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   name.str("");
   name << "Sight to be transported: Sight #" << i+1;
@@ -1844,7 +1889,7 @@ void Plot::transport_point(unsigned int i, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   name.str("");
   name << "Point to be transported: Point #" << i+1;
@@ -1875,7 +1920,7 @@ void Plot::show(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   T = gsl_root_fsolver_brent;
   s = gsl_root_fsolver_alloc (T);
@@ -2146,7 +2191,7 @@ void Sight::enter(Catalog catalog, String name, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   cout << prefix.value << "Enter " << name.value << ":\n";
   
@@ -2193,7 +2238,7 @@ bool Sight::reduce(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   compute_H_a(new_prefix);
   check &= get_coordinates(new_prefix);
@@ -2229,7 +2274,7 @@ bool Sight::compute_H_o(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
  
   check &= compute_DH_refraction(new_prefix);
 
@@ -2252,7 +2297,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   H_i = H_a + DH_refraction;
   H_i.print(String("intermediate altitude"), prefix, cout);
@@ -2556,7 +2601,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   ostr << prefix.value << name_in.value << ":\n";
   
@@ -2581,7 +2626,7 @@ void Body::enter(Catalog catalog, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   
   do{
@@ -2665,7 +2710,7 @@ void Length::set(String name, double x, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   value = x;
   
@@ -2727,7 +2772,7 @@ bool Sight::get_coordinates(String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
  
   
 
@@ -2949,7 +2994,7 @@ void Angle::enter(String name, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
 
   cout << prefix.value << "Enter " << name.value << " [s ddd mm.m]:\n";
@@ -2987,7 +3032,7 @@ void Point::enter(String name, String prefix){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   cout << prefix.value << "Enter " << name.value << ":\n";
 
@@ -3011,7 +3056,7 @@ void Point::print(String name, String prefix, ostream& ostr){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
 
   ostr << prefix.value << name.value << ":\n";
 
@@ -3108,7 +3153,7 @@ void Date::enter(String name, String prefix) {
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
  
 
   cout << prefix.value << "Enter " << name.value << " [YYYY-MM-DD]\n";
@@ -3165,7 +3210,7 @@ void Chrono::enter(String name, String prefix) {
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   cout << prefix.value << "Enter " << name.value << " [hh-mm-ss]\n";
 
@@ -3193,7 +3238,7 @@ void Time::print(String name, String prefix, ostream& ostr){
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   ostr << prefix.value << name.value << ":\n";
 
@@ -3209,7 +3254,7 @@ void Time::enter(String name, String prefix) {
   String new_prefix;
 
   //append \t to prefix
-  new_prefix = prefix.prepend(String("\t"));
+  new_prefix = prefix.append(String("\t"));
   
   cout << prefix.value << "Enter master-clock date and hour\n";
   

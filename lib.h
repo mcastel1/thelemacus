@@ -1716,6 +1716,17 @@ void Plot::menu(String prefix){
       command << "mv plot.plt " << "'plot " << line.value.c_str() << "'";
       system(command.str().c_str());
     }
+
+      //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped. 
+    if(job_id != -1){
+    
+      command.str("");
+      command << "kill -9 " << job_id;
+      system(command.str().c_str());
+    
+    }
+    file_id.remove();
+    file_gnuplot.remove();
     
     cout << prefix.value << CYAN << "Fair winds, following seas...\n" << RESET;
   }

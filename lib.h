@@ -1193,7 +1193,7 @@ class Sight{
   void compute_H_a(String);
   bool compute_H_o(String);
 
-  void enter(Catalog, String, String);
+  bool enter(Catalog, String, String);
   void print(String, String, ostream&);
   bool read_from_file(File&, String);
   bool reduce(String);
@@ -2189,13 +2189,18 @@ void Plot::show(String prefix){
   
 }
 
-void Sight::enter(Catalog catalog, String name, String prefix){
+bool Sight::enter(Catalog catalog, String name, String prefix){
 
-  File file;
+  //pointer to init.txt to read fixed sight data from in there
+  File file_init;
   String new_prefix;
+  bool check = true;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  file_init.set_name(String("/data/init.txt"));
+  check &= (file_init.open(String("in"), new_prefix));
   
   cout << prefix.value << "Enter " << name.value << ":\n";
   
@@ -2206,7 +2211,8 @@ void Sight::enter(Catalog catalog, String name, String prefix){
     limb.enter(String("limb"), new_prefix);
   }
   H_s.enter(String("sextant altitude"), new_prefix);
-  index_error.enter(String("index error"), new_prefix);
+  //read index error from data/init.txt
+  index_error.read_from_file(String("index error"), file_init, new_prefix);
   artificial_horizon.enter(String("artificial horizon"), new_prefix);
   if(artificial_horizon.value == 'n'){
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
@@ -2226,13 +2232,24 @@ void Sight::enter(Catalog catalog, String name, String prefix){
     
     }
 
-    TAI_minus_UTC.enter(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix);
+    //TAI_minus_UTC.enter(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix);
+    //read TAI_minus_UTC from data/index.txt
+    TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, new_prefix);
     time.add(TAI_minus_UTC);
     time.print(String("TAI date and hour of sight"), new_prefix, cout);
 
   }while(!check_data_time_interval(prefix));
 
   label.enter(String("label"), new_prefix);
+  
+  file_init.close(new_prefix);
+
+
+  if(!check){
+    cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
+  }
+
+  return check;
 
 }
 

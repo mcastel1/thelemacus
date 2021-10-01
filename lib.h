@@ -2212,7 +2212,9 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   }
   H_s.enter(String("sextant altitude"), new_prefix);
   //read index error from data/init.txt
+  cout << new_prefix.value << YELLOW << "Reading index error from file...\n" << RESET;
   index_error.read_from_file(String("index error"), file_init, new_prefix);
+  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
   artificial_horizon.enter(String("artificial horizon"), new_prefix);
   if(artificial_horizon.value == 'n'){
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
@@ -2232,9 +2234,10 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     
     }
 
-    //TAI_minus_UTC.enter(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix);
     //read TAI_minus_UTC from data/index.txt
+    cout << new_prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file...\n" << RESET;
     TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, new_prefix);
+    cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
     time.add(TAI_minus_UTC);
     time.print(String("TAI date and hour of sight"), new_prefix, cout);
 

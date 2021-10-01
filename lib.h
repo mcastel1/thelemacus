@@ -2199,8 +2199,8 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  file_init.set_name(String("/data/init.txt"));
-  check &= (file_init.open(String("in"), new_prefix));
+  file_init.set_name(String("data/init.txt"));
+  check &= (file_init.open(String("in"), prefix));
   
   cout << prefix.value << "Enter " << name.value << ":\n";
   
@@ -2242,7 +2242,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
   label.enter(String("label"), new_prefix);
   
-  file_init.close(new_prefix);
+  file_init.close(prefix);
 
 
   if(!check){

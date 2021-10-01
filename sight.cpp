@@ -93,7 +93,7 @@ int main(int argc, char *argv[]){
   */
   
   /*
-  Point a;
+  Position a;
   a.enter("Position", "");
   a.print("Entered position", "", cout);
   a.transport("");

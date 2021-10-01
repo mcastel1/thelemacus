@@ -337,12 +337,12 @@ void Angle::read_from_file(String name, File& file, String prefix){
 
 
 
-class Point{
+class Position{
 
  public:
-  //latitude and longitude of the point
+  //latitude and longitude of the position
   Angle phi, lambda;
-  //label to add a note about the point
+  //label to add a note about the position
   String label;
   
   void enter(String, String);
@@ -356,8 +356,8 @@ class Route{
 
  public:
   String type;
-  //starting point of the route
-  Point start, end;
+  //starting position of the route
+  Position start, end;
   //the angle that the vector tangent to the route describes with the local meridian at start
   Angle alpha;
   //the length of the route
@@ -398,7 +398,7 @@ String String::prepend(String s){
 }
 
 
-void Point::transport(String prefix){
+void Position::transport(String prefix){
 
   Route route;
   stringstream temp_label;
@@ -430,11 +430,11 @@ void Point::transport(String prefix){
 
   (*this) = route.end;
 
-  print(String("transported point"), prefix, cout);
+  print(String("transported position"), prefix, cout);
 
 }
 
-void Point::read_from_file(File& file, String prefix){
+void Position::read_from_file(File& file, String prefix){
 
   String new_prefix;
 
@@ -448,7 +448,7 @@ void Point::read_from_file(File& file, String prefix){
 }
 
 
-//returns a point on the Route at length l along the Route from start
+//returns a position on the Route at length l along the Route from start
 void Route::compute_end(String prefix){
 
   stringstream label_end;
@@ -516,8 +516,8 @@ void Route::print(String name, String prefix, ostream& ostr){
   cout << prefix.value << "Route " << name.value << ":\n";
 
   type.print(String("type"), new_prefix, ostr);
-  start.print(String("start point"), new_prefix, ostr);
-  //end.print("end point", new_prefix, ostr);
+  start.print(String("start position"), new_prefix, ostr);
+  //end.print("end position", new_prefix, ostr);
   alpha.print(String("starting heading"), new_prefix, ostr);
   l.print(String("length"), String("nm"), new_prefix, ostr);
   
@@ -542,7 +542,7 @@ void Route::enter(String name, String prefix){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
-  start.enter(String("starting point"), new_prefix);
+  start.enter(String("starting position"), new_prefix);
   alpha.enter(String("starting heading"), new_prefix);
   l.enter(String("length"), String("nm"), new_prefix);
   
@@ -1172,7 +1172,7 @@ class Sight{
   Time master_clock_date_and_hour, time;
   //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
   Chrono TAI_minus_UTC, stopwatch;
-  Point GP;
+  Position GP;
   Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
@@ -1199,7 +1199,7 @@ class Sight{
   bool reduce(String);
   bool check_data_time_interval(String);
 
-  Point circle_of_equal_altitude(Angle);
+  Position circle_of_equal_altitude(Angle);
 
   void transport(String);
 
@@ -1243,10 +1243,10 @@ void Sight::transport(String prefix){
 
 }
 
-//For a given value of the parameter angle t, this function returns a Point which lies on the circle of equal altitude described by GP and H_o. By varying t, the whole circle can be traced. 
-Point Sight::circle_of_equal_altitude(Angle t){
+//For a given value of the parameter angle t, this function returns a Position which lies on the circle of equal altitude described by GP and H_o. By varying t, the whole circle can be traced. 
+Position Sight::circle_of_equal_altitude(Angle t){
 
-  Point p;
+  Position p;
 
   (p.phi.value) = M_PI/2.0-acos(cos(M_PI/2.0 - (H_o.value)) * sin((GP.phi.value)) - cos((GP.phi.value)) * cos((t.value)) * sin(M_PI/2.0 - (H_o.value)));
 
@@ -1394,21 +1394,21 @@ class Plot{
   int job_id;
   stringstream command, plot_command;
   vector<Sight> sight_list;
-  vector<Point> point_list;
+  vector<Position> position_list;
   vector<string> choices;
 
   Plot(Catalog*);
   //~Plot();
   bool add_sight(String);
   void transport_sight(unsigned int, String);
-  void add_point(String);
+  void add_position(String);
   void remove_sight(unsigned int, String);
-  void transport_point(unsigned int, String);
-  void remove_point(unsigned int, String);
+  void transport_position(unsigned int, String);
+  void remove_position(unsigned int, String);
   bool read_from_file(String, String);
   void print(String, ostream&);
   void print_sights(String, ostream&);
-  void print_points(String, ostream&);
+  void print_positions(String, ostream&);
   void show(String);
   void menu(String);
 
@@ -1474,32 +1474,32 @@ bool Plot::read_from_file(String filename, String prefix){
  
     }
 
-    //2. Here I read points
+    //2. Here I read positions
 
     line.clear();
     //read dummy text line 
     getline(file.value, line);
-    pos = line.find("Point #");
+    pos = line.find("Position #");
 
-    //if I have found 'Point #' in the line above, then I proceed and read the relative point
+    //if I have found 'Position #' in the line above, then I proceed and read the relative position
     while(pos != (string::npos)){
     
-      cout << new_prefix.value << "Found new point!\n";
+      cout << new_prefix.value << "Found new position!\n";
   
-      //read the point block
-      Point point;
+      //read the position block
+      Position position;
 
-      point.read_from_file(file, new_prefix);
+      position.read_from_file(file, new_prefix);
 	  
-      point.print(String("New point"), new_prefix, cout);
+      position.print(String("New position"), new_prefix, cout);
     
-      point_list.push_back(point);
-      cout << new_prefix.value << "Point added as point #" << point_list.size() << ".\n";
+      position_list.push_back(position);
+      cout << new_prefix.value << "Position added as position #" << position_list.size() << ".\n";
 	  
       line.clear();
       //read dummyt text line 
       getline(file.value, line);
-      pos = line.find("Point #");
+      pos = line.find("Position #");
  
     }
 
@@ -1592,7 +1592,7 @@ void Plot::menu(String prefix){
 
   case 4:{
 
-    add_point(new_prefix);
+    add_position(new_prefix);
     print(new_prefix, cout);
     show(new_prefix);
     menu(prefix);  
@@ -1603,19 +1603,19 @@ void Plot::menu(String prefix){
     
   case 5:{
     
-    if(point_list.size() > 0){
+    if(position_list.size() > 0){
 
-      print_points(new_prefix, cout);
+      print_positions(new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to transport"), new_prefix);
+      enter_unsigned_int(&i, true, 1, position_list.size()+1, String("# of position that you want to transport"), new_prefix);
       i--;
 
-      transport_point(i, new_prefix);
+      transport_position(i, new_prefix);
       print(new_prefix, cout);
       show(new_prefix);
 
     }else{
-      cout << RED << "There are no points to transport!\n" << RESET;
+      cout << RED << "There are no positions to transport!\n" << RESET;
     }
     
     menu(prefix);  
@@ -1625,20 +1625,20 @@ void Plot::menu(String prefix){
 
   case 6:{
 
-    if(point_list.size() > 0){
+    if(position_list.size() > 0){
 
 
-      print_points(new_prefix, cout);
+      print_positions(new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, point_list.size()+1, String("# of point that you want to delete"), new_prefix);
+      enter_unsigned_int(&i, true, 1, position_list.size()+1, String("# of position that you want to delete"), new_prefix);
       i--;
 	
-      remove_point(i, new_prefix);
+      remove_position(i, new_prefix);
       print(new_prefix, cout);
       show(new_prefix);
 
     }else{
-      cout << RED << "There are no points to delete!\n" << RESET;
+      cout << RED << "There are no positions to delete!\n" << RESET;
     }
     
     menu(prefix);  
@@ -1648,7 +1648,7 @@ void Plot::menu(String prefix){
 
   case 7:{
 
-    if(sight_list.size() + point_list.size() > 0){
+    if(sight_list.size() + position_list.size() > 0){
   
       File file;
       stringstream temp;
@@ -1668,7 +1668,7 @@ void Plot::menu(String prefix){
       system(command.str().c_str());
 
     }else{    
-      cout << RED << "There are no sights nor points to save!\n" << RESET;
+      cout << RED << "There are no sights nor positions to save!\n" << RESET;
     }
     menu(prefix);
     
@@ -1711,7 +1711,7 @@ void Plot::menu(String prefix){
     file.close(new_prefix);
 
     //if plot.plt has been filled, here I save it with the name 'plot' + filename above
-    if(sight_list.size() + point_list.size() >0){
+    if(sight_list.size() + position_list.size() >0){
       command.str("");
       command << "mv plot.plt " << "'plot " << line.value.c_str() << "'";
       system(command.str().c_str());
@@ -1738,7 +1738,7 @@ Plot::Plot(Catalog* cata){
   file_id.set_name(String("job_id.txt"));
   file_gnuplot.set_name(String("plot.plt"));
 
-  choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a point", "Transport a point", "Delete a point", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Save to file", "Read from file", "Exit"};
   
 }
 
@@ -1757,8 +1757,8 @@ void Plot::print(String prefix, ostream& ostr){
     print_sights(prefix, ostr);
   }
 
-  if(point_list.size()>0){
-    print_points(prefix, ostr);
+  if(position_list.size()>0){
+    print_positions(prefix, ostr);
   }
   
 }
@@ -1782,7 +1782,7 @@ void Plot::print_sights(String prefix, ostream& ostr){
 
 }
 
-void Plot::print_points(String prefix, ostream& ostr){
+void Plot::print_positions(String prefix, ostream& ostr){
 
   stringstream name;
   unsigned int i;
@@ -1791,11 +1791,11 @@ void Plot::print_points(String prefix, ostream& ostr){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
    
-  ostr << prefix.value << "Points in the plot:\n";
-  for(i=0; i<point_list.size(); i++){
+  ostr << prefix.value << "Positions in the plot:\n";
+  for(i=0; i<position_list.size(); i++){
     name.str("");
-    name << "Point #" << i+1;
-    (point_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
+    name << "Position #" << i+1;
+    (position_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
   }
 
 
@@ -1824,14 +1824,14 @@ bool Plot::add_sight(String prefix){
   
 }
 
-void Plot::add_point(String prefix){
+void Plot::add_position(String prefix){
 
-  Point point;
+  Position position;
   
-  point.enter(String("new point"), prefix);
+  position.enter(String("new position"), prefix);
   
-  point_list.push_back(point);
-  cout << prefix.value << "Point added as point #" << point_list.size() << ".\n";
+  position_list.push_back(position);
+  cout << prefix.value << "Position added as position #" << position_list.size() << ".\n";
 
  
 }
@@ -1852,18 +1852,18 @@ void Plot::remove_sight(unsigned int i, String prefix){
 
 }
 
-void Plot::remove_point(unsigned int i, String prefix){
+void Plot::remove_position(unsigned int i, String prefix){
 
   stringstream name;
 
   name.str("");
-  name << "Point to be removed: Point #" << i+1;
+  name << "Position to be removed: Position #" << i+1;
   
-  (point_list[i]).print(String(name.str().c_str()), prefix, cout);
+  (position_list[i]).print(String(name.str().c_str()), prefix, cout);
   
-  point_list.erase(point_list.begin()+i);
+  position_list.erase(position_list.begin()+i);
   
-  cout << prefix.value << "Point removed.\n";
+  cout << prefix.value << "Position removed.\n";
 
 }
 
@@ -1887,7 +1887,7 @@ void Plot::transport_sight(unsigned int i, String prefix){
 }
 
 
-void Plot::transport_point(unsigned int i, String prefix){
+void Plot::transport_position(unsigned int i, String prefix){
 
   stringstream name;
   String new_prefix;
@@ -1896,13 +1896,13 @@ void Plot::transport_point(unsigned int i, String prefix){
   new_prefix = prefix.append(String("\t"));
 
   name.str("");
-  name << "Point to be transported: Point #" << i+1;
+  name << "Position to be transported: Position #" << i+1;
   
-  (point_list[i]).print(String(name.str().c_str()), new_prefix, cout);
+  (position_list[i]).print(String(name.str().c_str()), new_prefix, cout);
   
-  (point_list[i]).transport(prefix);
+  (position_list[i]).transport(prefix);
   
-  cout << prefix.value << "Point transported.\n";
+  cout << prefix.value << "Position transported.\n";
 
 }
 
@@ -1914,7 +1914,7 @@ void Plot::show(String prefix){
   unsigned int i;
   //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi. 
   Angle t_min, t_max, t_p, t_m, t_s;
-  Point p_min, p_max;
+  Position p_min, p_max;
   int status, iter = 0;
   //x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)
   double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
@@ -1958,7 +1958,7 @@ void Plot::show(String prefix){
     //if abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (sight_list[i]).GP.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(sight_list[i]).GP.lambda_{t = t_{min}} and (sight_list[i]).GP.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output. 
     if(abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0){
     
-      //compute the values of the parametric Angle t, t_min and t_max, which yield the point with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
+      //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
       t_max.set(String("t_{max}"), acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix);
       t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix);
 
@@ -2157,17 +2157,17 @@ void Plot::show(String prefix){
 
 
   
-  //replace line with point plots
+  //replace line with position plots
   
   plot_command.str("");
-  for(i=0; i<point_list.size(); i++){
-    //set the key in the correct position for the point that will be plotted 
+  for(i=0; i<position_list.size(); i++){
+    //set the key in the correct position for the position that will be plotted 
     plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(sight_list.size()+i+1)) << "*key_spacing\\\n";
 
-    plot_command << "plot \"+\" u (xe(K*(" << (point_list[i]).lambda.value << "))):(ye(K*(" << (point_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (point_list[i]).label.value << "\"\\\n";
+    plot_command << "plot \"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#point_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
+  command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
 
 
   command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
@@ -3050,7 +3050,7 @@ void Angle::enter(String name, String prefix){
 
 }
 
-void Point::enter(String name, String prefix){
+void Position::enter(String name, String prefix){
 
   bool check;
   String new_prefix;
@@ -3075,7 +3075,7 @@ void Point::enter(String name, String prefix){
   
 }
 
-void Point::print(String name, String prefix, ostream& ostr){
+void Position::print(String name, String prefix, ostream& ostr){
 
   String new_prefix;
 

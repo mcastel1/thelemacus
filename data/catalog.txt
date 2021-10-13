@@ -7,3 +7,4 @@ star			arcturus		0.0				213.913315		19.178249
 planet			saturn		31442.764578833692		      0.0	0.0
 star			capella		0.0				79.175833		46.000278
 star 			altair		0.0				297.695833		8.866389
+star 			kochab		0.0				222.675434		74.155316

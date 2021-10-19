@@ -932,7 +932,7 @@ void Length::read_from_file(String name, File& file, String prefix){
     value/=(1e3*nm);
   }
 
-  print(String("radius"), unit, prefix, cout);
+  print(name, unit, prefix, cout);
 
 }
 

@@ -12,7 +12,7 @@ N = 6.0;
 #circles of equal altitude are plotted with S points
 S = 1e4;
 #coastlines are plotted every M lines
-M = 1e1;
+M = 1e4;
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
@@ -307,13 +307,10 @@ plot [0.:2.*pi] xe(K*Lambda(t, 6.1240392855562193474838750262279, 0.890531052165
  set key at graph key_x, graph key_y - 2*key_spacing
 plot [0.:2.*pi] xe(K*Lambda(t, 6.1239913698183601198365977325011, 0.93758908442354260692752632166957, 1.2999223815859890507340423937421)), ye(K*Phi(t, 6.1239913698183601198365977325011, 0.93758908442354260692752632166957, 1.2999223815859890507340423937421)) smo csp dashtype 2 lt 2 ti "sun 2021-10-16 15:20:50 TAI, Michele #1"
 
-	
  set key at graph key_x, graph key_y - 3*key_spacing
-plot "+" u (xe(K*(0.025513717515607839403379841769492))):(ye(K*(0.8680801114733095458220191176224))) w p lw 2 lt 1 ti "Position pascale #1"
+plot [0.:2.*pi] xe(K*Lambda(t, 6.1233038988695280835372614092194, 1.6134934609372242331204461152083, 1.3349218448098716383043438327149)), ye(K*Phi(t, 6.1233038988695280835372614092194, 1.6134934609372242331204461152083, 1.3349218448098716383043438327149)) smo csp dashtype 3 lt 3 ti "sun 2021-10-16 17:55:43 TAI, Michele #2"
 
- set key at graph key_x, graph key_y - 4*key_spacing
-plot "+" u (xe(K*(0.025084395608438104369186660846935))):(ye(K*(0.86828341324234603604281801381148))) w p lw 2 lt 2 ti "Position Michele #1"
-
+	
 
 	x_max_old = GPVAL_X_MAX;
 

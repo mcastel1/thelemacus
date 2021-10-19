@@ -12,7 +12,7 @@ N = 6.0;
 #circles of equal altitude are plotted with S points
 S = 1e4;
 #coastlines are plotted every M lines
-M = 1e4;
+M = 1e1;
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.

@@ -931,8 +931,8 @@ void Length::read_from_file(String name, File& file, String prefix){
   if(unit.value == "m"){
     value/=(1e3*nm);
   }
-
-  print(name, "nm", prefix, cout);
+  
+  print(name, String("nm"), prefix, cout);
 
 }
 

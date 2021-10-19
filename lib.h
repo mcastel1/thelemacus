@@ -915,7 +915,7 @@ void Length::read_from_file(String name, File& file, String prefix){
   pos1 = line.find(" = ");
   pos2 = line.find(" nm");
 
-  if(line.find(" nm") < line.length()){
+  if(line.find(" nm") != (string::npos)){
     //in this case the units of the length read is nm
     cout << prefix.value << "Unit is in nm\n";
     pos2 = line.find(" nm");
@@ -932,7 +932,7 @@ void Length::read_from_file(String name, File& file, String prefix){
     value/=(1e3*nm);
   }
 
-  print(name, unit, prefix, cout);
+  print(name, "nm", prefix, cout);
 
 }
 

@@ -905,6 +905,7 @@ void Length::read_from_file(String name, File& file, String prefix){
   string line;
   stringstream new_prefix;
   size_t pos1, pos2;
+  String unit;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix.value;
@@ -914,9 +915,24 @@ void Length::read_from_file(String name, File& file, String prefix){
   pos1 = line.find(" = ");
   pos2 = line.find(" nm");
 
-  value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
+  if(line.find(" nm") < line.length()){
+    //in this case the units of the length read is nm
+    cout << prefix.value << "Unit is in nm\n";
+    pos2 = line.find(" nm");
+    unit = String("nm");
+  }else{
+    //in this case the units of the length read is m
+    cout << prefix.value << "Unit is in m\n";
+    pos2 = line.find(" m");
+    unit = String("m");
+  }
   
-  print(String("radius"), String("nm"), prefix, cout);
+  value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
+  if(unit.value == "m"){
+    value/=(1e3*nm);
+  }
+
+  print(String("radius"), unit, prefix, cout);
 
 }
 

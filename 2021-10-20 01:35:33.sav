@@ -1,0 +1,98 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 17° 25.200000000000102318153949454427'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 15:09:26
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Pascale #1
+			GP:
+				latitude = 350° 52.896278081001355531043373048306'
+				longitude = 51° 1.4202488645989319593354593962431'
+				label = 
+		Sight #2:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 16° 9.3999999999999772626324556767941'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 15:20:13
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Michele #1
+			GP:
+				latitude = 350° 52.731555907903384650126099586487'
+				longitude = 53° 43.193847300241401399034657515585'
+				label = 
+		Sight #3:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 14° 9.6000000000000085265128291212022'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 17:55:06
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Michele #2
+			GP:
+				latitude = 346° 51.203949458015358686679974198341'
+				longitude = 312° 10.888175845500427385559305548668'
+				label = 
+		Sight #4:
+			body:
+				Type = planet
+				Name = jupiter
+				Radius = 37748.920086393089150078594684601 nm
+			limb = c
+			sextant altitude = 26° 3.0000000000000426325641456060112'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 19:45:04
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Michele 3
+			GP:
+				latitude = 344° 50.741209245915115388925187289715'
+				longitude = 356° 46.383343704814024022198282182217'
+				label = 
+	Positions in the plot:
+		Position #1:
+			latitude = 49° 44.239600000000081081452663056552'
+			longitude = 1° 27.709699999999997999111656099558'
+			label = Position pascale #1
+		Position #2:
+			latitude = 49° 44.938500000000090039975475519896'
+			longitude = 1° 26.233800000000012886403055745177'
+			label = Position Michele #1
+		Position #3:
+			latitude = 49° 39.44259999999985666363500058651'
+			longitude = 1° 11.683400000000002449951352900825'
+			label = Position Michele #2
+		Position #4:
+			latitude = 49° 35.914299999999883539203437976539'
+			longitude = 1° 13.182200000000001693933882052079'
+			label = Position Michele #3

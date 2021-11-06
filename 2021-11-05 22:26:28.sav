@@ -1,0 +1,38 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 21째 33.200000000000073896444519050419'
+			index error = 0째 3.299999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 2.5 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-03
+				hour of master-clock date and hour of sight = 10:14:02
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = BJ 1 tr. w l, 155'�' 0'\'', l = 5.32 nm tr. w l, 155'�' 0'\'', l = 5.32 nm
+		Sight #2:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 25째 7.5999999999999090505298227071762'
+			index error = 0째 3.299999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 2.5 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-03
+				hour of master-clock date and hour of sight = 11:48:19
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight BJ 2
+	Positions in the plot:
+		Position #1:
+			latitude = 49째 30.384999999999990905052982270718'
+			longitude = 2째 1.5599999999999880628820392303169'
+			label = Position BJ 2

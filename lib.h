@@ -357,7 +357,7 @@ class Angle{
   double value;
   void normalize(void);
   void enter(String, String);
-  void set(String, double, String);
+  void set(String, double, bool, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
   stringstream to_string(unsigned int);
@@ -2225,7 +2225,7 @@ void Plot::show(String prefix){
   plot_command.str("");
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
 
-    cout << "Sight # " << i+1 << "\n";
+    //cout << "Sight # " << i+1 << "\n";
 
     //set the key in the correct position for the circle of equal altitude that will be plotted 
     plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(i+1)) << "*key_spacing\\\n";
@@ -2234,8 +2234,8 @@ void Plot::show(String prefix){
     if(abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0){
     
       //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
-      t_max.set(String("t_{max}"), acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix);
-      t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), new_prefix);
+      t_max.set(String("t_{max}"), acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), false, new_prefix);
+      t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), false, new_prefix);
 
       p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
       p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
@@ -2964,7 +2964,7 @@ void Sight::compute_DH_dip(String prefix){
   zero_Length.value = 0.0;
 
   DH_dip.set(String("Dip correction"),
-	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ), prefix);
+	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ), true, prefix);
 
 }
 
@@ -2992,7 +2992,7 @@ bool Sight::compute_DH_refraction(String prefix){
   //status = GSL_FAILURE
 
   if(status == GSL_SUCCESS){
-    DH_refraction.set(String("refraction correction"), result, prefix);
+    DH_refraction.set(String("refraction correction"), result, true, prefix);
   }else{
     check &= false;
     cout << prefix.value << RED << "GSL integration failed!\n" << RESET;
@@ -3276,11 +3276,11 @@ bool Sight::get_coordinates(String prefix){
   
 }
 
-void Angle::set(String name, double x, String prefix){
+void Angle::set(String name, double x, bool print_out, String prefix){
 
   value = x;
   normalize();
-  print(name, prefix, cout);
+  if(print_out){print(name, prefix, cout);}
   
 }
 

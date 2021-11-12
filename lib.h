@@ -356,7 +356,7 @@ class Angle{
  
   double value;
   void normalize(void);
-  void enter(String, String);
+  void enter(String, bool, String);
   void set(String, double, bool, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
@@ -700,7 +700,7 @@ Route Position::transport(String prefix){
     }
   }while(!check);
   route.start = (*this); 
-  route.alpha.enter(String("Course Over Ground"), new_prefix);
+  route.alpha.enter(String("Course Over Ground"), true, new_prefix);
 
   t_start.enter(String("start course time"), new_prefix);
   t_end.enter(String("end course time"), new_prefix);
@@ -835,7 +835,7 @@ void Route::enter(String name, String prefix){
     }
   }while(!check);
   start.enter(String("starting position"), new_prefix);
-  alpha.enter(String("starting heading"), new_prefix);
+  alpha.enter(String("starting heading"), true, new_prefix);
   l.enter(String("length"), String("nm"), new_prefix);
   
 }
@@ -2485,7 +2485,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   if(body.type.value != "star"){
     limb.enter(String("limb"), new_prefix);
   }
-  H_s.enter(String("sextant altitude"), new_prefix);
+  H_s.enter(String("sextant altitude"), true, new_prefix);
   //read index error from data/init.txt
   cout << new_prefix.value << YELLOW << "Reading index error from file...\n" << RESET;
   index_error.read_from_file(String("index error"), file_init, new_prefix);
@@ -3284,7 +3284,7 @@ void Angle::set(String name, double x, bool print_out, String prefix){
   
 }
 
-void Angle::enter(String name, String prefix){
+void Angle::enter(String name, bool is_positive, String prefix){
 
   string s;
   unsigned int ad;
@@ -3298,19 +3298,25 @@ void Angle::enter(String name, String prefix){
 
   cout << prefix.value << "Enter " << name.value << " [s ddd mm.m]:\n";
 
-  do{
+  if(!is_positive){
     
-    s.clear();
+    do{
+    
+      s.clear();
 
-    cout << prefix.value << "\tEnter s: ";
-    cin >> s;
+      cout << prefix.value << "\tEnter s: ";
+      cin >> s;
     
-    if((s=="+") || (s=="-")){check = true;}
-    else{
-      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-      check = false;
-    }
-  }while(!check);
+      if((s=="+") || (s=="-")){check = true;}
+      else{
+	cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
+	check = false;
+      }
+    }while(!check);
+
+  }else{
+    s = "+";
+  }
 
 
 
@@ -3336,7 +3342,7 @@ void Position::enter(String name, String prefix){
   cout << prefix.value << "Enter " << name.value << ":\n";
 
   do{
-    phi.enter(String("latitude"), new_prefix);
+    phi.enter(String("latitude"), false, new_prefix);
     if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
       cout << new_prefix.value << RED << "Entered value is not valid!\n" << RESET;
       check = true;
@@ -3345,7 +3351,7 @@ void Position::enter(String name, String prefix){
     }
   }while(check);
   
-  lambda.enter(String("longitude"), new_prefix);
+  lambda.enter(String("longitude"), false, new_prefix);
   label.enter(String("label"), new_prefix);
   
 }

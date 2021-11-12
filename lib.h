@@ -218,6 +218,13 @@ bool Speed::check_valid(String name, String prefix){
   
 }
 
+void Speed::print(String name, String prefix, ostream& ostr){
+
+  ostr << prefix.value << name.value << " = ";
+    ostr << value << " kt\n";
+ 
+}
+
 
 
 //enter a speed in knots

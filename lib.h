@@ -195,6 +195,32 @@ class Length{
 };
 
 
+class Speed{
+
+  public:
+  double value;
+  void enter(String, String);
+  bool check_valid(String, String);
+
+
+}
+
+//enter a speed in knots
+void Speed::enter(String name, String prefix){
+
+
+  do{
+    
+    enter_double(&value, false, 0.0, 0.0, name, prefix);
+    
+  }while(!check_valid(name, prefix));
+
+  
+  print(name, prefix, cout); 
+  
+}
+
+
 
 String::String(){
 

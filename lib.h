@@ -404,6 +404,7 @@ void Position::transport(String prefix){
   stringstream temp_label;
   bool check;
   String new_prefix;
+  Time t_start, t_end;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -419,6 +420,10 @@ void Position::transport(String prefix){
   }while(!check);
   route.start = (*this); 
   route.alpha.enter(String("starting heading"), new_prefix);
+
+  t_start.enter("Start course time", new_prefix);
+  t_end.enter("End course time", new_prefix);
+  
   route.l.enter(String("length"), String("nm"), new_prefix);
 
   route.print(String("transport"), prefix, cout);

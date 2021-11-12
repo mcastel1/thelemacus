@@ -35,6 +35,7 @@ class File;
 class Time;
 class Date;
 class Chrono;
+class Route;
 
 class String{
 
@@ -399,7 +400,8 @@ class Position{
   void enter(String, String);
   void print(String, String, ostream&);
   void read_from_file(File&, String);
-  void transport(String);
+  //this function transports the position and returns the Route with which it has been transported
+  Route transport(String);
 
 };
 
@@ -413,6 +415,7 @@ class Route{
   Angle alpha;
   //the length of the route
   Length l;
+  Speed sog;
 
   void enter(String, String);
   void print(String, String, ostream&);
@@ -676,14 +679,13 @@ void Time:: to_MJD(void)
 
 
 
-void Position::transport(String prefix){
+Route Position::transport(String prefix){
 
   Route route;
   stringstream temp_label;
   bool check;
   String new_prefix;
   Time t_start, t_end;
-  Speed sog;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -702,23 +704,25 @@ void Position::transport(String prefix){
 
   t_start.enter(String("Start course time"), new_prefix);
   t_end.enter(String("End course time"), new_prefix);
-  sog.enter(String("Speed Over Ground [kt]"), new_prefix);
+  (route.sog).enter(String("Speed Over Ground [kt]"), new_prefix);
   
   t_start.to_MJD();
   t_end.to_MJD();
 
-  (route.l).set(String("Length"), sog.value*((t_end.MJD)-(t_start.MJD))*24.0, new_prefix); 
+  (route.l).set(String("Length"), (route.sog).value*((t_end.MJD)-(t_start.MJD))*24.0, new_prefix); 
  
   route.print(String("transport"), prefix, cout);
   
   route.compute_end(new_prefix);
 
-  temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << sog.value << " kt";
+  temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << (route.sog).value << " kt";
   (route.end.label).set(temp_label.str(), prefix);
 
   (*this) = route.end;
 
   print(String("transported position"), prefix, cout);
+
+  return route;
 
 }
 
@@ -1469,33 +1473,34 @@ void Sight::transport(String prefix){
 
   Route route;
   stringstream temp_label;
-  bool check;
   String new_prefix;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  cout << prefix.value << "Enter route:\n";
-
-  do{
-    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
-    check = ((route.type.value == "l") || (route.type.value == "o"));
-    if(!check){
-      cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
-    }
-  }while(!check);
-  route.start = GP; 
-  route.alpha.enter(String("starting heading"), new_prefix);
-  route.l.enter(String("length"), String("nm"), new_prefix);
-
-  route.print(String("transport"), prefix, cout);
+  route = GP.transport(new_prefix);
   
-  route.compute_end(new_prefix);
+  /* cout << prefix.value << "Enter route:\n"; */
 
-  GP = route.end;
+  /* do{ */
+  /*   route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix); */
+  /*   check = ((route.type.value == "l") || (route.type.value == "o")); */
+  /*   if(!check){ */
+  /*     cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET; */
+  /*   } */
+  /* }while(!check); */
+  /* route.start = GP;  */
+  /* route.alpha.enter(String("starting heading"), new_prefix); */
+  /* route.l.enter(String("length"), String("nm"), new_prefix); */
+
+  /* route.print(String("transport"), prefix, cout); */
+  
+  /* route.compute_end(new_prefix); */
+
+  /* GP = route.end; */
 
   //append 'translated to ...' to the label of sight, and make this the new label of sight
-  temp_label << label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
+  temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << route.sog.value << " kt";
   label.set(temp_label.str(), prefix);
 
   print(String("transported sight"), prefix, cout);

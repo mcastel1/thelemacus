@@ -2240,8 +2240,8 @@ void Plot::show(String prefix){
       p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
       p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
 
-      p_max.print(String("p_max"), new_prefix, cout);
-      p_min.print(String("p_min"), new_prefix, cout);
+      /* p_max.print(String("p_max"), new_prefix, cout); */
+      /* p_min.print(String("p_min"), new_prefix, cout); */
 
       if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
 	cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;

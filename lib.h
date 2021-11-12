@@ -32,6 +32,9 @@
 
 class Catalog;
 class File;
+class Time;
+class Date;
+class Chrono;
 
 class String{
 
@@ -201,9 +204,10 @@ class Speed{
   double value;
   void enter(String, String);
   bool check_valid(String, String);
+  void print(String, String, ostream&);
 
 
-}
+};
 
 bool Speed::check_valid(String name, String prefix){
 
@@ -445,6 +449,233 @@ String String::prepend(String s){
 }
 
 
+class Date{
+
+ public:
+  unsigned int Y, M, D;
+  bool Y_is_leap_year;
+  vector<unsigned int> days_per_month;
+
+  void print(String, String, ostream&);
+  void enter(String, String);
+  bool read_from_file(String, File&, String);
+  stringstream to_string(void);
+  void check_leap_year(void);
+
+};
+
+class Chrono{
+
+ public:
+  unsigned int h, m;
+  double s;
+
+  void print(String, String, ostream&);
+  void enter(String, String);
+  bool read_from_file(String, File&, String);
+  stringstream to_string(unsigned int);
+
+};
+
+
+class Time{
+
+ public:
+  Date date;
+  Chrono chrono;
+  //is s used?
+  double s, MJD;
+  void enter(String, String);
+  void print(String, String, ostream&);
+  bool read_from_file(String, File&, String);
+  
+  void to_MJD(void);
+  void to_TAI(void);
+  void add(Chrono);
+  
+  stringstream to_string(unsigned int);
+  
+};
+
+stringstream Time::to_string(unsigned int precision){
+
+  stringstream output;
+
+  output << date.to_string().str() << " " << chrono.to_string(precision).str();
+ 
+  return output;
+  
+}
+
+
+void Time::print(String name, String prefix, ostream& ostr){
+
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+  
+  ostr << prefix.value << name.value << ":\n";
+
+  date.print(name, new_prefix, ostr);
+  chrono.print(name, new_prefix, ostr);
+  
+};
+
+
+
+void Time::enter(String name, String prefix) {
+
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+  
+  cout << prefix.value << "Enter master-clock date and hour\n";
+  
+  date.enter(String("date"), new_prefix);
+  chrono.enter(String("hour"), new_prefix);
+  
+  to_MJD();
+  print(name, prefix, cout);
+
+}
+
+void Time::to_TAI(void){
+  //int &day, int &month, int &year, double &hour)
+  /*
+    Calculate the calendar date from the Modified Julian Date
+   
+    INPUT :
+    MJD : Modified Julian Date (Julian Date - 2400000.5)
+   
+    OUTPUT :
+    day, month, year : corresponding date
+    hour : corresponding hours of the above date
+  */
+   
+  int Yt, Mt, Dt;
+  double ht;
+
+  long int b, c, d, e, f, jd0;
+   
+  jd0 = long(MJD +  2400001.0);
+  if (jd0 < 2299161) c = jd0 + 1524;    /* Julian calendar */
+  else
+    {                                /* Gregorian calendar */
+      b = long (( jd0 - 1867216.25) / 36524.25);
+      c = jd0 + b - (b/4) + 1525;
+    };
+   
+  if (MJD < -2400001.0)  // special case for year < -4712
+    {
+      if (MJD == floor(MJD)) jd0 = jd0 + 1;
+      c = long((-jd0 - 0.1)/ 365.25);
+      c = c + 1;
+      Yt = -4712 - c;
+      d = c / 4;
+      d = c * 365 + d;  // number of days from JAN 1, -4712
+      f = d + jd0;  // day of the year
+      if ((c % 4) == 0) e = 61;
+      else e = 60;
+      if (f == 0)
+        {
+	  Yt = Yt - 1;
+	  Mt = 12;
+	  Dt = 31;
+	  f = 500;  // set as a marker
+        };
+      if (f < e)
+        {
+	  if (f < 32)
+	    {
+	      Mt = 1;
+	      Dt = f;
+	    }
+	  else
+	    {
+	      Mt = 2;
+	      Dt = f - 31;
+	    };
+        }
+      else
+        {
+          if (f < 500)
+	    {
+	      f = f - e;
+	      Mt = long((f + 123.0) / 30.6001);
+	      Dt = f - long(Mt * 30.6001) + 123;
+	      Mt = Mt - 1;
+	    };
+        };
+    }
+  else   // normal case
+    {
+      d = long ((c - 122.1) / 365.25);
+      e = 365 * d + (d/4);
+      f = long ((c - e) / 30.6001);
+      Dt = c - e - long(30.6001 * f);
+      Mt = f - 1 - 12 * (f / 14);
+      Yt = d - 4715 - ((7 + Mt) / 10);
+    };
+   
+  ht = 24.0 * (MJD - floor(MJD));
+    
+
+  (date.Y) = ((unsigned int)Yt);
+  (date.M) = ((unsigned int)Mt);
+  (date.D) = ((unsigned int)Dt);
+
+  (chrono.h) = (unsigned int)(floor(ht));
+  (chrono.m) = floor((ht-floor(ht))*60.0);
+  (chrono.s) = (((ht-floor(ht))*60.0) - floor((ht-floor(ht))*60.0))*60.0;
+
+}
+
+void Time:: to_MJD(void)
+  
+  /*
+    Modified Julian Date ( MJD = Julian Date - 2400000.5)
+    valid for every date
+    Julian Calendar up to 4-OCT-1582,
+    Gregorian Calendar from 15-OCT-1582.
+  */
+{
+  
+  long int b, c;
+  int Yt = (date.Y), Mt = (date.M), Dt = (date.D);
+   
+  MJD = 10000.0 * Yt + 100.0 * Mt + Dt;
+  if (Mt <= 2)
+    {
+      Mt = Mt + 12;
+      Yt = Yt - 1;
+    };
+  if (MJD <= 15821004.1)
+    {
+      b = ((Yt+4716)/4) - 1181;
+      if (Yt < -4716)
+        {
+	  c = Yt + 4717;
+	  c = -c;
+	  c = c / 4;
+	  c = -c;
+	  b = c - 1182;
+        };
+    }
+  else b = (Yt/400) - (Yt/100) + (Yt/4);
+  //     { b = -2 + floor((Yt+4716)/4) - 1179;}
+  // else {b = floor(Yt/400) - floor(Yt/100) + floor(Yt/4);};
+   
+  MJD = 365.0 * Yt - 679004.0;
+  //comment this out if you want to include hours, minutes and seconds in MJD
+  MJD = MJD + b + int(30.6001 * (Mt + 1)) + Dt + (((double)(chrono.h)) + ((double)(chrono.m))/60.0 + ((double)(chrono.s))/(60.0*60.0)) / 24.0;
+   
+  
+}
+
+
+
 void Position::transport(String prefix){
 
   Route route;
@@ -468,8 +699,8 @@ void Position::transport(String prefix){
   route.start = (*this); 
   route.alpha.enter(String("starting heading"), new_prefix);
 
-  t_start.enter("Start course time", new_prefix);
-  t_end.enter("End course time", new_prefix);
+  t_start.enter(String("Start course time"), new_prefix);
+  t_end.enter(String("End course time"), new_prefix);
   
   route.l.enter(String("length"), String("nm"), new_prefix);
 
@@ -601,33 +832,6 @@ void Route::enter(String name, String prefix){
 }
 
 
-class Date{
-
- public:
-  unsigned int Y, M, D;
-  bool Y_is_leap_year;
-  vector<unsigned int> days_per_month;
-
-  void print(String, String, ostream&);
-  void enter(String, String);
-  bool read_from_file(String, File&, String);
-  stringstream to_string(void);
-  void check_leap_year(void);
-
-};
-
-class Chrono{
-
- public:
-  unsigned int h, m;
-  double s;
-
-  void print(String, String, ostream&);
-  void enter(String, String);
-  bool read_from_file(String, File&, String);
-  stringstream to_string(unsigned int);
-
-};
 
 
 
@@ -697,24 +901,6 @@ bool Chrono::read_from_file(String name, File& file, String prefix){
 }
 
 
-class Time{
-
- public:
-  Date date;
-  Chrono chrono;
-  //is s used?
-  double s, MJD;
-  void enter(String, String);
-  void print(String, String, ostream&);
-  bool read_from_file(String, File&, String);
-  
-  void to_MJD(void);
-  void to_TAI(void);
-  void add(Chrono);
-  
-  stringstream to_string(unsigned int);
-  
-};
 
 
 
@@ -3325,181 +3511,5 @@ void Chrono::enter(String name, String prefix) {
 
 
 
-stringstream Time::to_string(unsigned int precision){
-
-  stringstream output;
-
-  output << date.to_string().str() << " " << chrono.to_string(precision).str();
- 
-  return output;
-  
-}
-
-
-void Time::print(String name, String prefix, ostream& ostr){
-
-  String new_prefix;
-
-  //append \t to prefix
-  new_prefix = prefix.append(String("\t"));
-  
-  ostr << prefix.value << name.value << ":\n";
-
-  date.print(name, new_prefix, ostr);
-  chrono.print(name, new_prefix, ostr);
-  
-};
-
-
-
-void Time::enter(String name, String prefix) {
-
-  String new_prefix;
-
-  //append \t to prefix
-  new_prefix = prefix.append(String("\t"));
-  
-  cout << prefix.value << "Enter master-clock date and hour\n";
-  
-  date.enter(String("date"), new_prefix);
-  chrono.enter(String("hour"), new_prefix);
-  
-  to_MJD();
-  print(name, prefix, cout);
-
-}
-
-void Time:: to_TAI(void){
-  //int &day, int &month, int &year, double &hour)
-  /*
-    Calculate the calendar date from the Modified Julian Date
-   
-    INPUT :
-    MJD : Modified Julian Date (Julian Date - 2400000.5)
-   
-    OUTPUT :
-    day, month, year : corresponding date
-    hour : corresponding hours of the above date
-  */
-   
-  int Yt, Mt, Dt;
-  double ht;
-
-  long int b, c, d, e, f, jd0;
-   
-  jd0 = long(MJD +  2400001.0);
-  if (jd0 < 2299161) c = jd0 + 1524;    /* Julian calendar */
-  else
-    {                                /* Gregorian calendar */
-      b = long (( jd0 - 1867216.25) / 36524.25);
-      c = jd0 + b - (b/4) + 1525;
-    };
-   
-  if (MJD < -2400001.0)  // special case for year < -4712
-    {
-      if (MJD == floor(MJD)) jd0 = jd0 + 1;
-      c = long((-jd0 - 0.1)/ 365.25);
-      c = c + 1;
-      Yt = -4712 - c;
-      d = c / 4;
-      d = c * 365 + d;  // number of days from JAN 1, -4712
-      f = d + jd0;  // day of the year
-      if ((c % 4) == 0) e = 61;
-      else e = 60;
-      if (f == 0)
-        {
-	  Yt = Yt - 1;
-	  Mt = 12;
-	  Dt = 31;
-	  f = 500;  // set as a marker
-        };
-      if (f < e)
-        {
-	  if (f < 32)
-	    {
-	      Mt = 1;
-	      Dt = f;
-	    }
-	  else
-	    {
-	      Mt = 2;
-	      Dt = f - 31;
-	    };
-        }
-      else
-        {
-          if (f < 500)
-	    {
-	      f = f - e;
-	      Mt = long((f + 123.0) / 30.6001);
-	      Dt = f - long(Mt * 30.6001) + 123;
-	      Mt = Mt - 1;
-	    };
-        };
-    }
-  else   // normal case
-    {
-      d = long ((c - 122.1) / 365.25);
-      e = 365 * d + (d/4);
-      f = long ((c - e) / 30.6001);
-      Dt = c - e - long(30.6001 * f);
-      Mt = f - 1 - 12 * (f / 14);
-      Yt = d - 4715 - ((7 + Mt) / 10);
-    };
-   
-  ht = 24.0 * (MJD - floor(MJD));
-    
-
-  (date.Y) = ((unsigned int)Yt);
-  (date.M) = ((unsigned int)Mt);
-  (date.D) = ((unsigned int)Dt);
-
-  (chrono.h) = (unsigned int)(floor(ht));
-  (chrono.m) = floor((ht-floor(ht))*60.0);
-  (chrono.s) = (((ht-floor(ht))*60.0) - floor((ht-floor(ht))*60.0))*60.0;
-
-}
-
-void Time:: to_MJD(void)
-  
-  /*
-    Modified Julian Date ( MJD = Julian Date - 2400000.5)
-    valid for every date
-    Julian Calendar up to 4-OCT-1582,
-    Gregorian Calendar from 15-OCT-1582.
-  */
-{
-  
-  long int b, c;
-  int Yt = (date.Y), Mt = (date.M), Dt = (date.D);
-   
-  MJD = 10000.0 * Yt + 100.0 * Mt + Dt;
-  if (Mt <= 2)
-    {
-      Mt = Mt + 12;
-      Yt = Yt - 1;
-    };
-  if (MJD <= 15821004.1)
-    {
-      b = ((Yt+4716)/4) - 1181;
-      if (Yt < -4716)
-        {
-	  c = Yt + 4717;
-	  c = -c;
-	  c = c / 4;
-	  c = -c;
-	  b = c - 1182;
-        };
-    }
-  else b = (Yt/400) - (Yt/100) + (Yt/4);
-  //     { b = -2 + floor((Yt+4716)/4) - 1179;}
-  // else {b = floor(Yt/400) - floor(Yt/100) + floor(Yt/4);};
-   
-  MJD = 365.0 * Yt - 679004.0;
-  //comment this out if you want to include hours, minutes and seconds in MJD
-  MJD = MJD + b + int(30.6001 * (Mt + 1)) + Dt + (((double)(chrono.h)) + ((double)(chrono.m))/60.0 + ((double)(chrono.s))/(60.0*60.0)) / 24.0;
-   
-  
-}
 
 

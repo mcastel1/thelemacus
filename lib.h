@@ -713,7 +713,7 @@ void Position::transport(String prefix){
   
   route.compute_end(new_prefix);
 
-  temp_label << label.value << " tr. w " << route.type.value << ", " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << route.l.value << " nm";
+  temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << sog.value << " kt";
   (route.end.label).set(temp_label.str(), prefix);
 
   (*this) = route.end;

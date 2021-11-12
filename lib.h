@@ -534,7 +534,7 @@ void Time::enter(String name, String prefix) {
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
   
-  cout << prefix.value << "Enter master-clock date and hour\n";
+  cout << prefix.value << "Enter " << name.value << " date and hour\n";
   
   date.enter(String("date"), new_prefix);
   chrono.enter(String("hour"), new_prefix);
@@ -702,8 +702,8 @@ Route Position::transport(String prefix){
   route.start = (*this); 
   route.alpha.enter(String("Course Over Ground"), new_prefix);
 
-  t_start.enter(String("Start course time"), new_prefix);
-  t_end.enter(String("End course time"), new_prefix);
+  t_start.enter(String("start course time"), new_prefix);
+  t_end.enter(String("end course time"), new_prefix);
   (route.sog).enter(String("Speed Over Ground [kt]"), new_prefix);
   
   t_start.to_MJD();

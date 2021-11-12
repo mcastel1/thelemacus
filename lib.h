@@ -683,6 +683,7 @@ void Position::transport(String prefix){
   bool check;
   String new_prefix;
   Time t_start, t_end;
+  Speed sog;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -697,13 +698,17 @@ void Position::transport(String prefix){
     }
   }while(!check);
   route.start = (*this); 
-  route.alpha.enter(String("starting heading"), new_prefix);
+  route.alpha.enter(String("Course Over Ground"), new_prefix);
 
   t_start.enter(String("Start course time"), new_prefix);
   t_end.enter(String("End course time"), new_prefix);
+  sog.enter(String("Speed Over Ground [kt]"), new_prefix);
   
-  route.l.enter(String("length"), String("nm"), new_prefix);
+  t_start.to_MJD();
+  t_end.to_MJD();
 
+  (route.l).set(String("Length"), sog.value*((t_end.MJD)-(t_start.MJD))*24.0, new_prefix); 
+ 
   route.print(String("transport"), prefix, cout);
   
   route.compute_end(new_prefix);

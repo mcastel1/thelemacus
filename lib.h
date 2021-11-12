@@ -205,9 +205,23 @@ class Speed{
 
 }
 
+bool Speed::check_valid(String name, String prefix){
+
+  bool check = true;
+  
+  if(value<0.0){
+    check &= false;
+    cout << prefix.value << RED << "Entered value of " << name.value << " is not valid!\n" << RESET;
+  }
+
+  return check;
+  
+}
+
+
+
 //enter a speed in knots
 void Speed::enter(String name, String prefix){
-
 
   do{
     

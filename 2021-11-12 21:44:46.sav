@@ -1,0 +1,16 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = star
+				Name = capella
+				Right ascension = 79° 10.549979999999834490154171362519'
+				Declination = 46° 0.016680000000093286871560849249363'
+			sextant altitude = 3° 1.9999999999999928945726423989981'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2023-03-02
+				hour of master-clock date and hour of sight = 04:03:04
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = fsdgh

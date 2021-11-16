@@ -49,6 +49,7 @@
 - when you transport a sight and save to file, in the saved file there is no trace of the fact that the sight has been transported 
 - put variables which are always the same in file init, and choose this default value if pushing enter 
 - 360 deg E in xlabel -> 0 deg
+- make sure that code does not crash if special characters are entered in position/sight labels
 */
 
 

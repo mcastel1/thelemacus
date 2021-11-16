@@ -2485,6 +2485,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   if(body.type.value != "star"){
     limb.enter(String("limb"), new_prefix);
   }
+  //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
   H_s.enter(String("sextant altitude"), true, new_prefix);
   //read index error from data/init.txt
   cout << new_prefix.value << YELLOW << "Reading index error from file...\n" << RESET;

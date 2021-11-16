@@ -359,7 +359,7 @@ class Angle{
   void enter(String, bool, String);
   void set(String, double, bool, String);
   void print(String, String, ostream&);
-  void read_from_file(String, String, String);
+  void read_from_file(String, File&, bool, String);
   stringstream to_string(unsigned int);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
@@ -367,22 +367,31 @@ class Angle{
 };
 
 
-
-void Angle::read_from_file(String name, String filename, String prefix){
+//I added the booleian variable search_entire_file. If true, then this function rewinds the file pointer to the beginning of file and goes through the file until it finds the quantity 'name'. If false, it reads the angle at the position where 'file' was when it was passed to this function 
+void Angle::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
   string line;
   size_t pos1, pos2, pos3;
-  File file;
-  
-  file.set_name(filename);
-  file.open(String("in"), prefix);
 
-  do{
+  if(search_entire_file){
+
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+  
+    do{
     
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+
+  }else{
+
     line.clear();
     getline(file.value, line);
-
-  }while((line.find(name.value)) == (string::npos));
+    
+  }
 
   pos1 = line.find(" = ");
   pos2 = line.find("° ");
@@ -391,8 +400,6 @@ void Angle::read_from_file(String name, String filename, String prefix){
   value = k*(stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str()) + stod(line.substr(pos2+2, pos3 - (pos2+2)))/60.0);
 
   print(name, prefix, cout);
-
-  file.close(prefix);
   
 }
 
@@ -743,8 +750,8 @@ void Position::read_from_file(File& file, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  phi.read_from_file(String("latitude"), file.name, new_prefix);
-  lambda.read_from_file(String("longitude"), file.name, new_prefix);
+  phi.read_from_file(String("latitude"), file, false, new_prefix);
+  lambda.read_from_file(String("longitude"), file, false, new_prefix);
   label.read_from_file(String("label"), file, new_prefix);
 
 }
@@ -1293,8 +1300,8 @@ void Body::read_from_file(String name, File& file, String prefix){
 
 
   if(type.value == "star"){
-    RA.read_from_file(String("right ascension"), file.name, new_prefix);
-    d.read_from_file(String("declination"), file.name, new_prefix);
+    RA.read_from_file(String("right ascension"), file, false, new_prefix);
+    d.read_from_file(String("declination"), file, false, new_prefix);
   }else{
     radius.read_from_file(String("radius"), file, new_prefix);
   }
@@ -1551,8 +1558,8 @@ bool Sight::read_from_file(File& file, String prefix){
   if(body.type.value != "star"){
     limb.read_from_file(String("limb"), file, new_prefix);
   }
-  H_s.read_from_file(String("sextant altitude"), file.name, new_prefix);
-  index_error.read_from_file(String("index error"), file.name, new_prefix);
+  H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
+  index_error.read_from_file(String("index error"), file, false, new_prefix);
   artificial_horizon.read_from_file(String("artificial horizon"), file, new_prefix);
   if((artificial_horizon.value) == 'n'){
     height_of_eye.read_from_file(String("height of eye"), file, new_prefix);
@@ -2499,7 +2506,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   H_s.enter(String("sextant altitude"), true, new_prefix);
   //read index error from data/init.txt
   cout << new_prefix.value << YELLOW << "Reading index error from file...\n" << RESET;
-  index_error.read_from_file(String("index error"), file_init.name, new_prefix);
+  index_error.read_from_file(String("index error"), file_init, true, new_prefix);
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
   artificial_horizon.enter(String("artificial horizon"), new_prefix);
   if(artificial_horizon.value == 'n'){

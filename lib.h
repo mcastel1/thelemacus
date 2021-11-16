@@ -2567,10 +2567,10 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
   H_s.enter(String("sextant altitude"), true, new_prefix);
   //read index error from data/init.txt
-  cout << new_prefix.value << YELLOW << "Reading index error from init file...\n" << RESET;
+  cout << new_prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
   index_error.read_from_file(String("index error"), file_init, true, new_prefix);
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
-  cout << new_prefix.value << YELLOW << "Reading artificial horizon from init file...\n" << RESET;
+  cout << new_prefix.value << YELLOW << "Reading artificial horizon from file " << file_init.name.value << " ...\n" << RESET;
   artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
   if(artificial_horizon.value == 'n'){
@@ -2582,7 +2582,9 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
     time = master_clock_date_and_hour;
     
-    use_stopwatch.enter(String("use of stopwatch"), new_prefix);
+    cout << new_prefix.value << YELLOW << "Reading use of stopwatch from file " << file_init.name.value << " ...\n" << RESET;
+    use_stopwatch.read_from_file(String("use of stopwatch"), file_init, true, new_prefix);
+    cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
 
     if(use_stopwatch.value == 'y'){
         
@@ -2592,7 +2594,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     }
 
     //read TAI_minus_UTC from data/index.txt
-    cout << new_prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from init file...\n" << RESET;
+    cout << new_prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
     TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
     cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
     time.add(TAI_minus_UTC);

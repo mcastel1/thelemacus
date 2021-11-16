@@ -374,7 +374,8 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, Str
   size_t pos1, pos2, pos3;
 
   if(search_entire_file){
-
+    
+    //rewind the file pointer
     file.value.clear();                 // clear fail and eof bits
     file.value.seekg(0, std::ios::beg); // back to the start!
   
@@ -492,7 +493,7 @@ class Chrono{
 
   void print(String, String, ostream&);
   void enter(String, String);
-  bool read_from_file(String, File&, String);
+  bool read_from_file(String, File&, bool, String);
   stringstream to_string(unsigned int);
 
 };
@@ -875,20 +876,40 @@ void Route::enter(String name, String prefix){
 
 
 
-bool Chrono::read_from_file(String name, File& file, String prefix){
+bool Chrono::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
   string line;
   stringstream new_prefix;
   bool check = true;
+  size_t pos;
   
   //prepend \t to prefix
   new_prefix << "\t" << prefix.value;
 
-  size_t pos = 0;
+  pos = 0;
 
-  //read type
-  line.clear();
-  getline(file.value, line);
+  if(search_entire_file){
+
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
+
+
+  
   pos = line.find(" = ");
 
   //read hours
@@ -1040,7 +1061,7 @@ bool Time::read_from_file(String name, File& file, String prefix){
   }
 
   //read chrono
-  if(!(chrono.read_from_file(name, file, new_prefix))){
+  if(!(chrono.read_from_file(name, file, false, new_prefix))){
     check &= false;
   }
 
@@ -1575,12 +1596,12 @@ bool Sight::read_from_file(File& file, String prefix){
 
   if(use_stopwatch.value == 'y'){
       
-    stopwatch.read_from_file(String("stopwatch"), file, new_prefix);
+    stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
     time.add(stopwatch);
 
   }
   
-  TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file, new_prefix);
+  TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file, false, new_prefix);
   time.add(TAI_minus_UTC);
   time.print(String("TAI date and hour of sight"), new_prefix, cout);
 
@@ -2529,7 +2550,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
     //read TAI_minus_UTC from data/index.txt
     cout << new_prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file...\n" << RESET;
-    TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, new_prefix);
+    TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
     cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
     time.add(TAI_minus_UTC);
     time.print(String("TAI date and hour of sight"), new_prefix, cout);

@@ -368,11 +368,15 @@ class Angle{
 
 
 
-void Angle::read_from_file(String name, File& file, String prefix){
+void Angle::read_from_file(String name, String filename, String prefix){
 
   string line;
   size_t pos1, pos2, pos3;
-
+  File file;
+  
+  file.set_name(filename, prefix);
+  file.open(String("in"), prefix);
+  
   line.clear();
   getline(file.value, line);
 
@@ -383,6 +387,8 @@ void Angle::read_from_file(String name, File& file, String prefix){
   value = k*(stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str()) + stod(line.substr(pos2+2, pos3 - (pos2+2)))/60.0);
 
   print(name, prefix, cout);
+
+  file.close(prefix);
   
 }
 

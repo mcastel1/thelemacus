@@ -374,7 +374,7 @@ void Angle::read_from_file(String name, String filename, String prefix){
   size_t pos1, pos2, pos3;
   File file;
   
-  file.set_name(filename, prefix);
+  file.set_name(filename);
   file.open(String("in"), prefix);
 
   do{
@@ -743,8 +743,8 @@ void Position::read_from_file(File& file, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  phi.read_from_file(String("latitude"), file, new_prefix);
-  lambda.read_from_file(String("longitude"), file, new_prefix);
+  phi.read_from_file(String("latitude"), file.name, new_prefix);
+  lambda.read_from_file(String("longitude"), file.name, new_prefix);
   label.read_from_file(String("label"), file, new_prefix);
 
 }
@@ -1293,8 +1293,8 @@ void Body::read_from_file(String name, File& file, String prefix){
 
 
   if(type.value == "star"){
-    RA.read_from_file(String("right ascension"), file, new_prefix);
-    d.read_from_file(String("declination"), file, new_prefix);
+    RA.read_from_file(String("right ascension"), file.name, new_prefix);
+    d.read_from_file(String("declination"), file.name, new_prefix);
   }else{
     radius.read_from_file(String("radius"), file, new_prefix);
   }
@@ -1551,8 +1551,8 @@ bool Sight::read_from_file(File& file, String prefix){
   if(body.type.value != "star"){
     limb.read_from_file(String("limb"), file, new_prefix);
   }
-  H_s.read_from_file(String("sextant altitude"), file, new_prefix);
-  index_error.read_from_file(String("index error"), file, new_prefix);
+  H_s.read_from_file(String("sextant altitude"), file.name, new_prefix);
+  index_error.read_from_file(String("index error"), file.name, new_prefix);
   artificial_horizon.read_from_file(String("artificial horizon"), file, new_prefix);
   if((artificial_horizon.value) == 'n'){
     height_of_eye.read_from_file(String("height of eye"), file, new_prefix);
@@ -2499,7 +2499,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   H_s.enter(String("sextant altitude"), true, new_prefix);
   //read index error from data/init.txt
   cout << new_prefix.value << YELLOW << "Reading index error from file...\n" << RESET;
-  index_error.read_from_file(String("index error"), file_init, new_prefix);
+  index_error.read_from_file(String("index error"), file_init.name, new_prefix);
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
   artificial_horizon.enter(String("artificial horizon"), new_prefix);
   if(artificial_horizon.value == 'n'){

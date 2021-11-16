@@ -313,19 +313,40 @@ class Answer{
   void enter(String, String);
   //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
   void print(String, String, ostream&);
-  void read_from_file(String, File&, String);
+  void read_from_file(String, File&, bool, String);
 
 };
 
 
 
-void Answer::read_from_file(String name, File& file, String prefix){
+void Answer::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
   string line;
   size_t pos;
 
-  line.clear();
-  getline(file.value, line);
+    if(search_entire_file){
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+  
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
+
+
+  
   pos = line.find(" = ");
 
   value = line[pos+3];
@@ -1601,7 +1622,7 @@ bool Sight::read_from_file(File& file, String prefix){
   }
   H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
   index_error.read_from_file(String("index error"), file, false, new_prefix);
-  artificial_horizon.read_from_file(String("artificial horizon"), file, new_prefix);
+  artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
   if((artificial_horizon.value) == 'n'){
     height_of_eye.read_from_file(String("height of eye"), file, new_prefix);
   }
@@ -1612,7 +1633,7 @@ bool Sight::read_from_file(File& file, String prefix){
   }
   time = master_clock_date_and_hour;
  
-  use_stopwatch.read_from_file(String("use of stopwatch"), file, new_prefix);
+  use_stopwatch.read_from_file(String("use of stopwatch"), file, false, new_prefix);
 
   if(use_stopwatch.value == 'y'){
       

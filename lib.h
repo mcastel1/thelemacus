@@ -359,7 +359,7 @@ class Angle{
   void enter(String, bool, String);
   void set(String, double, bool, String);
   void print(String, String, ostream&);
-  void read_from_file(String, File&, String);
+  void read_from_file(String, String, String);
   stringstream to_string(unsigned int);
 
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
@@ -376,9 +376,13 @@ void Angle::read_from_file(String name, String filename, String prefix){
   
   file.set_name(filename, prefix);
   file.open(String("in"), prefix);
-  
-  line.clear();
-  getline(file.value, line);
+
+  do{
+    
+    line.clear();
+    getline(file.value, line);
+
+  }while((line.find(name.value)) == (string::npos));
 
   pos1 = line.find(" = ");
   pos2 = line.find("° ");

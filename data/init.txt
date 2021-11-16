@@ -1,3 +1,3 @@
+artificial horizon = y	
 index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-	

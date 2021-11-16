@@ -2567,10 +2567,12 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
   H_s.enter(String("sextant altitude"), true, new_prefix);
   //read index error from data/init.txt
-  cout << new_prefix.value << YELLOW << "Reading index error from file...\n" << RESET;
+  cout << new_prefix.value << YELLOW << "Reading index error from init file...\n" << RESET;
   index_error.read_from_file(String("index error"), file_init, true, new_prefix);
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
-  artificial_horizon.enter(String("artificial horizon"), new_prefix);
+  cout << new_prefix.value << YELLOW << "Reading artificial horizon from init file...\n" << RESET;
+  artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
+  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
   if(artificial_horizon.value == 'n'){
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
   }
@@ -2590,7 +2592,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     }
 
     //read TAI_minus_UTC from data/index.txt
-    cout << new_prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file...\n" << RESET;
+    cout << new_prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from init file...\n" << RESET;
     TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
     cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
     time.add(TAI_minus_UTC);

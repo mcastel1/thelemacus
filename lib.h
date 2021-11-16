@@ -46,7 +46,7 @@ class String{
   String(string);
   void enter(String, String);
   void print(String, String, ostream&);
-  void read_from_file(String, File&, String);
+  void read_from_file(String, File&, bool, String);
   void set(String, String);
   String append(String);
   String prepend(String);
@@ -268,13 +268,33 @@ File::File(){
   
 }
 
-void String::read_from_file(String name, File& file, String prefix){
+void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
   string line;
   size_t pos;
 
-  line.clear();
-  getline(file.value, line);
+  if(search_entire_file){
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+  
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
+
+  
   pos = line.find(" = ");
 
   //read the string after ' = ' until the end of line string and store it into value
@@ -753,7 +773,7 @@ void Position::read_from_file(File& file, String prefix){
 
   phi.read_from_file(String("latitude"), file, false, new_prefix);
   lambda.read_from_file(String("longitude"), file, false, new_prefix);
-  label.read_from_file(String("label"), file, new_prefix);
+  label.read_from_file(String("label"), file, false, new_prefix);
 
 }
 
@@ -1608,7 +1628,7 @@ bool Sight::read_from_file(File& file, String prefix){
   //check whether the date and hour of sight falls within the time window covered by JPL data files
   check &= check_data_time_interval(prefix);
 
-  label.read_from_file(String("label"), file, new_prefix);
+  label.read_from_file(String("label"), file, false, new_prefix);
 
   if(!check){
     cout << prefix.value << RED << "Error reading sight!\n" << RESET;

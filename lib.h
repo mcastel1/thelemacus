@@ -30,7 +30,7 @@
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
-  class Catalog;
+class Catalog;
 class File;
 class Time;
 class Date;
@@ -81,6 +81,63 @@ class Int{
   void print(String, String, ostream&);
 
 };
+
+
+class Double{
+
+ public:
+  int value;
+
+  void read_from_file(String, File&, bool, String);
+  void print(String, String, ostream&);
+
+};
+
+
+void Double::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+
+  string line;
+  size_t pos;
+
+  if(search_entire_file){
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+  
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
+
+  
+  pos = line.find(" = ");
+
+  //read the string after ' = ' until the end of line string and store it into value
+  value = stod(line.substr(pos+3, line.size() - (pos+3)).c_str(), NULL);
+
+  print(name, prefix, cout);
+  
+}
+
+void Double::print(String name, String prefix, ostream& ostr){
+
+  ostr << prefix.value << name.value << " = " << value << "\n";
+ 
+}
+
+
+
 
 void Int::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
@@ -2387,6 +2444,7 @@ void Plot::show(String prefix){
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
   Int plot_coastline_every;
+  Double x_min, x_max, y_min, y_max;
   String new_prefix;
   File file_init;
 
@@ -2453,13 +2511,19 @@ void Plot::show(String prefix){
         //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file. > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
 
     cout << new_prefix.value << "I found a boundary file.\n" << RESET;
-    /*
+    
     x_min.read_from_file(String("GPVAL_X_MIN"), file_boundary, true, new_prefix); 
     x_max.read_from_file(String("GPVAL_X_MAX"), file_boundary, true, new_prefix); 
     y_min.read_from_file(String("GPVAL_Y_MIN"), file_boundary, true, new_prefix); 
     y_max.read_from_file(String("GPVAL_Y_MAX"), file_boundary, true, new_prefix); 
+
+    command << "LANG=C sed 's/#min_longitude/lambda_min = lambda_inv(" << x_min.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    command << "LANG=C sed 's/#max_longitude/lambda_max = lambda_inv(" << x_max.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    command << "LANG=C sed 's/#min_latitude/phi_min = phi_inv(" << y_min.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    command << "LANG=C sed 's/#max_latitude/phi_max = phi_inv(" << y_max.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+
+    system(command.str().c_str());
     
-    */
 
   }
   //

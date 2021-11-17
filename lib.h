@@ -71,6 +71,62 @@ class File{
 };
 
 
+
+class Int{
+
+ public:
+  int value;
+
+  void read_from_file(String, File&, bool, String);
+  void print(String, String, ostream&);
+
+};
+
+void Int::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+
+  string line;
+  size_t pos;
+
+  if(search_entire_file){
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+  
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
+
+  
+  pos = line.find(" = ");
+
+  //read the string after ' = ' until the end of line string and store it into value
+  value = stoi(line.substr(pos+3, line.size() - (pos+3)).c_str(), NULL);
+
+  print(name, prefix, cout);
+
+  
+}
+
+
+void Int::print(String name, String prefix, ostream& ostr){
+
+  ostr << prefix.value << name.value << " = " << value << "\n";
+ 
+}
+
+
 bool get_date_hour(String &line, String prefix){
 
     File file;

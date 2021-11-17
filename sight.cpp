@@ -69,6 +69,15 @@ int main(int argc, char *argv[]){
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
 
+  /*
+  Int x;
+  File f;
+  f.set_name(String("data/init.txt"));
+  f.open(String("in"), String("\t"));
+  x.read_from_file(String("plot coastline every"), f, true, String("\t"));
+  f.close(String("\t"));
+  return 0;
+  */
 
   //unsigned int i;
   /*

@@ -86,7 +86,7 @@ class Int{
 class Double{
 
  public:
-  int value;
+  double value;
 
   void read_from_file(String, File&, bool, String);
   void print(String, String, ostream&);
@@ -2260,6 +2260,8 @@ Plot::Plot(Catalog* cata){
   file_gnuplot.set_name(String("plot.plt"));
   file_boundary.set_name(String("boundary.txt"));
 
+  file_boundary.remove();
+
   choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Save to file", "Read from file", "Exit"};
   
 }
@@ -2491,14 +2493,13 @@ void Plot::show(String prefix){
     cout << new_prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
 
     cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
-    plot_command.str("");
-    command.str("");
   
     lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix); 
     lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix); 
     phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix); 
     phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
   
+    command.str("");
     command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
     command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
     command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
@@ -2515,8 +2516,9 @@ void Plot::show(String prefix){
     x_min.read_from_file(String("GPVAL_X_MIN"), file_boundary, true, new_prefix); 
     x_max.read_from_file(String("GPVAL_X_MAX"), file_boundary, true, new_prefix); 
     y_min.read_from_file(String("GPVAL_Y_MIN"), file_boundary, true, new_prefix); 
-    y_max.read_from_file(String("GPVAL_Y_MAX"), file_boundary, true, new_prefix); 
+    y_max.read_from_file(String("GPVAL_Y_MAX"), file_boundary, true, new_prefix);
 
+    command.str("");
     command << "LANG=C sed 's/#min_longitude/lambda_min = lambda_inv(" << x_min.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
     command << "LANG=C sed 's/#max_longitude/lambda_max = lambda_inv(" << x_max.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
     command << "LANG=C sed 's/#min_latitude/phi_min = phi_inv(" << y_min.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";

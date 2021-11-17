@@ -2384,10 +2384,17 @@ void Plot::show(String prefix){
   gsl_function F;
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
+  Int plot_coastline_every;
   String new_prefix;
+  File file_init;
+
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  file_init.set_name(String("data/init.txt"));
+  file_init.open(String("in"), prefix);
+
   
   T = gsl_root_fsolver_brent;
   s = gsl_root_fsolver_alloc (T);
@@ -2406,11 +2413,21 @@ void Plot::show(String prefix){
   file_id.remove();
   file_gnuplot.remove();
   
-  command.str("");
 
-  //replace line with sight plots
-  
+  //replace line with plot_coastline_every
+  cout << new_prefix.value << YELLOW << "Reading plot coastline every from file " << file_init.name.value << " ...\n" << RESET;
   plot_command.str("");
+  command.str("");
+  plot_coastline_every.read_from_file(String("plot coastline every"), file_init, true, new_prefix); 
+  command << "LANG=C sed 's/#plot_coastline_every/M = " << plot_coastline_every.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
+  system(command.str().c_str());
+  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+
+
+  
+  //replace line with sight plots  
+  plot_command.str("");
+  command.str("");
   for(i=0, plot_command.str(""); i<sight_list.size(); i++){
 
     //cout << "Sight # " << i+1 << "\n";
@@ -2616,7 +2633,7 @@ void Plot::show(String prefix){
     
   } 
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_dummy.plt >> plot_temp.plt \n";
+  command << "LANG=C sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
 
 
   
@@ -2647,9 +2664,10 @@ void Plot::show(String prefix){
 
   file_id.close(String("\t"));
   file_id.remove();
-  
+  file_init.close(prefix);
+
   cout << prefix.value << "Job id = "<< job_id << "\n";
-  
+
 }
 
 bool Sight::enter(Catalog catalog, String name, String prefix){

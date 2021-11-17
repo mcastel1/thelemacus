@@ -30,7 +30,7 @@
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
-class Catalog;
+  class Catalog;
 class File;
 class Time;
 class Date;
@@ -129,31 +129,31 @@ void Int::print(String name, String prefix, ostream& ostr){
 
 bool get_date_hour(String &line, String prefix){
 
-    File file;
-    stringstream command;
-    bool check;
+  File file;
+  stringstream command;
+  bool check;
 
-    check = true;
+  check = true;
 
-    command.str("");
-    command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
-    system(command.str().c_str());
+  command.str("");
+  command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
+  system(command.str().c_str());
 
-    ((file.name).value) = "output.out";
-    check &= file.open(String("in"), prefix);
-    line.value.clear();
-    getline(file.value, line.value);
-    file.close(prefix);
+  ((file.name).value) = "output.out";
+  check &= file.open(String("in"), prefix);
+  line.value.clear();
+  getline(file.value, line.value);
+  file.close(prefix);
 
-    command.str("");
-    command << "rm -rf output.out";
-    system(command.str().c_str());
+  command.str("");
+  command << "rm -rf output.out";
+  system(command.str().c_str());
 
-    if(!check){
-      cout << prefix.value << RED << "\tI could not get hour and date!\n" << RESET;
-    }
+  if(!check){
+    cout << prefix.value << RED << "\tI could not get hour and date!\n" << RESET;
+  }
     
-    return check;
+  return check;
 
 }
   
@@ -257,7 +257,7 @@ class Length{
 
 class Speed{
 
-  public:
+ public:
   double value;
   void enter(String, String);
   bool check_valid(String, String);
@@ -282,7 +282,7 @@ bool Speed::check_valid(String name, String prefix){
 void Speed::print(String name, String prefix, ostream& ostr){
 
   ostr << prefix.value << name.value << " = ";
-    ostr << value << " kt\n";
+  ostr << value << " kt\n";
  
 }
 
@@ -380,7 +380,7 @@ void Answer::read_from_file(String name, File& file, bool search_entire_file, St
   string line;
   size_t pos;
 
-    if(search_entire_file){
+  if(search_entire_file){
     
     //rewind the file pointer
     file.value.clear();                 // clear fail and eof bits
@@ -1842,7 +1842,7 @@ class Plot{
   
  public:
   Catalog* catalog;
-  File file_id, file_gnuplot;
+  File file_id, file_gnuplot, file_boundary;
   int job_id;
   stringstream command, plot_command;
   vector<Sight> sight_list;
@@ -2169,7 +2169,7 @@ void Plot::menu(String prefix){
       system(command.str().c_str());
     }
 
-      //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped. 
+    //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped. 
     if(job_id != -1){
     
       command.str("");
@@ -2179,6 +2179,7 @@ void Plot::menu(String prefix){
     }
     file_id.remove();
     file_gnuplot.remove();
+    file_boundary.remove();
     
     cout << prefix.value << CYAN << "Fair winds, following seas...\n" << RESET;
   }
@@ -2200,6 +2201,7 @@ Plot::Plot(Catalog* cata){
 
   file_id.set_name(String("job_id.txt"));
   file_gnuplot.set_name(String("plot.plt"));
+  file_boundary.set_name(String("boundary.txt"));
 
   choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Save to file", "Read from file", "Exit"};
   
@@ -2425,22 +2427,41 @@ void Plot::show(String prefix){
 
   //replace line with min_latitude in plot_dummy.plt
   //
-  cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
-  plot_command.str("");
-  command.str("");
+
+  if(!file_boundary.open(String("in"), new_prefix)){
+    //in this case, there is no boundary file boundary.txt: a plot is made for the frist time -> the boundaries of the plot are thus read from the init file. 
+    cout << new_prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
+
+    cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
+    plot_command.str("");
+    command.str("");
   
-  lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix); 
-  lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix); 
-  phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix); 
-  phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
+    lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix); 
+    lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix); 
+    phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix); 
+    phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
   
-  command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-  command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-  command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-  command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   
-  system(command.str().c_str());
-  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+    system(command.str().c_str());
+    cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+
+  }else{
+        //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file. > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
+
+    cout << new_prefix.value << "I found a boundary file.\n" << RESET;
+    /*
+    x_min.read_from_file(String("GPVAL_X_MIN"), file_boundary, true, new_prefix); 
+    x_max.read_from_file(String("GPVAL_X_MAX"), file_boundary, true, new_prefix); 
+    y_min.read_from_file(String("GPVAL_Y_MIN"), file_boundary, true, new_prefix); 
+    y_max.read_from_file(String("GPVAL_Y_MAX"), file_boundary, true, new_prefix); 
+    
+    */
+
+  }
   //
   
   //replace line with sight plots  
@@ -2641,11 +2662,11 @@ void Plot::show(String prefix){
       t_s.value = (x_lo_s+x_hi_s)/2.0;
       t_s.print(String("t_*"), new_prefix, cout);
 
-      	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+      //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
+      plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
       
-	plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
+      plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
 
     }
     
@@ -3258,7 +3279,7 @@ void Length::enter(String name, String unit, String prefix){
   if(unit.value == "nm"){
     temp  << " [nm]";
   }else{
-   temp << " [m]";
+    temp << " [m]";
   }
 
   do{

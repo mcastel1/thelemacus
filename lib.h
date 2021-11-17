@@ -67,6 +67,7 @@ class File{
   void close(String);
   void remove(void);
   void count_lines(String);
+  bool check_if_exists(String);
   
 };
 
@@ -1310,6 +1311,25 @@ void File::set_name(String filename){
   
 }
 
+bool File::check_if_exists(String prefix){
+
+  bool output;
+
+  value.open(name.value, ios::in);
+  
+  if(value){
+    cout << prefix.value << "File " << (name.value) << " exists\n";
+    output = true;   
+  }
+  else{
+    cout << prefix.value << "File " << (name.value) << " does not exist\n";
+    output = false;
+  }
+
+  return output;
+
+}
+
 bool File::open(String mode, String prefix){
 
 
@@ -2488,7 +2508,7 @@ void Plot::show(String prefix){
   //replace line with min_latitude in plot_dummy.plt
   //
 
-  if(!file_boundary.open(String("in"), new_prefix)){
+  if(!file_boundary.check_if_exists(new_prefix)){
     //in this case, there is no boundary file boundary.txt: a plot is made for the frist time -> the boundaries of the plot are thus read from the init file. 
     cout << new_prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
 

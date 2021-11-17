@@ -193,7 +193,7 @@ class Length{
   void set(String, double, String);
   void enter(String, String, String);
   void print(String, String, String, ostream&);
-  void read_from_file(String, File&, String);
+  void read_from_file(String, File&, bool, String);
   bool check_valid(String, String);
 
 };
@@ -520,7 +520,7 @@ class Date{
 
   void print(String, String, ostream&);
   void enter(String, String);
-  bool read_from_file(String, File&, String);
+  bool read_from_file(String, File&, bool, String);
   stringstream to_string(void);
   void check_leap_year(void);
 
@@ -995,20 +995,38 @@ bool Chrono::read_from_file(String name, File& file, bool search_entire_file, St
 
 
 //this function returns true if the date read is consistent, false if it is not 
-bool Date::read_from_file(String name, File& file, String prefix){
+bool Date::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
   string line;
   stringstream new_prefix;
   bool check = true;
+  size_t pos;
 
   //prepend \t to prefix
   new_prefix << "\t" << prefix.value;
 
-  size_t pos = 0;
+  pos = 0;
 
-  //read type
-  line.clear();
-  getline(file.value, line);
+  if(search_entire_file){
+
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
+  
   pos = line.find(" = ");
 
   Y = stoi(line.substr(pos+3, 4).c_str(), NULL, 10);
@@ -1097,7 +1115,7 @@ bool Time::read_from_file(String name, File& file, String prefix){
   cout << prefix.value << name.value << ":\n";
   
   //read date
-  if(!(date.read_from_file(name, file, new_prefix))){ 
+  if(!(date.read_from_file(name, file, false, new_prefix))){ 
     check &= false;
   }
 
@@ -1226,7 +1244,7 @@ bool Length::check_valid(String name, String prefix){
   
 }
 
-void Length::read_from_file(String name, File& file, String prefix){
+void Length::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
   string line;
   stringstream new_prefix;
@@ -1236,8 +1254,26 @@ void Length::read_from_file(String name, File& file, String prefix){
   //prepend \t to prefix
   new_prefix << "\t" << prefix.value;
 
-  line.clear();
-  getline(file.value, line);
+  if(search_entire_file){
+
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
+   
   pos1 = line.find(" = ");
   pos2 = line.find(" nm");
 
@@ -1298,17 +1334,34 @@ class Limb{
   char value;
   void enter(String, String);
   void print(String, String, ostream&);
-  void read_from_file(String, File&, String);
+  void read_from_file(String, File&, bool, String);
   
 };
 
-void Limb::read_from_file(String name, File& file, String prefix){
+void Limb::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
   string line;
   size_t pos;
 
-  line.clear();
-  getline(file.value, line);
+  if(search_entire_file){
+
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+
+    do{
+    
+      line.clear();
+      getline(file.value, line);
+
+    }while((line.find(name.value)) == (string::npos));
+
+  }else{
+
+    line.clear();
+    getline(file.value, line);
+    
+  }
   pos = line.find(" = ");
 
   value = line[pos+3];
@@ -1365,7 +1418,7 @@ void Body::read_from_file(String name, File& file, String prefix){
     RA.read_from_file(String("right ascension"), file, false, new_prefix);
     d.read_from_file(String("declination"), file, false, new_prefix);
   }else{
-    radius.read_from_file(String("radius"), file, new_prefix);
+    radius.read_from_file(String("radius"), file, false, new_prefix);
   }
   
 }
@@ -1618,13 +1671,13 @@ bool Sight::read_from_file(File& file, String prefix){
 
   body.read_from_file(String("body"), file, new_prefix);
   if(body.type.value != "star"){
-    limb.read_from_file(String("limb"), file, new_prefix);
+    limb.read_from_file(String("limb"), file, false, new_prefix);
   }
   H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
   index_error.read_from_file(String("index error"), file, false, new_prefix);
   artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
   if((artificial_horizon.value) == 'n'){
-    height_of_eye.read_from_file(String("height of eye"), file, new_prefix);
+    height_of_eye.read_from_file(String("height of eye"), file, false, new_prefix);
   }
   
   check &= master_clock_date_and_hour.read_from_file(String("master-clock date and hour of sight"), file, new_prefix);

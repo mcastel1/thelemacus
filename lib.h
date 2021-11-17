@@ -2376,7 +2376,7 @@ void Plot::show(String prefix){
   string line;
   unsigned int i;
   //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi. 
-  Angle t_min, t_max, t_p, t_m, t_s, phi_min, phi_max;
+  Angle t_min, t_max, t_p, t_m, t_s, phi_min, phi_max, lambda_min, lambda_max;
   Position p_min, p_max;
   int status, iter = 0;
   //x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)
@@ -2424,16 +2424,24 @@ void Plot::show(String prefix){
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
 
   //replace line with min_latitude in plot_dummy.plt
-  cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude from file " << file_init.name.value << " ...\n" << RESET;
+  //
+  cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
   plot_command.str("");
   command.str("");
+  
+  lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix); 
+  lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix); 
   phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix); 
-  phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix); 
+  phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
+  
+  command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  
   system(command.str().c_str());
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
-  
+  //
   
   //replace line with sight plots  
   plot_command.str("");

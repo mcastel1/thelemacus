@@ -2526,8 +2526,9 @@ void Plot::show(String prefix){
 
     system(command.str().c_str());
     
-
   }
+
+  file_boundary.close(new_prefix);
   //
   
   //replace line with sight plots  

@@ -50,7 +50,7 @@
 - 360 deg E in xlabel -> 0 deg
 - make sure that code does not crash if special characters are entered in position/sight labels
 - remove horizontal lines in gnuplot plot
-- define global variable with path for file init
+- define global variable  path for each file
 */
 
 

@@ -26,7 +26,7 @@
 #define chars_double "0123456789."
 #define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-
+#define path_file_init "data/init.txt"
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
@@ -2474,7 +2474,7 @@ void Plot::show(String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  file_init.set_name(String("data/init.txt"));
+  file_init.set_name(String(path_file_init));
   file_init.open(String("in"), prefix);
 
   
@@ -2806,7 +2806,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  file_init.set_name(String("data/init.txt"));
+  file_init.set_name(String(path_file_init));
   check &= (file_init.open(String("in"), prefix));
   
   cout << prefix.value << "Enter " << name.value << ":\n";

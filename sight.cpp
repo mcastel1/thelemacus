@@ -50,7 +50,7 @@
 - 360 deg E in xlabel -> 0 deg
 - make sure that code does not crash if special characters are entered in position/sight labels
 - remove horizontal lines in gnuplot plot
-- define global variable  path for each file
+- modify structure of catalog.txt so angles and distances are read with Angle::read_from_file, etc...
 */
 
 
@@ -121,7 +121,7 @@ int main(int argc, char *argv[]){
   return 0;
   */
   
-  Catalog catalog(String("data/catalog.txt"));
+  Catalog catalog(String(path_file_catalog));
   Plot plot(&catalog);
 
   catalog.print(String("\t"), cout);

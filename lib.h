@@ -27,7 +27,7 @@
 #define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define path_file_init "data/init.txt"
-
+#define path_file_catalog "data/catalog.txt"
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 class Catalog;
@@ -2819,7 +2819,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   }
   //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
   H_s.enter(String("sextant altitude"), true, new_prefix);
-  //read index error from data/init.txt
+  //read index error from init file
   cout << new_prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
   index_error.read_from_file(String("index error"), file_init, true, new_prefix);
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;

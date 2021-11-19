@@ -866,8 +866,8 @@ Route Position::transport(String prefix){
   cout << prefix.value << "Enter route:\n";
 
   do{
-    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix);
-    check = ((route.type.value == "l") || (route.type.value == "o") || (route.type.value == "c"));
+    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
+    check = ((route.type.value == "l") || (route.type.value == "o"));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
@@ -1769,24 +1769,6 @@ void Sight::transport(String prefix){
 
   route = GP.transport(new_prefix);
   
-  /* cout << prefix.value << "Enter route:\n"; */
-
-  /* do{ */
-  /*   route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix); */
-  /*   check = ((route.type.value == "l") || (route.type.value == "o") || (route.type.value == "c")); */
-  /*   if(!check){ */
-  /*     cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET; */
-  /*   } */
-  /* }while(!check); */
-  /* route.start = GP;  */
-  /* route.alpha.enter(String("starting heading"), new_prefix); */
-  /* route.l.enter(String("length"), String("nm"), new_prefix); */
-
-  /* route.print(String("transport"), prefix, cout); */
-  
-  /* route.compute_end(new_prefix); */
-
-  /* GP = route.end; */
 
   //append 'translated to ...' to the label of sight, and make this the new label of sight
   temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << route.sog.value << " kt";

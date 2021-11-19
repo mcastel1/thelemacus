@@ -866,8 +866,8 @@ Route Position::transport(String prefix){
   cout << prefix.value << "Enter route:\n";
 
   do{
-    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
-    check = ((route.type.value == "l") || (route.type.value == "o"));
+    route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix);
+    check = ((route.type.value == "l") || (route.type.value == "o") || (route.type.value == "c"));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
@@ -1011,8 +1011,8 @@ void Route::enter(String name, String prefix){
   cout << prefix.value << "Enter " << name.value << ":\n";
 
   do{
-    type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
-    check = ((type.value == "l") || (type.value == "o"));
+    type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix);
+    check = ((type.value == "l") || (type.value == "o") || (type.value == "c"));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
@@ -1758,8 +1758,8 @@ void Sight::transport(String prefix){
   /* cout << prefix.value << "Enter route:\n"; */
 
   /* do{ */
-  /*   route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix); */
-  /*   check = ((route.type.value == "l") || (route.type.value == "o")); */
+  /*   route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix); */
+  /*   check = ((route.type.value == "l") || (route.type.value == "o") || (route.type.value == "c")); */
   /*   if(!check){ */
   /*     cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET; */
   /*   } */

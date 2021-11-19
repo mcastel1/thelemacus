@@ -75,6 +75,7 @@ int main(int argc, char *argv[]){
   route.enter(String("new route"), String("\t"));
   route.print(String("new route"), String("\t"), cout);
   route.compute_end(String("\t"));
+  route.start.print(String("start of circle of equal altitude"), String("\t"), cout);
   route.end.print(String("endpoint of circle of equal altitude"), String("\t"), cout);
   return 0;
   

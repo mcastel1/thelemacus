@@ -583,9 +583,9 @@ class Route{
  public:
   String type;
   //starting position of the route
-  Position start, end;
-  //the angle that the vector tangent to the route describes with the local meridian at start
-  Angle alpha;
+  Position start, end, GP;
+  //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
+  Angle alpha, omega;
   //the length of the route
   Length l;
   Speed sog;
@@ -1017,10 +1017,24 @@ void Route::enter(String name, String prefix){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
-  start.enter(String("starting position"), new_prefix);
-  alpha.enter(String("starting heading"), true, new_prefix);
-  l.enter(String("length"), String("nm"), new_prefix);
   
+  if((type.value == "l") || (type.value == "o")){
+    //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading
+    start.enter(String("starting position"), new_prefix);
+    alpha.enter(String("starting heading"), true, new_prefix);
+  }else{
+    //if the route is a circle of equal altitude, I enter its ground position and its aperture angle ... 
+    GP.enter(String("ground position"), new_prefix);
+    omega.enter(String("aperture angle"), true, new_prefix);
+    
+    //... and then compute the resulting starting position and starting heading
+    start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix);
+    start.lambda.set(String("longitude of ground position"), GP.lambda.value, true, new_prefix);
+    //by definition of circle of equal altitude, the starting heading is pi/2
+    alpha.set(String("starting heading"), M_PI/2.0, true, new_prefix);
+  }
+  l.enter(String("length"), String("nm"), new_prefix);
+
 }
 
 

@@ -593,8 +593,27 @@ class Route{
   void enter(String, String);
   void print(String, String, ostream&);
   void compute_end(String);
+  vector<Position> crossing(Route, String);
   
 };
+
+//this function computes the crossings between Route (*this) and Route route
+vector<Position> Route::crossing(Route route, String prefix){
+
+  vector<Position> p(0);
+  Angle t;
+
+  if(!(((*this).type.value == "c") && ((*this).type.value == "c"))){
+    cout << prefix.value << "Routes do not intersect\n";
+  }else{
+    cout << prefix.value << "Routes intersect\n";
+
+
+  }
+
+  return p;
+
+}
 
 String String::append(String s){
 

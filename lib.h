@@ -918,9 +918,13 @@ void Route::compute_end(String prefix){
 
   stringstream label_end;
 
-  if(type.value == "o"){
+  //picks the first (and only) character in string type.value
+  switch((type.value)[0]){
 
-    //end of orthodrome route
+  case 'o':
+    {
+
+    //orthodrome route
   
     (end.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
     (end.phi).normalize();
@@ -931,9 +935,13 @@ void Route::compute_end(String prefix){
 
     (end.lambda).normalize();
 
-  }else{
+    break;
+    }
+    
+  case 'l':
+    {
 
-    //end of loxodrome route
+    //loxodrome route
 
     //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
     int sigma, tau;
@@ -963,7 +971,9 @@ void Route::compute_end(String prefix){
 
     (end.lambda.value) = (start.lambda.value) + sigma*(t.value);
     (end.lambda).normalize();
-    
+
+    break;
+    }
   }
 
   label_end << start.label.value << " transported";
@@ -2529,7 +2539,7 @@ void Plot::show(String prefix){
     cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
 
   }else{
-        //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file. > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
+    //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file. > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
 
     cout << new_prefix.value << "I found a boundary file.\n" << RESET;
     

@@ -76,7 +76,14 @@ int main(int argc, char *argv[]){
   route.print(String("new route"), String("\t"), cout);
   route.compute_end(String("\t"));
   route.start.print(String("start of circle of equal altitude"), String("\t"), cout);
-  route.end.print(String("endpoint of circle of equal altitude"), String("\t"), cout);
+  route.end.print(String("end of circle of equal altitude"), String("\t"), cout);
+
+  Catalog catalog_temp(String(path_file_catalog));
+  Plot plot_temp(&catalog_temp);
+  plot_temp.position_list.push_back(route.GP);
+  plot_temp.position_list.push_back(route.start);
+  plot_temp.position_list.push_back(route.end);
+  plot_temp.show(String(""));
   return 0;
   
   /*

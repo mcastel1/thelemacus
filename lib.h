@@ -1045,19 +1045,17 @@ void Route::enter(String name, String prefix){
   }while(!check);
   
   if((type.value == "l") || (type.value == "o")){
-    //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading
+    //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
     start.enter(String("starting position"), new_prefix);
     alpha.enter(String("starting heading"), true, new_prefix);
   }else{
-    //if the route is a circle of equal altitude, I enter its ground position and its aperture angle ... 
+    //if the route is a circle of equal altitude, I enter its ground position and its aperture angle (alpha remains unused) ... 
     GP.enter(String("ground position"), new_prefix);
     omega.enter(String("aperture angle"), true, new_prefix);
     
     //... and then compute the resulting starting position and starting heading
     start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix);
     start.lambda.set(String("longitude of ground position"), GP.lambda.value, true, new_prefix);
-    //by definition of circle of equal altitude, the starting heading is pi/2
-    alpha.set(String("starting heading"), M_PI/2.0, true, new_prefix);
   }
   l.enter(String("length"), String("nm"), new_prefix);
 

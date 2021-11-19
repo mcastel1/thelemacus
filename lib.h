@@ -991,9 +991,14 @@ void Route::print(String name, String prefix, ostream& ostr){
   cout << prefix.value << "Route " << name.value << ":\n";
 
   type.print(String("type"), new_prefix, ostr);
-  start.print(String("start position"), new_prefix, ostr);
-  //end.print("end position", new_prefix, ostr);
-  alpha.print(String("starting heading"), new_prefix, ostr);
+
+  if((type.value == "l") || (type.value == "o")){
+    start.print(String("start position"), new_prefix, ostr);
+    alpha.print(String("starting heading"), new_prefix, ostr);
+  }else{
+    GP.print(String("ground position"), new_prefix, ostr);
+    omega.print(String("aperture angle"), new_prefix, ostr);
+  }
   l.print(String("length"), String("nm"), new_prefix, ostr);
   
 }
@@ -1036,21 +1041,6 @@ void Route::enter(String name, String prefix){
   l.enter(String("length"), String("nm"), new_prefix);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

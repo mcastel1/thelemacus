@@ -884,7 +884,7 @@ Route Position::transport(String prefix){
 
   (route.l).set(String("Length"), (route.sog).value*((t_end.MJD)-(t_start.MJD))*24.0, new_prefix); 
  
-  route.print(String("transport"), prefix, cout);
+  route.print (String("transport"), prefix, cout);
   
   route.compute_end(new_prefix);
 
@@ -974,6 +974,27 @@ void Route::compute_end(String prefix){
 
     break;
     }
+
+  case 'c':
+    {
+
+      Angle t;
+      //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
+      //R sin omega = r, r t = l, t = l / (R sin omega)
+      t.set(String("parametric angle t"), (l.value)/(Re*sin(omega.value)), false, prefix);
+
+      (end.phi.value) = M_PI/2.0-acos(cos((omega.value))* sin((GP.phi.value))-cos((GP.phi.value))* cos((t.value)) *sin((omega.value)));
+      (end.phi).normalize();
+
+
+      (end.lambda.value) = -(atan((-sin((GP.lambda.value)) *(cos((GP.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((GP.phi.value))* sin((omega.value))) +  cos((GP.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((GP.phi.value))*cos((GP.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((GP.lambda.value))*cos((t.value))*sin((GP.phi.value)) + sin((GP.lambda.value))*sin((t.value))))));
+      if(cos((GP.phi.value))*cos((GP.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((GP.lambda.value))*cos((t.value))*sin((GP.phi.value)) + sin((GP.lambda.value))*sin((t.value))) <= 0.0){
+	(end.lambda.value) -= M_PI;
+      }     
+      (end.lambda).normalize();
+
+    }
+
   }
 
   label_end << start.label.value << " transported";

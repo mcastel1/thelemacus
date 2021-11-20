@@ -30,6 +30,31 @@
 #define path_file_catalog "data/catalog.txt"
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
+inline double cot(double x){
+
+  return 1.0/tan(x);
+
+}
+
+inline double csc(double x){
+
+  return 1.0/sin(x);
+  
+}
+
+inline double atan(double x, double y){
+
+  if(x > 0.0){
+    
+    return atan(y/x);
+
+  }else{
+
+    return(atan(y/x)+M_PI);
+  }
+
+}
+
 class Catalog;
 class File;
 class Time;

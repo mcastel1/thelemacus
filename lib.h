@@ -608,6 +608,47 @@ vector<Position> Route::crossing(Route route, String prefix){
   }else{
     cout << prefix.value << "Routes intersect\n";
 
+    atan((8*cos(d2)*((cos(d2)*cos(GHA1 - GHA2)*sin(d1) - cos(d1)*sin(d2))*(cos(d1)*cos(d2)*cos(GHA1 - GHA2)*cot(H1) - cos(H2)*csc(H1) + cot(H1)*sin(d1)*sin(d2)) + 
+        Abs(sin(GHA1 - GHA2))*cos(d2)*Sqrt(-(gsl_sf_pow_int(cos(H2),2)*gsl_sf_pow_int(csc(H1),2)) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(d1),2) + 
+           2*cos(H2)*cot(H1)*csc(H1)*sin(d1)*sin(d2) - gsl_sf_pow_int(cot(H1),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(d2),2) + 
+           2*cos(d1)*cos(d2)*cos(GHA1 - GHA2)*csc(H1)*(cos(H2)*cot(H1) - csc(H1)*sin(d1)*sin(d2)) + 
+           gsl_sf_pow_int(cos(d1),2)*(-(gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1 - GHA2),2)*gsl_sf_pow_int(cot(H1),2)) + gsl_sf_pow_int(sin(d2),2)) + 
+           gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(GHA1),2) - 2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*sin(GHA1)*sin(GHA2) + 
+           2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*gsl_sf_pow_int(sin(d1),2)*sin(GHA1)*sin(GHA2) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2) + 
+           gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2))))/
+    (gsl_sf_pow_int(cos(d2),2)*(-6 + 2*cos(2*d1) + 2*cos(2*GHA1 - 2*GHA2) + cos(2*(d1 + GHA1 - GHA2)) + cos(2*(d1 - GHA1 + GHA2))) - 8*gsl_sf_pow_int(cos(d1),2)*gsl_sf_pow_int(sin(d2),2) + 
+      4*cos(GHA1 - GHA2)*sin(2*d1)*sin(2*d2)),(8*gsl_sf_pow_int(cos(d2),2)*(cos(d1)*cos(d2)*cos(GHA1 - GHA2)*cot(H1) - cos(H2)*csc(H1) + cot(H1)*sin(d1)*sin(d2))*
+       sin(GHA1 - GHA2) - 8*Abs(sin(GHA1 - GHA2))*cos(d2)*csc(GHA1 - GHA2)*(cos(d2)*cos(GHA1 - GHA2)*sin(d1) - cos(d1)*sin(d2))*
+       Sqrt(-(gsl_sf_pow_int(cos(H2),2)*gsl_sf_pow_int(csc(H1),2)) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(d1),2) + 2*cos(H2)*cot(H1)*csc(H1)*sin(d1)*sin(d2) - 
+         gsl_sf_pow_int(cot(H1),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(d2),2) + 2*cos(d1)*cos(d2)*cos(GHA1 - GHA2)*csc(H1)*(cos(H2)*cot(H1) - csc(H1)*sin(d1)*sin(d2)) + 
+         gsl_sf_pow_int(cos(d1),2)*(-(gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1 - GHA2),2)*gsl_sf_pow_int(cot(H1),2)) + gsl_sf_pow_int(sin(d2),2)) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(GHA1),2) - 
+         2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*sin(GHA1)*sin(GHA2) + 2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*gsl_sf_pow_int(sin(d1),2)*sin(GHA1)*sin(GHA2) + 
+         gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2)))/
+    (gsl_sf_pow_int(cos(d2),2)*(-6 + 2*cos(2*d1) + 2*cos(2*GHA1 - 2*GHA2) + cos(2*(d1 + GHA1 - GHA2)) + cos(2*(d1 - GHA1 + GHA2))) - 8*gsl_sf_pow_int(cos(d1),2)*gsl_sf_pow_int(sin(d2),2) + 
+     4*cos(GHA1 - GHA2)*sin(2*d1)*sin(2*d2)));
+    
+    atan((-8*cos(d2)*((-(cos(d2)*cos(GHA1 - GHA2)*sin(d1)) + cos(d1)*sin(d2))*(cos(d1)*cos(d2)*cos(GHA1 - GHA2)*cot(H1) - cos(H2)*csc(H1) + cot(H1)*sin(d1)*sin(d2)) + 
+        Abs(sin(GHA1 - GHA2))*cos(d2)*Sqrt(-(gsl_sf_pow_int(cos(H2),2)*gsl_sf_pow_int(csc(H1),2)) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(d1),2) + 
+           2*cos(H2)*cot(H1)*csc(H1)*sin(d1)*sin(d2) - gsl_sf_pow_int(cot(H1),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(d2),2) + 
+           2*cos(d1)*cos(d2)*cos(GHA1 - GHA2)*csc(H1)*(cos(H2)*cot(H1) - csc(H1)*sin(d1)*sin(d2)) + 
+           gsl_sf_pow_int(cos(d1),2)*(-(gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1 - GHA2),2)*gsl_sf_pow_int(cot(H1),2)) + gsl_sf_pow_int(sin(d2),2)) + 
+           gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(GHA1),2) - 2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*sin(GHA1)*sin(GHA2) + 
+           2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*gsl_sf_pow_int(sin(d1),2)*sin(GHA1)*sin(GHA2) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2) + 
+           gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2))))/
+    (gsl_sf_pow_int(cos(d2),2)*(-6 + 2*cos(2*d1) + 2*cos(2*GHA1 - 2*GHA2) + cos(2*(d1 + GHA1 - GHA2)) + cos(2*(d1 - GHA1 + GHA2))) - 8*gsl_sf_pow_int(cos(d1),2)*gsl_sf_pow_int(sin(d2),2) + 
+      4*cos(GHA1 - GHA2)*sin(2*d1)*sin(2*d2)),(8*cos(d2)*sin(GHA1 - GHA2)*
+      (cos(d2)*(cos(d1)*cos(d2)*cos(GHA1 - GHA2)*cot(H1) - cos(H2)*csc(H1) + cot(H1)*sin(d1)*sin(d2)) + 
+        Abs(sin(GHA1 - GHA2))*gsl_sf_pow_int(csc(GHA1 - GHA2),2)*(cos(d2)*cos(GHA1 - GHA2)*sin(d1) - cos(d1)*sin(d2))*
+         Sqrt(-(gsl_sf_pow_int(cos(H2),2)*gsl_sf_pow_int(csc(H1),2)) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(d1),2) + 
+           2*cos(H2)*cot(H1)*csc(H1)*sin(d1)*sin(d2) - gsl_sf_pow_int(cot(H1),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(d2),2) + 
+           2*cos(d1)*cos(d2)*cos(GHA1 - GHA2)*csc(H1)*(cos(H2)*cot(H1) - csc(H1)*sin(d1)*sin(d2)) + 
+           gsl_sf_pow_int(cos(d1),2)*(-(gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1 - GHA2),2)*gsl_sf_pow_int(cot(H1),2)) + gsl_sf_pow_int(sin(d2),2)) + 
+           gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA2),2)*gsl_sf_pow_int(sin(GHA1),2) - 2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*sin(GHA1)*sin(GHA2) + 
+           2*gsl_sf_pow_int(cos(d2),2)*cos(GHA1)*cos(GHA2)*gsl_sf_pow_int(sin(d1),2)*sin(GHA1)*sin(GHA2) + gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(cos(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2) + 
+           gsl_sf_pow_int(cos(d2),2)*gsl_sf_pow_int(sin(d1),2)*gsl_sf_pow_int(sin(GHA1),2)*gsl_sf_pow_int(sin(GHA2),2))))/
+    (gsl_sf_pow_int(cos(d2),2)*(-6 + 2*cos(2*d1) + 2*cos(2*GHA1 - 2*GHA2) + cos(2*(d1 + GHA1 - GHA2)) + cos(2*(d1 - GHA1 + GHA2))) - 8*gsl_sf_pow_int(cos(d1),2)*gsl_sf_pow_int(sin(d2),2) + 
+      4*cos(GHA1 - GHA2)*sin(2*d1)*sin(2*d2)))
+
 
   }
 

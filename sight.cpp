@@ -53,7 +53,7 @@
 - modify structure of catalog.txt so angles and distances are read with Angle::read_from_file, etc...
 - include computation of crossing points between circles of equal altitude
 - add check that start time < end time in route transport
-- change initial heading of circle of equal altitude: it may not always be +90 degrees
+- export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 */
 
 

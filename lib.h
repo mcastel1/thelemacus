@@ -633,7 +633,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
 
   if(!(((*this).type.value == "c") && ((*this).type.value == "c"))){
     
-    cout << prefix.value << "Routes do not intersect\n";
+    cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
     return false; 
     
   }else{

@@ -2070,6 +2070,7 @@ class Plot{
   stringstream command, plot_command;
   vector<Sight> sight_list;
   vector<Position> position_list;
+  vector<Route> route_list;
   vector<string> choices;
 
   Plot(Catalog*);
@@ -2077,6 +2078,7 @@ class Plot{
   bool add_sight(String);
   void transport_sight(unsigned int, String);
   void add_position(String);
+  void add_route(String);
   void remove_sight(unsigned int, String);
   void transport_position(unsigned int, String);
   void remove_position(unsigned int, String);
@@ -2525,6 +2527,19 @@ void Plot::add_position(String prefix){
 
  
 }
+
+void Plot::add_route(String prefix){
+
+  Route route;
+  
+  route.enter(String("new route"), prefix);
+  
+  route_list.push_back(route);
+  cout << prefix.value << "Route added as position #" << route_list.size() << ".\n";
+
+ 
+}
+
 
 
 void Plot::remove_sight(unsigned int i, String prefix){

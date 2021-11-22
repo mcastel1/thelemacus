@@ -303,6 +303,7 @@ while(1){
 
 	#sight_plots
 	#position_plots
+	#route_plots
 
 	x_max_old = GPVAL_X_MAX;
 

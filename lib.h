@@ -3010,8 +3010,29 @@ void Plot::show(String prefix){
     plot_command << "plot \"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
+  command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
 
+
+
+  
+  //replace line with route plots
+  
+  plot_command.str("");
+  for(i=0; i<route_list.size(); i++){
+    //set the key in the correct position for the position that will be plotted 
+    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(position_list.size()+i+1)) << "*key_spacing\\\n";
+
+    	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
+
+    plot_command << "plot [0.:2.*pi] xe(K*Lambda(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*Phi(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).type.value;
+    plot_command << "\"\\\n";
+
+
+  }
+  //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
+  command << "LANG=C sed 's/#route_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
+
+  
 
   command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";

@@ -2087,6 +2087,7 @@ class Plot{
   void print(String, ostream&);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
+  void print_routes(String, ostream&);
   void show(String);
   void menu(String);
 
@@ -2488,6 +2489,11 @@ void Plot::print(String prefix, ostream& ostr){
   if(position_list.size()>0){
     print_positions(prefix, ostr);
   }
+
+  if(route_list.size()>0){
+    print_routes(prefix, ostr);
+  }
+
   
 }
 
@@ -2529,6 +2535,24 @@ void Plot::print_positions(String prefix, ostream& ostr){
 
 }
 
+void Plot::print_routes(String prefix, ostream& ostr){
+
+  stringstream name;
+  unsigned int i;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+   
+  ostr << prefix.value << "Routes in the plot:\n";
+  for(i=0; i<route_list.size(); i++){
+    name.str("");
+    name << "Route #" << i+1;
+    (route_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
+  }
+
+
+}
 
 
 

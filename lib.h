@@ -3044,6 +3044,13 @@ void Plot::show(String prefix){
     case 'o':
       {
 
+	//in this case, the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
+	plot_command << "plot [0.:" << (route_list[i]).l.value << "] xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str();
+
+	plot_command << "\"\\\n";
+
+
+
 	break;
       }
 
@@ -3051,17 +3058,8 @@ void Plot::show(String prefix){
       {
 
 	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
-	plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value;
-
-	if((((route_list[i]).type.value == "l") || ((route_list[i]).type.value == "o"))){
-      
-	  plot_command << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str();
+	plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", GP = " << (route_list[i]).GP.to_string(display_precision).str().c_str() << ", aperture = " << (route_list[i]).omega.to_string(display_precision).str().c_str();
        
-	}else{
-
-	  plot_command << ", GP = " << (route_list[i]).GP.to_string(display_precision).str().c_str() << ", aperture = " << (route_list[i]).omega.to_string(display_precision).str().c_str();
-       
-	}
       
 	plot_command << "\"\\\n";
 

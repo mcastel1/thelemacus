@@ -639,9 +639,13 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
     
   }else{
 
-    Length l_a, l_b;
+
+    Angle theta;
+    theta.set(String("angle between the two GPs"), acos(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value)) + sin(((*this).GP.phi.value))*sin((route.GP.phi.value))), true, new_prefix);
 
     if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
+
+      Length l_a, l_b;
 
       cout << prefix.value << "Routes intersect\n";
 

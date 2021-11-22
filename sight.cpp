@@ -56,7 +56,10 @@
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 - for circles of eqal altitude set Route.l = nan, and do the same for omega etc for loxodrome and orthodrome
 - add function that returns the gnuplot line for plotting Routes of all types
+- add gnuplot of loxodrome and orthodrome in Plot::show
+- add case where circle of equal altitude crosses the 180 deg meridian in Plot::show
 */
+
 
 
 using namespace std;

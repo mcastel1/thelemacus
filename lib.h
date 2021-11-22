@@ -3031,12 +3031,18 @@ void Plot::show(String prefix){
   plot_command.str("");
   for(i=0; i<route_list.size(); i++){
     //set the key in the correct position for the position that will be plotted 
-    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(position_list.size()+i+1)) << "*key_spacing\\\n";
+    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(sight_list.size()+position_list.size()+i+1)) << "*key_spacing\\\n";
 
     switch(((route_list[i]).type.value)[0]){
 
     case 'l':
       {
+
+	//in this case, the loxodrome is not cut through the meridian lambda = M_PI, and I make a single plot
+	//in this case, the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
+	plot_command << "plot [0.:" << (route_list[i]).l.value << "] xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str();
+
+	plot_command << "\"\\\n";
 
 	break;
       }
@@ -3049,8 +3055,6 @@ void Plot::show(String prefix){
 
 	plot_command << "\"\\\n";
 
-
-
 	break;
       }
 
@@ -3059,14 +3063,11 @@ void Plot::show(String prefix){
 
 	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
 	plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", GP = " << (route_list[i]).GP.to_string(display_precision).str().c_str() << ", aperture = " << (route_list[i]).omega.to_string(display_precision).str().c_str();
-       
-      
+             
 	plot_command << "\"\\\n";
 
 	break;
       }
-
-
 
     }
 

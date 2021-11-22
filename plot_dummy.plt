@@ -64,9 +64,9 @@ list(start,end,increment)=system(sprintf("seq %g %g %g", start, increment, end))
 
 #set tics scale 0
 
-
-Phi(t, d, GHA, cH) =pi/2.-acos(cos(cH) * sin(d)-cos(d) * cos(t) * sin(cH))
-Lambda(t, d, GHA, cH) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(cH)+cos(t) * sin(d) * sin(cH))+cos(GHA) * sin(cH) * sin(t))/(cos(d) * cos(GHA) * cos(cH)+sin(cH)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(cH) +  sin(cH) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
+#latitude and longitude for a circle of equal altitude whose ground position has coordinates d, GHA, and whose angular aperture is omega
+phi_cea(t, d, GHA, omega) =pi/2.-acos(cos(omega) * sin(d)-cos(d) * cos(t) * sin(omega))
+lambda_cea(t, d, GHA, omega) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(omega)+cos(t) * sin(d) * sin(omega))+cos(GHA) * sin(omega) * sin(t))/(cos(d) * cos(GHA) * cos(omega)+sin(omega)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(omega) +  sin(omega) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
 
 
 

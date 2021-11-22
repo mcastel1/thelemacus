@@ -2924,16 +2924,16 @@ void Plot::show(String prefix){
 
 	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
+	plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
       
-	plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
+	plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
 
-	plot_command << "plot [" << t_p.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
+	plot_command << "plot [" << t_p.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
 
       }else{
 	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
 
-	plot_command << "plot [0.:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
+	plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
 
 
       }
@@ -2999,9 +2999,9 @@ void Plot::show(String prefix){
 
       //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-      plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
+      plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
       
-      plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*Lambda(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*Phi(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
+      plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
 
     }
     
@@ -3051,7 +3051,7 @@ void Plot::show(String prefix){
       {
 
 	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
-	plot_command << "plot [0.:2.*pi] xe(K*Lambda(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*Phi(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value;
+	plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value;
 
 	if((((route_list[i]).type.value == "l") || ((route_list[i]).type.value == "o"))){
       

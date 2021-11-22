@@ -75,6 +75,24 @@ int main(int argc, char *argv[]){
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
 
+  Route r1, r2;
+  vector<Position> c(2);
+  Catalog catalog_temp(String(path_file_catalog));
+
+  Plot plot_temp(&catalog_temp);
+
+  r1.enter(String("route 1"), String("\t"));
+  r2.enter(String("route 2"), String("\t"));
+  if(r1.crossing(r2, &c, String("\t"))){
+
+    plot_temp.position_list.push_back(c[0]);
+    plot_temp.position_list.push_back(c[1]);
+
+  }
+  
+  plot_temp.show(String(""));
+  return 0;
+  
   /*
   Int x;
   File f;

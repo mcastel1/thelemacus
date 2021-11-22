@@ -30,6 +30,31 @@
 #define path_file_catalog "data/catalog.txt"
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
+inline double cot(double x){
+
+  return 1.0/tan(x);
+
+}
+
+inline double csc(double x){
+
+  return 1.0/sin(x);
+  
+}
+
+inline double atan(double x, double y){
+
+  if(x > 0.0){
+    
+    return atan(y/x);
+
+  }else{
+
+    return(atan(y/x)+M_PI);
+  }
+
+}
+
 class Catalog;
 class File;
 class Time;
@@ -578,14 +603,15 @@ class Position{
 
 };
 
+//if type = l or o, the parameters specifying the route are start, alpha, l. if type = c, the parameters specifying the route are GP and omega. 
 class Route{
 
  public:
   String type;
   //starting position of the route
-  Position start, end;
-  //the angle that the vector tangent to the route describes with the local meridian at start
-  Angle alpha;
+  Position start, end, GP;
+  //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
+  Angle alpha, omega;
   //the length of the route
   Length l;
   Speed sog;
@@ -593,8 +619,110 @@ class Route{
   void enter(String, String);
   void print(String, String, ostream&);
   void compute_end(String);
+  bool crossing(Route, vector<Position>*, String);
   
 };
+
+//this function computes the crossings between Route (*this) and Route route
+bool Route::crossing(Route route, vector<Position>* p, String prefix){
+
+  //these are the two lengths along Route (*this) which correspond to the two crossings with route
+  String new_prefix;
+  bool output;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
+  if(!(((*this).type.value == "c") && ((*this).type.value == "c"))){
+    
+    cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
+    output = false; 
+    
+  }else{
+
+
+    Angle theta;
+    theta.set(String("angle between the two GPs"), acos(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value)) + sin(((*this).GP.phi.value))*sin((route.GP.phi.value))), true, new_prefix);
+
+    if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
+
+      Angle t_a, t_b;
+
+      cout << prefix.value << "Routes intersect\n";
+
+
+      t_a.set(String("t of first intersection"), atan((8*cos((route.GP.phi.value))*((cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+									    abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
+																					 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+																					 2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																					 gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
+																					 gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																					 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
+																					 gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
+					      (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+					       4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))),(8*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
+																				      sin(((*this).GP.lambda.value) - (route.GP.lambda.value)) - 8*abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*csc(((*this).GP.lambda.value) - (route.GP.lambda.value))*(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
+																				      sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - 
+																					   gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																					   gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 
+																					   2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																					   gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2)))/
+					      (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+					       4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value)))),
+	      true, new_prefix);
+
+      t_a.normalize();
+      ((*this).l).set(String("l of first intersection"), Re * sin((*this).omega.value) * (t_a.value), new_prefix);
+      (*this).compute_end(new_prefix);
+      (*p)[0] = ((*this).end);
+
+
+      t_b.set(String("t of second intersection"),
+
+	      atan((-8*cos((route.GP.phi.value))*((-(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value))) + cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+										  abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
+																					       2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+																					       2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																					       gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
+																					       gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																					       2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
+																					       gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
+						   (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+						    4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))),(8*cos((route.GP.phi.value))*sin(((*this).GP.lambda.value) - (route.GP.lambda.value))*
+																					   (cos((route.GP.phi.value))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																					    abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*gsl_sf_pow_int(csc(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
+																					    sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
+																						 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+																						 2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																						 gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
+																						 gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																						 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
+																						 gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
+						   (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+						    4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))))
+
+	      , true, new_prefix);
+
+      t_b.normalize();
+      
+      ((*this).l).set(String("l of second intersection"), Re * sin((*this).omega.value) * (t_b.value), new_prefix);
+      (*this).compute_end(new_prefix);
+      (*p)[1] = ((*this).end);
+
+      output = true;
+      
+    }else{
+
+      cout << prefix.value << "Routes do no intersect\n";
+      output = false;
+      
+    }
+    
+  }
+
+  return output;
+
+}
 
 String String::append(String s){
 
@@ -884,7 +1012,7 @@ Route Position::transport(String prefix){
 
   (route.l).set(String("Length"), (route.sog).value*((t_end.MJD)-(t_start.MJD))*24.0, new_prefix); 
  
-  route.print(String("transport"), prefix, cout);
+  route.print (String("transport"), prefix, cout);
   
   route.compute_end(new_prefix);
 
@@ -918,55 +1046,86 @@ void Route::compute_end(String prefix){
 
   stringstream label_end;
 
-  if(type.value == "o"){
+  //picks the first (and only) character in string type.value
+  switch((type.value)[0]){
 
-    //end of orthodrome route
+  case 'o':
+    {
+
+      //orthodrome route
   
-    (end.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
-    (end.phi).normalize();
+      (end.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
+      (end.phi).normalize();
 
-    (end.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
+      (end.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
 
-    if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(end.lambda.value) += M_PI;}
+      if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(end.lambda.value) += M_PI;}
 
-    (end.lambda).normalize();
+      (end.lambda).normalize();
 
-  }else{
-
-    //end of loxodrome route
-
-    //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
-    int sigma, tau;
-    double C;
-    Angle t;
-
-    //tau = +-_{notes}
-    if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
-    else{tau = -1;}
-
-    if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
-    else{sigma = +1;}
+      break;
+    }
     
-    C = gsl_pow_2(cos(alpha.value));
+  case 'l':
+    {
 
-    /* cout << "sigma = " << sigma << "\n"; */
-    /* cout << "tau = " << tau << "\n"; */
-    /* cout << "C = " << C << "\n"; */
-    
-    t.value = -tau*sqrt((1.0-C)/C)
-      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
-    
-    /* t.print("t", prefix, cout); */
-    
-    (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
-    (end.phi).normalize();
+      //loxodrome route
 
-    (end.lambda.value) = (start.lambda.value) + sigma*(t.value);
-    (end.lambda).normalize();
+      //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
+      int sigma, tau;
+      double C;
+      Angle t;
+
+      //tau = +-_{notes}
+      if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
+      else{tau = -1;}
+
+      if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
+      else{sigma = +1;}
     
+      C = gsl_pow_2(cos(alpha.value));
+
+      /* cout << "sigma = " << sigma << "\n"; */
+      /* cout << "tau = " << tau << "\n"; */
+      /* cout << "C = " << C << "\n"; */
+    
+      t.value = -tau*sqrt((1.0-C)/C)
+	* log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
+    
+      /* t.print("t", prefix, cout); */
+    
+      (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
+      (end.phi).normalize();
+
+      (end.lambda.value) = (start.lambda.value) + sigma*(t.value);
+      (end.lambda).normalize();
+
+      break;
+    }
+
+  case 'c':
+    {
+
+      Angle t;
+      //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
+      //R sin omega = r, r t = l, t = l / (R sin omega)
+      t.set(String("parametric angle t"), (l.value)/(Re*sin(omega.value)), false, prefix);
+
+      (end.phi.value) = M_PI/2.0-acos(cos((omega.value))* sin((GP.phi.value))-cos((GP.phi.value))* cos((t.value)) *sin((omega.value)));
+      (end.phi).normalize();
+
+
+      (end.lambda.value) = -(atan((-sin((GP.lambda.value)) *(cos((GP.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((GP.phi.value))* sin((omega.value))) +  cos((GP.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((GP.phi.value))*cos((GP.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((GP.lambda.value))*cos((t.value))*sin((GP.phi.value)) + sin((GP.lambda.value))*sin((t.value))))));
+      if(cos((GP.phi.value))*cos((GP.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((GP.lambda.value))*cos((t.value))*sin((GP.phi.value)) + sin((GP.lambda.value))*sin((t.value))) <= 0.0){
+	(end.lambda.value) -= M_PI;
+      }     
+      (end.lambda).normalize();
+
+    }
+
   }
 
-  label_end << start.label.value << " transported";
+  label_end << "position transported";
   (end.label.value) = label_end.str();
 
 }
@@ -981,10 +1140,15 @@ void Route::print(String name, String prefix, ostream& ostr){
   cout << prefix.value << "Route " << name.value << ":\n";
 
   type.print(String("type"), new_prefix, ostr);
-  start.print(String("start position"), new_prefix, ostr);
-  //end.print("end position", new_prefix, ostr);
-  alpha.print(String("starting heading"), new_prefix, ostr);
-  l.print(String("length"), String("nm"), new_prefix, ostr);
+
+  if((type.value == "l") || (type.value == "o")){
+    start.print(String("start position"), new_prefix, ostr);
+    alpha.print(String("starting heading"), new_prefix, ostr);
+    l.print(String("length"), String("nm"), new_prefix, ostr);
+  }else{
+    GP.print(String("ground position"), new_prefix, ostr);
+    omega.print(String("aperture angle"), new_prefix, ostr);
+  }
   
 }
 
@@ -1001,32 +1165,32 @@ void Route::enter(String name, String prefix){
   cout << prefix.value << "Enter " << name.value << ":\n";
 
   do{
-    type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
-    check = ((type.value == "l") || (type.value == "o"));
+    type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix);
+    check = ((type.value == "l") || (type.value == "o") || (type.value == "c"));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
-  start.enter(String("starting position"), new_prefix);
-  alpha.enter(String("starting heading"), true, new_prefix);
-  l.enter(String("length"), String("nm"), new_prefix);
   
+  if((type.value == "l") || (type.value == "o")){
+    //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
+
+    start.enter(String("starting position"), new_prefix);
+    alpha.enter(String("starting heading"), true, new_prefix);
+    l.enter(String("length"), String("nm"), new_prefix);
+
+    
+  }else{
+    //if the route is a circle of equal altitude, I enter its ground position and its aperture angle (alpha remains unused) ... 
+    GP.enter(String("ground position"), new_prefix);
+    omega.enter(String("aperture angle"), true, new_prefix);
+    
+    /* //... and then compute the resulting starting position and starting heading */
+    /* start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix); */
+    /* start.lambda.set(String("longitude of ground position"), GP.lambda.value, true, new_prefix); */
+  }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1745,24 +1909,6 @@ void Sight::transport(String prefix){
 
   route = GP.transport(new_prefix);
   
-  /* cout << prefix.value << "Enter route:\n"; */
-
-  /* do{ */
-  /*   route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix); */
-  /*   check = ((route.type.value == "l") || (route.type.value == "o")); */
-  /*   if(!check){ */
-  /*     cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET; */
-  /*   } */
-  /* }while(!check); */
-  /* route.start = GP;  */
-  /* route.alpha.enter(String("starting heading"), new_prefix); */
-  /* route.l.enter(String("length"), String("nm"), new_prefix); */
-
-  /* route.print(String("transport"), prefix, cout); */
-  
-  /* route.compute_end(new_prefix); */
-
-  /* GP = route.end; */
 
   //append 'translated to ...' to the label of sight, and make this the new label of sight
   temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << route.sog.value << " kt";
@@ -2529,7 +2675,7 @@ void Plot::show(String prefix){
     cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
 
   }else{
-        //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file. > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
+    //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file. > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
 
     cout << new_prefix.value << "I found a boundary file.\n" << RESET;
     
@@ -3349,10 +3495,9 @@ void Length::set(String name, double x, String prefix){
   new_prefix = prefix.append(String("\t"));
   
   value = x;
-  
-  if(check_valid(name, new_prefix)){
-    print(name, String("nm"), prefix, cout); 
-  }
+
+  print(name, String("nm"), prefix, cout); 
+  check_valid(name, new_prefix);
   
 }
 

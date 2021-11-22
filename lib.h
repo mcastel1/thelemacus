@@ -2325,6 +2325,41 @@ void Plot::menu(String prefix){
 
   case 7:{
 
+    add_route(new_prefix);
+    print(new_prefix, cout);
+    show(new_prefix);
+    menu(prefix);  
+
+  }
+    break;
+
+  case 8:{
+
+    if(route_list.size() > 0){
+
+
+      print_routes(new_prefix, cout);
+
+      enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);
+      i--;
+	
+      remove_route(i, new_prefix);
+      print(new_prefix, cout);
+      show(new_prefix);
+
+    }else{
+      cout << RED << "There are no routes to delete!\n" << RESET;
+    }
+    
+    menu(prefix);  
+
+  }
+    break;
+
+
+    
+  case 9:{
+
     if(sight_list.size() + position_list.size() > 0){
   
       File file;
@@ -2352,7 +2387,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 8:{
+  case 10:{
 
     String filename;
     stringstream line_ins;
@@ -2372,7 +2407,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 9:{
+  case 11:{
 
     File file;
     String line;
@@ -2430,7 +2465,7 @@ Plot::Plot(Catalog* cata){
 
   file_boundary.remove();
 
-  choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Add a route", "Delete a route", "Save to file", "Read from file", "Exit"};
   
 }
 

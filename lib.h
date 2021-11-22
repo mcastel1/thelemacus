@@ -600,6 +600,7 @@ class Position{
   void read_from_file(File&, String);
   //this function transports the position and returns the Route with which it has been transported
   Route transport(String);
+  stringstream to_string(unsigned int);
 
 };
 
@@ -806,6 +807,16 @@ stringstream Time::to_string(unsigned int precision){
   stringstream output;
 
   output << date.to_string().str() << " " << chrono.to_string(precision).str();
+ 
+  return output;
+  
+}
+
+stringstream Position::to_string(unsigned int precision){
+
+  stringstream output;
+
+  output << phi.to_string(precision).str() << " " << lambda.to_string(precision).str();
  
   return output;
   
@@ -3025,6 +3036,12 @@ void Plot::show(String prefix){
     	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
 
     plot_command << "plot [0.:2.*pi] xe(K*Lambda(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*Phi(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).type.value;
+    if((((route_list[i]).type.value == "l") || ((route_list[i]).type.value == "o"))){
+
+    }else{
+
+    }
+      
     plot_command << "\"\\\n";
 
 

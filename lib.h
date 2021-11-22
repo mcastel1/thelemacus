@@ -627,6 +627,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
 
   //these are the two lengths along Route (*this) which correspond to the two crossings with route
   String new_prefix;
+  bool output;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -634,76 +635,86 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
   if(!(((*this).type.value == "c") && ((*this).type.value == "c"))){
     
     cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
-    return false; 
+    output = false; 
     
   }else{
 
     Length l_a, l_b;
-    
-    cout << prefix.value << "Routes intersect\n";
 
-    l_a.set(String("l of first intersection"),
+    if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
 
-	    Re * sin((*this).omega.value) * atan((8*cos((route.GP.phi.value))*((cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
-        abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
-           2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
-           2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
-           gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
-           gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
-           2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
-           gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
-    (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
-      4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))),(8*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
-       sin(((*this).GP.lambda.value) - (route.GP.lambda.value)) - 8*abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*csc(((*this).GP.lambda.value) - (route.GP.lambda.value))*(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
-       sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - 
-         gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
-         gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 
-         2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
-         gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2)))/
-    (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
-     4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))))
+      cout << prefix.value << "Routes intersect\n";
+
+      l_a.set(String("l of first intersection"),
+
+	      Re * sin((*this).omega.value) * atan((8*cos((route.GP.phi.value))*((cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+										 abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
+																					      2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+																					      2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																					      gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
+																					      gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																					      2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
+																					      gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
+						   (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+						    4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))),(8*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
+																					   sin(((*this).GP.lambda.value) - (route.GP.lambda.value)) - 8*abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*csc(((*this).GP.lambda.value) - (route.GP.lambda.value))*(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
+																					   sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - 
+																						gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																						gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 
+																						2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																						gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2)))/
+						   (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+						    4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))))
 	   
-	   , new_prefix);
+	      , new_prefix);
 
-    ((*this).l) = l_a;
-    (*this).compute_end(new_prefix);
-    (*p)[0] = ((*this).end);
+      ((*this).l) = l_a;
+      (*this).compute_end(new_prefix);
+      (*p)[0] = ((*this).end);
 
 
-    l_b.set(String("l of second intersection"),
+      l_b.set(String("l of second intersection"),
 
-	    Re * sin((*this).omega.value) * atan((-8*cos((route.GP.phi.value))*((-(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value))) + cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
-        abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
-           2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
-           2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
-           gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
-           gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
-           2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
-           gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
-    (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
-      4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))),(8*cos((route.GP.phi.value))*sin(((*this).GP.lambda.value) - (route.GP.lambda.value))*
-      (cos((route.GP.phi.value))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
-        abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*gsl_sf_pow_int(csc(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
-         sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
-           2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
-           2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
-           gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
-           gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
-           2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
-           gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
-    (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
-     4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))))
+	      Re * sin((*this).omega.value) * atan((-8*cos((route.GP.phi.value))*((-(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value))) + cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+										  abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*cos((route.GP.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
+																					       2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+																					       2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																					       gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
+																					       gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																					       2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
+																					       gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
+						   (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+						    4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))),(8*cos((route.GP.phi.value))*sin(((*this).GP.lambda.value) - (route.GP.lambda.value))*
+																					   (cos((route.GP.phi.value))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																					    abs(sin(((*this).GP.lambda.value) - (route.GP.lambda.value)))*gsl_sf_pow_int(csc(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*(cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*
+																					    sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2) + 
+																						 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+																						 2*cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
+																						 gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value) - (route.GP.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.GP.phi.value)),2)) + 
+																						 gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos((route.GP.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + 
+																						 2*gsl_sf_pow_int(cos((route.GP.phi.value)),2)*cos(((*this).GP.lambda.value))*cos((route.GP.lambda.value))*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*sin(((*this).GP.lambda.value))*sin((route.GP.lambda.value)) + gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(cos(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2) + 
+																						 gsl_sf_pow_int(cos((route.GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin(((*this).GP.lambda.value)),2)*gsl_sf_pow_int(sin((route.GP.lambda.value)),2))))/
+						   (gsl_sf_pow_int(cos((route.GP.phi.value)),2)*(-6 + 2*cos(2*((*this).GP.phi.value)) + 2*cos(2*((*this).GP.lambda.value) - 2*(route.GP.lambda.value)) + cos(2*(((*this).GP.phi.value) + ((*this).GP.lambda.value) - (route.GP.lambda.value))) + cos(2*(((*this).GP.phi.value) - ((*this).GP.lambda.value) + (route.GP.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).GP.phi.value)),2)*gsl_sf_pow_int(sin((route.GP.phi.value)),2) + 
+						    4*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(2*((*this).GP.phi.value))*sin(2*(route.GP.phi.value))))
 
-	   , new_prefix);
+	      , new_prefix);
 
-    ((*this).l) = l_b;
-    (*this).compute_end(new_prefix);
-    (*p)[1] = ((*this).end);
+      ((*this).l) = l_b;
+      (*this).compute_end(new_prefix);
+      (*p)[1] = ((*this).end);
 
-    return true;
+      output = true;
+      
+    }else{
 
+      cout << prefix.value << "Routes do no intersect\n";
+      output = false;
+      
+    }
+    
   }
 
+  return output;
 
 }
 
@@ -1035,55 +1046,55 @@ void Route::compute_end(String prefix){
   case 'o':
     {
 
-    //orthodrome route
+      //orthodrome route
   
-    (end.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
-    (end.phi).normalize();
+      (end.phi.value) = asin(cos((alpha.value)) * cos((start.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((start.phi.value)));
+      (end.phi).normalize();
 
-    (end.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
+      (end.lambda.value) = -atan((cos((start.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((start.lambda.value)) * (-cos((l.value)/Re) * cos((start.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((start.phi.value))))/( cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) -  cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value)))));
 
-    if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(end.lambda.value) += M_PI;}
+      if(cos((l.value)/Re) * cos((start.lambda.value)) * cos((start.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((start.lambda.value)) - cos((alpha.value)) * cos((start.lambda.value)) * sin((start.phi.value))) < 0.0){(end.lambda.value) += M_PI;}
 
-    (end.lambda).normalize();
+      (end.lambda).normalize();
 
-    break;
+      break;
     }
     
   case 'l':
     {
 
-    //loxodrome route
+      //loxodrome route
 
-    //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
-    int sigma, tau;
-    double C;
-    Angle t;
+      //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t)); 
+      int sigma, tau;
+      double C;
+      Angle t;
 
-    //tau = +-_{notes}
-    if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
-    else{tau = -1;}
+      //tau = +-_{notes}
+      if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
+      else{tau = -1;}
 
-    if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
-    else{sigma = +1;}
+      if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
+      else{sigma = +1;}
     
-    C = gsl_pow_2(cos(alpha.value));
+      C = gsl_pow_2(cos(alpha.value));
 
-    /* cout << "sigma = " << sigma << "\n"; */
-    /* cout << "tau = " << tau << "\n"; */
-    /* cout << "C = " << C << "\n"; */
+      /* cout << "sigma = " << sigma << "\n"; */
+      /* cout << "tau = " << tau << "\n"; */
+      /* cout << "C = " << C << "\n"; */
     
-    t.value = -tau*sqrt((1.0-C)/C)
-      * log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
+      t.value = -tau*sqrt((1.0-C)/C)
+	* log( sqrt((1.0+sin(start.phi.value))/(1.0-sin(start.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(start.phi.value))/(1.0+sin(start.phi.value)))) ) );
     
-    /* t.print("t", prefix, cout); */
+      /* t.print("t", prefix, cout); */
     
-    (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
-    (end.phi).normalize();
+      (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(start.phi.value)) ) );
+      (end.phi).normalize();
 
-    (end.lambda.value) = (start.lambda.value) + sigma*(t.value);
-    (end.lambda).normalize();
+      (end.lambda.value) = (start.lambda.value) + sigma*(t.value);
+      (end.lambda).normalize();
 
-    break;
+      break;
     }
 
   case 'c':

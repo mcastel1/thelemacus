@@ -2082,6 +2082,7 @@ class Plot{
   void remove_sight(unsigned int, String);
   void transport_position(unsigned int, String);
   void remove_position(unsigned int, String);
+  void remove_route(unsigned int, String);
   bool read_from_file(String, String);
   void print(String, ostream&);
   void print_sights(String, ostream&);
@@ -2606,6 +2607,22 @@ void Plot::remove_position(unsigned int i, String prefix){
   cout << prefix.value << "Position removed.\n";
 
 }
+
+void Plot::remove_route(unsigned int i, String prefix){
+
+  stringstream name;
+
+  name.str("");
+  name << "Route to be removed: Position #" << i+1;
+  
+  (route_list[i]).print(String(name.str().c_str()), prefix, cout);
+  
+  route_list.erase(route_list.begin()+i);
+  
+  cout << prefix.value << "Route removed.\n";
+
+}
+
 
 void Plot::transport_sight(unsigned int i, String prefix){
 

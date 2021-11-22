@@ -603,6 +603,7 @@ class Position{
 
 };
 
+//if type = l or o, the parameters specifying the route are start, alpha, l. if type = c, the parameters specifying the route are GP and omega. 
 class Route{
 
  public:
@@ -1123,7 +1124,7 @@ void Route::compute_end(String prefix){
 
   }
 
-  label_end << start.label.value << " transported";
+  label_end << "position transported";
   (end.label.value) = label_end.str();
 
 }
@@ -1142,11 +1143,11 @@ void Route::print(String name, String prefix, ostream& ostr){
   if((type.value == "l") || (type.value == "o")){
     start.print(String("start position"), new_prefix, ostr);
     alpha.print(String("starting heading"), new_prefix, ostr);
+    l.print(String("length"), String("nm"), new_prefix, ostr);
   }else{
     GP.print(String("ground position"), new_prefix, ostr);
     omega.print(String("aperture angle"), new_prefix, ostr);
   }
-  l.print(String("length"), String("nm"), new_prefix, ostr);
   
 }
 
@@ -1172,18 +1173,21 @@ void Route::enter(String name, String prefix){
   
   if((type.value == "l") || (type.value == "o")){
     //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
+
     start.enter(String("starting position"), new_prefix);
     alpha.enter(String("starting heading"), true, new_prefix);
+    l.enter(String("length"), String("nm"), new_prefix);
+
+    
   }else{
     //if the route is a circle of equal altitude, I enter its ground position and its aperture angle (alpha remains unused) ... 
     GP.enter(String("ground position"), new_prefix);
     omega.enter(String("aperture angle"), true, new_prefix);
     
-    //... and then compute the resulting starting position and starting heading
-    start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix);
-    start.lambda.set(String("longitude of ground position"), GP.lambda.value, true, new_prefix);
+    /* //... and then compute the resulting starting position and starting heading */
+    /* start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix); */
+    /* start.lambda.set(String("longitude of ground position"), GP.lambda.value, true, new_prefix); */
   }
-  l.enter(String("length"), String("nm"), new_prefix);
 
 }
 

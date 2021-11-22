@@ -54,6 +54,7 @@
 - include computation of crossing points between circles of equal altitude
 - add check that start time < end time in route transport
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
+- for circles of eqal altitude set Route.l = nan, and do the same for omega etc for loxodrome and orthodrome
 */
 
 

@@ -3494,10 +3494,9 @@ void Length::set(String name, double x, String prefix){
   new_prefix = prefix.append(String("\t"));
   
   value = x;
-  
-  if(check_valid(name, new_prefix)){
-    print(name, String("nm"), prefix, cout); 
-  }
+
+  print(name, String("nm"), prefix, cout); 
+  check_valid(name, new_prefix));
   
 }
 

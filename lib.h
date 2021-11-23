@@ -2806,7 +2806,7 @@ void Plot::show(String prefix){
   
   plot_command.str("");
   command.str("");
-  for(i=0, plot_command.str(""); i<(route_list.size()); i++){
+  for(i=0; i<(route_list.size()); i++){
     
     //cout << "Route # " << i+1 << "\n";
 
@@ -3071,13 +3071,14 @@ void Plot::show(String prefix){
     plot_command << "plot \"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"\\\n";
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
 
 
   //add the overall plotting command to command string
   command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";
 
+  
   //execute the command string
   system(command.str().c_str());
 

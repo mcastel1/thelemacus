@@ -1898,7 +1898,7 @@ class Sight{
   bool enter(Catalog, String, String);
   void print(String, String, ostream&);
   bool read_from_file(File&, String);
-  bool reduce(String);
+  bool reduce(Route*, String);
   bool check_data_time_interval(String);
 
   Position circle_of_equal_altitude(Angle);
@@ -3168,17 +3168,21 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
 }
 
-bool Sight::reduce(String prefix){
+bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
 
   bool check = true;
   String new_prefix;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  ((*circle_of_equal_altitude).type) = 'c';
   
   compute_H_a(new_prefix);
-  check &= get_coordinates(new_prefix);
+  check &= get_coordinates(circle_of_equal_altitude, new_prefix);
+  
   check &= compute_H_o(new_prefix);
+  ((*circle_of_equal_altitude).omega.value) = M_PI/2.0 - (H_o.value);
 
   if(!check){
     cout << prefix.value << RED << "Sight cannot be reduced!\n" << RESET;

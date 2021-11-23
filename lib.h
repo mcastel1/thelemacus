@@ -1875,7 +1875,6 @@ class Sight{
   Time master_clock_date_and_hour, time;
   //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
   Chrono TAI_minus_UTC, stopwatch;
-  Position GP;
   Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
   Length r, height_of_eye;
   Atmosphere atmosphere;
@@ -1888,7 +1887,7 @@ class Sight{
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*), lambda_circle_of_equal_altitude_minus_pi(double, void*);
-  bool get_coordinates(String);
+  bool get_coordinates(Route*, String);
   void compute_DH_dip(String);
   bool compute_DH_refraction(String);
   void compute_DH_parallax_and_limb(String);
@@ -3695,7 +3694,7 @@ void Length::print(String name, String unit, String prefix, ostream& ostr){
  
 }
 
-bool Sight::get_coordinates(String prefix){
+bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
 
   File file;
   stringstream filename, line_ins;

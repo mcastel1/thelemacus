@@ -307,7 +307,6 @@ while(1){
 	#coastlines
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-	#sight_plots
 	#position_plots
 	#route_plots
 

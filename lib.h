@@ -1180,7 +1180,7 @@ void Route::print(String name, String prefix, ostream& ostr){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  cout << prefix.value << "Route " << name.value << ":\n";
+  ostr << prefix.value << name.value << ":\n";
 
   type.print(String("type"), new_prefix, ostr);
 
@@ -2559,13 +2559,14 @@ void Plot::print(String prefix, ostream& ostr){
     print_sights(prefix, ostr);
   }
 
+  if(route_list.size()>0){
+    print_routes(prefix, ostr);
+  }
+  
   if(position_list.size()>0){
     print_positions(prefix, ostr);
   }
 
-  if(route_list.size()>0){
-    print_routes(prefix, ostr);
-  }
 
 
   

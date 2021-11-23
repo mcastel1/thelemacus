@@ -2246,7 +2246,7 @@ void Plot::menu(String prefix){
       show(new_prefix);
 
     }else{
-      cout << RED << "There are no sights to transport!\n" << RESET;
+      cout << RED << "There are no routes to transport!\n" << RESET;
     }
 
     menu(prefix);

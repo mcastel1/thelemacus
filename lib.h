@@ -2257,14 +2257,14 @@ void Plot::menu(String prefix){
    
   case 3:{
 
-    if(sight_list.size() > 0){
+    if(route_list.size() > 0){
  
-      print_sights(new_prefix, cout);
+      print_routes(new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), new_prefix);	
+      enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);	
       i--;
    
-      remove_sight(i, new_prefix);
+      remove_route(i, new_prefix);
       print(new_prefix, cout);
       show(new_prefix);
 
@@ -2475,7 +2475,7 @@ Plot::Plot(Catalog* cata){
 
   file_boundary.remove();
 
-  choices = {"Add a sight", "Transport a route", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Add a route", "Delete a route", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Transport a route", "Delete a route", "Add a position", "Transport a position", "Delete a position", "Add a route", "Delete a route", "Save to file", "Read from file", "Exit"};
   
 }
 

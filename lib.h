@@ -3709,8 +3709,6 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
  
-  
-
   if((body.type.value) != "star"){
     filename << "data/" << body.name.value << ".txt";
   }else{
@@ -3794,22 +3792,22 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
 	cout << new_prefix.value << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
-      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.lambda).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).lambda).value)) != GSL_SUCCESS){
 	check &= false; 
       }else{
-	(GP.lambda).normalize();
-	(GP.lambda).print(String("GHA"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).lambda).normalize();
+	(((*circle_of_equal_altitude).GP).lambda).print(String("GHA"), new_prefix, cout);
       }	
-      //(GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
+      //(((*circle_of_equal_altitude).GP).lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
 
-      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).phi).value)) != GSL_SUCCESS){
 	check &= false; 
       }else{
-	(GP.phi).normalize();
-	(GP.phi).print(String("d"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).phi).normalize();
+	(((*circle_of_equal_altitude).GP).phi).print(String("d"), new_prefix, cout);
       }	
-      //(GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
+      //(((*circle_of_equal_altitude).GP).phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
       if(gsl_spline_eval_e(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc, &(r.value)) != GSL_SUCCESS){
 	check &= false; 
@@ -3880,18 +3878,18 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
       if(gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
 
       
-      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.lambda).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).lambda).value)) != GSL_SUCCESS){
 	check &= false;
       }else{
-	(GP.lambda).normalize();
-	(GP.lambda).print(String("GHA"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).lambda).normalize();
+	(((*circle_of_equal_altitude).GP).lambda).print(String("GHA"), new_prefix, cout);
       }
 
-      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).phi).value)) != GSL_SUCCESS){
 	check &= false;
       }else{
-	(GP.phi).normalize();
-	(GP.phi).print(String("d"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).phi).normalize();
+	(((*circle_of_equal_altitude).GP).phi).print(String("d"), new_prefix, cout);
       }
 
     }

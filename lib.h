@@ -1164,6 +1164,8 @@ void Route::print(String name, String prefix, ostream& ostr){
     GP.print(String("ground position"), new_prefix, ostr);
     omega.print(String("aperture angle"), new_prefix, ostr);
   }
+
+  label.print(String("label"), new_prefix, ostr);
   
 }
 
@@ -2371,7 +2373,7 @@ void Plot::menu(String prefix){
     
   case 9:{
 
-    if(sight_list.size() + position_list.size() > 0){
+    if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
       File file;
       stringstream temp;
@@ -2391,7 +2393,7 @@ void Plot::menu(String prefix){
       system(command.str().c_str());
 
     }else{    
-      cout << RED << "There are no sights nor positions to save!\n" << RESET;
+      cout << RED << "There are no routes nor positions to save!\n" << RESET;
     }
     menu(prefix);
     
@@ -2502,6 +2504,7 @@ void Plot::print(String prefix, ostream& ostr){
   if(route_list.size()>0){
     print_routes(prefix, ostr);
   }
+
 
   
 }

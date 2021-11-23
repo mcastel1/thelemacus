@@ -73,14 +73,13 @@
 			aperture angle = 56° 25.687960654880725996918044984341'
 			label = arcturus 2021-07-06 23:08:53.82 TAI, Sight was taken at BGC
 		Route #4:
-			type = l
-			start position:
-				latitude = 34° 2.9999999999998294697434175759554'
-				longitude = 2° 2.9999999999999893418589635984972'
-				label = michele
-			starting heading = 23° 2.000000000000099475983006414026'
-			length = 4000 nm
-			label = 2021-11-23 19:14:14
+			type = c
+			ground position:
+				latitude = 44° 4.000000000000198951966012828052'
+				longitude = 23° 2.000000000000099475983006414026'
+				label = 2021-11-23 19:04:39
+			aperture angle = 45° 4.4536349999999913507053861394525'
+			label = 2021-11-23 19:04:44
 	Positions in the plot:
 		Position #1:
 			latitude = 48° 51.179385474737415506751858629286'

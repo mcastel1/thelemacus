@@ -632,6 +632,7 @@ class Route{
 void Route::read_from_file(File& file, String prefix){
 
   String new_prefix;
+  string line;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -639,8 +640,11 @@ void Route::read_from_file(File& file, String prefix){
   type.read_from_file(String("type"), file, false, new_prefix);
 
   if((type.value)[0] == 'c'){
-    
+
+    line.clear();
+    getline(file.value, line);
     GP.read_from_file(file, new_prefix);
+    
     omega.read_from_file(String("omega"), file, false, new_prefix);
     
   }else{
@@ -2212,7 +2216,7 @@ bool Plot::read_from_file(String filename, String prefix){
       Route route;
 
       route.read_from_file(file, new_prefix);
-	  
+      
       route.print(String("New route"), new_prefix, cout);
     
       route_list.push_back(route);

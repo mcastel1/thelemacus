@@ -617,7 +617,6 @@ class Route{
   //the length of the route
   Length l;
   Speed sog;
-  Sight* sight;
 
   void enter(String, String);
   void print(String, String, ostream&);
@@ -1205,6 +1204,8 @@ void Route::enter(String name, String prefix){
     /* start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix); */
     /* start.lambda.set(String("longitude of ground position"), GP.lambda.value, true, new_prefix); */
   }
+
+  label.enter(String("label"), new_prefix);
 
 }
 
@@ -2967,7 +2968,7 @@ void Plot::show(String prefix){
 
 	    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	    plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (*((route_list[i]).sight)).body.name.value << " " << (*((route_list[i]).sight)).time.to_string(display_precision).str().c_str() << " TAI, " << (*((route_list[i]).sight)).label.value << "\"\\\n";
+	    plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
       
 	    plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
 
@@ -2976,7 +2977,7 @@ void Plot::show(String prefix){
 	  }else{
 	    //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
 
-	    plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (*((route_list[i]).sight)).body.name.value << " " << (*((route_list[i]).sight)).time.to_string(display_precision).str().c_str() << " TAI, " << (*((route_list[i]).sight)).label.value << "\"\\\n";
+	    plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
 
 
 	  }
@@ -3044,7 +3045,7 @@ void Plot::show(String prefix){
 
 	  //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	  plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (*((route_list[i]).sight)).body.name.value << " " << (*((route_list[i]).sight)).time.to_string(display_precision).str().c_str() << " TAI, " << (*((route_list[i]).sight)).label.value << "\"\\\n";
+	  plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
       
 	  plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
 	  
@@ -3173,6 +3174,9 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
 
   bool check = true;
   String new_prefix;
+  stringstream temp;
+
+  temp.clear();
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -3183,7 +3187,9 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
   check &= get_coordinates(circle_of_equal_altitude, new_prefix);
 
   //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-  ((*circle_of_equal_altitude).sight) = this;
+  temp <<  (*this).body.name.value << " " << (*this).time.to_string(display_precision).str().c_str() << " TAI, " << (*this).label.value;
+  ((*circle_of_equal_altitude).label).set(String(temp.str()), new_prefix);
+   
   check &= compute_H_o(new_prefix);
   ((*circle_of_equal_altitude).omega.value) = M_PI/2.0 - (H_o.value);
 

@@ -608,7 +608,7 @@ class Position{
 class Route{
 
  public:
-  String type, label;
+  String type, label, temp_prefix;
   //starting position of the route
   Position start, end, GP;
   //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
@@ -622,7 +622,7 @@ class Route{
   void compute_end(String);
   bool crossing(Route, vector<Position>*, String);
   void transport(String);
-  double lambda_minus_pi(double, void*);
+  static double lambda_minus_pi(double, void*);
 
   
 };
@@ -2884,8 +2884,9 @@ void Plot::show(String prefix){
 
 	  }
 
+	  (route_list[i]).temp_prefix = prefix;
+	  F.params = &(route_list[i]);
 	  F.function = &((route_list[i]).lambda_minus_pi);
-	  F.params = &(sight_list[i]);
 
 
 
@@ -2996,8 +2997,9 @@ void Plot::show(String prefix){
 
 	}
 
+	(route_list[i]).temp_prefix = prefix;
+	F.params = &(route_list[i]);
 	F.function = &((route_list[i]).lambda_minus_pi);
-	F.params = &(sight_list[i]);
 
 	//solve for t_s
       
@@ -3498,9 +3500,13 @@ double Sight::dH_refraction(double z, void* sight){
 double Route::lambda_minus_pi(double t, void* route){
 
   Route* r = (Route*)route;
- 
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = ((*r).temp_prefix).append(String("\t"));
+
   ((*r).l.value) = Re * sin(((*r).omega.value)) * t;
-  (*r).compute_end(String(""));
+  (*r).compute_end(new_prefix);
 
   return(((*r).end.lambda.value) - M_PI);
 

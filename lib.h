@@ -639,23 +639,29 @@ void Route::read_from_file(File& file, String prefix){
 
   type.read_from_file(String("type"), file, false, new_prefix);
 
+  line.clear();
+  getline(file.value, line);
+
+  
   if((type.value)[0] == 'c'){
 
-    line.clear();
-    getline(file.value, line);
-    GP.read_from_file(file, new_prefix);
-    
+    GP.read_from_file(file, new_prefix);    
     omega.read_from_file(String("omega"), file, false, new_prefix);
     
   }else{
     
+
     start.read_from_file(file, new_prefix);
+
+
     alpha.read_from_file(String("starting heading"), file, false, new_prefix);
     l.read_from_file(String("length"), file, false, new_prefix);
+
 
   }
   
   label.read_from_file(String("label"), file, false, new_prefix);
+
 
 }
  
@@ -2218,7 +2224,7 @@ bool Plot::read_from_file(String filename, String prefix){
       route.read_from_file(file, new_prefix);
       
       route.print(String("New route"), new_prefix, cout);
-    
+
       route_list.push_back(route);
       cout << new_prefix.value << "Route added as position #" << route_list.size() << ".\n";
 	  

@@ -2567,20 +2567,19 @@ void Plot::print_routes(String prefix, ostream& ostr){
 
 bool Plot::add_sight(String prefix){
 
-  Sight sight;
-  Route route;
+  //create a new sight and new route in the respective lists
+  sight_list.resize(sight_list.size()+1);
+  route_list.resize(route_list.size()+1);
+  
   bool check = true;
   
-  sight.enter((*catalog), String("new sight"), prefix);
-  check &= (sight.reduce(&route, prefix));
+  (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
+  check &= ((sight_list[sight_list.size()-1]).reduce(&(route_list[route_list.size()-1]), prefix));
 
   if(check){
-    sight.print(String("Sight"), prefix, cout);
+    (sight_list[sight_list.size()-1]).print(String("Sight"), prefix, cout);
   
-    sight_list.push_back(sight);
     cout << prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
-
-    route_list.push_back(route);
     cout << prefix.value << "Route added as route #" << route_list.size() << ".\n";
   }
 
@@ -3042,12 +3041,13 @@ void Plot::show(String prefix){
 	  t_s.value = (x_lo_s+x_hi_s)/2.0;
 	  t_s.print(String("t_*"), new_prefix, cout);
 
+
 	  //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
 	  plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (*((route_list[i]).sight)).body.name.value << " " << (*((route_list[i]).sight)).time.to_string(display_precision).str().c_str() << " TAI, " << (*((route_list[i]).sight)).label.value << "\"\\\n";
       
 	  plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
-
+	  
 	}
 
       }

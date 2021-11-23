@@ -620,6 +620,7 @@ class Route{
 
   void enter(String, String);
   void print(String, String, ostream&);
+  void read_from_file(File&, String);
   void compute_end(String);
   bool crossing(Route, vector<Position>*, String);
   void transport(String);
@@ -627,6 +628,33 @@ class Route{
 
   
 };
+
+void Route::read_from_file(File& file, String prefix){
+
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
+  type.read_from_file(String("type"), file, false, new_prefix);
+
+  if((type.value)[0] == 'c'){
+    
+    GP.read_from_file(file, new_prefix);
+    omega.read_from_file(String("omega"), file, false, new_prefix);
+    
+  }else{
+    
+    start.read_from_file(file, new_prefix);
+    alpha.read_from_file(String("starting heading"), file, false, new_prefix);
+    l.read_from_file(String("length"), file, false, new_prefix);
+
+  }
+  
+  label.read_from_file(String("label"), file, false, new_prefix);
+
+}
+ 
 
 //this function computes the crossings between Route (*this) and Route route
 bool Route::crossing(Route route, vector<Position>* p, String prefix){
@@ -1157,12 +1185,16 @@ void Route::print(String name, String prefix, ostream& ostr){
   type.print(String("type"), new_prefix, ostr);
 
   if((type.value == "l") || (type.value == "o")){
+    
     start.print(String("start position"), new_prefix, ostr);
     alpha.print(String("starting heading"), new_prefix, ostr);
     l.print(String("length"), String("nm"), new_prefix, ostr);
+    
   }else{
+    
     GP.print(String("ground position"), new_prefix, ostr);
     omega.print(String("aperture angle"), new_prefix, ostr);
+    
   }
 
   label.print(String("label"), new_prefix, ostr);
@@ -2164,7 +2196,37 @@ bool Plot::read_from_file(String filename, String prefix){
  
     }
 
-    //2. Here I read positions
+    //2. Here I read routes
+
+    line.clear();
+    //read dummy text line 
+    getline(file.value, line);
+    pos = line.find("Route #");
+
+    //if I have found 'Route #' in the line above, then I proceed and read the relative position
+    while(pos != (string::npos)){
+    
+      cout << new_prefix.value << "Found new route!\n";
+  
+      //read the position block
+      Route route;
+
+      route.read_from_file(file, new_prefix);
+	  
+      route.print(String("New route"), new_prefix, cout);
+    
+      route_list.push_back(route);
+      cout << new_prefix.value << "Route added as position #" << route_list.size() << ".\n";
+	  
+      line.clear();
+      //read dummyt text line 
+      getline(file.value, line);
+      pos = line.find("Route #");
+ 
+    }
+
+
+    //3. Here I read positions
 
     line.clear();
     //read dummy text line 

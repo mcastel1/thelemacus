@@ -49,6 +49,30 @@
 			label = Sight was taken at BGC
 	Routes in the plot:
 		Route #1:
+			type = c
+			ground position:
+				latitude = 343° 52.099010844137865205993875861168'
+				longitude = 6° 27.663146868397987532262050081044'
+				label = 
+			aperture angle = 65° 25.369107990062502722139470279217'
+			label = moon 2021-06-21 21:39:32 TAI, Sight was taken at BGC
+		Route #2:
+			type = c
+			ground position:
+				latitude = 343° 49.842653986104323848849162459373'
+				longitude = 9° 0.20505320239223578937526326626539'
+				label = 
+			aperture angle = 65° 47.397185895477207395742880180478'
+			label = moon 2021-06-21 21:50:05.99 TAI, Sight was taken at BGC
+		Route #3:
+			type = c
+			ground position:
+				latitude = 19° 4.791516365234969043740420602262'
+				longitude = 58° 5.6603923024762536897469544783235'
+				label = 
+			aperture angle = 56° 25.687960654880725996918044984341'
+			label = arcturus 2021-07-06 23:08:53.82 TAI, Sight was taken at BGC
+		Route #4:
 			type = l
 			start position:
 				latitude = 34° 2.9999999999998294697434175759554'

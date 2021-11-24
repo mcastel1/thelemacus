@@ -31,32 +31,6 @@
 			hour of stopwatch = 00:48:08.9900000000000002131628207280301
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at BGC
-		Sight #3:
-			body:
-				Type = star
-				Name = arcturus
-				Right ascension = 213° 54.79890000000068539520725607872'
-				Declination = 19° 10.694899999999947226569929625839'
-			sextant altitude = 67° 13.399999999999749888957012444735'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-06
-				hour of master-clock date and hour of sight = 22:48:40
-			use of stopwatch = y
-			hour of stopwatch = 00:19:36.819000000000002614797267597169
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
-	Routes in the plot:
-		Route #1:
-			type = l
-			start position:
-				latitude = 34° 2.9999999999998294697434175759554'
-				longitude = 2° 2.9999999999999893418589635984972'
-				label = michele
-			starting heading = 23° 2.000000000000099475983006414026'
-			length = 4000 nm
-			label = 2021-11-23 19:14:14
 	Positions in the plot:
 		Position #1:
 			latitude = 48° 51.179385474737415506751858629286'
@@ -70,3 +44,25 @@
 			latitude = 48° 51.309166999999860081516089849174'
 			longitude = 357° 35.41566699999748379923403263092'
 			label = My Place (MP)
+	Routes in the plot:
+			type = c
+			ground position:
+				latitude = 343° 52.099010844137865205993875861168'
+				longitude = 6° 27.663146868397987532262050081044'
+				label = 
+			aperture angle = 65° 25.369107990062502722139470279217'
+			label = moon 2021-06-21 21:39:32 TAI, Sight was taken at BGC
+			type = c
+			ground position:
+				latitude = 343° 49.842653986104323848849162459373'
+				longitude = 9° 0.20505320239223578937526326626539'
+				label = 
+			aperture angle = 65° 47.397185895477207395742880180478'
+			label = moon 2021-06-21 21:50:05.99 TAI, Sight was taken at BGC
+			type = c
+			ground position:
+				latitude = 44° 4.000000000000198951966012828052'
+				longitude = 3° 1.9999999999999928945726423989981'
+				label = 2021-11-23 16:03:16
+			aperture angle = 55° 5.0000000000001421085471520200372'
+			label = 2021-11-23 16:03:19

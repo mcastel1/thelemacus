@@ -1,0 +1,23 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = c
+			sextant altitude = 88째 2.9999999999998294697434175759554'
+			index error = 0째 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2020-01-02
+				hour of master-clock date and hour of sight = 12:02:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-11-23 14:59:56
+	Routes in the plot:
+			type = c
+			ground position:
+				latitude = 359째 35.587044793210225179791450500488'
+				longitude = 338째 37.456203193634109993581660091877'
+				label =  tr. w o, COG = 45'�' 3'\'', SOG = 4 kt
+			aperture angle = 46째 0.33311238761299932775727938860655'

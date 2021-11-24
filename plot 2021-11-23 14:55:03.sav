@@ -11,7 +11,7 @@ k = 1.0/K;
 N = 6.0;
 #circles of equal altitude are plotted with S points
 S = 1e4;
-#plot_coastline_every
+M = 135;
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
@@ -80,10 +80,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-#min_longitude
-#max_longitude
-#min_latitude
-#max_latitude
+lambda_min = 179.03166666666666628771054092795;
+lambda_max = 181.05333333333334167036809958518;
+phi_min = 280.23166666666662649731733836234;
+phi_max = 80.886666666666670266749861184508;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -307,8 +307,13 @@ while(1){
 	#coastlines
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-	#position_plots
-	#route_plots
+	
+	
+ set key at graph key_x, graph key_y - 1*key_spacing
+plot [0.:3.5067597512842390017340221675113 - epsilon] xe(K*lambda_cea(t, 5.9971017536234763056768315436784, 2.5673249644143463221723777678562, 1.2788251860915689217534918498131)), ye(K*phi_cea(t, 5.9971017536234763056768315436784, 2.5673249644143463221723777678562, 1.2788251860915689217534918498131)) smo csp dashtype 1 lt 1 ti "sun 2023-02-03 22:02:39 TAI, 2021-11-23 14:54:29"
+plot [3.5067597512842390017340221675113 + epsilon:6.2792062287690075805812739417888 - epsilon] xe(K*lambda_cea(t, 5.9971017536234763056768315436784, 2.5673249644143463221723777678562, 1.2788251860915689217534918498131)), ye(K*phi_cea(t, 5.9971017536234763056768315436784, 2.5673249644143463221723777678562, 1.2788251860915689217534918498131)) smo csp dashtype 1 lt 1 noti 
+plot [6.2792062287690075805812739417888 + epsilon:2.*pi] xe(K*lambda_cea(t, 5.9971017536234763056768315436784, 2.5673249644143463221723777678562, 1.2788251860915689217534918498131)), ye(K*phi_cea(t, 5.9971017536234763056768315436784, 2.5673249644143463221723777678562, 1.2788251860915689217534918498131)) smo csp dashtype 1 lt 1 noti 
+
 
 	x_max_old = GPVAL_X_MAX;
 

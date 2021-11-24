@@ -61,6 +61,8 @@ class Time;
 class Date;
 class Chrono;
 class Route;
+class Sight;
+class Atmosphere;
 
 class String{
 
@@ -608,7 +610,7 @@ class Position{
 class Route{
 
  public:
-  String type;
+  String type, label, temp_prefix;
   //starting position of the route
   Position start, end, GP;
   //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
@@ -616,13 +618,56 @@ class Route{
   //the length of the route
   Length l;
   Speed sog;
+  //this points to a Sight object from which the Route has been created, if type = 'c'. If the route does not come from any sight, then related_sight = NULL
+  Sight* related_sight;
 
   void enter(String, String);
   void print(String, String, ostream&);
+  void read_from_file(File&, String);
   void compute_end(String);
   bool crossing(Route, vector<Position>*, String);
+  void transport(String);
+  static double lambda_minus_pi(double, void*);
+
   
 };
+
+void Route::read_from_file(File& file, String prefix){
+
+  String new_prefix;
+  string line;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
+  type.read_from_file(String("type"), file, false, new_prefix);
+
+  line.clear();
+  getline(file.value, line);
+
+  
+  if((type.value)[0] == 'c'){
+
+    GP.read_from_file(file, new_prefix);    
+    omega.read_from_file(String("omega"), file, false, new_prefix);
+    
+  }else{
+    
+
+    start.read_from_file(file, new_prefix);
+
+
+    alpha.read_from_file(String("starting heading"), file, false, new_prefix);
+    l.read_from_file(String("length"), file, false, new_prefix);
+
+
+  }
+  
+  label.read_from_file(String("label"), file, false, new_prefix);
+  related_sight = NULL;
+
+}
+ 
 
 //this function computes the crossings between Route (*this) and Route route
 bool Route::crossing(Route route, vector<Position>* p, String prefix){
@@ -1027,7 +1072,7 @@ Route Position::transport(String prefix){
   
   route.compute_end(new_prefix);
 
-  temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << (route.sog).value << " kt";
+  temp_label << label.value << ", tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << (route.l).value << " nm";
   (route.end.label).set(temp_label.str(), prefix);
 
   (*this) = route.end;
@@ -1141,6 +1186,78 @@ void Route::compute_end(String prefix){
 
 }
 
+class Atmosphere{
+
+ public:
+  Length earth_radius;
+  unsigned int n_layers;
+  double A, B, P_dry_0, alpha, beta, gamma, T0;
+  vector<double> h, lambda, t;
+  void set(void);
+  double T(Length), n(Length), dTdz(Length), dndz(Length);
+
+};
+
+class Body{
+
+ public:
+  String name, type;
+  Length radius;
+  Angle RA, d; 
+  void enter(Catalog, String);
+  void print(String, String, ostream&);
+  void read_from_file(String, File&, String);
+  
+};
+
+class Limb{
+
+ public:
+  char value;
+  void enter(String, String);
+  void print(String, String, ostream&);
+  void read_from_file(String, File&, bool, String);
+  
+};
+
+
+class Sight{
+
+ public:
+  Time master_clock_date_and_hour, time;
+  //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
+  Chrono TAI_minus_UTC, stopwatch;
+  Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
+  Length r, height_of_eye;
+  Atmosphere atmosphere;
+  Body body;
+  Limb limb;
+  // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading
+  Answer artificial_horizon, use_stopwatch;
+  //label to add a note about the sight
+  String label;
+
+  Sight();
+  static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
+  bool get_coordinates(Route*, String);
+  void compute_DH_dip(String);
+  bool compute_DH_refraction(String);
+  void compute_DH_parallax_and_limb(String);
+
+  void compute_H_a(String);
+  bool compute_H_o(String);
+
+  bool enter(Catalog, String, String);
+  void print(String, String, ostream&);
+  bool read_from_file(File&, String);
+  bool reduce(Route*, String);
+  bool check_data_time_interval(String);
+
+  //Position circle_of_equal_altitude(Angle);
+   
+};
+
+
 void Route::print(String name, String prefix, ostream& ostr){
 
   String s, new_prefix;
@@ -1148,18 +1265,32 @@ void Route::print(String name, String prefix, ostream& ostr){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  cout << prefix.value << "Route " << name.value << ":\n";
+  ostr << prefix.value << name.value << ":\n";
 
   type.print(String("type"), new_prefix, ostr);
 
   if((type.value == "l") || (type.value == "o")){
+    
     start.print(String("start position"), new_prefix, ostr);
     alpha.print(String("starting heading"), new_prefix, ostr);
     l.print(String("length"), String("nm"), new_prefix, ostr);
+    
   }else{
+    
     GP.print(String("ground position"), new_prefix, ostr);
     omega.print(String("aperture angle"), new_prefix, ostr);
+    
   }
+
+  label.print(String("label"), new_prefix, ostr);
+
+  /*
+  if(related_sight != NULL){
+    
+    (*related_sight).label.print(String("label of related sight"), new_prefix, ostr);
+    
+  }
+  */
   
 }
 
@@ -1200,6 +1331,9 @@ void Route::enter(String name, String prefix){
     /* start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix); */
     /* start.lambda.set(String("longitude of ground position"), GP.lambda.value, true, new_prefix); */
   }
+
+  label.enter(String("label"), new_prefix);
+  related_sight = NULL;
 
 }
 
@@ -1636,15 +1770,6 @@ Angle Angle::operator/ (const double& x){
 }
 
 
-class Limb{
-
- public:
-  char value;
-  void enter(String, String);
-  void print(String, String, ostream&);
-  void read_from_file(String, File&, bool, String);
-  
-};
 
 void Limb::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
@@ -1679,17 +1804,6 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, Stri
   
 }
 
-class Body{
-
- public:
-  String name, type;
-  Length radius;
-  Angle RA, d; 
-  void enter(Catalog, String);
-  void print(String, String, ostream&);
-  void read_from_file(String, File&, String);
-  
-};
 
 void Body::read_from_file(String name, File& file, String prefix){
 
@@ -1821,17 +1935,6 @@ void Catalog::add(String type, String name, double radius){
 }
 
 
-class Atmosphere{
-
- public:
-  Length earth_radius;
-  unsigned int n_layers;
-  double A, B, P_dry_0, alpha, beta, gamma, T0;
-  vector<double> h, lambda, t;
-  void set(void);
-  double T(Length), n(Length), dTdz(Length), dndz(Length);
-
-};
 
 
 void Answer::enter(String name, String prefix){
@@ -1869,85 +1972,39 @@ void Answer::print(String name, String prefix, ostream& ostr){
 
 
 
-class Sight{
 
- public:
-  Time master_clock_date_and_hour, time;
-  //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
-  Chrono TAI_minus_UTC, stopwatch;
-  Position GP;
-  Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
-  Length r, height_of_eye;
-  Atmosphere atmosphere;
-  Body body;
-  Limb limb;
-  // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading
-  Answer artificial_horizon, use_stopwatch;
-  //label to add a note about the sight
-  String label;
+//this function transports the Route (*this) with the Route transporting route
+void Route::transport(String prefix){
 
-  Sight();
-  static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*), lambda_circle_of_equal_altitude_minus_pi(double, void*);
-  bool get_coordinates(String);
-  void compute_DH_dip(String);
-  bool compute_DH_refraction(String);
-  void compute_DH_parallax_and_limb(String);
-
-  void compute_H_a(String);
-  bool compute_H_o(String);
-
-  bool enter(Catalog, String, String);
-  void print(String, String, ostream&);
-  bool read_from_file(File&, String);
-  bool reduce(String);
-  bool check_data_time_interval(String);
-
-  Position circle_of_equal_altitude(Angle);
-
-  void transport(String);
-
-   
-};
-
-void Sight::transport(String prefix){
-
-  Route route;
-  stringstream temp_label;
   String new_prefix;
 
-  //append \t to prefix
-  new_prefix = prefix.append(String("\t"));
+  if((type.value)[0] == 'c'){
+  
+    Route transporting_route;
+    stringstream temp_label;
 
-  route = GP.transport(new_prefix);
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+
+    transporting_route = (GP.transport(new_prefix));
   
 
-  //append 'translated to ...' to the label of sight, and make this the new label of sight
-  temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << route.sog.value << " kt";
-  label.set(temp_label.str(), prefix);
+    //append 'translated to ...' to the label of sight, and make this the new label of sight
+    temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision).str().c_str() << ", l = " << transporting_route.l.value << " nm";
+    label.set(temp_label.str(), prefix);
+    related_sight = NULL;
 
-  print(String("transported sight"), prefix, cout);
+    print(String("transported route"), prefix, cout);
+
+  }else{
+
+    cout << prefix.value << RED << "I cannot transport routes different from circles of equal altitude\n" << RESET;
+
+  }
 
 }
 
-//For a given value of the parameter angle t, this function returns a Position which lies on the circle of equal altitude described by GP and H_o. By varying t, the whole circle can be traced. 
-Position Sight::circle_of_equal_altitude(Angle t){
 
-  Position p;
-
-  (p.phi.value) = M_PI/2.0-acos(cos(M_PI/2.0 - (H_o.value)) * sin((GP.phi.value)) - cos((GP.phi.value)) * cos((t.value)) * sin(M_PI/2.0 - (H_o.value)));
-
-  (p.phi).normalize();
-
-  
-  (p.lambda.value) = -atan( (-sin((GP.lambda.value)) * (cos((GP.phi.value)) * cos(M_PI/2.0 - (H_o.value)) + cos((t.value)) * sin((GP.phi.value)) * sin(M_PI/2.0 - (H_o.value))) + cos((GP.lambda.value)) * sin(M_PI/2.0 - (H_o.value)) * sin((t.value)))
-			    / (cos((GP.phi.value)) * cos((GP.lambda.value)) * cos(M_PI/2.0 - (H_o.value)) + sin(M_PI/2.0 - (H_o.value)) * (cos((GP.lambda.value)) * cos((t.value)) * sin((GP.phi.value)) + sin((GP.lambda.value)) * sin((t.value)))) );
-  if( cos((GP.phi.value)) * cos((GP.lambda.value)) * cos(M_PI/2.0 - (H_o.value)) + sin(M_PI/2.0 - (H_o.value)) * (cos((GP.lambda.value)) * cos((t.value)) * sin((GP.phi.value)) + sin((GP.lambda.value)) * sin((t.value))) < 0.0){(p.lambda.value) += M_PI;}
-
-  (p.lambda).normalize();
-  
-  return p;
-
-}
 
 //this function returns true if the reading operation has been performed without errors, false otherwise
 bool Sight::read_from_file(File& file, String prefix){
@@ -2087,7 +2144,7 @@ class Plot{
   Plot(Catalog*);
   //~Plot();
   bool add_sight(String);
-  void transport_sight(unsigned int, String);
+  void transport_route(unsigned int, String);
   void add_position(String);
   void add_route(String);
   void remove_sight(unsigned int, String);
@@ -2095,10 +2152,10 @@ class Plot{
   void remove_position(unsigned int, String);
   void remove_route(unsigned int, String);
   bool read_from_file(String, String);
-  void print(String, ostream&);
+  void print(bool, String, ostream&);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
-  void print_routes(String, ostream&);
+  void print_routes(bool, String, ostream&);
   void show(String);
   void menu(String);
 
@@ -2141,18 +2198,22 @@ bool Plot::read_from_file(String filename, String prefix){
   
       //read the sight block
       Sight sight;
-
+      Route route;
+      
       //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
       check &= (sight.read_from_file(file, new_prefix));
       if(check){
 	  
-	check &= (sight.reduce(new_prefix));
+	check &= (sight.reduce(&route, new_prefix));
 
 	if(check){
 	  sight.print(String("New sight"), new_prefix, cout);
     
 	  sight_list.push_back(sight);
 	  cout << new_prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
+
+	  route_list.push_back(route);
+	  cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
 	}
 	  
       }
@@ -2164,7 +2225,37 @@ bool Plot::read_from_file(String filename, String prefix){
  
     }
 
-    //2. Here I read positions
+    //2. Here I read routes
+
+    line.clear();
+    //read dummy text line 
+    getline(file.value, line);
+    pos = line.find("Route #");
+
+    //if I have found 'Route #' in the line above, then I proceed and read the relative position
+    while(pos != (string::npos)){
+    
+      cout << new_prefix.value << "Found new route!\n";
+  
+      //read the position block
+      Route route;
+
+      route.read_from_file(file, new_prefix);
+      
+      route.print(String("New route"), new_prefix, cout);
+
+      route_list.push_back(route);
+      cout << new_prefix.value << "Route added as position #" << route_list.size() << ".\n";
+	  
+      line.clear();
+      //read dummyt text line 
+      getline(file.value, line);
+      pos = line.find("Route #");
+ 
+    }
+
+
+    //3. Here I read positions
 
     line.clear();
     //read dummy text line 
@@ -2227,7 +2318,7 @@ void Plot::menu(String prefix){
   case 1:{
     
     add_sight(new_prefix);
-    print(new_prefix, cout);
+    print(false, new_prefix, cout);
     show(new_prefix);
     menu(prefix);  
 
@@ -2237,19 +2328,19 @@ void Plot::menu(String prefix){
 
   case 2:{
 
-    if(sight_list.size() > 0){
+    if(route_list.size() > 0){
 
-      print_sights(new_prefix, cout);
+      print_routes(true, new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to transport"), new_prefix);	
+      enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to transport"), new_prefix);	
       i--;
    
-      transport_sight(i, new_prefix);
-      print(new_prefix, cout);
+      transport_route(i, new_prefix);
+      print_routes(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
-      cout << RED << "There are no sights to transport!\n" << RESET;
+      cout << RED << "There are no routes to transport!\n" << RESET;
     }
 
     menu(prefix);
@@ -2260,15 +2351,15 @@ void Plot::menu(String prefix){
    
   case 3:{
 
-    if(sight_list.size() > 0){
+    if(route_list.size() > 0){
  
-      print_sights(new_prefix, cout);
+      print_routes(true, new_prefix, cout);
 
-      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), new_prefix);	
+      enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);	
       i--;
    
-      remove_sight(i, new_prefix);
-      print(new_prefix, cout);
+      remove_route(i, new_prefix);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2283,7 +2374,7 @@ void Plot::menu(String prefix){
   case 4:{
 
     add_position(new_prefix);
-    print(new_prefix, cout);
+    print(true, new_prefix, cout);
     show(new_prefix);
     menu(prefix);  
 
@@ -2301,7 +2392,7 @@ void Plot::menu(String prefix){
       i--;
 
       transport_position(i, new_prefix);
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2324,7 +2415,7 @@ void Plot::menu(String prefix){
       i--;
 	
       remove_position(i, new_prefix);
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2339,7 +2430,7 @@ void Plot::menu(String prefix){
   case 7:{
 
     add_route(new_prefix);
-    print(new_prefix, cout);
+    print(true, new_prefix, cout);
     show(new_prefix);
     menu(prefix);  
 
@@ -2351,13 +2442,13 @@ void Plot::menu(String prefix){
     if(route_list.size() > 0){
 
 
-      print_routes(new_prefix, cout);
+      print_routes(true, new_prefix, cout);
 
       enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);
       i--;
 	
       remove_route(i, new_prefix);
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2373,7 +2464,7 @@ void Plot::menu(String prefix){
     
   case 9:{
 
-    if(sight_list.size() + position_list.size() > 0){
+    if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
       File file;
       stringstream temp;
@@ -2385,7 +2476,7 @@ void Plot::menu(String prefix){
       file.set_name(temp.str());
 
       file.open(String("out"),new_prefix);    
-      print(new_prefix, file.value);
+      print(false, new_prefix, file.value);
       file.close(new_prefix);
 
       command.str("");
@@ -2393,7 +2484,7 @@ void Plot::menu(String prefix){
       system(command.str().c_str());
 
     }else{    
-      cout << RED << "There are no sights nor positions to save!\n" << RESET;
+      cout << RED << "There are no routes nor positions to save!\n" << RESET;
     }
     menu(prefix);
     
@@ -2410,7 +2501,7 @@ void Plot::menu(String prefix){
     filename.value = line_ins.str();
     
     if(read_from_file(filename, new_prefix)){
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
     }
         
@@ -2432,7 +2523,7 @@ void Plot::menu(String prefix){
     //print all plots to file with the filename above
     ((file.name).value) = line.value;
     file.open(String("out"), new_prefix);
-    print(new_prefix, file.value);
+    print(false, new_prefix, file.value);
     file.close(new_prefix);
 
     //if plot.plt has been filled, here I save it with the name 'plot' + filename above
@@ -2478,7 +2569,7 @@ Plot::Plot(Catalog* cata){
 
   file_boundary.remove();
 
-  choices = {"Add a sight", "Transport a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Add a route", "Delete a route", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Transport a route", "Delete a route", "Add a position", "Transport a position", "Delete a position", "Add a route", "Delete a route", "Save to file", "Read from file", "Exit"};
   
 }
 
@@ -2491,19 +2582,21 @@ Plot::Plot(Catalog* cata){
   }
 */
 
-void Plot::print(String prefix, ostream& ostr){
+void Plot::print(bool print_all_routes, String prefix, ostream& ostr){
 
   if(sight_list.size()>0){
     print_sights(prefix, ostr);
   }
 
+  if(route_list.size()>0){
+    print_routes(print_all_routes, prefix, ostr);
+  }
+  
   if(position_list.size()>0){
     print_positions(prefix, ostr);
   }
 
-  if(route_list.size()>0){
-    print_routes(prefix, ostr);
-  }
+
 
   
 }
@@ -2546,20 +2639,31 @@ void Plot::print_positions(String prefix, ostream& ostr){
 
 }
 
-void Plot::print_routes(String prefix, ostream& ostr){
+void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
 
   stringstream name;
-  unsigned int i;
+  unsigned int i, j;
   String new_prefix;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
    
   ostr << prefix.value << "Routes in the plot:\n";
-  for(i=0; i<route_list.size(); i++){
-    name.str("");
-    name << "Route #" << i+1;
-    (route_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
+  
+  for(i=0, j=0; i<route_list.size(); i++){
+    
+    
+    if(((route_list[i].related_sight) == NULL) || print_all_routes){
+      
+      name.str("");
+      name << "Route #" << j+1;
+      
+      (route_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
+
+      j++;
+      
+    }
+    
   }
 
 
@@ -2570,17 +2674,20 @@ void Plot::print_routes(String prefix, ostream& ostr){
 
 bool Plot::add_sight(String prefix){
 
-  Sight sight;
+  //create a new sight and new route in the respective lists
+  sight_list.resize(sight_list.size()+1);
+  route_list.resize(route_list.size()+1);
+  
   bool check = true;
   
-  sight.enter((*catalog), String("new sight"), prefix);
-  check &= (sight.reduce(prefix));
+  (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
+  check &= ((sight_list[sight_list.size()-1]).reduce(&(route_list[route_list.size()-1]), prefix));
 
   if(check){
-    sight.print(String("Sight"), prefix, cout);
+    (sight_list[sight_list.size()-1]).print(String("Sight"), prefix, cout);
   
-    sight_list.push_back(sight);
     cout << prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
+    cout << prefix.value << "Route added as route #" << route_list.size() << ".\n";
   }
 
   return check;
@@ -2659,7 +2766,7 @@ void Plot::remove_route(unsigned int i, String prefix){
 }
 
 
-void Plot::transport_sight(unsigned int i, String prefix){
+void Plot::transport_route(unsigned int i, String prefix){
 
   stringstream name;
   String new_prefix;
@@ -2668,13 +2775,13 @@ void Plot::transport_sight(unsigned int i, String prefix){
   new_prefix = prefix.append(String("\t"));
 
   name.str("");
-  name << "Sight to be transported: Sight #" << i+1;
+  name << "Route to be transported: Route #" << i+1;
   
-  (sight_list[i]).print(String(name.str().c_str()), new_prefix, cout);
+  (route_list[i]).print(String(name.str().c_str()), new_prefix, cout);
   
-  (sight_list[i]).transport(prefix);
+  (route_list[i]).transport(prefix);
   
-  cout << prefix.value << "Sight transported.\n";
+  cout << prefix.value << "Route transported.\n";
 
 }
 
@@ -2798,230 +2905,6 @@ void Plot::show(String prefix){
 
   file_boundary.close(new_prefix);
   //
-  
-  //replace line with sight plots  
-  plot_command.str("");
-  command.str("");
-  for(i=0, plot_command.str(""); i<sight_list.size(); i++){
-
-    //cout << "Sight # " << i+1 << "\n";
-
-    //set the key in the correct position for the circle of equal altitude that will be plotted 
-    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(i+1)) << "*key_spacing\\\n";
-
-    //if abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (sight_list[i]).GP.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(sight_list[i]).GP.lambda_{t = t_{min}} and (sight_list[i]).GP.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output. 
-    if(abs(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))) < 1.0){
-    
-      //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
-      t_max.set(String("t_{max}"), acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), false, new_prefix);
-      t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((sight_list[i]).GP.phi.value)*tan(M_PI/2.0 - ((sight_list[i]).H_o.value))), false, new_prefix);
-
-      p_max = (sight_list[i]).circle_of_equal_altitude(t_max);
-      p_min = (sight_list[i]).circle_of_equal_altitude(t_min);
-
-      /* p_max.print(String("p_max"), new_prefix, cout); */
-      /* p_min.print(String("p_min"), new_prefix, cout); */
-
-      if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
-	cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
-	//in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
-
-	if((sight_list[i]).GP.lambda.value > M_PI){
-	  //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
-
-	  cout << prefix.value << "Case I:\n";
-
-	  // interval where I know that there will be t_p
-	  x_lo_p = (t_max.value);
-	  x_hi_p = M_PI;
-
-	  //interval where I know that there will be t_m
-	  x_lo_m = 0.0;
-	  x_hi_m = (t_max.value);
-
-	}else{
-	  //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
-	  //here I select an interval where I know that there will be t_m
-
-	  cout << prefix.value << "Case II:\n";
-
-	  // interval where I know that there will be t_p
-	  x_lo_p = (t_min.value);
-	  x_hi_p = 2.0*M_PI;
-
-	  //interval where I know that there will be t_m
-	  x_lo_m = M_PI;
-	  x_hi_m = (t_min.value);
-
-	}
-
-	F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
-	F.params = &(sight_list[i]);
-
-
-
-	//solve for t_p
-      
-	gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
-
-	cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
-          
-	cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-	cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-
-	iter = 0;
-	do{
-      
-	  iter++;
-	  status = gsl_root_fsolver_iterate(s);
-      
-	  x = gsl_root_fsolver_root(s);
-	  x_lo_p = gsl_root_fsolver_x_lower(s);
-	  x_hi_p = gsl_root_fsolver_x_upper(s);
-	  status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
-	  if(status == GSL_SUCCESS){
-	    cout << new_prefix.value << "Converged:\n";
-	  }
-	  cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
-	}
-	while((status == GSL_CONTINUE) && (iter < max_iter));
-
-	t_p.value = (x_lo_p+x_hi_p)/2.0;
-	t_p.print(String("t_+"), new_prefix, cout);
-
-
-
-      
-
-	//solve for t_m
-      
-	gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
-
-	cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
-          
-	cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-	cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-
-	iter = 0;
-	do{
-      
-	  iter++;
-	  status = gsl_root_fsolver_iterate(s);
-      
-	  x = gsl_root_fsolver_root(s);
-	  x_lo_m = gsl_root_fsolver_x_lower(s);
-	  x_hi_m = gsl_root_fsolver_x_upper(s);
-	  status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
-	  if(status == GSL_SUCCESS){
-	    cout << new_prefix.value << "Converged:\n";
-	  }
-	  cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
-	}
-	while((status == GSL_CONTINUE) && (iter < max_iter));
-
-	t_m.value = (x_lo_m+x_hi_m)/2.0;
-	t_m.print(String("t_-"), new_prefix, cout);
-
-	//the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-      
-	plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
-      
-	plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
-
-	plot_command << "plot [" << t_p.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
-
-      }else{
-	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
-
-	plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
-
-
-      }
-      
-    }else{
-      //in this case (sight_list[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that (sight_list[i]).GP.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
-
-      // interval where I know that there will be t_s
-      if((-sin(M_PI/2.0 - ((sight_list[i]).H_o.value))/cos(((sight_list[i]).GP.phi.value) - (M_PI/2.0 - ((sight_list[i]).H_o.value)))) > 0.0){
-	//in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
-	if((sight_list[i]).GP.lambda.value < M_PI){
-	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-	  x_lo_s = 0.0;
-	  x_hi_s = M_PI;
-	}else{
-	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-	  x_lo_s = M_PI;
-	  x_hi_s = 2.0*M_PI;
-	}
-      }else{
-	//in this case lambda'(t = 0) < 0.0 -> lambda'(t) < 0.0  for all t
-	if((sight_list[i]).GP.lambda.value < M_PI){
-	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-	  x_lo_s = M_PI;
-	  x_hi_s = 2.0*M_PI;
-	}else{
-	  //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-	  x_lo_s = 0.0;
-	  x_hi_s = M_PI;
-	}
-
-      }
-
-      F.function = &((sight_list[i]).lambda_circle_of_equal_altitude_minus_pi);
-      F.params = &(sight_list[i]);
-
-      //solve for t_s
-      
-      gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
-
-      cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-      cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-
-      iter = 0;
-      do{
-      
-	iter++;
-	status = gsl_root_fsolver_iterate(s);
-      
-	x = gsl_root_fsolver_root(s);
-	x_lo_s = gsl_root_fsolver_x_lower(s);
-	x_hi_s = gsl_root_fsolver_x_upper(s);
-	status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
-	if(status == GSL_SUCCESS){
-	  cout << new_prefix.value << "Converged:\n";
-	}
-	cout << new_prefix.value << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
-      }
-      while((status == GSL_CONTINUE) && (iter < max_iter));
-
-      t_s.value = (x_lo_s+x_hi_s)/2.0;
-      t_s.print(String("t_*"), new_prefix, cout);
-
-      //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-      
-      plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (sight_list[i]).body.name.value << " " << (sight_list[i]).time.to_string(display_precision).str().c_str() << " TAI, " << (sight_list[i]).label.value << "\"\\\n";
-      
-      plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")), ye(K*phi_cea(t, " << (sight_list[i]).GP.phi.value << ", " << (sight_list[i]).GP.lambda.value << ", " << M_PI/2.0 - ((sight_list[i]).H_o.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
-
-    }
-    
-  } 
-  //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#sight_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-
-
-  
-  //replace line with position plots
-  
-  plot_command.str("");
-  for(i=0; i<position_list.size(); i++){
-    //set the key in the correct position for the position that will be plotted 
-    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(sight_list.size()+i+1)) << "*key_spacing\\\n";
-
-    plot_command << "plot \"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"\\\n";
-  }
-  //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
 
 
 
@@ -3029,17 +2912,21 @@ void Plot::show(String prefix){
   //replace line with route plots
   
   plot_command.str("");
-  for(i=0; i<route_list.size(); i++){
-    //set the key in the correct position for the position that will be plotted 
-    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(sight_list.size()+position_list.size()+i+1)) << "*key_spacing\\\n";
+  command.str("");
+  for(i=0; i<(route_list.size()); i++){
+    
+    //cout << "Route # " << i+1 << "\n";
+
+    //set the key in the correct position for the circle of equal altitude that will be plotted 
+    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(i+1)) << "*key_spacing\\\n";
 
     switch(((route_list[i]).type.value)[0]){
 
     case 'l':
+      //plot a loxodrome
       {
 
-	//in this case, the loxodrome is not cut through the meridian lambda = M_PI, and I make a single plot
-	//in this case, the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
+	//I assume that  the loxodrome is not cut through the meridian lambda = M_PI, and I make a single plot
 	plot_command << "plot [0.:" << (route_list[i]).l.value << "] xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str();
 
 	plot_command << "\"\\\n";
@@ -3048,9 +2935,10 @@ void Plot::show(String prefix){
       }
 
     case 'o':
+      //plot an orthodrome
       {
 
-	//in this case, the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
+	//I assume that the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
 	plot_command << "plot [0.:" << (route_list[i]).l.value << "] xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str();
 
 	plot_command << "\"\\\n";
@@ -3058,28 +2946,247 @@ void Plot::show(String prefix){
 	break;
       }
 
+
     case 'c':
+      //plot a circle of equal altitude
       {
 
-	//in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
-	plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << (route_list[i]).omega.value << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", GP = " << (route_list[i]).GP.to_string(display_precision).str().c_str() << ", aperture = " << (route_list[i]).omega.to_string(display_precision).str().c_str();
-             
-	plot_command << "\"\\\n";
+	//if abs(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (route_list[i]).GP.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(route_list[i]).GP.lambda_{t = t_{min}} and (route_list[i]).GP.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output. 
+	if(abs(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))) < 1.0){
+    
+	  //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
+	  t_max.set(String("t_{max}"), acos(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))), false, new_prefix);
+	  t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))), false, new_prefix);
 
-	break;
+	  //p_max =  circle of equal altitude computed at t_max
+	  ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_max.value);
+	  (route_list[i]).compute_end(new_prefix);
+	  p_max = ((route_list[i]).end);
+	
+	  ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_min.value);
+	  (route_list[i]).compute_end(new_prefix);
+	  p_min = ((route_list[i]).end);
+	  //p_min =  circle of equal altitude computed at t_min
+
+	  /* p_max.print(String("p_max"), new_prefix, cout); */
+	  /* p_min.print(String("p_min"), new_prefix, cout); */
+
+	  if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
+	    cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
+	    //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
+
+	    if((route_list[i]).GP.lambda.value > M_PI){
+	      //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+
+	      cout << prefix.value << "Case I:\n";
+
+	      // interval where I know that there will be t_p
+	      x_lo_p = (t_max.value);
+	      x_hi_p = M_PI;
+
+	      //interval where I know that there will be t_m
+	      x_lo_m = 0.0;
+	      x_hi_m = (t_max.value);
+
+	    }else{
+	      //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
+	      //here I select an interval where I know that there will be t_m
+
+	      cout << prefix.value << "Case II:\n";
+
+	      // interval where I know that there will be t_p
+	      x_lo_p = (t_min.value);
+	      x_hi_p = 2.0*M_PI;
+
+	      //interval where I know that there will be t_m
+	      x_lo_m = M_PI;
+	      x_hi_m = (t_min.value);
+
+	    }
+
+	    (route_list[i]).temp_prefix = prefix;
+	    F.params = &(route_list[i]);
+	    F.function = &((route_list[i]).lambda_minus_pi);
+
+
+
+	    //solve for t_p
+      
+	    gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
+
+	    cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
+          
+	    cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+	    cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+
+	    iter = 0;
+	    do{
+      
+	      iter++;
+	      status = gsl_root_fsolver_iterate(s);
+      
+	      x = gsl_root_fsolver_root(s);
+	      x_lo_p = gsl_root_fsolver_x_lower(s);
+	      x_hi_p = gsl_root_fsolver_x_upper(s);
+	      status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
+	      if(status == GSL_SUCCESS){
+		cout << new_prefix.value << "Converged:\n";
+	      }
+	      cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
+	    }
+	    while((status == GSL_CONTINUE) && (iter < max_iter));
+
+	    t_p.value = (x_lo_p+x_hi_p)/2.0;
+	    t_p.print(String("t_+"), new_prefix, cout);
+
+
+
+      
+
+	    //solve for t_m
+      
+	    gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
+
+	    cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
+          
+	    cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+	    cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+
+	    iter = 0;
+	    do{
+      
+	      iter++;
+	      status = gsl_root_fsolver_iterate(s);
+      
+	      x = gsl_root_fsolver_root(s);
+	      x_lo_m = gsl_root_fsolver_x_lower(s);
+	      x_hi_m = gsl_root_fsolver_x_upper(s);
+	      status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
+	      if(status == GSL_SUCCESS){
+		cout << new_prefix.value << "Converged:\n";
+	      }
+	      cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
+	    }
+	    while((status == GSL_CONTINUE) && (iter < max_iter));
+
+	    t_m.value = (x_lo_m+x_hi_m)/2.0;
+	    t_m.print(String("t_-"), new_prefix, cout);
+
+	    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+      
+	    plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
+      
+	    plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
+
+	    plot_command << "plot [" << t_p.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
+
+	  }else{
+	    //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
+
+	    plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
+
+
+	  }
+      
+	}else{
+	  //in this case (route_list[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that (route_list[i]).GP.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
+
+	  // interval where I know that there will be t_s
+	  if((-sin(((route_list[i]).omega.value))/cos(((route_list[i]).GP.phi.value) - (((route_list[i]).omega.value)))) > 0.0){
+	    //in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
+	    if((route_list[i]).GP.lambda.value < M_PI){
+	      //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
+	      x_lo_s = 0.0;
+	      x_hi_s = M_PI;
+	    }else{
+	      //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
+	      x_lo_s = M_PI;
+	      x_hi_s = 2.0*M_PI;
+	    }
+	  }else{
+	    //in this case lambda'(t = 0) < 0.0 -> lambda'(t) < 0.0  for all t
+	    if((route_list[i]).GP.lambda.value < M_PI){
+	      //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
+	      x_lo_s = M_PI;
+	      x_hi_s = 2.0*M_PI;
+	    }else{
+	      //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
+	      x_lo_s = 0.0;
+	      x_hi_s = M_PI;
+	    }
+
+	  }
+
+	  (route_list[i]).temp_prefix = prefix;
+	  F.params = &(route_list[i]);
+	  F.function = &((route_list[i]).lambda_minus_pi);
+
+	  //solve for t_s
+      
+	  gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
+
+	  cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+	  cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+
+	  iter = 0;
+	  do{
+      
+	    iter++;
+	    status = gsl_root_fsolver_iterate(s);
+      
+	    x = gsl_root_fsolver_root(s);
+	    x_lo_s = gsl_root_fsolver_x_lower(s);
+	    x_hi_s = gsl_root_fsolver_x_upper(s);
+	    status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
+	    if(status == GSL_SUCCESS){
+	      cout << new_prefix.value << "Converged:\n";
+	    }
+	    cout << new_prefix.value << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
+	  }
+	  while((status == GSL_CONTINUE) && (iter < max_iter));
+
+	  t_s.value = (x_lo_s+x_hi_s)/2.0;
+	  t_s.print(String("t_*"), new_prefix, cout);
+
+
+	  //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+      
+	  plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
+      
+	  plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
+	  
+	}
+
       }
-
+    
     }
+
 
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-  command << "LANG=C sed 's/#route_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
+  command << "LANG=C sed 's/#route_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+
 
   
+  //replace line with position plots
+  
+  plot_command.str("");
+  for(i=0; i<position_list.size(); i++){
+    //set the key in the correct position for the position that will be plotted 
+    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(route_list.size()+i+1)) << "*key_spacing\\\n";
 
+    plot_command << "plot \"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"\\\n";
+  }
+  //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
+  command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
+
+
+  //add the overall plotting command to command string
   command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";
+
   
+  //execute the command string
   system(command.str().c_str());
 
   //read the job id from file_id
@@ -3169,20 +3276,35 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
 }
 
-bool Sight::reduce(String prefix){
+bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
 
   bool check = true;
   String new_prefix;
+  stringstream temp;
+
+  temp.clear();
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  ((*circle_of_equal_altitude).type.value) = 'c';
   
   compute_H_a(new_prefix);
-  check &= get_coordinates(new_prefix);
+  check &= get_coordinates(circle_of_equal_altitude, new_prefix);
+
+  //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
+  temp <<  (*this).body.name.value << " " << (*this).time.to_string(display_precision).str().c_str() << " TAI, " << (*this).label.value;
+  ((*circle_of_equal_altitude).label).set(String(temp.str()), new_prefix);
+   
   check &= compute_H_o(new_prefix);
+  ((*circle_of_equal_altitude).omega.value) = M_PI/2.0 - (H_o.value);
+  //because *circle_of_equal_altitude has been generated from this Sight, I link it to the sight by setting related_sight
+  ((*circle_of_equal_altitude).related_sight) = this;
 
   if(!check){
+    
     cout << prefix.value << RED << "Sight cannot be reduced!\n" << RESET;
+    
   }
 
   return check;
@@ -3459,16 +3581,20 @@ double Sight::dH_refraction(double z, void* sight){
   
 }
 
-double Sight::lambda_circle_of_equal_altitude_minus_pi(double x, void* sight){
+//this function returns the longitude lambda of a circle of equal altitude (*this) - pi
+double Route::lambda_minus_pi(double t, void* route){
 
-  Sight* a = (Sight*)sight;
-  
-  Angle t;
-  (t.value) = x;
-  
-  return((((*a).circle_of_equal_altitude(t)).lambda.value) - M_PI);
+  Route* r = (Route*)route;
+  String new_prefix;
 
-  
+  //append \t to prefix
+  new_prefix = ((*r).temp_prefix).append(String("\t"));
+
+  ((*r).l.value) = Re * sin(((*r).omega.value)) * t;
+  (*r).compute_end(new_prefix);
+
+  return(((*r).end.lambda.value) - M_PI);
+
 }
 
 
@@ -3695,7 +3821,7 @@ void Length::print(String name, String unit, String prefix, ostream& ostr){
  
 }
 
-bool Sight::get_coordinates(String prefix){
+bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
 
   File file;
   stringstream filename, line_ins;
@@ -3710,8 +3836,6 @@ bool Sight::get_coordinates(String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
  
-  
-
   if((body.type.value) != "star"){
     filename << "data/" << body.name.value << ".txt";
   }else{
@@ -3795,22 +3919,22 @@ bool Sight::get_coordinates(String prefix){
 	cout << new_prefix.value << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
       }
 
-      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.lambda).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).lambda).value)) != GSL_SUCCESS){
 	check &= false; 
       }else{
-	(GP.lambda).normalize();
-	(GP.lambda).print(String("GHA"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).lambda).normalize();
+	(((*circle_of_equal_altitude).GP).lambda).print(String("GHA"), new_prefix, cout);
       }	
-      //(GP.lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
+      //(((*circle_of_equal_altitude).GP).lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
 
-      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).phi).value)) != GSL_SUCCESS){
 	check &= false; 
       }else{
-	(GP.phi).normalize();
-	(GP.phi).print(String("d"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).phi).normalize();
+	(((*circle_of_equal_altitude).GP).phi).print(String("d"), new_prefix, cout);
       }	
-      //(GP.phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
+      //(((*circle_of_equal_altitude).GP).phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
       if(gsl_spline_eval_e(interpolation_r, (time.MJD)-MJD_min-((double)l_min)/L, acc, &(r.value)) != GSL_SUCCESS){
 	check &= false; 
@@ -3881,18 +4005,18 @@ bool Sight::get_coordinates(String prefix){
       if(gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
 
       
-      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.lambda).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).lambda).value)) != GSL_SUCCESS){
 	check &= false;
       }else{
-	(GP.lambda).normalize();
-	(GP.lambda).print(String("GHA"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).lambda).normalize();
+	(((*circle_of_equal_altitude).GP).lambda).print(String("GHA"), new_prefix, cout);
       }
 
-      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((GP.phi).value)) != GSL_SUCCESS){
+      if(gsl_spline_eval_e(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc, &((((*circle_of_equal_altitude).GP).phi).value)) != GSL_SUCCESS){
 	check &= false;
       }else{
-	(GP.phi).normalize();
-	(GP.phi).print(String("d"), new_prefix, cout);
+	(((*circle_of_equal_altitude).GP).phi).normalize();
+	(((*circle_of_equal_altitude).GP).phi).print(String("d"), new_prefix, cout);
       }
 
     }

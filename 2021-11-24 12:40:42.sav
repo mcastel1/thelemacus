@@ -57,6 +57,15 @@
 			starting heading = 23° 2.000000000000099475983006414026'
 			length = 4000 nm
 			label = 2021-11-23 19:14:14
+		Route #2:
+			type = o
+			start position:
+				latitude = 33° 2.9999999999998294697434175759554'
+				longitude = 33° 2.9999999999998294697434175759554'
+				label = 2021-11-24 12:39:56
+			starting heading = 33° 2.9999999999998294697434175759554'
+			length = 2222 nm
+			label = 2021-11-24 12:40:01
 	Positions in the plot:
 		Position #1:
 			latitude = 48° 51.179385474737415506751858629286'

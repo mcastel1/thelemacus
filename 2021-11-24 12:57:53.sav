@@ -49,6 +49,14 @@
 			label = Sight was taken at BGC
 	Routes in the plot:
 		Route #1:
+			type = c
+			ground position:
+				latitude = 327째 27.452227772226933666388504207134'
+				longitude = 285째 0.26524000526478630490601062774658'
+				label =  tr. w o, COG = 120'�' 2'\'', SOG = 6 kt
+			aperture angle = 65째 25.369107990062502722139470279217'
+			label = moon 2021-06-21 21:39:32 TAI, Sight was taken at BGC tr. w o, COG = 120'�' 2'\'', SOG = 6 kt
+		Route #2:
 			type = l
 			start position:
 				latitude = 34째 2.9999999999998294697434175759554'

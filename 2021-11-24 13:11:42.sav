@@ -49,6 +49,14 @@
 			label = Sight was taken at BGC
 	Routes in the plot:
 		Route #1:
+			type = c
+			ground position:
+				latitude = 22째 11.03970768916639144663349725306'
+				longitude = 55째 54.498497872691160637259599752724'
+				label = , tr. w l, COG = 33'�' 23'\'', l = 223.2 nm
+			aperture angle = 56째 25.687960654880725996918044984341'
+			label = arcturus 2021-07-06 23:08:53.82 TAI, Sight was taken at BGC tr. w l, COG = 33'�' 23'\'', SOG = 0.3 kt
+		Route #2:
 			type = l
 			start position:
 				latitude = 34째 2.9999999999998294697434175759554'

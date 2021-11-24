@@ -1,0 +1,23 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 33° 2.9999999999998294697434175759554'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2023-02-03
+				hour of master-clock date and hour of sight = 22:02:02
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-11-23 14:54:29
+	Routes in the plot:
+			type = c
+			ground position:
+				latitude = 343° 36.51718758780361895333044230938'
+				longitude = 147° 5.8131059709779719923972152173519'
+				label = 
+			aperture angle = 73° 16.277153884740016565046971663833'

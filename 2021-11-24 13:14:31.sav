@@ -49,6 +49,14 @@
 			label = Sight was taken at BGC
 	Routes in the plot:
 		Route #1:
+			type = c
+			ground position:
+				latitude = 37째 15.554905820669091554009355604649'
+				longitude = 44째 35.22193976908837953487818595022'
+				label = , tr. w l, COG = 33'�' 3'\'', l = 1302.2 nm
+			aperture angle = 56째 25.687960654880725996918044984341'
+			label = arcturus 2021-07-06 23:08:53.82 TAI, Sight was taken at BGC, tr. w l, COG = 33'�' 3'\'', SOG = 6 kt
+		Route #2:
 			type = l
 			start position:
 				latitude = 34째 2.9999999999998294697434175759554'
@@ -59,14 +67,10 @@
 			label = 2021-11-23 19:14:14
 	Positions in the plot:
 		Position #1:
-			latitude = 48째 51.179385474737415506751858629286'
-			longitude = 357째 35.178159790311838150955736637115'
-			label = Centre Sportif Maryse Hilsz (MH)
-		Position #2:
 			latitude = 48째 51.327167000000031293893698602915'
 			longitude = 357째 35.565500000000156433088704943657'
 			label = Baby Gym Campo (BGC)
-		Position #3:
+		Position #2:
 			latitude = 48째 51.309166999999860081516089849174'
 			longitude = 357째 35.41566699999748379923403263092'
 			label = My Place (MP)

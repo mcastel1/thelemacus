@@ -2794,18 +2794,25 @@ void Plot::transport_route(unsigned int i, String prefix){
 
   stringstream name;
   String new_prefix;
+  Route original_route;
+  Answer keep_original;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
   name.str("");
   name << "Route to be transported: Route #" << i+1;
+
+  original_route = route_list[i];
   
   (route_list[i]).print(String(name.str().c_str()), new_prefix, cout);
-  
-  (route_list[i]).transport(prefix);
-  
+  (route_list[i]).transport(prefix);  
   cout << prefix.value << "Route transported.\n";
+
+  keep_original.enter(String("whether you want to keep the original route"), new_prefix);
+  if(keep_original.value == 'y'){
+    route_list.insert(route_list.begin()+i, original_route);
+  }
 
 }
 

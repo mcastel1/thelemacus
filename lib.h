@@ -2821,18 +2821,25 @@ void Plot::transport_position(unsigned int i, String prefix){
 
   stringstream name;
   String new_prefix;
+  Position original_position;
+  Answer keep_original;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
   name.str("");
   name << "Position to be transported: Position #" << i+1;
-  
-  (position_list[i]).print(String(name.str().c_str()), new_prefix, cout);
-  
+
+  original_position = position_list[i];
+
+  (position_list[i]).print(String(name.str().c_str()), new_prefix, cout); 
   (position_list[i]).transport(prefix);
-  
   cout << prefix.value << "Position transported.\n";
+
+  keep_original.enter(String("whether you want to keep the original position"), new_prefix);
+  if(keep_original.value == 'y'){
+    position_list.insert(position_list.begin()+i, original_position);
+  }
 
 }
 

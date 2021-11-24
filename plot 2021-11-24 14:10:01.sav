@@ -80,10 +80,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-lambda_min = lambda_inv(-3.9508194428604599401921859680442);
-lambda_max = lambda_inv(12.43252969630120041699683497427);
-phi_min = phi_inv(-4.172062810462279891510206653038);
-phi_max = phi_inv(4.0970822668784503406413932680152);
+lambda_min = 179.03166666666666628771054092795;
+lambda_max = 181.05333333333334167036809958518;
+phi_min = 320.23166666666662649731733836234;
+phi_max = 80.886666666666670266749861184508;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -309,16 +309,13 @@ while(1){
 
 	
  set key at graph key_x, graph key_y - 6*key_spacing
-plot "+" u (xe(K*(5.6768128462198941264205132029019))):(ye(K*(0.78447771203860283684150545013836))) w p lw 2 lt 1 ti "Centre Sportif Maryse Hilsz (MH), tr. w. l, COG = 100° 2', l = 1346 nm"
+plot "+" u (xe(K*(6.2410583415053171307818047353067))):(ye(K*(0.85264552071863697335629694862291))) w p lw 2 lt 1 ti "Centre Sportif Maryse Hilsz (MH)"
 
  set key at graph key_x, graph key_y - 7*key_spacing
 plot "+" u (xe(K*(6.241171014205057154811129294103))):(ye(K*(0.85268850862179457195111353939865))) w p lw 2 lt 2 ti "Baby Gym Campo (BGC)"
 
  set key at graph key_x, graph key_y - 8*key_spacing
-plot "+" u (xe(K*(1.8005378366935023137784810387529))):(ye(K*(0.49451417736423564086578608112177))) w p lw 2 lt 3 ti "Baby Gym Campo (BGC), tr. w. o, COG = 300° 2', l = 4704.12 nm"
-
- set key at graph key_x, graph key_y - 9*key_spacing
-plot "+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 4 ti "My Place (MP)"
+plot "+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 3 ti "My Place (MP)"
 
 	
  set key at graph key_x, graph key_y - 1*key_spacing

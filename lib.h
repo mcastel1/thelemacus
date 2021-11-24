@@ -1283,11 +1283,14 @@ void Route::print(String name, String prefix, ostream& ostr){
   }
 
   label.print(String("label"), new_prefix, ostr);
+
+  /*
   if(related_sight != NULL){
     
     (*related_sight).label.print(String("label of related sight"), new_prefix, ostr);
     
   }
+  */
   
 }
 
@@ -3295,6 +3298,8 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
    
   check &= compute_H_o(new_prefix);
   ((*circle_of_equal_altitude).omega.value) = M_PI/2.0 - (H_o.value);
+  //because *circle_of_equal_altitude has been generated from this Sight, I link it to the sight by setting related_sight
+  ((*circle_of_equal_altitude).related_sight) = this;
 
   if(!check){
     

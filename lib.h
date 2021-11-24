@@ -1283,7 +1283,11 @@ void Route::print(String name, String prefix, ostream& ostr){
   }
 
   label.print(String("label"), new_prefix, ostr);
-  (*related_sight).label.print(String("label of related sight"), new_prefix, ostr);
+  if(related_sight != NULL){
+    
+    (*related_sight).label.print(String("label of related sight"), new_prefix, ostr);
+    
+  }
   
 }
 
@@ -2145,10 +2149,10 @@ class Plot{
   void remove_position(unsigned int, String);
   void remove_route(unsigned int, String);
   bool read_from_file(String, String);
-  void print(String, ostream&);
+  void print(bool, String, ostream&);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
-  void print_routes(String, ostream&);
+  void print_routes(bool, String, ostream&);
   void show(String);
   void menu(String);
 
@@ -2311,7 +2315,7 @@ void Plot::menu(String prefix){
   case 1:{
     
     add_sight(new_prefix);
-    print(new_prefix, cout);
+    print(false, new_prefix, cout);
     show(new_prefix);
     menu(prefix);  
 
@@ -2323,13 +2327,13 @@ void Plot::menu(String prefix){
 
     if(route_list.size() > 0){
 
-      print_routes(new_prefix, cout);
+      print_routes(true, new_prefix, cout);
 
       enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to transport"), new_prefix);	
       i--;
    
       transport_route(i, new_prefix);
-      print_routes(new_prefix, cout);
+      print_routes(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2346,13 +2350,13 @@ void Plot::menu(String prefix){
 
     if(route_list.size() > 0){
  
-      print_routes(new_prefix, cout);
+      print_routes(true, new_prefix, cout);
 
       enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);	
       i--;
    
       remove_route(i, new_prefix);
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2367,7 +2371,7 @@ void Plot::menu(String prefix){
   case 4:{
 
     add_position(new_prefix);
-    print(new_prefix, cout);
+    print(true, new_prefix, cout);
     show(new_prefix);
     menu(prefix);  
 
@@ -2385,7 +2389,7 @@ void Plot::menu(String prefix){
       i--;
 
       transport_position(i, new_prefix);
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2408,7 +2412,7 @@ void Plot::menu(String prefix){
       i--;
 	
       remove_position(i, new_prefix);
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2423,7 +2427,7 @@ void Plot::menu(String prefix){
   case 7:{
 
     add_route(new_prefix);
-    print(new_prefix, cout);
+    print(true, new_prefix, cout);
     show(new_prefix);
     menu(prefix);  
 
@@ -2435,13 +2439,13 @@ void Plot::menu(String prefix){
     if(route_list.size() > 0){
 
 
-      print_routes(new_prefix, cout);
+      print_routes(true, new_prefix, cout);
 
       enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);
       i--;
 	
       remove_route(i, new_prefix);
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
 
     }else{
@@ -2469,7 +2473,7 @@ void Plot::menu(String prefix){
       file.set_name(temp.str());
 
       file.open(String("out"),new_prefix);    
-      print(new_prefix, file.value);
+      print(false, new_prefix, file.value);
       file.close(new_prefix);
 
       command.str("");
@@ -2494,7 +2498,7 @@ void Plot::menu(String prefix){
     filename.value = line_ins.str();
     
     if(read_from_file(filename, new_prefix)){
-      print(new_prefix, cout);
+      print(true, new_prefix, cout);
       show(new_prefix);
     }
         
@@ -2516,7 +2520,7 @@ void Plot::menu(String prefix){
     //print all plots to file with the filename above
     ((file.name).value) = line.value;
     file.open(String("out"), new_prefix);
-    print(new_prefix, file.value);
+    print(false, new_prefix, file.value);
     file.close(new_prefix);
 
     //if plot.plt has been filled, here I save it with the name 'plot' + filename above
@@ -2575,14 +2579,14 @@ Plot::Plot(Catalog* cata){
   }
 */
 
-void Plot::print(String prefix, ostream& ostr){
+void Plot::print(bool print_all_routes, String prefix, ostream& ostr){
 
   if(sight_list.size()>0){
     print_sights(prefix, ostr);
   }
 
   if(route_list.size()>0){
-    print_routes(prefix, ostr);
+    print_routes(print_all_routes, prefix, ostr);
   }
   
   if(position_list.size()>0){
@@ -2632,20 +2636,31 @@ void Plot::print_positions(String prefix, ostream& ostr){
 
 }
 
-void Plot::print_routes(String prefix, ostream& ostr){
+void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
 
   stringstream name;
-  unsigned int i;
+  unsigned int i, j;
   String new_prefix;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
    
   ostr << prefix.value << "Routes in the plot:\n";
-  for(i=0; i<route_list.size(); i++){
-    name.str("");
-    name << "Route #" << i+1;
-    (route_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
+  
+  for(i=0, j=0; i<route_list.size(); i++){
+    
+    
+    if(((route_list[i].related_sight) == NULL) || print_all_routes){
+      
+      name.str("");
+      name << "Route #" << j+1;
+      
+      (route_list[i]).print(String(name.str().c_str()), new_prefix, ostr);
+
+      j++;
+      
+    }
+    
   }
 
 

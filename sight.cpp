@@ -54,6 +54,7 @@
 - include computation of crossing points between circles of equal altitude
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 - include reading of dummy line in Position::read
+- remove double printing of tr. ... labels when translating a position or route
 */
 
 

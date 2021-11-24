@@ -617,6 +617,8 @@ class Route{
   //the length of the route
   Length l;
   Speed sog;
+  //this points to a Sight object from which the Route has been created, if type = 'c'. 
+  Sight* related_sight;
 
   void enter(String, String);
   void print(String, String, ostream&);

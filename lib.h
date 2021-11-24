@@ -2797,7 +2797,8 @@ void Plot::remove_sight(unsigned int i, String prefix){
   (sight_list[i]).print(String(name.str().c_str()), prefix, cout);
   
   sight_list.erase(sight_list.begin()+i);
-  
+
+  //update the linking indexed of routes in accordance with the deletion of the sight
   for(j=0; j<route_list.size(); j++){
     
     if(((route_list[j]).related_sight != -1) && ((route_list[j]).related_sight >= ((int)i))){
@@ -2833,6 +2834,7 @@ void Plot::remove_position(unsigned int i, String prefix){
 
 void Plot::remove_route(unsigned int i, String prefix){
 
+  unsigned int j;
   stringstream name;
 
   name.str("");
@@ -2841,6 +2843,21 @@ void Plot::remove_route(unsigned int i, String prefix){
   (route_list[i]).print(String(name.str().c_str()), prefix, cout);
   
   route_list.erase(route_list.begin()+i);
+
+  //update the linking indexed of sights in accordance with the deletion of the route
+  for(j=0; j<sight_list.size(); j++){
+    
+    if(((sight_list[j]).related_route != -1) && ((sight_list[j]).related_route >= ((int)i))){
+      
+      if((sight_list[j]).related_route == ((int)i)){
+	(sight_list[j]).related_route = -1;
+      }else{
+	((sight_list[j]).related_route)--;
+      }
+
+    }
+      
+  }
   
   cout << prefix.value << "Route removed.\n";
 

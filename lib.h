@@ -1279,7 +1279,6 @@ class Sight{
   bool reduce(Route*, String);
   bool check_data_time_interval(String);
 
-   
 };
 
 
@@ -1358,7 +1357,9 @@ void Route::enter(String name, String prefix){
   }
 
   label.enter(String("label"), new_prefix);
-  related_sight = NULL;
+
+  //given that the route has just been entered, it is not yet related to any sight, thus I set
+  related_sight = -1;
 
 }
 
@@ -2019,7 +2020,8 @@ void Route::transport(String prefix){
     //append 'translated to ...' to the label of sight, and make this the new label of sight
     temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision).str().c_str() << ", l = " << transporting_route.l.value << " nm";
     label.set(temp_label.str(), prefix);
-    related_sight = NULL;
+    //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set 
+    related_sight = -1;
 
     print(String("transported route"), prefix, cout);
 
@@ -2077,6 +2079,9 @@ bool Sight::read_from_file(File& file, String prefix){
   check &= check_data_time_interval(prefix);
 
   label.read_from_file(String("label"), file, false, new_prefix);
+  
+  //given that the sight is not yet related to a route, I set 
+  related_route = -1;
 
   if(!check){
     cout << prefix.value << RED << "Error reading sight!\n" << RESET;
@@ -2241,6 +2246,11 @@ bool Plot::read_from_file(String filename, String prefix){
 
 	  route_list.push_back(route);
 	  cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
+
+	  //I link the sight to the route, and the route to the sight
+	  route_list[route_list.size()-1].related_sight = sight_list.size()-1;
+	  sight_list[sight_list.size()-1].related_route = route_list.size()-1;
+	  
 	}
 	  
       }
@@ -2703,8 +2713,8 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
   
   for(i=0, j=0; i<route_list.size(); i++){
     
-    
-    if(((route_list[i].related_sight) == NULL) || print_all_routes){
+    //if print_all_routes = false, I only print routes which are linke to a sight
+    if(((route_list[i].related_sight) == -1) || print_all_routes){
       
       name.str("");
       name << "Route #" << j+1;
@@ -2733,7 +2743,12 @@ bool Plot::add_sight(String prefix){
   
   (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
   check &= ((sight_list[sight_list.size()-1]).reduce(&(route_list[route_list.size()-1]), prefix));
-
+  
+  //I link the sight to the route, and the route to the sight
+  (sight_list[sight_list.size()-1]).related_route = route_list.size()-1;
+  (route_list[route_list.size()-1]).related_sight = sight_list.size()-1;
+  
+  
   if(check){
     (sight_list[sight_list.size()-1]).print(String("Sight"), prefix, cout);
   
@@ -3329,6 +3344,9 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   }while(!check_data_time_interval(prefix));
 
   label.enter(String("label"), new_prefix);
+
+  //given that the sight is not yet linke to a route, I set
+  related_route = -1;
   
   file_init.close(prefix);
 
@@ -3363,8 +3381,6 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
    
   check &= compute_H_o(new_prefix);
   ((*circle_of_equal_altitude).omega.value) = M_PI/2.0 - (H_o.value);
-  //because *circle_of_equal_altitude has been generated from this Sight, I link it to the sight by setting related_sight
-  ((*circle_of_equal_altitude).related_sight) = this;
 
   if(!check){
     
@@ -3783,6 +3799,7 @@ void Body::enter(Catalog catalog, String prefix){
 Sight::Sight(void){
 
   atmosphere.set();
+  related_route = -1;
   
 }
 

@@ -5,5 +5,5 @@ minimal longitude = 179° 1.9'
 maximal longitude = 181° 3.2'
 index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-minimal latitude = -80° 13.9'
+minimal latitude = -40° 13.9'
 maximal latitude = 80° 53.2'

@@ -1072,7 +1072,7 @@ Route Position::transport(String prefix){
   
   route.compute_end(new_prefix);
 
-  temp_label << label.value << " tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << (route.sog).value << " kt";
+  temp_label << label.value << ", tr. w " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << (route.l).value << " nm";
   (route.end.label).set(temp_label.str(), prefix);
 
   (*this) = route.end;
@@ -1990,7 +1990,7 @@ void Route::transport(String prefix){
   
 
     //append 'translated to ...' to the label of sight, and make this the new label of sight
-    temp_label << label.value << " tr. w " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << transporting_route.sog.value << " kt";
+    temp_label << label.value << ", tr. w " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << transporting_route.sog.value << " kt";
     label.set(temp_label.str(), prefix);
     related_sight = NULL;
 

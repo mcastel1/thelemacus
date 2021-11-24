@@ -844,8 +844,22 @@ class Time{
   void add(Chrono);
   
   stringstream to_string(unsigned int);
+  bool operator> (const Time&);
   
 };
+
+//evaluates whether Time (*this) is larger than t
+bool Time::operator>(const Time& t){
+
+  Time s;
+  
+  (*this).to_MJD();
+  s = t;
+  s.to_MJD();
+
+  return((((*this).MJD) > (s.MJD)));
+  
+}
 
 stringstream Time::to_string(unsigned int precision){
 
@@ -1059,8 +1073,16 @@ Route Position::transport(String prefix){
   route.start = (*this); 
   route.alpha.enter(String("Course Over Ground"), true, new_prefix);
 
-  t_start.enter(String("start course time"), new_prefix);
-  t_end.enter(String("end course time"), new_prefix);
+  do{
+    
+    t_start.enter(String("start time of course"), new_prefix);
+    t_end.enter(String("end time of course"), new_prefix);
+    if(t_start > t_end){
+      cout << new_prefix.value << RED << "start time of course is larger than end time of course!\n" << RESET; 
+    }
+    
+  }while(t_start > t_end);
+  
   (route.sog).enter(String("Speed Over Ground [kt]"), new_prefix);
   
   t_start.to_MJD();
@@ -1743,12 +1765,14 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, St
 
 
 Angle Angle::operator+ (const Angle& angle){
+  
   Angle temp;
 
   temp.value = value +angle.value;
   temp.normalize();
 
   return temp;
+  
 }
 
 Angle Angle::operator- (const Angle& angle){

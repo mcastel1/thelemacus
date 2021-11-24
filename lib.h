@@ -62,6 +62,7 @@ class Date;
 class Chrono;
 class Route;
 class Sight;
+class Atmosphere;
 
 class String{
 
@@ -617,7 +618,7 @@ class Route{
   //the length of the route
   Length l;
   Speed sog;
-  //this points to a Sight object from which the Route has been created, if type = 'c'. 
+  //this points to a Sight object from which the Route has been created, if type = 'c'. If the route does not come from any sight, then related_sight = NULL
   Sight* related_sight;
 
   void enter(String, String);
@@ -663,7 +664,7 @@ void Route::read_from_file(File& file, String prefix){
   }
   
   label.read_from_file(String("label"), file, false, new_prefix);
-
+  related_sight = NULL;
 
 }
  
@@ -1185,6 +1186,78 @@ void Route::compute_end(String prefix){
 
 }
 
+class Atmosphere{
+
+ public:
+  Length earth_radius;
+  unsigned int n_layers;
+  double A, B, P_dry_0, alpha, beta, gamma, T0;
+  vector<double> h, lambda, t;
+  void set(void);
+  double T(Length), n(Length), dTdz(Length), dndz(Length);
+
+};
+
+class Body{
+
+ public:
+  String name, type;
+  Length radius;
+  Angle RA, d; 
+  void enter(Catalog, String);
+  void print(String, String, ostream&);
+  void read_from_file(String, File&, String);
+  
+};
+
+class Limb{
+
+ public:
+  char value;
+  void enter(String, String);
+  void print(String, String, ostream&);
+  void read_from_file(String, File&, bool, String);
+  
+};
+
+
+class Sight{
+
+ public:
+  Time master_clock_date_and_hour, time;
+  //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
+  Chrono TAI_minus_UTC, stopwatch;
+  Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
+  Length r, height_of_eye;
+  Atmosphere atmosphere;
+  Body body;
+  Limb limb;
+  // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading
+  Answer artificial_horizon, use_stopwatch;
+  //label to add a note about the sight
+  String label;
+
+  Sight();
+  static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
+  bool get_coordinates(Route*, String);
+  void compute_DH_dip(String);
+  bool compute_DH_refraction(String);
+  void compute_DH_parallax_and_limb(String);
+
+  void compute_H_a(String);
+  bool compute_H_o(String);
+
+  bool enter(Catalog, String, String);
+  void print(String, String, ostream&);
+  bool read_from_file(File&, String);
+  bool reduce(Route*, String);
+  bool check_data_time_interval(String);
+
+  //Position circle_of_equal_altitude(Angle);
+   
+};
+
+
 void Route::print(String name, String prefix, ostream& ostr){
 
   String s, new_prefix;
@@ -1210,6 +1283,7 @@ void Route::print(String name, String prefix, ostream& ostr){
   }
 
   label.print(String("label"), new_prefix, ostr);
+  (*related_sight).label.print(String("label of related sight"), new_prefix, ostr);
   
 }
 
@@ -1252,6 +1326,7 @@ void Route::enter(String name, String prefix){
   }
 
   label.enter(String("label"), new_prefix);
+  related_sight = NULL;
 
 }
 
@@ -1688,15 +1763,6 @@ Angle Angle::operator/ (const double& x){
 }
 
 
-class Limb{
-
- public:
-  char value;
-  void enter(String, String);
-  void print(String, String, ostream&);
-  void read_from_file(String, File&, bool, String);
-  
-};
 
 void Limb::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
@@ -1731,17 +1797,6 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, Stri
   
 }
 
-class Body{
-
- public:
-  String name, type;
-  Length radius;
-  Angle RA, d; 
-  void enter(Catalog, String);
-  void print(String, String, ostream&);
-  void read_from_file(String, File&, String);
-  
-};
 
 void Body::read_from_file(String name, File& file, String prefix){
 
@@ -1873,17 +1928,6 @@ void Catalog::add(String type, String name, double radius){
 }
 
 
-class Atmosphere{
-
- public:
-  Length earth_radius;
-  unsigned int n_layers;
-  double A, B, P_dry_0, alpha, beta, gamma, T0;
-  vector<double> h, lambda, t;
-  void set(void);
-  double T(Length), n(Length), dTdz(Length), dndz(Length);
-
-};
 
 
 void Answer::enter(String name, String prefix){
@@ -1921,41 +1965,6 @@ void Answer::print(String name, String prefix, ostream& ostr){
 
 
 
-class Sight{
-
- public:
-  Time master_clock_date_and_hour, time;
-  //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
-  Chrono TAI_minus_UTC, stopwatch;
-  Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
-  Length r, height_of_eye;
-  Atmosphere atmosphere;
-  Body body;
-  Limb limb;
-  // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading
-  Answer artificial_horizon, use_stopwatch;
-  //label to add a note about the sight
-  String label;
-
-  Sight();
-  static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
-  bool get_coordinates(Route*, String);
-  void compute_DH_dip(String);
-  bool compute_DH_refraction(String);
-  void compute_DH_parallax_and_limb(String);
-
-  void compute_H_a(String);
-  bool compute_H_o(String);
-
-  bool enter(Catalog, String, String);
-  void print(String, String, ostream&);
-  bool read_from_file(File&, String);
-  bool reduce(Route*, String);
-  bool check_data_time_interval(String);
-
-  //Position circle_of_equal_altitude(Angle);
-   
-};
 
 //this function transports the Route (*this) with the Route transporting route
 void Route::transport(String prefix){
@@ -1976,6 +1985,7 @@ void Route::transport(String prefix){
     //append 'translated to ...' to the label of sight, and make this the new label of sight
     temp_label << label.value << " tr. w " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision).str().c_str() << ", SOG = " << transporting_route.sog.value << " kt";
     label.set(temp_label.str(), prefix);
+    related_sight = NULL;
 
     print(String("transported route"), prefix, cout);
 

@@ -619,8 +619,8 @@ class Route{
   //the length of the route
   Length l;
   Speed sog;
-  //this points to a Sight object from which the Route has been created, if type = 'c'. If the route does not come from any sight, then related_sight = NULL
-  Sight* related_sight;
+  //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1. 
+  int related_sight;
 
   void enter(String, String);
   void print(String, String, ostream&);
@@ -665,7 +665,8 @@ void Route::read_from_file(File& file, String prefix){
   }
   
   label.read_from_file(String("label"), file, false, new_prefix);
-  related_sight = NULL;
+  //when a sight is read from file, it is not yet linked to any route, thus I set
+  related_sight = -1;
 
 }
  
@@ -1259,6 +1260,8 @@ class Sight{
   Answer artificial_horizon, use_stopwatch;
   //label to add a note about the sight
   String label;
+  //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1. 
+  int related_route;
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -1276,7 +1279,6 @@ class Sight{
   bool reduce(Route*, String);
   bool check_data_time_interval(String);
 
-  //Position circle_of_equal_altitude(Angle);
    
 };
 

@@ -20,6 +20,7 @@
 #define YELLOW     "\033[1;33m"   
 #define CYAN "\033[1;36m"      
 #define RESET   "\033[0m"
+#define BOLD     "\033[1m"   
 //all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
@@ -2329,10 +2330,34 @@ void Plot::menu(String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
   
-  cout << "You can:\n";
-  for(i=0; i<choices.size(); i++){
-    cout << "\t(" << i+1 << ") " << choices[i] << "\n";
+  cout << prefix.value << "You can:\n";
+  
+  cout << prefix.value << BOLD << "Sights:" << RESET << "\n";
+  for(i=0; i<3; i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
+  
+  cout << prefix.value << BOLD << "Positions:" << RESET << "\n";
+  for(i=3; i<6; i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+  }
+  
+  cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
+  for(i=6; i<8; i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+  }
+
+  cout << prefix.value << BOLD << "Files:" << RESET << "\n";
+  for(i=8; i<10; i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+  }
+  
+  i=10;
+  cout << prefix.value << "\n";
+  cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+
+
+
   enter_unsigned_int(&i, true, 1, choices.size()+1, String("choice #"), prefix);
 
   

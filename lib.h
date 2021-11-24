@@ -2789,6 +2789,7 @@ void Plot::add_route(String prefix){
 void Plot::remove_sight(unsigned int i, String prefix){
 
   stringstream name;
+  unsigned int j;
 
   name.str("");
   name << "Sight to be removed: Sight #" << i+1;
@@ -2796,6 +2797,20 @@ void Plot::remove_sight(unsigned int i, String prefix){
   (sight_list[i]).print(String(name.str().c_str()), prefix, cout);
   
   sight_list.erase(sight_list.begin()+i);
+  
+  for(j=0; j<route_list.size(); j++){
+    
+    if(((route_list[j]).related_sight != -1) && ((route_list[j]).related_sight >= ((int)i))){
+      
+      if((route_list[j]).related_sight == ((int)i)){
+	(route_list[j]).related_sight = -1;
+      }else{
+	((route_list[j]).related_sight)--;
+      }
+
+    }
+      
+  }
   
   cout << prefix.value << "Sigh removed.\n";
 

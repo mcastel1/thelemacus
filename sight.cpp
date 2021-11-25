@@ -46,7 +46,6 @@
 - all functions ..read_from_file shouuld return a bool to signal whether the reading was successful or not
 - check whether H_o > 0, and if it is not, restart the procedure to enter the sight
 - adjust the number of points of coastlines as a function of the plot scale: the larger the scale, the lesser points
-- when you transport a sight and save to file, in the saved file there is no trace of the fact that the sight has been transported 
 - 360 deg E in xlabel -> 0 deg
 - make sure that code does not crash if special characters are entered in position/sight labels
 - remove horizontal lines in gnuplot plot
@@ -55,6 +54,8 @@
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 - include reading of dummy line in Position::read
 - remove double printing of tr. ... labels when translating a position or route
+- add modify sight, route and position in menu
+- when you delete a sight, ask whether you want to delete the corresponding route if the sight is linked to a route. same for route <-> sight
 */
 
 

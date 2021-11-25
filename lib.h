@@ -2345,17 +2345,17 @@ void Plot::menu(String prefix){
   cout << prefix.value << "You can:\n";
   
   cout << prefix.value << BOLD << "Sights:" << RESET << "\n";
-  for(i=0; i<3; i++){
+  for(i=0; i<2; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
   
   cout << prefix.value << BOLD << "Positions:" << RESET << "\n";
-  for(i=3; i<6; i++){
+  for(i=2; i<5; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
   
   cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
-  for(i=6; i<8; i++){
+  for(i=5; i<8; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
 
@@ -2387,30 +2387,9 @@ void Plot::menu(String prefix){
     break;
 
 
+
+   
   case 2:{
-
-    if(route_list.size() > 0){
-
-      print_routes(true, new_prefix, cout);
-
-      enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to transport"), new_prefix);	
-      i--;
-   
-      transport_route(i, new_prefix);
-      print_routes(true, new_prefix, cout);
-      show(new_prefix);
-
-    }else{
-      cout << RED << "There are no routes to transport!\n" << RESET;
-    }
-
-    menu(prefix);
-   
-  }
-    break;
-
-   
-  case 3:{
 
     if(sight_list.size() > 0){
  
@@ -2432,7 +2411,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 4:{
+  case 3:{
 
     add_position(new_prefix);
     print(true, new_prefix, cout);
@@ -2443,7 +2422,7 @@ void Plot::menu(String prefix){
     break;
 
     
-  case 5:{
+  case 4:{
     
     if(position_list.size() > 0){
 
@@ -2465,7 +2444,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 6:{
+  case 5:{
 
     if(position_list.size() > 0){
 
@@ -2488,7 +2467,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 7:{
+  case 6:{
 
     add_route(new_prefix);
     print(true, new_prefix, cout);
@@ -2497,6 +2476,29 @@ void Plot::menu(String prefix){
 
   }
     break;
+
+      case 7:{
+
+    if(route_list.size() > 0){
+
+      print_routes(true, new_prefix, cout);
+
+      enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to transport"), new_prefix);	
+      i--;
+   
+      transport_route(i, new_prefix);
+      print_routes(true, new_prefix, cout);
+      show(new_prefix);
+
+    }else{
+      cout << RED << "There are no routes to transport!\n" << RESET;
+    }
+
+    menu(prefix);
+   
+  }
+    break;
+
 
   case 8:{
 
@@ -2630,7 +2632,7 @@ Plot::Plot(Catalog* cata){
 
   file_boundary.remove();
 
-  choices = {"Add a sight", "Transport a route", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Add a route", "Delete a route", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Add a route", "Transport a route", "Delete a route", "Save to file", "Read from file", "Exit"};
   
 }
 

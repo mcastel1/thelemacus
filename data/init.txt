@@ -7,3 +7,5 @@ index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 minimal latitude = -40° 13.9'
 maximal latitude = 80° 53.2'
+gnuplot window width = 800
+gnuplot window height = 600

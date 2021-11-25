@@ -2797,21 +2797,12 @@ void Plot::remove_sight(unsigned int i, String prefix){
   stringstream name;
   unsigned int j;
   Answer remove_related_route;
+  int i_related_route;
+
+  i_related_route = ((sight_list[i]).related_route);
 
   name.str("");
   name << "Sight to be removed: Sight #" << i+1;
-
-  if((sight_list[i]).related_route != -1){
-    
-    remove_related_route.enter(String("whether you want to remove the route related to this sight [y/n]"), prefix);
-    if(remove_related_route.value == 'y'){
-
-      remove_route(((unsigned int)((sight_list[i]).related_route)), prefix);
-      
-    }
-
-  }
-
   
   (sight_list[i]).print(String(name.str().c_str()), prefix, cout);
   
@@ -2833,8 +2824,18 @@ void Plot::remove_sight(unsigned int i, String prefix){
   }
   
   cout << prefix.value << "Sight removed.\n";
+  
 
+  if(i_related_route != -1){
+    
+    remove_related_route.enter(String("whether you want to remove the route related to this sight"), prefix);
+    if((remove_related_route.value) == 'y'){
 
+      remove_route(i_related_route, prefix);
+      
+    }
+
+  }
 
 }
 
@@ -2856,8 +2857,12 @@ void Plot::remove_position(unsigned int i, String prefix){
 void Plot::remove_route(unsigned int i, String prefix){
 
   unsigned int j;
+  int i_related_sight;
   stringstream name;
+  Answer remove_related_sight;
 
+  i_related_sight = ((route_list[i]).related_sight);
+  
   name.str("");
   name << "Route to be removed: Position #" << i+1;
   
@@ -2881,6 +2886,20 @@ void Plot::remove_route(unsigned int i, String prefix){
   }
   
   cout << prefix.value << "Route removed.\n";
+  
+
+  if(i_related_sight != -1){
+    
+    remove_related_sight.enter(String("whether you want to remove the sight related to the route"), prefix);
+    
+    if((remove_related_sight.value) == 'y'){
+
+      remove_sight(i_related_sight, prefix);
+      
+    }
+
+  }
+
 
 }
 

@@ -75,7 +75,7 @@ class String{
   void enter(String, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
-  void set(String, String);
+  void set(String, String, bool, String);
   String append(String);
   String prepend(String);
 
@@ -524,10 +524,10 @@ void String::print(String name, String prefix, ostream& ostr){
   
 }
 
-void String::set(String name, String prefix){
+void String::set(String name, String input_string, bool print_out, String prefix){
 
-  value = name.value;
-  print(name, prefix, cout);
+  value = (input_string.value);
+  if(print_out){print(name, prefix, cout);}
 
 }
 
@@ -1096,8 +1096,8 @@ Route Position::transport(String prefix){
   
   route.compute_end(new_prefix);
 
-  temp_label << label.value << ", tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << (route.l).value << " nm";
-  (route.end.label).set(temp_label.str(), prefix);
+  temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << (route.l).value << " nm";
+  (route.end.label).set(String("label of endpoint"), temp_label.str(), false, prefix);
 
   (*this) = route.end;
 
@@ -2019,7 +2019,7 @@ void Route::transport(String prefix){
 
     //append 'translated to ...' to the label of sight, and make this the new label of sight
     temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision).str().c_str() << ", l = " << transporting_route.l.value << " nm";
-    label.set(temp_label.str(), prefix);
+    label.set(String("label"), temp_label.str(), false, prefix);
     //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set 
     related_sight = -1;
 
@@ -3457,7 +3457,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
 
   //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
   temp <<  (*this).body.name.value << " " << (*this).time.to_string(display_precision).str().c_str() << " TAI, " << (*this).label.value;
-  ((*circle_of_equal_altitude).label).set(String(temp.str()), new_prefix);
+  ((*circle_of_equal_altitude).label).set(String("label"), String(temp.str()), false, new_prefix);
    
   check &= compute_H_o(new_prefix);
   ((*circle_of_equal_altitude).omega.value) = M_PI/2.0 - (H_o.value);

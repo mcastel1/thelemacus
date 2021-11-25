@@ -53,9 +53,7 @@
 - include computation of crossing points between circles of equal altitude
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 - include reading of dummy line in Position::read
-- remove double printing of tr. ... labels when translating a position or route
 - add modify sight, route and position in menu
-- when you delete a sight, ask whether you want to delete the corresponding route if the sight is linked to a route. same for route <-> sight
 */
 
 

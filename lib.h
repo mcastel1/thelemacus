@@ -2934,7 +2934,7 @@ void Plot::show(String prefix){
   gsl_function F;
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
-  Int plot_coastline_every;
+  Int plot_coastline_every, width_plot_window, height_plot_window;
   Double x_min, x_max, y_min, y_max;
   String new_prefix;
   File file_init;
@@ -2974,6 +2974,14 @@ void Plot::show(String prefix){
   system(command.str().c_str());
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
 
+
+  //read from init_file with and height of plot window
+  cout << new_prefix.value << YELLOW << "Reading width and height of plot window from file " << file_init.name.value << " ...\n" << RESET;
+  width_plot_window.read_from_file(String("width of plot window"), file_init, true, new_prefix); 
+  height_plot_window.read_from_file(String("height of plot window"), file_init, true, new_prefix); 
+  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+
+  
   //replace line with min_latitude in plot_dummy.plt
   //
 
@@ -3296,7 +3304,7 @@ void Plot::show(String prefix){
 
 
   //add the overall plotting command to command string
-  command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
+  command << "gnuplot -geometry " << (width_plot_window.value) << "x" << (height_plot_window.value) << " '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";
 
   

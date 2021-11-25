@@ -1,6 +1,6 @@
 use of stopwatch = n
 artificial horizon = y	
-plot coastline every = 135
+plot coastline every = 13500
 minimal longitude = 179° 1.9'
 maximal longitude = 181° 3.2'
 index error = 0° 1.9'

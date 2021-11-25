@@ -654,13 +654,10 @@ void Route::read_from_file(File& file, String prefix){
     
   }else{
     
-
     start.read_from_file(file, new_prefix);
-
 
     alpha.read_from_file(String("starting heading"), file, false, new_prefix);
     l.read_from_file(String("length"), file, false, new_prefix);
-
 
   }
   
@@ -1065,6 +1062,9 @@ Route Position::transport(String prefix){
 
   cout << prefix.value << "Enter route:\n";
 
+  // route is not related to any sight, so I set
+  (route.related_sight) = -1;
+  
   do{
     route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
     check = ((route.type.value == "l") || (route.type.value == "o"));
@@ -1092,7 +1092,7 @@ Route Position::transport(String prefix){
 
   (route.l).set(String("Length"), (route.sog).value*((t_end.MJD)-(t_start.MJD))*24.0, new_prefix); 
  
-  route.print (String("transport"), prefix, cout);
+  route.print(String("transport"), prefix, cout);
   
   route.compute_end(new_prefix);
 

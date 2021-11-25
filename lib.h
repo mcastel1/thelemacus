@@ -1308,13 +1308,13 @@ void Route::print(String name, String prefix, ostream& ostr){
 
   label.print(String("label"), new_prefix, ostr);
 
-  /*
-  if(related_sight != NULL){
-    
-    (*related_sight).label.print(String("label of related sight"), new_prefix, ostr);
+  
+  if(related_sight != -1){
+
+    cout << new_prefix.value << "Related sight # = " << related_sight+1 << "\n";
     
   }
-  */
+  
   
 }
 
@@ -2158,7 +2158,11 @@ void Sight::print(String name, String prefix, ostream& ostr){
   TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix, ostr);
 
   label.print(String("label"), new_prefix, ostr);
-
+  
+  if(related_route != -1){
+    cout << new_prefix.value << "Related route # = " << related_route+1 << "\n";
+  }
+  
 }
 
 class Plot{
@@ -2792,9 +2796,22 @@ void Plot::remove_sight(unsigned int i, String prefix){
 
   stringstream name;
   unsigned int j;
+  Answer remove_related_route;
 
   name.str("");
   name << "Sight to be removed: Sight #" << i+1;
+
+  if((sight_list[i]).related_route != -1){
+    
+    remove_related_route.enter(String("whether you want to remove the route related to this sight [y/n]"), prefix);
+    if(remove_related_route.value == 'y'){
+
+      remove_route(((unsigned int)((sight_list[i]).related_route)), prefix);
+      
+    }
+
+  }
+
   
   (sight_list[i]).print(String(name.str().c_str()), prefix, cout);
   
@@ -2815,7 +2832,9 @@ void Plot::remove_sight(unsigned int i, String prefix){
       
   }
   
-  cout << prefix.value << "Sigh removed.\n";
+  cout << prefix.value << "Sight removed.\n";
+
+
 
 }
 

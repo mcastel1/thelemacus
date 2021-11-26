@@ -597,8 +597,11 @@ class Position{
   Angle phi, lambda;
   //label to add a note about the position
   String label;
-  
+  vector<String> modify_choices;
+
+  Position();
   void enter(String, String);
+  void modify(String);
   void print(String, String, ostream&);
   void read_from_file(File&, String);
   //this function transports the position and returns the Route with which it has been transported
@@ -606,6 +609,59 @@ class Position{
   stringstream to_string(unsigned int);
 
 };
+
+Position::Position(void){
+
+  modify_choices = {String("latitude"), String("longitude"), String("label")};
+
+}
+
+void Position::modify(String prefix){
+
+  unsigned int i;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+ 
+  cout << prefix.value << "Enter the item that you want to modify:\n";
+
+  for(i=0; i<modify_choices.size(); i++){
+    cout << prefix.value << "\t(" << i+1 << ") " << (modify_choices[i]).value << "\n";
+  }
+
+  enter_unsigned_int(&i, true, 1, modify_choices.size()+1, String("choice #"), prefix);
+
+  switch(i){
+
+  case 1:{
+    
+    phi.enter(String("latitude"), false, new_prefix);
+
+  }
+    break;
+
+
+  case 2:{
+    
+    lambda.enter(String("longitude"), false, new_prefix);
+
+  }
+    break;
+
+    
+  case 3:{
+    
+    label.enter(String("label"), new_prefix);
+
+  }
+    break;
+
+  }
+
+  cout << prefix.value << "Position modified\n";
+  
+}
 
 //if type = l or o, the parameters specifying the route are start, alpha, l. if type = c, the parameters specifying the route are GP and omega. 
 class Route{
@@ -2354,21 +2410,21 @@ void Plot::menu(String prefix){
   }
   
   cout << prefix.value << BOLD << "Positions:" << RESET << "\n";
-  for(i=2; i<5; i++){
+  for(i=2; i<6; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
   
   cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
-  for(i=5; i<8; i++){
+  for(i=6; i<9; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=8; i<10; i++){
+  for(i=9; i<11; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
   }
   
-  i=10;
+  i=11;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
 
@@ -2425,8 +2481,31 @@ void Plot::menu(String prefix){
   }
     break;
 
+
     
   case 4:{
+    
+    if(position_list.size() > 0){
+
+      print_positions(new_prefix, cout);
+
+      enter_unsigned_int(&i, true, 1, position_list.size()+1, String("# of position that you want to modify"), new_prefix);
+      i--;
+
+      (position_list[i]).modify(new_prefix);
+      print(true, new_prefix, cout);
+      show(new_prefix);
+
+    }else{
+      cout << RED << "There are no positions to modify!\n" << RESET;
+    }
+    
+    menu(prefix);  
+
+  }
+    break;
+    
+  case 5:{
     
     if(position_list.size() > 0){
 
@@ -2448,7 +2527,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 5:{
+  case 6:{
 
     if(position_list.size() > 0){
 
@@ -2471,7 +2550,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 6:{
+  case 7:{
 
     add_route(new_prefix);
     print(true, new_prefix, cout);
@@ -2481,7 +2560,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-      case 7:{
+  case 8:{
 
     if(route_list.size() > 0){
 
@@ -2504,7 +2583,7 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 8:{
+  case 9:{
 
     if(route_list.size() > 0){
 
@@ -2529,7 +2608,7 @@ void Plot::menu(String prefix){
 
 
     
-  case 9:{
+  case 10:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -2558,7 +2637,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 10:{
+  case 11:{
 
     String filename;
     stringstream line_ins;
@@ -2578,7 +2657,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 11:{
+  case 12:{
 
     File file;
     String line;
@@ -2636,7 +2715,7 @@ Plot::Plot(Catalog* cata){
 
   file_boundary.remove();
 
-  choices = {"Add a sight", "Delete a sight", "Add a position", "Transport a position", "Delete a position", "Add a route", "Transport a route", "Delete a route", "Save to file", "Read from file", "Exit"};
+  choices = {"Add a sight", "Delete a sight", "Add a position", "Modify a position", "Transport a position", "Delete a position", "Add a route", "Transport a route", "Delete a route", "Save to file", "Read from file", "Exit"};
   
 }
 

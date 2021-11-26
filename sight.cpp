@@ -53,7 +53,8 @@
 - include computation of crossing points between circles of equal altitude
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 - include reading of dummy line in Position::read
-- add modify sight, route and position in menu
+- add modify sight, route  in menu
+ - when entering angles, replace +- with N/S and E/W
 */
 
 

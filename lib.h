@@ -2231,7 +2231,7 @@ class Plot{
   vector<Sight> sight_list;
   vector<Position> position_list;
   vector<Route> route_list;
-  vector<string> choices;
+  vector<String> choices;
 
   Plot(Catalog*);
   //~Plot();
@@ -2406,27 +2406,27 @@ void Plot::menu(String prefix){
   
   cout << prefix.value << BOLD << "Sights:" << RESET << "\n";
   for(i=0; i<2; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Positions:" << RESET << "\n";
   for(i=2; i<6; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
   for(i=6; i<9; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
   for(i=9; i<11; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   i=11;
   cout << prefix.value << "\n";
-  cout << new_prefix.value << "\t(" << i+1 << ") " << choices[i] << "\n";
+  cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
 
 
 
@@ -2715,7 +2715,7 @@ Plot::Plot(Catalog* cata){
 
   file_boundary.remove();
 
-  choices = {"Add a sight", "Delete a sight", "Add a position", "Modify a position", "Transport a position", "Delete a position", "Add a route", "Transport a route", "Delete a route", "Save to file", "Read from file", "Exit"};
+  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Delete a route"), String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 

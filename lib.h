@@ -597,8 +597,11 @@ class Position{
   Angle phi, lambda;
   //label to add a note about the position
   String label;
-  
+  vector<String> modify_choices;
+
+  Position();
   void enter(String, String);
+  void modify(String, String);
   void print(String, String, ostream&);
   void read_from_file(File&, String);
   //this function transports the position and returns the Route with which it has been transported
@@ -606,6 +609,28 @@ class Position{
   stringstream to_string(unsigned int);
 
 };
+
+Position::Position(void){
+
+  modify_choices = {String("latitude"), String("longitude"), String("label")};
+
+}
+
+void Position::modify(String name, String prefix){
+
+  unsigned int i;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+ 
+  cout << prefix.value << "Enter the item that you want to modify:\n";
+
+  for(i=0; i<modify_choices.size(); i++){
+    cout << new_prefix.value << (modify_choices[i]).value << "\n";
+  }
+
+}
 
 //if type = l or o, the parameters specifying the route are start, alpha, l. if type = c, the parameters specifying the route are GP and omega. 
 class Route{

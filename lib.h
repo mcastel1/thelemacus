@@ -3036,8 +3036,8 @@ void Plot::transport_position(unsigned int i, String prefix){
 
 }
 
-
-void Plot::show(String prefix){
+// if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
+void Plot::show(bool zoom_out, String prefix){
 
   stringstream line_ins;
   string line;

@@ -2420,12 +2420,18 @@ void Plot::menu(String prefix){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
+  cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
+  for(i=9; i<10; i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
+  }
+
+
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=9; i<11; i++){
+  for(i=10; i<12; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=11;
+  i=12;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -2608,8 +2614,16 @@ void Plot::menu(String prefix){
     break;
 
 
-    
   case 10:{
+
+    show(true, new_prefix);
+    menu(prefix);  
+
+  }
+    break;
+
+    
+  case 11:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -2638,7 +2652,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 11:{
+  case 12:{
 
     String filename;
     stringstream line_ins;
@@ -2658,7 +2672,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 12:{
+  case 13:{
 
     File file;
     String line;
@@ -2716,7 +2730,7 @@ Plot::Plot(Catalog* cata, String prefix){
 
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Delete a route"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Delete a route"), String("Full zoom out"), String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 
@@ -3104,7 +3118,7 @@ void Plot::show(bool zoom_out, String prefix){
   //
 
   if((!file_boundary.check_if_exists(new_prefix)) || zoom_out){
-    //in this case, there is no boundary file boundary.txt: a plot is made for the frist time -> the boundaries of the plot are thus read from the init file. 
+    //in this case, there is no boundary file boundary.txt ot zoom_out: a plot is made for the frist time or the boundaries need to be reset to the ones from the init file -> the boundaries of the plot are thus read from the init file. 
 
     if(!file_boundary.check_if_exists(new_prefix)){
       
@@ -3112,10 +3126,12 @@ void Plot::show(bool zoom_out, String prefix){
       
     }else{
       
+      cout << new_prefix.value  << "Fully zooming out.\n";
+
       if(zoom_out){
 	file_boundary.remove(new_prefix);
       }
-      
+
     }
     
     cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;

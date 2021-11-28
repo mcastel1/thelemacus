@@ -57,6 +57,7 @@
  - when entering angles, replace +- with N/S and E/W
 - include function replot in menu: one can close the gnuplot window and end up without plot 
 - include funciton full zoom out in plot
+- do not include dates step by step (first YYYY, then MM, then DD), but enter them all at the same time (YYYY MM DD directly) 
 */
 
 

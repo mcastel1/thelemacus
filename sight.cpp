@@ -149,7 +149,7 @@ int main(int argc, char *argv[]){
   */
   
   Catalog catalog(String(path_file_catalog));
-  Plot plot(&catalog);
+  Plot plot(&catalog, String(""));
 
   catalog.print(String("\t"), cout);
   

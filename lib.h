@@ -93,7 +93,7 @@ class File{
   void enter_name(String);
   bool open(String, String);
   void close(String);
-  void remove(void);
+  void remove(String);
   void count_lines(String);
   bool check_if_exists(String);
   
@@ -1665,7 +1665,7 @@ void File::count_lines(String prefix){
 
 
   file_number_of_lines.set_name(String("output.out"));
-  file_number_of_lines.remove();
+  file_number_of_lines.remove(new_prefix);
   
   command.str("");
   command << "wc -l " << (name.value)  << " >> " << ((file_number_of_lines.name).value);
@@ -1685,7 +1685,7 @@ void File::count_lines(String prefix){
 }
 
 
-void File::remove(void){
+void File::remove(String prefix){
 
   stringstream command;
 
@@ -1693,6 +1693,7 @@ void File::remove(void){
   command << "rm -rf " << (name.value) << "> /dev/null 2>&1";
   system(command.str().c_str());
 
+  cout << prefix.value << "File " << name.value << " removed\n";
   
 }
 
@@ -2233,7 +2234,7 @@ class Plot{
   vector<Route> route_list;
   vector<String> choices;
 
-  Plot(Catalog*);
+  Plot(Catalog*, String);
   //~Plot();
   bool add_sight(String);
   void transport_route(unsigned int, String);
@@ -2248,7 +2249,7 @@ class Plot{
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
   void print_routes(bool, String, ostream&);
-  void show(String);
+  void show(bool, String);
   void menu(String);
 
 };
@@ -2440,7 +2441,7 @@ void Plot::menu(String prefix){
     
     add_sight(new_prefix);
     print(false, new_prefix, cout);
-    show(new_prefix);
+    show(false, new_prefix);
     menu(prefix);  
 
   }
@@ -2460,7 +2461,7 @@ void Plot::menu(String prefix){
    
       remove_sight(i, new_prefix);
       print(true, new_prefix, cout);
-      show(new_prefix);
+      show(false, new_prefix);
 
     }else{
       cout << RED << "There are no sights to delete!\n" << RESET;
@@ -2475,7 +2476,7 @@ void Plot::menu(String prefix){
 
     add_position(new_prefix);
     print(true, new_prefix, cout);
-    show(new_prefix);
+    show(false, new_prefix);
     menu(prefix);  
 
   }
@@ -2494,7 +2495,7 @@ void Plot::menu(String prefix){
 
       (position_list[i]).modify(new_prefix);
       print(true, new_prefix, cout);
-      show(new_prefix);
+      show(false, new_prefix);
 
     }else{
       cout << RED << "There are no positions to modify!\n" << RESET;
@@ -2516,7 +2517,7 @@ void Plot::menu(String prefix){
 
       transport_position(i, new_prefix);
       print(true, new_prefix, cout);
-      show(new_prefix);
+      show(false, new_prefix);
 
     }else{
       cout << RED << "There are no positions to transport!\n" << RESET;
@@ -2539,7 +2540,7 @@ void Plot::menu(String prefix){
 	
       remove_position(i, new_prefix);
       print(true, new_prefix, cout);
-      show(new_prefix);
+      show(false, new_prefix);
 
     }else{
       cout << RED << "There are no positions to delete!\n" << RESET;
@@ -2554,7 +2555,7 @@ void Plot::menu(String prefix){
 
     add_route(new_prefix);
     print(true, new_prefix, cout);
-    show(new_prefix);
+    show(false, new_prefix);
     menu(prefix);  
 
   }
@@ -2571,7 +2572,7 @@ void Plot::menu(String prefix){
    
       transport_route(i, new_prefix);
       print_routes(true, new_prefix, cout);
-      show(new_prefix);
+      show(false, new_prefix);
 
     }else{
       cout << RED << "There are no routes to transport!\n" << RESET;
@@ -2595,7 +2596,7 @@ void Plot::menu(String prefix){
 	
       remove_route(i, new_prefix);
       print(true, new_prefix, cout);
-      show(new_prefix);
+      show(false, new_prefix);
 
     }else{
       cout << RED << "There are no routes to delete!\n" << RESET;
@@ -2648,7 +2649,7 @@ void Plot::menu(String prefix){
     
     if(read_from_file(filename, new_prefix)){
       print(true, new_prefix, cout);
-      show(new_prefix);
+      show(false, new_prefix);
     }
         
     menu(prefix);  
@@ -2687,9 +2688,9 @@ void Plot::menu(String prefix){
       system(command.str().c_str());
     
     }
-    file_id.remove();
-    file_gnuplot.remove();
-    file_boundary.remove();
+    file_id.remove(new_prefix);
+    file_gnuplot.remove(new_prefix);
+    file_boundary.remove(new_prefix);
     
     cout << prefix.value << CYAN << "Fair winds, following seas...\n" << RESET;
   }
@@ -2701,7 +2702,7 @@ void Plot::menu(String prefix){
     
 }
 
-Plot::Plot(Catalog* cata){
+Plot::Plot(Catalog* cata, String prefix){
 
   catalog = cata;
   job_id = -1;
@@ -2713,7 +2714,7 @@ Plot::Plot(Catalog* cata){
   file_gnuplot.set_name(String("plot.plt"));
   file_boundary.set_name(String("boundary.txt"));
 
-  file_boundary.remove();
+  file_boundary.remove(prefix);
 
   choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Delete a route"), String("Save to file"), String("Read from file"), String("Exit")};
   
@@ -3078,8 +3079,8 @@ void Plot::show(bool zoom_out, String prefix){
     
   }
 
-  file_id.remove();
-  file_gnuplot.remove();
+  file_id.remove(prefix);
+  file_gnuplot.remove(prefix);
   
 
   //replace line with plot_coastline_every in plot_dummy.plt
@@ -3102,10 +3103,21 @@ void Plot::show(bool zoom_out, String prefix){
   //replace line with min_latitude in plot_dummy.plt
   //
 
-  if(!file_boundary.check_if_exists(new_prefix)){
+  if((!file_boundary.check_if_exists(new_prefix)) || zoom_out){
     //in this case, there is no boundary file boundary.txt: a plot is made for the frist time -> the boundaries of the plot are thus read from the init file. 
-    cout << new_prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
 
+    if(!file_boundary.check_if_exists(new_prefix)){
+      
+      cout << new_prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
+      
+    }else{
+      
+      if(zoom_out){
+	file_boundary.remove(new_prefix);
+      }
+      
+    }
+    
     cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
   
     lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix); 
@@ -3435,8 +3447,8 @@ void Plot::show(bool zoom_out, String prefix){
     line_ins >> job_id;
   }
 
-  file_id.close(String("\t"));
-  file_id.remove();
+  file_id.close(prefix);
+  file_id.remove(prefix);
   file_init.close(prefix);
 
   cout << prefix.value << "Job id = "<< job_id << "\n";

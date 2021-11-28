@@ -55,6 +55,8 @@
 - include reading of dummy line in Position::read
 - add modify sight, route  in menu
  - when entering angles, replace +- with N/S and E/W
+- include function replot in menu: one can close the gnuplot window and end up without plot 
+- include funciton full zoom out in plot
 */
 
 

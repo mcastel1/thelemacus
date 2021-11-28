@@ -2421,17 +2421,17 @@ void Plot::menu(String prefix){
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
-  for(i=9; i<10; i++){
+  for(i=9; i<11; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=10; i<12; i++){
+  for(i=11; i<13; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=12;
+  i=13;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -2614,7 +2614,15 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 10:{
+      case 10:{
+
+    show(false, new_prefix);
+    menu(prefix);  
+
+  }
+    break;
+
+  case 11:{
 
     show(true, new_prefix);
     menu(prefix);  
@@ -2623,7 +2631,7 @@ void Plot::menu(String prefix){
     break;
 
     
-  case 11:{
+  case 12:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -2652,7 +2660,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 12:{
+  case 13:{
 
     String filename;
     stringstream line_ins;
@@ -2672,7 +2680,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 13:{
+  case 14:{
 
     File file;
     String line;
@@ -2730,7 +2738,7 @@ Plot::Plot(Catalog* cata, String prefix){
 
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Delete a route"), String("Full zoom out"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 

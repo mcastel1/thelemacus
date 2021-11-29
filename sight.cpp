@@ -55,6 +55,7 @@
 - include reading of dummy line in Position::read
 - add modify sight, route  in menu
  - when entering angles, replace +- with N/S and E/W
+- the plot command is too slow
 - do not include dates step by step (first YYYY, then MM, then DD), but enter them all at the same time (YYYY MM DD directly) 
 */
 

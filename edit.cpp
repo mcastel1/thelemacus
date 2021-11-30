@@ -91,7 +91,7 @@ int main(int argc, char *argv[]){
 
     floor_new = floor(t.lat);
 
-    (p[floor_new]).push_back(t);
+    (p[floor_new+90]).push_back(t);
 
     if(floor_new != floor_old){
       for(i=0; i<(int)(p.size()); i++){(p[i]).clear();}

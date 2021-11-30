@@ -92,12 +92,14 @@ int main(int argc, char *argv[]){
 
       cout << "\tNew latitude\n";
       
-      for(i=0; i<(int)(p.size()); i++){(p[i]).clear();}
+      for(i=0; i<(int)(p.size()); i++){
+	(p[i]).clear();
+      }
       outfile << "\n\n";
       
     }else{
       
-      (p[floor(-(t.lon)+360.0)]).push_back(t);
+      (p[floor(-(t.lon)+180.0)]).push_back(t);
       
     }
     

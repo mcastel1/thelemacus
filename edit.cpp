@@ -54,7 +54,31 @@ using namespace std;
 int main(int argc, char *argv[]){
 
 
+  ifstream infile;
+  string line;
+  double lon, lat;
+  stringstream line_ins;
+
+  line.clear();
+  line_ins.clear();
+  getline(infile, line);
+
+  infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
+
+
+
+  while(!infile.eof()){
+
+    line_ins << line;
+    line_ins >> lon >> lat;
+
+    cout << lon << "\t" << lat << "\n";
+    
+  }
+
+
   
+  infile.close();
 
   cout << "\n";
   return(0);

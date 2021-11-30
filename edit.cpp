@@ -27,14 +27,14 @@
 // #include <gsl_vector.h>
 // #include <gsl_matrix.h>
 // #include <gsl_eigen.h>
-#include <gsl_blas.h>
-#include <gsl_sf_pow_int.h>
-#include <gsl_sf_exp.h>
-#include <gsl_errno.h> 
-#include <gsl_math.h>
-#include <gsl_spline.h>
-#include <gsl_integration.h>
-#include <gsl_roots.h>
+// #include <gsl_blas.h>
+// #include <gsl_sf_pow_int.h>
+// #include <gsl_sf_exp.h>
+// #include <gsl_errno.h> 
+// #include <gsl_math.h>
+// #include <gsl_spline.h>
+// #include <gsl_integration.h>
+// #include <gsl_roots.h>
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
 
@@ -42,10 +42,6 @@
 
 
 using namespace std;
-
-
-
-#include "lib.h"
 
 class position{
 
@@ -69,7 +65,7 @@ int main(int argc, char *argv[]){
   int i;
 
 
-  infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
+  infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv");
 
 
@@ -91,11 +87,18 @@ int main(int argc, char *argv[]){
 
     floor_new = floor(t.lat);
 
-    (p[floor_new+90]).push_back(t);
 
     if(floor_new != floor_old){
+
+      cout << "\tNew latitude\n";
+      
       for(i=0; i<(int)(p.size()); i++){(p[i]).clear();}
       outfile << "\n\n";
+      
+    }else{
+      
+      (p[floor(-(t.lon)+360.0)]).push_back(t);
+      
     }
     
     line.clear();

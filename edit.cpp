@@ -58,56 +58,26 @@ int main(int argc, char *argv[]){
   ifstream infile;
   ofstream outfile;
   string line;
-  int floor_old, floor_new;
+  //int floor_old, floor_new;
   vector< vector<position> > p(360);
-  stringstream line_ins;
+  stringstream ins;
   position t;
-  int i;
+  //int i,j;
 
 
   infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv");
 
-
-  for(i=0; i<(int)(p.size()); i++){(p[i]).resize(0);}
-
-  
-  line.clear();
-  line_ins.clear();
-  getline(infile, line);
-
-  floor_old = -1;
-
   while(!infile.eof()){
 
-    line_ins << line;
-    line_ins >> (t.lon) >> (t.lat);
-
-    cout << t.lon << "\t" << t.lat << "\n";
-
-    floor_new = floor(t.lat);
-
-
-    if(floor_new != floor_old){
-
-      cout << "\tNew latitude\n";
-      
-      for(i=0; i<(int)(p.size()); i++){
-	(p[i]).clear();
-      }
-      outfile << "\n\n";
-      
-    }else{
-      
-      (p[floor(-(t.lon)+180.0)]).push_back(t);
-      
-    }
-    
     line.clear();
-    line_ins.clear();
-    getline(infile, line);
+    ins.clear();
 
-    floor_old = floor_new;
+    getline(infile, line);
+    ins << line;
+    ins >> (t.lon) >> (t.lat);
+
+    cout << "{" << (t.lat) << "," << (t.lon) << "}\n";
 
   }
 

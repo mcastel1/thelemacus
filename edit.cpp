@@ -59,13 +59,13 @@ int main(int argc, char *argv[]){
   double lon, lat;
   stringstream line_ins;
 
-  line.clear();
-  line_ins.clear();
-  getline(infile, line);
 
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
 
 
+  line.clear();
+  line_ins.clear();
+  getline(infile, line);
 
   while(!infile.eof()){
 
@@ -74,6 +74,10 @@ int main(int argc, char *argv[]){
 
     cout << lon << "\t" << lat << "\n";
     
+    line.clear();
+    line_ins.clear();
+    getline(infile, line); 
+
   }
 
 

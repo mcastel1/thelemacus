@@ -58,16 +58,18 @@ int main(int argc, char *argv[]){
   ifstream infile;
   ofstream outfile;
   string line;
-  //int floor_old, floor_new;
+  int floor_old, floor_new;
   vector< vector<position> > p(360);
   stringstream ins;
   position t;
-  //int i,j;
+  int i, j;
 
 
   infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv");
 
+  floor_old = -90-1;
+  
   while(!infile.eof()){
 
     line.clear();
@@ -77,10 +79,45 @@ int main(int argc, char *argv[]){
     ins << line;
     ins >> (t.lon) >> (t.lat);
 
-    cout << "{" << (t.lat) << "," << (t.lon) << "}\n";
+    floor_new = floor((t.lat));
+
+    if(floor_new != floor_old){
+      cout << "\nSwitching to a new latitude";
+
+      for(i=0; i<((int)p.size()); i++){
+	if((p[i]).size() != 0){
+	  //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
+	  cout << "\np[" << -i+180-1 << "]:\t\t";
+	  for(j=0; j<(int)(p[i]).size(); j++){
+	    cout << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "} ";
+	  }
+
+	}
+
+      }
+
+      
+      for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
+    }
+    p[floor(-(t.lon)+180.0)].push_back(t);
+    cout << "\nPushing back {" << (t.lat) << "," << (t.lon) << "} to p[" << floor(-(t.lon)+180.0) << "]";
+
+    floor_old = floor_new;
 
   }
 
+
+  for(i=0; i<((int)p.size()); i++){
+    if((p[i]).size() != 0){
+      //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
+      cout << "\np[" << -i+180-1 << "]:\t\t";
+      for(j=0; j<(int)(p[i]).size(); j++){
+	cout << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "} ";
+      }
+
+    }
+
+  }
 
   
   infile.close();

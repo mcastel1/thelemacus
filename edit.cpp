@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <list>
 
+#define min_lat (-78.7290778)
+#define outfile_precision 16
+
 
 //mac
 /*
@@ -66,10 +69,14 @@ int main(int argc, char *argv[]){
 
 
   infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
-  outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv");
+  //infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
 
-  floor_old = -90-1;
-  
+  outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv");
+  outfile.precision(outfile_precision);
+
+  floor_old = floor(min_lat);
+  for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
+
   while(!infile.eof()){
 
     line.clear();
@@ -82,25 +89,24 @@ int main(int argc, char *argv[]){
     floor_new = floor((t.lat));
 
     if(floor_new != floor_old){
+
+      if(floor_new > floor_old + 1){cout << "\nJump is > 1!"; return 0;}
+      
       cout << "\nSwitching to a new latitude";
 
       for(i=0; i<((int)p.size()); i++){
-	if((p[i]).size() != 0){
-	  //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
-	  cout << "\np[" << -i+180-1 << "]:\t\t";
-	  for(j=0; j<(int)(p[i]).size(); j++){
-	    cout << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "} ";
-	  }
-
+	//-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
+	outfile << "\np[" << -i+180-1 << "]:\t\t";
+	for(j=0; j<(int)(p[i]).size(); j++){
+	  outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "}\t";
 	}
-
       }
 
       
       for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
     }
     p[floor(-(t.lon)+180.0)].push_back(t);
-    cout << "\nPushing back {" << (t.lat) << "," << (t.lon) << "} to p[" << floor(-(t.lon)+180.0) << "]";
+    //cout << "\nPushing back {" << (t.lat) << "," << (t.lon) << "} to p[" << floor(-(t.lon)+180.0) << "]";
 
     floor_old = floor_new;
 
@@ -108,16 +114,13 @@ int main(int argc, char *argv[]){
 
 
   for(i=0; i<((int)p.size()); i++){
-    if((p[i]).size() != 0){
-      //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
-      cout << "\np[" << -i+180-1 << "]:\t\t";
-      for(j=0; j<(int)(p[i]).size(); j++){
-	cout << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "} ";
-      }
-
+    //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
+    outfile << "\np[" << -i+180-1 << "]:\t\t";
+    for(j=0; j<(int)(p[i]).size(); j++){
+      outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "}\t";
     }
-
   }
+
 
   
   infile.close();

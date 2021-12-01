@@ -71,8 +71,8 @@ int main(int argc, char *argv[]){
   //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
 
-  system("rm /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv");
-  outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv");
+  system("rm /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
+  outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
   outfile.precision(outfile_precision);
 
   floor_old = floor(min_lat);
@@ -98,13 +98,13 @@ int main(int argc, char *argv[]){
       for(i=0; i<((int)p.size()); i++){
 	//-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
 	//outfile << "\np[" << -i+180-1 << "]:\t\t";
-	outfile << "\n";
+	outfile << "\n" << i << "\t";
 	for(j=0; j<(int)(p[i]).size(); j++){
-	  outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	  //outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << "\t";
+	  //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
+	  outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << "\t";
 	}
       }
-      outfile << "\n";
+     outfile << "\n";
 
       
       for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
@@ -121,10 +121,10 @@ int main(int argc, char *argv[]){
     //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
     //outfile << "\np[" << -i+180-1 << "]:\t\t";
 
-    outfile << "\n";
+    outfile << "\n" << i << "\t";
     for(j=0; j<(int)(p[i]).size(); j++){
-      outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-      //    outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << "\t";
+      //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
+      outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << "\t";
     }
   }
   outfile << "\n";

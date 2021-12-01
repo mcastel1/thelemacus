@@ -95,7 +95,6 @@ int main(int argc, char *argv[]){
       
       cout << "\nSwitching to latitude " << floor_new;
 
-      // outfile << "\n";
       for(i=0; i<((int)p.size()); i++){
 	//-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
 	//outfile << "\np[" << -i+180-1 << "]:\t\t";
@@ -120,8 +119,8 @@ int main(int argc, char *argv[]){
   for(i=0; i<((int)p.size()); i++){
     //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
     //outfile << "\np[" << -i+180-1 << "]:\t\t";
-    // outfile << "\n";
 
+    outfile << "\n";
     for(j=0; j<(int)(p[i]).size(); j++){
       //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "}\t";
       outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << "\t";

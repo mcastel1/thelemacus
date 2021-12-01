@@ -98,13 +98,18 @@ int main(int argc, char *argv[]){
       for(i=0; i<((int)p.size()); i++){
 	//-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
 	//outfile << "\np[" << -i+180-1 << "]:\t\t";
-	outfile << "\n" << i << "\t";
-	for(j=0; j<(int)(p[i]).size(); j++){
-	  //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	  outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << "\t";
+	//outfile << "\n" << i << "\t";
+	
+	if((p[i]).size() != 0){
+	  for(j=0; j<(int)(p[i]).size(); j++){
+	    //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
+	    outfile << "\n" << ((p[i][j]).lat) << " " << ((p[i][j]).lon);
+	  }
+	}else{
+	  outfile << "\n0.0\t0.0";
 	}
+	outfile << "\n";
       }
-     outfile << "\n";
 
       
       for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
@@ -120,14 +125,18 @@ int main(int argc, char *argv[]){
   for(i=0; i<((int)p.size()); i++){
     //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
     //outfile << "\np[" << -i+180-1 << "]:\t\t";
-
-    outfile << "\n" << i << "\t";
-    for(j=0; j<(int)(p[i]).size(); j++){
-      //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-      outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << "\t";
+    //outfile << "\n" << i << "\t";
+	
+    if((p[i]).size() != 0){
+      for(j=0; j<(int)(p[i]).size(); j++){
+	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
+	outfile << "\n" << ((p[i][j]).lat) << " " << ((p[i][j]).lon);
+      }
+    }else{
+      outfile << "\n0.0\t0.0";
     }
+    outfile << "\n";
   }
-  outfile << "\n";
 
 
   

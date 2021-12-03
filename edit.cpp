@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <list>
 
+#define max_lat (83.6664731)
 #define min_lat (-78.7290778)
 #define outfile_precision 16
 
@@ -66,12 +67,13 @@ int main(int argc, char *argv[]){
   stringstream ins;
   position t;
   int i, j;
+  unsigned int count;
 
   /*
-  ifstream is("text.txt");
-  unsigned int l;
+    ifstream is("text.txt");
+    unsigned int l;
 
-  if(is){
+    if(is){
     is.seekg (0, is.end);
     l = is.tellg();
 
@@ -85,12 +87,12 @@ int main(int argc, char *argv[]){
     cout.write(buffer, 2);
 
     is.close();
-  }else{
+    }else{
 
     cout << "Could not open file!\n";
-  }
-  cout << "\n";
-  return 0;
+    }
+    cout << "\n";
+    return 0;
   */
 
   //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
@@ -128,15 +130,12 @@ int main(int argc, char *argv[]){
 	if((p[i]).size() != 0){
 	  for(j=0; j<(int)(p[i]).size(); j++){
 	    //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	    outfile << "\n" << ((p[i][j]).lat) << " " << ((p[i][j]).lon);
+	    outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
 	  }
-	}else{
-	  outfile << "\n0.0\t0.0";
 	}
 	outfile << "\n";
       }
 
-      
       for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
     }
     p[floor(-(t.lon)+180.0)].push_back(t);
@@ -155,10 +154,8 @@ int main(int argc, char *argv[]){
     if((p[i]).size() != 0){
       for(j=0; j<(int)(p[i]).size(); j++){
 	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	outfile << "\n" << ((p[i][j]).lat) << " " << ((p[i][j]).lon);
+	outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
       }
-    }else{
-      outfile << "\n0.0\t0.0";
     }
     outfile << "\n";
   }

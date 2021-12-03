@@ -6,6 +6,7 @@
 #include <strstream>
 #include <string.h>
 #include <sstream>
+#include <iomanip>
 #include <algorithm>
 #include <list>
 
@@ -60,15 +61,15 @@ int main(int argc, char *argv[]){
 
 
   ifstream infile;
-  ofstream outfile;
+  ofstream outfile, outfile_n_line;
   string line;
   int floor_old = 0, floor_new = 0;
-  vector< vector<position> > p(360);
+  vector< vector<position> > p(360+1);
   stringstream ins;
   position t;
   int i, j;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
-  vector<unsigned int> n_line(360*(floor(max_lat)-floor(min_lat)+1));
+  vector<unsigned int> n_line((360+1)*(floor(max_lat)-floor(min_lat)+1));
   unsigned int n;
   /*
     ifstream is("text.txt");
@@ -101,7 +102,11 @@ int main(int argc, char *argv[]){
 
   system("rm /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
   outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  outfile.precision(outfile_precision);
+  outfile << fixed << setprecision(2) << setfill('0');
+
+
+  system("rm n_line.txt");
+  outfile_n_line.open("n_line.txt");
 
   floor_old = floor(min_lat);
   for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
@@ -131,14 +136,16 @@ int main(int argc, char *argv[]){
 	if((p[i]).size() != 0){
 	  for(j=0; j<(int)(p[i]).size(); j++){
 	    //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	    outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
-	    n+= outfile_precision + 1 + outfile_precision + 1;
+	    outfile << setw(5) << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
+	    n += 5+1 + 1 + 5+1 + 1;
 	  }
 	}else{
 	  n++;
 	}
 
-	n_line[360*(floor_new-floor(min_lat))+i] = n;
+	n_line[(360+1)*(floor_new-floor(min_lat))+i] = n;
+	
+	outfile_n_line << n_line[(360+1)*(floor_new-floor(min_lat))+i] << "\n";
 	outfile << "\n";
       }
 
@@ -160,14 +167,16 @@ int main(int argc, char *argv[]){
     if((p[i]).size() != 0){
       for(j=0; j<(int)(p[i]).size(); j++){
 	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
-	n+= outfile_precision + 1 + outfile_precision + 1;
+	outfile << setw(5) << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
+	n += 5+1 + 1 + 5+1 + 1;
       }
     }else{
       n++;
     }
 
-    n_line[360*(floor_new-floor(min_lat))+i] = n;
+    n_line[(360+1)*(floor_new-floor(min_lat))+i] = n;
+    
+    outfile_n_line << n_line[(360+1)*(floor_new-floor(min_lat))+i] << "\n";
     outfile << "\n";
   }
   
@@ -175,6 +184,7 @@ int main(int argc, char *argv[]){
   p.clear();
   n_line.clear();
   outfile.close();
+  outfile_n_line.close();
 
   cout << "\n";
   return(0);

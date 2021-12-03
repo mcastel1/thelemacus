@@ -62,13 +62,14 @@ int main(int argc, char *argv[]){
   ifstream infile;
   ofstream outfile;
   string line;
-  int floor_old, floor_new;
+  int floor_old = 0, floor_new = 0;
   vector< vector<position> > p(360);
   stringstream ins;
   position t;
   int i, j;
-  unsigned int count;
-
+  //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
+  vector<unsigned int> n_line(360*(floor(max_lat)-floor(min_lat)+1));
+  unsigned int n;
   /*
     ifstream is("text.txt");
     unsigned int l;
@@ -104,7 +105,7 @@ int main(int argc, char *argv[]){
 
   floor_old = floor(min_lat);
   for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
-
+  n = 0;
   while(!infile.eof()){
 
     line.clear();
@@ -131,8 +132,13 @@ int main(int argc, char *argv[]){
 	  for(j=0; j<(int)(p[i]).size(); j++){
 	    //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
 	    outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
+	    n+= outfile_precision + 1 + outfile_precision + 1;
 	  }
+	}else{
+	  n++;
 	}
+
+	n_line[360*(floor_new-floor(min_lat))+i] = n;
 	outfile << "\n";
       }
 
@@ -155,15 +161,19 @@ int main(int argc, char *argv[]){
       for(j=0; j<(int)(p[i]).size(); j++){
 	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
 	outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
+	n+= outfile_precision + 1 + outfile_precision + 1;
       }
+    }else{
+      n++;
     }
+
+    n_line[360*(floor_new-floor(min_lat))+i] = n;
     outfile << "\n";
   }
-
-
   
   infile.close();
   p.clear();
+  n_line.clear();
   outfile.close();
 
   cout << "\n";

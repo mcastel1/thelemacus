@@ -67,6 +67,31 @@ int main(int argc, char *argv[]){
   position t;
   int i, j;
 
+  /*
+  ifstream is("text.txt");
+  unsigned int l;
+
+  if(is){
+    is.seekg (0, is.end);
+    l = is.tellg();
+
+    // allocate memory:
+    char * buffer = new char [l];
+
+    // read data as a block:
+    is.seekg(3, is.beg);
+    is.read(buffer, 2);
+
+    cout.write(buffer, 2);
+
+    is.close();
+  }else{
+
+    cout << "Could not open file!\n";
+  }
+  cout << "\n";
+  return 0;
+  */
 
   //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");

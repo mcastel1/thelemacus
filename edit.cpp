@@ -80,7 +80,7 @@ int main(int argc, char *argv[]){
 
   //
   
-  /*
+  //
   //read n_line.txt and store it into vector n_line
   infile_n_line.open("n_line.txt");
   i=0;
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]){
   
   //this chunk of code reads in map_conv_blocked.csv the points with latitude flor(lat_min)+i, and longitude j
   ifstream is("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  unsigned int k, l;
+  unsigned int l;
 
   cout << "\nEnter i:";
   cin >> i;
@@ -113,12 +113,11 @@ int main(int argc, char *argv[]){
   // is.seekg (0, is.end);
   // l = is.tellg();
 
-  // allocate memory:
     
   // read data as a block:
   is.seekg(n_line[361*i+j], is.beg);
 
-  l = n_line[361*i+j+1] - n_line[361*i+j];
+  l = n_line[361*i+j + 1] - n_line[361*i+j] - 1;
   char * buffer = new char [l];
 
   is.read(buffer, l);
@@ -130,11 +129,10 @@ int main(int argc, char *argv[]){
   cout << "\nerror: only " << is.gcount() << " could be read";
   is.close();
 
-  cout << "\nlast entry of buffer is " << buffer[83];
   
   cout << "\nResult of reading n_line.txt: ";
-  for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
-  //cout.write(buffer, l);
+  // for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
+  cout.write(buffer, l);
 
   is.close();
   }else{
@@ -143,7 +141,7 @@ int main(int argc, char *argv[]){
   }
   cout << "\n";
   return 0;
-  */
+  //
   
   //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
@@ -191,7 +189,10 @@ int main(int argc, char *argv[]){
 	    fprintf(outfile, "%02f %02f ", ((p[i][j]).lat), ((p[i][j]).lon));
 	    n += 10 + 1 + 10 + 1;
 	  }
+	  //add to n the character corresponding to the '\n' found at the end of the line
+	  n++;
 	}else{
+	  //add to n the character corresponding to the '\n' found at the end of the line
 	  n++;
 	}
 
@@ -216,20 +217,22 @@ int main(int argc, char *argv[]){
     n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;	
     outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
 
-    
+	
     if((p[i]).size() != 0){
       for(j=0; j<(int)(p[i]).size(); j++){
 	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
 	fprintf(outfile, "%02f %02f ", ((p[i][j]).lat), ((p[i][j]).lon));
 	n += 10 + 1 + 10 + 1;
       }
+      //add to n the character corresponding to the '\n' found at the end of the line
+      n++;
     }else{
+      //add to n the character corresponding to the '\n' found at the end of the line
       n++;
     }
 
     fprintf(outfile, "\n");
   }
-
   
   infile.close();
   p.clear();

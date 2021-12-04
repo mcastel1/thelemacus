@@ -82,14 +82,14 @@ int main(int argc, char *argv[]){
   i=0;
   while(!infile_n_line.eof()){
 
-    line.clear();
-    ins.clear();
+  line.clear();
+  ins.clear();
 
-    getline(infile_n_line, line);
-    ins << line;
-    ins >> n_line[i++];
+  getline(infile_n_line, line);
+  ins << line;
+  ins >> n_line[i++];
 
-    //cout << "\n" << n_line[i-1];
+  //cout << "\n" << n_line[i-1];
 
   }
   infile_n_line.close();
@@ -108,25 +108,25 @@ int main(int argc, char *argv[]){
   cin >> j;
 
   if(is){
-    // is.seekg (0, is.end);
-    // l = is.tellg();
+  // is.seekg (0, is.end);
+  // l = is.tellg();
 
-    // allocate memory:
+  // allocate memory:
     
-    // read data as a block:
-    is.seekg(n_line[361*i+j], is.beg);
+  // read data as a block:
+  is.seekg(n_line[361*i+j], is.beg);
 
-    l = n_line[361*i+j+1] - n_line[361*i+j];
-    char * buffer = new char [l];
+  l = n_line[361*i+j+1] - n_line[361*i+j];
+  char * buffer = new char [l];
 
-    is.read(buffer, l);
+  is.read(buffer, l);
 
-    cout.write(buffer, l);
+  cout.write(buffer, l);
 
-    is.close();
+  is.close();
   }else{
 
-    cout << "Could not open file!\n";
+  cout << "Could not open file!\n";
   }
   cout << "\n";
   return 0;
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]){
 
   floor_old = floor_min_lat;
   for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
-  n = -1;
+  n = 0;
   while(!infile.eof()){
 
     line.clear();
@@ -167,6 +167,10 @@ int main(int argc, char *argv[]){
 	//-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
 	//outfile << "\np[" << -i+180-1 << "]:\t\t";
 	//outfile << "\n" << i << "\t";
+
+	n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;	
+	outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
+
 	
 	if((p[i]).size() != 0){
 	  for(j=0; j<(int)(p[i]).size(); j++){
@@ -178,9 +182,6 @@ int main(int argc, char *argv[]){
 	  n++;
 	}
 
-	n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;
-	
-	outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
 	outfile << "\n";
       }
 
@@ -198,7 +199,11 @@ int main(int argc, char *argv[]){
     //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
     //outfile << "\np[" << -i+180-1 << "]:\t\t";
     //outfile << "\n" << i << "\t";
-	
+
+    n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;	
+    outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
+
+    
     if((p[i]).size() != 0){
       for(j=0; j<(int)(p[i]).size(); j++){
 	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
@@ -209,9 +214,6 @@ int main(int argc, char *argv[]){
       n++;
     }
 
-    n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;
-    
-    outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
     outfile << "\n";
   }
 

@@ -73,7 +73,7 @@ int main(int argc, char *argv[]){
   vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
 
  
-  /*
+  //
   //read n_line.txt and store it into vector n_line
   infile_n_line.open("n_line.txt");
   i=0;
@@ -102,45 +102,56 @@ int main(int argc, char *argv[]){
   i -= floor_min_lat;
   cout << "\nEnter lon:";
   cin >> j;
-  j = 359 - j;
 
   cout << "\ni = " << i << "\nj= " << j;
 
   if(is){
-  // is.seekg (0, is.end);
-  // l = is.tellg();
+    // is.seekg (0, is.end);
+    // l = is.tellg();
 
     
-  // read data as a block:
-  is.seekg(n_line[360*i+j], is.beg);
+    // read data as a block:
+    is.seekg(n_line[360*i+j], is.beg);
 
-  l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
-  char * buffer = new char [l];
+    l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
+    char * buffer = new char [l];
 
-  is.read(buffer, l);
-  cout << "\nl = " << l;
+    is.read(buffer, l);
+    cout << "\nl = " << l;
 
-  if (is)
-  cout << "\nall characters read successfully.";
-  else
-  cout << "\nerror: only " << is.gcount() << " could be read";
-  is.close();
+    if (is)
+      cout << "\nall characters read successfully.";
+    else
+      cout << "\nerror: only " << is.gcount() << " could be read";
+    is.close();
 
   
-  cout << "\nResult of reading n_line.txt: ";
-  // for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
-  cout.write(buffer, l);
+    cout << "\nResult of reading n_line.txt: ";
+    // for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
+    cout.write(buffer, l);
 
-  is.close();
+    string data(buffer, l);
+    replace(data.begin(), data.end(), ' ', '\n');
+    replace(data.begin(), data.end(), ',', ' ');
+
+    system("rm -rf result.txt");
+    outfile.open("result.txt");
+    outfile << data;
+    outfile.close();
+
+    
+    is.close();
   }else{
 
-  cout << "Could not open file!\n";
+    cout << "Could not open file!\n";
   }
 
-  */
+  
+
+  //
 
   //this part of the code creates map_conv_blocked.csv 
-  //
+  /*
   int floor_old = 0, floor_new = 0;
   position t;
   long int n;
@@ -241,7 +252,7 @@ int main(int argc, char *argv[]){
   outfile.close();
   outfile_n_line.close();
 
-  //
+  */
 
   cout << "\n";
   return(0);

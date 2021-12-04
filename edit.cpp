@@ -12,6 +12,9 @@
 
 #define max_lat (83.6664731)
 #define min_lat (-78.7290778)
+#define floor_min_lat (floor(min_lat))
+#define floor_max_lat (floor(max_lat))
+#define span_lat ((floor_max_lat-floor_min_lat+1)
 #define outfile_precision 16
 
 
@@ -60,7 +63,7 @@ public:
 int main(int argc, char *argv[]){
 
 
-  ifstream infile;
+  ifstream infile, infile_n_line;
   ofstream outfile, outfile_n_line;
   string line;
   int floor_old = 0, floor_new = 0;
@@ -69,34 +72,66 @@ int main(int argc, char *argv[]){
   position t;
   int i, j;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
-  vector<unsigned int> n_line((360+1)*(floor(max_lat)-floor(min_lat)+1));
-  unsigned int n;
+  vector<unsigned int> n_line((360+1)*(floor_max_lat-floor_min_lat+1));
+  long int n;
+
+  
   /*
-    ifstream is("text.txt");
-    unsigned int l;
+  //read n_line.txt and store it into vector n_line
+  infile_n_line.open("n_line.txt");
+  i=0;
+  while(!infile_n_line.eof()){
 
-    if(is){
-    is.seekg (0, is.end);
-    l = is.tellg();
+    line.clear();
+    ins.clear();
 
-    // allocate memory:
-    char * buffer = new char [l];
+    getline(infile_n_line, line);
+    ins << line;
+    ins >> n_line[i++];
 
-    // read data as a block:
-    is.seekg(3, is.beg);
-    is.read(buffer, 2);
+    //cout << "\n" << n_line[i-1];
 
-    cout.write(buffer, 2);
-
-    is.close();
-    }else{
-
-    cout << "Could not open file!\n";
-    }
-    cout << "\n";
-    return 0;
+  }
+  infile_n_line.close();
+  //return 0;
   */
 
+
+  /*
+  //this chunk of code reads in map_conv_blocked.csv the points with latitude flor(lat_min)+i, and longitude j
+  ifstream is("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
+  unsigned int l;
+
+  cout << "\nEnter i:";
+  cin >> i;
+  cout << "\nEnter j:";
+  cin >> j;
+
+  if(is){
+    // is.seekg (0, is.end);
+    // l = is.tellg();
+
+    // allocate memory:
+    
+    // read data as a block:
+    is.seekg(n_line[361*i+j], is.beg);
+
+    l = n_line[361*i+j+1] - n_line[361*i+j];
+    char * buffer = new char [l];
+
+    is.read(buffer, l);
+
+    cout.write(buffer, l);
+
+    is.close();
+  }else{
+
+    cout << "Could not open file!\n";
+  }
+  cout << "\n";
+  return 0;
+  */
+  
   //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
 
@@ -108,9 +143,9 @@ int main(int argc, char *argv[]){
   system("rm n_line.txt");
   outfile_n_line.open("n_line.txt");
 
-  floor_old = floor(min_lat);
+  floor_old = floor_min_lat;
   for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
-  n = 0;
+  n = -1;
   while(!infile.eof()){
 
     line.clear();
@@ -143,9 +178,9 @@ int main(int argc, char *argv[]){
 	  n++;
 	}
 
-	n_line[(360+1)*(floor_new-floor(min_lat))+i] = n;
+	n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;
 	
-	outfile_n_line << n_line[(360+1)*(floor_new-floor(min_lat))+i] << "\n";
+	outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
 	outfile << "\n";
       }
 
@@ -174,11 +209,12 @@ int main(int argc, char *argv[]){
       n++;
     }
 
-    n_line[(360+1)*(floor_new-floor(min_lat))+i] = n;
+    n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;
     
-    outfile_n_line << n_line[(360+1)*(floor_new-floor(min_lat))+i] << "\n";
+    outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
     outfile << "\n";
   }
+
   
   infile.close();
   p.clear();

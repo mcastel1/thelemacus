@@ -6,7 +6,7 @@
 #include <strstream>
 #include <string.h>
 #include <sstream>
-#include <iomanip>
+//#include <iomanip>
 #include <algorithm>
 #include <list>
 
@@ -15,7 +15,7 @@
 #define floor_min_lat (floor(min_lat))
 #define floor_max_lat (floor(max_lat))
 #define span_lat ((floor_max_lat-floor_min_lat+1)
-#define outfile_precision 16
+#define outfile_precision 4
 
 
 //mac
@@ -64,7 +64,8 @@ int main(int argc, char *argv[]){
 
 
   ifstream infile, infile_n_line;
-  ofstream outfile, outfile_n_line;
+  ofstream outfile_n_line;
+  FILE* outfile;
   string line;
   int floor_old = 0, floor_new = 0;
   vector< vector<position> > p(360+1);
@@ -75,6 +76,9 @@ int main(int argc, char *argv[]){
   vector<unsigned int> n_line((360+1)*(floor_max_lat-floor_min_lat+1));
   long int n;
 
+  //
+
+  //
   
   /*
   //read n_line.txt and store it into vector n_line
@@ -87,20 +91,18 @@ int main(int argc, char *argv[]){
 
   getline(infile_n_line, line);
   ins << line;
-  ins >> n_line[i++];
+  ins >> (n_line[i++]);
 
-  //cout << "\n" << n_line[i-1];
+  //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
 
   }
   infile_n_line.close();
-  //return 0;
-  */
 
 
-  /*
+  
   //this chunk of code reads in map_conv_blocked.csv the points with latitude flor(lat_min)+i, and longitude j
   ifstream is("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  unsigned int l;
+  unsigned int k, l;
 
   cout << "\nEnter i:";
   cin >> i;
@@ -120,8 +122,19 @@ int main(int argc, char *argv[]){
   char * buffer = new char [l];
 
   is.read(buffer, l);
+  cout << "\nl = " << l;
 
-  cout.write(buffer, l);
+  if (is)
+  cout << "\nall characters read successfully.";
+  else
+  cout << "\nerror: only " << is.gcount() << " could be read";
+  is.close();
+
+  cout << "\nlast entry of buffer is " << buffer[83];
+  
+  cout << "\nResult of reading n_line.txt: ";
+  for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
+  //cout.write(buffer, l);
 
   is.close();
   }else{
@@ -136,8 +149,8 @@ int main(int argc, char *argv[]){
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
 
   system("rm /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  outfile << fixed << setprecision(2) << setfill('0');
+  outfile = fopen("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv", "w");
+  //outfile << fixed << setprecision(2) << setfill('0');
 
 
   system("rm n_line.txt");
@@ -175,14 +188,14 @@ int main(int argc, char *argv[]){
 	if((p[i]).size() != 0){
 	  for(j=0; j<(int)(p[i]).size(); j++){
 	    //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	    outfile << setw(5) << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
-	    n += 5+1 + 1 + 5+1 + 1;
+	    fprintf(outfile, "%02f %02f ", ((p[i][j]).lat), ((p[i][j]).lon));
+	    n += 10 + 1 + 10 + 1;
 	  }
 	}else{
 	  n++;
 	}
 
-	outfile << "\n";
+	fprintf(outfile, "\n");
       }
 
       for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
@@ -207,21 +220,21 @@ int main(int argc, char *argv[]){
     if((p[i]).size() != 0){
       for(j=0; j<(int)(p[i]).size(); j++){
 	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	outfile << setw(5) << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
-	n += 5+1 + 1 + 5+1 + 1;
+	fprintf(outfile, "%02f %02f ", ((p[i][j]).lat), ((p[i][j]).lon));
+	n += 10 + 1 + 10 + 1;
       }
     }else{
       n++;
     }
 
-    outfile << "\n";
+    fprintf(outfile, "\n");
   }
 
   
   infile.close();
   p.clear();
   n_line.clear();
-  outfile.close();
+  fclose(outfile);
   outfile_n_line.close();
 
   cout << "\n";

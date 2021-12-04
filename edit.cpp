@@ -15,7 +15,7 @@
 #define floor_min_lat (floor(min_lat))
 #define floor_max_lat (floor(max_lat))
 #define span_lat ((floor_max_lat-floor_min_lat+1)
-#define outfile_precision 4
+#define outfile_precision 16
 
 
 //mac
@@ -64,21 +64,17 @@ int main(int argc, char *argv[]){
 
 
   ifstream infile, infile_n_line;
-  ofstream outfile_n_line;
-  FILE* outfile;
+  ofstream outfile_n_line, outfile;
   string line;
   int floor_old = 0, floor_new = 0;
   vector< vector<position> > p(360+1);
-  stringstream ins;
+  stringstream ins, ins_outfile;
   position t;
   int i, j;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
   vector<unsigned int> n_line((360+1)*(floor_max_lat-floor_min_lat+1));
   long int n;
 
-  //
-
-  //
   
   //
   //read n_line.txt and store it into vector n_line
@@ -86,14 +82,14 @@ int main(int argc, char *argv[]){
   i=0;
   while(!infile_n_line.eof()){
 
-  line.clear();
-  ins.clear();
+    line.clear();
+    ins.clear();
 
-  getline(infile_n_line, line);
-  ins << line;
-  ins >> (n_line[i++]);
+    getline(infile_n_line, line);
+    ins << line;
+    ins >> (n_line[i++]);
 
-  //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+    //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
 
   }
   infile_n_line.close();
@@ -110,34 +106,34 @@ int main(int argc, char *argv[]){
   cin >> j;
 
   if(is){
-  // is.seekg (0, is.end);
-  // l = is.tellg();
+    // is.seekg (0, is.end);
+    // l = is.tellg();
 
     
-  // read data as a block:
-  is.seekg(n_line[361*i+j], is.beg);
+    // read data as a block:
+    is.seekg(n_line[361*i+j], is.beg);
 
-  l = n_line[361*i+j + 1] - n_line[361*i+j] - 1;
-  char * buffer = new char [l];
+    l = n_line[361*i+j + 1] - n_line[361*i+j] - 1;
+    char * buffer = new char [l];
 
-  is.read(buffer, l);
-  cout << "\nl = " << l;
+    is.read(buffer, l);
+    cout << "\nl = " << l;
 
-  if (is)
-  cout << "\nall characters read successfully.";
-  else
-  cout << "\nerror: only " << is.gcount() << " could be read";
-  is.close();
+    if (is)
+      cout << "\nall characters read successfully.";
+    else
+      cout << "\nerror: only " << is.gcount() << " could be read";
+    is.close();
 
   
-  cout << "\nResult of reading n_line.txt: ";
-  // for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
-  cout.write(buffer, l);
+    cout << "\nResult of reading n_line.txt: ";
+    // for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
+    cout.write(buffer, l);
 
-  is.close();
+    is.close();
   }else{
 
-  cout << "Could not open file!\n";
+    cout << "Could not open file!\n";
   }
   cout << "\n";
   return 0;
@@ -147,9 +143,9 @@ int main(int argc, char *argv[]){
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
 
   system("rm /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  outfile = fopen("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv", "w");
-  //outfile << fixed << setprecision(2) << setfill('0');
-
+  outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
+  outfile.precision(outfile_precision);
+  ins_outfile.precision(outfile_precision);
 
   system("rm n_line.txt");
   outfile_n_line.open("n_line.txt");
@@ -175,20 +171,18 @@ int main(int argc, char *argv[]){
       cout << "\nSwitching to latitude " << floor_new;
 
       for(i=0; i<((int)p.size()); i++){
-	//-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
-	//outfile << "\np[" << -i+180-1 << "]:\t\t";
-	//outfile << "\n" << i << "\t";
 
 	n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;	
 	outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
 
-	
+	ins_outfile.str("");
 	if((p[i]).size() != 0){
+	  
 	  for(j=0; j<(int)(p[i]).size(); j++){
-	    //outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	    fprintf(outfile, "%02f %02f ", ((p[i][j]).lat), ((p[i][j]).lon));
-	    n += 10 + 1 + 10 + 1;
+	    ins_outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
 	  }
+	  outfile << ins_outfile.str();
+	  n += (ins_outfile.str()).size();
 	  //add to n the character corresponding to the '\n' found at the end of the line
 	  n++;
 	}else{
@@ -196,13 +190,12 @@ int main(int argc, char *argv[]){
 	  n++;
 	}
 
-	fprintf(outfile, "\n");
+	outfile <<  "\n";
       }
 
       for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
     }
     p[floor(-(t.lon)+180.0)].push_back(t);
-    //cout << "\nPushing back {" << (t.lat) << "," << (t.lon) << "} to p[" << floor(-(t.lon)+180.0) << "]";
 
     floor_old = floor_new;
 
@@ -210,20 +203,18 @@ int main(int argc, char *argv[]){
 
 
   for(i=0; i<((int)p.size()); i++){
-    //-lon+180-e = i , lon = 180-i-e, floor(lon) = 180-i-1
-    //outfile << "\np[" << -i+180-1 << "]:\t\t";
-    //outfile << "\n" << i << "\t";
 
     n_line[(360+1)*(floor_new-floor_min_lat)+i] = n;	
     outfile_n_line << n_line[(360+1)*(floor_new-floor_min_lat)+i] << "\n";
 
-	
+    ins_outfile.str("");
     if((p[i]).size() != 0){
+	  
       for(j=0; j<(int)(p[i]).size(); j++){
-	//outfile << "{" << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << "},";
-	fprintf(outfile, "%02f %02f ", ((p[i][j]).lat), ((p[i][j]).lon));
-	n += 10 + 1 + 10 + 1;
+	ins_outfile << ((p[i][j]).lat) << " " << ((p[i][j]).lon) << " ";
       }
+      outfile << ins_outfile.str();
+      n += (ins_outfile.str()).size();
       //add to n the character corresponding to the '\n' found at the end of the line
       n++;
     }else{
@@ -231,13 +222,13 @@ int main(int argc, char *argv[]){
       n++;
     }
 
-    fprintf(outfile, "\n");
+    outfile <<  "\n";
   }
-  
+    
   infile.close();
   p.clear();
   n_line.clear();
-  fclose(outfile);
+  outfile.close();
   outfile_n_line.close();
 
   cout << "\n";

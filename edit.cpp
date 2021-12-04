@@ -66,14 +66,14 @@ int main(int argc, char *argv[]){
   ifstream infile, infile_n_line;
   ofstream outfile_n_line, outfile;
   string line;
-  int floor_old = 0, floor_new = 0;
+  //  int floor_old = 0, floor_new = 0;
   vector< vector<position> > p(360+1);
   stringstream ins, ins_outfile;
-  position t;
+  // position t;
   int i, j;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
   vector<unsigned int> n_line((360+1)*(floor_max_lat-floor_min_lat+1));
-  long int n;
+  // long int n;
 
   
   //
@@ -137,7 +137,9 @@ int main(int argc, char *argv[]){
   }
   cout << "\n";
   return 0;
-  //
+
+  //this part of the code creates map_conv_blocked.csv 
+  /*
   
   //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
   infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
@@ -230,6 +232,8 @@ int main(int argc, char *argv[]){
   n_line.clear();
   outfile.close();
   outfile_n_line.close();
+
+  */
 
   cout << "\n";
   return(0);

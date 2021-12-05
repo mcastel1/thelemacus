@@ -130,7 +130,7 @@ int main(int argc, char *argv[]){
       buffer = new char [l];
 
       is.read(buffer, l);
-      string dummy(buffer);
+      string dummy(buffer, l);
       data.append(dummy);
       dummy.clear();
 

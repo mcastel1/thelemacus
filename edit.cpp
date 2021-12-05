@@ -79,14 +79,14 @@ int main(int argc, char *argv[]){
   i=0;
   while(!infile_n_line.eof()){
 
-  line.clear();
-  ins.clear();
+    line.clear();
+    ins.clear();
 
-  getline(infile_n_line, line);
-  ins << line;
-  ins >> (n_line[i++]);
+    getline(infile_n_line, line);
+    ins << line;
+    ins >> (n_line[i++]);
 
-  //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+    //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
 
   }
   infile_n_line.close();
@@ -96,55 +96,70 @@ int main(int argc, char *argv[]){
   //this chunk of code reads in map_conv_blocked.csv the points with latitude floor(lat_min)+i, and longitude j
   ifstream is("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
   unsigned int l;
-
-  cout << "\nEnter lat [" << floor_min_lat << ":" << floor_max_lat << "]";
-  cin >> i;
-  i -= floor_min_lat;
-  cout << "\nEnter lon:";
-  cin >> j;
-
-  cout << "\ni = " << i << "\nj= " << j;
-
-  if(is){
-    // is.seekg (0, is.end);
-    // l = is.tellg();
-
-    
-    // read data as a block:
-    is.seekg(n_line[360*i+j], is.beg);
-
-    l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
-    char * buffer = new char [l];
-
-    is.read(buffer, l);
-    cout << "\nl = " << l;
-
-    if (is)
-      cout << "\nall characters read successfully.";
-    else
-      cout << "\nerror: only " << is.gcount() << " could be read";
-    is.close();
+  char* buffer = NULL;
+  string data;
+  int i_min, i_max, j_min, j_max;
 
   
-    cout << "\nResult of reading n_line.txt: ";
-    // for(k=0; k<l; k++){cout << "\nk=" << k << "\t\t" << buffer[k];}
-    cout.write(buffer, l);
 
-    string data(buffer, l);
-    replace(data.begin(), data.end(), ' ', '\n');
-    replace(data.begin(), data.end(), ',', ' ');
+  cout << "\nEnter minimal latitude:";
+  cin >> i_min;
+  i_min -= floor_min_lat;
 
-    system("rm -rf result.txt");
-    outfile.open("result.txt");
-    outfile << data;
-    outfile.close();
+  cout << "\nEnter maximal latitude:";
+  cin >> i_max;
+  i_max -= floor_min_lat;
+  
+  cout << "\nEnter minimal longitude:";
+  cin >> j_min;
 
+  cout << "\nEnter maximal longitude:";
+  cin >> j_max;
+
+  data.clear();
+  for(i=i_min; i<=i_max; i++){
     
-    is.close();
-  }else{
+    for(j=j_min; j<=j_max; j++){
+      
+      // read data as a block:
+      is.seekg(n_line[360*i+j], is.beg);
 
-    cout << "Could not open file!\n";
+      
+      l = n_line[360*i+j + 1] - n_line[360*i+j] - 1; 
+      if(buffer != NULL){delete [] buffer;}
+      buffer = new char [l];
+
+      is.read(buffer, l);
+      string dummy(buffer);
+      data.append(dummy);
+      dummy.clear();
+
+      if(is){
+      
+	cout << "\nall characters read successfully.";
+      
+      }else{
+      
+	cout << "\nerror: only " << is.gcount() << " could be read";
+	is.close();
+
+      }
+
+    }
+
   }
+  
+  cout << "\nResult of reading n_line.txt: " << data;
+ 
+  //make substitutions to plot with gnuplot
+  replace(data.begin(), data.end(), ' ', '\n');
+  replace(data.begin(), data.end(), ',', ' ');
+
+  system("rm -rf result.txt");
+  outfile.open("result.txt");
+  outfile << data;
+  outfile.close();
+  is.close();
 
   
 
@@ -152,26 +167,26 @@ int main(int argc, char *argv[]){
 
   //this part of the code creates map_conv_blocked.csv 
   /*
-  int floor_old = 0, floor_new = 0;
-  position t;
-  long int n;
+    int floor_old = 0, floor_new = 0;
+    position t;
+    long int n;
 
   
-  //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
-  infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
+    //infile.open("/Users/mcastellana/Documents/navigational_astronomy/sight_reduction_program/sample.csv");
+    infile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_sorted_by_latitude.csv");
 
-  system("rm /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-  outfile.precision(outfile_precision);
-  ins_outfile.precision(outfile_precision);
+    system("rm /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
+    outfile.open("/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
+    outfile.precision(outfile_precision);
+    ins_outfile.precision(outfile_precision);
 
-  system("rm n_line.txt");
-  outfile_n_line.open("n_line.txt");
+    system("rm n_line.txt");
+    outfile_n_line.open("n_line.txt");
 
-  floor_old = floor_min_lat;
-  for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
-  n = 0;
-  while(!infile.eof()){
+    floor_old = floor_min_lat;
+    for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
+    n = 0;
+    while(!infile.eof()){
 
     line.clear();
     ins.clear();
@@ -186,44 +201,11 @@ int main(int argc, char *argv[]){
 
     if(floor_new != floor_old){
 
-      if(floor_new > floor_old + 1){cout << "\nJump is > 1!"; return 0;}
+    if(floor_new > floor_old + 1){cout << "\nJump is > 1!"; return 0;}
       
-      cout << "\nSwitching to latitude " << floor_new;
+    cout << "\nSwitching to latitude " << floor_new;
 
-      for(i=0; i<((int)p.size()); i++){
-
-	n_line[360*(floor_new-floor_min_lat)+i] = n;	
-	outfile_n_line << n_line[360*(floor_new-floor_min_lat)+i] << "\n";
-
-	ins_outfile.str("");
-	if((p[i]).size() != 0){
-	  
-	  for(j=0; j<(int)(p[i]).size(); j++){
-	    ins_outfile << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << " ";
-	  }
-	  outfile << ins_outfile.str();
-	  n += (ins_outfile.str()).size();
-	  //add to n the character corresponding to the '\n' found at the end of the line
-	  n++;
-	}else{
-	  //add to n the character corresponding to the '\n' found at the end of the line
-	  n++;
-	}
-
-	outfile <<  "\n";
-      }
-
-      for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
-    }
-    p[(t.lon)].push_back(t);
-
-    floor_old = floor_new;
-
-  }
-
-
-
-  for(i=0; i<((int)p.size()); i++){
+    for(i=0; i<((int)p.size()); i++){
 
     n_line[360*(floor_new-floor_min_lat)+i] = n;	
     outfile_n_line << n_line[360*(floor_new-floor_min_lat)+i] << "\n";
@@ -231,26 +213,59 @@ int main(int argc, char *argv[]){
     ins_outfile.str("");
     if((p[i]).size() != 0){
 	  
-      for(j=0; j<(int)(p[i]).size(); j++){
-	ins_outfile << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << " ";
-      }
-      outfile << ins_outfile.str();
-      n += (ins_outfile.str()).size();
-      //add to n the character corresponding to the '\n' found at the end of the line
-      n++;
+    for(j=0; j<(int)(p[i]).size(); j++){
+    ins_outfile << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << " ";
+    }
+    outfile << ins_outfile.str();
+    n += (ins_outfile.str()).size();
+    //add to n the character corresponding to the '\n' found at the end of the line
+    n++;
     }else{
-      //add to n the character corresponding to the '\n' found at the end of the line
-      n++;
+    //add to n the character corresponding to the '\n' found at the end of the line
+    n++;
     }
 
     outfile <<  "\n";
-  }
+    }
+
+    for(i=0; i<((int)p.size()); i++){(p[i]).clear();}
+    }
+    p[(t.lon)].push_back(t);
+
+    floor_old = floor_new;
+
+    }
+
+
+
+    for(i=0; i<((int)p.size()); i++){
+
+    n_line[360*(floor_new-floor_min_lat)+i] = n;	
+    outfile_n_line << n_line[360*(floor_new-floor_min_lat)+i] << "\n";
+
+    ins_outfile.str("");
+    if((p[i]).size() != 0){
+	  
+    for(j=0; j<(int)(p[i]).size(); j++){
+    ins_outfile << ((p[i][j]).lat) << "," << ((p[i][j]).lon) << " ";
+    }
+    outfile << ins_outfile.str();
+    n += (ins_outfile.str()).size();
+    //add to n the character corresponding to the '\n' found at the end of the line
+    n++;
+    }else{
+    //add to n the character corresponding to the '\n' found at the end of the line
+    n++;
+    }
+
+    outfile <<  "\n";
+    }
   
-  infile.close();
-  p.clear();
-  n_line.clear();
-  outfile.close();
-  outfile_n_line.close();
+    infile.close();
+    p.clear();
+    n_line.clear();
+    outfile.close();
+    outfile_n_line.close();
 
   */
 

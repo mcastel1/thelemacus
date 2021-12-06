@@ -11,8 +11,7 @@ k = 1.0/K;
 N = 6.0;
 #circles of equal altitude are plotted with S points
 S = 1e4;
-#coastlines are plotted every M lines
-M = 1e1;
+#plot_coastline_every
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
@@ -65,19 +64,26 @@ list(start,end,increment)=system(sprintf("seq %g %g %g", start, increment, end))
 
 #set tics scale 0
 
+#latitude and longitude for a circle of equal altitude whose ground position has coordinates d, GHA, and whose angular aperture is omega
+phi_cea(t, d, GHA, omega) =pi/2.-acos(cos(omega) * sin(d)-cos(d) * cos(t) * sin(omega))
+lambda_cea(t, d, GHA, omega) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(omega)+cos(t) * sin(d) * sin(omega))+cos(GHA) * sin(omega) * sin(t))/(cos(d) * cos(GHA) * cos(omega)+sin(omega)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(omega) +  sin(omega) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
 
-Phi(t, d, GHA, cH) =pi/2.-acos(cos(cH) * sin(d)-cos(d) * cos(t) * sin(cH))
-Lambda(t, d, GHA, cH) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(cH)+cos(t) * sin(d) * sin(cH))+cos(GHA) * sin(cH) * sin(t))/(cos(d) * cos(GHA) * cos(cH)+sin(cH)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(cH) +  sin(cH) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
+#latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a
+phi_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, t = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), asin( tanh( tau*sqrt(C/(1.0-C))*t + atanh(sin(d)) ) ) )
+
+lambda_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, t = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), lambda = GHA + sigma*t, lambda - 2.0*pi*floor(lambda/(2.0*pi)) )
 
 
-
-
+#latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a
+phi_ort(l, d, GHA, a, Re) = asin(cos(a) * cos(d) * sin(l/Re) + cos(l/Re) * sin(d))
+lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) + sin(GHA) * (-cos(l/Re) * cos(d) +  cos(a) * sin(l/Re) * sin(d)))/( cos(l/Re) * cos(GHA) * cos(d) +  sin(l/Re) * (sin(a) * sin(GHA) -  cos(a) * cos(GHA) * sin(d)))) + ( ( cos(l/Re) * cos(GHA) * cos(d) + sin(l/Re) * (sin(a) * sin(GHA) - cos(a) * cos(GHA) * sin(d)) ) >= 0.0 ? 0.0 : pi ) ), lambda - 2.0*pi*floor(lambda/(2.0*pi)))
 
 #angles are in degrees
-lambda_min = 180.0 - epsilon
-lambda_max = 180.0 + epsilon
-phi_min = -80.0
-phi_max = 80.0
+#lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
+#min_longitude
+#max_longitude
+#min_latitude
+#max_latitude
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -89,11 +95,14 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 
 
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
-label_deg(x) = sprintf("%.f\260   ", x - myint(x/360.0)*360.0)
+label_deg_latitude(x) = ( x == 0.0 ) ? sprintf("0\260") : ( x > 0.0 ? sprintf("%.f\260 N", x - myint(x/360.0)*360.0) : sprintf("%.f\260 S", ((-x) - myint((-x)/360.0)*360.0)) )
+label_deg_longitude(x) = ( x == 0.0 ) ? sprintf("0\260") : ( x < 180.0 ? sprintf("%.f\260 W", x - myint(x/360.0)*360.0) : sprintf("%.f\260 E", 360.0 - (x - myint(x/360.0)*360.0)) )
 #this prints the arcminutes only of angle x
 label_min(x) = sprintf("%.f'", minutes(x) ) 
 #if the arcminutes are zero, I print out only the degrees for clarity
-label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprintf("%.f\260 %.f'", degrees(x), minutes(x)) ) 
+label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprintf("%.f\260 %.f'", degrees(x), minutes(x)) )
+#this function outputs angle x in the format which can be read from file from lib.h 
+label_deg_min_c_lib(x) = sprintf("%.f° %.f'", degrees(x), minutes(x))
 
 
 #GPS position
@@ -207,7 +216,7 @@ while(1){
 		if(x >= GPVAL_X_MIN){
 
 		          if(is_int(lambda) == 1){
-		       		      set xtics add (label_deg(lambda) x);
+		       		      set xtics add (label_deg_longitude(lambda) x);
 		          }else{
 		       		      set xtics add (label_min(lambda) x);
 		          }
@@ -268,7 +277,7 @@ while(1){
 	while(phi<=phi_max){
 		if(phi >= phi_min){
 		       if(is_int(phi) == 1){
-		       		      set ytics add (label_deg(phi) ye(phi));
+		       		      set ytics add (label_deg_latitude(phi) ye(phi));
 		       }else{
 		       		      set ytics add (label_min(phi) ye(phi));
 		       }
@@ -300,13 +309,18 @@ while(1){
 	#coastlines
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-	#sight_plots
 	#position_plots
+	#route_plots
 
 	x_max_old = GPVAL_X_MAX;
+
+        set print "boundary.txt";
+	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX, "\n", "minimal longitude = ", label_deg_min_c_lib(lambda_min), "\n", "maximal longitude = ", label_deg_min_c_lib(lambda_max), "\n", "minimal latitude = ", label_deg_min_c_lib(phi_min), "\n", "maximal latitude = ", label_deg_min_c_lib(phi_max), "\n";
+	unset print;
+	system("chmod 777 boundary.txt");
 
 	}
 
 
-    	pause 1e-3      # waiting time in seconds
+    	pause 1e-1      # waiting time in seconds
 }

@@ -3208,6 +3208,7 @@ void Plot::show(bool zoom_out, String prefix){
   file_boundary.close(new_prefix);
   //
 
+  //in either case of the if above, I write the boundary values which I have read in plot_temp.plt
   command.str("");
   command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";

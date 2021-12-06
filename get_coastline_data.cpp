@@ -54,7 +54,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-  ifstream infile_n_line, infile_coastline_data_blocked;
+  ifstream file_n_line, file_coastline_data_blocked;
   ofstream outfile_selected_coastline_data;
   string data, line;
   stringstream ins;
@@ -66,26 +66,26 @@ int main(int argc, char *argv[]){
 
  
   //read file n_line and store it into vector n_line
-  infile_n_line.open(path_file_n_line);
+  file_n_line.open(path_file_n_line);
   i=0;
-  while(!infile_n_line.eof()){
+  while(!file_n_line.eof()){
 
     line.clear();
     ins.clear();
 
-    getline(infile_n_line, line);
+    getline(file_n_line, line);
     ins << line;
     ins >> (n_line[i++]);
 
     //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
 
   }
-  infile_n_line.close();
+  file_n_line.close();
 
 
   
   //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
-  infile_coastline_data_blocked.open(path_file_coastline_data_blocked);
+  file_coastline_data_blocked.open(path_file_coastline_data_blocked);
   cout << "\nEnter minimal latitude:";
   cin >> i_min;
   i_min -= floor_min_lat;
@@ -106,25 +106,25 @@ int main(int argc, char *argv[]){
     for(j=j_min; j<=j_max; j++){
       
       // read data as a block:
-      infile_coastline_data_blocked.seekg(n_line[360*i+j], infile_coastline_data_blocked.beg);
+      file_coastline_data_blocked.seekg(n_line[360*i+j], file_coastline_data_blocked.beg);
 
       l = n_line[360*i+j + 1] - n_line[360*i+j] - 1; 
       if(buffer != NULL){delete [] buffer;}
       buffer = new char [l];
 
-      infile_coastline_data_blocked.read(buffer, l);
+      file_coastline_data_blocked.read(buffer, l);
       string dummy(buffer, l);
       data.append(dummy);
       dummy.clear();
 
-      if(infile_coastline_data_blocked){
+      if(file_coastline_data_blocked){
       
 	cout << "\nAll characters read successfully.";
       
       }else{
       
-	cout << "\nError: only " << infile_coastline_data_blocked.gcount() << " characters could be read";
-	infile_coastline_data_blocked.close();
+	cout << "\nError: only " << file_coastline_data_blocked.gcount() << " characters could be read";
+	file_coastline_data_blocked.close();
 
       }
 
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]){
   outfile_selected_coastline_data << data;
   outfile_selected_coastline_data.close();
   
-  infile_coastline_data_blocked.close();
+  file_coastline_data_blocked.close();
 
   cout << "\n";
   return(0);

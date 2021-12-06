@@ -8,6 +8,7 @@
 #include <sstream>
 #include <algorithm>
 #include <list>
+#include <unistd.h>
 
 #define max_lat (83.6664731)
 #define min_lat (-78.7290778)
@@ -25,8 +26,8 @@
   clear; clear; g++ get_coastline_data.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o get_coastline_data.o -Wall -DHAVE_INLINE -g
 
   ./get_coastline_data.o 
-  valgrind ./get_coastline_data.o 
-  valgrind --leak-check=full ./get_coastline_data.o  
+  valgrind ./get_coastline_data.o   -p 45 -P 50 -l 1 -L 4
+  valgrind --leak-check=full ./get_coastline_data.o    -p 45 -P 50 -l 1 -L 4
 
 
 */
@@ -55,13 +56,42 @@ using namespace std;
 int main(int argc, char *argv[]){
 
   File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
+  int options;
   string data, line;
   stringstream ins;
-  int i, j, i_min, i_max, j_min, j_max;
+  int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
   vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
   unsigned int l;
   char* buffer = NULL;
+
+
+  while ((options = getopt(argc, argv, ":l:L:p:P:")) != -1) {
+		
+    switch (options) {
+
+    case 'p':
+      i_min = ((unsigned long long int)atoi(optarg)) - floor_min_lat;
+      break;
+
+    case 'P':
+      i_max = ((unsigned long long int)atoi(optarg)) - floor_min_lat;
+      break;	
+
+    case 'l':
+      j_min = (unsigned long long int)atoi(optarg);
+      break;	
+
+    case 'L':
+      j_max = (unsigned long long int)atoi(optarg);
+      break;	
+      
+    }
+    
+  }
+
+  cout << "Coordinates: " << i_min << " " << i_max << " " << j_min << " " << j_max << "\n";
+
 
   file_n_line.set_name(String(path_file_n_line));
   file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
@@ -89,19 +119,6 @@ int main(int argc, char *argv[]){
   
   //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
   file_coastline_data_blocked.open(String("in"), String(""));
-  cout << "\nEnter minimal latitude:";
-  cin >> i_min;
-  i_min -= floor_min_lat;
-
-  cout << "\nEnter maximal latitude:";
-  cin >> i_max;
-  i_max -= floor_min_lat;
-  
-  cout << "\nEnter minimal longitude:";
-  cin >> j_min;
-
-  cout << "\nEnter maximal longitude:";
-  cin >> j_max;
 
   data.clear();
   for(i=i_min; i<=i_max; i++){

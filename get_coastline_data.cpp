@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
   int options;
   string data, line;
   stringstream ins;
-  int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
+  int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
   vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
   unsigned int l, every = 0;
@@ -96,14 +96,9 @@ int main(int argc, char *argv[]){
     
   }
 
+  
   cout << "Coordinates: " << i_min << " " << i_max << " " << j_min << " " << j_max << "\n";
 
-  //swap min and max longitude in case the code is called with j_min > j_max (this can happen when it is called from the gnuplot script)
-  if(j_max < j_min){
-    j = j_min;
-    j_min = j_max;
-    j_max = j;
-  }
   
   file_n_line.set_name(String(path_file_n_line));
   file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
@@ -136,11 +131,13 @@ int main(int argc, char *argv[]){
   for(i=i_min; i<=i_max; i++){
     
     for(j=j_min; j<=j_max; j++){
+
+      j_normalized = (j % 360);
       
       // read data as a block:
-      file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
+      file_coastline_data_blocked.value.seekg(n_line[360*i+j_normalized], file_coastline_data_blocked.value.beg);
 
-      l = n_line[360*i+j + 1] - n_line[360*i+j] - 1; 
+      l = n_line[360*i+j_normalized + 1] - n_line[360*i+j_normalized] - 1; 
       if(buffer != NULL){delete [] buffer;}
       buffer = new char [l];
 

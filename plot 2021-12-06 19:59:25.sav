@@ -80,10 +80,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-#min_longitude
-#max_longitude
-#min_latitude
-#max_latitude
+lambda_min = 170.20750000000001023181539494544;
+lambda_max = 190.00016666666667219942610245198;
+phi_min = 310.23166666666668334073619917035;
+phi_max = 80.886666666666670266749861184508;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -316,23 +316,14 @@ while(1){
 	#M = 300;
   	print "\narea = ", area, "\n", "M = " , M;
 	#set the values lambda_min_get_coastline_data,  lambda_max_get_coastline_data which I will feed into get_coastline_data.cpp
-	if((lambda_min < 180.0) && (lambda_max >= 180.0)){
-		lambda_min_get_coastline_data = lambda_max - 360.0;
-		lambda_max_get_coastline_data = lambda_min;
-	}else{
-		lambda_min_get_coastline_data = lambda_max;
-		lambda_max_get_coastline_data = lambda_min;
-	}
-	#lambda_min_get_coastline_data = lambda_max - 360.0; lambda_max_get_coastline_data = lambda_min;
+	(((lambda_min < 180.0) && (lambda_max >= 180.0)) ? (lambda_min_get_coastline_data = lambda_max - 360.0; lambda_max_get_coastline_data = lambda_min) : (lambda_min_get_coastline_data = lambda_max; lambda_max_get_coastline_data = lambda_min) )
 
-	system(sprintf("./get_coastline_data.o -p %g -P %g -l %g -L %g -e %g > /dev/null 2>&1", floor(phi_min), floor(phi_max), floor(lambda_min_get_coastline_data), floor(lambda_max_get_coastline_data), M));
+#	system(sprintf("./get_coastline_data.o -p %g -P %g -l %g -L %g -e %g", floor(phi_min), floor(phi_max), floor(lambda_min_get_coastline_data), floor(lambda_max_get_coastline_data), M));
 
-	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d lw 2 linecolor rgb "black" noti
+#	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d lw 2 linecolor rgb "black" noti
 
-	#position_plots
-	#route_plots
-
-	x_max_old = GPVAL_X_MAX;
+	
+ 	x_max_old = GPVAL_X_MAX;
 
         set print "boundary.txt";
 	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX, "\n", "minimal longitude = ", label_deg_min_c_lib(lambda_min), "\n", "maximal longitude = ", label_deg_min_c_lib(lambda_max), "\n", "minimal latitude = ", label_deg_min_c_lib(phi_min), "\n", "maximal latitude = ", label_deg_min_c_lib(phi_max), "\n";

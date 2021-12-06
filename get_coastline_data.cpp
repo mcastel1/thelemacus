@@ -64,6 +64,7 @@ int main(int argc, char *argv[]){
   vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
   unsigned int l;
   char* buffer = NULL;
+  size_t pos_beg, pos_end;
 
 
   while ((options = getopt(argc, argv, ":l:L:p:P:")) != -1) {
@@ -152,18 +153,31 @@ int main(int argc, char *argv[]){
 
   }
   
-  cout << "\nResult of reading n_line.txt: " << data;
+  //cout << "\nResult of reading n_line.txt: " << data;
  
-  //replace ' ' with newline and ',' with a space, so the file will be in a format which is readable from gnuplot
-  replace(data.begin(), data.end(), ' ', '\n');
-  replace(data.begin(), data.end(), ',', ' ');
-
  
   //open a new file selected coastline data and write into it the new data
-  outfile_selected_coastline_data.remove(String(""));
-  
+  outfile_selected_coastline_data.remove(String(""));  
   outfile_selected_coastline_data.open(String("out"), String(""));
-  (outfile_selected_coastline_data.value) << data;
+
+  i=0;
+  pos_beg = 0;
+  pos_end = data.find(" ", pos_beg);
+  while(pos_end != (string::npos)){
+    
+    line.clear();
+    line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+
+    replace(line.begin(), line.end(), ' ', '\n');
+    replace(line.begin(), line.end(), ',', ' ');
+
+    (outfile_selected_coastline_data.value) << line;
+
+    pos_beg = pos_end+1;
+    pos_end = data.find(" ", pos_beg);
+    
+  };
+  
   outfile_selected_coastline_data.close(String(""));
   
   file_coastline_data_blocked.close(String(""));

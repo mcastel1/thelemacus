@@ -313,8 +313,8 @@ while(1){
 	x_max_old = GPVAL_X_MAX;
 
         set print "boundary.txt";
-	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX << "\n"
-	      << "minimal longitude = ", lambda_min, "\n", "maximal longitude = ", lambda_max, "\n", "minimal latitude = ", phi_min, "\n", "maximal latitude = ", phi_max;
+	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX , "\n",
+	      "minimal longitude = ", lambda_min, "\n", "maximal longitude = ", lambda_max, "\n", "minimal latitude = ", phi_min, "\n", "maximal latitude = ", phi_max;
 	unset print;
 	system("chmod 777 boundary.txt");
 

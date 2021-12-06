@@ -35,4 +35,4 @@ phi_inv(ye) = K*atan(sinh(ye))
 set size ratio -1
 
 
-plot   'result.txt' u (xe($2)):(ye($1))  w d linecolor rgb "black" noti
+plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1))  w d linecolor rgb "black" noti

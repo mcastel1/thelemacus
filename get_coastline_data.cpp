@@ -24,9 +24,9 @@
   clear; clear; g++ get_coastline_data.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o get_coastline_data.o -Wall -DHAVE_INLINE
   clear; clear; g++ get_coastline_data.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o get_coastline_data.o -Wall -DHAVE_INLINE -g
 
-  ./get_coastline_data.o
-  valgrind ./get_coastline_data.o
-  valgrind --leak-check=full ./get_coastline_data.o
+  ./get_coastline_data.o 
+  valgrind ./get_coastline_data.o 
+  valgrind --leak-check=full ./get_coastline_data.o  
 
 
 */

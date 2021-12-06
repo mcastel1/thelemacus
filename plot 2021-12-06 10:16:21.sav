@@ -11,7 +11,7 @@ k = 1.0/K;
 N = 6.0;
 #circles of equal altitude are plotted with S points
 S = 1e4;
-#plot_coastline_every
+M = 1000;
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
@@ -80,10 +80,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-#min_longitude
-#max_longitude
-#min_latitude
-#max_latitude
+lambda_min = 179.03166666666666628771054092795;
+lambda_max = 181.05333333333334167036809958518;
+phi_min = 320.23166666666662649731733836234;
+phi_max = 80.886666666666670266749861184508;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -307,13 +307,17 @@ while(1){
 	#coastlines
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv' u (xe(-$1+360.0)):(ye($2)) every M w d linecolor rgb "gray" noti
 
-	#position_plots
-	#route_plots
+	
+ set key at graph key_x, graph key_y - 1*key_spacing
+plot "+" u (xe(K*(5.6940203293480333712750507402234))):(ye(K*(0.60018964093998339315305656782584))) w p lw 2 lt 1 ti "2021-12-06 10:13:22"
+
+	
 
 	x_max_old = GPVAL_X_MAX;
 
         set print "boundary.txt";
-	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX;
+	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX , "\n",
+	      "minimal longitude = ", lambda_min, "\n", "maximal longitude = ", lambda_max, "\n", "minimal latitude = ", phi_min, "\n", "maximal latitude = ", phi_max;
 	unset print;
 	system("chmod 777 boundary.txt");
 

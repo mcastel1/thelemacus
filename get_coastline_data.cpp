@@ -172,6 +172,7 @@ int main(int argc, char *argv[]){
   n = count(data.begin(), data.end(), ',');
  
   every = (unsigned int)(((double)n)/((double)N_points));
+  if(every == 0){every = 1;}
 
   i=0;
   pos_beg = 0;

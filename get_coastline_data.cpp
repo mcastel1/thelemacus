@@ -26,8 +26,8 @@
   clear; clear; g++ get_coastline_data.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o get_coastline_data.o -Wall -DHAVE_INLINE -g
 
   ./get_coastline_data.o 
-  valgrind ./get_coastline_data.o   -p 45 -P 50 -l 1 -L 4 -N 10
-  valgrind --leak-check=full ./get_coastline_data.o    -p 45 -P 50 -l 1 -L 4 -N 10
+  valgrind ./get_coastline_data.o   -p 45 -P 50 -l 1 -L 4 -N 1000
+  valgrind --leak-check=full ./get_coastline_data.o    -p 45 -P 50 -l 1 -L 4 -N 1000
 
 
 */
@@ -52,7 +52,7 @@ using namespace std;
 
 #include <lib.h>
 
-//this code efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing N_points points max 
+//this code efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points_coastline points max 
 int main(int argc, char *argv[]){
 
   File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
   int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
   vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
-  unsigned int l, N_points = 0, n = 0, every = 0;
+  unsigned int l, n_points_coastline = 0, n = 0, every = 0;
   char* buffer = NULL;
   size_t pos_beg, pos_end;
 
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
       break;	
 
    case 'N':
-     N_points = (unsigned int)atoi(optarg);
+     n_points_coastline = (unsigned int)atoi(optarg);
       break;	
  
       
@@ -171,7 +171,7 @@ int main(int argc, char *argv[]){
   //count how many datapoints are in data
   n = count(data.begin(), data.end(), ',');
  
-  every = (unsigned int)(((double)n)/((double)N_points));
+  every = (unsigned int)(((double)n)/((double)n_points_coastline));
   if(every == 0){every = 1;}
 
   i=0;
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]){
   pos_end = data.find(" ", pos_beg);
   while(pos_end != (string::npos)){
 
-    //I write points in data to outfile_selected_coastline_data in such a way to write N_points points to the most
+    //I write points in data to outfile_selected_coastline_data in such a way to write n_points_coastline points to the most
     if((i % every) == 0){
     
       line.clear();

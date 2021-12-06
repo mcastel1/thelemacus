@@ -3116,7 +3116,7 @@ void Plot::show(bool zoom_out, String prefix){
   gsl_function F;
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
-  Int /*plot_coastline_every, */width_plot_window, height_plot_window;
+  Int n_points_plot_coastline, width_plot_window, height_plot_window;
   String new_prefix;
   File file_init;
 
@@ -3146,16 +3146,14 @@ void Plot::show(bool zoom_out, String prefix){
   file_gnuplot.remove(prefix);
   
 
-  //replace line with plot_coastline_every in plot_dummy.plt
-  /*
-  cout << new_prefix.value << YELLOW << "Reading plot coastline every from file " << file_init.name.value << " ...\n" << RESET;
+  //replace line with n_points_plot_coastline in plot_dummy.plt
+  cout << new_prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
   plot_command.str("");
   command.str("");
-  plot_coastline_every.read_from_file(String("plot coastline every"), file_init, true, new_prefix); 
-  command << "LANG=C sed 's/#plot_coastline_every/M = " << plot_coastline_every.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
+  n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix); 
+  command << "LANG=C sed 's/#n_points_coastline/n_points_coastline = " << n_points_plot_coastline.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
   system(command.str().c_str());
   cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
-  */
 
 
   //read from init_file with and height of plot window
@@ -3212,7 +3210,7 @@ void Plot::show(bool zoom_out, String prefix){
 
   //in either case of the if above, I write the boundary values which I have read in plot_temp.plt
   command.str("");
-  command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_dummy.plt >> plot_temp.plt \n";
+  command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";

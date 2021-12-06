@@ -2656,7 +2656,7 @@ void Plot::menu(String prefix){
     break;
 
 
-      case 10:{
+  case 10:{
 
     show(false, new_prefix);
     menu(prefix);  
@@ -3117,7 +3117,6 @@ void Plot::show(bool zoom_out, String prefix){
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
   Int plot_coastline_every, width_plot_window, height_plot_window;
-  Double x_min, x_max, y_min, y_max;
   String new_prefix;
   File file_init;
 
@@ -3190,39 +3189,32 @@ void Plot::show(bool zoom_out, String prefix){
     lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix); 
     phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix); 
     phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
-  
-    command.str("");
-    command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-  
-    system(command.str().c_str());
+
     cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+
 
   }else{
     //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
 
     cout << new_prefix.value << "I found a boundary file.\n" << RESET;
     
-    x_min.read_from_file(String("GPVAL_X_MIN"), file_boundary, true, new_prefix); 
-    x_max.read_from_file(String("GPVAL_X_MAX"), file_boundary, true, new_prefix); 
-    y_min.read_from_file(String("GPVAL_Y_MIN"), file_boundary, true, new_prefix); 
-    y_max.read_from_file(String("GPVAL_Y_MAX"), file_boundary, true, new_prefix);
-
-    command.str("");
-    command << "LANG=C sed 's/#min_longitude/lambda_min = lambda_inv(" << x_min.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#max_longitude/lambda_max = lambda_inv(" << x_max.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#min_latitude/phi_min = phi_inv(" << y_min.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#max_latitude/phi_max = phi_inv(" << y_max.value << ");/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-
-    system(command.str().c_str());
+    lambda_min.read_from_file(String("minimal longitude"), file_boundary, true, new_prefix); 
+    lambda_max.read_from_file(String("maximal longitude"), file_boundary, true, new_prefix); 
+    phi_min.read_from_file(String("minimal latitude"), file_boundary, true, new_prefix); 
+    phi_max.read_from_file(String("maximal latitude"), file_boundary, true, new_prefix);
     
   }
 
   file_boundary.close(new_prefix);
   //
 
+  command.str("");
+  command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  
+  system(command.str().c_str());
 
 
   

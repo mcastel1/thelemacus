@@ -54,8 +54,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-  ifstream file_n_line, file_coastline_data_blocked;
-  ofstream outfile_selected_coastline_data;
+  File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
   string data, line;
   stringstream ins;
   int i, j, i_min, i_max, j_min, j_max;
@@ -64,28 +63,32 @@ int main(int argc, char *argv[]){
   unsigned int l;
   char* buffer = NULL;
 
+  file_n_line.set_name(String(path_file_n_line));
+  file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
+  outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
+
  
   //read file n_line and store it into vector n_line
-  file_n_line.open(path_file_n_line);
+  file_n_line.open(String("in"), String(""));
   i=0;
-  while(!file_n_line.eof()){
+  while(!(file_n_line.value.eof())){
 
     line.clear();
     ins.clear();
 
-    getline(file_n_line, line);
+    getline(file_n_line.value, line);
     ins << line;
     ins >> (n_line[i++]);
 
     //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
 
   }
-  file_n_line.close();
+  file_n_line.close(String(""));
 
 
   
   //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
-  file_coastline_data_blocked.open(path_file_coastline_data_blocked);
+  file_coastline_data_blocked.open(String("in"), String(""));
   cout << "\nEnter minimal latitude:";
   cin >> i_min;
   i_min -= floor_min_lat;
@@ -106,25 +109,25 @@ int main(int argc, char *argv[]){
     for(j=j_min; j<=j_max; j++){
       
       // read data as a block:
-      file_coastline_data_blocked.seekg(n_line[360*i+j], file_coastline_data_blocked.beg);
+      file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
 
       l = n_line[360*i+j + 1] - n_line[360*i+j] - 1; 
       if(buffer != NULL){delete [] buffer;}
       buffer = new char [l];
 
-      file_coastline_data_blocked.read(buffer, l);
+      file_coastline_data_blocked.value.read(buffer, l);
       string dummy(buffer, l);
       data.append(dummy);
       dummy.clear();
 
-      if(file_coastline_data_blocked){
+      if(file_coastline_data_blocked.value){
       
 	cout << "\nAll characters read successfully.";
       
       }else{
       
-	cout << "\nError: only " << file_coastline_data_blocked.gcount() << " characters could be read";
-	file_coastline_data_blocked.close();
+	cout << "\nError: only " << file_coastline_data_blocked.value.gcount() << " characters could be read";
+	file_coastline_data_blocked.close(String(""));
 
       }
 
@@ -138,17 +141,15 @@ int main(int argc, char *argv[]){
   replace(data.begin(), data.end(), ' ', '\n');
   replace(data.begin(), data.end(), ',', ' ');
 
-  ins.str("");
-  ins << "rm -rf " << path_file_selected_coastline_data;
-
-  //remove file selected coastline data
-  system(ins.str().c_str());
+ 
   //open a new file selected coastline data and write into it the new data
-  outfile_selected_coastline_data.open(path_file_selected_coastline_data);
-  outfile_selected_coastline_data << data;
-  outfile_selected_coastline_data.close();
+  outfile_selected_coastline_data.remove(String(""));
   
-  file_coastline_data_blocked.close();
+  outfile_selected_coastline_data.open(String("out"), String(""));
+  (outfile_selected_coastline_data.value) << data;
+  outfile_selected_coastline_data.close(String(""));
+  
+  file_coastline_data_blocked.close(String(""));
 
   cout << "\n";
   return(0);

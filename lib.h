@@ -3201,7 +3201,7 @@ void Plot::show(bool zoom_out, String prefix){
     cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
 
   }else{
-    //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file. > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
+    //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
 
     cout << new_prefix.value << "I found a boundary file.\n" << RESET;
     

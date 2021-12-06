@@ -80,10 +80,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-#min_longitude
+lambda_min = 121.05333333333332745951338438317;
 #max_longitude
-#min_latitude
-#max_latitude
+phi_min = 320.23166666666662649731733836234;
+phi_max = 80.886666666666670266749861184508;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -307,13 +307,27 @@ while(1){
 
 	set multiplot	
 	#coastlines
-	M = 100
 	system(sprintf("./get_coastline_data.o -p %g -P %g -l %g -L %g -e %g > /dev/null 2>&1", floor(phi_min), floor(phi_max), floor(lambda_min), floor(lambda_max), M));
 
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
 
-	#position_plots
-	#route_plots
+	
+ set key at graph key_x, graph key_y - 3*key_spacing
+plot "+" u (xe(K*(6.2410583415053171307818047353067))):(ye(K*(0.85264552071863697335629694862291))) w p lw 2 lt 1 ti "Centre Sportif Maryse Hilsz (MH)"
+
+ set key at graph key_x, graph key_y - 4*key_spacing
+plot "+" u (xe(K*(6.241171014205057154811129294103))):(ye(K*(0.85268850862179457195111353939865))) w p lw 2 lt 2 ti "Baby Gym Campo (BGC)"
+
+ set key at graph key_x, graph key_y - 5*key_spacing
+plot "+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 3 ti "My Place (MP)"
+
+	
+ set key at graph key_x, graph key_y - 1*key_spacing
+plot [0.:2.*pi] xe(K*lambda_cea(t, 6.0016343222782575494989032449666, 0.11276663835826482296109674052786, 1.1418435881749906535276295471704)), ye(K*phi_cea(t, 6.0016343222782575494989032449666, 0.11276663835826482296109674052786, 1.1418435881749906535276295471704)) smo csp dashtype 1 lt 1 ti "moon 2021-06-21 21:39:32 TAI, Sight was taken at BGC"
+
+ set key at graph key_x, graph key_y - 2*key_spacing
+plot [0.:2.*pi] xe(K*lambda_cea(t, 6.0009779746737130778910795925185, 0.15713928023821471802179416954459, 1.1482512962972457604138298847829)), ye(K*phi_cea(t, 6.0009779746737130778910795925185, 0.15713928023821471802179416954459, 1.1482512962972457604138298847829)) smo csp dashtype 2 lt 2 ti "moon 2021-06-21 21:50:05.99 TAI, Sight was taken at BGC"
+
 
 	x_max_old = GPVAL_X_MAX;
 

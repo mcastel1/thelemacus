@@ -9,4 +9,4 @@ minimal latitude = -50° 13.9'
 maximal latitude = 80° 53.2'
 width of plot window = 800
 height of plot window = 600
-number of points coastline = 20000
+number of points coastline = 50000

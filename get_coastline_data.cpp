@@ -62,10 +62,10 @@ int main(int argc, char *argv[]){
   int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0;
   //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
   vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
-  unsigned int l, n_points_coastline = 0, n = 0, every = 0;
+  unsigned int l, n_points_coastline = 0, n = 0, every = 0, n_points_grid = 0;
   char* buffer = NULL;
   size_t pos_beg, pos_end;
-
+  bool check;
 
   while ((options = getopt(argc, argv, ":l:L:p:P:N:")) != -1) {
 		
@@ -87,8 +87,8 @@ int main(int argc, char *argv[]){
       j_max = atoi(optarg);
       break;	
 
-   case 'N':
-     n_points_coastline = (unsigned int)atoi(optarg);
+    case 'N':
+      n_points_coastline = (unsigned int)atoi(optarg);
       break;	
  
       
@@ -99,6 +99,8 @@ int main(int argc, char *argv[]){
   
   cout << "Coordinates: " << i_min << " " << i_max << " " << j_min << " " << j_max << "\n";
 
+
+  n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
   
   file_n_line.set_name(String(path_file_n_line));
   file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
@@ -126,8 +128,11 @@ int main(int argc, char *argv[]){
   
   //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
   file_coastline_data_blocked.open(String("in"), String(""));
+  //open a new file selected coastline data and write into it the new data
+  outfile_selected_coastline_data.remove(String(""));  
+  outfile_selected_coastline_data.open(String("out"), String(""));
 
-  data.clear();
+  check = true;
   for(i=i_min; i<=i_max; i++){
     
     for(j=j_min; j<=j_max; j++){
@@ -142,68 +147,67 @@ int main(int argc, char *argv[]){
       buffer = new char [l];
 
       file_coastline_data_blocked.value.read(buffer, l);
-      string dummy(buffer, l);
-      data.append(dummy);
-      dummy.clear();
+      string data(buffer, l);
 
-      if(file_coastline_data_blocked.value){
-      
-	cout << "\nAll characters read successfully.";
-      
-      }else{
-      
-	cout << "\nError: only " << file_coastline_data_blocked.value.gcount() << " characters could be read";
-	file_coastline_data_blocked.close(String(""));
+      if(!(file_coastline_data_blocked.value)){
 
+	check = false;
+      
       }
+
+      //count how many datapoints are in data
+      n = count(data.begin(), data.end(), ',');
+
+      every = (unsigned int)(((double)n)/((double)n_points_coastline)*((double)n_points_grid));
+      if(every == 0){every = 1;}
+
+      l=0;
+      pos_beg = 0;
+      pos_end = data.find(" ", pos_beg);
+      while(pos_end != (string::npos)){
+
+	//I write points in data to outfile_selected_coastline_data in such a way to write n_points_coastline points to the most
+	if((l % every) == 0){
+    
+	  line.clear();
+	  line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+
+	  replace(line.begin(), line.end(), ' ', '\n');
+	  replace(line.begin(), line.end(), ',', ' ');
+
+	  (outfile_selected_coastline_data.value) << line;
+
+	}
+
+	pos_beg = pos_end+1;
+	pos_end = data.find(" ", pos_beg);
+
+	l++;
+    
+      };
+
+
+      data.clear();
 
     }
 
   }
   
-  //cout << "\nResult of reading n_line.txt: " << data;
- 
- 
-  //open a new file selected coastline data and write into it the new data
-  outfile_selected_coastline_data.remove(String(""));  
-  outfile_selected_coastline_data.open(String("out"), String(""));
+  if(check){
 
-  //count how many datapoints are in data
-  n = count(data.begin(), data.end(), ',');
- 
-  every = (unsigned int)(((double)n)/((double)n_points_coastline));
-  if(every == 0){every = 1;}
+    cout << "All characters read successfully\n";
+      
+  }else{
+      
+    cout << RED << "Error: only " << file_coastline_data_blocked.value.gcount() << " characters could be read\n" << RESET;
+    return 0;
+	
+  }
 
-  i=0;
-  pos_beg = 0;
-  pos_end = data.find(" ", pos_beg);
-  while(pos_end != (string::npos)){
-
-    //I write points in data to outfile_selected_coastline_data in such a way to write n_points_coastline points to the most
-    if((i % every) == 0){
-    
-      line.clear();
-      line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-
-      replace(line.begin(), line.end(), ' ', '\n');
-      replace(line.begin(), line.end(), ',', ' ');
-
-      (outfile_selected_coastline_data.value) << line;
-
-    }
-
-    pos_beg = pos_end+1;
-    pos_end = data.find(" ", pos_beg);
-
-    i++;
-    
-  };
   
-  outfile_selected_coastline_data.close(String(""));
-  
+  outfile_selected_coastline_data.close(String(""));  
   file_coastline_data_blocked.close(String(""));
 
-  cout << "\n";
   return(0);
 	
 }

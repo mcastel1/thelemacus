@@ -319,7 +319,7 @@ while(1){
 	#fetch coastline data in path_file_coastline_data_blocked, and produce file path_file_selected_coastline_data which contains n_points_coastline points of the coastline of the world
 	system(sprintf("./get_coastline_data.o -p %g -P %g -l %g -L %g -N %g > /dev/null 2>&1", floor(phi_min), floor(phi_max), floor(lambda_min_get_coastline_data), floor(lambda_max_get_coastline_data), n_points_coastline));
 
-	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
+#	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
 
 	
  set key at graph key_x, graph key_y - 5*key_spacing
@@ -332,40 +332,40 @@ plot "+" u (xe(K*(6.241171014205057154811129294103))):(ye(K*(0.85268850862179457
 plot "+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 3 ti "My Place (MP)"
 
  set key at graph key_x, graph key_y - 8*key_spacing
-plot "+" u (xe(K*(6.2304573770340470062478743784595))):(ye(K*(0.85075457049861902270038171991473))) w p lw 2 lt 4 ti "position transported"
+plot "+" u (xe(K*(6.2304573770340470062478743784595))):(ye(K*(0.85075457049861902270038171991473))) w p lw 2 lt 4 noti
 
  set key at graph key_x, graph key_y - 9*key_spacing
-plot "+" u (xe(K*(5.6197796172146023963023253600113))):(ye(K*(4.9244751858369095742773424717598))) w p lw 2 lt 5 ti "position transported"
+plot "+" u (xe(K*(5.6197796172146023963023253600113))):(ye(K*(4.9244751858369095742773424717598))) w p lw 2 lt 5 noti
 
  set key at graph key_x, graph key_y - 10*key_spacing
-plot "+" u (xe(K*(6.2421974846703820460902534250636))):(ye(K*(0.85207213738669762559396758661023))) w p lw 2 lt 6 ti "position transported"
+plot "+" u (xe(K*(6.2421974846703820460902534250636))):(ye(K*(0.85207213738669762559396758661023))) w p lw 2 lt 6 noti
 
  set key at graph key_x, graph key_y - 11*key_spacing
-plot "+" u (xe(K*(1.3506112506281851004530381032964))):(ye(K*(5.6849332309804019303101085824892))) w p lw 2 lt 7 ti "position transported"
+plot "+" u (xe(K*(1.3506112506281851004530381032964))):(ye(K*(5.6849332309804019303101085824892))) w p lw 2 lt 7 noti
 
  set key at graph key_x, graph key_y - 12*key_spacing
-plot "+" u (xe(K*(6.239919873518503301568216556916))):(ye(K*(0.85182440354923671943510044002323))) w p lw 2 lt 8 ti "position transported"
+plot "+" u (xe(K*(6.239919873518503301568216556916))):(ye(K*(0.85182440354923671943510044002323))) w p lw 2 lt 8 noti
 
  set key at graph key_x, graph key_y - 13*key_spacing
-plot "+" u (xe(K*(5.1536403946555022770326104364358))):(ye(K*(5.5904422949497059036616519733798))) w p lw 2 lt 9 ti "position transported"
+plot "+" u (xe(K*(5.1536403946555022770326104364358))):(ye(K*(5.5904422949497059036616519733798))) w p lw 2 lt 9 noti
 
  set key at graph key_x, graph key_y - 14*key_spacing
-plot "+" u (xe(K*(6.242294029719087866681093146326))):(ye(K*(0.85245689659923817860232020393596))) w p lw 2 lt 10 ti "position transported"
+plot "+" u (xe(K*(6.242294029719087866681093146326))):(ye(K*(0.85245689659923817860232020393596))) w p lw 2 lt 10 noti
 
  set key at graph key_x, graph key_y - 15*key_spacing
-plot "+" u (xe(K*(1.4016593123289571298784039754537))):(ye(K*(5.7035711345874071653838655038271))) w p lw 2 lt 11 ti "position transported"
+plot "+" u (xe(K*(1.4016593123289571298784039754537))):(ye(K*(5.7035711345874071653838655038271))) w p lw 2 lt 11 noti
 
  set key at graph key_x, graph key_y - 16*key_spacing
-plot "+" u (xe(K*(6.2399527169746473731493097147904))):(ye(K*(0.85212852415408213424541372660315))) w p lw 2 lt 12 ti "position transported"
+plot "+" u (xe(K*(6.2399527169746473731493097147904))):(ye(K*(0.85212852415408213424541372660315))) w p lw 2 lt 12 noti
 
  set key at graph key_x, graph key_y - 17*key_spacing
-plot "+" u (xe(K*(5.1893897584325374694458332669456))):(ye(K*(5.5971074026961682434944123087917))) w p lw 2 lt 13 ti "position transported"
+plot "+" u (xe(K*(5.1893897584325374694458332669456))):(ye(K*(5.5971074026961682434944123087917))) w p lw 2 lt 13 noti
 
  set key at graph key_x, graph key_y - 18*key_spacing
-plot "+" u (xe(K*(6.2378920338895884611929432139732))):(ye(K*(0.83383685789296546619908667707932))) w p lw 2 lt 14 ti "position transported"
+plot "+" u (xe(K*(6.2378920338895884611929432139732))):(ye(K*(0.83383685789296546619908667707932))) w p lw 2 lt 14 noti
 
  set key at graph key_x, graph key_y - 19*key_spacing
-plot "+" u (xe(K*(6.2208980612342550386983930366114))):(ye(K*(0.71601704349799699667045160822454))) w p lw 2 lt 15 ti "position transported"
+plot "+" u (xe(K*(6.2208980612342550386983930366114))):(ye(K*(0.71601704349799699667045160822454))) w p lw 2 lt 15 noti
 
 	
  set key at graph key_x, graph key_y - 1*key_spacing

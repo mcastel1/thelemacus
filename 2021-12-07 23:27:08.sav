@@ -1,0 +1,859 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12099999999998090061126276851 nm
+			limb = u
+			sextant altitude = 47° 57.799999999999869260136620141566'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-06-21
+				hour of master-clock date and hour of sight = 21:01:20
+			use of stopwatch = y
+			hour of stopwatch = 00:37:35
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+			Related route # = 1
+		Sight #2:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12099999999998090061126276851 nm
+			limb = u
+			sextant altitude = 47° 13.500000000000085265128291212022'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-06-21
+				hour of master-clock date and hour of sight = 21:01:20
+			use of stopwatch = y
+			hour of stopwatch = 00:48:08.9900000000000002131628207280301
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+			Related route # = 2
+		Sight #3:
+			body:
+				Type = star
+				Name = arcturus
+				Right ascension = 213° 54.79890000000068539520725607872'
+				Declination = 19° 10.694899999999947226569929625839'
+			sextant altitude = 67° 13.399999999999749888957012444735'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-06
+				hour of master-clock date and hour of sight = 22:48:40
+			use of stopwatch = y
+			hour of stopwatch = 00:19:36.819000000000002614797267597169
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+			Related route # = 3
+		Sight #4:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375648 nm
+			limb = l
+			sextant altitude = 53° 16.800000000000068212102632969618'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-08
+				hour of master-clock date and hour of sight = 06:56:00
+			use of stopwatch = y
+			hour of stopwatch = 00:01:46.826000000000000511590769747272
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+			Related route # = 4
+		Sight #5:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375648 nm
+			limb = u
+			sextant altitude = 54° 28.60000000000042064129956997931'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-20
+				hour of master-clock date and hour of sight = 07:05:55
+			use of stopwatch = y
+			hour of stopwatch = 00:01:49.371000000000002216893335571513
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+			Related route # = 5
+		Sight #6:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375648 nm
+			limb = u
+			sextant altitude = 56° 12.900000000000204636307898908854'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-20
+				hour of master-clock date and hour of sight = 07:11:20
+			use of stopwatch = y
+			hour of stopwatch = 00:01:36.073000000000000397903932025656
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+			Related route # = 6
+		Sight #7:
+			body:
+				Type = planet
+				Name = saturn
+				Radius = 31442.764578833692212356254458427 nm
+			limb = c
+			sextant altitude = 40° 23.700000000000187583282240666449'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-29
+				hour of master-clock date and hour of sight = 22:35:30
+			use of stopwatch = y
+			hour of stopwatch = 00:10:34.539000000000001477928890381008
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+			Related route # = 7
+		Sight #8:
+			body:
+				Type = planet
+				Name = jupiter
+				Radius = 37748.920086393089150078594684601 nm
+			limb = c
+			sextant altitude = 40° 27.000000000000170530256582424045'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-29
+				hour of master-clock date and hour of sight = 22:55:35
+			use of stopwatch = y
+			hour of stopwatch = 00:02:35.731999999999999317878973670304
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight taken at BGC
+			Related route # = 8
+		Sight #9:
+			body:
+				Type = planet
+				Name = jupiter
+				Radius = 37748.920086393089150078594684601 nm
+			limb = c
+			sextant altitude = 41° 30.30000000000015347723092418164'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-29
+				hour of master-clock date and hour of sight = 23:01:05
+			use of stopwatch = y
+			hour of stopwatch = 00:02:11.618999999999999772626324556768
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+			Related route # = 9
+		Sight #10:
+			body:
+				Type = planet
+				Name = jupiter
+				Radius = 37748.920086393089150078594684601 nm
+			limb = c
+			sextant altitude = 53° 33.700000000000045474735088646412'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-09-02
+				hour of master-clock date and hour of sight = 22:22:30
+			use of stopwatch = y
+			hour of stopwatch = 00:05:45.936999999999997612576407846063
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+			Related route # = 10
+		Sight #11:
+			body:
+				Type = planet
+				Name = jupiter
+				Radius = 37748.920086393089150078594684601 nm
+			limb = c
+			sextant altitude = 53° 53.599999999999852207110961899161'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-09-02
+				hour of master-clock date and hour of sight = 22:34:10
+			use of stopwatch = y
+			hour of stopwatch = 00:04:25.670999999999999374722392531112
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+			Related route # = 11
+		Sight #12:
+			body:
+				Type = star
+				Name = capella
+				Right ascension = 79° 10.549979999999834490154171362519'
+				Declination = 46° 0.016680000000093286871560849249363'
+			sextant altitude = 45° 15'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-09-03
+				hour of master-clock date and hour of sight = 22:49:13
+			use of stopwatch = y
+			hour of stopwatch = 00:05:13.877000000000000667910171614494
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+			Related route # = 12
+		Sight #13:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 65° 19.400000000000261479726759716868'
+			index error = 0° 3.299999999999999822364316059975'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-14
+				hour of master-clock date and hour of sight = 22:17:07
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+			Related route # = 13
+	Routes in the plot:
+	Positions in the plot:
+		Position #1:
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH)
+		Position #2:
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
+			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)
+		Position #4:
+			latitude = 48° 44.678777462155636612806119956076'
+			longitude = 356° 58.734728411997139119193889200687'
+			label = position transported
+		Position #5:
+			latitude = 282° 9.0986679214017840422457084059715'
+			longitude = 321° 59.379231602522395405685529112816'
+			label = position transported
+		Position #6:
+			latitude = 48° 49.208238776940902425849344581366'
+			longitude = 357° 39.094245527478506119223311543465'
+			label = position transported
+		Position #7:
+			latitude = 325° 43.360856930869431380415335297585'
+			longitude = 77° 23.059465432852164212818024680018'
+			label = position transported
+		Position #8:
+			latitude = 48° 48.356592577195556259539443999529'
+			longitude = 357° 31.264395145003618381451815366745'
+			label = position transported
+		Position #9:
+			latitude = 320° 18.524946722898221196373924612999'
+			longitude = 295° 16.910624513774337174254469573498'
+			label = position transported
+		Position #10:
+			latitude = 48° 48.872687299917032532903249375522'
+			longitude = 357° 35.994964552639885368989780545235'
+			label = position transported
+		Position #11:
+			latitude = 318° 11.865161096689007536042481660843'
+			longitude = 295° 15.375659647656902961898595094681'
+			label = position transported
+		Position #12:
+			latitude = 48° 48.718057644101975256489822641015'
+			longitude = 357° 34.573041351502524776151403784752'
+			label = position transported
+		Position #13:
+			latitude = 318° 54.807496790838285960489884018898'
+			longitude = 295° 15.589709261363395853550173342228'
+			label = position transported
+		Position #14:
+			latitude = 48° 49.60294948850119567396177444607'
+			longitude = 357° 42.764256266308393605868332087994'
+			label = position transported
+		Position #15:
+			latitude = 283° 40.967528317565893303253687918186'
+			longitude = 56° 29.721851043008769011066760867834'
+			label = position transported
+		Position #16:
+			latitude = 48° 49.517205202667753383138915523887'
+			longitude = 357° 41.964747959472106231260113418102'
+			label = position transported
+		Position #17:
+			latitude = 278° 49.169875055059719670680351555347'
+			longitude = 350° 9.0683530097464881691848859190941'
+			label = position transported
+		Position #18:
+			latitude = 48° 49.501835245681888864055508747697'
+			longitude = 357° 41.821566625035302422475069761276'
+			label = position transported
+		Position #19:
+			latitude = 279° 0.61779327822478080634027719497681'
+			longitude = 346° 36.299212003883667421177960932255'
+			label = position transported
+		Position #20:
+			latitude = 48° 50.016095809070151290143257938325'
+			longitude = 357° 46.634408069485289161093533039093'
+			label = position transported
+		Position #21:
+			latitude = 288° 22.910574949252122678444720804691'
+			longitude = 306° 37.941742717559918673941865563393'
+			label = position transported
+		Position #22:
+			latitude = 48° 50.095987301548348114010877907276'
+			longitude = 357° 47.386236761038844633731059730053'
+			label = position transported
+		Position #23:
+			latitude = 291° 34.666711889555017478414811193943'
+			longitude = 302° 56.685816749530886227148585021496'
+			label = position transported
+		Position #24:
+			latitude = 48° 48.511031417786512065504211932421'
+			longitude = 357° 32.675440296379747451283037662506'
+			label = position transported
+		Position #25:
+			latitude = 358° 13.753830069629202625947073101997'
+			longitude = 301° 33.784630219859081989852711558342'
+			label = position transported
+		Position #26:
+			latitude = 48° 48.350888173819441817613551393151'
+			longitude = 357° 31.212350153803072316804900765419'
+			label = position transported
+		Position #27:
+			latitude = 332° 22.753364331255170327494852244854'
+			longitude = 76° 44.863630390531170633039437234402'
+			label = position transported
+		Position #28:
+			latitude = 48° 50.530943517381814444888732396066'
+			longitude = 357° 39.426142956899639102630317211151'
+			label = position transported
+		Position #29:
+			latitude = 326° 47.433249870051668040105141699314'
+			longitude = 80° 18.549774699511090148007497191429'
+			label = position transported
+		Position #30:
+			latitude = 48° 49.402082204431962964008562266827'
+			longitude = 357° 31.377302630301073804730549454689'
+			label = position transported
+		Position #31:
+			latitude = 320° 41.437899355231593290227465331554'
+			longitude = 297° 19.807884395891051099169999361038'
+			label = position transported
+		Position #32:
+			latitude = 48° 50.056121611886936761948163621128'
+			longitude = 357° 36.028367535556071743485517799854'
+			label = position transported
+		Position #33:
+			latitude = 318° 30.217870551360874742385931313038'
+			longitude = 297° 16.672640827558780074468813836575'
+			label = position transported
+		Position #34:
+			latitude = 48° 49.852292861237259558038203977048'
+			longitude = 357° 34.575281706128180303494445979595'
+			label = position transported
+		Position #35:
+			latitude = 319° 11.304556818013224983587861061096'
+			longitude = 297° 17.35626272195872843440156430006'
+			label = position transported
+		Position #36:
+			latitude = 48° 50.511753885419636844744672998786'
+			longitude = 357° 39.288474483124673497513867914677'
+			label = position transported
+		Position #37:
+			latitude = 282° 5.692353422914493421558290719986'
+			longitude = 55° 47.544913464724487539569963701069'
+			label = position transported
+		Position #38:
+			latitude = 48° 50.604527976079651807594927959144'
+			longitude = 357° 39.954320199278754444094374775887'
+			label = position transported
+		Position #39:
+			latitude = 278° 38.283114158377884450601413846016'
+			longitude = 348° 6.5819900858809887722600251436234'
+			label = position transported
+		Position #40:
+			latitude = 48° 50.575807593136090645202784799039'
+			longitude = 357° 39.748118137079018197255209088326'
+			label = position transported
+		Position #41:
+			latitude = 278° 52.115570706614562368486076593399'
+			longitude = 344° 41.309959965889220256940461695194'
+			label = position transported
+		Position #42:
+			latitude = 48° 50.574096941587356468517100438476'
+			longitude = 357° 39.735838366943880828330293297768'
+			label = position transported
+		Position #43:
+			latitude = 287° 36.22640557666954919113777577877'
+			longitude = 308° 52.185503541510342984111048281193'
+			label = position transported
+		Position #44:
+			latitude = 48° 50.493646527858970785018755123019'
+			longitude = 357° 39.158597481459764821920543909073'
+			label = position transported
+		Position #45:
+			latitude = 290° 6.834144269688522399519570171833'
+			longitude = 305° 44.391092211960767599521204829216'
+			label = position transported
+		Position #46:
+			latitude = 48° 49.878201625434996913099894300103'
+			longitude = 357° 34.759802356634281750302761793137'
+			label = position transported
+		Position #47:
+			latitude = 0° 30.543390804125088777709606802091'
+			longitude = 304° 26.60512485223421208502259105444'
+			label = position transported
+		Position #48:
+			latitude = 48° 49.917746834792353638476924970746'
+			longitude = 357° 35.041542847803839322295971214771'
+			label = position transported
+		Position #49:
+			latitude = 339° 37.174478435013043053913861513138'
+			longitude = 78° 39.151712252182164775149431079626'
+			label = position transported
+		Position #50:
+			latitude = 47° 46.519965583002260700595797970891'
+			longitude = 357° 24.293196009031134963151998817921'
+			label = position transported
+		Position #51:
+			latitude = 41° 1.4852791122186204120225738734007'
+			longitude = 356° 25.872221390349068315117619931698'
+			label = position transported
+		Position #52:
+			latitude = 48° 35.004167085280499804866849444807'
+			longitude = 357° 35.5821383936415713833412155509'
+			label = position transported
+		Position #53:
+			latitude = 35° 3.8774871023801438241207506507635'
+			longitude = 356° 15.896570034724391007330268621445'
+			label = position transported
+		Position #54:
+			latitude = 48° 30.535314403129092397648491896689'
+			longitude = 357° 34.496697086522090103244408965111'
+			label = position transported
+		Position #55:
+			latitude = 33° 45.074015343142974643342313356698'
+			longitude = 356° 17.896074322679851320572197437286'
+			label = position transported
+		Position #56:
+			latitude = 48° 50.479208024237891550001222640276'
+			longitude = 357° 39.413145710092294393689371645451'
+			label = position transported
+		Position #57:
+			latitude = 322° 45.088568617758255641092546284199'
+			longitude = 54° 32.203831971342822271253680810332'
+			label = position transported
+		Position #58:
+			latitude = 48° 50.846989008513361341101699508727'
+			longitude = 357° 39.505569076419533303123898804188'
+			label = position transported
+		Position #59:
+			latitude = 327° 34.98450409243673675518948584795'
+			longitude = 33° 59.284022030991110341346939094365'
+			label = position transported
+		Position #60:
+			latitude = 48° 50.718085947851392347729415632784'
+			longitude = 357° 39.473168421845912234857678413391'
+			label = position transported
+		Position #61:
+			latitude = 327° 17.726432248160790550173260271549'
+			longitude = 34° 39.107895260364244904849329032004'
+			label = position transported
+		Position #62:
+			latitude = 48° 50.597568341879508579950197599828'
+			longitude = 357° 39.442882647955457287025637924671'
+			label = position transported
+		Position #63:
+			latitude = 322° 39.115491371486541538615711033344'
+			longitude = 58° 15.200281349894879667772329412401'
+			label = position transported
+		Position #64:
+			latitude = 48° 50.481529184423123979286174289882'
+			longitude = 357° 39.413728816214188555022701621056'
+			label = position transported
+		Position #65:
+			latitude = 322° 42.159123095564154937164857983589'
+			longitude = 60° 38.238108290073000716802198439837'
+			label = position transported
+		Position #66:
+			latitude = 60° 13.373896006200993724633008241653'
+			longitude = 113° 5.1897435451959950114542152732611'
+			label = position transported
+		Position #67:
+			latitude = 48° 53.408770491788430945234722457826'
+			longitude = 357° 40.151129258638320607133209705353'
+			label = position transported
+		Position #68:
+			latitude = 48° 51.838579699965237068681744858623'
+			longitude = 357° 39.755076133815236971713602542877'
+			label = position transported
+		Position #69:
+			latitude = 324° 33.031606363724677066784352064133'
+			longitude = 73° 23.952092406968290561053436249495'
+			label = position transported
+		Position #70:
+			latitude = 49° 46.449394493373574732686392962933'
+			longitude = 357° 37.279689013049619461526162922382'
+			label = position transported
+		Position #71:
+			latitude = 332° 28.260031021152371977223083376884'
+			longitude = 243° 14.102707066401194424543064087629'
+			label = position transported
+		Position #72:
+			latitude = 49° 19.240397252075354117550887167454'
+			longitude = 357° 34.528391686127406501327641308308'
+			label = position transported
+		Position #73:
+			latitude = 320° 57.748220925344639908871613442898'
+			longitude = 267° 47.974420379430284810950979590416'
+			label = position transported
+		Position #74:
+			latitude = 48° 52.483180443223318434320390224457'
+			longitude = 357° 31.709069140305246037314645946026'
+			label = position transported
+		Position #75:
+			latitude = 323° 53.205627783374893624568358063698'
+			longitude = 258° 11.910319852130442086490802466869'
+			label = position transported
+		Position #76:
+			latitude = 48° 54.905885183995337683882098644972'
+			longitude = 357° 31.968915477450536855030804872513'
+			label = position transported
+		Position #77:
+			latitude = 330° 13.745376638162269955500960350037'
+			longitude = 246° 15.970106510205255290202330797911'
+			label = position transported
+		Position #78:
+			latitude = 48° 54.605608710034232444741064682603'
+			longitude = 357° 31.936758526077255737618543207645'
+			label = position transported
+		Position #79:
+			latitude = 329° 1.3135442479995163012063130736351'
+			longitude = 248° 5.1874766709897812688723206520081'
+			label = position transported
+		Position #80:
+			latitude = 48° 51.221221505263372364424867555499'
+			longitude = 357° 31.573360322794314924976788461208'
+			label = position transported
+		Position #81:
+			latitude = 319° 18.30870580343002984591294080019'
+			longitude = 284° 31.453210166209828457795083522797'
+			label = position transported
+		Position #82:
+			latitude = 48° 50.849494829175796439812984317541'
+			longitude = 357° 31.533338814313083275919780135155'
+			label = position transported
+		Position #83:
+			latitude = 319° 24.580440751205969718284904956818'
+			longitude = 287° 19.411526130853644644957967102528'
+			label = position transported
+		Position #84:
+			latitude = 48° 47.525813439629729373336886055768'
+			longitude = 357° 31.174555771236782675259746611118'
+			label = position transported
+		Position #85:
+			latitude = 339° 24.751062606338791738380677998066'
+			longitude = 235° 49.844517085103348108532372862101'
+			label = position transported
+		Position #86:
+			latitude = 48° 48.372947486656840965224546380341'
+			longitude = 357° 31.266162681641844756086356937885'
+			label = position transported
+		Position #87:
+			latitude = 337° 46.936658592318281080224551260471'
+			longitude = 329° 2.9569304107326388475485146045685'
+			label = position transported
+		Position #88:
+			latitude = 47° 53.283971754459287240024423226714'
+			longitude = 357° 34.10693512827720041968859732151'
+			label = position transported
+		Position #89:
+			latitude = 335° 13.587140138732820560107938945293'
+			longitude = 330° 25.999519308948038087692111730576'
+			label = position transported
+		Position #90:
+			latitude = 48° 51.352021283983049215748906135559'
+			longitude = 357° 36.064614091258135886164382100105'
+			label = position transported
+		Position #91:
+			latitude = 323° 2.3160040594814290670910850167274'
+			longitude = 258° 2.5592410219690009398618713021278'
+			label = position transported
+		Position #92:
+			latitude = 48° 52.683344859700156348480959422886'
+			longitude = 357° 36.101490888183889182982966303825'
+			label = position transported
+		Position #93:
+			latitude = 329° 59.603209260341145636630244553089'
+			longitude = 246° 15.045192936123612525989301502705'
+			label = position transported
+		Position #94:
+			latitude = 48° 52.463378740348360906864400021732'
+			longitude = 357° 36.095423190545261604711413383484'
+			label = position transported
+		Position #95:
+			latitude = 328° 39.496157634521296131424605846405'
+			longitude = 248° 4.0712811733254739010590128600597'
+			label = position transported
+		Position #96:
+			latitude = 48° 50.867981695558484034336288459599'
+			longitude = 357° 36.051115900952481752028688788414'
+			label = position transported
+		Position #97:
+			latitude = 317° 31.988061056626975187100470066071'
+			longitude = 284° 42.945146958624036415130831301212'
+			label = position transported
+		Position #98:
+			latitude = 48° 50.640435364661726680424180813134'
+			longitude = 357° 36.044753735264976057806052267551'
+			label = position transported
+		Position #99:
+			latitude = 317° 33.697912596383048366988077759743'
+			longitude = 287° 31.68595435284942141151987016201'
+			label = position transported
+		Position #100:
+			latitude = 48° 50.721905312780251051663071848452'
+			longitude = 357° 36.047032850476625753799453377724'
+			label = position transported
+		Position #101:
+			latitude = 339° 18.294995682210810628021135926247'
+			longitude = 236° 36.78358506361576019116910174489'
+			label = position transported
+		Position #102:
+			latitude = 48° 50.323676762583460231326171196997'
+			longitude = 357° 36.035879445206546733970753848553'
+			label = position transported
+		Position #103:
+			latitude = 334° 39.139279169369274313794448971748'
+			longitude = 329° 51.379584191437288609449751675129'
+			label = position transported
+		Position #104:
+			latitude = 48° 51.738538545725418771326076239347'
+			longitude = 357° 34.578347027749032349674962460995'
+			label = position transported
+		Position #105:
+			latitude = 324° 30.393739026652610846213065087795'
+			longitude = 258° 18.837110586376866194768808782101'
+			label = position transported
+		Position #106:
+			latitude = 48° 53.502234508819839220450376160443'
+			longitude = 357° 34.580465815171237409231252968311'
+			label = position transported
+		Position #107:
+			latitude = 332° 5.1702901542910240095807239413261'
+			longitude = 246° 23.960421875605675268161576241255'
+			label = position transported
+		Position #108:
+			latitude = 48° 53.244744574659392810644931159914'
+			longitude = 357° 34.580201562000638659810647368431'
+			label = position transported
+		Position #109:
+			latitude = 330° 40.116308722572284750640392303467'
+			longitude = 248° 10.892386532545970112551003694534'
+			label = position transported
+		Position #110:
+			latitude = 48° 50.984725594234276968563790433109'
+			longitude = 357° 34.577221037634444655850529670715'
+			label = position transported
+		Position #111:
+			latitude = 318° 25.744089663293152625556103885174'
+			longitude = 284° 36.776277137918214066303335130215'
+			label = position transported
+		Position #112:
+			latitude = 48° 50.708930624628862915415083989501'
+			longitude = 357° 34.576776125900323677342385053635'
+			label = position transported
+		Position #113:
+			latitude = 318° 24.224952950221450009848922491074'
+			longitude = 287° 25.701282461908476761891506612301'
+			label = position transported
+		Position #114:
+			latitude = 48° 49.757105053981263154128100723028'
+			longitude = 357° 34.575105147094973290222696959972'
+			label = position transported
+		Position #115:
+			latitude = 338° 59.208225173373421057476662099361'
+			longitude = 239° 22.16048889643843722296878695488'
+			label = position transported
+		Position #116:
+			latitude = 48° 49.727171052503393866572878323495'
+			longitude = 357° 34.575049190023037226637825369835'
+			label = position transported
+		Position #117:
+			latitude = 334° 40.032245264625316849560476839542'
+			longitude = 329° 51.123970517213592756888829171658'
+			label = position transported
+		Position #118:
+			latitude = 48° 50.088402807642466996185248717666'
+			longitude = 357° 40.909029589736292109591886401176'
+			label = position transported
+		Position #119:
+			latitude = 290° 3.6637474539077174995327368378639'
+			longitude = 254° 47.385608496416011803376022726297'
+			label = position transported
+		Position #120:
+			latitude = 48° 50.204232566063780041076825000346'
+			longitude = 357° 40.465889035025384146138094365597'
+			label = position transported
+		Position #121:
+			latitude = 293° 22.853992274153824837412685155869'
+			longitude = 254° 39.857100756909176197950728237629'
+			label = position transported
+		Position #122:
+			latitude = 48° 50.653330486219800832259352318943'
+			longitude = 357° 38.745975356285953239421360194683'
+			label = position transported
+		Position #123:
+			latitude = 310° 26.830108218141504039522260427475'
+			longitude = 56° 29.694875119901098514674231410027'
+			label = position transported
+		Position #124:
+			latitude = 48° 50.482079581033758586272597312927'
+			longitude = 357° 39.402146423451540613314136862755'
+			label = position transported
+		Position #125:
+			latitude = 305° 26.151176212284781286143697798252'
+			longitude = 57° 6.6799487534623835927050095051527'
+			label = position transported
+		Position #126:
+			latitude = 48° 51.176118344838528173568192869425'
+			longitude = 357° 36.740317436996292599360458552837'
+			label = position transported
+		Position #127:
+			latitude = 339° 50.497821207105744178988970816135'
+			longitude = 261° 36.231195586387912044301629066467'
+			label = position transported
+		Position #128:
+			latitude = 48° 50.955776410324915559613145887852'
+			longitude = 357° 37.58611630621317090117372572422'
+			label = position transported
+		Position #129:
+			latitude = 308° 4.3682309012535824876977130770683'
+			longitude = 56° 48.152048879315714202675735577941'
+			label = position transported
+		Position #130:
+			latitude = 48° 47.392093853567160977036110125482'
+			longitude = 357° 45.88456620668125651718582957983'
+			label = position transported
+		Position #131:
+			latitude = 295° 14.493170611355026267119683325291'
+			longitude = 29° 15.971604675277362161978089716285'
+			label = position transported
+		Position #132:
+			latitude = 48° 50.548223911209362313456949777901'
+			longitude = 357° 40.058505360356093660811893641949'
+			label = position transported
+		Position #133:
+			latitude = 283° 52.178683642079022320103831589222'
+			longitude = 15° 20.140272870644047031873924424872'
+			label = position transported
+		Position #134:
+			latitude = 48° 50.441423853197733251363388262689'
+			longitude = 357° 40.256104204941038915421813726425'
+			label = position transported
+		Position #135:
+			latitude = 283° 43.717842683696517269709147512913'
+			longitude = 14° 58.415105580238453342190041439608'
+			label = position transported
+		Position #136:
+			latitude = 48° 51.813966422180470772218541242182'
+			longitude = 357° 37.714242343799924128688871860504'
+			label = position transported
+		Position #137:
+			latitude = 338° 35.719504553011347525171004235744'
+			longitude = 247° 1.3487179978420726911281235516071'
+			label = position transported
+		Position #138:
+			latitude = 48° 51.354627141558211178562487475574'
+			longitude = 357° 38.565493706871620815945789217949'
+			label = position transported
+		Position #139:
+			latitude = 301° 12.738614573737550017540343105793'
+			longitude = 31° 47.795229869400586153460608329624'
+			label = position transported
+		Position #140:
+			latitude = 48° 50.572618826685840076606837101281'
+			longitude = 357° 39.754279652896684638108126819134'
+			label = position transported
+		Position #141:
+			latitude = 283° 38.939321023827915269066579639912'
+			longitude = 13° 21.803254027693057537362619768828'
+			label = position transported
+		Position #142:
+			latitude = 48° 50.454463364554271720407996326685'
+			longitude = 357° 39.982564614883813192136585712433'
+			label = position transported
+		Position #143:
+			latitude = 283° 32.772600786920520476996898651123'
+			longitude = 13° 3.5498787732114678306061250623316'
+			label = position transported
+		Position #144:
+			latitude = 48° 51.70975154185697419961798004806'
+			longitude = 357° 37.555089523024207665002904832363'
+			label = position transported
+		Position #145:
+			latitude = 338° 36.500913511042654135962948203087'
+			longitude = 248° 52.38996607744411448948085308075'
+			label = position transported
+		Position #146:
+			latitude = 48° 51.281025994935305334365693852305'
+			longitude = 357° 38.384696916117491127806715667248'
+			label = position transported
+		Position #147:
+			latitude = 301° 14.110946406344737624749541282654'
+			longitude = 32° 2.9068148100000712474866304546595'
+			label = position transported
+		Position #148:
+			latitude = 48° 50.307408259859300869720755144954'
+			longitude = 357° 43.048581910738903388846665620804'
+			label = position transported
+		Position #149:
+			latitude = 283° 8.2042887174611678346991539001465'
+			longitude = 7° 35.158112174107394309885421535'
+			label = position transported
+		Position #150:
+			latitude = 48° 50.852485197443257902705227024853'
+			longitude = 357° 36.246321213930059457197785377502'
+			label = position transported
+		Position #151:
+			latitude = 348° 18.311624437451428093481808900833'
+			longitude = 286° 12.04334817741255392320454120636'
+			label = position transported
+		Position #152:
+			latitude = 48° 50.780216666957045390518032945693'
+			longitude = 357° 37.155321208695113455178216099739'
+			label = position transported
+		Position #153:
+			latitude = 307° 26.449267062965873265056870877743'
+			longitude = 55° 34.848708897517326477100141346455'
+			label = position transported
+		Position #154:
+			latitude = 48° 50.645766747131517604429973289371'
+			longitude = 357° 35.930839630302671139361336827278'
+			label = position transported
+		Position #155:
+			latitude = 349° 59.552129884293663053540512919426'
+			longitude = 289° 16.88971908524877107993233948946'
+			label = position transported
+		Position #156:
+			latitude = 48° 50.608153187686610863238456659019'
+			longitude = 357° 36.733278115823395637562498450279'
+			label = position transported
+		Position #157:
+			latitude = 308° 58.231035889386930648470297455788'
+			longitude = 58° 23.96027556612040143591002561152'
+			label = position transported
+		Position #158:
+			latitude = 48° 49.677717995866998990095453336835'
+			longitude = 357° 34.454031519434238362009637057781'
+			label = position transported
+		Position #159:
+			latitude = 31° 16.174469413380663240786816459149'
+			longitude = 336° 22.668244768061640570522285997868'
+			label = position transported

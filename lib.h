@@ -2661,6 +2661,9 @@ void Plot::menu(String prefix){
     }
 
     crossing_route_list.clear();
+    
+    print(true, new_prefix, cout);
+    show(false, new_prefix);
     menu(prefix);
    
   }
@@ -2854,8 +2857,13 @@ void Plot::compute_crossings(String prefix){
 
       cout << new_prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
       
-      (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &(p[l++]), new_prefix);
+      (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &(p[l]), new_prefix);
 
+      /* position_list.push_back(p[l][0]); */
+      /* position_list.push_back(p[l][1]); */
+
+      l++;
+      
     }   
   }
 

@@ -80,10 +80,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-lambda_min = 170.1999999999999886313162278384;
-lambda_max = 190;
-phi_min = 310.76666666666665150842163711786;
-phi_max = 80.883333333333339965065533760935;
+lambda_min = 170.20750000000001023181539494544;
+lambda_max = 190.00016666666667219942610245198;
+phi_min = 310.23166666666668334073619917035;
+phi_max = 80.886666666666670266749861184508;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -322,49 +322,34 @@ while(1){
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
 
 	
- set key at graph key_x, graph key_y - 5*key_spacing
 plot "+" u (xe(K*(6.2410583415053171307818047353067))):(ye(K*(0.85264552071863697335629694862291))) w p lw 2 lt 1 ti "Centre Sportif Maryse Hilsz (MH)"
 
- set key at graph key_x, graph key_y - 6*key_spacing
 plot "+" u (xe(K*(6.241171014205057154811129294103))):(ye(K*(0.85268850862179457195111353939865))) w p lw 2 lt 2 ti "Baby Gym Campo (BGC)"
 
- set key at graph key_x, graph key_y - 7*key_spacing
 plot "+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 3 ti "My Place (MP)"
 
- set key at graph key_x, graph key_y - 8*key_spacing
 plot "+" u (xe(K*(6.2304573770340470062478743784595))):(ye(K*(0.85075457049861902270038171991473))) w p lw 2 lt 4 ti "position transported"
 
- set key at graph key_x, graph key_y - 9*key_spacing
 plot "+" u (xe(K*(5.6197796172146023963023253600113))):(ye(K*(4.9244751858369095742773424717598))) w p lw 2 lt 5 ti "position transported"
 
- set key at graph key_x, graph key_y - 10*key_spacing
 plot "+" u (xe(K*(6.2421974846703820460902534250636))):(ye(K*(0.85207213738669762559396758661023))) w p lw 2 lt 6 ti "position transported"
 
- set key at graph key_x, graph key_y - 11*key_spacing
 plot "+" u (xe(K*(1.3506112506281851004530381032964))):(ye(K*(5.6849332309804019303101085824892))) w p lw 2 lt 7 ti "position transported"
 
- set key at graph key_x, graph key_y - 12*key_spacing
 plot "+" u (xe(K*(6.239919873518503301568216556916))):(ye(K*(0.85182440354923671943510044002323))) w p lw 2 lt 8 ti "position transported"
 
- set key at graph key_x, graph key_y - 13*key_spacing
 plot "+" u (xe(K*(5.1536403946555022770326104364358))):(ye(K*(5.5904422949497059036616519733798))) w p lw 2 lt 9 ti "position transported"
 
- set key at graph key_x, graph key_y - 14*key_spacing
 plot "+" u (xe(K*(6.242294029719087866681093146326))):(ye(K*(0.85245689659923817860232020393596))) w p lw 2 lt 10 ti "position transported"
 
- set key at graph key_x, graph key_y - 15*key_spacing
 plot "+" u (xe(K*(1.4016593123289571298784039754537))):(ye(K*(5.7035711345874071653838655038271))) w p lw 2 lt 11 ti "position transported"
 
- set key at graph key_x, graph key_y - 16*key_spacing
 plot "+" u (xe(K*(6.2399527169746473731493097147904))):(ye(K*(0.85212852415408213424541372660315))) w p lw 2 lt 12 ti "position transported"
 
- set key at graph key_x, graph key_y - 17*key_spacing
 plot "+" u (xe(K*(5.1893897584325374694458332669456))):(ye(K*(5.5971074026961682434944123087917))) w p lw 2 lt 13 ti "position transported"
 
- set key at graph key_x, graph key_y - 18*key_spacing
 plot "+" u (xe(K*(6.2378920338895884611929432139732))):(ye(K*(0.83383685789296546619908667707932))) w p lw 2 lt 14 ti "position transported"
 
- set key at graph key_x, graph key_y - 19*key_spacing
 plot "+" u (xe(K*(6.2208980612342550386983930366114))):(ye(K*(0.71601704349799699667045160822454))) w p lw 2 lt 15 ti "position transported"
 
 	

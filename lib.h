@@ -791,7 +791,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
 
       Angle t_a, t_b;
 
-      cout << prefix.value << "Routes intersect\n";
+      cout << new_prefix.value << "Routes intersect\n";
 
 
       t_a.set(String("t of first intersection"), atan((8*cos((route.GP.phi.value))*((cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*sin(((*this).GP.phi.value)) - cos(((*this).GP.phi.value))*sin((route.GP.phi.value)))*(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).GP.phi.value))*sin((route.GP.phi.value))) + 
@@ -856,7 +856,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       
     }else{
 
-      cout << prefix.value << "Routes do no intersect\n";
+      cout << new_prefix.value << "Routes do no intersect\n";
       output = false;
       
     }
@@ -2490,7 +2490,7 @@ void Plot::menu(String prefix){
   case 1:{
     
     add_sight(new_prefix);
-    print(false, new_prefix, cout);
+    print(true, new_prefix, cout);
     show(false, new_prefix);
     menu(prefix);  
 
@@ -2831,15 +2831,36 @@ Plot::Plot(Catalog* cata, String prefix){
 
 void Plot::compute_crossings(String prefix){
 
-  unsigned int i;
+  unsigned int i, j, l;
+  String new_prefix;
+  vector< vector<Position> > p;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
   
   cout << prefix.value << "Computing crossings between routes #:";
   for(i=0; i<crossing_route_list.size(); i++){
     cout << crossing_route_list[i]+1 << " ";
   }
   cout << "\n";
-  
 
+  //I run over all the pairs of circles of equal altitude and write their crossing points into p
+  l=0;
+  for(i=0; i<crossing_route_list.size(); i++){
+    for(j=i+1; j<crossing_route_list.size(); j++){
+
+      p.resize(l+1);
+      (p[l]).resize(2);
+
+      cout << new_prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
+      
+      (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &(p[l++]), new_prefix);
+
+    }   
+  }
+
+  p.clear();
+  
 }
 
 void Plot::print(bool print_all_routes, String prefix, ostream& ostr){

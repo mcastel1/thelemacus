@@ -55,7 +55,6 @@
 - include reading of dummy line in Position::read
 - add modify sight, route  in menu
  - when entering angles, replace +- with N/S and E/W
-- the plot command is too slow
 - find out why increasing too much number of points coastline in init file yields plots with few points
 - set output to log file
 */

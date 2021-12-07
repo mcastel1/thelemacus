@@ -1777,12 +1777,12 @@ bool File::open(String mode, String prefix){
   
   if(!value){
     
-    cout << prefix.value << RED << "Error opening file " << (name.value) << "!\n" << RESET;
+    cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
     return 0;
     
   }else{
     
-    cout << prefix.value <<  "File " << (name.value) << " opened.\n";
+    cout << prefix.value <<  "... done.\n";
     return 1;
      
   }
@@ -2259,7 +2259,7 @@ void Sight::print(String name, String prefix, ostream& ostr){
   label.print(String("label"), new_prefix, ostr);
   
   if(related_route != -1){
-    cout << new_prefix.value << "Related route # = " << related_route+1 << "\n";
+    ostr << new_prefix.value << "Related route # = " << related_route+1 << "\n";
   }
   
 }

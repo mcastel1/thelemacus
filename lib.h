@@ -2293,6 +2293,7 @@ class Plot{
   void print_routes(bool, String, ostream&);
   void show(bool, String);
   void menu(String);
+  void compute_crossings(String);
 
 };
 
@@ -2637,9 +2638,11 @@ void Plot::menu(String prefix){
 
   case 9:{
 
-    if(route_list.size() > 0){
+    //there need to be at list two routes to compute crossings
+    if(route_list.size() > 1){
 
       print_routes(true, new_prefix, cout);
+      compute_crossings(new_prefix);
 
     }else{
       
@@ -2814,6 +2817,11 @@ Plot::Plot(Catalog* cata, String prefix){
   
   }
 */
+
+void Plot::compute_crossings(String prefix){
+
+
+}
 
 void Plot::print(bool print_all_routes, String prefix, ostream& ostr){
 

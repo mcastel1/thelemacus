@@ -2512,7 +2512,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << RED << "There are no sights to delete!\n" << RESET;
+      cout << YELLOW << "There are no sights to delete!\n" << RESET;
     }
 
     menu(prefix);  
@@ -2546,7 +2546,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << RED << "There are no positions to modify!\n" << RESET;
+      cout << YELLOW << "There are no positions to modify!\n" << RESET;
     }
     
     menu(prefix);  
@@ -2568,7 +2568,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << RED << "There are no positions to transport!\n" << RESET;
+      cout << YELLOW << "There are no positions to transport!\n" << RESET;
     }
     
     menu(prefix);  
@@ -2591,7 +2591,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << RED << "There are no positions to delete!\n" << RESET;
+      cout << YELLOW << "There are no positions to delete!\n" << RESET;
     }
     
     menu(prefix);  
@@ -2609,24 +2609,9 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 8:{
-
-    if(route_list.size() > 0){
-
-      print_routes(true, new_prefix, cout);
-
-
-    }else{
-      cout << RED << "There are no routes to transport!\n" << RESET;
-    }
-
-    menu(prefix);
-   
-  }
-    break;
 
     
-  case 9:{
+  case 8:{
 
     if(route_list.size() > 0){
 
@@ -2640,13 +2625,33 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << RED << "There are no routes to transport!\n" << RESET;
+      
+      cout << YELLOW << "There are no routes to transport!\n" << RESET;
+      
     }
 
     menu(prefix);
    
   }
     break;
+
+  case 9:{
+
+    if(route_list.size() > 0){
+
+      print_routes(true, new_prefix, cout);
+
+    }else{
+      
+      cout << YELLOW << "There are no routes to compute crossings!\n" << RESET;
+
+    }
+
+    menu(prefix);
+   
+  }
+    break;
+
 
 
   case 10:{
@@ -2664,7 +2669,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << RED << "There are no routes to delete!\n" << RESET;
+      cout << YELLOW << "There are no routes to delete!\n" << RESET;
     }
     
     menu(prefix);  
@@ -2712,7 +2717,7 @@ void Plot::menu(String prefix){
       system(command.str().c_str());
 
     }else{    
-      cout << RED << "There are no routes nor positions to save!\n" << RESET;
+      cout << YELLOW << "There are no routes nor positions to save!\n" << RESET;
     }
     menu(prefix);
     

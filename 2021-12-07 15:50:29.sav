@@ -15,6 +15,7 @@
 			hour of stopwatch = 00:37:35
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at BGC
+			Related route # = 1
 		Sight #2:
 			body:
 				Type = moon
@@ -31,7 +32,16 @@
 			hour of stopwatch = 00:48:08.9900000000000002131628207280301
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at BGC
+			Related route # = 2
 	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 328째 55.021202949752705535502173006535'
+				longitude = 47째 57.426491939885124793363502249122'
+				label = tr. w. o, COG = 240'�' 2.243'\'', l = 2307.04 nm
+			aperture angle = 65째 47.397185895477207395742880180478'
+			label = moon 2021-06-21 21:50:05.99 TAI, Sight was taken at BGC, tr. w. o, COG = 240'�' 2.243'\'', l = 2307.04 nm
 	Positions in the plot:
 		Position #1:
 			latitude = 48째 51.179385474737415506751858629286'

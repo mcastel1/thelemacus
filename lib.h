@@ -2275,6 +2275,7 @@ class Plot{
   vector<Position> position_list;
   vector<Route> route_list;
   vector<String> choices;
+  vector<unsigned int> crossing_route_list;
 
   Plot(Catalog*, String);
   //~Plot();
@@ -2441,7 +2442,7 @@ bool Plot::read_from_file(String filename, String prefix){
 void Plot::menu(String prefix){
 
   String new_prefix;
-  unsigned int i;
+  unsigned int i, j;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -2637,19 +2638,29 @@ void Plot::menu(String prefix){
     break;
 
   case 9:{
+    
+    //there need to be at list two routes of type "c" to compute crossings. Here I write the indexes of routes of type "c" into crossing_route_list 
+    for(crossing_route_list.clear(), j=0; j<route_list.size(); j++){
 
-    //there need to be at list two routes to compute crossings
-    if(route_list.size() > 1){
+      if((((route_list)[j]).type.value) == "c"){
+	
+	crossing_route_list.push_back(j);
+	
+      }
+      
+    }
+	
+    if(crossing_route_list.size() > 1){
 
-      print_routes(true, new_prefix, cout);
       compute_crossings(new_prefix);
 
     }else{
       
-      cout << YELLOW << "There are no routes to compute crossings!\n" << RESET;
+      cout << YELLOW << "There are not enough routes to compute crossings!\n" << RESET;
 
     }
 
+    crossing_route_list.clear();
     menu(prefix);
    
   }
@@ -2820,6 +2831,14 @@ Plot::Plot(Catalog* cata, String prefix){
 
 void Plot::compute_crossings(String prefix){
 
+  unsigned int i;
+  
+  cout << prefix.value << "Computing crossings between routes #:";
+  for(i=0; i<crossing_route_list.size(); i++){
+    cout << crossing_route_list[i]+1 << " ";
+  }
+  cout << "\n";
+  
 
 }
 

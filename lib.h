@@ -2458,22 +2458,22 @@ void Plot::menu(String prefix){
   }
   
   cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
-  for(i=6; i<9; i++){
+  for(i=6; i<10; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
-  for(i=9; i<11; i++){
+  for(i=10; i<12; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=11; i<13; i++){
+  for(i=12; i<14; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=13;
+  i=14;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -2615,6 +2615,23 @@ void Plot::menu(String prefix){
 
       print_routes(true, new_prefix, cout);
 
+
+    }else{
+      cout << RED << "There are no routes to transport!\n" << RESET;
+    }
+
+    menu(prefix);
+   
+  }
+    break;
+
+    
+  case 9:{
+
+    if(route_list.size() > 0){
+
+      print_routes(true, new_prefix, cout);
+
       enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to transport"), new_prefix);	
       i--;
    
@@ -2632,7 +2649,7 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 9:{
+  case 10:{
 
     if(route_list.size() > 0){
 
@@ -2656,7 +2673,7 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 10:{
+  case 11:{
 
     show(false, new_prefix);
     menu(prefix);  
@@ -2664,7 +2681,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 11:{
+  case 12:{
 
     show(true, new_prefix);
     menu(prefix);  
@@ -2673,7 +2690,7 @@ void Plot::menu(String prefix){
     break;
 
     
-  case 12:{
+  case 13:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -2702,7 +2719,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 13:{
+  case 14:{
 
     String filename;
     stringstream line_ins;
@@ -2722,7 +2739,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 14:{
+  case 15:{
 
     File file;
     String line;
@@ -2780,7 +2797,7 @@ Plot::Plot(Catalog* cata, String prefix){
 
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 

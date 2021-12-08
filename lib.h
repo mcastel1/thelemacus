@@ -649,12 +649,18 @@ class Position{
   //this function transports the position and returns the Route with which it has been transported
   Route transport(String);
   stringstream to_string(unsigned int);
+  bool distance(Position, Length*, String);
 
 };
 
 Position::Position(void){
 
   modify_choices = {String("latitude"), String("longitude"), String("label")};
+
+}
+
+bool Position::distance(position p, Length* l, String prefix){
+
 
 }
 

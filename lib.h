@@ -3368,12 +3368,13 @@ void Plot::show(bool zoom_out, String prefix){
   
   plot_command.str("");
   command.str("");
+  //set the key in the correct position for the circle of equal altitude that will be plotted 
+  plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)1) << "*key_spacing\\\n";
+  plot_command << "plot ";
   for(i=0; i<(route_list.size()); i++){
     
     //cout << "Route # " << i+1 << "\n";
 
-    //set the key in the correct position for the circle of equal altitude that will be plotted 
-    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(i+1)) << "*key_spacing\\\n";
 
     switch(((route_list[i]).type.value)[0]){
 
@@ -3382,9 +3383,7 @@ void Plot::show(bool zoom_out, String prefix){
       {
 
 	//I assume that  the loxodrome is not cut through the meridian lambda = M_PI, and I make a single plot
-	plot_command << "plot [0.:" << (route_list[i]).l.value << "] xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str();
-
-	plot_command << "\"\\\n";
+	plot_command << "[0.:" << (route_list[i]).l.value << "] xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
 
 	break;
       }
@@ -3394,9 +3393,7 @@ void Plot::show(bool zoom_out, String prefix){
       {
 
 	//I assume that the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
-	plot_command << "plot [0.:" << (route_list[i]).l.value << "] xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str();
-
-	plot_command << "\"\\\n";
+	plot_command << "[0.:" << (route_list[i]).l.value << "] xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")), ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
 
 	break;
       }
@@ -3529,17 +3526,16 @@ void Plot::show(bool zoom_out, String prefix){
 
 	    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	    plot_command << "plot [0.:" << t_m.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
-      
-	    plot_command << "plot [" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
-
-	    plot_command << "plot [" << t_p.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n";
+	    plot_command << "[0.:" << t_m.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\",\\\\\\\n";
+	    //maybe wrong
+	    plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti,\\\\\\\n";
+	    //maybe wrong
+	    plot_command << "[" << t_p.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti";
 
 	  }else{
 	    //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
 
-	    plot_command << "plot [0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
-
+	    plot_command << "[0.:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"";
 
 	  }
       
@@ -3606,9 +3602,9 @@ void Plot::show(bool zoom_out, String prefix){
 
 	  //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	  plot_command << "plot [0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"\\\n";
-      
-	  plot_command << "plot [" << t_s.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti \\\n"; 
+	  plot_command << "[0.:" << t_s.value << " - epsilon] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\" ,\\\\\\\n";
+	  //maybe wrong      
+	  plot_command << "[" << t_s.value << " + epsilon:2.*pi] xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")), ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << ")) smo csp dashtype " << i+1 << " lt " << i+1 << " noti";
 	  
 	}
 
@@ -3616,6 +3612,13 @@ void Plot::show(bool zoom_out, String prefix){
     
     }
 
+    if(i+1<route_list.size()){
+      
+      plot_command << ",\\\\";
+      
+    }
+    
+    plot_command << "\\\n";
 
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude

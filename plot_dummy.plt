@@ -321,10 +321,11 @@ while(1){
 	#fetch coastline data in path_file_coastline_data_blocked, and produce file path_file_selected_coastline_data which contains n_points_coastline points of the coastline of the world
 	system(sprintf("./get_coastline_data.o -p %g -P %g -l %g -L %g -N %g > /dev/null 2>&1", floor(phi_min), floor(phi_max), floor(lambda_min_get_coastline_data), floor(lambda_max_get_coastline_data), n_points_coastline));
 
-	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
 
 	#position_plots
 	#route_plots
+	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
+
 
 	x_max_old = GPVAL_X_MAX;
 

@@ -844,6 +844,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       ((*this).l).set(String("l of first intersection"), Re * sin((*this).omega.value) * (t_a.value), new_prefix);
       (*this).compute_end(new_prefix);
       (*p)[0] = ((*this).end);
+      ((*p)[0]).label.set(String("label of position"), String("crossing"), false, new_prefix);
 
 
       t_b.set(String("t of second intersection"),
@@ -877,6 +878,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       ((*this).l).set(String("l of second intersection"), Re * sin((*this).omega.value) * (t_b.value), new_prefix);
       (*this).compute_end(new_prefix);
       (*p)[1] = ((*this).end);
+      ((*p)[1]).label.set(String("label of position"), String("crossing"), false, new_prefix);
 
       output = true;
       
@@ -2885,8 +2887,9 @@ void Plot::compute_crossings(String prefix){
       
       (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &(p[l]), new_prefix);
 
-      /* position_list.push_back(p[l][0]); */
-      /* position_list.push_back(p[l][1]); */
+      
+      position_list.push_back(p[l][0]); 
+      position_list.push_back(p[l][1]); 
 
       l++;
       

@@ -2284,7 +2284,7 @@ void Sight::print(String name, String prefix, ostream& ostr){
 
   label.print(String("label"), new_prefix, ostr);
   
-  if(related_route != -1){
+  if((related_route != -1) && (&ostr == &cout)){
     ostr << new_prefix.value << "Related route # = " << related_route+1 << "\n";
   }
   

@@ -2864,7 +2864,9 @@ void Plot::compute_crossings(String prefix){
 
   unsigned int i, j, l;
   String new_prefix;
+  Length s;
   vector< vector<Position> > p;
+  vector<Position> q;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -2878,6 +2880,7 @@ void Plot::compute_crossings(String prefix){
   //I run over all the pairs of circles of equal altitude and write their crossing points into p
   l=0;
   for(i=0; i<crossing_route_list.size(); i++){
+    
     for(j=i+1; j<crossing_route_list.size(); j++){
 
       p.resize(l+1);
@@ -2886,17 +2889,29 @@ void Plot::compute_crossings(String prefix){
       cout << new_prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
       
       (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &(p[l]), new_prefix);
-
       
-      position_list.push_back(p[l][0]); 
-      position_list.push_back(p[l][1]); 
+      q.push_back(p[l][0]);  
+      q.push_back(p[l][1]);  
 
       l++;
       
-    }   
+    }
+    
+  }
+
+  for(i=0; i<q.size(); i++){
+    
+    for(j=i+1; j<q.size(); j++){
+
+
+      (q[i]).distance((q[j]), &s, new_prefix);
+
+    }
+
   }
 
   p.clear();
+  q.clear();
   
 }
 

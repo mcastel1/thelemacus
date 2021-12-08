@@ -1,7 +1,7 @@
 //this is the high precision used for storing data and making calculations with it 
 #define data_precision 32
 //this is the low precision used for displaying data
-#define display_precision 16
+#define display_precision 4
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
@@ -14,8 +14,8 @@
 #define max_iter (1e3)
 //one nautical mile in kilometers
 #define nm 1.852
-//earth radius
-#define Re (nm*60.0*360.0/(2.0*M_PI))
+//earth radius in nautical miles
+#define Re (60.0*360.0/(2.0*M_PI))
 #define RED     "\033[1;31m"    
 #define YELLOW     "\033[1;33m"   
 #define CYAN "\033[1;36m"      
@@ -669,7 +669,9 @@ bool Position::distance(Position p, Length* l, String prefix){
   check &= !isnan((*l).value);
 
   if(check){
-    
+
+    Angle a;
+    a.set(String("Angle between points"), ((*l).value)/Re, true, prefix);
     (*l).print(String("Distance between points"), String("nm"), prefix, cout);
 
   }else{

@@ -44,6 +44,156 @@
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = 3
+		Sight #4:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 38° 20.699999999999931787897367030382'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:23:38
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 4
+		Sight #5:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 39° 35.900000000000176214598468504846'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:27:44
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 5
+		Sight #6:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 44° 1.4999999999999147348717087879777'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:36:58
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 6
+		Sight #7:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 45° 10.499999999999829469743417575955'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:40:33
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-08 12:19:36
+		Sight #8:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 47° 18.299999999999982946974341757596'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:47:15
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-08 12:20:02
+		Sight #9:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 47° 53.40000000000046043169277254492'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:49:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-08 12:20:49
+		Sight #10:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 48° 34.100000000000108002495835535228'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:51:14
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-08 12:21:23
+		Sight #11:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 52° 42.500000000000142108547152020037'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-26
+				hour of master-clock date and hour of sight = 00:04:22
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-08 12:22:02
+		Sight #12:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 37° 27.799999999999869260136620141566'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-29
+				hour of master-clock date and hour of sight = 10:55:37
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-08 12:22:42
+		Sight #13:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = u
+			sextant altitude = 38° 53.800000000000096633812063373625'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-29
+				hour of master-clock date and hour of sight = 11:02:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-08 12:23:16
 	Routes in the plot:
 	Positions in the plot:
 		Position #1:

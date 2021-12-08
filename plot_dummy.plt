@@ -6,6 +6,8 @@ reset
 #do not use stellarium to compute hour angle and declination: they are calculated with the reference frame sitting on the surface of the earth at the observer's location! 
 #here 0 <= lambda < 360.0, and it grows in the W direction
 #notes
+#this command is such that when two points of a curve are both outisde the plotting window, the line that joins them is plotted
+set clip two
 K = 360.0/(2.0*pi);
 k = 1.0/K;
 N = 6.0;

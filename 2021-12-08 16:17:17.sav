@@ -1,0 +1,76 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = u
+			sextant altitude = 43° 32.200000000000130739863379858434'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-18
+				hour of master-clock date and hour of sight = 11:03:50
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 1
+		Sight #2:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 34° 8.4000000000000341060513164848089'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:09:38
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2
+		Sight #3:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 36° 0.59999999999988062882039230316877'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:15:58
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 3
+	Routes in the plot:
+	Positions in the plot:
+		Position #1:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = MP
+		Position #2:
+			latitude = 48° 51.585483936349874056759290397167'
+			longitude = 357° 36.463978786864572612103074789047'
+			label = crossing
+		Position #3:
+			latitude = 314° 37.794498200759107930934987962246'
+			longitude = 271° 0.54072585130484185356181114912033'
+			label = crossing
+		Position #4:
+			latitude = 48° 51.430981195287444052155478857458'
+			longitude = 357° 38.127355663932576135266572237015'
+			label = crossing
+		Position #5:
+			latitude = 315° 29.158909370636365565587766468525'
+			longitude = 271° 8.6029259707026994874468073248863'
+			label = crossing
+		Position #6:
+			latitude = 49° 47.446344381059759598429081961513'
+			longitude = 358° 6.9967631143856579001294448971748'
+			label = crossing
+		Position #7:
+			latitude = 331° 16.77573934159454438486136496067'
+			longitude = 313° 32.002671020645721000619232654572'
+			label = crossing

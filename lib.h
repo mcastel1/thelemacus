@@ -374,13 +374,22 @@ class Length{
 
  public:
   double value;
+  
   void set(String, double, String);
   void enter(String, String, String);
   void print(String, String, String, ostream&);
   void read_from_file(String, File&, bool, String);
   bool check_valid(String, String);
+  bool operator> (const Length&);
 
 };
+
+//evaluates whether Length (*this) is larger than r
+bool Length::operator>(const Length& r){
+
+  return((((*this).value) > (r.value)));
+  
+}
 
 
 class Speed{
@@ -671,7 +680,7 @@ bool Position::distance(Position p, Length* l, String prefix){
   if(check){
 
     Angle a;
-    a.set(String("Angle between points"), ((*l).value)/Re, true, prefix);
+    a.set(String("Angle between points"), ((*l).value)/Re, false, prefix);
     (*l).print(String("Distance between points"), String("nm"), prefix, cout);
 
   }else{
@@ -2864,9 +2873,10 @@ void Plot::compute_crossings(String prefix){
 
   unsigned int i, j, l;
   String new_prefix;
-  Length s;
+  Length r, s;
   vector< vector<Position> > p;
   vector<Position> q;
+  Position center;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -2886,7 +2896,7 @@ void Plot::compute_crossings(String prefix){
       p.resize(l+1);
       (p[l]).resize(2);
 
-      cout << new_prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
+      cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
       
       (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &(p[l]), new_prefix);
       
@@ -2899,16 +2909,29 @@ void Plot::compute_crossings(String prefix){
     
   }
 
+  //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center 
+  r.set(String("maximal distance between crossing points"), M_PI*Re, prefix);
+  
   for(i=0; i<q.size(); i++){
     
     for(j=i+1; j<q.size(); j++){
 
 
+      cout << new_prefix.value << "Points " << i << " and " << j << ":\n";
       (q[i]).distance((q[j]), &s, new_prefix);
+
+      if(r>s){
+	r = s;
+	center = (q[i]);
+      }
 
     }
 
   }
+
+  r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
+  
+  center.print(String("approximate astronomical position"), prefix, cout);
 
   p.clear();
   q.clear();

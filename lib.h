@@ -3626,12 +3626,33 @@ void Plot::show(bool zoom_out, String prefix){
   //replace line with position plots
   
   plot_command.str("");
+  //set the key in the correct place for the Positions that will be plotted 
+  plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(route_list.size()+1)) << "*key_spacing\\\n";
+  plot_command << "plot ";
   for(i=0; i<position_list.size(); i++){
-    //set the key in the correct position for the position that will be plotted 
-    plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(route_list.size()+i+1)) << "*key_spacing\\\n";
 
-    plot_command << "plot \"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"\\\n";
+    plot_command << "\"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 ";
+
+    if(((position_list[i]).label.value) != "crossing"){
+
+      plot_command << "lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"";
+
+    }else{
+
+      plot_command << "lt " << 1 << "linecolor rgb \"gray\" noti";
+      
+    }
+
+    if(i+1<position_list.size()){
+
+      plot_command << ",\\\\";
+      
+    }
+
+    plot_command << "\\\n";
+    
   }
+  
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "LANG=C sed 's/#position_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> " << ((file_gnuplot.name).value) << "\n";
 

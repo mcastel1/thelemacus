@@ -11,7 +11,7 @@ k = 1.0/K;
 N = 6.0;
 #circles of equal altitude are plotted with S points
 S = 1e4;
-#n_points_coastline
+n_points_coastline = 200000;
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
@@ -80,10 +80,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-#min_longitude
-#max_longitude
-#min_latitude
-#max_latitude
+lambda_min = 170.20750000000001023181539494544;
+lambda_max = 190.00016666666667219942610245198;
+phi_min = 310.23166666666668334073619917035;
+phi_max = 80.886666666666670266749861184508;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -200,7 +200,7 @@ while(1){
 	#plot the first few custom-made myxics close to the left edge of the x axis. Here I consider 		x = x + dlambda*k (the first value of x which is an 'integer multiple of dlambda' and which is contained in the x axis), and then decrease it by one tenth of arcminute in the while loop
 	if(gamma_lambda == 60.0){
 					i=0.0;
-					while(x + (dlambda + (i/10.0)*1.0/60.0)*k > GPVAL_X_MIN){
+					while(x + (dlambda + (i/10.0)*1.0/60.0)*k >= GPVAL_X_MIN){
 				             #set custom-made minor xtics every tenths (i/10.0) of arcminutes (1.0/60.0) 
 					     set arrow from first x + (dlambda + (i/10.0)*1.0/60.0)*k, graph 0 to first x + (dlambda + (i/10.0)*1.0/60.0)*k, graph mtics_size nohead  linecolor "blue";
 					     i=i-1.0;
@@ -266,7 +266,7 @@ while(1){
 	#plot the first few custom-made mytics close to the lower edge of the y axis. Here I consider phi + dphi (the first value of phi which is an 'integer multiple of dphi' and which is contained in the y axis), and then decrease it by one tenth of arcminute in the while loop
 	if(gamma_phi == 60.0){
 					i=0.0;
-					while(ye(phi + dphi + (i/10.0)*1.0/60.0) >= GPVAL_Y_MIN){
+					while(ye(phi + dphi + (i/10.0)*1.0/60.0) > GPVAL_Y_MIN){
 						  #set custom-made minor ytics every tenths (i/10.0) of arcminutes (1.0/60.0) 
 		       	 		       	  set arrow from graph 0,first ye(phi + dphi + (i/10.0)*1.0/60.0) to graph mtics_size, first ye(phi + dphi + (i/10.0)*1.0/60.0) nohead  linecolor "blue";
 					i=i-1.0;
@@ -321,10 +321,18 @@ while(1){
 
 	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
 
-	#position_plots
-	#route_plots
+	
+ set key at graph key_x, graph key_y - 14*key_spacing
+plot "+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 1 ti "MP"
 
-	x_max_old = GPVAL_X_MAX;
+	
+ set key at graph key_x, graph key_y - 1*key_spacing
+plot [0.:2.*pi] xe(K*lambda_cea(t, 5.9458043846890671346727685886435, 6.1033453850680494667813036357984, .1965015776790313140054422547109)), ye(K*phi_cea(t, 5.9458043846890671346727685886435, 6.1033453850680494667813036357984, .1965015776790313140054422547109)) smo csp dashtype 1 lt 1 ti "sun 2021-11-18 11:04:27 TAI, 1"
+
+
+
+
+     x_max_old = GPVAL_X_MAX;
 
         set print "boundary.txt";
 	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX, "\n", "minimal longitude = ", label_deg_min_c_lib(lambda_min), "\n", "maximal longitude = ", label_deg_min_c_lib(lambda_max), "\n", "minimal latitude = ", label_deg_min_c_lib(phi_min), "\n", "maximal latitude = ", label_deg_min_c_lib(phi_max), "\n";

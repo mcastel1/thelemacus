@@ -659,9 +659,27 @@ Position::Position(void){
 
 }
 
-bool Position::distance(position p, Length* l, String prefix){
+bool Position::distance(Position p, Length* l, String prefix){
 
+  bool check;
+  check = true;
 
+  ((*l).value) = Re * acos( cos((lambda.value) - (p.lambda.value))*cos((phi.value))*cos((p.phi.value)) + sin((phi.value))*sin((p.phi.value)) );
+
+  check &= !isnan((*l).value);
+
+  if(check){
+    
+    (*l).print(String("Distance between points"), String("nm"), prefix, cout);
+
+  }else{
+
+    cout << prefix.value << RED << "\tI could not compute the distance between points!\n" << RESET;
+    
+  }
+
+  return check;
+  
 }
 
 void Position::modify(String prefix){

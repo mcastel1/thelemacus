@@ -77,6 +77,14 @@ int main(int argc, char *argv[]){
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
 
+  //
+  Position a,b;
+  Length l;
+  a.enter(String("a"), String(""));
+  b.enter(String("b"), String(""));
+  a.distance(b, &l, String("\t"));
+  //
+
   /*
   Angle x;
   x.enter(String("instrumental altitude"), false, String("\t"));

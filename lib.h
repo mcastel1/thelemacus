@@ -2930,9 +2930,27 @@ void Plot::compute_crossings(String prefix){
   }
 
   r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
-  
   center.print(String("approximate astronomical position"), prefix, cout);
 
+  q.clear();
+  for(i=0; i<p.size(); i++){
+
+    center.distance(p[i][0], &r, new_prefix);
+    center.distance(p[i][1], &s, new_prefix);
+
+    if(r>s){
+
+      q.push_back(p[i][1]);
+
+    }else{
+
+     q.push_back(p[i][0]);
+
+    }
+    
+  }
+
+		       
   p.clear();
   q.clear();
   

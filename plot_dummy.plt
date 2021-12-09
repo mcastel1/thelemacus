@@ -12,7 +12,7 @@ K = 360.0/(2.0*pi);
 k = 1.0/K;
 N = 6.0;
 #circles of equal altitude are plotted with S points
-S = 1e4;
+S = 1e3;
 #n_points_coastline
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0

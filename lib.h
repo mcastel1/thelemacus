@@ -3368,8 +3368,8 @@ void Plot::show(bool zoom_out, String prefix){
   
   plot_command.str("");
   command.str("");
-  //set the key in the correct position for the circle of equal altitude that will be plotted 
-  plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)1) << "*key_spacing\\\n";
+  //set the key position on the screen
+  plot_command << "set key top right\\\n";
   plot_command << "plot ";
   for(i=0; i<(route_list.size()); i++){
     
@@ -3612,14 +3612,20 @@ void Plot::show(bool zoom_out, String prefix){
     
     }
 
-    if(i+1<route_list.size()){
+    //if there is a route or a position plot after the one that I just added, then I add a ,\ for it
+    if((i+1<route_list.size()) || ((i+1 == route_list.size()) && (position_list.size() > 0))){
       
       plot_command << ",\\\\";
       
     }
-    
-    plot_command << "\\\n";
 
+    //if I did not reach the last route plot, I add a newline. If I reached the last plot, no need to add a newline because the sed replacement commands will do it
+    if(i+1<route_list.size()){
+      
+      plot_command << "\\\n";
+      
+    }
+    
   }
   //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
   command << "LANG=C sed 's/#route_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
@@ -3630,8 +3636,9 @@ void Plot::show(bool zoom_out, String prefix){
   
   plot_command.str("");
   //set the key in the correct place for the Positions that will be plotted 
-  plot_command << "\\\n set key at graph key_x, graph key_y - " << ((double)(route_list.size()+1)) << "*key_spacing\\\n";
-  plot_command << "plot ";
+  if(route_list.size() == 0){
+    plot_command << "plot ";
+  }
   for(i=0; i<position_list.size(); i++){
 
     plot_command << "\"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 ";

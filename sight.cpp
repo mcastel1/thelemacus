@@ -57,6 +57,7 @@
  - when entering angles, replace +- with N/S and E/W
 - find out why increasing too much number of points coastline in init file yields plots with few points
 - set output to log file
+- centralizza tutti i percorsi dei file in modo che se devi cambiarlo basta cambiarlo in un posto solo
 */
 
 

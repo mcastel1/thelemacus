@@ -2948,6 +2948,9 @@ void Plot::compute_crossings(String prefix){
 
     }
     
+    
+    position_list.push_back(q[q.size()-1]);
+    
   }
 
 		       

@@ -967,7 +967,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
 
       if(r>s){
 
-	cout << YELLOW << new_prefix.value << "exchanging ts!\n" << RESET;
+	cout << new_prefix.value << "Exchanging ts!\n";
 	
 	t_temp = u[0];
 	u[0] = u[1];
@@ -975,13 +975,6 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
 	
       }
 
-      cout << CYAN;
-
-      (t[0]).print(String("angle of intersection 1 for Route 1"), new_prefix, cout);
-      (t[1]).print(String("angle of intersection 2 for Route 1"), new_prefix, cout);
-      (u[0]).print(String("angle of intersection 1 for Route 2"), new_prefix, cout);
-      (u[1]).print(String("angle of intersection 2 for Route 2"), new_prefix, cout);
-      
       ((*this).l).set(String("l of intersection 1 for Route 1"), Re * sin((*this).omega.value) * ((t[0]).value), new_prefix);
       (*this).compute_end(new_prefix);
       ((*this).end).print(String("position of intersection 1 for Route 1"), new_prefix, cout);
@@ -989,25 +982,10 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       (route.l).set(String("l of intersection 1 for Route 2"), Re * sin(route.omega.value) * ((u[0]).value), new_prefix);
       route.compute_end(new_prefix);
       (route.end).print(String("position of intersection 1 for Route 2"), new_prefix, cout);
-
-      ((*this).l).set(String("l of intersection 2 for Route 1"), Re * sin((*this).omega.value) * ((t[1]).value), new_prefix);
-      (*this).compute_end(new_prefix);
-      ((*this).end).print(String("position of intersection 2 for Route 1"), new_prefix, cout);
-      
-      (route.l).set(String("l of intersection 2 for Route 2"), Re * sin(route.omega.value) * ((u[1]).value), new_prefix);
-      route.compute_end(new_prefix);
-      (route.end).print(String("position of intersection 2 for Route 2"), new_prefix, cout);
-
-      
-      cout << RESET;
       
       cout << YELLOW << new_prefix.value << "angle 1 between tangents = " << K * acos( cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[0]).value))*sin(((u[0]).value)) + (cos(((t[0]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[0]).value)))*(cos(((u[0]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[0]).value))) + 
 										       (cos(((*this).GP.lambda.value))*cos(((t[0]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[0]).value)))*(cos((route.GP.lambda.value))*cos(((u[0]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[0]).value))) ) << RESET<<  "\n";
-
-
-      cout << YELLOW << new_prefix.value << "angle 2 between tangents = " << K * acos( cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[1]).value))*sin(((u[1]).value)) + (cos(((t[1]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[1]).value)))*(cos(((u[1]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[1]).value))) + 
-										       (cos(((*this).GP.lambda.value))*cos(((t[1]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[1]).value)))*(cos((route.GP.lambda.value))*cos(((u[1]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[1]).value))) ) << RESET<<  "\n";
-
+      
       //
 	
  

@@ -4394,7 +4394,8 @@ void Length::set(String name, double x, String prefix){
   
   value = x;
 
-  print(name, String("nm"), prefix, cout); 
+  //I print the Length only if Length::set has not been called with "" in the first argument
+  if(!(name == String(""))){print(name, String("nm"), prefix, cout);}
   check_valid(name, new_prefix);
   
 }

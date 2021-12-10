@@ -79,7 +79,16 @@ class String{
   String append(String);
   String prepend(String);
 
+  bool operator==(const String&);
+
 };
+
+bool String::operator==(const String& s){
+
+  return((((*this).value) == (s.value)));
+  
+}
+
 
 class File{
 
@@ -596,9 +605,17 @@ class Angle{
   void read_from_file(String, File&, bool, String);
   stringstream to_string(unsigned int);
 
+  bool operator==(const Angle&);
   Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
   
 };
+
+bool Angle::operator==(const Angle& x){
+
+  return((((*this).value) == (x.value)));
+  
+}
+
 
 
 //I added the booleian variable search_entire_file. If true, then this function rewinds the file pointer to the beginning of file and goes through the file until it finds the quantity 'name'. If false, it reads the angle at the position where 'file' was when it was passed to this function 
@@ -659,8 +676,26 @@ class Position{
   Route transport(String);
   stringstream to_string(unsigned int);
   bool distance(Position, Length*, String);
+  bool operator==(const Position&);
+
 
 };
+
+//evaluates whether Length (*this) is larger than r
+bool Position::operator==(const Position& p){
+
+  bool check;
+  
+  check = true;
+  
+  check &= (((*this).phi) == (p.phi));
+  check &= (((*this).lambda) == (p.lambda));
+  check &= (((*this).label) == (p.label));
+
+  return check;
+  
+}
+
 
 Position::Position(void){
 
@@ -2959,28 +2994,33 @@ void Plot::compute_crossings(String prefix){
   r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
   center.print(String("approximate astronomical position"), prefix, cout);
 
+  //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center. Crossings are also added to position_list, in such a way that they are shown in the plot
   q.clear();
+  q.push_back(center);
+  position_list.push_back(q[q.size()-1]);
   for(i=0; i<p.size(); i++){
 
-    center.distance(p[i][0], &r, new_prefix);
-    center.distance(p[i][1], &s, new_prefix);
+    if(!( ((p[i][0])==center) || ((p[i][1])==center) )){
+      
+      center.distance(p[i][0], &r, new_prefix);
+      center.distance(p[i][1], &s, new_prefix);
 
-    if(r>s){
+      if(r>s){
 
-      q.push_back(p[i][1]);
+	q.push_back(p[i][1]);
 
-    }else{
+      }else{
 
-     q.push_back(p[i][0]);
+	q.push_back(p[i][0]);
+
+      }
+    
+      position_list.push_back(q[q.size()-1]);
 
     }
     
-    
-    position_list.push_back(q[q.size()-1]);
-    
   }
-
-		       
+	       
   p.clear();
   q.clear();
   

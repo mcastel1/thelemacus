@@ -580,7 +580,7 @@ void String::enter(String name, String prefix){
 
 void String::print(String name, String prefix, ostream& ostr){
 
-  ostr << prefix.value << name.value << " = " << value << "\n";
+  if(value != ""){ostr << prefix.value << name.value << " = " << value << "\n";}
   
 }
 
@@ -600,7 +600,7 @@ class Angle{
   double value;
   void normalize(void);
   void enter(String, bool, String);
-  void set(String, double, bool, String);
+  void set(String, double, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
   stringstream to_string(unsigned int);
@@ -675,7 +675,7 @@ class Position{
   //this function transports the position and returns the Route with which it has been transported
   Route transport(String);
   stringstream to_string(unsigned int);
-  bool distance(Position, Length*, String);
+  bool distance(Position, Length*, String, String);
   bool operator==(const Position&);
 
 
@@ -703,7 +703,8 @@ Position::Position(void){
 
 }
 
-bool Position::distance(Position p, Length* l, String prefix){
+//here name is the name of the distance that I am computing; for example 'distance between positions A and B'
+bool Position::distance(Position p, Length* l, String name, String prefix){
 
   bool check;
   check = true;
@@ -715,12 +716,12 @@ bool Position::distance(Position p, Length* l, String prefix){
   if(check){
 
     Angle a;
-    a.set(String("Angle between points"), ((*l).value)/Re, false, prefix);
-    (*l).print(String("Distance between points"), String("nm"), prefix, cout);
+    a.set(String(""), ((*l).value)/Re, prefix);
+    (*l).print(name, String("nm"), prefix, cout);
 
   }else{
 
-    cout << prefix.value << RED << "\tI could not compute the distance between points!\n" << RESET;
+    cout << prefix.value << RED << "\tI could not compute distance!\n" << RESET;
     
   }
 
@@ -863,9 +864,9 @@ bool Route::t_crossing(Route route, vector<Angle> *t, String prefix){
   if(check){
 
     ((*t)[0]).normalize();
-    ((*t)[0]).set(String("t of first intersection"), (t_a.value), true, new_prefix);
+    ((*t)[0]).set(String(""), (t_a.value), new_prefix);
     ((*t)[1]).normalize();
-    ((*t)[1]).set(String("t of second intersection"), (t_b.value), true, new_prefix);
+    ((*t)[1]).set(String(""), (t_b.value), new_prefix);
 
   }else{
 
@@ -932,7 +933,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
     Angle theta, t_temp;
     Length r, s;
     
-    theta.set(String("angle between the two GPs"), acos(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value)) + sin(((*this).GP.phi.value))*sin((route.GP.phi.value))), true, new_prefix);
+    theta.set(String("angle between the two GPs"), acos(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value)) + sin(((*this).GP.phi.value))*sin((route.GP.phi.value))), new_prefix);
 
     if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
 
@@ -945,12 +946,12 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       (*this).t_crossing(route, &t, new_prefix);
       route.t_crossing((*this), &u, new_prefix);
 
-      ((*this).l).set(String("l of first intersection"), Re * sin((*this).omega.value) * ((t[0]).value), new_prefix);
+      ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[0]).value), new_prefix);
       (*this).compute_end(new_prefix);
       (*p)[0] = ((*this).end);
       ((*p)[0]).label.set(String("label of position"), String("crossing"), false, new_prefix);
 
-      ((*this).l).set(String("l of second intersection"), Re * sin((*this).omega.value) * ((t[1]).value), new_prefix);
+      ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[1]).value), new_prefix);
       (*this).compute_end(new_prefix);
       (*p)[1] = ((*this).end);
       ((*p)[1]).label.set(String("label of position"), String("crossing"), false, new_prefix);
@@ -962,8 +963,8 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       (route.l).set(String("l of intersection"), Re * sin(route.omega.value) * ((u[0]).value), new_prefix);
       route.compute_end(new_prefix);
       
-      ((*p)[0]).distance(route.end, &r, new_prefix);
-      ((*p)[1]).distance(route.end, &s, new_prefix);
+      ((*p)[0]).distance(route.end, &r, String(""), new_prefix);
+      ((*p)[1]).distance(route.end, &s, String(""), new_prefix);
 
       if(r>s){
 
@@ -983,8 +984,8 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       route.compute_end(new_prefix);
       (route.end).print(String("position of intersection 1 for Route 2"), new_prefix, cout);
       
-      cout << YELLOW << new_prefix.value << "angle 1 between tangents = " << K * acos( cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[0]).value))*sin(((u[0]).value)) + (cos(((t[0]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[0]).value)))*(cos(((u[0]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[0]).value))) + 
-										       (cos(((*this).GP.lambda.value))*cos(((t[0]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[0]).value)))*(cos((route.GP.lambda.value))*cos(((u[0]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[0]).value))) ) << RESET<<  "\n";
+      cout << new_prefix.value << "angle 1 between tangents = " << K * acos( cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[0]).value))*sin(((u[0]).value)) + (cos(((t[0]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[0]).value)))*(cos(((u[0]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[0]).value))) + 
+										       (cos(((*this).GP.lambda.value))*cos(((t[0]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[0]).value)))*(cos((route.GP.lambda.value))*cos(((u[0]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[0]).value))) ) << "\n";
       
       //
 	
@@ -1362,8 +1363,6 @@ void Position::read_from_file(File& file, String prefix){
 //returns a position on the Route at length l along the Route from start
 void Route::compute_end(String prefix){
 
-  stringstream label_end;
-
   //picks the first (and only) character in string type.value
   switch((type.value)[0]){
 
@@ -1427,7 +1426,7 @@ void Route::compute_end(String prefix){
       Angle t;
       //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
       //R sin omega = r, r t = l, t = l / (R sin omega)
-      t.set(String("parametric angle t"), (l.value)/(Re*sin(omega.value)), false, prefix);
+      t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
 
       (end.phi.value) = M_PI/2.0-acos(cos((omega.value))* sin((GP.phi.value))-cos((GP.phi.value))* cos((t.value)) *sin((omega.value)));
       (end.phi).normalize();
@@ -1443,8 +1442,7 @@ void Route::compute_end(String prefix){
 
   }
 
-  label_end << "position transported";
-  (end.label.value) = label_end.str();
+  (end.label.value) = "";
 
 }
 
@@ -2976,6 +2974,7 @@ void Plot::compute_crossings(String prefix){
 
   unsigned int i, j, l;
   String new_prefix;
+  stringstream dummy;
   Length r, s;
   vector< vector<Position> > p;
   vector<Position> q;
@@ -3013,15 +3012,18 @@ void Plot::compute_crossings(String prefix){
   }
 
   //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center 
-  r.set(String("maximal distance between crossing points"), M_PI*Re, prefix);
+
+  cout << prefix.value << "Distances between pairs of crossing positions:\n";
+  r.set(String(""), M_PI*Re, prefix);
   
   for(i=0; i<q.size(); i++){
     
     for(j=i+1; j<q.size(); j++){
 
-
-      cout << new_prefix.value << "Points " << i << " and " << j << ":\n";
-      (q[i]).distance((q[j]), &s, new_prefix);
+      dummy.str("");
+      dummy << "distance between points " << i << " and " << j;
+      
+      (q[i]).distance((q[j]), &s, String(dummy.str()), new_prefix);
 
       if(r>s){
 	r = s;
@@ -3043,8 +3045,8 @@ void Plot::compute_crossings(String prefix){
 
     if(!( ((p[i][0])==center) || ((p[i][1])==center) )){
       
-      center.distance(p[i][0], &r, new_prefix);
-      center.distance(p[i][1], &s, new_prefix);
+      center.distance(p[i][0], &r, String(""), new_prefix);
+      center.distance(p[i][1], &s, String(""), new_prefix);
 
       if(r>s){
 
@@ -3536,8 +3538,8 @@ void Plot::show(bool zoom_out, String prefix){
 	if(abs(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))) < 1.0){
     
 	  //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude 
-	  t_max.set(String("t_{max}"), acos(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))), false, new_prefix);
-	  t_min.set(String("t_{min}"), 2.0*M_PI - acos(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))), false, new_prefix);
+	  t_max.set(String(""), acos(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
+	  t_min.set(String(""), 2.0*M_PI - acos(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
 
 	  //p_max =  circle of equal altitude computed at t_max
 	  ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_max.value);
@@ -4345,7 +4347,7 @@ void Sight::compute_DH_dip(String prefix){
   zero_Length.value = 0.0;
 
   DH_dip.set(String("Dip correction"),
-	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ), true, prefix);
+	     -acos( atmosphere.n(zero_Length)/atmosphere.n(height_of_eye)*((atmosphere.earth_radius.value)/((atmosphere.earth_radius.value)+(height_of_eye.value)) ) ), prefix);
 
 }
 
@@ -4373,7 +4375,7 @@ bool Sight::compute_DH_refraction(String prefix){
   //status = GSL_FAILURE
 
   if(status == GSL_SUCCESS){
-    DH_refraction.set(String("refraction correction"), result, true, prefix);
+    DH_refraction.set(String("refraction correction"), result, prefix);
   }else{
     check &= false;
     cout << prefix.value << RED << "GSL integration failed!\n" << RESET;
@@ -4394,8 +4396,7 @@ void Length::set(String name, double x, String prefix){
   
   value = x;
 
-  //I print the Length only if Length::set has not been called with "" in the first argument
-  if(!(name == String(""))){print(name, String("nm"), prefix, cout);}
+  print(name, String("nm"), prefix, cout);
   check_valid(name, new_prefix);
   
 }
@@ -4430,11 +4431,15 @@ void Length::enter(String name, String unit, String prefix){
 
 void Length::print(String name, String unit, String prefix, ostream& ostr){
 
-  ostr << prefix.value << name.value << " = ";
-  if(unit.value == "nm"){
-    ostr << value << " nm\n";
-  }else{
-    ostr << value*nm*1e3 << " m\n";
+  if((name.value) != ""){
+  
+    ostr << prefix.value << name.value << " = ";
+    if(unit.value == "nm"){
+      ostr << value << " nm\n";
+    }else{
+      ostr << value*nm*1e3 << " m\n";
+    }
+
   }
  
 }
@@ -4655,11 +4660,11 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
   
 }
 
-void Angle::set(String name, double x, bool print_out, String prefix){
+void Angle::set(String name, double x, String prefix){
 
   value = x;
   normalize();
-  if(print_out){print(name, prefix, cout);}
+  if(name.value != ""){print(name, prefix, cout);}
   
 }
 

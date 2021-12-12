@@ -58,6 +58,7 @@
 - find out why increasing too much number of points coastline in init file yields plots with few points
 - set output to log file
 - centralizza tutti i percorsi dei file in modo che se devi cambiarlo basta cambiarlo in un posto solo
+- in all functions ::set and ::print, print out only if the associated name of the quantity that you are printing is different from ""
 */
 
 

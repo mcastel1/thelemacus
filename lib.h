@@ -795,7 +795,7 @@ class Route{
   void print(String, String, ostream&);
   void read_from_file(File&, String);
   void compute_end(String);
-  bool crossing(Route, vector<Position>*, String);
+  bool crossing(Route, vector<Position>*, double*, String);
   void transport(String);
   static double lambda_minus_pi(double, void*);
   bool t_crossing(Route, vector<Angle>*, String);
@@ -913,8 +913,8 @@ void Route::read_from_file(File& file, String prefix){
 }
  
 
-//this function computes the crossings between Route (*this) and Route route
-bool Route::crossing(Route route, vector<Position>* p, String prefix){
+//this function computes the crossings between Route (*this) and Route route: it writes the two crossing points in p, and the cosing of the crossing angle in cos_crossing_angle
+bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle, String prefix){
 
   //these are the two lengths along Route (*this) which correspond to the two crossings with route
   String new_prefix;
@@ -922,6 +922,9 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+
+
 
   if(!(((*this).type.value == "c") && ((*this).type.value == "c"))){
     
@@ -933,7 +936,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
     Angle theta, t_temp;
     Length r, s;
     
-    theta.set(String("angle between the two GPs"), acos(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value)) + sin(((*this).GP.phi.value))*sin((route.GP.phi.value))), new_prefix);
+    theta.set(String("angle between the two GPs"), acos(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value)) + sin(((*this).GP.phi.value))*sin((route.GP.phi.value))), prefix);
 
     if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
 
@@ -941,30 +944,30 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       //u contains the parametric angle of Route route where route crosses (*this)
       vector<Angle> t(2), u(2);
 
-      cout << new_prefix.value << "Routes intersect\n";
+      cout << prefix.value << "Routes intersect\n";
 
       (*this).t_crossing(route, &t, new_prefix);
       route.t_crossing((*this), &u, new_prefix);
 
-      ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[0]).value), new_prefix);
+      ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[0]).value), prefix);
       (*this).compute_end(new_prefix);
       (*p)[0] = ((*this).end);
-      ((*p)[0]).label.set(String("label of position"), String("crossing"), false, new_prefix);
+      ((*p)[0]).label.set(String("label of position"), String("crossing"), false, prefix);
 
-      ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[1]).value), new_prefix);
+      ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[1]).value), prefix);
       (*this).compute_end(new_prefix);
       (*p)[1] = ((*this).end);
-      ((*p)[1]).label.set(String("label of position"), String("crossing"), false, new_prefix);
+      ((*p)[1]).label.set(String("label of position"), String("crossing"), false, prefix);
 
 
 
       //
 
-      (route.l).set(String("l of intersection"), Re * sin(route.omega.value) * ((u[0]).value), new_prefix);
-      route.compute_end(new_prefix);
+      (route.l).set(String("l of intersection"), Re * sin(route.omega.value) * ((u[0]).value), prefix);
+      route.compute_end(prefix);
       
-      ((*p)[0]).distance(route.end, &r, String(""), new_prefix);
-      ((*p)[1]).distance(route.end, &s, String(""), new_prefix);
+      ((*p)[0]).distance(route.end, &r, String(""), prefix);
+      ((*p)[1]).distance(route.end, &s, String(""), prefix);
 
       if(r>s){
 
@@ -976,16 +979,18 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
 	
       }
 
-      ((*this).l).set(String("l of intersection 1 for Route 1"), Re * sin((*this).omega.value) * ((t[0]).value), new_prefix);
-      (*this).compute_end(new_prefix);
-      ((*this).end).print(String("position of intersection 1 for Route 1"), new_prefix, cout);
+      ((*this).l).set(String("l of intersection 1 for Route 1"), Re * sin((*this).omega.value) * ((t[0]).value), prefix);
+      (*this).compute_end(prefix);
+      ((*this).end).print(String("position of intersection 1 for Route 1"), prefix, cout);
       
-      (route.l).set(String("l of intersection 1 for Route 2"), Re * sin(route.omega.value) * ((u[0]).value), new_prefix);
-      route.compute_end(new_prefix);
-      (route.end).print(String("position of intersection 1 for Route 2"), new_prefix, cout);
+      (route.l).set(String("l of intersection 1 for Route 2"), Re * sin(route.omega.value) * ((u[0]).value), prefix);
+      route.compute_end(prefix);
+      (route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);
+
+      (*cos_crossing_angle) = cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[0]).value))*sin(((u[0]).value)) + (cos(((t[0]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[0]).value)))*(cos(((u[0]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[0]).value))) + 
+	(cos(((*this).GP.lambda.value))*cos(((t[0]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[0]).value)))*(cos((route.GP.lambda.value))*cos(((u[0]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[0]).value)));
       
-      cout << new_prefix.value << "angle 1 between tangents = " << K * acos( cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[0]).value))*sin(((u[0]).value)) + (cos(((t[0]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[0]).value)))*(cos(((u[0]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[0]).value))) + 
-										       (cos(((*this).GP.lambda.value))*cos(((t[0]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[0]).value)))*(cos((route.GP.lambda.value))*cos(((u[0]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[0]).value))) ) << "\n";
+      cout << prefix.value << "cos(angle 1 between tangents) = " << (*cos_crossing_angle)  << "\n";
       
       //
 	
@@ -997,7 +1002,7 @@ bool Route::crossing(Route route, vector<Position>* p, String prefix){
       
     }else{
 
-      cout << new_prefix.value << "Routes do no intersect\n";
+      cout << prefix.value << "Routes do no intersect\n";
       output = false;
       
     }
@@ -2977,11 +2982,24 @@ void Plot::compute_crossings(String prefix){
   stringstream dummy;
   Length r, s;
   vector< vector<Position> > p;
-  vector<Position> q;
+  vector<Position> q, q_temp(2);
   Position center;
+  File file_init;
+  Angle min_crossing_angle;
+  double x;
+
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+ 
+  cout << prefix.value << YELLOW << "Reading minimal crossing angle between circles of equal altitude from file " << file_init.name.value << " ...\n" << RESET;
+  file_init.set_name(String(path_file_init));
+  file_init.open(String("in"), new_prefix);
+  min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), file_init, true, new_prefix);
+  file_init.close(new_prefix);
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+
   
   cout << prefix.value << "Computing crossings between routes #:";
   for(i=0; i<crossing_route_list.size(); i++){
@@ -2992,23 +3010,35 @@ void Plot::compute_crossings(String prefix){
   //I run over all the pairs of circles of equal altitude and write their crossing points into p
   l=0;
   for(i=0; i<crossing_route_list.size(); i++){
-    
     for(j=i+1; j<crossing_route_list.size(); j++){
 
-      p.resize(l+1);
-      (p[l]).resize(2);
-
+ 
       cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
       
-      (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &(p[l]), new_prefix);
-      
-      q.push_back(p[l][0]);  
-      q.push_back(p[l][1]);  
+      (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix);
 
-      l++;
+      //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle.value), then I add this crossing to the list of sensible crossings
+      if(fabs(x) < cos(min_crossing_angle.value)){
+
+	p.resize(l+1);
+	(p[l]).resize(2);
+
+	p[l] = q_temp;
+
+	q.push_back(q_temp[0]);  
+	q.push_back(q_temp[1]);  
+
+	l++;
+
+	cout << new_prefix.value << "Crossing accepted\n";
+
+      }else{
+
+	cout << new_prefix.value << "Crossing not accepted\n";
+
+      }
       
     }
-    
   }
 
   //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center 
@@ -3017,7 +3047,6 @@ void Plot::compute_crossings(String prefix){
   r.set(String(""), M_PI*Re, prefix);
   
   for(i=0; i<q.size(); i++){
-    
     for(j=i+1; j<q.size(); j++){
 
       dummy.str("");
@@ -3031,7 +3060,6 @@ void Plot::compute_crossings(String prefix){
       }
 
     }
-
   }
 
   r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
@@ -3066,6 +3094,7 @@ void Plot::compute_crossings(String prefix){
 	       
   p.clear();
   q.clear();
+  q_temp.clear();
   
 }
 
@@ -3423,20 +3452,20 @@ void Plot::show(bool zoom_out, String prefix){
   
 
   //replace line with n_points_plot_coastline in plot_dummy.plt
-  cout << new_prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
+  cout << prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
   plot_command.str("");
   command.str("");
   n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix); 
   command << "LANG=C sed 's/#n_points_coastline/n_points_coastline = " << n_points_plot_coastline.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
   system(command.str().c_str());
-  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
 
   //read from init_file with and height of plot window
-  cout << new_prefix.value << YELLOW << "Reading width and height of plot window from file " << file_init.name.value << " ...\n" << RESET;
+  cout << prefix.value << YELLOW << "Reading width and height of plot window from file " << file_init.name.value << " ...\n" << RESET;
   width_plot_window.read_from_file(String("width of plot window"), file_init, true, new_prefix); 
   height_plot_window.read_from_file(String("height of plot window"), file_init, true, new_prefix); 
-  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
   
   //replace line with min_latitude in plot_dummy.plt
@@ -3459,14 +3488,14 @@ void Plot::show(bool zoom_out, String prefix){
 
     }
     
-    cout << new_prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
+    cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
   
     lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix); 
     lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix); 
     phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix); 
     phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
 
-    cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
 
   }else{
@@ -3845,12 +3874,12 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
   H_s.enter(String("sextant altitude"), true, new_prefix);
   //read index error from init file
-  cout << new_prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
+  cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
   index_error.read_from_file(String("index error"), file_init, true, new_prefix);
-  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
-  cout << new_prefix.value << YELLOW << "Reading artificial horizon from file " << file_init.name.value << " ...\n" << RESET;
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
+  cout << prefix.value << YELLOW << "Reading artificial horizon from file " << file_init.name.value << " ...\n" << RESET;
   artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
-  cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
   if(artificial_horizon.value == 'n'){
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
   }
@@ -3860,9 +3889,9 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
     time = master_clock_date_and_hour;
     
-    cout << new_prefix.value << YELLOW << "Reading use of stopwatch from file " << file_init.name.value << " ...\n" << RESET;
+    cout << prefix.value << YELLOW << "Reading use of stopwatch from file " << file_init.name.value << " ...\n" << RESET;
     use_stopwatch.read_from_file(String("use of stopwatch"), file_init, true, new_prefix);
-    cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
     if(use_stopwatch.value == 'y'){
         
@@ -3872,9 +3901,9 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     }
 
     //read TAI_minus_UTC from data/index.txt
-    cout << new_prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
+    cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
     TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
-    cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     time.add(TAI_minus_UTC);
     time.print(String("TAI date and hour of sight"), new_prefix, cout);
 

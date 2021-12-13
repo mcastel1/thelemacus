@@ -2998,6 +2998,7 @@ void Plot::compute_crossings(String prefix){
   File file_init;
   Angle min_crossing_angle;
   double x;
+  Route error_circle;
 
 
   //append \t to prefix
@@ -3128,11 +3129,19 @@ void Plot::compute_crossings(String prefix){
     }
   }
   (r.value) /= ((double)((q.size())*((q.size())-1)/2));
+
+  //computes the circle of equal altitude which represents the error of the sight
+  (error_circle.type) = String("c");
+  (error_circle.GP) = center;
+  (error_circle.omega.value) = (r.value)/Re;
+  (error_circle.label) = String("error on astronomical position");
+  (error_circle.related_sight) = -1;
   
   center.print(String("astronomical position"), prefix, cout);
-  r.print(String("error on astronomical position"), String("nm"), new_prefix, cout);
+  r.print(String("error on astronomical position"), String("nm"), prefix, cout);
 	  
   position_list.push_back(center);
+  route_list.push_back(error_circle);
   
   p.clear();
   q.clear();
@@ -3451,7 +3460,7 @@ void Plot::transport_position(unsigned int i, String prefix){
 // if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
 void Plot::show(bool zoom_out, String prefix){
 
-  stringstream line_ins;
+  stringstream line_ins, /*plot_style contains the chunk of the gnuplot command line containing the style (dashtype, line type, color, ...) of the Routes and Position to be plotted*/plot_style;
   string line;
   unsigned int i;
   //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi. 
@@ -3566,7 +3575,7 @@ void Plot::show(bool zoom_out, String prefix){
 
 
   
-  //replace line with route plots
+  //plot routes
   
   plot_command.str("");
   command.str("");
@@ -3574,9 +3583,14 @@ void Plot::show(bool zoom_out, String prefix){
   plot_command << "set key top right\\\n";
   plot_command << "plot ";
   for(i=0; i<(route_list.size()); i++){
-    
-    //cout << "Route # " << i+1 << "\n";
 
+    //set a  plot style for "error on astronomical position curve" and another one for all other curves
+    plot_style.str("");
+    if(((route_list[i]).label) == String("error on astronomical position")){
+      plot_style << "w l dashtype " << i+1 << " linecolor rgb \"purple\"";
+    }else{
+      plot_style << "w l dashtype " << i+1 << " lt " << i+1;
+    }
 
     switch(((route_list[i]).type.value)[0]){
 
@@ -3585,7 +3599,7 @@ void Plot::show(bool zoom_out, String prefix){
       {
 
 	//I assume that  the loxodrome is not cut through the meridian lambda = M_PI, and I make a single plot
-	plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) w l dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
+	plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
 
 	break;
       }
@@ -3595,7 +3609,7 @@ void Plot::show(bool zoom_out, String prefix){
       {
 
 	//I assume that the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
-	plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) w l dashtype " << i+1 << " lt " << i+1 << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
+	plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
 
 	break;
       }
@@ -3728,16 +3742,16 @@ void Plot::show(bool zoom_out, String prefix){
 
 	    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	    plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) w l dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\",\\\\\\\n";
+	    plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " ti \"" << (route_list[i]).label.value << "\",\\\\\\\n";
 	    //maybe wrong
-	    plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) w l dashtype " << i+1 << " lt " << i+1 << " noti,\\\\\\\n";
+	    plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti,\\\\\\\n";
 	    //maybe wrong
-	    plot_command << "[" << t_p.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) w l dashtype " << i+1 << " lt " << i+1 << " noti";
+	    plot_command << "[" << t_p.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
 
 	  }else{
 	    //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
 
-	    plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) w l dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\"";
+	    plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " ti \"" << (route_list[i]).label.value << "\"";
 
 	  }
       
@@ -3804,9 +3818,9 @@ void Plot::show(bool zoom_out, String prefix){
 
 	  //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	  plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) w l dashtype " << i+1 << " lt " << i+1 << " ti \"" << (route_list[i]).label.value << "\" ,\\\\\\\n";
+	  plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " ti \"" << (route_list[i]).label.value << "\" ,\\\\\\\n";
 	  //maybe wrong      
-	  plot_command << "[" << t_s.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) w l dashtype " << i+1 << " lt " << i+1 << " noti";
+	  plot_command << "[" << t_s.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
 	  
 	}
 
@@ -3834,7 +3848,7 @@ void Plot::show(bool zoom_out, String prefix){
 
 
   
-  //replace line with position plots
+  //plot positions
   
   plot_command.str("");
   //set the key in the correct place for the Positions that will be plotted 
@@ -3843,17 +3857,34 @@ void Plot::show(bool zoom_out, String prefix){
   }
   for(i=0; i<position_list.size(); i++){
 
-    plot_command << "\"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 ";
+    //set a  plot style for "astronomical position" Position and another one for all other Positions
+    plot_style.str("");
+    if(!(((position_list[i]).label) == String("crossing"))){
 
-    if(((position_list[i]).label.value) != "crossing"){
+      if(!(((position_list[i]).label) == String("astronomical position"))){
 
-      plot_command << "lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"";
+	plot_style << "lt " << i+1 << " ti \"" << (position_list[i]).label.value << "\"";
+  
+      }else{
 
+	plot_style << "linecolor rgb \"purple\" " << " ti \"" << (position_list[i]).label.value << "\"";
+  
+      }
+
+      
     }else{
-
-      plot_command << "lt " << 1 << "linecolor rgb \"gray\" noti";
+      
+      plot_style << "lt " << 1 << "linecolor rgb \"gray\" noti";
       
     }
+
+
+    plot_command << "\"+\" u (xe(K*(" << (position_list[i]).lambda.value << "))):(ye(K*(" << (position_list[i]).phi.value << "))) w p lw 2 " << plot_style.str();
+
+
+
+
+      
 
     if(i+1<position_list.size()){
 

@@ -82,10 +82,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-lambda_min = 170.20750000000001023181539494544;
-lambda_max = 190.00016666666667219942610245198;
-phi_min = 300.23166666666668334073619917035;
-phi_max = 80.886666666666670266749861184508;
+lambda_min = 170.1999999999999886313162278384;
+lambda_max = 190;
+phi_min = 300.76666666666665150842163711786;
+phi_max = 80.883333333333339965065533760935;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]

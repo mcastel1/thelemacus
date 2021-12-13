@@ -390,6 +390,7 @@ class Length{
   void read_from_file(String, File&, bool, String);
   bool check_valid(String, String);
   bool operator> (const Length&);
+  Length operator + (const Length&);
 
 };
 
@@ -397,6 +398,16 @@ class Length{
 bool Length::operator>(const Length& r){
 
   return((((*this).value) > (r.value)));
+  
+}
+
+Length Length::operator+ (const Length& l){
+  
+  Length s;
+
+  (s.value) = value + (l.value);
+
+  return s;
   
 }
 
@@ -3103,9 +3114,24 @@ void Plot::compute_crossings(String prefix){
   }
   (center.lambda.value)/=((double)(q.size()));
   (center.phi.value)/=((double)(q.size()));
-
   center.label.set(String(""), String("astronomical position"),  prefix);
+
+  //compute error on astronomical position
+  (r.value) = 0.0;
+  for(i=0 ; i<q.size(); i++){
+    for(j=i+1 ; j<q.size(); j++){
+
+
+      (q[i]).distance(q[j], &s, String(""), new_prefix);
+      r= r+s;
+      
+    }
+  }
+  (r.value) /= ((double)((q.size())*((q.size())-1)/2));
+  
   center.print(String("astronomical position"), prefix, cout);
+  r.print(String("error on astronomical position"), String("nm"), new_prefix, cout);
+	  
   position_list.push_back(center);
   
   p.clear();

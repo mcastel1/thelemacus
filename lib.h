@@ -3460,7 +3460,7 @@ void Plot::transport_position(unsigned int i, String prefix){
 // if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
 void Plot::show(bool zoom_out, String prefix){
 
-  stringstream line_ins, /*plot_style contains the chunk of the gnuplot command line containing the style (dashtype, line type, color, ...) of the Routes and Position to be plotted*/plot_style;
+  stringstream line_ins, /*plot_style contains the chunk of the gnuplot command line containing the style (dashtype, line type, color, ...) of the Routes and Position to be plotted*/plot_style, /*plot_title contains the gnuplot title of the Route to be plotted*/ plot_title;
   string line;
   unsigned int i;
   //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi. 
@@ -3638,6 +3638,14 @@ file_gnuplot.remove(prefix);
       //plot a circle of equal altitude
       {
 
+	//this is the title for all curves which will be plotted with a non-empty title in their legent. Curves plotted with an empty title in their legend will be plotted with 'noti' in the plot command. 
+	plot_title.str("");
+	if(!((route_list[i]).label == String("error on astronomical position"))){
+	  plot_title << " ti \"" << (route_list[i]).label.value << "\"";
+	}else{
+	  plot_title << " noti";
+	}
+	
 	//if abs(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (route_list[i]).GP.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(route_list[i]).GP.lambda_{t = t_{min}} and (route_list[i]).GP.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output. 
 	if(abs(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))) < 1.0){
     
@@ -3761,7 +3769,7 @@ file_gnuplot.remove(prefix);
 
 	    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	    plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " ti \"" << (route_list[i]).label.value << "\",\\\\\\\n";
+	    plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << ",\\\\\\\n";
 	    //maybe wrong
 	    plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti,\\\\\\\n";
 	    //maybe wrong
@@ -3770,7 +3778,7 @@ file_gnuplot.remove(prefix);
 	  }else{
 	    //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
 
-	    plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " ti \"" << (route_list[i]).label.value << "\"";
+	    plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
 
 	  }
       
@@ -3837,8 +3845,8 @@ file_gnuplot.remove(prefix);
 
 	  //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
       
-	  plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " ti \"" << (route_list[i]).label.value << "\" ,\\\\\\\n";
-	  //maybe wrong      
+	  plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << " ,\\\\\\\n";
+
 	  plot_command << "[" << t_s.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).GP.phi.value << ", " << (route_list[i]).GP.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
 	  
 	}

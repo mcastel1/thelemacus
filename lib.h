@@ -3101,8 +3101,8 @@ void Plot::compute_crossings(String prefix){
     (center.phi.value) += ((q[i]).phi.value);
 
   }
-  (center.lambda.value)/=q.size();
-  (center.phi.value)/=q.size();
+  (center.lambda.value)/=((double)(q.size()));
+  (center.phi.value)/=((double)(q.size()));
 
   center.label.set(String(""), String("astronomical position"),  prefix);
   center.print(String("astronomical position"), prefix, cout);

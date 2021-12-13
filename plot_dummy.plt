@@ -10,9 +10,8 @@ reset
 set clip two
 K = 360.0/(2.0*pi);
 k = 1.0/K;
-N = 6.0;
-#circles of equal altitude are plotted with S points
-S = 1e3;
+#number of intervals for tics
+#number of points for routes
 #n_points_coastline
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
@@ -57,7 +56,7 @@ set format y "";
 set ytics ();
 
 set ticscale 3,1
-set samples S
+set samples n_points_routes
 #increments in degrees
 increment_phi = 20.0;
 increment_lambda = 60.0;
@@ -158,7 +157,7 @@ while(1){
 	else{gamma_lambda = 60.0;}
 
 	dlambda=1.0/gamma_lambda;
-	while(N*dlambda<lambda_span){
+	while(n_intervals_tics*dlambda<lambda_span){
 	#print dlambda;
 	if(dlambda == 1.0/gamma_lambda){dlambda = dlambda + 4.0/gamma_lambda;}
 	else{dlambda = dlambda + 5.0/gamma_lambda;}
@@ -178,7 +177,7 @@ while(1){
 	else{gamma_phi = 60.0;}
 	
 	dphi=1.0/gamma_phi;
-	while(N*dphi<phi_span){
+	while(n_intervals_tics*dphi<phi_span){
 		#print dphi;
 		if(dphi == 1.0/gamma_phi){dphi = dphi + 4.0/gamma_phi;}
 		else{dphi = dphi + 5.0/gamma_phi;}

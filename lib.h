@@ -3472,7 +3472,7 @@ void Plot::show(bool zoom_out, String prefix){
   gsl_function F;
   const gsl_root_fsolver_type *T;
   gsl_root_fsolver *s;
-  Int n_points_plot_coastline, width_plot_window, height_plot_window;
+  Int n_points_plot_coastline, width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
   String new_prefix;
   File file_init;
 
@@ -3499,15 +3499,34 @@ void Plot::show(bool zoom_out, String prefix){
   }
 
   file_id.remove(prefix);
-  file_gnuplot.remove(prefix);
-  
+file_gnuplot.remove(prefix);
 
+  //replace line with number of intervals for tics in plot_dummy.plt
+  cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
+  plot_command.str("");
+  command.str("");
+  n_intervals_tics.read_from_file(String("number of intervals for tics"), file_init, true, new_prefix); 
+  command << "LANG=C sed 's/#number of intervals for tics/n_intervals_tics = " << n_intervals_tics.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
+  system(command.str().c_str());
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+ 
+  //replace line with number of points for routes in plot_dummy.plt
+  cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
+  plot_command.str("");
+  command.str("");
+  n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix); 
+  command << "LANG=C sed 's/#number of points for routes/n_points_routes = " << n_points_routes.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+  system(command.str().c_str());
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+  
   //replace line with n_points_plot_coastline in plot_dummy.plt
   cout << prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
   plot_command.str("");
   command.str("");
   n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix); 
-  command << "LANG=C sed 's/#n_points_coastline/n_points_coastline = " << n_points_plot_coastline.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
+  command << "LANG=C sed 's/#n_points_coastline/n_points_coastline = " << n_points_plot_coastline.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
   system(command.str().c_str());
   cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
@@ -3522,19 +3541,19 @@ void Plot::show(bool zoom_out, String prefix){
   //replace line with min_latitude in plot_dummy.plt
   //
 
-  if((!file_boundary.check_if_exists(new_prefix)) || zoom_out){
+  if((!file_boundary.check_if_exists(prefix)) || zoom_out){
     //in this case, there is no boundary file boundary.txt ot zoom_out: a plot is made for the frist time or the boundaries need to be reset to the ones from the init file -> the boundaries of the plot are thus read from the init file. 
 
-    if(!file_boundary.check_if_exists(new_prefix)){
+    if(!file_boundary.check_if_exists(prefix)){
       
-      cout << new_prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
+      cout << prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
       
     }else{
       
-      cout << new_prefix.value  << "Fully zooming out.\n";
+      cout << prefix.value  << "Fully zooming out.\n";
 
       if(zoom_out){
-	file_boundary.remove(new_prefix);
+	file_boundary.remove(prefix);
       }
 
     }
@@ -3561,7 +3580,7 @@ void Plot::show(bool zoom_out, String prefix){
     
   }
 
-  file_boundary.close(new_prefix);
+  file_boundary.close(prefix);
   //
 
   //in either case of the if above, I write the boundary values which I have read in plot_temp.plt

@@ -90,23 +90,6 @@ bool String::operator==(const String& s){
 }
 
 
-class File{
-
- public:
-  fstream value;
-  String name;
-  unsigned int number_of_lines;
-
-  File();
-  void set_name(String);
-  void enter_name(String);
-  bool open(String, String);
-  void close(String);
-  void remove(String);
-  void count_lines(String);
-  bool check_if_exists(String);
-  
-};
 
 
 
@@ -130,6 +113,139 @@ class Double{
   void print(String, String, ostream&);
 
 };
+
+class File{
+
+ public:
+  fstream value;
+  String name;
+  unsigned int number_of_lines;
+
+  File();
+  void set_name(String);
+  void enter_name(String);
+  bool open(String, String);
+  void close(String);
+  void remove(String);
+  void count_lines(String);
+  bool check_if_exists(String);
+  
+};
+
+void File::enter_name(String prefix){
+
+  name.enter(String("name of file"), prefix);
+  
+}
+
+void File::count_lines(String prefix){
+
+  stringstream command, line_ins;
+  string line, dummy;
+  File file_number_of_lines;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
+
+  file_number_of_lines.set_name(String("output.out"));
+  file_number_of_lines.remove(new_prefix);
+  
+  command.str("");
+  command << "wc -l " << (name.value)  << " >> " << ((file_number_of_lines.name).value);
+  system(command.str().c_str());
+
+  file_number_of_lines.open(String("in"), new_prefix);
+  
+  getline((file_number_of_lines.value), line); 
+  line_ins << line;
+  line_ins >> number_of_lines >> dummy;
+
+  file_number_of_lines.close(new_prefix);  
+
+  cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
+
+  
+}
+
+
+void File::remove(String prefix){
+
+  stringstream command;
+
+  command.str("");
+  command << "rm -rf " << (name.value) << "> /dev/null 2>&1";
+  system(command.str().c_str());
+
+  cout << prefix.value << "File " << name.value << " removed\n";
+  
+}
+
+
+File::File(){
+
+  value.precision(data_precision);
+  
+}
+
+void File::set_name(String filename){
+
+  (name.value) = filename.value;
+  
+}
+
+bool File::check_if_exists(String prefix){
+
+  bool output;
+
+  value.open(name.value, ios::in);
+  
+  if(value){
+    cout << prefix.value << "File " << (name.value) << " exists\n";
+    output = true;   
+  }
+  else{
+    cout << prefix.value << "File " << (name.value) << " does not exist\n";
+    output = false;
+  }
+
+  return output;
+
+}
+
+bool File::open(String mode, String prefix){
+
+
+  if(mode.value == "in"){
+    value.open(name.value, ios::in);
+  }else{
+    value.open(name.value, ios::out);
+  }
+  
+  cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
+  
+  if(!value){
+    
+    cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
+    return 0;
+    
+  }else{
+    
+    cout << prefix.value <<  "... done.\n";
+    return 1;
+     
+  }
+
+}
+
+void File::close(String prefix){
+  
+  value.close();
+  cout << prefix.value << "File " << (name.value) << " closed.\n";
+     
+
+}
 
 
 void Double::read_from_file(String name, File& file, bool search_entire_file, String prefix){
@@ -475,11 +591,6 @@ String::String(string s){
 }
 
 
-File::File(){
-
-  value.precision(data_precision);
-  
-}
 
 void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
 
@@ -524,12 +635,39 @@ class Answer{
  public:
   char value;
   void enter(String, String);
+  bool set(String, char, String);
   //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
 
 };
 
+bool Answer::set(String name, char c, String prefix){
+
+  bool check;
+
+  check = true;
+  check &= ((c == 'y') || (c == 'n'));
+  
+  if(check){
+
+    value = c;
+    
+    if(!(name == String(""))){
+      
+      cout << prefix.value << name.value << " = " << c << "\n";
+      
+    }
+
+  }else{
+
+    cout << prefix.value << RED << "Value of answer is not valid!\n" << RESET;
+    
+  }
+
+  return check;
+  
+}
 
 
 void Answer::read_from_file(String name, File& file, bool search_entire_file, String prefix){
@@ -1843,113 +1981,7 @@ void Time::add(Chrono chrono_in){
 }
 
 
-void File::enter_name(String prefix){
 
-  name.enter(String("name of file"), prefix);
-  
-}
-
-void File::count_lines(String prefix){
-
-  stringstream command, line_ins;
-  string line, dummy;
-  File file_number_of_lines;
-  String new_prefix;
-
-  //append \t to prefix
-  new_prefix = prefix.append(String("\t"));
-
-
-  file_number_of_lines.set_name(String("output.out"));
-  file_number_of_lines.remove(new_prefix);
-  
-  command.str("");
-  command << "wc -l " << (name.value)  << " >> " << ((file_number_of_lines.name).value);
-  system(command.str().c_str());
-
-  file_number_of_lines.open(String("in"), new_prefix);
-  
-  getline((file_number_of_lines.value), line); 
-  line_ins << line;
-  line_ins >> number_of_lines >> dummy;
-
-  file_number_of_lines.close(new_prefix);  
-
-  cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
-
-  
-}
-
-
-void File::remove(String prefix){
-
-  stringstream command;
-
-  command.str("");
-  command << "rm -rf " << (name.value) << "> /dev/null 2>&1";
-  system(command.str().c_str());
-
-  cout << prefix.value << "File " << name.value << " removed\n";
-  
-}
-
-void File::set_name(String filename){
-
-  (name.value) = filename.value;
-  
-}
-
-bool File::check_if_exists(String prefix){
-
-  bool output;
-
-  value.open(name.value, ios::in);
-  
-  if(value){
-    cout << prefix.value << "File " << (name.value) << " exists\n";
-    output = true;   
-  }
-  else{
-    cout << prefix.value << "File " << (name.value) << " does not exist\n";
-    output = false;
-  }
-
-  return output;
-
-}
-
-bool File::open(String mode, String prefix){
-
-
-  if(mode.value == "in"){
-    value.open(name.value, ios::in);
-  }else{
-    value.open(name.value, ios::out);
-  }
-  
-  cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
-  
-  if(!value){
-    
-    cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
-    return 0;
-    
-  }else{
-    
-    cout << prefix.value <<  "... done.\n";
-    return 1;
-     
-  }
-
-}
-
-void File::close(String prefix){
-  
-  value.close();
-  cout << prefix.value << "File " << (name.value) << " closed.\n";
-     
-
-}
 
 
 bool Length::check_valid(String name, String prefix){
@@ -2436,7 +2468,7 @@ class Plot{
   void transport_position(unsigned int, String);
   void remove_position(unsigned int, String);
   void remove_route(unsigned int, String);
-  bool read_from_file(String, String);
+  bool read_from_file(File, String);
   void print(bool, String, ostream&);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
@@ -2447,9 +2479,8 @@ class Plot{
 
 };
 
-bool Plot::read_from_file(String filename, String prefix){
+bool Plot::read_from_file(File file, String prefix){
 
-  File file;
   stringstream line_ins;
   string line;
   size_t pos;
@@ -2459,7 +2490,6 @@ bool Plot::read_from_file(String filename, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
  
-  file.set_name(filename.value);
   
   if(!(file.open(String("in"), new_prefix))){
     
@@ -2587,6 +2617,9 @@ bool Plot::read_from_file(String filename, String prefix){
   return check;
   
 }
+
+
+
 
 void Plot::menu(String prefix){
 
@@ -2867,6 +2900,10 @@ void Plot::menu(String prefix){
   
       File file;
       stringstream temp;
+      Answer answer;
+
+      //answer says whether one should create a new file on which the data will be saved
+      answer.set(String(""), 'y', new_prefix);
     
       file.name.enter(String("name of file (without extension)"), new_prefix);
       //add the extension .sav to name of file
@@ -2874,17 +2911,32 @@ void Plot::menu(String prefix){
       temp << file.name.value << ".sav";
       file.set_name(temp.str());
 
-      file.open(String("out"),new_prefix);    
-      print(false, new_prefix, file.value);
-      file.close(new_prefix);
+      //If the file already exists, I ask whether the user want to overwrite it
+      if((file.check_if_exists(new_prefix))){
 
-      command.str("");
-      command << "mv plot.plt " << "'plot " << temp.str() << "'";
-      system(command.str().c_str());
+	cout << new_prefix.value << YELLOW << "You may be overwriting data!\n" << RESET;
+	answer.enter(String("whether you want to overwrite the file"), new_prefix);
+	
+      }
 
-    }else{    
+      if((answer.value) == 'y'){
+
+	file.open(String("out"), new_prefix);    
+	print(false, new_prefix, file.value);
+	file.close(new_prefix);
+
+	command.str("");
+	command << "mv plot.plt " << "'plot " << temp.str() << "'";
+	system(command.str().c_str());
+
+      }
+
+    }else{
+      
       cout << YELLOW << "There are no routes nor positions to save!\n" << RESET;
+      
     }
+    
     menu(prefix);
     
   }
@@ -2892,14 +2944,18 @@ void Plot::menu(String prefix){
 
   case 14:{
 
-    String filename;
+    File file;
     stringstream line_ins;
+    String line;
+
+    line_ins.str("");
+    line.enter(String("name of file (without extension)"), new_prefix);
+    line_ins << line.value << ".sav";
+
+    file.set_name(String(line_ins.str()));
+
     
-    filename.enter(String("name of file (without extension)"), new_prefix);
-    line_ins << filename.value << ".sav"; 
-    filename.value = line_ins.str();
-    
-    if(read_from_file(filename, new_prefix)){
+    if(read_from_file(file, new_prefix)){
       print(true, new_prefix, cout);
       show(false, new_prefix);
     }

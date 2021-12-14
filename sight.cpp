@@ -80,6 +80,12 @@ int main(int argc, char *argv[]){
   gsl_set_error_handler_off();
 
   /*
+  Answer a;
+  a.set(String("what an answer!"), 'c', String("\t"));
+  return 0;
+  */
+
+  /*
   Position a,b;
   Length l;
   a.enter(String("a"), String(""));

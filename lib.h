@@ -203,6 +203,7 @@ bool File::check_if_exists(String prefix){
   
   if(value){
     cout << prefix.value << "File " << (name.value) << " exists\n";
+    value.close();
     output = true;   
   }
   else{
@@ -3623,15 +3624,17 @@ file_gnuplot.remove(prefix);
     //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
 
     cout << new_prefix.value << "I found a boundary file.\n" << RESET;
+
+    file_boundary.open(String("in"), prefix);
     
     lambda_min.read_from_file(String("minimal longitude"), file_boundary, true, new_prefix); 
     lambda_max.read_from_file(String("maximal longitude"), file_boundary, true, new_prefix); 
     phi_min.read_from_file(String("minimal latitude"), file_boundary, true, new_prefix); 
     phi_max.read_from_file(String("maximal latitude"), file_boundary, true, new_prefix);
     
+    file_boundary.close(prefix);
   }
 
-  file_boundary.close(prefix);
   //
 
   //in either case of the if above, I write the boundary values which I have read in plot_temp.plt

@@ -1,7 +1,7 @@
 //this is the high precision used for storing data and making calculations with it 
 #define data_precision 32
 //this is the low precision used for displaying data
-#define display_precision 4
+#define display_precision 64
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
@@ -2189,7 +2189,8 @@ void Catalog::print(String prefix, ostream& ostr){
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
-  
+
+  cout << prefix.value << "Bodies in the catalog:\n";
   for(i=0; i<list.size(); i++){
 
     name.str("");

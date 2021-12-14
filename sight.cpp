@@ -164,7 +164,7 @@ int main(int argc, char *argv[]){
   return 0;
   */
   
-  Catalog catalog(String(path_file_catalog));
+  Catalog catalog(String(path_file_catalog), String(""));
   Plot plot(&catalog, String(""));
 
   catalog.print(String(""), cout);

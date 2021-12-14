@@ -1,7 +1,7 @@
 //this is the high precision used for storing data and making calculations with it 
 #define data_precision 32
 //this is the low precision used for displaying data
-#define display_precision 64
+#define display_precision 4
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
@@ -2131,49 +2131,43 @@ class Catalog{
 
  public:
   vector<Body> list;
-  Catalog(String);
+  Catalog(String, String);
   void add(String, String, double);
   void print(String, ostream&);
 
 };
 
-Catalog::Catalog(String filename){
+Catalog::Catalog(String filename, String prefix){
 
   File file;
   string line;
-  stringstream line_ins;
-  Body temp;
+  Body body;
+  streampos old_position;
 
 
   file.set_name(filename);
   if(file.open(String("in"), String(""))){
 
-    getline((file.value), line);
+    // stores the position of file.value
+    old_position = file.value.tellg();
+    //read the next line in the file
+    getline(file.value, line); 
 
-    line.clear();
-    line_ins.clear();
-    getline((file.value), line);
-
+    //check whether the next line in the file has reached the end of file
     while(!(file.value).eof()){
-
-      line_ins << line;
-      line_ins >>  temp.type.value >> temp.name.value >> temp.radius.value >> temp.RA.value >> temp.d.value;
-
-      temp.RA.value *= k;
-      temp.d.value *= k;
       
-      temp.RA.normalize();
-      temp.d.normalize();
-      
-      list.push_back(temp);
-      /* cout << line << "-----" << temp.RA.value << "\t" << temp.d.value << "\n"; */
+      //if the next line in the file has not reached the end of file, I set file.value to its old position and keep reading the file
+      (file.value).seekg(old_position);
 
-      line.clear();
-      line_ins.clear();
-      getline((file.value), line);
+      body.read_from_file(String("read body"), file, prefix);
+      list.push_back(body);
+
+      // stores the position of file.value
+      old_position = file.value.tellg();
+      //read the next line in the file
+      getline(file.value, line); 
 
     }
-  
   
     file.close(String(""));
 

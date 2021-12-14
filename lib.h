@@ -2468,7 +2468,7 @@ class Plot{
   void transport_position(unsigned int, String);
   void remove_position(unsigned int, String);
   void remove_route(unsigned int, String);
-  bool read_from_file(File, String);
+  bool read_from_file(File&, String);
   void print(bool, String, ostream&);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
@@ -2479,7 +2479,7 @@ class Plot{
 
 };
 
-bool Plot::read_from_file(File file, String prefix){
+bool Plot::read_from_file(File& file, String prefix){
 
   stringstream line_ins;
   string line;
@@ -2921,6 +2921,7 @@ void Plot::menu(String prefix){
 
       if((answer.value) == 'y'){
 
+	file.remove(new_prefix);	
 	file.open(String("out"), new_prefix);    
 	print(false, new_prefix, file.value);
 	file.close(new_prefix);
@@ -2953,7 +2954,6 @@ void Plot::menu(String prefix){
     line_ins << line.value << ".sav";
 
     file.set_name(String(line_ins.str()));
-
     
     if(read_from_file(file, new_prefix)){
       print(true, new_prefix, cout);

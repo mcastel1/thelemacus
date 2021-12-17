@@ -60,6 +60,7 @@
 - centralizza tutti i percorsi dei file in modo che se devi cambiarlo basta cambiarlo in un posto solo
 - in all functions ::set and ::print, print out only if the associated name of the quantity that you are printing is different from ""
 - the way you compute the error on the astronomical position is wrong: it does not go to zero as the number of sights goes to infinity
+- make sure that when you remove the Position astronomical position, the circle of error Route is also removed
 */
 
 

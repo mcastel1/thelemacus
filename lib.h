@@ -2634,33 +2634,33 @@ void Plot::menu(String prefix){
   
   cout << prefix.value << BOLD << "Sights:" << RESET << "\n";
   for(i=0; i<2; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
+    cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Positions:" << RESET << "\n";
   for(i=2; i<6; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
+    cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
   for(i=6; i<10; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
+    cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
   for(i=10; i<13; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
+    cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
   for(i=13; i<15; i++){
-    cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
+    cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   i=15;
   cout << prefix.value << "\n";
-  cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
+  cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
 
 
 

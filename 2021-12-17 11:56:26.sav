@@ -1,0 +1,130 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 52° 42.500000000000142108547152020037'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-26
+				hour of master-clock date and hour of sight = 00:04:22
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-17 11:51:36
+		Sight #2:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 37° 27.799999999999869260136620141566'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-29
+				hour of master-clock date and hour of sight = 10:55:37
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-17 11:52:22
+		Sight #3:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = u
+			sextant altitude = 38° 53.800000000000096633812063373625'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-29
+				hour of master-clock date and hour of sight = 11:02:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-17 11:52:53
+		Sight #4:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 90° 51.999999999999602096067974343896'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:09:04
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-17 11:53:23
+		Sight #5:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 95° 1.8000000000000682121026329696178'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:23:30
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-17 11:54:31
+	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 48° 51.434110536470427632593782618642'
+				longitude = 357° 36.164523379134152492042630910873'
+				label = astronomical position
+			aperture angle = 0° 0.15491855905635090739913550805795'
+			label = error on astronomical position
+	Positions in the plot:
+		Position #1:
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH)
+		Position #2:
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
+			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)
+		Position #4:
+			latitude = 48° 51.409762973291179832813213579357'
+			longitude = 357° 36.300868325142801040783524513245'
+			label = crossing
+		Position #5:
+			latitude = 48° 51.458066208638513217010768130422'
+			longitude = 357° 36.301977724290281912544742226601'
+			label = crossing
+		Position #6:
+			latitude = 48° 51.327611267572308406670344993472'
+			longitude = 357° 36.298980369460878137033432722092'
+			label = crossing
+		Position #7:
+			latitude = 48° 51.453358784629728006621007807553'
+			longitude = 357° 35.945613371890203779912553727627'
+			label = crossing
+		Position #8:
+			latitude = 48° 51.419857708398524209769675508142'
+			longitude = 357° 36.218626286487278775894083082676'
+			label = crossing
+		Position #9:
+			latitude = 48° 51.498688514131885085589601658285'
+			longitude = 357° 35.911898707454383838921785354614'
+			label = crossing
+		Position #10:
+			latitude = 48° 51.471428298629575692757498472929'
+			longitude = 357° 36.173698869240524800261482596397'
+			label = crossing
+		Position #11:
+			latitude = 48° 51.434110536470427632593782618642'
+			longitude = 357° 36.164523379134152492042630910873'
+			label = astronomical position

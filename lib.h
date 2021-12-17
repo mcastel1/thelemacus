@@ -2648,17 +2648,17 @@ void Plot::menu(String prefix){
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
-  for(i=10; i<12; i++){
+  for(i=10; i<13; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=12; i<14; i++){
+  for(i=13; i<15; i++){
     cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=14;
+  i=15;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "\t(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -2894,8 +2894,34 @@ void Plot::menu(String prefix){
   }
     break;
 
-    
+
   case 13:{
+
+    if(route_list.size() + position_list.size() > 0){
+  
+      for(i=0; i<position_list.size(); i++){
+	remove_position(i, new_prefix);
+      }
+      
+      for(i=0; i<route_list.size(); i++){
+	remove_route(i, new_prefix);
+      }
+ 
+      show(false, new_prefix);
+     
+    }else{
+      
+      cout << YELLOW << "There are no routes nor positions to clear!\n" << RESET;
+      
+    }
+    
+    menu(prefix);
+    
+  }
+    break;
+
+    
+  case 14:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -2944,7 +2970,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 14:{
+  case 15:{
 
     File file;
     stringstream line_ins;
@@ -2967,7 +2993,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 15:{
+  case 16:{
 
     File file;
     String line;
@@ -3025,7 +3051,7 @@ Plot::Plot(Catalog* cata, String prefix){
 
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 

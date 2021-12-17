@@ -3423,7 +3423,7 @@ void Plot::remove_position(unsigned int i, String prefix){
   stringstream name;
 
   name.str("");
-  name << "Position to be removed: Position #" << i+1;
+  name << "Position to be removed: #" << i+1;
   
   (position_list[i]).print(String(name.str().c_str()), prefix, cout);
   
@@ -3443,7 +3443,7 @@ void Plot::remove_route(unsigned int i, String prefix){
   i_related_sight = ((route_list[i]).related_sight);
   
   name.str("");
-  name << "Route to be removed: Position #" << i+1;
+  name << "Route to be removed: #" << i+1;
   
   (route_list[i]).print(String(name.str().c_str()), prefix, cout);
   

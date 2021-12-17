@@ -3578,7 +3578,7 @@ void Plot::show(bool zoom_out, String prefix){
   }
 
   file_id.remove(prefix);
-file_gnuplot.remove(prefix);
+  file_gnuplot.remove(prefix);
 
   //replace line with number of intervals for tics in plot_dummy.plt
   cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
@@ -3681,9 +3681,13 @@ file_gnuplot.remove(prefix);
   command.str("");
   //set the key position on the screen
   plot_command << "set key top right\\\n";
-  plot_command << "plot ";
   for(i=0; i<(route_list.size()); i++){
 
+    //I start a brand new multiline plot command only if I am looking at the first route plot
+    if(i==0){
+      plot_command << "plot ";
+    }
+    
     //set a  plot style for "error on astronomical position curve" and another one for all other curves
     plot_style.str("");
     if(((route_list[i]).label) == String("error on astronomical position")){
@@ -3959,11 +3963,12 @@ file_gnuplot.remove(prefix);
   //plot positions
   
   plot_command.str("");
-  //set the key in the correct place for the Positions that will be plotted 
-  if(route_list.size() == 0){
-    plot_command << "plot ";
-  }
   for(i=0; i<position_list.size(); i++){
+
+    //I start a brand new multiling plotting command only if I am looking at the first position plot and if there were no previous route plots
+    if((i==0) && (route_list.size() == 0)){
+      plot_command << "plot ";
+    }
 
     //set a  plot style for "astronomical position" Position and another one for all other Positions
     plot_style.str("");

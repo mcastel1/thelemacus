@@ -2626,6 +2626,7 @@ void Plot::menu(String prefix){
 
   String new_prefix;
   unsigned int i, j;
+  int l;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -2899,12 +2900,12 @@ void Plot::menu(String prefix){
 
     if(route_list.size() + position_list.size() > 0){
   
-      for(i=0; i<position_list.size(); i++){
-	remove_position(i, new_prefix);
+      for(l=position_list.size()-1; l>-1; l--){
+	remove_position(l, new_prefix);
       }
       
-      for(i=0; i<route_list.size(); i++){
-	remove_route(i, new_prefix);
+      for(l=route_list.size()-1; l>-1; l--){
+	remove_route(l, new_prefix);
       }
  
       show(false, new_prefix);

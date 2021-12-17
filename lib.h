@@ -2626,7 +2626,6 @@ void Plot::menu(String prefix){
 
   String new_prefix;
   unsigned int i, j;
-  int l;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -2900,16 +2899,19 @@ void Plot::menu(String prefix){
 
     if(route_list.size() + position_list.size() > 0){
   
-      for(l=position_list.size()-1; l>-1; l--){
-	remove_position(l, new_prefix);
+      //in this loop I don't increment i because position_list.size() decreases at each iteration
+      for(i=0; i<position_list.size(); ){
+	remove_position(i, new_prefix);
       }
       
-      for(l=route_list.size()-1; l>-1; l--){
-	remove_route(l, new_prefix);
+      //in this loop I don't increment i because route_list.size() decreases at each iteration
+      for(i=0; i<route_list.size(); ){
+	remove_route(i, new_prefix);
       }
  
+      print(true, new_prefix, cout);
       show(false, new_prefix);
-     
+   
     }else{
       
       cout << YELLOW << "There are no routes nor positions to clear!\n" << RESET;

@@ -1,0 +1,33 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = star
+				Name = arcturus
+				Right ascension = 213° 54.79890000000068539520725607872'
+				Declination = 19° 10.694899999999947226569929625839'
+			sextant altitude = 67° 13.399999999999749888957012444735'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-06
+				hour of master-clock date and hour of sight = 22:48:40
+			use of stopwatch = y
+			hour of stopwatch = 00:19:36.819000000000002614797267597169
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+		Sight #2:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 89° 23.699999999999761257640784606338'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2023-05-04
+				hour of master-clock date and hour of sight = 22:02:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-17 11:27:54
+	Routes in the plot:

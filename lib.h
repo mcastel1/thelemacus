@@ -1654,7 +1654,7 @@ class Sight{
   String label;
   //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1. 
   int related_route;
-  //this is a list of the items whic are part of a Sight object (master_clock_date_and_hour, time, body, ...)
+  //this is a list of the minimal items which are part of a Sight object (master_clock_date_and_hour, body, ...). For some sights, (e.g., moon sights), some other items (e.g. limb) must be added to this minimal list
   vector<String> items;
 
 
@@ -1684,13 +1684,62 @@ void Sight::modify(String prefix){
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+
  
   cout << prefix.value << "Enter the item that you want to modify:\n";
-
   for(i=0; i<items.size(); i++){
     cout << prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
   }
 
+  enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), prefix);
+
+
+  
+  /*    
+  switch(i){
+
+  case 1:{
+    
+    body.enter(String("body"), false, new_prefix);
+
+  }
+    break;
+
+
+  case 2:{
+    
+    limb.enter(String("limb"), false, new_prefix);
+
+  }
+    break;
+
+    
+  case 3:{
+    
+    //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
+    H_s.enter(String("sextant altitude"), true, new_prefix);
+
+  }
+    break;
+
+  case 4:{
+    
+  
+  }
+    break;
+
+  case 5:{
+    
+  
+  }
+    break;
+
+    
+  }
+  */
+
+  cout << prefix.value << "Position modified\n";
 
 }
 
@@ -4084,9 +4133,13 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   File file_init;
   String new_prefix;
   bool check = true;
+  //this unsigned int counts how many additional entries have been inserted into the vector item
+  unsigned int additional_items;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  additional_items = 0;
 
   file_init.set_name(String(path_file_init));
   check &= (file_init.open(String("in"), prefix));
@@ -4097,6 +4150,8 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   //GP.label.set("geographic position", new_prefix);
 
   if(body.type.value != "star"){
+    items.insert(items.begin()+1+(additional_items++), String("limb"));
+    
     limb.enter(String("limb"), new_prefix);
   }
   //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
@@ -4109,9 +4164,10 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
   cout << prefix.value << YELLOW << "... done.\n" << RESET;
   if(artificial_horizon.value == 'n'){
+    items.insert(items.begin()+2+(additional_items++), String("height of eye"));    
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
   }
-  
+
   do{
   
     master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
@@ -4137,6 +4193,12 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
   }while(!check_data_time_interval(prefix));
 
+
+  //if the sight has use_stopwatch = 'y', then I add to the list of its items the stopwatch reading
+  if(use_stopwatch.value == 'y'){
+    items.insert(items.begin()+3+(additional_items++), String("stopwatch reading"));    
+  }
+
   label.enter(String("label"), new_prefix);
 
   //given that the sight is not yet linke to a route, I set
@@ -4144,6 +4206,14 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   
   file_init.close(prefix);
 
+  /*
+  cout << RED << "items:\n";
+  for(unsigned int i=0; i<items.size(); i++){
+    cout << items[i].value << " ";
+
+  }
+  cout << RESET;
+  */
 
   if(!check){
     cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
@@ -4592,7 +4662,7 @@ void Body::enter(Catalog catalog, String prefix){
 
 Sight::Sight(void){
 
-  items = {String("body"), String("limb"), String("sextant altitude"), String("time"), String("label"), String("related route")};
+  items = {String("body"), String("sextant altitude"), String("master-clock date and hour of sight"), String("label"), String("related route")};
 
   atmosphere.set();
   related_route = -1;

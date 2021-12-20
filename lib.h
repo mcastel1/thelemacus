@@ -2392,18 +2392,24 @@ bool Sight::read_from_file(File& file, String prefix){
   string line;
   bool check = true;
   String new_prefix;
+  //this unsigned int counts how many additional entries have been inserted into the vector item
+  unsigned int additional_items;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
+  additional_items = 0;
+
   body.read_from_file(String("body"), file, new_prefix);
   if(body.type.value != "star"){
+    items.insert(items.begin()+1+(additional_items++), String("limb"));
     limb.read_from_file(String("limb"), file, false, new_prefix);
   }
   H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
   index_error.read_from_file(String("index error"), file, false, new_prefix);
   artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
   if((artificial_horizon.value) == 'n'){
+    items.insert(items.begin()+2+(additional_items++), String("height of eye"));    
     height_of_eye.read_from_file(String("height of eye"), file, false, new_prefix);
   }
   
@@ -2416,7 +2422,8 @@ bool Sight::read_from_file(File& file, String prefix){
   use_stopwatch.read_from_file(String("use of stopwatch"), file, false, new_prefix);
 
   if(use_stopwatch.value == 'y'){
-      
+
+    items.insert(items.begin()+3+(additional_items++), String("stopwatch reading"));    
     stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
     time.add(stopwatch);
 
@@ -2513,6 +2520,16 @@ void Sight::print(String name, String prefix, ostream& ostr){
   if((related_route != -1) && (&ostr == &cout)){
     ostr << new_prefix.value << "Related route # = " << related_route+1 << "\n";
   }
+
+  //
+  cout << RED << "items:\n";
+  for(unsigned int i=0; i<items.size(); i++){
+    cout << new_prefix.value << items[i].value << "\n";
+
+  }
+  cout << RESET << "\n";
+  //
+
   
 }
 
@@ -2605,6 +2622,8 @@ bool Plot::read_from_file(File& file, String prefix){
 	  //I link the sight to the route, and the route to the sight
 	  route_list[route_list.size()-1].related_sight = sight_list.size()-1;
 	  sight_list[sight_list.size()-1].related_route = route_list.size()-1;
+	  //I add the 'related route' item to the items of the sight, because now the Sight is related to a Route
+	  (sight_list[sight_list.size()-1]).items.push_back(String("related route"));
 	  
 	}
 	  
@@ -3423,7 +3442,9 @@ bool Plot::add_sight(String prefix){
   //I link the sight to the route, and the route to the sight
   (sight_list[sight_list.size()-1]).related_route = route_list.size()-1;
   (route_list[route_list.size()-1]).related_sight = sight_list.size()-1;
-  
+  //I add the 'related route' item to the items of the sight, because now the Sight is related to a Route
+  (sight_list[sight_list.size()-1]).items.push_back(String("related route"));
+
   
   if(check){
     (sight_list[sight_list.size()-1]).print(String("Sight"), prefix, cout);
@@ -3547,6 +3568,8 @@ void Plot::remove_route(unsigned int i, String prefix){
       
       if((sight_list[j]).related_route == ((int)i)){
 	(sight_list[j]).related_route = -1;
+	//I delete the 'related route' item to the items of the sight, because now the Sight is no longer related to a Route
+	(sight_list[sight_list.size()-1]).items.erase((sight_list[sight_list.size()-1]).items.end()-1);
       }else{
 	((sight_list[j]).related_route)--;
       }
@@ -4201,19 +4224,11 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
   label.enter(String("label"), new_prefix);
 
-  //given that the sight is not yet linke to a route, I set
+  //given that the sight is not yet linked to a route, I set
   related_route = -1;
   
   file_init.close(prefix);
 
-  /*
-  cout << RED << "items:\n";
-  for(unsigned int i=0; i<items.size(); i++){
-    cout << items[i].value << " ";
-
-  }
-  cout << RESET;
-  */
 
   if(!check){
     cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
@@ -4662,7 +4677,7 @@ void Body::enter(Catalog catalog, String prefix){
 
 Sight::Sight(void){
 
-  items = {String("body"), String("sextant altitude"), String("master-clock date and hour of sight"), String("label"), String("related route")};
+  items = {String("body"), String("sextant altitude"), String("master-clock date and hour of sight"), String("label")};
 
   atmosphere.set();
   related_route = -1;

@@ -1,0 +1,19 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = c
+			sextant altitude = 23° 34.645786999999970134922477882355'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = n
+			height of eye = 33.345359999999999445208231918514 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2023-02-03
+				hour of master-clock date and hour of sight = 02:03:04.4000000000000003552713678800501
+			use of stopwatch = y
+			hour of stopwatch = 03:02:04
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = speriamo che funzioni
+	Routes in the plot:

@@ -1,5 +1,5 @@
-use of stopwatch = n
-artificial horizon = y	
+use of stopwatch = y
+artificial horizon = n	
 plot coastline every = 10
 minimal longitude = 170° 12.45'
 maximal longitude = 190° 0.01'

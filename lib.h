@@ -4592,6 +4592,8 @@ void Body::enter(Catalog catalog, String prefix){
 
 Sight::Sight(void){
 
+  items = {String("body"), String("limb"), String("sextant altitude"), String("time"), String("label"), String("related route")};
+
   atmosphere.set();
   related_route = -1;
   

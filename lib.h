@@ -815,7 +815,8 @@ class Position{
   Angle phi, lambda;
   //label to add a note about the position
   String label;
-  vector<String> modify_choices;
+  //this is a list of the items which are part of a Position object (phi, lambda, ..)
+  vector<String> items;
 
   Position();
   void enter(String, String);
@@ -849,7 +850,7 @@ bool Position::operator==(const Position& p){
 
 Position::Position(void){
 
-  modify_choices = {String("latitude"), String("longitude"), String("label")};
+  items = {String("latitude"), String("longitude"), String("label")};
 
 }
 
@@ -889,11 +890,11 @@ void Position::modify(String prefix){
  
   cout << prefix.value << "Enter the item that you want to modify:\n";
 
-  for(i=0; i<modify_choices.size(); i++){
-    cout << prefix.value << "\t(" << i+1 << ") " << (modify_choices[i]).value << "\n";
+  for(i=0; i<items.size(); i++){
+    cout << prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
   }
 
-  enter_unsigned_int(&i, true, 1, modify_choices.size()+1, String("choice #"), prefix);
+  enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), prefix);
 
   switch(i){
 
@@ -1653,6 +1654,9 @@ class Sight{
   String label;
   //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1. 
   int related_route;
+  //this is a list of the items whic are part of a Sight object (master_clock_date_and_hour, time, body, ...)
+  vector<String> items;
+
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -1665,6 +1669,7 @@ class Sight{
   bool compute_H_o(String);
 
   bool enter(Catalog, String, String);
+  void modify(String);
   void print(String, String, ostream&);
   bool read_from_file(File&, String);
   bool reduce(Route*, String);
@@ -1672,6 +1677,22 @@ class Sight{
 
 };
 
+void Sight::modify(String prefix){
+  
+  unsigned int i;
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+ 
+  cout << prefix.value << "Enter the item that you want to modify:\n";
+
+  for(i=0; i<items.size(); i++){
+    cout << prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
+  }
+
+
+}
 
 void Route::print(String name, String prefix, ostream& ostr){
 
@@ -2633,32 +2654,32 @@ void Plot::menu(String prefix){
   cout << prefix.value << "You can:\n";
   
   cout << prefix.value << BOLD << "Sights:" << RESET << "\n";
-  for(i=0; i<2; i++){
+  for(i=0; i<3; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Positions:" << RESET << "\n";
-  for(i=2; i<6; i++){
+  for(i=3; i<7; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
-  for(i=6; i<10; i++){
+  for(i=7; i<11; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
-  for(i=10; i<13; i++){
+  for(i=11; i<14; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=13; i<15; i++){
+  for(i=14; i<16; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=15;
+  i=16;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -2681,9 +2702,29 @@ void Plot::menu(String prefix){
     break;
 
 
-
-   
   case 2:{
+    
+    if(sight_list.size() > 0){
+
+      print_sights(new_prefix, cout);
+
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to modify"), new_prefix);
+      i--;
+
+      (sight_list[i]).modify(new_prefix);
+      print(true, new_prefix, cout);
+      show(false, new_prefix);
+
+    }else{
+      cout << YELLOW << "There are no sights to modify!\n" << RESET;
+    }
+    
+    menu(prefix);  
+
+  }
+    break;
+   
+  case 3:{
 
     if(sight_list.size() > 0){
  
@@ -2705,7 +2746,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 3:{
+  case 4:{
 
     add_position(new_prefix);
     print(true, new_prefix, cout);
@@ -2717,7 +2758,7 @@ void Plot::menu(String prefix){
 
 
     
-  case 4:{
+  case 5:{
     
     if(position_list.size() > 0){
 
@@ -2739,7 +2780,7 @@ void Plot::menu(String prefix){
   }
     break;
     
-  case 5:{
+  case 6:{
     
     if(position_list.size() > 0){
 
@@ -2761,7 +2802,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 6:{
+  case 7:{
 
     if(position_list.size() > 0){
 
@@ -2784,7 +2825,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 7:{
+  case 8:{
 
     add_route(new_prefix);
     print(true, new_prefix, cout);
@@ -2796,7 +2837,7 @@ void Plot::menu(String prefix){
 
 
     
-  case 8:{
+  case 9:{
 
     if(route_list.size() > 0){
 
@@ -2820,7 +2861,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 9:{
+  case 10:{
     
     //there need to be at list two routes of type "c" to compute crossings. Here I write the indexes of routes of type "c" into crossing_route_list 
     for(crossing_route_list.clear(), j=0; j<route_list.size(); j++){
@@ -2852,9 +2893,8 @@ void Plot::menu(String prefix){
   }
     break;
 
-
-
-  case 10:{
+    
+  case 11:{
 
     if(route_list.size() > 0){
 
@@ -2878,7 +2918,7 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 11:{
+  case 12:{
 
     show(false, new_prefix);
     menu(prefix);  
@@ -2886,7 +2926,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 12:{
+  case 13:{
 
     show(true, new_prefix);
     menu(prefix);  
@@ -2895,7 +2935,7 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 13:{
+  case 14:{
 
     if(route_list.size() + position_list.size() > 0){
   
@@ -2924,7 +2964,7 @@ void Plot::menu(String prefix){
     break;
 
     
-  case 14:{
+  case 15:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -2973,7 +3013,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 15:{
+  case 16:{
 
     File file;
     stringstream line_ins;
@@ -2996,7 +3036,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 16:{
+  case 17:{
 
     File file;
     String line;
@@ -3054,7 +3094,7 @@ Plot::Plot(Catalog* cata, String prefix){
 
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Modify a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 

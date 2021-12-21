@@ -78,10 +78,33 @@ class String{
   void set(String, String, String);
   String append(String);
   String prepend(String);
+  long int to_long_int(String);
 
   bool operator==(const String&);
 
 };
+
+//this function converts a String object to an int. 
+long int String::to_long_int(String prefix){
+
+  String temp;
+  string::iterator no_space_end;
+
+  temp = (*this);
+  
+  //remove all spaces in (*this).value, and returns no_space_end. the string with the spaces removed is in [value.begin(),no_space_end), and the remaining characters are the ones left from the original string
+  no_space_end = remove(temp.value.begin(), temp.value.end(), ' ');
+  //I remove the remaining characters
+  temp.value.erase(no_space_end, temp.value.end());
+  //temp.print(String("string without spaces"), prefix, cout);
+
+  //convert the String temp to a long int and return it
+  
+  return  strtol(&((temp.value)[0]), NULL, 10);
+  
+}
+
+
 
 bool String::operator==(const String& s){
 
@@ -1696,8 +1719,8 @@ void Sight::modify(String prefix){
 
 
   
-  /*    
-  switch(i){
+  /*
+  switch(strtol((items[i].value), NULL, 10)){
 
   case 1:{
     
@@ -1737,7 +1760,7 @@ void Sight::modify(String prefix){
 
     
   }
-  */
+  */  
 
   cout << prefix.value << "Position modified\n";
 

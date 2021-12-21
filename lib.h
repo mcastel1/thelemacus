@@ -2521,14 +2521,14 @@ void Sight::print(String name, String prefix, ostream& ostr){
     ostr << new_prefix.value << "Related route # = " << related_route+1 << "\n";
   }
 
-  //
+  /*
   cout << RED << "items:\n";
   for(unsigned int i=0; i<items.size(); i++){
     cout << new_prefix.value << items[i].value << "\n";
 
   }
   cout << RESET << "\n";
-  //
+  */
 
   
 }
@@ -3569,7 +3569,7 @@ void Plot::remove_route(unsigned int i, String prefix){
       if((sight_list[j]).related_route == ((int)i)){
 	(sight_list[j]).related_route = -1;
 	//I delete the 'related route' item to the items of the sight, because now the Sight is no longer related to a Route
-	(sight_list[sight_list.size()-1]).items.erase((sight_list[sight_list.size()-1]).items.end()-1);
+	(sight_list[j]).items.erase((sight_list[j]).items.end()-1);
       }else{
 	((sight_list[j]).related_route)--;
       }

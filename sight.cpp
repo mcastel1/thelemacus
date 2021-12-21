@@ -81,11 +81,19 @@ int main(int argc, char *argv[]){
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
 
-  //
-  String s("ciao come stai");
+  /*
+  char c[] = "fgdfjhttjerioyje434678ghfd";
+  cout << "\tint = " << strtol (c, NULL, 32) << "\n";
+  return 0;
+  */
+
+  
+  /*
+  String s;
+  s.enter(String("test string to convert"), String(""));
   cout << "Int = " << s.to_long_int(String("\t")) << "\n";
   return 0;
-  //
+  */
   
   /*
   Answer a;

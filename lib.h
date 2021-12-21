@@ -100,7 +100,7 @@ long int String::to_long_int(String prefix){
 
   //convert the String temp to a long int and return it
   
-  return  strtol(&((temp.value)[0]), NULL, 10);
+  return  strtol(&((temp.value)[0]), NULL, 32);
   
 }
 

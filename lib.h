@@ -1,3 +1,4 @@
+//lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 //this is the high precision used for storing data and making calculations with it 
 #define data_precision 32
 //this is the low precision used for displaying data
@@ -29,7 +30,6 @@
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
-//lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 inline double cot(double x){
 
@@ -78,31 +78,11 @@ class String{
   void set(String, String, String);
   String append(String);
   String prepend(String);
-  long int to_long_int(String);
 
   bool operator==(const String&);
 
 };
 
-//this function converts a String object to an int. 
-long int String::to_long_int(String prefix){
-
-  String temp;
-  string::iterator no_space_end;
-
-  temp = (*this);
-  
-  //remove all spaces in (*this).value, and returns no_space_end. the string with the spaces removed is in [value.begin(),no_space_end), and the remaining characters are the ones left from the original string
-  no_space_end = remove(temp.value.begin(), temp.value.end(), ' ');
-  //I remove the remaining characters
-  temp.value.erase(no_space_end, temp.value.end());
-  //temp.print(String("string without spaces"), prefix, cout);
-
-  //convert the String temp to a long int and return it
-  
-  return  strtol(&((temp.value)[0]), NULL, 32);
-  
-}
 
 
 
@@ -1678,7 +1658,7 @@ class Sight{
   //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1. 
   int related_route;
   //this is a list of the minimal items which are part of a Sight object (master_clock_date_and_hour, body, ...). For some sights, (e.g., moon sights), some other items (e.g. limb) must be added to this minimal list
-  vector<String> items;
+  vector<String> items, all_items;
 
 
   Sight();
@@ -1704,6 +1684,7 @@ void Sight::modify(String prefix){
   
   unsigned int i;
   String new_prefix;
+  vector<String>::iterator p;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -1718,49 +1699,21 @@ void Sight::modify(String prefix){
   enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), prefix);
 
 
-  
+  p = find(all_items.begin(), all_items.end(), items[i]); 
+  //cout << RED << "p = " << p << RESET << "\n"; 
+
   /*
-  switch(strtol((items[i].value), NULL, 10)){
+  switch((items[i]).to_long_int(new_prefix)){
 
   case 1:{
     
-    body.enter(String("body"), false, new_prefix);
+    limb.enter(String((all_items[1])), new_prefix);
 
   }
     break;
-
-
-  case 2:{
-    
-    limb.enter(String("limb"), false, new_prefix);
-
-  }
-    break;
-
-    
-  case 3:{
-    
-    //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
-    H_s.enter(String("sextant altitude"), true, new_prefix);
-
-  }
-    break;
-
-  case 4:{
-    
   
   }
-    break;
-
-  case 5:{
-    
-  
-  }
-    break;
-
-    
-  }
-  */  
+  */
 
   cout << prefix.value << "Position modified\n";
 
@@ -2425,7 +2378,7 @@ bool Sight::read_from_file(File& file, String prefix){
 
   body.read_from_file(String("body"), file, new_prefix);
   if(body.type.value != "star"){
-    items.insert(items.begin()+1+(additional_items++), String("limb"));
+    items.insert(items.begin()+1+(additional_items++), all_items[1]);
     limb.read_from_file(String("limb"), file, false, new_prefix);
   }
   H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
@@ -4196,7 +4149,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   //GP.label.set("geographic position", new_prefix);
 
   if(body.type.value != "star"){
-    items.insert(items.begin()+1+(additional_items++), String("limb"));
+    items.insert(items.begin()+1+(additional_items++), all_items[1]);
     
     limb.enter(String("limb"), new_prefix);
   }
@@ -4700,7 +4653,9 @@ void Body::enter(Catalog catalog, String prefix){
 
 Sight::Sight(void){
 
-  items = {String("body"), String("sextant altitude"), String("master-clock date and hour of sight"), String("label")};
+  //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element. 
+  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("height of eye"), String("master-clock date and hour of sight"), String("stopwatch reading"), String("label"), String("related route")};
+  items = {all_items[0], all_items[2], all_items[4], all_items[6]};
 
   atmosphere.set();
   related_route = -1;

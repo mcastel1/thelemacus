@@ -1623,7 +1623,7 @@ class Body{
   String name, type;
   Length radius;
   Angle RA, d; 
-  void enter(Catalog, String);
+  void enter(String, Catalog, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
   
@@ -1718,9 +1718,11 @@ void Sight::modify(Catalog catalog, String prefix){
 
   case 0:{
     //in this case I modify the body
-    
-    //create a function Body::modify
-    //body.modify(catalog, String((all_items[0])), new_prefix);
+
+    body.print(String("old body"), new_new_prefix, cout);
+    body.enter(String("new body"), catalog, new_new_prefix);
+
+    cout << new_prefix.value << "Body modified\n";
 
   }
     break;
@@ -4183,7 +4185,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   
   cout << prefix.value << "Enter " << name.value << ":\n";
   
-  body.enter(catalog, new_prefix);
+  body.enter(String("body"), catalog, new_prefix);
   //GP.label.set("geographic position", new_prefix);
 
   if(body.type.value != "star"){
@@ -4664,7 +4666,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
 }
 
 
-void Body::enter(Catalog catalog, String prefix){
+void Body::enter(String name, Catalog catalog, String prefix){
 
   unsigned int i;
   bool check;
@@ -4679,7 +4681,7 @@ void Body::enter(Catalog catalog, String prefix){
 
     s.clear();
     
-    cout << prefix.value << "Enter name of body:";
+    cout << prefix.value << "Enter " << name.value << ":";
     getline(cin >> ws, s);
 
     for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name.value == s){check=false;}}
@@ -4689,7 +4691,8 @@ void Body::enter(Catalog catalog, String prefix){
   
   i--;
   (*this) = (catalog.list)[i];
-  print(String("body"), prefix, cout);
+  
+  print(name, prefix, cout);
   
 }
 

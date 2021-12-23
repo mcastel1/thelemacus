@@ -509,10 +509,17 @@ class Length{
   void print(String, String, String, ostream&);
   void read_from_file(String, File&, bool, String);
   bool check_valid(String, String);
-  bool operator> (const Length&);
+  bool operator> (const Length&), operator==(const Length&);
   Length operator + (const Length&);
 
 };
+
+bool Length::operator==(const Length& length){
+
+  return (value == (length.value));
+  
+}
+
 
 //evaluates whether Length (*this) is larger than r
 bool Length::operator>(const Length& r){
@@ -1626,8 +1633,18 @@ class Body{
   void enter(String, Catalog, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
+
+  bool operator==(const Body&);
+
   
 };
+
+bool Body::operator==(const Body& body){
+
+  return (name == (body.name));
+  
+}
+
 
 class Limb{
 
@@ -1636,9 +1653,16 @@ class Limb{
   void enter(String, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
-  
+
+  bool operator==(const Limb&);
+
 };
 
+bool Limb::operator==(const Limb& limb){
+
+  return(value == limb.value);
+
+}
 
 class Sight{
 
@@ -1672,7 +1696,7 @@ class Sight{
   bool compute_H_o(String);
 
   bool enter(Catalog, String, String);
-  void modify(Catalog, String);
+  bool modify(Catalog, String);
   void print(String, String, ostream&);
   bool read_from_file(File&, String);
   bool reduce(Route*, String);
@@ -1691,17 +1715,18 @@ class Catalog{
 };
 
 
-void Sight::modify(Catalog catalog, String prefix){
+bool Sight::modify(Catalog catalog, String prefix){
   
   unsigned int i;
   String new_prefix, new_new_prefix;
+  bool check;
   vector<String>::iterator p;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
   new_new_prefix = new_prefix.append(String("\t"));
 
-
+  check = true;
  
   cout << new_prefix.value << "Enter the item that you want to modify:\n";
   for(i=0; i<items.size(); i++){
@@ -1726,22 +1751,30 @@ void Sight::modify(Catalog catalog, String prefix){
     body.print(String("old body"), new_new_prefix, cout);
     body.enter(String("new body"), catalog, new_new_prefix);
 
-    if((body.type == String("star")) && (!(old_body.type == String("star")))){
-      //in this case, the old body was not a star, while the new (mofidied) body is a star -> I remove the limb entry (all_items[1]) in items 
+    if(!(body == old_body)){
 
-      items.erase(find(items.begin(), items.end(), all_items[1]));
+      if((body.type == String("star")) && (!(old_body.type == String("star")))){
+	//in this case, the old body was not a star, while the new (mofidied) body is a star -> I remove the limb entry (all_items[1]) in items 
+
+	items.erase(find(items.begin(), items.end(), all_items[1]));
       
-    }
-    if((old_body.type == String("star")) && (!(body.type == String("star")))){
-      //in this case, the old body was  a star, while the new (mofidied) body is not a star -> I ask the user to enter the limb of the new body and add the limb entry in items, right after the body entry (all_items[0])
+      }
+      if((old_body.type == String("star")) && (!(body.type == String("star")))){
+	//in this case, the old body was  a star, while the new (mofidied) body is not a star -> I ask the user to enter the limb of the new body and add the limb entry in items, right after the body entry (all_items[0])
 
-      limb.enter(String("limb of new body"), new_new_prefix);
-      items.insert(find(items.begin(), items.end(), all_items[0])+1, String("limb"));
+	limb.enter(String("limb of new body"), new_new_prefix);
+	items.insert(find(items.begin(), items.end(), all_items[0])+1, String("limb"));
       
+      }
+
+      cout << new_prefix.value << "Body modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New body is equal to old body!\n" << RESET;
+
     }
-
-
-    cout << new_prefix.value << "Body modified\n";
 
   }
     break;
@@ -1750,20 +1783,40 @@ void Sight::modify(Catalog catalog, String prefix){
   case 1:{
     //in this case I modify the limb
 
+    Limb old_limb;
+
+    old_limb = limb;
+    
     limb.print(String("old limb"), new_new_prefix, cout);
     limb.enter(String("new limb"), new_new_prefix);
 
-    cout << new_prefix.value << "Limb modified\n";
+    if(!(old_limb == limb)){
+
+      cout << new_prefix.value << "Limb modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New limb is equal to old limb!\n" << RESET;
+
+    }
 
   }
     break;
 
   }
     
-  cout << prefix.value << "Sight modified\n";
+  if(check){
+    
+    cout << new_prefix.value << "Item modified\n";
 
-  //(*this).reduce(&(route_list[(*this).related_route]), prefix));
+  }else{
 
+    cout << new_prefix.value << RED << "Could not modify item!\n" << RESET;
+    
+  }
+  
+  return check;
 
 }
 
@@ -3446,15 +3499,27 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
 
 bool Plot::modify_sight(unsigned int i, String prefix){
   
-  bool check = true;
+  bool check;
+
+  check = true;
   
-  (sight_list[i]).modify((*catalog), prefix);
-  check &= ((sight_list[i]).reduce(&(route_list[(sight_list[i]).related_route]), prefix));
+  check &= ((sight_list[i]).modify((*catalog), prefix));
+
+  if(check){
+
+    check &= ((sight_list[i]).reduce(&(route_list[(sight_list[i]).related_route]), prefix));
+
+  }
+
   
   if(check){
-    (sight_list[i]).print(String("Modified sight"), prefix, cout);
+    
+    (sight_list[i]).print(String("Sight modified"), prefix, cout);
+    
   }else{
+    
     cout << prefix.value << RED << "Sight could not be modified!\n" << RESET;
+    
   }
 
   return check;

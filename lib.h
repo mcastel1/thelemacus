@@ -1733,8 +1733,9 @@ void Sight::modify(Catalog catalog, String prefix){
       
     }
     if((old_body.type == String("star")) && (!(body.type == String("star")))){
-      //in this case, the old body was not a star, while the new (mofidied) body is a star -> I add the limb entry in items, right after the body entry (all_items[0])
+      //in this case, the old body was  a star, while the new (mofidied) body is not a star -> I ask the user to enter the limb of the new body and add the limb entry in items, right after the body entry (all_items[0])
 
+      limb.enter(String("limb of new body"), new_new_prefix);
       items.insert(find(items.begin(), items.end(), all_items[0])+1, String("limb"));
       
     }
@@ -4725,6 +4726,8 @@ Sight::Sight(void){
   all_items  = {String("body"), String("limb"), String("sextant altitude"), String("height of eye"), String("master-clock date and hour of sight"), String("stopwatch reading"), String("label"), String("related route")};
   items = {all_items[0], all_items[2], all_items[4], all_items[6]};
 
+  //initiazlie the limb to a 'n/a' value
+  limb.value = 'n';
   atmosphere.set();
   related_route = -1;
   

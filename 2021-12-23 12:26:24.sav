@@ -1,0 +1,165 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = u
+			sextant altitude = 38° 53.800000000000096633812063373625'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-29
+				hour of master-clock date and hour of sight = 11:02:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:41:54
+		Sight #2:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 89° 56.200000000000045474735088646412'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:05:51
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:42:46
+		Sight #3:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 68° 45.999999999999943156581139191985'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-21
+				hour of master-clock date and hour of sight = 21:45:46
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:43:24
+		Sight #4:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 84° 35.799999999999840838427189737558'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-21
+				hour of master-clock date and hour of sight = 22:35:51
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:44:09
+		Sight #5:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 36° 0.59999999999988062882039230316877'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:15:58
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:45:41
+		Sight #6:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = u
+			sextant altitude = 43° 32.200000000000130739863379858434'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-18
+				hour of master-clock date and hour of sight = 11:03:50
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:46:25
+		Sight #7:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 45° 10.499999999999829469743417575955'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:40:33
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:48:15
+		Sight #8:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 52° 42.500000000000142108547152020037'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-11-26
+				hour of master-clock date and hour of sight = 00:04:22
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:49:05
+		Sight #9:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 114° 38.699999999999761257640784606338'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-18
+				hour of master-clock date and hour of sight = 00:30:41
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:52:13
+		Sight #10:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 112° 53.200000000000216004991671070457'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-18
+				hour of master-clock date and hour of sight = 00:38:10
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2021-12-23 00:53:02
+	Routes in the plot:
+	Positions in the plot:
+		Position #1:
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH)
+		Position #2:
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
+			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)

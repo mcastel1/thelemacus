@@ -20,7 +20,7 @@
 				Type = moon
 				Name = moon
 				Radius = 938.12099999999998090061126276851 nm
-			limb = u
+			limb = l
 			sextant altitude = 47° 13.500000000000085265128291212022'
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
@@ -57,3 +57,11 @@
 			latitude = 48° 51.327167000000031293893698602915'
 			longitude = 357° 35.565500000000156433088704943657'
 			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)
+		Position #4:
+			latitude = 34° 1.9999999999998863131622783839703'
+			longitude = 315° 56.000000000000227373675443232059'
+			label = fsdgdfj fjdlkfg

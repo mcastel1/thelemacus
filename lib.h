@@ -1672,7 +1672,7 @@ class Sight{
   bool compute_H_o(String);
 
   bool enter(Catalog, String, String);
-  void modify(String);
+  void modify(Catalog, String);
   void print(String, String, ostream&);
   bool read_from_file(File&, String);
   bool reduce(Route*, String);
@@ -1680,7 +1680,18 @@ class Sight{
 
 };
 
-void Sight::modify(String prefix){
+class Catalog{
+
+ public:
+  vector<Body> list;
+  Catalog(String, String);
+  void add(String, String, double);
+  void print(String, ostream&);
+
+};
+
+
+void Sight::modify(Catalog catalog, String prefix){
   
   unsigned int i;
   String new_prefix;
@@ -1691,31 +1702,44 @@ void Sight::modify(String prefix){
 
 
  
-  cout << prefix.value << "Enter the item that you want to modify:\n";
+  cout << new_prefix.value << "Enter the item that you want to modify:\n";
   for(i=0; i<items.size(); i++){
-    cout << prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
   }
 
-  enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), prefix);
-
-
+  enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), new_prefix);
+  //decrease i because the user entered it in format starting from i=1;
+  i--;
+  
   p = find(all_items.begin(), all_items.end(), items[i]); 
-  //cout << RED << "p = " << p << RESET << "\n"; 
+  
+  switch(/*this is the iterator p converted to int: if this quantity = 0 then I am considering the first element in all_items, if its = 1 I am considering the second element, etc... */distance(all_items.begin(), p)){
 
-  /*
-  switch((items[i]).to_long_int(new_prefix)){
-
-  case 1:{
+  case 0:{
+    //in this case I modify the body
     
-    limb.enter(String((all_items[1])), new_prefix);
+    //create a function Body::modify
+    //body.modify(catalog, String((all_items[0])), new_prefix);
 
   }
     break;
   
-  }
-  */
+ 
+  case 1:{
+    //in this case I modify the limb
 
-  cout << prefix.value << "Position modified\n";
+    limb.print(String("old limb"), new_prefix, cout);
+    limb.enter(String("new limb"), new_prefix);
+
+  }
+    break;
+
+  }
+    
+  cout << prefix.value << "Sight modified\n";
+
+  //(*this).reduce(&(route_list[(*this).related_route]), prefix));
+
 
 }
 
@@ -2206,15 +2230,6 @@ void Body::read_from_file(String name, File& file, String prefix){
 }
 
 
-class Catalog{
-
- public:
-  vector<Body> list;
-  Catalog(String, String);
-  void add(String, String, double);
-  void print(String, ostream&);
-
-};
 
 Catalog::Catalog(String filename, String prefix){
 
@@ -2498,12 +2513,12 @@ void Sight::print(String name, String prefix, ostream& ostr){
   }
 
   /*
-  cout << RED << "items:\n";
-  for(unsigned int i=0; i<items.size(); i++){
+    cout << RED << "items:\n";
+    for(unsigned int i=0; i<items.size(); i++){
     cout << new_prefix.value << items[i].value << "\n";
 
-  }
-  cout << RESET << "\n";
+    }
+    cout << RESET << "\n";
   */
 
   
@@ -2525,6 +2540,7 @@ class Plot{
   Plot(Catalog*, String);
   //~Plot();
   bool add_sight(String);
+  bool modify_sight(unsigned int, String);
   void transport_route(unsigned int, String);
   void add_position(String);
   void add_route(String);
@@ -2755,12 +2771,14 @@ void Plot::menu(String prefix){
       enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to modify"), new_prefix);
       i--;
 
-      (sight_list[i]).modify(new_prefix);
+      modify_sight(i, new_prefix);
       print(true, new_prefix, cout);
       show(false, new_prefix);
 
     }else{
+      
       cout << YELLOW << "There are no sights to modify!\n" << RESET;
+      
     }
     
     menu(prefix);  
@@ -3401,6 +3419,23 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
 
 }
 
+
+bool Plot::modify_sight(unsigned int i, String prefix){
+  
+  bool check = true;
+  
+  (sight_list[i]).modify((*catalog), prefix);
+  check &= ((sight_list[i]).reduce(&(route_list[(sight_list[i]).related_route]), prefix));
+  
+  if(check){
+    (sight_list[i]).print(String("Modified sight"), prefix, cout);
+  }else{
+    cout << prefix.value << RED << "Sight could not be modified!\n" << RESET;
+  }
+
+  return check;
+  
+}
 
 
 

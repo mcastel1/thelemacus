@@ -1694,11 +1694,12 @@ class Catalog{
 void Sight::modify(Catalog catalog, String prefix){
   
   unsigned int i;
-  String new_prefix;
+  String new_prefix, new_new_prefix;
   vector<String>::iterator p;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+  new_new_prefix = new_prefix.append(String("\t"));
 
 
  
@@ -1728,8 +1729,10 @@ void Sight::modify(Catalog catalog, String prefix){
   case 1:{
     //in this case I modify the limb
 
-    limb.print(String("old limb"), new_prefix, cout);
-    limb.enter(String("new limb"), new_prefix);
+    limb.print(String("old limb"), new_new_prefix, cout);
+    limb.enter(String("new limb"), new_new_prefix);
+
+    cout << new_prefix.value << "Limb modified\n";
 
   }
     break;
@@ -4260,6 +4263,8 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
+  cout << prefix.value << "Reducing sight ...\n";
+
   ((*circle_of_equal_altitude).type.value) = 'c';
   
   compute_H_a(new_prefix);
@@ -4276,6 +4281,10 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
     
     cout << prefix.value << RED << "Sight cannot be reduced!\n" << RESET;
     
+  }else{
+
+    cout << prefix.value << "... done\n";
+
   }
 
   return check;
@@ -4305,13 +4314,16 @@ bool Sight::compute_H_o(String prefix){
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  cout << prefix.value << "Computing observed altitude ...\n";
  
   check &= compute_DH_refraction(new_prefix);
 
   if(check){
     compute_DH_parallax_and_limb(new_prefix);
     H_o = H_a + DH_refraction + DH_parallax_and_limb;
-    H_o.print(String("observed altitude"), new_prefix, cout);
+    cout << prefix.value << "...done\n";
+    H_o.print(String("observed altitude"), prefix, cout);
   }else{
     cout << prefix.value << RED << "H_o cannot be computed!\n" << RESET;
   }
@@ -4815,6 +4827,8 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  cout << prefix.value << "Fetching ephemerides' data ...\n";
  
   if((body.type.value) != "star"){
     filename << "data/" << body.name.value << ".txt";
@@ -5006,7 +5020,13 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
   }
 
   if(!check){
-    cout << prefix.value << RED << "Cannot obtain coordinates!\n" << RESET;
+    
+    cout << prefix.value << RED << "Cannot fetch ephemerides' data!\n" << RESET;
+    
+  }else{
+
+    cout << prefix.value << "...done\n";
+
   }
   
   gsl_interp_accel_free(acc);

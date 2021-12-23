@@ -62,6 +62,7 @@
 - the way you compute the error on the astronomical position is wrong: it does not go to zero as the number of sights goes to infinity
 - make sure that when you remove the Position astronomical position, the circle of error Route is also removed
 - when you delete a sight, make sure that all the crossing Positions involving it are also deleted
+- enter body + limb directly in one line
 */
 
 

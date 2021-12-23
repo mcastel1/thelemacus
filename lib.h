@@ -1719,8 +1719,26 @@ void Sight::modify(Catalog catalog, String prefix){
   case 0:{
     //in this case I modify the body
 
+    Body old_body;
+
+    old_body = body;
+    
     body.print(String("old body"), new_new_prefix, cout);
     body.enter(String("new body"), catalog, new_new_prefix);
+
+    if((body.type == String("star")) && (!(old_body.type == String("star")))){
+      //in this case, the old body was not a star, while the new (mofidied) body is a star -> I remove the limb entry (all_items[1]) in items 
+
+      items.erase(find(items.begin(), items.end(), all_items[1]));
+      
+    }
+    if((old_body.type == String("star")) && (!(body.type == String("star")))){
+      //in this case, the old body was not a star, while the new (mofidied) body is a star -> I add the limb entry in items, right after the body entry (all_items[0])
+
+      items.insert(find(items.begin(), items.end(), all_items[0])+1, String("limb"));
+      
+    }
+
 
     cout << new_prefix.value << "Body modified\n";
 

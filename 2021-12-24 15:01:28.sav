@@ -23,8 +23,7 @@
 			limb = u
 			sextant altitude = 87° 23.245243654699834223720245063305'
 			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = n
-			height of eye = 3 m
+			artificial horizon = y
 			master-clock date and hour of sight:
 				date of master-clock date and hour of sight = 2021-06-21
 				hour of master-clock date and hour of sight = 21:01:20

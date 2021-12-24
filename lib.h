@@ -1772,7 +1772,7 @@ bool Sight::modify(Catalog catalog, String prefix){
     }else{
 
       check &= false;
-      cout << new_new_prefix.value << YELLOW << "New body is equal to old body!\n" << RESET;
+      cout << new_new_prefix.value << YELLOW << "New body is equal to old one!\n" << RESET;
 
     }
 
@@ -1797,12 +1797,41 @@ bool Sight::modify(Catalog catalog, String prefix){
     }else{
 
       check &= false;
-      cout << new_new_prefix.value << YELLOW << "New limb is equal to old limb!\n" << RESET;
+      cout << new_new_prefix.value << YELLOW << "New limb is equal to old one!\n" << RESET;
 
     }
 
   }
     break;
+
+
+
+  case 2:{
+    //in this case I modify the sextant altitude
+
+    Angle old_H_s;
+
+    old_H_s = H_s;
+    
+    H_s.print(String("old sextant altitude"), new_new_prefix, cout);
+    //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
+    H_s.enter(String("new sextant altitude"), true, new_new_prefix);
+
+    if(!(old_H_s == H_s)){
+
+      cout << new_prefix.value << "Sextant altitude modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New sextant altitude is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+    
+    
 
   }
     
@@ -5163,7 +5192,7 @@ void Angle::enter(String name, bool is_positive, String prefix){
       s = '+';
 
       //enter the input string, containing degrees and arcminutes with a ' ' in between
-      cout << new_prefix.value << "Enter " << input_unit.str() << ":";
+      cout << prefix.value << "Enter " << input_unit.str() << ":";
       getline(cin >> ws, input);
       
       //check whether the string contains only one ' '
@@ -5198,7 +5227,7 @@ void Angle::enter(String name, bool is_positive, String prefix){
       check = true;
 
       //enter the input string, containing degrees and arcminutes with a ' ' in between
-      cout << new_prefix.value << "Enter " << input_unit.str() << ":";
+      cout << prefix.value << "Enter " << input_unit.str() << ":";
       getline(cin >> ws, input);
 
       //check whether the string contains only two ' ', one after the sign, one adter the degrees

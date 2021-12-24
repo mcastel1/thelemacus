@@ -1681,7 +1681,7 @@ class Sight{
   String label;
   //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1. 
   int related_route;
-  //this is a list of the minimal items which are part of a Sight object (master_clock_date_and_hour, body, ...). For some sights, (e.g., moon sights), some other items (e.g. limb) must be added to this minimal list
+  //all_items is a list of all the possible items which are part of a Sight object (master_clock_date_and_hour, body, ...). items is the list of items specific to a given Sight object: items may not include all the elements of all_items
   vector<String> items, all_items;
 
 
@@ -2506,7 +2506,7 @@ bool Sight::read_from_file(File& file, String prefix){
   index_error.read_from_file(String("index error"), file, false, new_prefix);
   artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
   if((artificial_horizon.value) == 'n'){
-    items.insert(items.begin()+2+(additional_items++), String("height of eye"));    
+    items.insert(items.begin()+3+(additional_items++), String("height of eye"));    
     height_of_eye.read_from_file(String("height of eye"), file, false, new_prefix);
   }
   
@@ -2520,7 +2520,7 @@ bool Sight::read_from_file(File& file, String prefix){
 
   if(use_stopwatch.value == 'y'){
 
-    items.insert(items.begin()+3+(additional_items++), String("stopwatch reading"));    
+    items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
     stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
     time.add(stopwatch);
 
@@ -2720,8 +2720,6 @@ bool Plot::read_from_file(File& file, String prefix){
 	  //I link the sight to the route, and the route to the sight
 	  route_list[route_list.size()-1].related_sight = sight_list.size()-1;
 	  sight_list[sight_list.size()-1].related_route = route_list.size()-1;
-	  //I add the 'related route' item to the items of the sight, because now the Sight is related to a Route
-	  (sight_list[sight_list.size()-1]).items.push_back(String("related route"));
 	  
 	}
 	  
@@ -3571,8 +3569,6 @@ bool Plot::add_sight(String prefix){
   //I link the sight to the route, and the route to the sight
   (sight_list[sight_list.size()-1]).related_route = route_list.size()-1;
   (route_list[route_list.size()-1]).related_sight = sight_list.size()-1;
-  //I add the 'related route' item to the items of the sight, because now the Sight is related to a Route
-  (sight_list[sight_list.size()-1]).items.push_back(String("related route"));
 
   
   if(check){
@@ -3697,8 +3693,6 @@ void Plot::remove_route(unsigned int i, String prefix){
       
       if((sight_list[j]).related_route == ((int)i)){
 	(sight_list[j]).related_route = -1;
-	//I delete the 'related route' item to the items of the sight, because now the Sight is no longer related to a Route
-	(sight_list[j]).items.erase((sight_list[j]).items.end()-1);
       }else{
 	((sight_list[j]).related_route)--;
       }
@@ -4316,7 +4310,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
   cout << prefix.value << YELLOW << "... done.\n" << RESET;
   if(artificial_horizon.value == 'n'){
-    items.insert(items.begin()+2+(additional_items++), String("height of eye"));    
+    items.insert(items.begin()+3+(additional_items++), String("height of eye"));    
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
   }
 
@@ -4348,7 +4342,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
   //if the sight has use_stopwatch = 'y', then I add to the list of its items the stopwatch reading
   if(use_stopwatch.value == 'y'){
-    items.insert(items.begin()+3+(additional_items++), String("stopwatch reading"));    
+    items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
   }
 
   label.enter(String("label"), new_prefix);
@@ -4817,8 +4811,8 @@ void Body::enter(String name, Catalog catalog, String prefix){
 Sight::Sight(void){
 
   //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element. 
-  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("height of eye"), String("master-clock date and hour of sight"), String("stopwatch reading"), String("label"), String("related route")};
-  items = {all_items[0], all_items[2], all_items[4], all_items[6]};
+  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("artificial horizon"), String("height of eye"), String("master-clock date and hour of sight"), String("stopwatch reading"), String("label"), String("related route")};
+  items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[7], all_items[8]};
 
   //initiazlie the limb to a 'n/a' value
   limb.value = 'n';

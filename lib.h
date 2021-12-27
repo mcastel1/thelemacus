@@ -650,8 +650,22 @@ class Answer{
   //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
+  bool operator==(const Answer&), operator !=(const Answer&);
 
 };
+
+bool Answer::operator==(const Answer& s){
+
+  return((((*this).value) == (s.value)));
+  
+}
+
+bool Answer::operator!=(const Answer& s){
+
+  return(!((*this)==s));
+  
+}
+
 
 bool Answer::set(String name, char c, String prefix){
 
@@ -1831,6 +1845,31 @@ bool Sight::modify(Catalog catalog, String prefix){
   }
     break;
     
+
+  case 3:{
+    //in this case I modify the artificial horizon
+
+    Answer old_artificial_horizon;
+
+    old_artificial_horizon = artificial_horizon;
+    
+    artificial_horizon.print(String("old artificial_horizon"), new_new_prefix, cout);
+    artificial_horizon.enter(String("new artificial horizon"), new_new_prefix);
+
+    if(!(old_artificial_horizon == artificial_horizon)){
+
+      cout << new_prefix.value << "Artificial horizon modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New artificial horizon is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+
     
 
   }

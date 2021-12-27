@@ -83,6 +83,17 @@ int main(int argc, char *argv[]){
   gsl_set_error_handler_off();
 
   /*
+  Answer a, b;
+
+  a.set(String("answer a"), 'y', String(""));
+  b.set(String("answer b"), 'n', String(""));
+  bool C = (a!=b);
+  
+  cout << "a != b = " << C;
+  return 0;
+  */
+  
+  /*
   char c[] = "fgdfjhttjerioyje434678ghfd";
   cout << "\tint = " << strtol (c, NULL, 32) << "\n";
   return 0;

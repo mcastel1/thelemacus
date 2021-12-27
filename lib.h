@@ -645,6 +645,9 @@ class Answer{
 
  public:
   char value;
+
+  Answer();  
+  Answer(char, String);
   void enter(String, String);
   bool set(String, char, String);
   //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
@@ -653,6 +656,30 @@ class Answer{
   bool operator==(const Answer&), operator !=(const Answer&);
 
 };
+
+Answer::Answer(void){
+  //this is the default constructor, sets value to the default value, 'n' char
+  
+  value = 'n';
+  
+}
+
+Answer::Answer(char c, String prefix){
+
+  if((c=='y') || (c=='n')){
+    
+    value = c;
+    
+  }else{
+    //if the entered value is not valid, set value to 'n' and prints out this info
+    
+    value = 'n';
+    cout << prefix.value << RED << "Value of answer is not valid, setting it to 'n'!\n" << RESET;
+
+  }
+  
+}
+
 
 bool Answer::operator==(const Answer& s){
 
@@ -1858,6 +1885,25 @@ bool Sight::modify(Catalog catalog, String prefix){
 
     if(!(old_artificial_horizon == artificial_horizon)){
 
+
+      if((artificial_horizon == Answer('y', new_new_prefix)) && (old_artificial_horizon == Answer('n', new_new_prefix))){
+	//in this case,  old artificial_horizon = n, while the new (mofidied) artificial_horizon = y -> I remove the height of eye entry (all_items[4]) in items and set the height of eye (which is now useless) to zero 
+
+	items.erase(find(items.begin(), items.end(), all_items[4]));
+	height_of_eye.set(String("removed height of eye"), 0.0, new_new_prefix);
+      
+      }
+      
+      /*
+      if((old_artificial_horizon.type == String("star")) && (!(artificial_horizon.type == String("star")))){
+	//in this case, the old artificial_horizon was  a star, while the new (mofidied) artificial_horizon is not a star -> I ask the user to enter the limb of the new artificial_horizon and add the limb entry in items, right after the artificial_horizon entry (all_items[0])
+
+	limb.enter(String("limb of new artificial_horizon"), new_new_prefix);
+	items.insert(find(items.begin(), items.end(), all_items[0])+1, String("limb"));
+      
+      }
+      */
+
       cout << new_prefix.value << "Artificial horizon modified\n";
 
     }else{
@@ -1883,6 +1929,12 @@ bool Sight::modify(Catalog catalog, String prefix){
     cout << new_prefix.value << RED << "Could not modify item!\n" << RESET;
     
   }
+
+  cout << new_prefix.value << "Items after modification:\n";
+  for(i=0; i<items.size(); i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
+  }
+
   
   return check;
 

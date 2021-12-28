@@ -2471,6 +2471,7 @@ class Plot{
   void remove_route(unsigned int, String);
   bool read_from_file(File&, String);
   void print(bool, String, ostream&);
+  void print_to_kml(String);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
   void print_routes(bool, String, ostream&);
@@ -2479,6 +2480,52 @@ class Plot{
   void compute_crossings(String);
 
 };
+
+// if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
+void Plot::print_to_kml(String prefix){
+
+  stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
+  string line;
+  unsigned int i;
+  Int n_points_routes;
+  String new_prefix;
+  File file_init;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
+  file_init.set_name(String(path_file_init));
+  file_init.open(String("in"), prefix);
+  
+ 
+  //replace line with number of points for routes in plot_dummy.plt
+  cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
+  plot_command.str("");
+  command.str("");
+  n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix); 
+  cout << prefix.value << YELLOW << "... done.\n" << RESET;
+  
+
+  
+  //plot routes
+  
+  plot_command.str("");
+  command.str("");
+  //set the key position on the screen
+  plot_command << "set key top right\\\n";
+  for(i=0; i<(route_list.size()); i++){
+
+    
+  }
+
+    
+
+
+  
+  file_init.close(prefix);
+
+}
+
 
 bool Plot::read_from_file(File& file, String prefix){
 

@@ -1912,7 +1912,7 @@ bool Sight::modify(Catalog catalog, String prefix){
     artificial_horizon.print(String("old artificial_horizon"), new_new_prefix, cout);
     artificial_horizon.enter(String("new artificial horizon"), new_new_prefix);
 
-    if(!(old_artificial_horizon == artificial_horizon)){
+    if(old_artificial_horizon != artificial_horizon){
 
 
       if((artificial_horizon == Answer('y', new_new_prefix)) && (old_artificial_horizon == Answer('n', new_new_prefix))){
@@ -2682,7 +2682,7 @@ bool Sight::read_from_file(File& file, String prefix){
   H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
   index_error.read_from_file(String("index error"), file, false, new_prefix);
   artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
-  if((artificial_horizon.value) == 'n'){
+  if(artificial_horizon == Answer('n', new_prefix)){
     items.insert(items.begin()+3+(additional_items++), String("height of eye"));    
     height_of_eye.read_from_file(String("height of eye"), file, false, new_prefix);
   }
@@ -2779,7 +2779,7 @@ void Sight::print(String name, String prefix, ostream& ostr){
   H_s.print(String("sextant altitude"), new_prefix, ostr);
   index_error.print(String("index error"), new_prefix, ostr);
   artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
-  if(artificial_horizon.value == 'n'){
+  if(artificial_horizon == Answer('n', new_prefix)){
     height_of_eye.print(String("height of eye"), String("m"), new_prefix, ostr);
   }
   master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
@@ -3332,7 +3332,7 @@ void Plot::menu(String prefix){
 	
       }
 
-      if((answer.value) == 'y'){
+      if(answer == Answer('y', new_prefix)){
 
 	file.remove(new_prefix);	
 	file.open(String("out"), new_prefix);    
@@ -3822,7 +3822,7 @@ void Plot::remove_sight(unsigned int i, String prefix){
   if(i_related_route != -1){
     
     remove_related_route.enter(String("whether you want to remove the route related to this sight"), prefix);
-    if((remove_related_route.value) == 'y'){
+    if(remove_related_route == Answer('y', new_prefix)){
 
       remove_route(i_related_route, prefix);
       
@@ -3885,7 +3885,7 @@ void Plot::remove_route(unsigned int i, String prefix){
     
     remove_related_sight.enter(String("whether you want to remove the sight related to the route"), prefix);
     
-    if((remove_related_sight.value) == 'y'){
+    if(remove_related_sight == Answer('y', new_prefix)){
 
       remove_sight(i_related_sight, prefix);
       
@@ -3917,7 +3917,7 @@ void Plot::transport_route(unsigned int i, String prefix){
   cout << prefix.value << "Route transported.\n";
 
   keep_original.enter(String("whether you want to keep the original route"), new_prefix);
-  if(keep_original.value == 'y'){
+  if(keep_original == Answer('y', new_prefix)){
     route_list.insert(route_list.begin()+i, original_route);
   }
 
@@ -3944,7 +3944,7 @@ void Plot::transport_position(unsigned int i, String prefix){
   cout << prefix.value << "Position transported.\n";
 
   keep_original.enter(String("whether you want to keep the original position"), new_prefix);
-  if(keep_original.value == 'y'){
+  if(keep_original == Answer('y', new_prefix)){
     position_list.insert(position_list.begin()+i, original_position);
   }
 
@@ -4486,7 +4486,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   cout << prefix.value << YELLOW << "Reading artificial horizon from file " << file_init.name.value << " ...\n" << RESET;
   artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
   cout << prefix.value << YELLOW << "... done.\n" << RESET;
-  if(artificial_horizon.value == 'n'){
+  if(artificial_horizon == Answer('n', new_prefix)){
     items.insert(items.begin()+3+(additional_items++), String("height of eye"));    
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
   }
@@ -4580,7 +4580,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
 
 void Sight::compute_H_a(String prefix){
   
-  if(artificial_horizon.value == 'y'){
+  if(artificial_horizon == Answer('y', prefix)){
     H_a = (H_s-index_error)/2.0;
     H_a.print(String("apparent altitude"), prefix, cout);
 

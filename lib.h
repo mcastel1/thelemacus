@@ -2471,7 +2471,7 @@ class Plot{
   void remove_route(unsigned int, String);
   bool read_from_file(File&, String);
   void print(bool, String, ostream&);
-  void print_to_kml(String);
+  void print_to_kml(String, ostream&);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
   void print_routes(bool, String, ostream&);
@@ -2482,7 +2482,7 @@ class Plot{
 };
 
 // if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
-void Plot::print_to_kml(String prefix){
+void Plot::print_to_kml(String prefix, ostream& ostr){
 
   stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
   string line;
@@ -2981,8 +2981,9 @@ void Plot::menu(String prefix){
 
       //answer says whether one should create a new file on which the data will be saved
       answer.set(String(""), 'y', new_prefix);
-    
-      file.name.enter(String("name of file (without extension)"), new_prefix);
+
+
+      file.name.enter(String("name of data file (without extension)"), new_prefix);
       //add the extension .sav to name of file
       temp.str("");
       temp << file.name.value << ".sav";
@@ -3000,7 +3001,10 @@ void Plot::menu(String prefix){
 
 	file.remove(new_prefix);	
 	file.open(String("out"), new_prefix);    
+	//save everything to data file
 	print(false, new_prefix, file.value);
+	//save everything to kml file
+	print_to_kml(new_prefix, file.value);
 	file.close(new_prefix);
 
 	command.str("");

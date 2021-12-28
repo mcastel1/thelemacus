@@ -54,6 +54,8 @@
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 - include reading of dummy line in Position::read
 - add modify sight, route  in menu
+- export data to gpx file and open Chrome authomatically to data.shom page to plot the gpx file
+- set position of the gnuplot plot window when this is opened
  - when entering angles, replace +- with N/S and E/W
 - find out why increasing too much number of points coastline in init file yields plots with few points
 - set output to log file

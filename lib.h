@@ -1295,9 +1295,32 @@ class Time{
   void add(Chrono);
   
   stringstream to_string(unsigned int);
-  bool operator> (const Time&);
+  bool operator==(const Time&), operator!=(const Time&), operator> (const Time&);
   
 };
+
+//evaluates whether Time (*this) is equal to t
+bool Time::operator==(const Time& t){
+
+  Time s;
+  
+  (*this).to_MJD();
+  s = t;
+  s.to_MJD();
+
+  return((((*this).MJD) == (s.MJD)));
+  
+}
+
+//evaluates whether Time (*this) is different from t
+bool Time::operator!=(const Time& t){
+
+  return(!((*this) == t));
+  
+}
+
+
+
 
 //evaluates whether Time (*this) is larger than t
 bool Time::operator>(const Time& t){
@@ -1921,7 +1944,7 @@ bool Sight::modify(Catalog catalog, String prefix){
     break;
 
 
-      case 4:{
+  case 4:{
     //in this case I modify the height of eye
 
     Length old_height_of_eye;
@@ -1945,6 +1968,42 @@ bool Sight::modify(Catalog catalog, String prefix){
   }
     break;
 
+
+
+  case 5:{
+    //in this case I modify the master-clock date and hour of sight
+
+    Time old_master_clock_date_and_hour;
+
+    old_master_clock_date_and_hour = master_clock_date_and_hour;
+    
+    master_clock_date_and_hour.print(String("old master-clock date and hour of sight"), new_new_prefix, cout);
+    master_clock_date_and_hour.enter(String("new master-clock date and hour of sight"), new_new_prefix);
+
+    if(old_master_clock_date_and_hour != master_clock_date_and_hour){
+      //if the new master-clock date and hour of sight is different from the old one, I write its value into (*this).time, and add to itt the stopwatch time if use_stopwatch.value == 'y'
+
+      time = master_clock_date_and_hour;
+      
+      if(use_stopwatch.value == 'y'){
+	
+	time.add(stopwatch);
+	
+      }
+
+      cout << new_prefix.value << "master-clock date and hour of sight modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New master-clock date and hour of sight is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+
+
   }
     
   if(check){
@@ -1953,7 +2012,7 @@ bool Sight::modify(Catalog catalog, String prefix){
 
   }else{
 
-    cout << new_prefix.value << RED << "Could not modify item!\n" << RESET;
+    cout << new_prefix.value << RED << "I could not modify item!\n" << RESET;
     
   }
 
@@ -3663,7 +3722,7 @@ bool Plot::modify_sight(unsigned int i, String prefix){
     
   }else{
     
-    cout << prefix.value << RED << "Sight could not be modified!\n" << RESET;
+    cout << prefix.value << RED << "I could not modify sight!\n" << RESET;
     
   }
 

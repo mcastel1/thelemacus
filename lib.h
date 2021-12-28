@@ -1801,10 +1801,10 @@ bool Sight::modify(Catalog catalog, String prefix){
       
       }
       if((old_body.type == String("star")) && (!(body.type == String("star")))){
-	//in this case, the old body was  a star, while the new (mofidied) body is not a star -> I ask the user to enter the limb of the new body and add the limb entry in items, right after the body entry (all_items[0])
+	//in this case, the old body was  a star, while the new (mofidied) body is not a star -> I ask the user to enter the limb of the new body and add the limb entry (all_items[1]) in items, right after the body entry (all_items[0])
 
 	limb.enter(String("limb of new body"), new_new_prefix);
-	items.insert(find(items.begin(), items.end(), all_items[0])+1, String("limb"));
+	items.insert(find(items.begin(), items.end(), all_items[0])+1, all_items[1]);
       
       }
 
@@ -1894,15 +1894,13 @@ bool Sight::modify(Catalog catalog, String prefix){
       
       }
       
-      /*
-      if((old_artificial_horizon.type == String("star")) && (!(artificial_horizon.type == String("star")))){
-	//in this case, the old artificial_horizon was  a star, while the new (mofidied) artificial_horizon is not a star -> I ask the user to enter the limb of the new artificial_horizon and add the limb entry in items, right after the artificial_horizon entry (all_items[0])
+      if((artificial_horizon == Answer('n', new_new_prefix)) && (old_artificial_horizon == Answer('y', new_new_prefix))){
+	//in this case,  old artificial_horizon = y, while the new (mofidied) artificial_horizon = n -> I add the height of eye entry (all_items[4]) in items right after the entry "artificial horizon" (all_items[3]), and let the user enter the height of eye
 
-	limb.enter(String("limb of new artificial_horizon"), new_new_prefix);
-	items.insert(find(items.begin(), items.end(), all_items[0])+1, String("limb"));
-      
+	height_of_eye.enter(String("height of eye"), String("m"), new_new_prefix);
+	items.insert(find(items.begin(), items.end(), all_items[3])+1, String(all_items[4]));
+
       }
-      */
 
       cout << new_prefix.value << "Artificial horizon modified\n";
 

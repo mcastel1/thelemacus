@@ -29,6 +29,8 @@
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
+//these are the color codes in kml file format for a few populat colors (red, etc...);
+string kml_colors[] = {"ff0000ff", "ff00ff00", "ff336699", "ffff0000", "ff800080", "ff0080ff", "ffff00ff"};
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 inline double cot(double x){
@@ -2516,7 +2518,7 @@ void Plot::print_to_kml(String prefix){
   for(i=0; i<(route_list.size()); i++){
 
     //this is the opening of a path code in kml format
-    plot_command << "\\\t<LineStyle>\\\n\\\t\\\t<color>ff0000ff<\\/color>\\\n\\\t\\\t<width>4<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<Placemark>\\\n\\\t\\\t<description>"
+    plot_command << "\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>4<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<Placemark>\\\n\\\t\\\t<description>"
 		 << (route_list[i]).label.value
 		 << "<\\/description>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
 

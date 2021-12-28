@@ -221,7 +221,7 @@ bool File::check_if_exists(String prefix){
 bool File::open(String mode, String prefix){
 
 
-  if(mode.value == "in"){
+  if(mode == String("in")){
     value.open(name.value, ios::in);
   }else{
     value.open(name.value, ios::out);
@@ -1134,7 +1134,7 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
 
 
 
-  if(!(((*this).type.value == "c") && ((*this).type.value == "c"))){
+  if(!(((*this).type == String("c")) && (route.type == String("c")))){
     
     cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
     output = false; 
@@ -1542,7 +1542,7 @@ Route Position::transport(String prefix){
   
   do{
     route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
-    check = ((route.type.value == "l") || (route.type.value == "o"));
+    check = ((route.type == String("l")) || (route.type == String("o")));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
@@ -2037,7 +2037,7 @@ void Route::print(String name, String prefix, ostream& ostr){
 
   type.print(String("type"), new_prefix, ostr);
 
-  if((type.value == "l") || (type.value == "o")){
+  if((type == String("l")) || (type == String("o"))){
     
     start.print(String("start position"), new_prefix, ostr);
     alpha.print(String("starting heading"), new_prefix, ostr);
@@ -2076,13 +2076,13 @@ void Route::enter(String name, String prefix){
 
   do{
     type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix);
-    check = ((type.value == "l") || (type.value == "o") || (type.value == "c"));
+    check = ((type == String("l")) || (type == String("o")) || (type == String("c")));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
   
-  if((type.value == "l") || (type.value == "o")){
+  if((type == String("l")) || (type == String("o"))){
     //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
 
     start.enter(String("starting position"), new_prefix);
@@ -2397,7 +2397,7 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, St
   }
   
   value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
-  if(unit.value == "m"){
+  if(unit == String("m")){
     value/=(1e3*nm);
   }
   
@@ -2503,7 +2503,7 @@ void Body::read_from_file(String name, File& file, String prefix){
   cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
 
 
-  if(type.value == "star"){
+  if(type == String("star")){
     RA.read_from_file(String("right ascension"), file, false, new_prefix);
     d.read_from_file(String("declination"), file, false, new_prefix);
   }else{
@@ -4940,7 +4940,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
   ostr << new_prefix.value << "Type = " << type.value << "\n";
   ostr << new_prefix.value << "Name = " << name.value << "\n";
   
-  if(type.value == "star"){
+  if(type == String("star")){
     RA.print(String("Right ascension"), new_prefix, ostr);
     d.print(String("Declination"), new_prefix, ostr);
   }else{
@@ -5066,7 +5066,7 @@ void Length::enter(String name, String unit, String prefix){
 
   temp.clear();
   temp << name.value;
-  if(unit.value == "nm"){
+  if(unit == String("nm")){
     temp  << " [nm]";
   }else{
     temp << " [m]";
@@ -5079,7 +5079,7 @@ void Length::enter(String name, String unit, String prefix){
   }while(!check_valid(name, prefix));
 
   //if the length has been entered in units of m, convert it to nautical miles
-  if(unit.value == "m"){
+  if(unit == String("m")){
     value/=(1e3*nm);
   }
   
@@ -5092,7 +5092,7 @@ void Length::print(String name, String unit, String prefix, ostream& ostr){
   if((name.value) != ""){
   
     ostr << prefix.value << name.value << " = ";
-    if(unit.value == "nm"){
+    if(unit == String("nm")){
       ostr << value << " nm\n";
     }else{
       ostr << value*nm*1e3 << " m\n";

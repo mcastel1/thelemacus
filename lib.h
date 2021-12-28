@@ -509,7 +509,7 @@ class Length{
   void print(String, String, String, ostream&);
   void read_from_file(String, File&, bool, String);
   bool check_valid(String, String);
-  bool operator> (const Length&), operator==(const Length&);
+  bool operator> (const Length&), operator==(const Length&), operator!=(const Length&);
   Length operator + (const Length&);
 
 };
@@ -517,6 +517,12 @@ class Length{
 bool Length::operator==(const Length& length){
 
   return (value == (length.value));
+  
+}
+
+bool Length::operator!=(const Length& length){
+
+  return (!((*this) == length));
   
 }
 
@@ -1914,7 +1920,30 @@ bool Sight::modify(Catalog catalog, String prefix){
   }
     break;
 
+
+      case 4:{
+    //in this case I modify the height of eye
+
+    Length old_height_of_eye;
+
+    old_height_of_eye = height_of_eye;
     
+    height_of_eye.print(String("old height of eye"), String("m"), new_new_prefix, cout);
+    height_of_eye.enter(String("new height of eye"), String("m"), new_new_prefix);
+
+    if(old_height_of_eye != height_of_eye){
+
+      cout << new_prefix.value << "Height of eye modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New height of eye is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
 
   }
     

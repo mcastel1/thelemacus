@@ -3822,7 +3822,7 @@ void Plot::remove_sight(unsigned int i, String prefix){
   if(i_related_route != -1){
     
     remove_related_route.enter(String("whether you want to remove the route related to this sight"), prefix);
-    if(remove_related_route == Answer('y', new_prefix)){
+    if(remove_related_route == Answer('y', prefix)){
 
       remove_route(i_related_route, prefix);
       
@@ -3885,7 +3885,7 @@ void Plot::remove_route(unsigned int i, String prefix){
     
     remove_related_sight.enter(String("whether you want to remove the sight related to the route"), prefix);
     
-    if(remove_related_sight == Answer('y', new_prefix)){
+    if(remove_related_sight == Answer('y', prefix)){
 
       remove_sight(i_related_sight, prefix);
       

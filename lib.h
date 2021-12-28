@@ -1985,7 +1985,7 @@ bool Sight::modify(Catalog catalog, String prefix){
 
       time = master_clock_date_and_hour;
       
-      if(use_stopwatch.value == 'y'){
+      if(use_stopwatch == Answer('y', new_new_prefix)){
 	
 	time.add(stopwatch);
 	
@@ -2695,7 +2695,7 @@ bool Sight::read_from_file(File& file, String prefix){
  
   use_stopwatch.read_from_file(String("use of stopwatch"), file, false, new_prefix);
 
-  if(use_stopwatch.value == 'y'){
+  if(use_stopwatch == Answer('y', new_prefix)){
 
     items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
     stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
@@ -2784,7 +2784,7 @@ void Sight::print(String name, String prefix, ostream& ostr){
   }
   master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
   use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);
-  if(use_stopwatch.value == 'y'){
+  if(use_stopwatch == Answer('y', new_prefix)){
     stopwatch.print(String("stopwatch"), new_prefix, ostr);
   }
   TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix, ostr);
@@ -4500,7 +4500,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     use_stopwatch.read_from_file(String("use of stopwatch"), file_init, true, new_prefix);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
-    if(use_stopwatch.value == 'y'){
+    if(use_stopwatch == Answer('y', new_prefix)){
         
       stopwatch.enter(String("stopwatch reading"), new_prefix);
       time.add(stopwatch);
@@ -4518,7 +4518,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
 
   //if the sight has use_stopwatch = 'y', then I add to the list of its items the stopwatch reading
-  if(use_stopwatch.value == 'y'){
+  if(use_stopwatch == Answer('y', new_prefix)){
     items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
   }
 

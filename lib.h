@@ -2488,8 +2488,10 @@ void Plot::print_to_kml(String prefix){
   string line;
   unsigned int i, j;
   Int n_points_routes;
+  Length l_saved;
   String new_prefix;
   File file_init;
+  
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
@@ -2514,12 +2516,22 @@ void Plot::print_to_kml(String prefix){
   for(i=0; i<(route_list.size()); i++){
 
     //this is the opening of a path code in kml format
-    plot_command << "\\\t<LineStyle>\\\n\\\t\\\t<color>ff0000ff<\\/color>\\\n\\\t\\\t<width>4<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
+    plot_command << "\\\t<LineStyle>\\\n\\\t\\\t<color>ff0000ff<\\/color>\\\n\\\t\\\t<width>4<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<Placemark>\\\n\\\t\\\t<description>"
 		 << (route_list[i]).label.value
-		 << "<\\/name>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
+		 << "<\\/description>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
 
+    //I save the original value of the length of the Route route_list[i] into l_saved
+    l_saved = (route_list[i]).l;
     for(j=0; j<(unsigned int)(n_points_routes.value); j++){
-      plot_command << "\\\t\\\t\\\t\\\t" << gsl_pow_2(((double)j)/((double)(n_points_routes.value)))*30.0 << "," << ((double)j)/((double)(n_points_routes.value))*47.64 << ",0.0\\\n";
+
+      //I set equal to a temporary value of the length of the route, which spans between 0 and l_saved across the for loop over j
+      ((route_list[i]).l).set(String(""), (l_saved.value)*((double)j)/((double)(n_points_routes.value-1)), new_prefix);
+
+      //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above 
+      (route_list[i]).compute_end(new_prefix);
+
+      //I write the coordinates in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in the longitude is added because kml files appear to have the convention that longitude is positive towards the east, while in this library it is positive towards the west
+      plot_command << "\\\t\\\t\\\t\\\t" << (-K*((route_list[i]).end.lambda.value)) << "," << K*((route_list[i]).end.phi.value) << ",0.0\\\n";
     }
 
     //this is the closing of a path code in kml format

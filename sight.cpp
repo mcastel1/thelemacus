@@ -66,6 +66,7 @@
 - when you delete a sight, make sure that all the crossing Positions involving it are also deleted
 - enter body + limb directly in one line
 - add != operators in all classes
+- finisci di programmare Sight::modify (mancano le modifiche ad alcuni item)
 */
 
 

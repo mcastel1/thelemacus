@@ -8,12 +8,10 @@
 
 
     //First path
-    <Style id="redLineGreenPoly">
       <LineStyle> 
         <color>ff0000ff</color>
         <width>4</width>
       </LineStyle>
-    </Style>
     <Placemark>
       <name>This is the name of the path</name>
       <description>This is the legend of the path</description>

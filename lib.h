@@ -2450,7 +2450,7 @@ class Plot{
   
  public:
   Catalog* catalog;
-  File file_id, file_gnuplot, file_boundary;
+  File file_id, file_gnuplot, file_kml, file_boundary;
   int job_id;
   stringstream command, plot_command;
   vector<Sight> sight_list;
@@ -2471,7 +2471,7 @@ class Plot{
   void remove_route(unsigned int, String);
   bool read_from_file(File&, String);
   void print(bool, String, ostream&);
-  void print_to_kml(String, ostream&);
+  void print_to_kml(String);
   void print_sights(String, ostream&);
   void print_positions(String, ostream&);
   void print_routes(bool, String, ostream&);
@@ -2482,11 +2482,11 @@ class Plot{
 };
 
 // if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
-void Plot::print_to_kml(String prefix, ostream& ostr){
+void Plot::print_to_kml(String prefix){
 
   stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
   string line;
-  unsigned int i;
+  unsigned int i, j;
   Int n_points_routes;
   String new_prefix;
   File file_init;
@@ -2496,7 +2496,7 @@ void Plot::print_to_kml(String prefix, ostream& ostr){
 
   file_init.set_name(String(path_file_init));
   file_init.open(String("in"), prefix);
-  
+  file_kml.remove(prefix);
  
   //replace line with number of points for routes in plot_dummy.plt
   cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
@@ -2511,12 +2511,29 @@ void Plot::print_to_kml(String prefix, ostream& ostr){
   
   plot_command.str("");
   command.str("");
-  //set the key position on the screen
-  plot_command << "set key top right\\\n";
   for(i=0; i<(route_list.size()); i++){
 
+    //this is the opening of a path code in kml format
+    plot_command << "\\\t<LineStyle>\\\n\\\t\\\t<color>ff0000ff<\\/color>\\\n\\\t\\\t<width>4<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
+		 << (route_list[i]).label.value
+		 << "<\\/name>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
+
+    for(j=0; j<(unsigned int)(n_points_routes.value); j++){
+      plot_command << "\\\t\\\t\\\t\\\t" << gsl_pow_2(((double)j)/((double)(n_points_routes.value)))*30.0 << "," << ((double)j)/((double)(n_points_routes.value))*47.64 << ",0.0\\\n";
+    }
+
+    //this is the closing of a path code in kml format
+    plot_command << "\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/LineString>\\\n\\\t<\\/Placemark>\\\n\\\n";
     
   }
+
+  cout << prefix.value << RED << "plot_command:" << plot_command.str() << "\n" << RESET;
+
+  //add the line to plot_kml.kml which contains the parametric plot of the routes
+  command << "LANG=C sed 's/\\/\\/route\\_plots/" << plot_command.str().c_str() << "/g' kml_dummy.kml >> " << file_kml.name.value << " \n";
+
+  //execute the command string
+  system(command.str().c_str());
 
     
 
@@ -2976,7 +2993,7 @@ void Plot::menu(String prefix){
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
       File file;
-      stringstream temp;
+      stringstream temp, temp_kml;
       Answer answer;
 
       //answer says whether one should create a new file on which the data will be saved
@@ -2984,10 +3001,12 @@ void Plot::menu(String prefix){
 
 
       file.name.enter(String("name of data file (without extension)"), new_prefix);
-      //add the extension .sav to name of file
+      //add the extension .sav to name of sav file and the extension .kml to the name kml file
       temp.str("");
       temp << file.name.value << ".sav";
+      temp_kml << file.name.value << ".kml";
       file.set_name(temp.str());
+      file_kml.set_name(temp_kml.str());
 
       //If the file already exists, I ask whether the user want to overwrite it
       if((file.check_if_exists(new_prefix))){
@@ -3004,7 +3023,7 @@ void Plot::menu(String prefix){
 	//save everything to data file
 	print(false, new_prefix, file.value);
 	//save everything to kml file
-	print_to_kml(new_prefix, file.value);
+	print_to_kml(new_prefix);
 	file.close(new_prefix);
 
 	command.str("");

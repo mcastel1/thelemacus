@@ -1,3 +1,4 @@
+//lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 //this is the high precision used for storing data and making calculations with it 
 #define data_precision 32
 //this is the low precision used for displaying data
@@ -84,6 +85,9 @@ class String{
   bool operator==(const String&);
 
 };
+
+
+
 
 bool String::operator==(const String& s){
 
@@ -220,7 +224,7 @@ bool File::check_if_exists(String prefix){
 bool File::open(String mode, String prefix){
 
 
-  if(mode.value == "in"){
+  if(mode == String("in")){
     value.open(name.value, ios::in);
   }else{
     value.open(name.value, ios::out);
@@ -508,10 +512,23 @@ class Length{
   void print(String, String, String, ostream&);
   void read_from_file(String, File&, bool, String);
   bool check_valid(String, String);
-  bool operator> (const Length&);
+  bool operator> (const Length&), operator==(const Length&), operator!=(const Length&);
   Length operator + (const Length&);
 
 };
+
+bool Length::operator==(const Length& length){
+
+  return (value == (length.value));
+  
+}
+
+bool Length::operator!=(const Length& length){
+
+  return (!((*this) == length));
+  
+}
+
 
 //evaluates whether Length (*this) is larger than r
 bool Length::operator>(const Length& r){
@@ -637,13 +654,54 @@ class Answer{
 
  public:
   char value;
+
+  Answer();  
+  Answer(char, String);
   void enter(String, String);
   bool set(String, char, String);
   //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
+  bool operator==(const Answer&), operator !=(const Answer&);
 
 };
+
+Answer::Answer(void){
+  //this is the default constructor, sets value to the default value, 'n' char
+  
+  value = 'n';
+  
+}
+
+Answer::Answer(char c, String prefix){
+
+  if((c=='y') || (c=='n')){
+    
+    value = c;
+    
+  }else{
+    //if the entered value is not valid, set value to 'n' and prints out this info
+    
+    value = 'n';
+    cout << prefix.value << RED << "Value of answer is not valid, setting it to 'n'!\n" << RESET;
+
+  }
+  
+}
+
+
+bool Answer::operator==(const Answer& s){
+
+  return((((*this).value) == (s.value)));
+  
+}
+
+bool Answer::operator!=(const Answer& s){
+
+  return(!((*this)==s));
+  
+}
+
 
 bool Answer::set(String name, char c, String prefix){
 
@@ -817,7 +875,8 @@ class Position{
   Angle phi, lambda;
   //label to add a note about the position
   String label;
-  vector<String> modify_choices;
+  //this is a list of the items which are part of a Position object (phi, lambda, ..)
+  vector<String> items;
 
   Position();
   void enter(String, String);
@@ -851,7 +910,7 @@ bool Position::operator==(const Position& p){
 
 Position::Position(void){
 
-  modify_choices = {String("latitude"), String("longitude"), String("label")};
+  items = {String("latitude"), String("longitude"), String("label")};
 
 }
 
@@ -891,11 +950,11 @@ void Position::modify(String prefix){
  
   cout << prefix.value << "Enter the item that you want to modify:\n";
 
-  for(i=0; i<modify_choices.size(); i++){
-    cout << prefix.value << "\t(" << i+1 << ") " << (modify_choices[i]).value << "\n";
+  for(i=0; i<items.size(); i++){
+    cout << prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
   }
 
-  enter_unsigned_int(&i, true, 1, modify_choices.size()+1, String("choice #"), prefix);
+  enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), prefix);
 
   switch(i){
 
@@ -1078,7 +1137,7 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
 
 
 
-  if(!(((*this).type.value == "c") && ((*this).type.value == "c"))){
+  if(!(((*this).type == String("c")) && (route.type == String("c")))){
     
     cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
     output = false; 
@@ -1239,9 +1298,32 @@ class Time{
   void add(Chrono);
   
   stringstream to_string(unsigned int);
-  bool operator> (const Time&);
+  bool operator==(const Time&), operator!=(const Time&), operator> (const Time&);
   
 };
+
+//evaluates whether Time (*this) is equal to t
+bool Time::operator==(const Time& t){
+
+  Time s;
+  
+  (*this).to_MJD();
+  s = t;
+  s.to_MJD();
+
+  return((((*this).MJD) == (s.MJD)));
+  
+}
+
+//evaluates whether Time (*this) is different from t
+bool Time::operator!=(const Time& t){
+
+  return(!((*this) == t));
+  
+}
+
+
+
 
 //evaluates whether Time (*this) is larger than t
 bool Time::operator>(const Time& t){
@@ -1463,7 +1545,7 @@ Route Position::transport(String prefix){
   
   do{
     route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
-    check = ((route.type.value == "l") || (route.type.value == "o"));
+    check = ((route.type == String("l")) || (route.type == String("o")));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
@@ -1621,11 +1703,21 @@ class Body{
   String name, type;
   Length radius;
   Angle RA, d; 
-  void enter(Catalog, String);
+  void enter(String, Catalog, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, String);
+
+  bool operator==(const Body&);
+
   
 };
+
+bool Body::operator==(const Body& body){
+
+  return (name == (body.name));
+  
+}
+
 
 class Limb{
 
@@ -1634,9 +1726,16 @@ class Limb{
   void enter(String, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
-  
+
+  bool operator==(const Limb&);
+
 };
 
+bool Limb::operator==(const Limb& limb){
+
+  return(value == limb.value);
+
+}
 
 class Sight{
 
@@ -1655,6 +1754,9 @@ class Sight{
   String label;
   //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1. 
   int related_route;
+  //all_items is a list of all the possible items which are part of a Sight object (master_clock_date_and_hour, body, ...). items is the list of items specific to a given Sight object: items may not include all the elements of all_items
+  vector<String> items, all_items;
+
 
   Sight();
   static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
@@ -1667,6 +1769,7 @@ class Sight{
   bool compute_H_o(String);
 
   bool enter(Catalog, String, String);
+  bool modify(Catalog, String);
   void print(String, String, ostream&);
   bool read_from_file(File&, String);
   bool reduce(Route*, String);
@@ -1674,6 +1777,257 @@ class Sight{
 
 };
 
+class Catalog{
+
+ public:
+  vector<Body> list;
+  Catalog(String, String);
+  void add(String, String, double);
+  void print(String, ostream&);
+
+};
+
+
+bool Sight::modify(Catalog catalog, String prefix){
+  
+  unsigned int i;
+  String new_prefix, new_new_prefix;
+  bool check;
+  vector<String>::iterator p;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+  new_new_prefix = new_prefix.append(String("\t"));
+
+  check = true;
+ 
+  cout << new_prefix.value << "Enter the item that you want to modify:\n";
+  for(i=0; i<items.size(); i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
+  }
+
+  enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), new_prefix);
+  //decrease i because the user entered it in format starting from i=1;
+  i--;
+  
+  p = find(all_items.begin(), all_items.end(), items[i]); 
+  
+  switch(/*this is the iterator p converted to int: if this quantity = 0 then I am considering the first element in all_items, if its = 1 I am considering the second element, etc... */distance(all_items.begin(), p)){
+
+  case 0:{
+    //in this case I modify the body
+
+    Body old_body;
+
+    old_body = body;
+    
+    body.print(String("old body"), new_new_prefix, cout);
+    body.enter(String("new body"), catalog, new_new_prefix);
+
+    if(!(body == old_body)){
+
+      if((body.type == String("star")) && (!(old_body.type == String("star")))){
+	//in this case, the old body was not a star, while the new (mofidied) body is a star -> I remove the limb entry (all_items[1]) in items 
+
+	items.erase(find(items.begin(), items.end(), all_items[1]));
+      
+      }
+      if((old_body.type == String("star")) && (!(body.type == String("star")))){
+	//in this case, the old body was  a star, while the new (mofidied) body is not a star -> I ask the user to enter the limb of the new body and add the limb entry (all_items[1]) in items, right after the body entry (all_items[0])
+
+	limb.enter(String("limb of new body"), new_new_prefix);
+	items.insert(find(items.begin(), items.end(), all_items[0])+1, all_items[1]);
+      
+      }
+
+      cout << new_prefix.value << "Body modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New body is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+  
+ 
+  case 1:{
+    //in this case I modify the limb
+
+    Limb old_limb;
+
+    old_limb = limb;
+    
+    limb.print(String("old limb"), new_new_prefix, cout);
+    limb.enter(String("new limb"), new_new_prefix);
+
+    if(!(old_limb == limb)){
+
+      cout << new_prefix.value << "Limb modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New limb is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+
+
+
+  case 2:{
+    //in this case I modify the sextant altitude
+
+    Angle old_H_s;
+
+    old_H_s = H_s;
+    
+    H_s.print(String("old sextant altitude"), new_new_prefix, cout);
+    //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
+    H_s.enter(String("new sextant altitude"), true, new_new_prefix);
+
+    if(!(old_H_s == H_s)){
+
+      cout << new_prefix.value << "Sextant altitude modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New sextant altitude is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+    
+
+  case 3:{
+    //in this case I modify the artificial horizon
+
+    Answer old_artificial_horizon;
+
+    old_artificial_horizon = artificial_horizon;
+    
+    artificial_horizon.print(String("old artificial_horizon"), new_new_prefix, cout);
+    artificial_horizon.enter(String("new artificial horizon"), new_new_prefix);
+
+    if(old_artificial_horizon != artificial_horizon){
+
+
+      if((artificial_horizon == Answer('y', new_new_prefix)) && (old_artificial_horizon == Answer('n', new_new_prefix))){
+	//in this case,  old artificial_horizon = n, while the new (mofidied) artificial_horizon = y -> I remove the height of eye entry (all_items[4]) in items and set the height of eye (which is now useless) to zero 
+
+	items.erase(find(items.begin(), items.end(), all_items[4]));
+	height_of_eye.set(String("removed height of eye"), 0.0, new_new_prefix);
+      
+      }
+      
+      if((artificial_horizon == Answer('n', new_new_prefix)) && (old_artificial_horizon == Answer('y', new_new_prefix))){
+	//in this case,  old artificial_horizon = y, while the new (mofidied) artificial_horizon = n -> I add the height of eye entry (all_items[4]) in items right after the entry "artificial horizon" (all_items[3]), and let the user enter the height of eye
+
+	height_of_eye.enter(String("height of eye"), String("m"), new_new_prefix);
+	items.insert(find(items.begin(), items.end(), all_items[3])+1, String(all_items[4]));
+
+      }
+
+      cout << new_prefix.value << "Artificial horizon modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New artificial horizon is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+
+
+  case 4:{
+    //in this case I modify the height of eye
+
+    Length old_height_of_eye;
+
+    old_height_of_eye = height_of_eye;
+    
+    height_of_eye.print(String("old height of eye"), String("m"), new_new_prefix, cout);
+    height_of_eye.enter(String("new height of eye"), String("m"), new_new_prefix);
+
+    if(old_height_of_eye != height_of_eye){
+
+      cout << new_prefix.value << "Height of eye modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New height of eye is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+
+
+
+  case 5:{
+    //in this case I modify the master-clock date and hour of sight
+
+    Time old_master_clock_date_and_hour;
+
+    old_master_clock_date_and_hour = master_clock_date_and_hour;
+    
+    master_clock_date_and_hour.print(String("old master-clock date and hour of sight"), new_new_prefix, cout);
+    master_clock_date_and_hour.enter(String("new master-clock date and hour of sight"), new_new_prefix);
+
+    if(old_master_clock_date_and_hour != master_clock_date_and_hour){
+      //if the new master-clock date and hour of sight is different from the old one, I write its value into (*this).time, and add to itt the stopwatch time if use_stopwatch.value == 'y'
+
+      time = master_clock_date_and_hour;
+      
+      if(use_stopwatch == Answer('y', new_new_prefix)){
+	
+	time.add(stopwatch);
+	
+      }
+
+      cout << new_prefix.value << "master-clock date and hour of sight modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New master-clock date and hour of sight is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+
+
+  }
+    
+  if(check){
+    
+    cout << new_prefix.value << "Item modified\n";
+
+  }else{
+
+    cout << new_prefix.value << RED << "I could not modify item!\n" << RESET;
+    
+  }
+
+  cout << new_prefix.value << "Items after modification:\n";
+  for(i=0; i<items.size(); i++){
+    cout << new_prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
+  }
+
+  
+  return check;
+
+}
 
 void Route::print(String name, String prefix, ostream& ostr){
 
@@ -1686,7 +2040,7 @@ void Route::print(String name, String prefix, ostream& ostr){
 
   type.print(String("type"), new_prefix, ostr);
 
-  if((type.value == "l") || (type.value == "o")){
+  if((type == String("l")) || (type == String("o"))){
     
     start.print(String("start position"), new_prefix, ostr);
     alpha.print(String("starting heading"), new_prefix, ostr);
@@ -1725,13 +2079,13 @@ void Route::enter(String name, String prefix){
 
   do{
     type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix);
-    check = ((type.value == "l") || (type.value == "o") || (type.value == "c"));
+    check = ((type == String("l")) || (type == String("o")) || (type == String("c")));
     if(!check){
       cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
     }
   }while(!check);
   
-  if((type.value == "l") || (type.value == "o")){
+  if((type == String("l")) || (type == String("o"))){
     //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
 
     start.enter(String("starting position"), new_prefix);
@@ -2046,7 +2400,7 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, St
   }
   
   value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
-  if(unit.value == "m"){
+  if(unit == String("m")){
     value/=(1e3*nm);
   }
   
@@ -2152,7 +2506,7 @@ void Body::read_from_file(String name, File& file, String prefix){
   cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
 
 
-  if(type.value == "star"){
+  if(type == String("star")){
     RA.read_from_file(String("right ascension"), file, false, new_prefix);
     d.read_from_file(String("declination"), file, false, new_prefix);
   }else{
@@ -2162,15 +2516,6 @@ void Body::read_from_file(String name, File& file, String prefix){
 }
 
 
-class Catalog{
-
- public:
-  vector<Body> list;
-  Catalog(String, String);
-  void add(String, String, double);
-  void print(String, ostream&);
-
-};
 
 Catalog::Catalog(String filename, String prefix){
 
@@ -2324,18 +2669,24 @@ bool Sight::read_from_file(File& file, String prefix){
   string line;
   bool check = true;
   String new_prefix;
+  //this unsigned int counts how many additional entries have been inserted into the vector item
+  unsigned int additional_items;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
+  additional_items = 0;
+
   body.read_from_file(String("body"), file, new_prefix);
   if(body.type.value != "star"){
+    items.insert(items.begin()+1+(additional_items++), all_items[1]);
     limb.read_from_file(String("limb"), file, false, new_prefix);
   }
   H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
   index_error.read_from_file(String("index error"), file, false, new_prefix);
   artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
-  if((artificial_horizon.value) == 'n'){
+  if(artificial_horizon == Answer('n', new_prefix)){
+    items.insert(items.begin()+3+(additional_items++), String("height of eye"));    
     height_of_eye.read_from_file(String("height of eye"), file, false, new_prefix);
   }
   
@@ -2347,8 +2698,9 @@ bool Sight::read_from_file(File& file, String prefix){
  
   use_stopwatch.read_from_file(String("use of stopwatch"), file, false, new_prefix);
 
-  if(use_stopwatch.value == 'y'){
-      
+  if(use_stopwatch == Answer('y', new_prefix)){
+
+    items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
     stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
     time.add(stopwatch);
 
@@ -2430,12 +2782,12 @@ void Sight::print(String name, String prefix, ostream& ostr){
   H_s.print(String("sextant altitude"), new_prefix, ostr);
   index_error.print(String("index error"), new_prefix, ostr);
   artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
-  if(artificial_horizon.value == 'n'){
+  if(artificial_horizon == Answer('n', new_prefix)){
     height_of_eye.print(String("height of eye"), String("m"), new_prefix, ostr);
   }
   master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
   use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);
-  if(use_stopwatch.value == 'y'){
+  if(use_stopwatch == Answer('y', new_prefix)){
     stopwatch.print(String("stopwatch"), new_prefix, ostr);
   }
   TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix, ostr);
@@ -2445,6 +2797,16 @@ void Sight::print(String name, String prefix, ostream& ostr){
   if((related_route != -1) && (&ostr == &cout)){
     ostr << new_prefix.value << "Related route # = " << related_route+1 << "\n";
   }
+
+  /*
+    cout << RED << "items:\n";
+    for(unsigned int i=0; i<items.size(); i++){
+    cout << new_prefix.value << items[i].value << "\n";
+
+    }
+    cout << RESET << "\n";
+  */
+
   
 }
 
@@ -2464,6 +2826,7 @@ class Plot{
   Plot(Catalog*, String);
   //~Plot();
   bool add_sight(String);
+  bool modify_sight(unsigned int, String);
   void transport_route(unsigned int, String);
   void add_position(String);
   void add_route(String);
@@ -2713,32 +3076,32 @@ void Plot::menu(String prefix){
   cout << prefix.value << "You can:\n";
   
   cout << prefix.value << BOLD << "Sights:" << RESET << "\n";
-  for(i=0; i<2; i++){
+  for(i=0; i<3; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Positions:" << RESET << "\n";
-  for(i=2; i<6; i++){
+  for(i=3; i<7; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
   cout << prefix.value << BOLD << "Routes:" << RESET << "\n";
-  for(i=6; i<10; i++){
+  for(i=7; i<11; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
-  for(i=10; i<13; i++){
+  for(i=11; i<14; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=13; i<15; i++){
+  for(i=14; i<16; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=15;
+  i=16;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -2761,9 +3124,31 @@ void Plot::menu(String prefix){
     break;
 
 
-
-   
   case 2:{
+    
+    if(sight_list.size() > 0){
+
+      print_sights(new_prefix, cout);
+
+      enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to modify"), new_prefix);
+      i--;
+
+      modify_sight(i, new_prefix);
+      print(true, new_prefix, cout);
+      show(false, new_prefix);
+
+    }else{
+      
+      cout << YELLOW << "There are no sights to modify!\n" << RESET;
+      
+    }
+    
+    menu(prefix);  
+
+  }
+    break;
+   
+  case 3:{
 
     if(sight_list.size() > 0){
  
@@ -2785,7 +3170,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 3:{
+  case 4:{
 
     add_position(new_prefix);
     print(true, new_prefix, cout);
@@ -2797,7 +3182,7 @@ void Plot::menu(String prefix){
 
 
     
-  case 4:{
+  case 5:{
     
     if(position_list.size() > 0){
 
@@ -2819,7 +3204,7 @@ void Plot::menu(String prefix){
   }
     break;
     
-  case 5:{
+  case 6:{
     
     if(position_list.size() > 0){
 
@@ -2841,7 +3226,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 6:{
+  case 7:{
 
     if(position_list.size() > 0){
 
@@ -2864,7 +3249,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 7:{
+  case 8:{
 
     add_route(new_prefix);
     print(true, new_prefix, cout);
@@ -2876,7 +3261,7 @@ void Plot::menu(String prefix){
 
 
     
-  case 8:{
+  case 9:{
 
     if(route_list.size() > 0){
 
@@ -2900,7 +3285,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 9:{
+  case 10:{
     
     //there need to be at list two routes of type "c" to compute crossings. Here I write the indexes of routes of type "c" into crossing_route_list 
     for(crossing_route_list.clear(), j=0; j<route_list.size(); j++){
@@ -2932,9 +3317,8 @@ void Plot::menu(String prefix){
   }
     break;
 
-
-
-  case 10:{
+    
+  case 11:{
 
     if(route_list.size() > 0){
 
@@ -2958,7 +3342,7 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 11:{
+  case 12:{
 
     show(false, new_prefix);
     menu(prefix);  
@@ -2966,7 +3350,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 12:{
+  case 13:{
 
     show(true, new_prefix);
     menu(prefix);  
@@ -2975,7 +3359,7 @@ void Plot::menu(String prefix){
     break;
 
 
-  case 13:{
+  case 14:{
 
     if(route_list.size() + position_list.size() > 0){
   
@@ -3004,7 +3388,7 @@ void Plot::menu(String prefix){
     break;
 
     
-  case 14:{
+  case 15:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -3032,7 +3416,7 @@ void Plot::menu(String prefix){
 	
       }
 
-      if((answer.value) == 'y'){
+      if(answer == Answer('y', new_prefix)){
 
 	file.remove(new_prefix);	
 	file.open(String("out"), new_prefix);    
@@ -3059,7 +3443,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 15:{
+  case 16:{
 
     File file;
     stringstream line_ins;
@@ -3082,7 +3466,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 16:{
+  case 17:{
 
     File file;
     String line;
@@ -3140,7 +3524,7 @@ Plot::Plot(Catalog* cata, String prefix){
 
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Modify a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 
@@ -3404,6 +3788,35 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
 }
 
 
+bool Plot::modify_sight(unsigned int i, String prefix){
+  
+  bool check;
+
+  check = true;
+  
+  check &= ((sight_list[i]).modify((*catalog), prefix));
+
+  if(check){
+
+    check &= ((sight_list[i]).reduce(&(route_list[(sight_list[i]).related_route]), prefix));
+
+  }
+
+  
+  if(check){
+    
+    (sight_list[i]).print(String("Sight modified"), prefix, cout);
+    
+  }else{
+    
+    cout << prefix.value << RED << "I could not modify sight!\n" << RESET;
+    
+  }
+
+  return check;
+  
+}
+
 
 
 bool Plot::add_sight(String prefix){
@@ -3420,7 +3833,7 @@ bool Plot::add_sight(String prefix){
   //I link the sight to the route, and the route to the sight
   (sight_list[sight_list.size()-1]).related_route = route_list.size()-1;
   (route_list[route_list.size()-1]).related_sight = sight_list.size()-1;
-  
+
   
   if(check){
     (sight_list[sight_list.size()-1]).print(String("Sight"), prefix, cout);
@@ -3496,7 +3909,7 @@ void Plot::remove_sight(unsigned int i, String prefix){
   if(i_related_route != -1){
     
     remove_related_route.enter(String("whether you want to remove the route related to this sight"), prefix);
-    if((remove_related_route.value) == 'y'){
+    if(remove_related_route == Answer('y', prefix)){
 
       remove_route(i_related_route, prefix);
       
@@ -3559,7 +3972,7 @@ void Plot::remove_route(unsigned int i, String prefix){
     
     remove_related_sight.enter(String("whether you want to remove the sight related to the route"), prefix);
     
-    if((remove_related_sight.value) == 'y'){
+    if(remove_related_sight == Answer('y', prefix)){
 
       remove_sight(i_related_sight, prefix);
       
@@ -3591,7 +4004,7 @@ void Plot::transport_route(unsigned int i, String prefix){
   cout << prefix.value << "Route transported.\n";
 
   keep_original.enter(String("whether you want to keep the original route"), new_prefix);
-  if(keep_original.value == 'y'){
+  if(keep_original == Answer('y', new_prefix)){
     route_list.insert(route_list.begin()+i, original_route);
   }
 
@@ -3618,7 +4031,7 @@ void Plot::transport_position(unsigned int i, String prefix){
   cout << prefix.value << "Position transported.\n";
 
   keep_original.enter(String("whether you want to keep the original position"), new_prefix);
-  if(keep_original.value == 'y'){
+  if(keep_original == Answer('y', new_prefix)){
     position_list.insert(position_list.begin()+i, original_position);
   }
 
@@ -4130,19 +4543,25 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   File file_init;
   String new_prefix;
   bool check = true;
+  //this unsigned int counts how many additional entries have been inserted into the vector item
+  unsigned int additional_items;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  additional_items = 0;
 
   file_init.set_name(String(path_file_init));
   check &= (file_init.open(String("in"), prefix));
   
   cout << prefix.value << "Enter " << name.value << ":\n";
   
-  body.enter(catalog, new_prefix);
+  body.enter(String("body"), catalog, new_prefix);
   //GP.label.set("geographic position", new_prefix);
 
   if(body.type.value != "star"){
+    items.insert(items.begin()+1+(additional_items++), all_items[1]);
+    
     limb.enter(String("limb"), new_prefix);
   }
   //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
@@ -4154,10 +4573,11 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   cout << prefix.value << YELLOW << "Reading artificial horizon from file " << file_init.name.value << " ...\n" << RESET;
   artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
   cout << prefix.value << YELLOW << "... done.\n" << RESET;
-  if(artificial_horizon.value == 'n'){
+  if(artificial_horizon == Answer('n', new_prefix)){
+    items.insert(items.begin()+3+(additional_items++), String("height of eye"));    
     height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
   }
-  
+
   do{
   
     master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
@@ -4167,7 +4587,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     use_stopwatch.read_from_file(String("use of stopwatch"), file_init, true, new_prefix);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
-    if(use_stopwatch.value == 'y'){
+    if(use_stopwatch == Answer('y', new_prefix)){
         
       stopwatch.enter(String("stopwatch reading"), new_prefix);
       time.add(stopwatch);
@@ -4183,9 +4603,15 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
   }while(!check_data_time_interval(prefix));
 
+
+  //if the sight has use_stopwatch = 'y', then I add to the list of its items the stopwatch reading
+  if(use_stopwatch == Answer('y', new_prefix)){
+    items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
+  }
+
   label.enter(String("label"), new_prefix);
 
-  //given that the sight is not yet linke to a route, I set
+  //given that the sight is not yet linked to a route, I set
   related_route = -1;
   
   file_init.close(prefix);
@@ -4210,6 +4636,8 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
+  cout << prefix.value << "Reducing sight ...\n";
+
   ((*circle_of_equal_altitude).type.value) = 'c';
   
   compute_H_a(new_prefix);
@@ -4226,6 +4654,10 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
     
     cout << prefix.value << RED << "Sight cannot be reduced!\n" << RESET;
     
+  }else{
+
+    cout << prefix.value << "... done\n";
+
   }
 
   return check;
@@ -4235,7 +4667,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
 
 void Sight::compute_H_a(String prefix){
   
-  if(artificial_horizon.value == 'y'){
+  if(artificial_horizon == Answer('y', prefix)){
     H_a = (H_s-index_error)/2.0;
     H_a.print(String("apparent altitude"), prefix, cout);
 
@@ -4255,13 +4687,16 @@ bool Sight::compute_H_o(String prefix){
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  cout << prefix.value << "Computing observed altitude ...\n";
  
   check &= compute_DH_refraction(new_prefix);
 
   if(check){
     compute_DH_parallax_and_limb(new_prefix);
     H_o = H_a + DH_refraction + DH_parallax_and_limb;
-    H_o.print(String("observed altitude"), new_prefix, cout);
+    cout << prefix.value << "...done\n";
+    H_o.print(String("observed altitude"), prefix, cout);
   }else{
     cout << prefix.value << RED << "H_o cannot be computed!\n" << RESET;
   }
@@ -4592,7 +5027,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
   ostr << new_prefix.value << "Type = " << type.value << "\n";
   ostr << new_prefix.value << "Name = " << name.value << "\n";
   
-  if(type.value == "star"){
+  if(type == String("star")){
     RA.print(String("Right ascension"), new_prefix, ostr);
     d.print(String("Declination"), new_prefix, ostr);
   }else{
@@ -4602,7 +5037,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
 }
 
 
-void Body::enter(Catalog catalog, String prefix){
+void Body::enter(String name, Catalog catalog, String prefix){
 
   unsigned int i;
   bool check;
@@ -4617,7 +5052,7 @@ void Body::enter(Catalog catalog, String prefix){
 
     s.clear();
     
-    cout << prefix.value << "Enter name of body:";
+    cout << prefix.value << "Enter " << name.value << ":";
     getline(cin >> ws, s);
 
     for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name.value == s){check=false;}}
@@ -4627,7 +5062,8 @@ void Body::enter(Catalog catalog, String prefix){
   
   i--;
   (*this) = (catalog.list)[i];
-  print(String("body"), prefix, cout);
+  
+  print(name, prefix, cout);
   
 }
 
@@ -4638,6 +5074,12 @@ void Body::enter(Catalog catalog, String prefix){
 
 Sight::Sight(void){
 
+  //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element. 
+  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("artificial horizon"), String("height of eye"), String("master-clock date and hour of sight"), String("stopwatch reading"), String("label"), String("related route")};
+  items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[7], all_items[8]};
+
+  //initiazlie the limb to a 'n/a' value
+  limb.value = 'n';
   atmosphere.set();
   related_route = -1;
   
@@ -4711,7 +5153,7 @@ void Length::enter(String name, String unit, String prefix){
 
   temp.clear();
   temp << name.value;
-  if(unit.value == "nm"){
+  if(unit == String("nm")){
     temp  << " [nm]";
   }else{
     temp << " [m]";
@@ -4724,7 +5166,7 @@ void Length::enter(String name, String unit, String prefix){
   }while(!check_valid(name, prefix));
 
   //if the length has been entered in units of m, convert it to nautical miles
-  if(unit.value == "m"){
+  if(unit == String("m")){
     value/=(1e3*nm);
   }
   
@@ -4737,7 +5179,7 @@ void Length::print(String name, String unit, String prefix, ostream& ostr){
   if((name.value) != ""){
   
     ostr << prefix.value << name.value << " = ";
-    if(unit.value == "nm"){
+    if(unit == String("nm")){
       ostr << value << " nm\n";
     }else{
       ostr << value*nm*1e3 << " m\n";
@@ -4761,6 +5203,8 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+
+  cout << prefix.value << "Fetching ephemerides' data ...\n";
  
   if((body.type.value) != "star"){
     filename << "data/" << body.name.value << ".txt";
@@ -4952,7 +5396,13 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
   }
 
   if(!check){
-    cout << prefix.value << RED << "Cannot obtain coordinates!\n" << RESET;
+    
+    cout << prefix.value << RED << "Cannot fetch ephemerides' data!\n" << RESET;
+    
+  }else{
+
+    cout << prefix.value << "...done\n";
+
   }
   
   gsl_interp_accel_free(acc);
@@ -5000,7 +5450,7 @@ void Angle::enter(String name, bool is_positive, String prefix){
       s = '+';
 
       //enter the input string, containing degrees and arcminutes with a ' ' in between
-      cout << new_prefix.value << "Enter " << input_unit.str() << ":";
+      cout << prefix.value << "Enter " << input_unit.str() << ":";
       getline(cin >> ws, input);
       
       //check whether the string contains only one ' '
@@ -5035,7 +5485,7 @@ void Angle::enter(String name, bool is_positive, String prefix){
       check = true;
 
       //enter the input string, containing degrees and arcminutes with a ' ' in between
-      cout << new_prefix.value << "Enter " << input_unit.str() << ":";
+      cout << prefix.value << "Enter " << input_unit.str() << ":";
       getline(cin >> ws, input);
 
       //check whether the string contains only two ' ', one after the sign, one adter the degrees

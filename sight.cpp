@@ -87,6 +87,31 @@ int main(int argc, char *argv[]){
   gsl_set_error_handler_off();
 
   /*
+  Answer a, b;
+
+  a.set(String("answer a"), 'y', String(""));
+  b.set(String("answer b"), 'n', String(""));
+  bool C = (a!=b);
+  
+  cout << "a != b = " << C;
+  return 0;
+  */
+  
+  /*
+  char c[] = "fgdfjhttjerioyje434678ghfd";
+  cout << "\tint = " << strtol (c, NULL, 32) << "\n";
+  return 0;
+  */
+
+  
+  /*
+  String s;
+  s.enter(String("test string to convert"), String(""));
+  cout << "Int = " << s.to_long_int(String("\t")) << "\n";
+  return 0;
+  */
+  
+  /*
   Answer a;
   a.set(String("what an answer!"), 'c', String("\t"));
   return 0;

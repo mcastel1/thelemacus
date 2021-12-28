@@ -2518,7 +2518,9 @@ void Plot::print_to_kml(String prefix){
   for(i=0; i<(route_list.size()); i++){
 
     //this is the opening of a path code in kml format
-    plot_command << "\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>4<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<Placemark>\\\n\\\t\\\t<description>"
+    plot_command << "<Style id=\\\"" << i << "\\\">\\\n\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>4<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<\\/Style>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
+		 << (route_list[i]).label.value
+		 << "<\\/name>\\\n\\\t<styleUrl>#" << i << "<\\/styleUrl>\\\n\\\t\\\t<description>"
 		 << (route_list[i]).label.value
 		 << "<\\/description>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
 

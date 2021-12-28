@@ -11,7 +11,7 @@ set clip two
 K = 360.0/(2.0*pi);
 k = 1.0/K;
 n_intervals_tics = 6;
-n_points_routes = 10;
+n_points_routes = 1000;
 n_points_coastline = 200000;
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0

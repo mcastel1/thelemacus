@@ -2853,6 +2853,7 @@ void Plot::print_to_kml(String prefix){
   string line;
   unsigned int i, j;
   Int n_points_routes;
+  double lambda_kml, phi_kml; 
   Length l_saved;
   String new_prefix;
   File file_init;
@@ -2888,7 +2889,7 @@ void Plot::print_to_kml(String prefix){
 		 << "<\\/description>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
 
     //I save the original value of the length of the Route route_list[i] into l_saved
-    l_saved = (route_list[i]).l;
+    l_saved = ((route_list[i]).l);
     for(j=0; j<(unsigned int)(n_points_routes.value); j++){
 
       //I set equal to a temporary value of the length of the route, which spans between 0 and l_saved across the for loop over j
@@ -2897,8 +2898,20 @@ void Plot::print_to_kml(String prefix){
       //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above 
       (route_list[i]).compute_end(new_prefix);
 
-      //I write the coordinates in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in the longitude is added because kml files appear to have the convention that longitude is positive towards the east, while in this library it is positive towards the west
-      plot_command << "\\\t\\\t\\\t\\\t" << (-K*((route_list[i]).end.lambda.value)) << "," << K*((route_list[i]).end.phi.value) << ",0.0\\\n";
+      //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
+      
+      lambda_kml = -K*((route_list[i]).end.lambda.value);
+      if(lambda_kml < -180.0){
+	lambda_kml += 360.0;
+      }
+      
+      phi_kml = K*((route_list[i]).end.phi.value);
+      if(phi_kml > 270.0){
+	phi_kml -= 360.0;
+      }
+           
+      plot_command << "\\\t\\\t\\\t\\\t" << lambda_kml << "," << phi_kml << ",0.0\\\n";
+      
     }
 
     //this is the closing of a path code in kml format

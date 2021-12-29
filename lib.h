@@ -2854,7 +2854,6 @@ void Plot::print_to_kml(String prefix){
   unsigned int i, j;
   Int n_points_routes;
   double lambda_kml, phi_kml; 
-  Length l_saved;
   String new_prefix;
   File file_init;
   
@@ -2888,12 +2887,12 @@ void Plot::print_to_kml(String prefix){
 		 << (route_list[i]).label.value
 		 << "<\\/description>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
 
-    //I save the original value of the length of the Route route_list[i] into l_saved
-    l_saved = ((route_list[i]).l);
+   
+    
     for(j=0; j<(unsigned int)(n_points_routes.value); j++){
 
-      //I set equal to a temporary value of the length of the route, which spans between 0 and l_saved across the for loop over j
-      ((route_list[i]).l).set(String(""), (l_saved.value)*((double)j)/((double)(n_points_routes.value-1)), new_prefix);
+      //I set equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
+      ((route_list[i]).l).set(String(""), 2.0*M_PI*(Re*sin(((route_list[i]).omega.value)))*((double)j)/((double)(n_points_routes.value-1)), new_prefix);
 
       //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above 
       (route_list[i]).compute_end(new_prefix);
@@ -5403,6 +5402,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
       }
 
     }
+
+    //set the length of the circle of equal altitude
+    (*circle_of_equal_altitude).l.set(String("length of circle of equal altitude"), 2.0*M_PI*Re*sin((*circle_of_equal_altitude).omega.value), new_prefix);
 
   }else{
     check &= false;

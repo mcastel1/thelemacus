@@ -1021,5 +1021,20 @@
 		</LineString>
 	</Placemark>
 
+
+	<Placemark>
+		<description>GPS</description>
+		<Style>
+			<IconStyle>
+				<color>ff0000ff</color>
+				<IconStyleSimpleExtensionGroup radius="10" points="Infinity" strokeColor="#ff0000ff" strokeWidth="2"/>
+			</IconStyle>
+		</Style>
+		<Point>
+			<coordinates>
+				-0.49890000000000001012523398458143,49.424066666666675473607028834522
+			</coordinates>
+		</Point>
+	</Placemark>
 </Document>
 </kml>

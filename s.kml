@@ -3062,13 +3062,13 @@
 		<description>This is a location</description>
 		<Style>
 			<IconStyle>
-				<color>7733ff66</color>
-				<IconStyleSimpleExtensionGroup radius="3" points="Infinity" strokeColor="#ff0000ff" strokeWidth="20" lineDash="undefined"/>
+				<color>ff0000ff</color>
+				<IconStyleSimpleExtensionGroup radius="1" points="Infinity" strokeColor="#ff0000ff" strokeWidth="1" lineDash="undefined"/>
 			</IconStyle>
 		</Style>
 		<Point>
 			<coordinates>
-				-95.45467093062673,37.68694091704796
+				34.050000000000011368683772161603,44.033333333333331438552704639733
 			</coordinates>
 		</Point>
 	</Placemark>

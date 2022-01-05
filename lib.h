@@ -2935,8 +2935,23 @@ void Plot::print_to_kml(String prefix){
   for(i=0; i<(position_list.size()); i++){
 
     //this is the opening of a path code in kml format
-    plot_command << "\\\n\\\t<Placemark>\\\n\\\t\\\t<description>This is a location<\\/description>\\\n\\\t\\\t<Style>\\\n\\\t\\\t\\\t<IconStyle>\\\n\\\t\\\t\\\t\\\t<color>7733ff66<\\/color>\\\n\\\t\\\t\\\t\\\t<IconStyleSimpleExtensionGroup radius=\\\"3\\\" points=\\\"Infinity\\\" strokeColor=\\\"#" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "\\\" strokeWidth=\\\"20\\\" lineDash=\\\"undefined\\\"\\/>\\\n\\\t\\\t\\\t<\\/IconStyle>\\\n\\\t\\\t<\\/Style>\\\n\\\t\\\t<Point>\\\n\\\t\\\t\\\t<coordinates>\\\n\\\t\\\t\\\t\\\t-95.45467093062673,37.68694091704796\\\n\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/Point>\\\n\\\t<\\/Placemark>";
+    plot_command << "\\\n\\\t<Placemark>\\\n\\\t\\\t<description>" <<  (position_list[i]).label.value << "<\\/description>\\\n\\\t\\\t<Style>\\\n\\\t\\\t\\\t<IconStyle>\\\n\\\t\\\t\\\t\\\t<color>" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t\\\t\\\t<IconStyleSimpleExtensionGroup radius=\\\"10\\\" points=\\\"Infinity\\\" strokeColor=\\\"#" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "\\\" strokeWidth=\\\"2\\\"\\/>\\\n\\\t\\\t\\\t<\\/IconStyle>\\\n\\\t\\\t<\\/Style>\\\n\\\t\\\t<Point>\\\n\\\t\\\t\\\t<coordinates>";
 
+
+        //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude. The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
+  
+    lambda_kml = -K*((position_list[i]).lambda.value);
+    if(lambda_kml < -180.0){
+      lambda_kml += 360.0;
+    }
+      
+    phi_kml = K*((position_list[i]).phi.value);
+    if(phi_kml > 270.0){
+      phi_kml -= 360.0;
+    }
+
+    plot_command << "\\\n\\\t\\\t\\\t\\\t" << lambda_kml << "," << phi_kml;
+    plot_command << "\\\n\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/Point>\\\n\\\t<\\/Placemark>";
     
   }
 

@@ -88,6 +88,12 @@ int main(int argc, char *argv[]){
   gsl_set_error_handler_off();
 
   /*
+  Date date;
+  date.enter(String("test date of new year"), String(""));
+  return 0;
+  */
+
+  /*
   Answer a, b;
 
   a.set(String("answer a"), 'y', String(""));

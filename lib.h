@@ -5691,9 +5691,11 @@ void Date::enter(String name, String prefix) {
     check = true;
 
     cout << prefix.value << "Enter " << name.value << " [YYYY MM DD]:";
-    getline(cin >> ws, input);
+    getline(cin, input);
 
-    if(input == ""){
+    if(input.empty()){
+
+      cout << prefix.value << YELLOW << "Entered an empty date, setting it to \n" << RESET;
 
     }else{
 

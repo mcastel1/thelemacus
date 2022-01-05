@@ -32,7 +32,8 @@
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
-string kml_colors[] = {"ff0000ff", "ff00ff00", "ff336699", "ffff0000", "ff800080", "ff0080ff", "ffff00ff"};
+string kml_colors[] = {"ff3643f4", "ff0000ff", "ffff0000", "ff800080", "ff0080ff", "ffff00ff"};
+string hex_colors[] = {"#0000FF", "FF0000", "0000CC"};
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 inline double cot(double x){
@@ -2935,7 +2936,7 @@ void Plot::print_to_kml(String prefix){
   for(i=0; i<(position_list.size()); i++){
 
     //this is the opening of a path code in kml format
-    plot_command << "\\\n\\\t<Placemark>\\\n\\\t\\\t<description>" <<  (position_list[i]).label.value << "<\\/description>\\\n\\\t\\\t<Style>\\\n\\\t\\\t\\\t<IconStyle>\\\n\\\t\\\t\\\t\\\t<color>" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t\\\t\\\t<IconStyleSimpleExtensionGroup radius=\\\"10\\\" points=\\\"Infinity\\\" strokeColor=\\\"#" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "\\\" strokeWidth=\\\"2\\\"\\/>\\\n\\\t\\\t\\\t<\\/IconStyle>\\\n\\\t\\\t<\\/Style>\\\n\\\t\\\t<Point>\\\n\\\t\\\t\\\t<coordinates>";
+    plot_command << "<Placemark><Style><IconStyle><color>" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color><IconStyleSimpleExtensionGroup radius=\\\"20\\\" points=\\\"Infinity\\\" strokeColor=\\\"#" << hex_colors[i % (sizeof(hex_colors)/sizeof(*hex_colors))] << "\\\" strokeWidth=\\\"2\\\" lineDash=\\\"undefined\\\"\\/><\\/IconStyle><PolyStyle xmlns=\\\"\\\"><outline>0<\\/outline><\\/PolyStyle><\\/Style><ExtendedData><Data name=\\\"scStyle\\\"\\/><\\/ExtendedData><Point><coordinates>";
 
 
         //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude. The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 

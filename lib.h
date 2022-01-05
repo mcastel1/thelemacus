@@ -2919,7 +2919,7 @@ void Plot::print_to_kml(String prefix){
     
   }
 
-  cout << prefix.value << RED << "plot_command:" << plot_command.str() << "\n" << RESET;
+  //cout << prefix.value << "plot_command:" << plot_command.str() << "\n";
 
   //add the line to plot_kml.kml which contains the parametric plot of the routes
   command << "LANG=C sed 's/\\/\\/route\\_plots/" << plot_command.str().c_str() << "/g' kml_dummy.kml >> " << file_kml.name.value << " \n";

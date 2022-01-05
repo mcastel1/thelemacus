@@ -1,9 +1,9 @@
-use of stopwatch = y
+use of stopwatch = n
 artificial horizon = n	
 plot coastline every = 10
 minimal longitude = 170° 12.45'
 maximal longitude = 190° 0.01'
-index error = 0° 1.9'
+index error = 0° 6.5'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 minimal latitude = -76° 13.9'
 maximal latitude = 80° 53.2'

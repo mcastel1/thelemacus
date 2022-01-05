@@ -1,0 +1,71 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = star
+				Name = spica
+				Right ascension = 201° 17.899980000000823565642349421978'
+				Declination = 348° 50.325000000000272848410531878471'
+			sextant altitude = 28° 57.899999999999991473487170878798'
+			index error = 0° 3.299999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-31
+				hour of master-clock date and hour of sight = 06:31:01
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 1
+		Sight #2:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 11° 49.499999999999957367435854393989'
+			index error = 0° 3.299999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-31
+				hour of master-clock date and hour of sight = 07:19:05
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2
+		Sight #3:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 12° 29.500000000000028421709430404007'
+			index error = 0° 3.299999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-31
+				hour of master-clock date and hour of sight = 07:27:13
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 3
+	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 348° 39.601910996950664411997422575951'
+				longitude = 356° 3.7192920803659035300370305776596'
+				label = tr. w. l, COG = 140'�' 0'\'', l = 5.15167 nm
+			aperture angle = 61° 10.170841349009407394987647421658'
+			label = spica 2021-12-31 06:31:38 TAI, 1, tr. w. l, COG = 140'�' 0'\'', l = 5.15167 nm
+		Route #2:
+			type = c
+			ground position:
+				latitude = 338° 30.356062822805824907845817506313'
+				longitude = 326° 41.081344195538349595153704285622'
+				label = tr. w. l, COG = 140'�' 0'\'', l = 0.745556 nm
+			aperture angle = 77° 5.3067650076229710975894704461098'
+			label = moon 2021-12-31 07:19:42 TAI, 2, tr. w. l, COG = 140'�' 0'\'', l = 0.745556 nm
+	Positions in the plot:
+		Position #1:
+			latitude = 49° 23.194000000000016825651982799172'
+			longitude = 0° 46.060999999999999943156581139192'
+			label = GPS

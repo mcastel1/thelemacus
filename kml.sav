@@ -1,0 +1,47 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 11째 49.499999999999957367435854393989'
+			index error = 0째 6.049999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-31
+				hour of master-clock date and hour of sight = 07:19:05
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2
+		Sight #2:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 12째 29.500000000000028421709430404007'
+			index error = 0째 6.049999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-12-31
+				hour of master-clock date and hour of sight = 07:27:13
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 3
+	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 338째 30.356062822805824907845817506313'
+				longitude = 326째 41.081344195538349595153704285622'
+				label = tr. w. l, COG = 140'�' 0'\'', l = 0.745556 nm
+			aperture angle = 77째 8.0641854767389986591297201812267'
+			label = moon 2021-12-31 07:19:42 TAI, 2, tr. w. l, COG = 140'�' 0'\'', l = 0.745556 nm
+	Positions in the plot:
+		Position #1:
+			latitude = 49째 23.194000000000016825651982799172'
+			longitude = 0째 46.060999999999999943156581139192'
+			label = GPS

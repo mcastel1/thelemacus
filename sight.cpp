@@ -90,6 +90,7 @@ int main(int argc, char *argv[]){
   /*
   Date date;
   date.enter(String("test date of new year"), String(""));
+  date.print(String("entered date"), String(""), cout);
   return 0;
   */
 

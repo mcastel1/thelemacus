@@ -28,6 +28,7 @@
 #define chars_double "0123456789."
 #define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+#define path_file_utc_date "utc_date.txt"
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
@@ -5671,31 +5672,79 @@ stringstream Chrono::to_string(unsigned int precision){
 
 void Date::print(String name, String prefix, ostream& ostr){
 
-  ostr << prefix.value << "date of " << name.value << " = " << to_string().str().c_str() << "\n";
+  ostr << prefix.value << name.value << " = " << to_string().str().c_str() << "\n";
 
 };
 
 void Date::enter(String name, String prefix) {
 
   string input;
-  String new_prefix;
+  stringstream line_ins;
+  String new_prefix, new_new_prefix;
   bool check;
   size_t pos;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
+  //append \t to new_prefix
+  new_new_prefix = new_prefix.append(String("\t"));
 
   
   do{
 
     check = true;
 
-    cout << prefix.value << "Enter " << name.value << " [YYYY MM DD]:";
+    cout << prefix.value << "Enter " << name.value << " [YYYY MM DD], or press enter for current UTC date:";
     getline(cin, input);
 
     if(input.empty()){
 
-      cout << prefix.value << YELLOW << "Entered an empty date, setting it to \n" << RESET;
+      File file_utc_date;
+
+      cout << prefix.value << YELLOW << "Entered an empty date, setting it to current UTC date!\n" << RESET;
+
+      file_utc_date.set_name(String(path_file_utc_date));
+      file_utc_date.remove(new_prefix);
+
+      line_ins.str("");
+      line_ins << "date --utc -Idate >> " << path_file_utc_date;
+      
+      //execute the date command in the terminal and writes the UTC date to file_utc_date
+      system(line_ins.str().c_str());
+
+      //reads the utc date from file_utc_date
+      cout << new_prefix.value << YELLOW << "Reading utc date from file " << file_utc_date.name.value << " ...\n" << RESET;
+      
+      check &= (file_utc_date.open(String("in"), new_new_prefix));
+
+      if(check){
+	
+	getline(file_utc_date.value, input);
+
+	//read the part of input containing the year
+	pos = input.find("-");
+	//check whether year part is formatted correctly
+	Y = stoi(input.substr(0, pos).c_str(), NULL, 10);
+
+	//now I am no longer interested in the year, the string runs from the month to days
+	input  =  (input.substr(pos+1).c_str());
+	//find the position of the second '-' 
+	pos = input.find("-");
+	//check whether month part is formatted correctly
+	M = stoi(input.substr(0, pos).c_str(), NULL, 10);
+
+	//now I am no longer interested in the month, the string runs from the days to the end of the string
+	input  =  (input.substr(pos+1).c_str());
+	D = stoi(input.c_str());
+
+	cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
+
+      }
+
+      file_utc_date.close(new_prefix);
+      file_utc_date.remove(new_prefix);
+
+      print(String("entered date"), prefix, cout);
 
     }else{
 
@@ -5750,14 +5799,14 @@ void Date::enter(String name, String prefix) {
 
       }
     
-      if(!check){
-      
-	cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-      
-      }
-
     }
-    
+
+    if(!check){
+      
+      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
+      
+    }
+
   }while(!check);
 
  

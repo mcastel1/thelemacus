@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document>
-
-    <name>Paths</name>
-    <Style id="0">
+<Document>
+  <name>Paths</name>
+	<Style id="0">
 	<LineStyle>
 		<color>ff0000ff</color>
 		<width>4</width>
@@ -11,7 +10,7 @@
 	</Style>
 	<Placemark>
 		<name>sun 2022-01-02 11:44:50 TAI, 2022-01-05 14:14:49</name>
-	<styleUrl>#0</styleUrl>
+		<styleUrl>#0</styleUrl>
 		<description>sun 2022-01-02 11:44:50 TAI, 2022-01-05 14:14:49</description>
 		<LineString>
 			<extrude>1</extrude>
@@ -1022,10 +1021,5 @@
 		</LineString>
 	</Placemark>
 
-
- 
-
-   
-    
-  </Document>
+</Document>
 </kml>

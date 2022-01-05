@@ -2936,7 +2936,7 @@ void Plot::print_to_kml(String prefix){
   for(i=0; i<(position_list.size()); i++){
 
     //this is the opening of a path code in kml format
-    plot_command << "<Placemark><Style><IconStyle><color>" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color><IconStyleSimpleExtensionGroup radius=\\\"20\\\" points=\\\"Infinity\\\" strokeColor=\\\"#" << hex_colors[i % (sizeof(hex_colors)/sizeof(*hex_colors))] << "\\\" strokeWidth=\\\"2\\\" lineDash=\\\"undefined\\\"\\/><\\/IconStyle><PolyStyle xmlns=\\\"\\\"><outline>0<\\/outline><\\/PolyStyle><\\/Style><ExtendedData><Data name=\\\"scStyle\\\"\\/><\\/ExtendedData><Point><coordinates>";
+    plot_command << "<Placemark>\\\n\\\t\\\t<description>" << (position_list[i]).label.value << "<\\/description><Style><IconStyle><color>" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color><IconStyleSimpleExtensionGroup radius=\\\"10\\\" points=\\\"Infinity\\\" strokeColor=\\\"#" << hex_colors[i % (sizeof(hex_colors)/sizeof(*hex_colors))] << "\\\" strokeWidth=\\\"2\\\" lineDash=\\\"undefined\\\"\\/><\\/IconStyle><PolyStyle xmlns=\\\"\\\"><outline>0<\\/outline><\\/PolyStyle><\\/Style><ExtendedData><Data name=\\\"scStyle\\\"\\/><\\/ExtendedData><Point><coordinates>";
 
 
         //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude. The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 

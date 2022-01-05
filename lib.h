@@ -2919,10 +2919,8 @@ void Plot::print_to_kml(String prefix){
     
   }
 
-  //cout << prefix.value << "plot_command:" << plot_command.str() << "\n";
-
   //add the line to plot_kml.kml which contains the parametric plot of the routes
-  command << "LANG=C sed 's/\\/\\/route\\_plots/" << plot_command.str().c_str() << "/g' kml_dummy.kml >> " << file_kml.name.value << " \n";
+  command << "LANG=C sed 's/\\/\\/route\\_plots/" << plot_command.str().c_str() << "/g' kml_dummy.kml >> kml_temp.kml \n";
 
   //execute the command string
   system(command.str().c_str());
@@ -2930,6 +2928,25 @@ void Plot::print_to_kml(String prefix){
     
 
 
+  //plot positions
+  
+  plot_command.str("");
+  command.str("");
+  for(i=0; i<(position_list.size()); i++){
+
+    //this is the opening of a path code in kml format
+    plot_command << "\\\n\\\t<Placemark>\\\n\\\t\\\t<description>This is a location<\\/description>\\\n\\\t\\\t<Style>\\\n\\\t\\\t\\\t<IconStyle>\\\n\\\t\\\t\\\t\\\t<color>7733ff66<\\/color>\\\n\\\t\\\t\\\t\\\t<IconStyleSimpleExtensionGroup radius=\\\"3\\\" points=\\\"Infinity\\\" strokeColor=\\\"#" << kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "\\\" strokeWidth=\\\"20\\\" lineDash=\\\"undefined\\\"\\/>\\\n\\\t\\\t\\\t<\\/IconStyle>\\\n\\\t\\\t<\\/Style>\\\n\\\t\\\t<Point>\\\n\\\t\\\t\\\t<coordinates>\\\n\\\t\\\t\\\t\\\t-95.45467093062673,37.68694091704796\\\n\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/Point>\\\n\\\t<\\/Placemark>";
+
+    
+  }
+
+  //add the line to plot_kml.kml which contains the parametric plot of the positions
+  command << "LANG=C sed 's/\\/\\/position\\_plots/" << plot_command.str().c_str() << "/g' kml_temp.kml >> " << file_kml.name.value << "\nrm -rf kml_temp.kml\n";
+
+  //execute the command string
+  system(command.str().c_str());
+
+ 
   
   file_init.close(prefix);
 

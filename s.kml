@@ -2039,21 +2039,6 @@
 		</LineString>
 	</Placemark>
 
-<Placemark>
-		<description>Centre Sportif Maryse Hilsz (MH)</description><Style><IconStyle><color>ff3643f4</color><IconStyleSimpleExtensionGroup radius="10" points="1" strokeColor="##0000FF" strokeWidth="20" lineDash="undefined"/></IconStyle><PolyStyle xmlns=""><outline>0</outline></PolyStyle></Style><ExtendedData><Data name="scStyle"/></ExtendedData><Point><coordinates>
-				2.4136973368281360308174043893814,48.852989757912290258445864310488
-			</coordinates>
-		</Point>
-	</Placemark><Placemark>
-		<description>Baby Gym Campo (BGC)</description><Style><IconStyle><color>ff0000ff</color><IconStyleSimpleExtensionGroup radius="10" points="1" strokeColor="#FF0000" strokeWidth="20" lineDash="undefined"/></IconStyle><PolyStyle xmlns=""><outline>0</outline></PolyStyle></Style><ExtendedData><Data name="scStyle"/></ExtendedData><Point><coordinates>
-				2.4072416666666640594485215842724,48.855452783333333854898228310049
-			</coordinates>
-		</Point>
-	</Placemark><Placemark>
-		<description>My Place (MP)</description><Style><IconStyle><color>ffff0000</color><IconStyleSimpleExtensionGroup radius="10" points="1" strokeColor="#0000CC" strokeWidth="20" lineDash="undefined"/></IconStyle><PolyStyle xmlns=""><outline>0</outline></PolyStyle></Style><ExtendedData><Data name="scStyle"/></ExtendedData><Point><coordinates>
-				2.409738883333375270012766122818,48.855152783333331001358601497486
-			</coordinates>
-		</Point>
-	</Placemark>
+<Placemark><Style><IconStyle><color>7733ff66</color><IconStyleSimpleExtensionGroup radius="3" points="Infinity" strokeColor="#66ff33" strokeWidth="2" lineDash="undefined"/></IconStyle><PolyStyle xmlns=""><outline>0</outline></PolyStyle></Style><ExtendedData><Data name="scStyle"/></ExtendedData><Point><coordinates>45.581081666666705132229253649712,44.055427911333332247068028664216</coordinates></Point></Placemark>
 </Document>
 </kml>

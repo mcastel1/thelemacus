@@ -67,6 +67,7 @@
 - enter body + limb directly in one line
 - add != operators in all classes
 - finisci di programmare Sight::modify (mancano le modifiche ad alcuni item)
+- solve issue that sed crashes if replaced string is too long
 */
 
 

@@ -3,4 +3,4 @@
 clear 
 clear
 
-rm -rf 2021-*.sav plot\ 2021*.sav
+rm -rf 2022-*.sav plot\ 2022*.sav

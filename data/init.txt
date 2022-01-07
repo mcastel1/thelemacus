@@ -10,7 +10,7 @@ minimal crossing angle between circles of equal altitude = 30° 2.15'
 width of plot window = 800
 height of plot window = 600
 number of points coastline = 200000
-number of points for routes = 1000
+number of points for routes = 500
 number of intervals for tics = 6
 use of stopwatch = n
 

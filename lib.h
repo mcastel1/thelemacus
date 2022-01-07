@@ -32,7 +32,7 @@
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
-string kml_colors[] = {"ff3643f4", "ff0000ff", "ffff0000", "ff800080", "ff0080ff", "ffff00ff"};
+string kml_colors[] = {"50000014", "501400E6", "50F06E14", "50143C78", "500078F0", "503CB414"};
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 

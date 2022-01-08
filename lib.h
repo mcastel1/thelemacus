@@ -5438,7 +5438,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
     }
 
     //set the length of the circle of equal altitude
-    (*circle_of_equal_altitude).l.set(String("length of circle of equal altitude"), 2.0*M_PI*Re*sin((*circle_of_equal_altitude).omega.value), new_prefix);
+    //(*circle_of_equal_altitude).l.set(String("length of circle of equal altitude"), 2.0*M_PI*Re*sin((*circle_of_equal_altitude).omega.value), new_prefix);
 
   }else{
     check &= false;

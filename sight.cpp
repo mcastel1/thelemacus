@@ -68,6 +68,7 @@
 - add != operators in all classes
 - finisci di programmare Sight::modify (mancano le modifiche ad alcuni item)
 - solve issue that sed crashes if replaced string is too long
+- fix definitely lost bytes with Valgrind
 */
 
 

@@ -4111,7 +4111,7 @@ void Plot::show(bool zoom_out, String prefix){
 
   
   T = gsl_root_fsolver_brent;
-  s = gsl_root_fsolver_alloc (T);
+  s = gsl_root_fsolver_alloc(T);
 
 
   
@@ -4578,6 +4578,7 @@ void Plot::show(bool zoom_out, String prefix){
   file_id.close(prefix);
   file_id.remove(prefix);
   file_init.close(prefix);
+  gsl_root_fsolver_free(s);
 
   cout << prefix.value << "Job id = "<< job_id << "\n";
 

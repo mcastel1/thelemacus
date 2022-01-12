@@ -88,11 +88,11 @@ int main(int argc, char *argv[]){
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
 
-  //
+  /*
   Chrono c;
   c.set(String("my chronometer"), 2.342546574, String("\t"));
   return 0;
-  //
+  */
   
   /*
   Date date;

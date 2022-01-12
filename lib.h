@@ -1295,7 +1295,7 @@ bool Chrono::set(String name, double x, String prefix){
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
   
-  check &= (x > 0.0);
+  check &= (x >= 0.0);
   if(check){
 
     h = ((unsigned int)floor(x));
@@ -2058,15 +2058,20 @@ bool Sight::modify(Catalog catalog, String prefix){
       if((use_stopwatch == Answer('n', new_new_prefix)) && (old_use_stopwatch == Answer('y', new_new_prefix))){
 	//in this case,  old use_stopwatch = y, while the new (mofidied) use_stopwatch = n -> I remove the  (all_items[7]) in items and set stopwatch reading (which is now useless) to zero 
 
-	items.erase(find(items.begin(), items.end(), all_items[7]));
 	stopwatch.set(String("removed stopwatch reading"), 0.0, new_new_prefix);
-      
+	time = master_clock_date_and_hour;
+
+	items.erase(find(items.begin(), items.end(), all_items[7]));
+
       }
       
       if((use_stopwatch == Answer('y', new_new_prefix)) && (old_use_stopwatch == Answer('n', new_new_prefix))){
 	//in this case,  old use_stopwatch = n, while the new (mofidied) use_stopwatch = y -> I add the stopwatch reading (all_items[7]) in items right after the entry "use of stopwatch" (all_items[6]), and let the user enter the stopwatch reading
 
 	stopwatch.enter(String("stopwatch"), new_new_prefix);
+	time = master_clock_date_and_hour;
+	time.add(stopwatch);
+	
 	items.insert(find(items.begin(), items.end(), all_items[6])+1, String(all_items[7]));
 
       }

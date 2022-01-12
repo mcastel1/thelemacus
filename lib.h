@@ -84,16 +84,20 @@ class String{
   String append(String);
   String prepend(String);
 
-  bool operator==(const String&);
+  bool operator==(const String&), operator!=(const String&);
 
 };
-
-
 
 
 bool String::operator==(const String& s){
 
   return((((*this).value) == (s.value)));
+  
+}
+
+bool String::operator!=(const String& s){
+
+  return(!((*this) == s));
   
 }
 
@@ -2133,6 +2137,31 @@ bool Sight::modify(Catalog catalog, String prefix){
 
   }
     break;
+
+  case 8:{
+    //in this case I modify the label
+
+    String old_label;
+
+    old_label = label;
+    
+    label.print(String("old label"), new_new_prefix, cout);
+    label.enter(String("new label"), new_new_prefix);
+
+    if(old_label != label){
+
+      cout << new_prefix.value << "Label modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New label is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+
 
     
   }

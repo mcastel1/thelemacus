@@ -22,6 +22,8 @@
 #define CYAN "\033[1;36m"      
 #define RESET   "\033[0m"
 #define BOLD     "\033[1m"   
+//all possible chars that can enter in a signed integer
+#define chars_int "+-0123456789"
 //all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
@@ -88,6 +90,194 @@ class String{
 
 };
 
+//this function checks whether the  unsigned int in string s is formatted correctly and, if check_interval = true, it also checks whether the this unsigned int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
+bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned int min, unsigned int sup){
+
+  bool check;
+  unsigned int j;
+  
+  if(/*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
+    
+    j = stoi(s, NULL, 10);
+      
+    if(check_interval){
+
+      check = ((j >= min) && (j < sup));
+		
+    }else{
+      
+      check = true;
+    }
+      
+  }else{
+    
+    check = false;
+    
+  }
+  
+  if((i != NULL) && check){
+
+    (*i) = j;
+    
+  }
+
+  return check;
+  
+}
+
+
+
+//this function checks whether the int in string s is formatted correctly and, if check_interval = true, it also checks whether the this  int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
+bool check_int(string s, int* i, bool check_interval, int min, int sup){
+
+  bool check;
+   int j;
+  
+  if(/*here I check whether the quantity entered in s is an integer, i.e., it contains only the characters +-0123456789*/ ((s.find_first_not_of(chars_int)) == (std::string::npos))){
+    
+    j = stoi(s, NULL, 10);
+      
+    if(check_interval){
+
+      check = ((j >= min) && (j < sup));
+		
+    }else{
+      
+      check = true;
+      
+    }
+      
+  }else{
+    
+    check = false;
+    
+  }
+  
+  if((i != NULL) && check){
+
+    (*i) = j;
+    
+  }
+
+  return check;
+  
+}
+
+
+//this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
+void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, String name, String prefix){
+
+  string s;
+  bool check;
+
+  do{
+    
+    s.clear();
+
+    cout << prefix.value << "Enter " << name.value << ":";
+    getline(cin >> ws, s);
+
+    check = check_unsigned_int(s, i, check_interval, min, sup);
+    
+    if(!check){
+      
+      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
+      
+    }
+    
+  }while(!check);
+
+}
+
+
+
+//this function asks the user to enter an  int from keyboard and checks whether the entered value is an  int and, if check_interval = true, that the entered value lies in [min, sup)
+void enter_int(int* i, bool check_interval, int min, int sup, String name, String prefix){
+
+  string s;
+  bool check;
+
+  do{
+    
+    s.clear();
+
+    cout << prefix.value << "Enter " << name.value << ":";
+    getline(cin >> ws, s);
+
+    check = check_int(s, i, check_interval, min, sup);
+    
+    if(!check){
+      
+      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
+      
+    }
+    
+  }while(!check);
+
+}
+
+
+//this function checks whether the double in string s is formatted correctly and, if check_interval = true, it also checks whether the this double lies in [min, sup). If x != NULL and the check is ok, it also writes the value of the double read from s into (*x)
+bool check_double(string s, double* x, bool check_interval, double min, double sup){
+
+  bool check;
+  double y;
+
+  if((/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the dot occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)){
+
+    y = stod(s);
+      
+    if(check_interval){
+	
+      check = ((y >= min) && (y < sup));
+	
+    }else{
+      
+      check = true;
+      
+    }
+      
+  }else{
+    
+    check = false;
+    
+  }
+
+  if((x != NULL) && check){
+
+    (*x) = y;
+    
+  }
+
+  return check;
+ 
+}
+
+
+//this function asks the user to enter a double from keyboard and checks whether the entered value contains the allowed chars for double and, if check_interval = true, that the entered value lies in [min, sup)
+void enter_double(double* x, bool check_interval, double min, double sup, String name, String prefix){
+
+  string s;
+  bool check;
+
+  do{
+    
+    s.clear();
+
+    cout << prefix.value << "Enter " << name.value << ":";
+    getline(cin >> ws, s);
+
+    check = check_double(s, x, check_interval, min, sup);
+    
+    if(!check){
+      
+      cout << prefix.value << RED << "Entered value is not valid!\n" << RESET;
+      
+    }
+    
+  }while(!check);
+
+}
 
 bool String::operator==(const String& s){
 
@@ -111,9 +301,50 @@ class Int{
   int value;
 
   void read_from_file(String, File&, bool, String);
+  void enter(String, String);
+  void set(String, int, String);
   void print(String, String, ostream&);
 
+  bool operator==(const Int&), operator!=(const Int&);
+
 };
+
+
+void Int::set(String name, int i, String prefix){
+
+  String new_prefix;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+  
+  value = i;
+
+  print(name, prefix, cout);
+  
+}
+
+
+bool Int::operator==(const Int& i){
+
+  return (value == (i.value));
+  
+}
+
+bool Int::operator!=(const Int& i){
+
+  return (!((*this) == i));
+  
+}
+
+
+//enter an Int
+void Int::enter(String name, String prefix){
+  
+  enter_int(&value, false, 0, 0, name, prefix);
+  print(name, prefix, cout); 
+  
+}
+
 
 
 class Double{
@@ -381,129 +612,6 @@ bool get_date_hour(String &line, String prefix){
 
 }
 
-//this function checks whether the  unsigned int in string s is formatted correctly and, if check_interval = true, it also checks whether the this unsigned int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
-bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned int min, unsigned int sup){
-
-  bool check;
-  unsigned int j;
-  
-  if(/*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
-    
-    j = stoi(s, NULL, 10);
-      
-    if(check_interval){
-
-      check = ((j >= min) && (j < sup));
-		
-    }else{
-      
-      check = true;
-    }
-      
-  }else{
-    
-    check = false;
-    
-  }
-  
-  if((i != NULL) && check){
-
-    (*i) = j;
-    
-  }
-
-  return check;
-  
-}
-
-  
-//this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, String name, String prefix){
-
-  string s;
-  bool check;
-
-  do{
-    
-    s.clear();
-
-    cout << prefix.value << "Enter " << name.value << ":";
-    getline(cin >> ws, s);
-
-    check = check_unsigned_int(s, i, check_interval, min, sup);
-    
-    if(!check){
-      
-      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-      
-    }
-    
-  }while(!check);
-
-}
-
-
-//this function checks whether the double in string s is formatted correctly and, if check_interval = true, it also checks whether the this double lies in [min, sup). If x != NULL and the check is ok, it also writes the value of the double read from s into (*x)
-bool check_double(string s, double* x, bool check_interval, double min, double sup){
-
-  bool check;
-  double y;
-
-  if((/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the dot occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)){
-
-    y = stod(s);
-      
-    if(check_interval){
-	
-      check = ((y >= min) && (y < sup));
-	
-    }else{
-      
-      check = true;
-      
-    }
-      
-  }else{
-    
-    check = false;
-    
-  }
-
-  if((x != NULL) && check){
-
-    (*x) = y;
-    
-  }
-
-  return check;
- 
-}
-
-
-//this function asks the user to enter a double from keyboard and checks whether the entered value contains the allowed chars for double and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_double(double* x, bool check_interval, double min, double sup, String name, String prefix){
-
-  string s;
-  bool check;
-
-  do{
-    
-    s.clear();
-
-    cout << prefix.value << "Enter " << name.value << ":";
-    getline(cin >> ws, s);
-
-    check = check_double(s, x, check_interval, min, sup);
-    
-    if(!check){
-      
-      cout << prefix.value << RED << "Entered value is not valid!\n" << RESET;
-      
-    }
-    
-  }while(!check);
-
-}
 
 
 
@@ -1807,7 +1915,7 @@ class Sight{
   //label to add a note about the sight
   String label;
   //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1. 
-  int related_route;
+  Int related_route;
   //all_items is a list of all the possible items which are part of a Sight object (master_clock_date_and_hour, body, ...). items is the list of items specific to a given Sight object: items may not include all the elements of all_items
   vector<String> items, all_items;
 
@@ -2163,6 +2271,33 @@ bool Sight::modify(Catalog catalog, String prefix){
     break;
 
 
+    //the # of related route cannot be modified because it is automatically assigned. 
+    /*
+  case 9:{
+    //in this case I modify the # of related route
+
+    Int old_related_route;
+
+    old_related_route = related_route;
+    
+    related_route.print(String("old # of related route"), new_new_prefix, cout);
+    related_route.enter(String("new # of related route"), new_new_prefix);
+
+    if(old_related_route != related_route){
+
+      cout << new_prefix.value << "# of related route modified\n" << new_prefix.value << YELLOW << "Beware: route # " << related_route.value << " has not been automatically pointed to this sight!\n" << RESET;
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New # of related route is equal to old one!\n" << RESET;
+
+    }
+
+  }
+    break;
+    */
+    
     
   }
     
@@ -2873,7 +3008,7 @@ bool Sight::read_from_file(File& file, String prefix){
   label.read_from_file(String("label"), file, false, new_prefix);
   
   //given that the sight is not yet related to a route, I set 
-  related_route = -1;
+  (related_route.value) = -1;
 
   if(!check){
     cout << prefix.value << RED << "Error reading sight!\n" << RESET;
@@ -2951,8 +3086,8 @@ void Sight::print(String name, String prefix, ostream& ostr){
 
   label.print(String("label"), new_prefix, ostr);
   
-  if((related_route != -1) && (&ostr == &cout)){
-    ostr << new_prefix.value << "Related route # = " << related_route+1 << "\n";
+  if(((related_route.value) != -1) && (&ostr == &cout)){
+    ostr << new_prefix.value << "# of related route = " << (related_route.value)+1 << "\n";
   }
 
   /*
@@ -3178,7 +3313,7 @@ bool Plot::read_from_file(File& file, String prefix){
 
 	  //I link the sight to the route, and the route to the sight
 	  route_list[route_list.size()-1].related_sight = sight_list.size()-1;
-	  sight_list[sight_list.size()-1].related_route = route_list.size()-1;
+	  (sight_list[sight_list.size()-1].related_route.value) = route_list.size()-1;
 	  
 	}
 	  
@@ -3999,7 +4134,7 @@ bool Plot::modify_sight(unsigned int i, String prefix){
 
   if(check){
 
-    check &= ((sight_list[i]).reduce(&(route_list[(sight_list[i]).related_route]), prefix));
+    check &= ((sight_list[i]).reduce(&(route_list[(sight_list[i]).related_route.value]), prefix));
 
   }
 
@@ -4032,7 +4167,7 @@ bool Plot::add_sight(String prefix){
   check &= ((sight_list[sight_list.size()-1]).reduce(&(route_list[route_list.size()-1]), prefix));
   
   //I link the sight to the route, and the route to the sight
-  (sight_list[sight_list.size()-1]).related_route = route_list.size()-1;
+  ((sight_list[sight_list.size()-1]).related_route.value) = route_list.size()-1;
   (route_list[route_list.size()-1]).related_sight = sight_list.size()-1;
 
   
@@ -4078,7 +4213,7 @@ void Plot::remove_sight(unsigned int i, String prefix){
   stringstream name;
   unsigned int j;
   Answer remove_related_route;
-  int i_related_route;
+  Int i_related_route;
 
   i_related_route = ((sight_list[i]).related_route);
 
@@ -4107,12 +4242,12 @@ void Plot::remove_sight(unsigned int i, String prefix){
   cout << prefix.value << "Sight removed.\n";
   
 
-  if(i_related_route != -1){
+  if((i_related_route.value) != -1){
     
     remove_related_route.enter(String("whether you want to remove the route related to this sight"), prefix);
     if(remove_related_route == Answer('y', prefix)){
 
-      remove_route(i_related_route, prefix);
+      remove_route((i_related_route.value), prefix);
       
     }
 
@@ -4154,12 +4289,12 @@ void Plot::remove_route(unsigned int i, String prefix){
   //update the linking indexed of sights in accordance with the deletion of the route
   for(j=0; j<sight_list.size(); j++){
     
-    if(((sight_list[j]).related_route != -1) && ((sight_list[j]).related_route >= ((int)i))){
+    if((((sight_list[j]).related_route.value) != -1) && (((sight_list[j]).related_route.value) >= ((int)i))){
       
-      if((sight_list[j]).related_route == ((int)i)){
-	(sight_list[j]).related_route = -1;
+      if(((sight_list[j]).related_route.value) == ((int)i)){
+	((sight_list[j]).related_route.value) = -1;
       }else{
-	((sight_list[j]).related_route)--;
+	((sight_list[j]).related_route.value)--;
       }
 
     }
@@ -4814,7 +4949,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
   label.enter(String("label"), new_prefix);
 
   //given that the sight is not yet linked to a route, I set
-  related_route = -1;
+  (related_route.value) = -1;
   
   file_init.close(prefix);
 
@@ -5277,13 +5412,13 @@ void Body::enter(String name, Catalog catalog, String prefix){
 Sight::Sight(void){
 
   //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element. 
-  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("artificial horizon"), String("height of eye"), String("master-clock date and hour of sight"), String("use of stopwatch"), String("stopwatch reading"), String("label"), String("related route")};
-  items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[6], all_items[8], all_items[9]};
+  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("artificial horizon"), String("height of eye"), String("master-clock date and hour of sight"), String("use of stopwatch"), String("stopwatch reading"), String("label")};
+  items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[6], all_items[8]};
 
   //initiazlie the limb to a 'n/a' value
   limb.value = 'n';
   atmosphere.set();
-  related_route = -1;
+  (related_route.value) = -1;
   
 }
 

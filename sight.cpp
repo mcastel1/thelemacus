@@ -69,6 +69,7 @@
 - finisci di programmare Sight::modify (mancano le modifiche ad alcuni item)
 - solve issue that sed crashes if replaced string is too long
 - check check_double function for sign of double
+- type of related_sight should be int -> Int
 */
 
 

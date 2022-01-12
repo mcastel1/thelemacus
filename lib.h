@@ -2009,6 +2009,15 @@ bool Sight::modify(Catalog catalog, String prefix){
     break;
 
 
+    
+  case 6:{
+    //in this case I modify use of stopwatch 
+
+
+  }
+    break;
+
+
   }
     
   if(check){
@@ -2702,7 +2711,7 @@ bool Sight::read_from_file(File& file, String prefix){
 
   if(use_stopwatch == Answer('y', new_prefix)){
 
-    items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
+    items.insert(items.begin()+5+(additional_items++), String("stopwatch reading"));    
     stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
     time.add(stopwatch);
 
@@ -4653,7 +4662,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
 
   //if the sight has use_stopwatch = 'y', then I add to the list of its items the stopwatch reading
   if(use_stopwatch == Answer('y', new_prefix)){
-    items.insert(items.begin()+4+(additional_items++), String("stopwatch reading"));    
+    items.insert(items.begin()+5+(additional_items++), String("stopwatch reading"));    
   }
 
   label.enter(String("label"), new_prefix);
@@ -5122,8 +5131,8 @@ void Body::enter(String name, Catalog catalog, String prefix){
 Sight::Sight(void){
 
   //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element. 
-  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("artificial horizon"), String("height of eye"), String("master-clock date and hour of sight"), String("stopwatch reading"), String("label"), String("related route")};
-  items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[7], all_items[8]};
+  all_items  = {String("body"), String("limb"), String("sextant altitude"), String("artificial horizon"), String("height of eye"), String("master-clock date and hour of sight"), String("use of stopwatch"), String("stopwatch reading"), String("label"), String("related route")};
+  items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[6], all_items[8], all_items[9]};
 
   //initiazlie the limb to a 'n/a' value
   limb.value = 'n';

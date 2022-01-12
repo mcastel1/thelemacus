@@ -1277,11 +1277,44 @@ class Chrono{
   double s;
 
   void print(String, String, ostream&);
+  bool set(String, double, String);
   void enter(String, String);
   bool read_from_file(String, File&, bool, String);
   stringstream to_string(unsigned int);
 
 };
+
+//sets the Chrono object to the time x, which is expressed in hours
+bool Chrono::set(String name, double x, String prefix){
+
+  String new_prefix;
+  bool check;
+
+  check = true;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+  
+  check &= (x > 0.0);
+  if(check){
+
+    h = ((unsigned int)floor(x));
+    m = (unsigned int)((x - ((double)h))*60.0);
+    s = (((x - ((double)h))*60.0) - ((double)m))*60.0;
+    
+    print(name, prefix, cout);
+
+  }else{
+
+    cout << new_prefix.value << RED << "Set value is not valid!\n" << RESET;
+
+  }
+  
+  return check;
+
+  
+}
+
 
 
 class Time{
@@ -2013,6 +2046,39 @@ bool Sight::modify(Catalog catalog, String prefix){
   case 6:{
     //in this case I modify use of stopwatch 
 
+    Answer old_use_stopwatch;
+
+    old_use_stopwatch = use_stopwatch;
+    
+    use_stopwatch.print(String("old use of stopwatch"), new_new_prefix, cout);
+    use_stopwatch.enter(String("new use of stopwatch"), new_new_prefix);
+
+    if(old_use_stopwatch != use_stopwatch){
+
+      if((use_stopwatch == Answer('n', new_new_prefix)) && (old_use_stopwatch == Answer('y', new_new_prefix))){
+	//in this case,  old use_stopwatch = y, while the new (mofidied) use_stopwatch = n -> I remove the  (all_items[7]) in items and set stopwatch reading (which is now useless) to zero 
+
+	items.erase(find(items.begin(), items.end(), all_items[7]));
+	stopwatch.set(String("removed stopwatch reading"), 0.0, new_new_prefix);
+      
+      }
+      
+      if((use_stopwatch == Answer('y', new_new_prefix)) && (old_use_stopwatch == Answer('n', new_new_prefix))){
+	//in this case,  old use_stopwatch = n, while the new (mofidied) use_stopwatch = y -> I add the stopwatch reading (all_items[7]) in items right after the entry "use of stopwatch" (all_items[6]), and let the user enter the stopwatch reading
+
+	stopwatch.enter(String("stopwatch"), new_new_prefix);
+	items.insert(find(items.begin(), items.end(), all_items[6])+1, String(all_items[7]));
+
+      }
+
+      cout << new_prefix.value << "Stopwatch reading modified\n";
+
+    }else{
+
+      check &= false;
+      cout << new_new_prefix.value << YELLOW << "New use of stopwatch is equal to old one!\n" << RESET;
+
+    }
 
   }
     break;

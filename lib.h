@@ -1130,7 +1130,11 @@ class Route{
 
 bool Route::closest_point_to(Position* p, Position q, String prefix){
 
+  String new_prefix;
   bool check;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
 
   check = true;
 
@@ -1138,6 +1142,8 @@ bool Route::closest_point_to(Position* p, Position q, String prefix){
 
     //these are the two values of the parametric angle t of the Route (*this), for which the distance between q and a point on (*this) vs. t has a maximum or a minimum
     Angle t_1, t_2;
+    Position p_1, p_2;
+    Length s_1, s_2;
     
     t_1.set(String(""),
 
@@ -1147,7 +1153,7 @@ bool Route::closest_point_to(Position* p, Position q, String prefix){
 		 -((cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/sqrt(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + 
 										       gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin((q.lambda.value)),2)) + gsl_pow_int(cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) - cos(GP.phi.value)*sin((q.phi.value)),2) - 
 										       2*cos(GP.phi.value)*cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*(cos(GP.phi.value)*cos((q.phi.value))*sin((GP.lambda.value))*sin((q.lambda.value)) + sin(GP.phi.value)*sin((q.phi.value))))))	  
-	    , prefix);
+	    , new_prefix);
 
 
     t_2.set(String(""),
@@ -1158,8 +1164,25 @@ bool Route::closest_point_to(Position* p, Position q, String prefix){
 		 (cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/sqrt(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + 
 										     gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin((q.lambda.value)),2)) + gsl_pow_int(cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) - cos(GP.phi.value)*sin((q.phi.value)),2) - 
 										     2*cos(GP.phi.value)*cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*(cos(GP.phi.value)*cos((q.phi.value))*sin((GP.lambda.value))*sin((q.lambda.value)) + sin(GP.phi.value)*sin((q.phi.value)))))	  
-	    , prefix);
+	    , new_prefix);
 
+    //determine which one between the point on (*this) at t_1 and the one at t_2 is the one with minimum distance with respect to q, and store this point into (*p)
+    l.set(String(""), (t_1.value)*Re*sin(omega.value), new_prefix);
+    compute_end(new_prefix);
+    p_1 = end;
+    q.distance(p_1, &s_1, String("Distance with respect to p_1"), new_prefix); 
+
+    l.set(String(""), (t_2.value)*Re*sin(omega.value), new_prefix);
+    compute_end(new_prefix);
+    p_2 = end;
+    q.distance(p_2, &s_2, String("Distance with respect to p_2"), new_prefix);
+
+    if(s_2 > s_1){
+      (*p) = p_1;
+    }else{
+      (*p) = p_2;
+    }
+    
 
   }else{
 

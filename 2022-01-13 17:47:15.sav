@@ -1,0 +1,18 @@
+	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 304° 56.436599999999543797457590699196'
+				longitude = 34° 3.4325436349999449703318532556295'
+				label = 2022-01-13 17:45:42
+			aperture angle = 44° 3.2999999999999829469743417575955'
+			label = 2022-01-13 17:45:50
+	Positions in the plot:
+		Position #1:
+			latitude = 344° 53.430579000000761880073696374893'
+			longitude = 58° 5.4256068999994511159457033500075'
+			label = closest point
+		Position #2:
+			latitude = 315° 55.567463525355833553476259112358'
+			longitude = 44° 2.3453634543778889565146528184414'
+			label = p

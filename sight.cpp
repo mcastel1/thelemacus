@@ -90,6 +90,14 @@ int main(int argc, char *argv[]){
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
 
+  //
+  Route r;
+  Position q, p;
+  r.enter(String("testing route"), String(""));
+  q.enter(String("position"), String(""));
+  r.closest_point_to(&p, q, String(""));
+  //
+
   /*
   Chrono c;
   c.set(String("my chronometer"), 2.342546574, String("\t"));

@@ -3809,7 +3809,24 @@ void Plot::menu(String prefix){
     }
     
     if(j > 0){
-  
+
+      Position p, q;
+      
+      print_routes(false, new_prefix, cout); 
+      cout << new_prefix.value << "Enter the # of the route that you want to transform into a line of position:";
+      cin >> i;
+      i--;
+
+      q.enter(String("assumed position"), new_prefix);
+      (route_list[i]).closest_point_to(&p, q, new_prefix);
+      p.label.set(String(""), String("closest point to assumed position"), new_prefix);
+
+      
+      position_list.push_back(q);
+      position_list.push_back(p);
+
+      print(true, new_prefix, cout);
+      show(false, new_prefix);
   
     }else{
       
@@ -4205,8 +4222,8 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
   
   for(i=0, j=0; i<route_list.size(); i++){
     
-    //if print_all_routes = false, I only print routes which are linke to a sight
-    if(((route_list[i].related_sight) == -1) || print_all_routes){
+    //if print_all_routes = false, I only print routes which are linked to a sight
+    if((((route_list[i]).related_sight) != -1) || print_all_routes){
       
       name.str("");
       name << "Route #" << j+1;

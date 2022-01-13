@@ -34,7 +34,7 @@
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
-string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
+  string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
@@ -131,7 +131,7 @@ bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned
 bool check_int(string s, int* i, bool check_interval, int min, int sup){
 
   bool check;
-   int j;
+  int j;
   
   if(/*here I check whether the quantity entered in s is an integer, i.e., it contains only the characters +-0123456789*/ ((s.find_first_not_of(chars_int)) == (std::string::npos))){
     
@@ -1124,9 +1124,60 @@ class Route{
   void transport(String);
   static double lambda_minus_pi(double, void*);
   bool t_crossing(Route, vector<Angle>*, String);
-
+  bool closest_point_to(Position*, Position, String);
   
 };
+
+bool Route::closest_point_to(Position* p, Position q, String prefix){
+
+  bool check;
+
+  check = true;
+
+  if(type == String("c")){
+
+    Angle t_1, t_2;
+    t_1.set(String(""),
+
+ArcTan((-(cos((GP.lambda.value))*cos(((*p).lambda.value))*cos(((*p).phi.value))*sin(GP.phi.value)) - cos(((*p).phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin(((*p).lambda.value)) + cos(GP.phi.value)*sin(((*p).phi.value)))/
+     sqrt(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin(((*p).lambda.value)),2)) + 
+       gsl_pow_int(cos(((*p).phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin(((*p).lambda.value)) - cos(GP.phi.value)*sin(((*p).phi.value)),2) - 2*cos(GP.phi.value)*cos((GP.lambda.value))*cos(((*p).lambda.value))*cos(((*p).phi.value))*(cos(GP.phi.value)*cos(((*p).phi.value))*sin((GP.lambda.value))*sin(((*p).lambda.value)) + sin(GP.phi.value)*sin(((*p).phi.value)))),
+    -((cos(((*p).phi.value))*sin((GP.lambda.value) - ((*p).lambda.value)))/sqrt(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + 
+         gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin(((*p).lambda.value)),2)) + gsl_pow_int(cos(((*p).phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin(((*p).lambda.value)) - cos(GP.phi.value)*sin(((*p).phi.value)),2) - 
+         2*cos(GP.phi.value)*cos((GP.lambda.value))*cos(((*p).lambda.value))*cos(((*p).phi.value))*(cos(GP.phi.value)*cos(((*p).phi.value))*sin((GP.lambda.value))*sin(((*p).lambda.value)) + sin(GP.phi.value)*sin(((*p).phi.value))))))	  
+    , prefix);
+
+
+t_2.set(String(""),
+
+ArcTan((cos((GP.lambda.value))*cos(((*p).lambda.value))*cos(((*p).phi.value))*sin(GP.phi.value) + cos(((*p).phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin(((*p).lambda.value)) - cos(GP.phi.value)*sin(((*p).phi.value)))/
+     sqrt(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin(((*p).lambda.value)),2)) + 
+       gsl_pow_int(cos(((*p).phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin(((*p).lambda.value)) - cos(GP.phi.value)*sin(((*p).phi.value)),2) - 2*cos(GP.phi.value)*cos((GP.lambda.value))*cos(((*p).lambda.value))*cos(((*p).phi.value))*(cos(GP.phi.value)*cos(((*p).phi.value))*sin((GP.lambda.value))*sin(((*p).lambda.value)) + sin(GP.phi.value)*sin(((*p).phi.value)))),
+    (cos(((*p).phi.value))*sin((GP.lambda.value) - ((*p).lambda.value)))/sqrt(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + 
+       gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos(((*p).phi.value)),2)*(gsl_pow_int(cos(((*p).lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin(((*p).lambda.value)),2)) + gsl_pow_int(cos(((*p).phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin(((*p).lambda.value)) - cos(GP.phi.value)*sin(((*p).phi.value)),2) - 
+       2*cos(GP.phi.value)*cos((GP.lambda.value))*cos(((*p).lambda.value))*cos(((*p).phi.value))*(cos(GP.phi.value)*cos(((*p).phi.value))*sin((GP.lambda.value))*sin(((*p).lambda.value)) + sin(GP.phi.value)*sin(((*p).phi.value)))))	  
+    , prefix);
+
+
+}else{
+
+   check &= false;
+    
+ }
+
+if(check){
+    
+  (*p).print(String("Closest point"), prefix, cout);
+    
+ }else{
+    
+  cout << prefix.value << RED << "Closest point could not be computed!\n" << RESET;
+    
+ }
+
+return check;
+  
+}
 
 //returns in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route r
 bool Route::t_crossing(Route route, vector<Angle> *t, String prefix){
@@ -2273,29 +2324,29 @@ bool Sight::modify(Catalog catalog, String prefix){
 
     //the # of related route cannot be modified because it is automatically assigned. 
     /*
-  case 9:{
-    //in this case I modify the # of related route
+      case 9:{
+      //in this case I modify the # of related route
 
-    Int old_related_route;
+      Int old_related_route;
 
-    old_related_route = related_route;
+      old_related_route = related_route;
     
-    related_route.print(String("old # of related route"), new_new_prefix, cout);
-    related_route.enter(String("new # of related route"), new_new_prefix);
+      related_route.print(String("old # of related route"), new_new_prefix, cout);
+      related_route.enter(String("new # of related route"), new_new_prefix);
 
-    if(old_related_route != related_route){
+      if(old_related_route != related_route){
 
       cout << new_prefix.value << "# of related route modified\n" << new_prefix.value << YELLOW << "Beware: route # " << related_route.value << " has not been automatically pointed to this sight!\n" << RESET;
 
-    }else{
+      }else{
 
       check &= false;
       cout << new_new_prefix.value << YELLOW << "New # of related route is equal to old one!\n" << RESET;
 
-    }
+      }
 
-  }
-    break;
+      }
+      break;
     */
     
     
@@ -3230,7 +3281,7 @@ void Plot::print_to_kml(String prefix){
 		 << (position_list[i]).label.value << "<\\/description>\\\n\\\t\\\t<ExtendedData>\\\n\\\t\\\t\\\t<Data name=\\\"scStyle\\\"\\/>\\\n\\\t\\\t<\\/ExtendedData>\\\n\\\t\\\t<Point>\\\n\\\t\\\t\\\t<coordinates>";
 
 
-        //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude. The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
+    //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude. The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
   
     lambda_kml = -K*((position_list[i]).lambda.value);
     if(lambda_kml < -180.0){

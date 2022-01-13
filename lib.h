@@ -3503,17 +3503,17 @@ void Plot::menu(String prefix){
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
-  for(i=11; i<14; i++){
+  for(i=11; i<15; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=14; i<16; i++){
+  for(i=15; i<17; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=16;
+  i=17;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -3551,7 +3551,7 @@ void Plot::menu(String prefix){
 
     }else{
       
-      cout << YELLOW << "There are no sights to modify!\n" << RESET;
+      cout << RED << "There are no sights to modify!\n" << RESET;
       
     }
     
@@ -3574,7 +3574,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no sights to delete!\n" << RESET;
+      cout << RED << "There are no sights to delete!\n" << RESET;
     }
 
     menu(prefix);  
@@ -3608,7 +3608,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no positions to modify!\n" << RESET;
+      cout << RED << "There are no positions to modify!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3630,7 +3630,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no positions to transport!\n" << RESET;
+      cout << RED << "There are no positions to transport!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3653,7 +3653,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no positions to delete!\n" << RESET;
+      cout << RED << "There are no positions to delete!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3688,7 +3688,7 @@ void Plot::menu(String prefix){
 
     }else{
       
-      cout << YELLOW << "There are no routes to transport!\n" << RESET;
+      cout << RED << "There are no routes to transport!\n" << RESET;
       
     }
 
@@ -3716,7 +3716,7 @@ void Plot::menu(String prefix){
 
     }else{
       
-      cout << YELLOW << "There are not enough routes to compute crossings!\n" << RESET;
+      cout << RED << "There are not enough routes to compute crossings!\n" << RESET;
 
     }
 
@@ -3745,7 +3745,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no routes to delete!\n" << RESET;
+      cout << RED << "There are no routes to delete!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3790,7 +3790,30 @@ void Plot::menu(String prefix){
    
     }else{
       
-      cout << YELLOW << "There are no routes nor positions to clear!\n" << RESET;
+      cout << RED << "There are no routes nor positions to clear!\n" << RESET;
+      
+    }
+    
+    menu(prefix);
+    
+  }
+    break;
+
+
+  case 15:{
+
+    unsigned int i, j;
+    
+    for(i=0, j=0; i<route_list.size(); i++){
+      if((route_list[i]).type == String("c")){j++;}
+    }
+    
+    if(j > 0){
+  
+  
+    }else{
+      
+      cout << RED << "There are no circles of equal altitude!\n" << RESET;
       
     }
     
@@ -3800,7 +3823,7 @@ void Plot::menu(String prefix){
     break;
 
     
-  case 15:{
+  case 16:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -3855,7 +3878,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 16:{
+  case 17:{
 
     File file;
     stringstream line_ins;
@@ -3878,7 +3901,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 17:{
+  case 18:{
 
     File file;
     String line;
@@ -3936,7 +3959,7 @@ Plot::Plot(Catalog* cata, String prefix){
 
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Modify a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Modify a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Line of position on paper chart"),  String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 

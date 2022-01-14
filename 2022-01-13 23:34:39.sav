@@ -1,0 +1,30 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 114° 6.5999999999999658939486835151911'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2022-01-13
+				hour of master-clock date and hour of sight = 22:21:37
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2022-01-13 23:25:38
+	Routes in the plot:
+	Positions in the plot:
+		Position #1:
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH)
+		Position #2:
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
+			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)

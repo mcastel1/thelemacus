@@ -3811,6 +3811,7 @@ void Plot::menu(String prefix){
     if(j > 0){
 
       Position p, q;
+      Angle Z;
       
       print_routes(false, new_prefix, cout); 
       cout << new_prefix.value << "Enter the # of the route that you want to transform into a line of position:";
@@ -3820,6 +3821,8 @@ void Plot::menu(String prefix){
       q.enter(String("assumed position"), new_prefix);
       (route_list[i]).closest_point_to(&p, q, new_prefix);
       p.label.set(String(""), String("closest point to assumed position"), new_prefix);
+
+      Z.set(String("azimuth"), acos(cos(d)*cos(\[Phi])*sin(t) + (cos(GHA - \[Lambda])*sin(d)*sin(t) - cos(t)*sin(GHA - \[Lambda]))*sin(\[Phi])), new_prefix);
 
       
       position_list.push_back(q);

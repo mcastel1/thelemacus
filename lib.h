@@ -2236,6 +2236,9 @@ bool Sight::modify(Catalog catalog, String prefix){
 	
       }
 
+      time.add(TAI_minus_UTC);
+      time.print(String("TAI date and hour of sight"), new_prefix, cout);
+      
       cout << new_prefix.value << "master-clock date and hour of sight modified\n";
 
     }else{
@@ -2285,6 +2288,10 @@ bool Sight::modify(Catalog catalog, String prefix){
 
       }
 
+      time.add(TAI_minus_UTC);
+      time.print(String("TAI date and hour of sight"), new_prefix, cout);
+
+      
       cout << new_prefix.value << "Stopwatch reading modified\n";
 
     }else{

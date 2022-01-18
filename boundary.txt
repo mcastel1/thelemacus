@@ -1,9 +1,0 @@
-GPVAL_X_MIN = -0.810876576943323
-GPVAL_X_MAX = 0.781509642375405
-GPVAL_Y_MIN = 0.254794917769205
-GPVAL_Y_MAX = 1.0188850536177
-minimal longitude = 46° 28'
-maximal longitude = 315° 13'
-minimal latitude = 14° 27'
-maximal latitude = 50° 18'
-

@@ -3224,7 +3224,7 @@ class Plot{
 
 };
 
-// if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
+// this function plots the Routes of type String("c") in route_list in kml format
 void Plot::print_to_kml(String prefix){
 
   stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
@@ -3257,6 +3257,8 @@ void Plot::print_to_kml(String prefix){
   plot_command.str("");
   command.str("");
   for(i=0; i<(route_list.size()); i++){
+
+    if(route_list[i].type == String("c")){
 
     //this is the opening of a path code in kml format
     plot_command << "\\\t<Style id=\\\"" << i << "\\\">\\\n\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>2<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<\\/Style>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
@@ -3293,6 +3295,8 @@ void Plot::print_to_kml(String prefix){
 
     //this is the closing of a path code in kml format
     plot_command << "\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/LineString>\\\n\\\t<\\/Placemark>\\\n";
+
+    }    
     
   }
 

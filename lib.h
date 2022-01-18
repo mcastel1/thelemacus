@@ -3827,7 +3827,7 @@ void Plot::menu(String prefix){
 
       Z.set(String(""), acos( cos(((route_list[i]).GP.phi.value))*cos((q.phi.value))*sin((t.value)) + (cos(((route_list[i]).GP.lambda.value) - (q.lambda.value))*sin(((route_list[i]).GP.phi.value))*sin((t.value)) - cos((t.value))*sin(((route_list[i]).GP.lambda.value) - (q.lambda.value)))*sin((q.phi.value)) ), new_prefix);
 
-      if( cos((route_list[i]).GP.phi.value)*cos(t.value)*cot((route_list[i]).omega.value) + sin((route_list[i]).GP.phi.value) > 0.0 ){(Z.value) = 2.0*M_PI - (Z.value);}
+      if( -(cos(((route_list[i]).GP.phi.value))*cos((t.value))*cot(((route_list[i]).omega.value))) - sin(((route_list[i]).GP.phi.value)) > 0.0 ){(Z.value) = 2.0*M_PI - (Z.value);}
       Z.normalize();
       Z.print(String("azimuth"), new_prefix, cout);
       

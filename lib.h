@@ -3837,6 +3837,19 @@ void Plot::menu(String prefix){
       if( -(cos(((route_list[i]).GP.phi.value))*cos((t.value))*cot(((route_list[i]).omega.value))) - sin(((route_list[i]).GP.phi.value)) > 0.0 ){(Z.value) = 2.0*M_PI - (Z.value);}
       Z.normalize();
       Z.print(String("azimuth"), new_prefix, cout);
+
+      //
+      //create a loxodrome Route through p with azimuth Z
+      Route route;
+      route.type = String("l");
+      route.start = p;
+      route.alpha = Z;
+      route.l.value = 100.0;
+      route.label = String("LOP");
+      route.related_sight = -1;
+
+      route_list.push_back(route);
+      //
       
       position_list.push_back(q);
       position_list.push_back(p);

@@ -1124,11 +1124,12 @@ class Route{
   void transport(String);
   static double lambda_minus_pi(double, void*);
   bool t_crossing(Route, vector<Angle>*, String);
-  bool closest_point_to(Position*, Position, String);
+  bool closest_point_to(Position*, Angle*, Position, String);
   
 };
 
-bool Route::closest_point_to(Position* p, Position q, String prefix){
+//Given the route (*this), this function returns the point on the Route which is closest to Position q, and writes this position and the corresponding value of t in p and tau, respectively.
+bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix){
 
   String new_prefix;
   bool check;
@@ -1179,8 +1180,10 @@ bool Route::closest_point_to(Position* p, Position q, String prefix){
 
     if(s_2 > s_1){
       (*p) = p_1;
+      (*tau) = t_1;
     }else{
       (*p) = p_2;
+      (*tau) = t_2; 
     }
     
 
@@ -3811,7 +3814,7 @@ void Plot::menu(String prefix){
     if(j > 0){
 
       Position p, q;
-      Angle Z;
+      Angle /*this is the value of the parametric angle t which corresponds to the point on Route (route_list[i]) closest to q*/t, /*this is the azimuth of the line of position*/Z;
       
       print_routes(false, new_prefix, cout); 
       cout << new_prefix.value << "Enter the # of the route that you want to transform into a line of position:";
@@ -3819,11 +3822,14 @@ void Plot::menu(String prefix){
       i--;
 
       q.enter(String("assumed position"), new_prefix);
-      (route_list[i]).closest_point_to(&p, q, new_prefix);
+      (route_list[i]).closest_point_to(&p, &t, q, new_prefix);
       p.label.set(String(""), String("closest point to assumed position"), new_prefix);
 
-      Z.set(String("azimuth"), acos(cos(d)*cos(\[Phi])*sin(t) + (cos(GHA - \[Lambda])*sin(d)*sin(t) - cos(t)*sin(GHA - \[Lambda]))*sin(\[Phi])), new_prefix);
+      Z.set(String(""), acos( cos(((route_list[i]).GP.phi.value))*cos((q.phi.value))*sin((t.value)) + (cos(((route_list[i]).GP.lambda.value) - (q.lambda.value))*sin(((route_list[i]).GP.phi.value))*sin((t.value)) - cos((t.value))*sin(((route_list[i]).GP.lambda.value) - (q.lambda.value)))*sin((q.phi.value)) ), new_prefix);
 
+      if( cos((route_list[i]).GP.phi.value)*cos(t.value)*cot((route_list[i]).omega.value) + sin((route_list[i]).GP.phi.value) > 0.0 ){(Z.value) = 2.0*M_PI - (Z.value);}
+      Z.normalize();
+      Z.print(String("azimuth"), new_prefix, cout);
       
       position_list.push_back(q);
       position_list.push_back(p);

@@ -71,6 +71,7 @@
 - check check_double function for sign of double
 - type of related_sight should be int -> Int
 - in print_to_kml include also loxodromes and orthodromes
+- when you enter positive quantities, revise the code in such a way that you can skip entering the + sign
 */
 
 

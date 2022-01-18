@@ -70,9 +70,9 @@ phi_cea(t, d, GHA, omega) =pi/2.-acos(cos(omega) * sin(d)-cos(d) * cos(t) * sin(
 lambda_cea(t, d, GHA, omega) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(omega)+cos(t) * sin(d) * sin(omega))+cos(GHA) * sin(omega) * sin(t))/(cos(d) * cos(GHA) * cos(omega)+sin(omega)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(omega) +  sin(omega) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
 
 #latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a
-phi_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, t = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), asin( tanh( tau*sqrt(C/(1.0-C))*t + atanh(sin(d)) ) ) )
+phi_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, tt = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), asin( tanh( tau*sqrt(C/(1.0-C))*tt + atanh(sin(d)) ) ) )
 
-lambda_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, t = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), lambda = GHA + sigma*t, lambda - 2.0*pi*floor(lambda/(2.0*pi)) )
+lambda_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, tt = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), lambda = GHA + sigma*tt, lambda - 2.0*pi*floor(lambda/(2.0*pi)) )
 
 
 #latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a

@@ -229,7 +229,7 @@ int main(int argc, char *argv[]){
   return 0;
   */
 
-  system("printf '\e[8;47;100t'\n printf '\e[3;0;0t'");
+  system("printf '\e[8;47;110t'\n printf '\e[3;0;0t'");
   
   Catalog catalog(String(path_file_catalog), String(""));
   Plot plot(&catalog, String(""));

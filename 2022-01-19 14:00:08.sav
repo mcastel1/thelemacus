@@ -9,7 +9,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-06-21
+				master-clock date and hour of sight = 2021-06-21
 				hour of master-clock date and hour of sight = 21:01:20
 			use of stopwatch = y
 			hour of stopwatch = 00:37:35
@@ -25,7 +25,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-06-21
+				master-clock date and hour of sight = 2021-06-21
 				hour of master-clock date and hour of sight = 21:01:20
 			use of stopwatch = y
 			hour of stopwatch = 00:48:08.9900000000000002131628207280301
@@ -41,7 +41,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-06
+				master-clock date and hour of sight = 2021-07-06
 				hour of master-clock date and hour of sight = 22:48:40
 			use of stopwatch = y
 			hour of stopwatch = 00:19:36.819000000000002614797267597169
@@ -57,7 +57,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-08
+				master-clock date and hour of sight = 2021-07-08
 				hour of master-clock date and hour of sight = 06:56:00
 			use of stopwatch = y
 			hour of stopwatch = 00:01:46.826000000000000511590769747272
@@ -73,7 +73,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-20
+				master-clock date and hour of sight = 2021-07-20
 				hour of master-clock date and hour of sight = 07:05:55
 			use of stopwatch = y
 			hour of stopwatch = 00:01:49.371000000000002216893335571513
@@ -89,7 +89,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-20
+				master-clock date and hour of sight = 2021-07-20
 				hour of master-clock date and hour of sight = 07:11:20
 			use of stopwatch = y
 			hour of stopwatch = 00:01:36.073000000000000397903932025656
@@ -105,7 +105,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-29
+				master-clock date and hour of sight = 2021-07-29
 				hour of master-clock date and hour of sight = 22:35:30
 			use of stopwatch = y
 			hour of stopwatch = 00:10:34.539000000000001477928890381008
@@ -121,7 +121,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-29
+				master-clock date and hour of sight = 2021-07-29
 				hour of master-clock date and hour of sight = 22:55:35
 			use of stopwatch = y
 			hour of stopwatch = 00:02:35.731999999999999317878973670304
@@ -137,7 +137,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-07-29
+				master-clock date and hour of sight = 2021-07-29
 				hour of master-clock date and hour of sight = 23:01:05
 			use of stopwatch = y
 			hour of stopwatch = 00:02:11.618999999999999772626324556768
@@ -153,7 +153,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-09-02
+				master-clock date and hour of sight = 2021-09-02
 				hour of master-clock date and hour of sight = 22:22:30
 			use of stopwatch = y
 			hour of stopwatch = 00:05:45.936999999999997612576407846063
@@ -169,7 +169,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-09-02
+				master-clock date and hour of sight = 2021-09-02
 				hour of master-clock date and hour of sight = 22:34:10
 			use of stopwatch = y
 			hour of stopwatch = 00:04:25.670999999999999374722392531112
@@ -185,7 +185,7 @@
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-09-03
+				master-clock date and hour of sight = 2021-09-03
 				hour of master-clock date and hour of sight = 22:49:13
 			use of stopwatch = y
 			hour of stopwatch = 00:05:13.877000000000000667910171614494
@@ -201,12 +201,103 @@
 			index error = 0° 3.299999999999999822364316059975'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-11-14
+				master-clock date and hour of sight = 2021-11-14
 				hour of master-clock date and hour of sight = 22:17:07
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at MP
 	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 343° 52.099010844137865205993875861168'
+				longitude = 6° 27.663146868397987532262050081044'
+			aperture angle = 65° 25.406382064982437896105693653226'
+			label = moon 2021-06-21 21:39:32 TAI, Sight was taken at BGC
+		Route #2:
+			type = c
+			ground position:
+				latitude = 343° 49.842653986104323848849162459373'
+				longitude = 9° 0.20505320239223578937526326626539'
+			aperture angle = 65° 47.434567276899599619355285540223'
+			label = moon 2021-06-21 21:50:05.99 TAI, Sight was taken at BGC
+		Route #3:
+			type = c
+			ground position:
+				latitude = 19° 4.791516365234969043740420602262'
+				longitude = 58° 5.6603923024762536897469544783235'
+			aperture angle = 56° 25.687956522622670263444888405502'
+			label = arcturus 2021-07-06 23:08:53.82 TAI, Sight was taken at BGC
+		Route #4:
+			type = c
+			ground position:
+				latitude = 22° 26.191770058313394997639989014715'
+				longitude = 283° 12.314975520987445634091272950172'
+			aperture angle = 63° 8.5986827513136177003616467118263'
+			label = sun 2021-07-08 06:58:23.83 TAI, Sight was taken at MP
+		Route #5:
+			type = c
+			ground position:
+				latitude = 20° 35.921842917042425824547535739839'
+				longitude = 285° 22.362303569685764159657992422581'
+			aperture angle = 63° 4.1088816859011956239555729553103'
+			label = sun 2021-07-20 07:08:21.37 TAI, Sight was taken at MP
+		Route #6:
+			type = c
+			ground position:
+				latitude = 20° 35.880763820316801115950511302799'
+				longitude = 286° 40.284932481496298350975848734379'
+			aperture angle = 62° 11.893305723987595001744921319187'
+			label = sun 2021-07-20 07:13:33.07 TAI, Sight was taken at MP
+		Route #7:
+			type = c
+			ground position:
+				latitude = 341° 37.798552147907003018190152943134'
+				longitude = 336° 15.815496265211095305858179926872'
+			aperture angle = 69° 51.668096212879675022122683003545'
+			label = saturn 2021-07-29 22:46:41.54 TAI, Sight was taken at BGC
+		Route #8:
+			type = c
+			ground position:
+				latitude = 347° 24.963704454595472270739264786243'
+				longitude = 320° 3.0323893304819193872390314936638'
+			aperture angle = 69° 49.996040852094836282049072906375'
+			label = jupiter 2021-07-29 22:58:47.73 TAI, Sight taken at BGC
+		Route #9:
+			type = c
+			ground position:
+				latitude = 347° 24.954595362548843695549294352531'
+				longitude = 321° 19.735740050095955666620284318924'
+			aperture angle = 69° 18.275831223228919952816795557737'
+			label = jupiter 2021-07-29 23:03:53.62 TAI, Sight was taken at BGC
+		Route #10:
+			type = c
+			ground position:
+				latitude = 345° 49.909899319626447322661988437176'
+				longitude = 351° 16.122441231464108568616211414337'
+			aperture angle = 63° 15.957903250170772935234708711505'
+			label = jupiter 2021-09-02 22:28:52.94 TAI, Sight was taken at MP
+		Route #11:
+			type = c
+			ground position:
+				latitude = 345° 49.891718606954782444518059492111'
+				longitude = 353° 51.531093078934873119578696787357'
+			aperture angle = 63° 5.9945435887046016887325095012784'
+			label = jupiter 2021-09-02 22:39:12.67 TAI, Sight was taken at MP
+		Route #12:
+			type = c
+			ground position:
+				latitude = 46° 1.4092295705303570230171317234635'
+				longitude = 247° 22.317322946804551975219510495663'
+			aperture angle = 67° 25.734482148702966242126422002912'
+			label = capella 2021-09-03 22:55:03.877 TAI, Sight was taken at MP
+		Route #13:
+			type = c
+			ground position:
+				latitude = 357° 12.70452138375844697293359786272'
+				longitude = 23° 39.180585676629249292091117240489'
+			aperture angle = 56° 21.594837617149380548653425648808'
+			label = moon 2021-11-14 22:17:44 TAI, Sight was taken at MP
 	Positions in the plot:
 		Position #1:
 			latitude = 48° 51.179385474737415506751858629286'

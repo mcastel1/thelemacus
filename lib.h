@@ -5000,7 +5000,8 @@ void Plot::show(bool zoom_out, String prefix){
 
 
   //add the overall plotting command to command string
-  command << "gnuplot -geometry " << (width_plot_window.value) << "x" << (height_plot_window.value) << " '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
+  //here -0+0 is to open the xterm window on the top right edge of the screen
+  command << "gnuplot -geometry " << (width_plot_window.value) << "x" << (height_plot_window.value) << "-0+0 '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";
 
   

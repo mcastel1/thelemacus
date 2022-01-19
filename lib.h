@@ -3192,7 +3192,7 @@ class Plot{
   
  public:
   Catalog* catalog;
-  File file_id, file_gnuplot, file_kml, file_boundary;
+  File file_init, file_id, file_gnuplot, file_kml, file_boundary;
   int job_id;
   stringstream command, plot_command;
   vector<Sight> sight_list;
@@ -3232,14 +3232,11 @@ void Plot::print_to_kml(String prefix){
   unsigned int i, j;
   Int n_points_routes;
   double lambda_kml, phi_kml; 
-  String new_prefix;
-  File file_init;
-  
+  String new_prefix;  
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  file_init.set_name(String(path_file_init));
   file_init.open(String("in"), prefix);
   file_kml.remove(prefix);
  
@@ -4003,6 +4000,7 @@ Plot::Plot(Catalog* cata, String prefix){
   plot_command.precision(data_precision);
   command.precision(data_precision);
 
+  file_init.set_name(String(path_file_init));
   file_id.set_name(String("job_id.txt"));
   file_gnuplot.set_name(String("plot.plt"));
   file_boundary.set_name(String("boundary.txt"));
@@ -4031,7 +4029,6 @@ void Plot::compute_crossings(String prefix){
   vector< vector<Position> > p;
   vector<Position> q, q_temp(2);
   Position center;
-  File file_init;
   Angle min_crossing_angle;
   double x;
   Route error_circle;
@@ -4041,7 +4038,6 @@ void Plot::compute_crossings(String prefix){
   new_prefix = prefix.append(String("\t"));
  
   cout << prefix.value << YELLOW << "Reading minimal crossing angle between circles of equal altitude from file " << file_init.name.value << " ...\n" << RESET;
-  file_init.set_name(String(path_file_init));
   file_init.open(String("in"), new_prefix);
   min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), file_init, true, new_prefix);
   file_init.close(new_prefix);
@@ -4539,13 +4535,10 @@ void Plot::show(bool zoom_out, String prefix){
   gsl_root_fsolver *s;
   Int n_points_plot_coastline, width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
   String new_prefix;
-  File file_init;
-
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  file_init.set_name(String(path_file_init));
   file_init.open(String("in"), prefix);
 
   

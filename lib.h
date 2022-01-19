@@ -4004,7 +4004,6 @@ Plot::Plot(Catalog* cata, String prefix){
   file_id.set_name(String("job_id.txt"));
   file_gnuplot.set_name(String("plot.plt"));
   file_boundary.set_name(String("boundary.txt"));
-
   file_boundary.remove(prefix);
 
   choices = {String("Add a sight"), String("Modify a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Line of position on paper chart"),  String("Save to file"), String("Read from file"), String("Exit")};

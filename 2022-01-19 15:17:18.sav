@@ -1,0 +1,25 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 33° 3.2345399999998392104316735640168'
+			index error = 0° 3.299999999999999822364316059975'
+			artificial horizon = n
+			height of eye = 4 m
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2022-01-19
+				hour of master-clock date and hour of sight = 03:03:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2022-01-19 15:17:11
+	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 21° 52.391665078178348835535871330649'
+				longitude = 28° 37.147433085999281843214703258127'
+			aperture angle = 56° 3.8910862057906570043996907770634'
+			label = moon 2022-01-19 03:03:40 TAI, 2022-01-19 15:17:11

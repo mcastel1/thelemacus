@@ -89,6 +89,10 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
+  Int width_terminal_window, height_terminal_window;
+  File file_init;
+  stringstream command;
+
   cout.precision(display_precision);
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
@@ -230,7 +234,17 @@ int main(int argc, char *argv[]){
   return 0;
   */
 
-  system("printf '\e[8;47;110t'\n printf '\e[3;0;0t'");
+  //read height and width of terminal window from file_init and writes them to width_terminal_window and height_terminal_window
+  file_init.set_name(String(path_file_init));
+  file_init.open(String("in"), String(""));
+  width_terminal_window.read_from_file(String("width of terminal window"), file_init, true, String("\t")); 
+  height_terminal_window.read_from_file(String("height of terminal window"), file_init, true, String("\t")); 
+  file_init.close(String(""));
+  //run the command that sets the width and height of terminal window, and moves it to the top left corner of the screen
+  command.str("");
+  command << "printf '\e[8;" << (width_terminal_window.value) << ";" << (height_terminal_window.value) << "t'\n printf '\e[3;0;0t'";
+  system(command.str().c_str());
+
   
   Catalog catalog(String(path_file_catalog), String(""));
   Plot plot(&catalog, String(""));

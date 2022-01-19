@@ -13,4 +13,6 @@ number of points coastline = 200000
 number of points for routes = 1000
 number of intervals for tics = 6
 use of stopwatch = n
+width of terminal window = 47
+height of terminal window = 110
 

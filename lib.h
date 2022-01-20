@@ -508,7 +508,7 @@ void Double::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -553,7 +553,7 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, Strin
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -742,7 +742,7 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ && (line[0] != '#'));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -861,7 +861,7 @@ void Answer::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -959,7 +959,7 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, Str
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -2592,7 +2592,7 @@ bool Date::read_from_file(String name, File& file, bool search_entire_file, Stri
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
   }else{
 
@@ -2753,7 +2753,7 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
   }else{
 
@@ -2835,7 +2835,7 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, Stri
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
   }else{
 

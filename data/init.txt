@@ -1,12 +1,20 @@
 #comment lines, such as this one, will be ignored
 artificial horizon = n	
 plot coastline every = 10
-minimal longitude = 170° 12.45'
-maximal longitude = 190° 0.01'
 index error = 0° 3.3'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+#entire world
 minimal latitude = -76° 13.9'
 maximal latitude = 80° 53.2'
+minimal longitude = 170° 12.45'
+maximal longitude = 190° 0.01'
+#entire world
+#north of france
+#minimal longitude = 5° 47'
+#maximal longitude = 356° 9'
+#minimal latitude = 47° 8'
+#maximal latitude = 50° 10'
+#north of france
 minimal crossing angle between circles of equal altitude = 30° 2.15'
 #values for mac
 width of plot window = 705

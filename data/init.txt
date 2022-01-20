@@ -8,12 +8,14 @@ hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 minimal latitude = -76° 13.9'
 maximal latitude = 80° 53.2'
 minimal crossing angle between circles of equal altitude = 30° 2.15'
-width of plot window = 700
-height of plot window = 700
+#values for mac
+width of plot window = 705
+height of plot window = 792
+width of terminal window = 88
+height of terminal window = 110
+#values for mac
 number of points coastline = 200000
 number of points for routes = 1000
 number of intervals for tics = 6
 use of stopwatch = n
-width of terminal window = 47
-height of terminal window = 110
 

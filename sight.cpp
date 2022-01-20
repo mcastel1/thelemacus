@@ -242,7 +242,7 @@ int main(int argc, char *argv[]){
   file_init.close(String(""));
   //run the command that sets the width and height of terminal window, and moves it to the top left corner of the screen
   command.str("");
-  command << "printf '\e[8;" << (width_terminal_window.value) << ";" << (height_terminal_window.value) << "t'\n printf '\e[3;0;0t'";
+  command << "printf '\e[8;" << (height_terminal_window.value) << ";" << (width_terminal_window.value) << "t'\n printf '\e[3;0;0t'";
   system(command.str().c_str());
 
   

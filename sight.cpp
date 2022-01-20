@@ -258,7 +258,9 @@ int main(int argc, char *argv[]){
   // sight.enter(catalog); 
   // sight.reduce();
 
-  
+  //restore the terminal window to full screen
+  system("printf '\e[9;1t'");
+
 
   cout << "\n";
   return(0);

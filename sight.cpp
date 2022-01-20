@@ -73,6 +73,7 @@
 - in print_to_kml include also loxodromes and orthodromes
 - when you enter positive quantities, revise the code in such a way that you can skip entering the + sign
 - make file_init a variable of the Sight class
+- the line width of gnuplot curves should be a variable in the init_file
 */
 
 

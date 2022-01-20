@@ -1,3 +1,4 @@
+#comment lines, such as this one, will be ignored
 artificial horizon = n	
 plot coastline every = 10
 minimal longitude = 170° 12.45'

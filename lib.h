@@ -742,7 +742,7 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ && (line[0] != '#'));
 
 
   }else{

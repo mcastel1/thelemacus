@@ -99,6 +99,12 @@ int main(int argc, char *argv[]){
   gsl_set_error_handler_off();
 
   /*
+  double x;
+  enter_double(&x, true, -3.1, -2., String("xxx"), String("---"));
+  return 0;
+  */
+  
+  /*
   Route r;
   Position q, p;
   r.enter(String("testing route"), String(""));

@@ -27,7 +27,7 @@
 //all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
-#define chars_double "0123456789."
+#define chars_double "+-0123456789."
 #define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define path_file_utc_date "utc_date.txt"
@@ -223,8 +223,9 @@ bool check_double(string s, double* x, bool check_interval, double min, double s
   bool check;
   double y;
 
-  if((/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the dot occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)){
+  if((/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters in chars_double*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the '.' occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1) && /*here I count whether the '+' occurs zero or one time*/(count(s.begin(), s.end(), '+') <= 1)  && /*here I count whether the '-' occurs zero or one time*/(count(s.begin(), s.end(), '-') <= 1)){
 
+    //if the check above passed, then I proceed and write s into y
     y = stod(s);
       
     if(check_interval){
@@ -243,6 +244,7 @@ bool check_double(string s, double* x, bool check_interval, double min, double s
     
   }
 
+  //if x == NULL, then this function is meant to be used to check the correct format of s only, not to write its value to x. 
   if((x != NULL) && check){
 
     (*x) = y;

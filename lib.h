@@ -27,14 +27,14 @@
 //all possible chars that can enter in an unsigned integer
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
-#define chars_double "0123456789."
+#define chars_double "+-0123456789."
 #define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define path_file_utc_date "utc_date.txt"
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
-string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
+    string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
@@ -131,7 +131,7 @@ bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned
 bool check_int(string s, int* i, bool check_interval, int min, int sup){
 
   bool check;
-   int j;
+  int j;
   
   if(/*here I check whether the quantity entered in s is an integer, i.e., it contains only the characters +-0123456789*/ ((s.find_first_not_of(chars_int)) == (std::string::npos))){
     
@@ -223,8 +223,9 @@ bool check_double(string s, double* x, bool check_interval, double min, double s
   bool check;
   double y;
 
-  if((/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters 0123456789.*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the dot occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)){
+  if((/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters in chars_double*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the '.' occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1) && /*here I count whether the '+' occurs zero or one time*/(count(s.begin(), s.end(), '+') <= 1)  && /*here I count whether the '-' occurs zero or one time*/(count(s.begin(), s.end(), '-') <= 1)){
 
+    //if the check above passed, then I proceed and write s into y
     y = stod(s);
       
     if(check_interval){
@@ -243,6 +244,7 @@ bool check_double(string s, double* x, bool check_interval, double min, double s
     
   }
 
+  //if x == NULL, then this function is meant to be used to check the correct format of s only, not to write its value to x. 
   if((x != NULL) && check){
 
     (*x) = y;
@@ -508,7 +510,7 @@ void Double::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -553,7 +555,7 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, Strin
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -742,7 +744,7 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -861,7 +863,7 @@ void Answer::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -959,7 +961,7 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, Str
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
 
   }else{
@@ -1124,9 +1126,99 @@ class Route{
   void transport(String);
   static double lambda_minus_pi(double, void*);
   bool t_crossing(Route, vector<Angle>*, String);
-
+  bool closest_point_to(Position*, Angle*, Position, String);
   
 };
+
+//Given the route (*this), this function returns the point on the Route which is closest to Position q, and writes this position and the corresponding value of t in p and tau, respectively.
+bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix){
+
+  String new_prefix;
+  bool check;
+
+  //append \t to prefix
+  new_prefix = prefix.append(String("\t"));
+
+  check = true;
+
+  if(type == String("c")){
+
+    //these are the two values of the parametric angle t of the Route (*this), for which the distance between q and a point on (*this) vs. t has a maximum or a minimum
+    Angle t_1, t_2;
+    Position p_1, p_2;
+    Length s_1, s_2;
+    
+    t_1.set(String(""),
+
+
+atan((cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value)) - cos((GP.phi.value))*sin((q.phi.value)))/
+     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
+    (cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
+     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)))
+	    
+	    , new_prefix);
+
+
+    t_2.set(String(""),
+
+atan((-(cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))) + cos((GP.phi.value))*sin((q.phi.value)))/
+     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
+    -((cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
+       sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+         gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+         2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+         gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2))))
+	    
+	    , new_prefix);
+
+    //determine which one between the point on (*this) at t_1 and the one at t_2 is the one with minimum distance with respect to q, and store this point into (*p)
+    l.set(String(""), (t_1.value)*Re*sin(omega.value), new_prefix);
+    compute_end(new_prefix);
+    p_1 = end;
+    q.distance(p_1, &s_1, String("Distance with respect to p_1"), new_prefix); 
+
+    l.set(String(""), (t_2.value)*Re*sin(omega.value), new_prefix);
+    compute_end(new_prefix);
+    p_2 = end;
+    q.distance(p_2, &s_2, String("Distance with respect to p_2"), new_prefix);
+
+    if(s_2 > s_1){
+      (*p) = p_1;
+      (*tau) = t_1;
+    }else{
+      (*p) = p_2;
+      (*tau) = t_2; 
+    }
+    
+
+  }else{
+
+    check &= false;
+    
+  }
+
+  if(check){
+    
+    (*p).print(String("Closest point"), prefix, cout);
+    
+  }else{
+    
+    cout << prefix.value << RED << "Closest point could not be computed!\n" << RESET;
+    
+  }
+
+  return check;
+  
+}
 
 //returns in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route r
 bool Route::t_crossing(Route route, vector<Angle> *t, String prefix){
@@ -2157,6 +2249,9 @@ bool Sight::modify(Catalog catalog, String prefix){
 	
       }
 
+      time.add(TAI_minus_UTC);
+      time.print(String("TAI date and hour of sight"), new_prefix, cout);
+      
       cout << new_prefix.value << "master-clock date and hour of sight modified\n";
 
     }else{
@@ -2206,6 +2301,10 @@ bool Sight::modify(Catalog catalog, String prefix){
 
       }
 
+      time.add(TAI_minus_UTC);
+      time.print(String("TAI date and hour of sight"), new_prefix, cout);
+
+      
       cout << new_prefix.value << "Stopwatch reading modified\n";
 
     }else{
@@ -2273,29 +2372,29 @@ bool Sight::modify(Catalog catalog, String prefix){
 
     //the # of related route cannot be modified because it is automatically assigned. 
     /*
-  case 9:{
-    //in this case I modify the # of related route
+      case 9:{
+      //in this case I modify the # of related route
 
-    Int old_related_route;
+      Int old_related_route;
 
-    old_related_route = related_route;
+      old_related_route = related_route;
     
-    related_route.print(String("old # of related route"), new_new_prefix, cout);
-    related_route.enter(String("new # of related route"), new_new_prefix);
+      related_route.print(String("old # of related route"), new_new_prefix, cout);
+      related_route.enter(String("new # of related route"), new_new_prefix);
 
-    if(old_related_route != related_route){
+      if(old_related_route != related_route){
 
       cout << new_prefix.value << "# of related route modified\n" << new_prefix.value << YELLOW << "Beware: route # " << related_route.value << " has not been automatically pointed to this sight!\n" << RESET;
 
-    }else{
+      }else{
 
       check &= false;
       cout << new_new_prefix.value << YELLOW << "New # of related route is equal to old one!\n" << RESET;
 
-    }
+      }
 
-  }
-    break;
+      }
+      break;
     */
     
     
@@ -2506,7 +2605,7 @@ bool Date::read_from_file(String name, File& file, bool search_entire_file, Stri
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
   }else{
 
@@ -2667,7 +2766,7 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, St
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
   }else{
 
@@ -2749,7 +2848,7 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, Stri
       line.clear();
       getline(file.value, line);
 
-    }while((line.find(name.value)) == (string::npos));
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
   }else{
 
@@ -3106,7 +3205,7 @@ class Plot{
   
  public:
   Catalog* catalog;
-  File file_id, file_gnuplot, file_kml, file_boundary;
+  File file_init, file_id, file_gnuplot, file_kml, file_boundary;
   int job_id;
   stringstream command, plot_command;
   vector<Sight> sight_list;
@@ -3138,7 +3237,7 @@ class Plot{
 
 };
 
-// if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
+// this function plots the Routes of type String("c") in route_list in kml format
 void Plot::print_to_kml(String prefix){
 
   stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
@@ -3146,14 +3245,11 @@ void Plot::print_to_kml(String prefix){
   unsigned int i, j;
   Int n_points_routes;
   double lambda_kml, phi_kml; 
-  String new_prefix;
-  File file_init;
-  
+  String new_prefix;  
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  file_init.set_name(String(path_file_init));
   file_init.open(String("in"), prefix);
   file_kml.remove(prefix);
  
@@ -3171,6 +3267,8 @@ void Plot::print_to_kml(String prefix){
   plot_command.str("");
   command.str("");
   for(i=0; i<(route_list.size()); i++){
+
+    if(route_list[i].type == String("c")){
 
     //this is the opening of a path code in kml format
     plot_command << "\\\t<Style id=\\\"" << i << "\\\">\\\n\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>2<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<\\/Style>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
@@ -3207,6 +3305,8 @@ void Plot::print_to_kml(String prefix){
 
     //this is the closing of a path code in kml format
     plot_command << "\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/LineString>\\\n\\\t<\\/Placemark>\\\n";
+
+    }    
     
   }
 
@@ -3230,7 +3330,7 @@ void Plot::print_to_kml(String prefix){
 		 << (position_list[i]).label.value << "<\\/description>\\\n\\\t\\\t<ExtendedData>\\\n\\\t\\\t\\\t<Data name=\\\"scStyle\\\"\\/>\\\n\\\t\\\t<\\/ExtendedData>\\\n\\\t\\\t<Point>\\\n\\\t\\\t\\\t<coordinates>";
 
 
-        //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude. The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
+    //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude. The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
   
     lambda_kml = -K*((position_list[i]).lambda.value);
     if(lambda_kml < -180.0){
@@ -3427,17 +3527,17 @@ void Plot::menu(String prefix){
   }
 
   cout << prefix.value << BOLD << "Graph:" << RESET << "\n";
-  for(i=11; i<14; i++){
+  for(i=11; i<15; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
 
 
   cout << prefix.value << BOLD << "Files:" << RESET << "\n";
-  for(i=14; i<16; i++){
+  for(i=15; i<17; i++){
     cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
   }
   
-  i=16;
+  i=17;
   cout << prefix.value << "\n";
   cout << new_prefix.value << "(" << i+1 << ") " << (choices[i]).value << "\n";
 
@@ -3475,7 +3575,7 @@ void Plot::menu(String prefix){
 
     }else{
       
-      cout << YELLOW << "There are no sights to modify!\n" << RESET;
+      cout << RED << "There are no sights to modify!\n" << RESET;
       
     }
     
@@ -3498,7 +3598,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no sights to delete!\n" << RESET;
+      cout << RED << "There are no sights to delete!\n" << RESET;
     }
 
     menu(prefix);  
@@ -3532,7 +3632,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no positions to modify!\n" << RESET;
+      cout << RED << "There are no positions to modify!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3554,7 +3654,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no positions to transport!\n" << RESET;
+      cout << RED << "There are no positions to transport!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3577,7 +3677,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no positions to delete!\n" << RESET;
+      cout << RED << "There are no positions to delete!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3612,7 +3712,7 @@ void Plot::menu(String prefix){
 
     }else{
       
-      cout << YELLOW << "There are no routes to transport!\n" << RESET;
+      cout << RED << "There are no routes to transport!\n" << RESET;
       
     }
 
@@ -3640,7 +3740,7 @@ void Plot::menu(String prefix){
 
     }else{
       
-      cout << YELLOW << "There are not enough routes to compute crossings!\n" << RESET;
+      cout << RED << "There are not enough routes to compute crossings!\n" << RESET;
 
     }
 
@@ -3669,7 +3769,7 @@ void Plot::menu(String prefix){
       show(false, new_prefix);
 
     }else{
-      cout << YELLOW << "There are no routes to delete!\n" << RESET;
+      cout << RED << "There are no routes to delete!\n" << RESET;
     }
     
     menu(prefix);  
@@ -3714,7 +3814,66 @@ void Plot::menu(String prefix){
    
     }else{
       
-      cout << YELLOW << "There are no routes nor positions to clear!\n" << RESET;
+      cout << RED << "There are no routes nor positions to clear!\n" << RESET;
+      
+    }
+    
+    menu(prefix);
+    
+  }
+    break;
+
+
+  case 15:{
+
+    unsigned int i, j;
+    
+    for(i=0, j=0; i<route_list.size(); i++){
+      if((route_list[i]).type == String("c")){j++;}
+    }
+    
+    if(j > 0){
+
+      Position p, q;
+      Angle /*this is the value of the parametric angle t which corresponds to the point on Route (route_list[i]) closest to q*/t, /*this is the azimuth of the line of position*/Z;
+      
+      print_routes(false, new_prefix, cout); 
+      cout << new_prefix.value << "Enter the # of the route that you want to transform into a line of position:";
+      cin >> i;
+      i--;
+
+      q.enter(String("assumed position"), new_prefix);
+      (route_list[i]).closest_point_to(&p, &t, q, new_prefix);
+      p.label.set(String(""), String("closest point to assumed position"), new_prefix);
+
+      Z.set(String(""), acos( cos(((route_list[i]).GP.phi.value))*cos((p.phi.value))*sin((t.value)) + (cos(((route_list[i]).GP.lambda.value) - (p.lambda.value))*sin(((route_list[i]).GP.phi.value))*sin((t.value)) - cos((t.value))*sin(((route_list[i]).GP.lambda.value) - (p.lambda.value)))*sin((p.phi.value)) ), new_prefix);
+
+      if( -(cos(((route_list[i]).GP.phi.value))*cos((t.value))*cot(((route_list[i]).omega.value))) - sin(((route_list[i]).GP.phi.value)) > 0.0 ){(Z.value) = 2.0*M_PI - (Z.value);}
+      Z.normalize();
+      Z.print(String("azimuth"), new_prefix, cout);
+
+      //
+      //create a loxodrome Route through p with azimuth Z
+      Route route;
+      route.type = String("l");
+      route.start = p;
+      route.alpha = Z;
+      route.l.value = 100.0;
+      route.label = String("LOP");
+      route.related_sight = -1;
+
+      route_list.push_back(route);
+      //
+      
+      position_list.push_back(q);
+      position_list.push_back(p);
+
+      print(true, new_prefix, cout);
+      show(false, new_prefix);
+  
+    }else{
+      
+      cout << RED << "There are no circles of equal altitude!\n" << RESET;
       
     }
     
@@ -3724,7 +3883,7 @@ void Plot::menu(String prefix){
     break;
 
     
-  case 15:{
+  case 16:{
 
     if(sight_list.size() + route_list.size() + position_list.size() > 0){
   
@@ -3779,7 +3938,7 @@ void Plot::menu(String prefix){
   }
     break;
 
-  case 16:{
+  case 17:{
 
     File file;
     stringstream line_ins;
@@ -3802,7 +3961,7 @@ void Plot::menu(String prefix){
     break;
     
     
-  case 17:{
+  case 18:{
 
     File file;
     String line;
@@ -3854,13 +4013,13 @@ Plot::Plot(Catalog* cata, String prefix){
   plot_command.precision(data_precision);
   command.precision(data_precision);
 
+  file_init.set_name(String(path_file_init));
   file_id.set_name(String("job_id.txt"));
   file_gnuplot.set_name(String("plot.plt"));
   file_boundary.set_name(String("boundary.txt"));
-
   file_boundary.remove(prefix);
 
-  choices = {String("Add a sight"), String("Modify a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Save to file"), String("Read from file"), String("Exit")};
+  choices = {String("Add a sight"), String("Modify a sight"), String("Delete a sight"), String("Add a position"), String("Modify a position"), String("Transport a position"), String("Delete a position"), String("Add a route"), String("Transport a route"), String("Compute route crossings"), String("Delete a route"), String("Replot"), String("Full zoom out"), String("Clear"), String("Line of position on paper chart"),  String("Save to file"), String("Read from file"), String("Exit")};
   
 }
 
@@ -3882,7 +4041,6 @@ void Plot::compute_crossings(String prefix){
   vector< vector<Position> > p;
   vector<Position> q, q_temp(2);
   Position center;
-  File file_init;
   Angle min_crossing_angle;
   double x;
   Route error_circle;
@@ -3892,7 +4050,6 @@ void Plot::compute_crossings(String prefix){
   new_prefix = prefix.append(String("\t"));
  
   cout << prefix.value << YELLOW << "Reading minimal crossing angle between circles of equal altitude from file " << file_init.name.value << " ...\n" << RESET;
-  file_init.set_name(String(path_file_init));
   file_init.open(String("in"), new_prefix);
   min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), file_init, true, new_prefix);
   file_init.close(new_prefix);
@@ -4106,8 +4263,8 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
   
   for(i=0, j=0; i<route_list.size(); i++){
     
-    //if print_all_routes = false, I only print routes which are linke to a sight
-    if(((route_list[i].related_sight) == -1) || print_all_routes){
+    //if print_all_routes = false, I only print routes which are linked to a sight
+    if((((route_list[i]).related_sight) != -1) || print_all_routes){
       
       name.str("");
       name << "Route #" << j+1;
@@ -4390,13 +4547,10 @@ void Plot::show(bool zoom_out, String prefix){
   gsl_root_fsolver *s;
   Int n_points_plot_coastline, width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
   String new_prefix;
-  File file_init;
-
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-  file_init.set_name(String(path_file_init));
   file_init.open(String("in"), prefix);
 
   
@@ -4851,7 +5005,8 @@ void Plot::show(bool zoom_out, String prefix){
 
 
   //add the overall plotting command to command string
-  command << "gnuplot -geometry " << (width_plot_window.value) << "x" << (height_plot_window.value) << " '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
+  //here -0+0 is to open the xterm window on the top right edge of the screen
+  command << "gnuplot -geometry " << (width_plot_window.value) << "x" << (height_plot_window.value) << "-0+0 '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
   command << "rm -rf plot_temp.plt";
 
   

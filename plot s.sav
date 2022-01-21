@@ -70,9 +70,9 @@ phi_cea(t, d, GHA, omega) =pi/2.-acos(cos(omega) * sin(d)-cos(d) * cos(t) * sin(
 lambda_cea(t, d, GHA, omega) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(omega)+cos(t) * sin(d) * sin(omega))+cos(GHA) * sin(omega) * sin(t))/(cos(d) * cos(GHA) * cos(omega)+sin(omega)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(omega) +  sin(omega) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
 
 #latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a
-phi_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, t = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), asin( tanh( tau*sqrt(C/(1.0-C))*t + atanh(sin(d)) ) ) )
+phi_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, tt = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), asin( tanh( tau*sqrt(C/(1.0-C))*tt + atanh(sin(d)) ) ) )
 
-lambda_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, t = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), lambda = GHA + sigma*t, lambda - 2.0*pi*floor(lambda/(2.0*pi)) )
+lambda_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, tt = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), lambda = GHA + sigma*tt, lambda - 2.0*pi*floor(lambda/(2.0*pi)) )
 
 
 #latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a
@@ -321,12 +321,8 @@ while(1){
 
 
 	set key top right
-plot [0.:2.*pi] "+" u (xe(K*lambda_cea(t, 6.0016343222782575494989032449666, 0.11276663835826482296109674052786, 1.141854430763873828880150540499))) : (ye(K*phi_cea(t, 6.0016343222782575494989032449666, 0.11276663835826482296109674052786, 1.141854430763873828880150540499))) w l dashtype 1 lt 1 ti "moon 2021-06-21 21:39:32 TAI, Sight was taken at BGC",\
-[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 6.0009779746737130778910795925185, 0.15713928023821471802179416954459, 1.1482621701003250525019439010066))) : (ye(K*phi_cea(t, 6.0009779746737130778910795925185, 0.15713928023821471802179416954459, 1.1482621701003250525019439010066))) w l dashtype 2 lt 2 ti "moon 2021-06-21 21:50:05.99 TAI, Sight was taken at BGC",\
-	"+" u (xe(K*(6.2410583415053171307818047353067))):(ye(K*(0.85264552071863697335629694862291))) w p lw 2 lt 1 ti "Centre Sportif Maryse Hilsz (MH)",\
-"+" u (xe(K*(6.241171014205057154811129294103))):(ye(K*(0.85268850862179457195111353939865))) w p lw 2 lt 2 ti "Baby Gym Campo (BGC)",\
-"+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 3 ti "My Place (MP)"
-
+plot [0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.5098129558418597051527854091546, 5.326114800199610144204598327633, 0.82192442001708165832951635820791))) : (ye(K*phi_cea(t, 0.5098129558418597051527854091546, 5.326114800199610144204598327633, 0.82192442001708165832951635820791))) w l dashtype 1 lt 1 ti "alpheratz 2021-10-31 17:49:37 TAI, 2022-01-18 18:54:43"
+	
 
 	#coastlines
 	number_of_lines_map_conv_selected = system("wc -l < /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt")

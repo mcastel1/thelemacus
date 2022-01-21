@@ -71,6 +71,9 @@
 - check check_double function for sign of double
 - type of related_sight should be int -> Int
 - when you enter positive angles, revise Angle::enter in such a way that you don't have to enter '+' from keyborard
+- in print_to_kml include also loxodromes and orthodromes
+- make file_init a variable of the Sight class
+- the line width of gnuplot curves should be a variable in the init_file
 */
 
 
@@ -87,9 +90,27 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
+  Int width_terminal_window, height_terminal_window;
+  File file_init;
+  stringstream command;
+
   cout.precision(display_precision);
   //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
   gsl_set_error_handler_off();
+
+  /*
+  double x;
+  enter_double(&x, true, -3.1, -2., String("xxx"), String("---"));
+  return 0;
+  */
+  
+  /*
+  Route r;
+  Position q, p;
+  r.enter(String("testing route"), String(""));
+  q.enter(String("position"), String(""));
+  r.closest_point_to(&p, q, String(""));
+  */
 
   /*
   Chrono c;
@@ -219,6 +240,18 @@ int main(int argc, char *argv[]){
   route.print("path to cape horn", "", cout);
   return 0;
   */
+
+  //read height and width of terminal window from file_init and writes them to width_terminal_window and height_terminal_window
+  file_init.set_name(String(path_file_init));
+  file_init.open(String("in"), String(""));
+  width_terminal_window.read_from_file(String("width of terminal window"), file_init, true, String("\t")); 
+  height_terminal_window.read_from_file(String("height of terminal window"), file_init, true, String("\t")); 
+  file_init.close(String(""));
+  //run the command that sets the width and height of terminal window, and moves it to the top left corner of the screen
+  command.str("");
+  command << "printf '\e[8;" << (height_terminal_window.value) << ";" << (width_terminal_window.value) << "t'\n printf '\e[3;0;0t'";
+  system(command.str().c_str());
+
   
   Catalog catalog(String(path_file_catalog), String(""));
   Plot plot(&catalog, String(""));
@@ -232,7 +265,9 @@ int main(int argc, char *argv[]){
   // sight.enter(catalog); 
   // sight.reduce();
 
-  
+  //restore the terminal window to full screen
+  system("printf '\e[9;1t'");
+
 
   cout << "\n";
   return(0);

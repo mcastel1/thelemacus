@@ -1148,23 +1148,34 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     
     t_1.set(String(""),
 
-	    atan((-(cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*sin(GP.phi.value)) - cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) + cos(GP.phi.value)*sin((q.phi.value)))/
-		 sqrt(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin((q.lambda.value)),2)) + 
-		      gsl_pow_int(cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) - cos(GP.phi.value)*sin((q.phi.value)),2) - 2*cos(GP.phi.value)*cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*(cos(GP.phi.value)*cos((q.phi.value))*sin((GP.lambda.value))*sin((q.lambda.value)) + sin(GP.phi.value)*sin((q.phi.value)))),
-		 -((cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/sqrt(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + 
-										       gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin((q.lambda.value)),2)) + gsl_pow_int(cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) - cos(GP.phi.value)*sin((q.phi.value)),2) - 
-										       2*cos(GP.phi.value)*cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*(cos(GP.phi.value)*cos((q.phi.value))*sin((GP.lambda.value))*sin((q.lambda.value)) + sin(GP.phi.value)*sin((q.phi.value))))))	  
+
+atan((cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value)) - cos((GP.phi.value))*sin((q.phi.value)))/
+     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
+    (cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
+     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)))
+	    
 	    , new_prefix);
 
 
     t_2.set(String(""),
 
-	    atan((cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*sin(GP.phi.value) + cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) - cos(GP.phi.value)*sin((q.phi.value)))/
-		 sqrt(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin((q.lambda.value)),2)) + 
-		      gsl_pow_int(cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) - cos(GP.phi.value)*sin((q.phi.value)),2) - 2*cos(GP.phi.value)*cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*(cos(GP.phi.value)*cos((q.phi.value))*sin((GP.lambda.value))*sin((q.lambda.value)) + sin(GP.phi.value)*sin((q.phi.value)))),
-		 (cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/sqrt(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value)),2) + 
-										     gsl_pow_int(cos((GP.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*(gsl_pow_int(cos((q.lambda.value)),2)*gsl_pow_int(sin(GP.phi.value),2) + gsl_pow_int(sin((q.lambda.value)),2)) + gsl_pow_int(cos((q.phi.value))*sin(GP.phi.value)*sin((GP.lambda.value))*sin((q.lambda.value)) - cos(GP.phi.value)*sin((q.phi.value)),2) - 
-										     2*cos(GP.phi.value)*cos((GP.lambda.value))*cos((q.lambda.value))*cos((q.phi.value))*(cos(GP.phi.value)*cos((q.phi.value))*sin((GP.lambda.value))*sin((q.lambda.value)) + sin(GP.phi.value)*sin((q.phi.value)))))	  
+atan((-(cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))) + cos((GP.phi.value))*sin((q.phi.value)))/
+     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
+    -((cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
+       sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+         gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+         2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+         gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2))))
+	    
 	    , new_prefix);
 
     //determine which one between the point on (*this) at t_1 and the one at t_2 is the one with minimum distance with respect to q, and store this point into (*p)

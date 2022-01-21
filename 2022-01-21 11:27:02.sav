@@ -1,0 +1,46 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = planet
+				Name = jupiter
+				Radius = 37748.920086393089150078594684601 nm
+			limb = c
+			sextant altitude = 53° 33.700000000000045474735088646412'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-09-02
+				hour of master-clock date and hour of sight = 22:22:30
+			use of stopwatch = y
+			hour of stopwatch = 00:05:45.936999999999997612576407846063
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 345° 49.909899319626447322661988437176'
+				longitude = 351° 16.122441231464108568616211414337'
+			aperture angle = 63° 15.957903250170772935234708711505'
+			label = jupiter 2021-09-02 22:28:52.94 TAI, Sight was taken at MP
+	Positions in the plot:
+		Position #1:
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH)
+		Position #2:
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
+			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)
+		Position #4:
+			latitude = 336° 55.999999999996816768543794751167'
+			longitude = 326° 57.000000000002728484105318784714'
+			label = 2022-01-21 11:12:58
+		Position #5:
+			latitude = 331° 47.661699899304039718117564916611'
+			longitude = 284° 17.443995683786397421499714255333'
+			label = closest point to assumed position

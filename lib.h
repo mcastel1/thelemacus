@@ -5946,7 +5946,7 @@ void Angle::enter(String name, String prefix){
     //find the position of the first ' ' 
     pos = (input).find(" ");
 
-    if(( ((input).substr(0, pos).c_str())[0] == '+' ) || ( ((input).substr(0, pos).c_str())[0] == '-' )){
+    if(( ((input).substr(0, pos)) == "+" ) || ( ((input).substr(0, pos)) == "-" )){
       //in this case, there is a '+' or '-' sign in front the angle
 
       //check whether the string contains only two ' ', one after the sign, one adter the degrees

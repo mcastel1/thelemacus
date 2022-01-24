@@ -34,7 +34,7 @@
 #define path_file_init "data/init.txt"
 #define path_file_catalog "data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
-    string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
+string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
@@ -925,7 +925,7 @@ class Angle{
  
   double value;
   void normalize(void);
-  void enter(String, bool, String);
+  void enter(String, String);
   void set(String, double, String);
   void print(String, String, ostream&);
   void read_from_file(String, File&, bool, String);
@@ -1076,7 +1076,7 @@ void Position::modify(String prefix){
 
   case 1:{
     
-    phi.enter(String("latitude"), false, new_prefix);
+    phi.enter(String("latitude"), new_prefix);
 
   }
     break;
@@ -1084,7 +1084,7 @@ void Position::modify(String prefix){
 
   case 2:{
     
-    lambda.enter(String("longitude"), false, new_prefix);
+    lambda.enter(String("longitude"), new_prefix);
 
   }
     break;
@@ -1151,32 +1151,32 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     t_1.set(String(""),
 
 
-atan((cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value)) - cos((GP.phi.value))*sin((q.phi.value)))/
-     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
-       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
-       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
-       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
-    (cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
-     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
-       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
-       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
-       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)))
+	    atan((cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value)) - cos((GP.phi.value))*sin((q.phi.value)))/
+		 sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+		      gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+		      2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+		      gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
+		 (cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
+		 sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+		      gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+		      2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+		      gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)))
 	    
 	    , new_prefix);
 
 
     t_2.set(String(""),
 
-atan((-(cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))) + cos((GP.phi.value))*sin((q.phi.value)))/
-     sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
-       gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
-       2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
-       gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
-    -((cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
-       sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
-         gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
-         2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
-         gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2))))
+	    atan((-(cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))) + cos((GP.phi.value))*sin((q.phi.value)))/
+		 sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+		      gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+		      2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+		      gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
+		 -((cos((q.phi.value))*sin((GP.lambda.value) - (q.lambda.value)))/
+		   sqrt(gsl_pow_int(cos((GP.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.phi.value)),2) + 
+			gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((GP.lambda.value) - (q.lambda.value)),2) - 
+			2*cos((GP.phi.value))*cos((GP.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((GP.phi.value))*sin((q.phi.value)) + 
+			gsl_pow_int(cos((GP.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2))))
 	    
 	    , new_prefix);
 
@@ -1805,7 +1805,7 @@ Route Position::transport(String prefix){
     }
   }while(!check);
   route.start = (*this); 
-  route.alpha.enter(String("Course Over Ground"), true, new_prefix);
+  route.alpha.enter(String("Course Over Ground"), new_prefix);
 
   do{
     
@@ -2142,7 +2142,7 @@ bool Sight::modify(Catalog catalog, String prefix){
     
     H_s.print(String("old sextant altitude"), new_new_prefix, cout);
     //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
-    H_s.enter(String("new sextant altitude"), true, new_new_prefix);
+    H_s.enter(String("new sextant altitude"), new_new_prefix);
 
     if(!(old_H_s == H_s)){
 
@@ -2480,14 +2480,14 @@ void Route::enter(String name, String prefix){
     //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
 
     start.enter(String("starting position"), new_prefix);
-    alpha.enter(String("starting heading"), true, new_prefix);
+    alpha.enter(String("starting heading"), new_prefix);
     l.enter(String("length"), String("nm"), new_prefix);
 
     
   }else{
     //if the route is a circle of equal altitude, I enter its ground position and its aperture angle (alpha remains unused) ... 
     GP.enter(String("ground position"), new_prefix);
-    omega.enter(String("aperture angle"), true, new_prefix);
+    omega.enter(String("aperture angle"), new_prefix);
     
     /* //... and then compute the resulting starting position and starting heading */
     /* start.phi.set(String("latitude of ground position"), (GP.phi.value) - (omega.value), true, new_prefix); */
@@ -3270,41 +3270,41 @@ void Plot::print_to_kml(String prefix){
 
     if(route_list[i].type == String("c")){
 
-    //this is the opening of a path code in kml format
-    plot_command << "\\\t<Style id=\\\"" << i << "\\\">\\\n\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>2<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<\\/Style>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
-		 << (route_list[i]).label.value
-		 << "<\\/name>\\\n\\\t\\\t<styleUrl>#" << i << "<\\/styleUrl>\\\n\\\t\\\t<description>"
-		 << (route_list[i]).label.value
-		 << "<\\/description>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
+      //this is the opening of a path code in kml format
+      plot_command << "\\\t<Style id=\\\"" << i << "\\\">\\\n\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors)/sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>2<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<\\/Style>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
+		   << (route_list[i]).label.value
+		   << "<\\/name>\\\n\\\t\\\t<styleUrl>#" << i << "<\\/styleUrl>\\\n\\\t\\\t<description>"
+		   << (route_list[i]).label.value
+		   << "<\\/description>\\\n\\\t\\\t<LineString>\\\n\\\t\\\t\\\t<extrude>1<\\/extrude>\\\n\\\t\\\t\\\t<tessellate>0<\\/tessellate>\\\n\\\t\\\t\\\t<altitudeMode>absolute<\\/altitudeMode>\\\n\\\t\\\t\\\t<coordinates>\\\n";
 
    
     
-    for(j=0; j<(unsigned int)(n_points_routes.value); j++){
+      for(j=0; j<(unsigned int)(n_points_routes.value); j++){
 
-      //I set equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
-      ((route_list[i]).l).set(String(""), 2.0*M_PI*(Re*sin(((route_list[i]).omega.value)))*((double)j)/((double)(n_points_routes.value-1)), new_prefix);
+	//I set equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
+	((route_list[i]).l).set(String(""), 2.0*M_PI*(Re*sin(((route_list[i]).omega.value)))*((double)j)/((double)(n_points_routes.value-1)), new_prefix);
 
-      //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above 
-      (route_list[i]).compute_end(new_prefix);
+	//I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above 
+	(route_list[i]).compute_end(new_prefix);
 
-      //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
+	//I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90. 
       
-      lambda_kml = -K*((route_list[i]).end.lambda.value);
-      if(lambda_kml < -180.0){
-	lambda_kml += 360.0;
-      }
+	lambda_kml = -K*((route_list[i]).end.lambda.value);
+	if(lambda_kml < -180.0){
+	  lambda_kml += 360.0;
+	}
       
-      phi_kml = K*((route_list[i]).end.phi.value);
-      if(phi_kml > 270.0){
-	phi_kml -= 360.0;
-      }
+	phi_kml = K*((route_list[i]).end.phi.value);
+	if(phi_kml > 270.0){
+	  phi_kml -= 360.0;
+	}
            
-      plot_command << "\\\t\\\t\\\t\\\t" << lambda_kml << "," << phi_kml << ",0.0\\\n";
+	plot_command << "\\\t\\\t\\\t\\\t" << lambda_kml << "," << phi_kml << ",0.0\\\n";
       
-    }
+      }
 
-    //this is the closing of a path code in kml format
-    plot_command << "\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/LineString>\\\n\\\t<\\/Placemark>\\\n";
+      //this is the closing of a path code in kml format
+      plot_command << "\\\t\\\t\\\t<\\/coordinates>\\\n\\\t\\\t<\\/LineString>\\\n\\\t<\\/Placemark>\\\n";
 
     }    
     
@@ -5056,8 +5056,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     
     limb.enter(String("limb"), new_prefix);
   }
-  //here I assume that the sextant altitude is positive: if you want to trop this, true -> false
-  H_s.enter(String("sextant altitude"), true, new_prefix);
+  H_s.enter(String("sextant altitude"), new_prefix);
   //read index error from init file
   cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
   index_error.read_from_file(String("index error"), file_init, true, new_prefix);
@@ -5916,7 +5915,8 @@ void Angle::set(String name, double x, String prefix){
   
 }
 
-void Angle::enter(String name, bool is_positive, String prefix){
+//this fucnction takes an angle entered from keyboard. the angle may or may not contain a sign in front of it. If it does not contain a sign, the sign is interpreted as '+'
+void Angle::enter(String name, String prefix){
 
   unsigned int ad;
   double am;
@@ -5931,93 +5931,66 @@ void Angle::enter(String name, bool is_positive, String prefix){
   new_prefix = prefix.append(String("\t"));
   
 
-  if(is_positive){
-    //in this case the angle is positive defined and there is no '+' or '-' sign in front of it
 
-    input_unit.clear();
-    input_unit << name.value << " [ddd mm.m]";
+  input_unit.clear();
+  input_unit << name.value << " [(s )ddd mm.m]";
 
-    do{
+  do{
   
-      check = true;
+    check = true;
+
+    //enter the input string, containing degrees and arcminutes with a ' ' in between
+    cout << prefix.value << "Enter " << input_unit.str() << ":";
+    getline(cin >> ws, input);
+
+    //find the position of the first ' ' 
+    pos = (input).find(" ");
+
+    if(( ((input).substr(0, pos).c_str())[0] == '+' ) || ( ((input).substr(0, pos).c_str())[0] == '-' )){
+      //in this case, there is a '+' or '-' sign in front the angle
+
+      //check whether the string contains only two ' ', one after the sign, one adter the degrees
+      check &= (count((input).begin(), (input).end(), ' ') == 2);
+      
+      //set the sign
+      s = ((input).substr(0, pos).c_str())[0];
+
+      //now I am no longer interested in the sign, the string runs from the degrees to the end of arcminutes
+      (input)  =  ((input).substr(pos+1).c_str());
+
+    }else{
+      //in this case, there is no '+' nor '-' in front of the angle -> the sign is set to '+'
 
       //set the sign
       s = '+';
 
-      //enter the input string, containing degrees and arcminutes with a ' ' in between
-      cout << prefix.value << "Enter " << input_unit.str() << ":";
-      getline(cin >> ws, input);
-      
-      //check whether the string contains only one ' '
+      cout << prefix.value << YELLOW << "No sign has been entered. Interpreting it as +!\n" << RESET;
+
+      //check whether the string contains only one ' ',  after the degrees
       check &= (count((input).begin(), (input).end(), ' ') == 1);
 
-      if(check){
- 
-	pos = (input).find(" ");
+    }
 
-	//check whether degree part is formatted correctly
-	check &= check_unsigned_int((input).substr(0, pos).c_str(), NULL, true, 0, 360);
+    if(check){
+
+      //find the position of the  ' ' between degrees and arcminutes 
+      pos = (input).find(" ");
+
+      //check whether degree part is formatted correctly
+      check &= check_unsigned_int((input).substr(0, pos).c_str(), NULL, true, 0, 360);
       
-	//check whether arcminute part is formatted correctly
-	check &= check_double((input).substr(pos+1, (input).size()-pos).c_str(), NULL, true, 0.0, 60.0);
+      //check whether arcminute part is formatted correctly
+      check &= check_double((input).substr(pos+1, (input).size()-pos).c_str(), NULL, true, 0.0, 60.0);
       
-      }
+    }
     
-      if(!check){
-	cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-      }
+    if(!check){
+      cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
+    }
 
-    }while(!check);
+  }while(!check);
 
-  }else{
-    //in this case the angle is not positive defined and there is a '+' or '-' sign in front of it
-
-    input_unit.clear();
-    input_unit << name.value << " [s ddd mm.m]";
-
-    do{
   
-      check = true;
-
-      //enter the input string, containing degrees and arcminutes with a ' ' in between
-      cout << prefix.value << "Enter " << input_unit.str() << ":";
-      getline(cin >> ws, input);
-
-      //check whether the string contains only two ' ', one after the sign, one adter the degrees
-      check &= (count((input).begin(), (input).end(), ' ') == 2);
-
-      if(check){
-
-	//find the position of the first ' ' 
-	pos = (input).find(" ");
-
-	//check whether the sign is formatted correctly
-	check &= ( ( ((input).substr(0, pos).c_str())[0] == '+' ) || ( ((input).substr(0, pos).c_str())[0] == '-' ) );
-
-	//set the sign
-	s = ((input).substr(0, pos).c_str())[0];  
-
-	//now I am no longer interested in the sign, the string runs from the degrees to the end of arcminutes
-	(input)  =  ((input).substr(pos+1).c_str());
-
-	//find the position of the second ' ' 
-	pos = (input).find(" ");
-
-	//check whether degree part is formatted correctly
-	check &= check_unsigned_int((input).substr(0, pos).c_str(), NULL, true, 0, 360);
-      
-	//check whether arcminute part is formatted correctly
-	check &= check_double((input).substr(pos+1, (input).size()-pos).c_str(), NULL, true, 0.0, 60.0);
-      
-      }
-    
-      if(!check){
-	cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-      }
-
-    }while(!check);
-
-  }
 
   //set degrees and arcminutes
   ad = stoi((input).substr(0, pos).c_str(), NULL, 10);
@@ -6045,7 +6018,7 @@ void Position::enter(String name, String prefix){
   cout << prefix.value << "Enter " << name.value << ":\n";
 
   do{
-    phi.enter(String("latitude"), false, new_prefix);
+    phi.enter(String("latitude"), new_prefix);
     if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
       cout << new_prefix.value << RED << "Entered value is not valid!\n" << RESET;
       check = true;
@@ -6054,7 +6027,7 @@ void Position::enter(String name, String prefix){
     }
   }while(check);
   
-  lambda.enter(String("longitude"), false, new_prefix);
+  lambda.enter(String("longitude"), new_prefix);
   label.enter(String("label"), new_prefix);
   
 }

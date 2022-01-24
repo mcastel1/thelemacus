@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
 
   /*
   double x;
-  enter_double(&x, true, -3.1, -2., String("xxx"), String("---"));
+  enter_double(&x, true, -3., 2., String("xxx"), String("---"));
   return 0;
   */
   
@@ -166,8 +166,8 @@ int main(int argc, char *argv[]){
 
   /*
   Angle x;
-  x.enter(String("instrumental altitude"), false, String("\t"));
-  x.enter(String("instrumental altitude"), true, String("\t"));
+  x.enter(String("instrumental altitude"), String("\t"));
+  x.print(String("instrumental altitude"), String("\t"), cout);
   return 0;
   */
 

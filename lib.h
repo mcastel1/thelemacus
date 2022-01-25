@@ -4264,8 +4264,8 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
   
   for(i=0, j=0; i<route_list.size(); i++){
     
-    //if print_all_routes = false, I only print routes which are linked to a sight
-    if((((route_list[i]).related_sight) != -1) || print_all_routes){
+    //if print_all_routes = false, I only print routes which are not linked to a sight. This is to avoid doubles: If I print also Routes which are related to a Sight, then when the file to which I am saving will be read again, the code will reduce them and create double Routes identical to the ones already present in the file. 
+    if((((route_list[i]).related_sight) == -1) || print_all_routes){
       
       name.str("");
       name << "Route #" << j+1;

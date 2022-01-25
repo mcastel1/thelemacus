@@ -49,13 +49,11 @@
 - 360 deg E in xlabel -> 0 deg
 - make sure that code does not crash if special characters are entered in position/sight labels
 - remove horizontal lines in gnuplot plot
-- modify structure of catalog.txt so angles and distances are read with Angle::read_from_file, etc...
 - include computation of crossing points between circles of equal altitude
 - export plots in .kml formats, so they can be plotted on the nautical charts on data.shom
 - include reading of dummy line in Position::read
-- add modify sight, route  in menu
+- add modify route  in menu
 - export data to gpx file and open Chrome authomatically to data.shom page to plot the gpx file
-- set position of the gnuplot plot window when this is opened
  - when entering angles, replace +- with N/S and E/W
 - find out why increasing too much number of points coastline in init file yields plots with few points
 - set output to log file
@@ -66,11 +64,8 @@
 - when you delete a sight, make sure that all the crossing Positions involving it are also deleted
 - enter body + limb directly in one line
 - add != operators in all classes
-- finisci di programmare Sight::modify (mancano le modifiche ad alcuni item)
 - solve issue that sed crashes if replaced string is too long
-- check check_double function for sign of double
 - type of related_sight should be int -> Int
-- when you enter positive angles, revise Angle::enter in such a way that you don't have to enter '+' from keyborard
 - in print_to_kml include also loxodromes and orthodromes
 - make file_init a variable of the Sight class
 - the line width of gnuplot curves should be a variable in the init_file

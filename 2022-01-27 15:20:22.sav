@@ -1,0 +1,1788 @@
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = u
+			sextant altitude = 43° 32.200000000000130739863379858434'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-18
+				hour of master-clock date and hour of sight = 11:03:50
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #2:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 34° 8.4000000000000341060513164848089'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:09:38
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #3:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 36° 0.59999999999988062882039230316877'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:15:58
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #4:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 38° 20.699999999999931787897367030382'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:23:38
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #5:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 39° 35.900000000000176214598468504846'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-22
+				hour of master-clock date and hour of sight = 20:27:44
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #6:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 44° 1.4999999999999147348717087879777'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:36:58
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #7:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 45° 10.499999999999829469743417575955'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:40:33
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #8:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 47° 18.299999999999982946974341757596'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:47:15
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #9:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 47° 53.40000000000046043169277254492'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:49:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #10:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 48° 34.100000000000108002495835535228'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-25
+				hour of master-clock date and hour of sight = 23:51:14
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #11:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 52° 42.500000000000142108547152020037'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-26
+				hour of master-clock date and hour of sight = 00:04:22
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #12:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 37° 27.799999999999869260136620141566'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-29
+				hour of master-clock date and hour of sight = 10:55:37
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #13:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = u
+			sextant altitude = 38° 53.800000000000096633812063373625'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-11-29
+				hour of master-clock date and hour of sight = 11:02:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #14:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 84° 2.1999999999997044142219237983227'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 18:46:25
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #15:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 87° 3.3000000000004092726157978177071'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 18:56:23
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #16:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 88° 1.2999999999996703081706073135138'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 18:59:30
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #17:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 88° 46.500000000000341060513164848089'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:02:03
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #18:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 89° 56.200000000000045474735088646412'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:05:51
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #19:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 90° 51.999999999999602096067974343896'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:09:04
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #20:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 91° 36.599999999999965893948683515191'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:11:35
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #21:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 92° 31.99999999999988631316227838397'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:14:48
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #22:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 94° 4.8999999999998067323758732527494'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:20:12
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2022-01-26 17:21:22
+		Sight #23:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 95° 1.8000000000000682121026329696178'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:23:30
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #24:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 95° 52.300000000000181898940354585648'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:26:29
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #25:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 98° 3.5000000000010800249583553522825'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-16
+				hour of master-clock date and hour of sight = 19:34:20
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = PGP
+		Sight #26:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 61° 28.799999999999386091076303273439'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-21
+				hour of master-clock date and hour of sight = 21:22:53
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = BGCB
+		Sight #27:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 66° 45.999999999999943156581139191985'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-21
+				hour of master-clock date and hour of sight = 21:39:26
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = BGCB
+		Sight #28:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 68° 45.999999999999943156581139191985'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-21
+				hour of master-clock date and hour of sight = 21:45:46
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = BGCB
+		Sight #29:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 84° 35.799999999999840838427189737558'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-12-21
+				hour of master-clock date and hour of sight = 22:35:51
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = BGCB
+		Sight #30:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 114° 16.600000000001102762325899675488'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2022-01-13
+				hour of master-clock date and hour of sight = 22:21:37
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #31:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 110° 30.399999999999636202119290828705'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2021-01-13
+				hour of master-clock date and hour of sight = 22:38:09
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #32:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 109° 20.999999999999658939486835151911'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2022-01-13
+				hour of master-clock date and hour of sight = 22:42:44
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #33:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 105° 8.6999999999997612576407846063375'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2022-01-13
+				hour of master-clock date and hour of sight = 21:59:15
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #34:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 94° 50.600000000000875388650456443429'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2022-01-13
+				hour of master-clock date and hour of sight = 23:36:02
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+		Sight #35:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = l
+			sextant altitude = 92° 46.39999999999957935870043002069'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				master-clock date and hour of sight = 2022-01-13
+				hour of master-clock date and hour of sight = 23:42:55
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = MP
+	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 49° 30.348596859505647671539918519557'
+				longitude = 350° 21.618670189614022092428058385849'
+				label = astronomical position
+			aperture angle = nan° nan'
+			label = error on astronomical position
+	Positions in the plot:
+		Position #1:
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH)
+		Position #2:
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
+			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)
+		Position #4:
+			latitude = 48° 51.381955796276201908767689019442'
+			longitude = 357° 36.171990905294251206214539706707'
+			label = crossing
+		Position #5:
+			latitude = 48° 51.579664951960495500316028483212'
+			longitude = 357° 34.044889649385368102230131626129'
+			label = crossing
+		Position #6:
+			latitude = 48° 51.425115731925927775591844692826'
+			longitude = 357° 35.708477483591423151665367186069'
+			label = crossing
+		Position #7:
+			latitude = 48° 51.470570684063972066724090836942'
+			longitude = 357° 35.219815052992089476902037858963'
+			label = crossing
+		Position #8:
+			latitude = 48° 51.48388385368221520366205368191'
+			longitude = 357° 35.076594427449663271545432507992'
+			label = crossing
+		Position #9:
+			latitude = 48° 51.456983071594351031308178789914'
+			longitude = 357° 35.365942408735691060428507626057'
+			label = crossing
+		Position #10:
+			latitude = 48° 51.550630622006252679057070054114'
+			longitude = 357° 34.357875816381238109897822141647'
+			label = crossing
+		Position #11:
+			latitude = 48° 51.625703992216358528821729123592'
+			longitude = 357° 33.548159704643012446467764675617'
+			label = crossing
+		Position #12:
+			latitude = 48° 51.696099879052610504004405811429'
+			longitude = 357° 32.787600240152414698968641459942'
+			label = crossing
+		Position #13:
+			latitude = 48° 51.649657607795944613826577551663'
+			longitude = 357° 33.289504851503579629934392869473'
+			label = crossing
+		Position #14:
+			latitude = 48° 51.59193749691027619519445579499'
+			longitude = 357° 33.912529471911057044053450226784'
+			label = crossing
+		Position #15:
+			latitude = 48° 51.445702910735633395233890041709'
+			longitude = 357° 35.487219358939228186500258743763'
+			label = crossing
+		Position #16:
+			latitude = 48° 51.43399857641000494368199724704'
+			longitude = 357° 35.613023186203918157843872904778'
+			label = crossing
+		Position #17:
+			latitude = 48° 51.590807820380462089815409854054'
+			longitude = 357° 33.92471469065867495373822748661'
+			label = crossing
+		Position #18:
+			latitude = 48° 51.555424045040325609079445712268'
+			longitude = 357° 34.306217972181229924899525940418'
+			label = crossing
+		Position #19:
+			latitude = 48° 51.728439816362907777147484011948'
+			longitude = 357° 32.437777249795090028783306479454'
+			label = crossing
+		Position #20:
+			latitude = 48° 51.644335891888744072275585494936'
+			longitude = 357° 33.346982098686339668347500264645'
+			label = crossing
+		Position #21:
+			latitude = 48° 51.678533551080221286611049436033'
+			longitude = 357° 32.977504950274578732205554842949'
+			label = crossing
+		Position #22:
+			latitude = 48° 51.616709801726585737924324348569'
+			longitude = 357° 33.645242930489303034846670925617'
+			label = crossing
+		Position #23:
+			latitude = 48° 51.581059863467970671990769915283'
+			longitude = 357° 34.029847350893760449253022670746'
+			label = crossing
+		Position #24:
+			latitude = 48° 51.622403034412940314723527990282'
+			longitude = 357° 33.583792591524570525507442653179'
+			label = crossing
+		Position #25:
+			latitude = 48° 51.614151266271619533654302358627'
+			longitude = 357° 33.672856012235570233315229415894'
+			label = crossing
+		Position #26:
+			latitude = 48° 51.619867379210546687318128533661'
+			longitude = 357° 33.611162389059927591006271541119'
+			label = crossing
+		Position #27:
+			latitude = 48° 51.457904995936445402548997662961'
+			longitude = 357° 35.35602907393240457167848944664'
+			label = crossing
+		Position #28:
+			latitude = 48° 51.541011351299346188170602545142'
+			longitude = 357° 34.461523521941899161902256309986'
+			label = crossing
+		Position #29:
+			latitude = 48° 51.473636743567112716846168041229'
+			longitude = 357° 35.186834877374622010393068194389'
+			label = crossing
+		Position #30:
+			latitude = 48° 51.509884047946030705134035088122'
+			longitude = 357° 34.796761246034293435513973236084'
+			label = crossing
+		Position #31:
+			latitude = 48° 51.246472377484479920894955284894'
+			longitude = 357° 37.624006414557698008138686418533'
+			label = crossing
+		Position #32:
+			latitude = 49° 0.097598356022672305698506534099579'
+			longitude = 343° 27.819572801577123755123466253281'
+			label = crossing
+		Position #33:
+			latitude = 48° 51.076790795213469209556933492422'
+			longitude = 357° 39.436164924609329318627715110779'
+			label = crossing
+		Position #34:
+			latitude = 48° 51.263250085116851550992578268051'
+			longitude = 357° 37.444440782904848674661479890347'
+			label = crossing
+		Position #35:
+			latitude = 48° 51.3934108271128309297637315467'
+			longitude = 357° 33.944212678383109960122965276241'
+			label = crossing
+		Position #36:
+			latitude = 48° 51.441754269412172106967773288488'
+			longitude = 357° 33.970343326806187178590334951878'
+			label = crossing
+		Position #37:
+			latitude = 48° 52.808247504848395692533813416958'
+			longitude = 357° 34.709164662784814936458133161068'
+			label = crossing
+		Position #38:
+			latitude = 48° 52.824987103379612563003320246935'
+			longitude = 357° 34.718217687249079972389154136181'
+			label = crossing
+		Position #39:
+			latitude = 48° 51.486317177726874660947942174971'
+			longitude = 357° 33.994430951371441551600582897663'
+			label = crossing
+		Position #40:
+			latitude = 48° 51.778991035919261776143684983253'
+			longitude = 357° 34.152640543674124273820780217648'
+			label = crossing
+		Position #41:
+			latitude = 48° 50.386901923161389049710123799741'
+			longitude = 357° 33.400284751780873193638399243355'
+			label = crossing
+		Position #42:
+			latitude = 48° 51.073641985584004032716620713472'
+			longitude = 357° 33.771383233844289861735887825489'
+			label = crossing
+		Position #43:
+			latitude = 48° 50.819860661999314288550522178411'
+			longitude = 357° 33.634234147165216199937276542187'
+			label = crossing
+		Position #44:
+			latitude = 48° 51.301846799904922136192908510566'
+			longitude = 357° 33.894721737696045238408260047436'
+			label = crossing
+		Position #45:
+			latitude = 48° 51.569621758238497477577766403556'
+			longitude = 357° 34.039460760714064235799014568329'
+			label = crossing
+		Position #46:
+			latitude = 48° 51.279425902581010632275138050318'
+			longitude = 357° 33.882603367774208891205489635468'
+			label = crossing
+		Position #47:
+			latitude = 48° 51.342908636360107266227714717388'
+			longitude = 357° 33.916915704654684304841794073582'
+			label = crossing
+		Position #48:
+			latitude = 48° 51.320177623489087181951617822051'
+			longitude = 357° 33.904629523939320279168896377087'
+			label = crossing
+		Position #49:
+			latitude = 48° 52.416697850632516519908676855266'
+			longitude = 357° 34.49742557542435861250851303339'
+			label = crossing
+		Position #50:
+			latitude = 58° 9.6734904697176204990682890638709'
+			longitude = 3° 20.162468074711796361953020095825'
+			label = crossing
+		Position #51:
+			latitude = 48° 51.191176633451362931737094186246'
+			longitude = 357° 35.589126917503790537011809647083'
+			label = crossing
+		Position #52:
+			latitude = 48° 51.268670526042825486001675017178'
+			longitude = 357° 35.628661502082650258671492338181'
+			label = crossing
+		Position #53:
+			latitude = 48° 51.231209018963710377647657878697'
+			longitude = 357° 35.609549859689195727696642279625'
+			label = crossing
+		Position #54:
+			latitude = 48° 51.34726008287671561447496060282'
+			longitude = 357° 35.66875615727326476189773529768'
+			label = crossing
+		Position #55:
+			latitude = 48° 50.002802803358719074822147376835'
+			longitude = 357° 34.982996607106997544178739190102'
+			label = crossing
+		Position #56:
+			latitude = 48° 50.327651977381435699498979374766'
+			longitude = 357° 35.148660815365246889996342360973'
+			label = crossing
+		Position #57:
+			latitude = 48° 48.935893933779226472324808128178'
+			longitude = 357° 34.439035340502641702187247574329'
+			label = crossing
+		Position #58:
+			latitude = 48° 49.670224926072279458821867592633'
+			longitude = 357° 34.813410580787831349880434572697'
+			label = crossing
+		Position #59:
+			latitude = 48° 49.43345261794533485044667031616'
+			longitude = 357° 34.692689214466554403770714998245'
+			label = crossing
+		Position #60:
+			latitude = 48° 49.956417511118758056909427978098'
+			longitude = 357° 34.959342919296432228293269872665'
+			label = crossing
+		Position #61:
+			latitude = 48° 50.278407181792488245264394208789'
+			longitude = 357° 35.123546096702966679004020988941'
+			label = crossing
+		Position #62:
+			latitude = 48° 50.010318138961622480564983561635'
+			longitude = 357° 34.986829009118309841142036020756'
+			label = crossing
+		Position #63:
+			latitude = 48° 50.100929793221666841418482363224'
+			longitude = 357° 35.03303669668298425676766782999'
+			label = crossing
+		Position #64:
+			latitude = 48° 50.143966555055925482520251534879'
+			longitude = 357° 35.054983939668318271287716925144'
+			label = crossing
+		Position #65:
+			latitude = 48° 50.372375524242869460067595355213'
+			longitude = 357° 35.171470085949749773135408759117'
+			label = crossing
+		Position #66:
+			latitude = 58° 5.0512757725897472482756711542606'
+			longitude = 2° 55.739269445172929806631145766005'
+			label = crossing
+		Position #67:
+			latitude = 48° 51.249495831530964551348006352782'
+			longitude = 357° 35.115226185600931785302236676216'
+			label = crossing
+		Position #68:
+			latitude = 48° 51.318888603340866438884404487908'
+			longitude = 357° 35.148054635183143545873463153839'
+			label = crossing
+		Position #69:
+			latitude = 48° 51.713193115083697648515226319432'
+			longitude = 357° 35.334605983541678142501041293144'
+			label = crossing
+		Position #70:
+			latitude = 48° 51.8018727458084526915627066046'
+			longitude = 357° 35.376564710863931395579129457474'
+			label = crossing
+		Position #71:
+			latitude = 48° 50.404515077523370791823253966868'
+			longitude = 357° 34.715536602304837288102135062218'
+			label = crossing
+		Position #72:
+			latitude = 48° 50.732832752809144949424080550671'
+			longitude = 357° 34.87082403520048501377459615469'
+			label = crossing
+		Position #73:
+			latitude = 48° 49.287683982308578833908541128039'
+			longitude = 357° 34.187414158224100901861675083637'
+			label = crossing
+		Position #74:
+			latitude = 48° 50.036653442459453344781650230289'
+			longitude = 357° 34.541564023330693089519627392292'
+			label = crossing
+		Position #75:
+			latitude = 48° 49.786586196829176742539857514203'
+			longitude = 357° 34.423310924187262571649625897408'
+			label = crossing
+		Position #76:
+			latitude = 48° 50.317076996524150445111445151269'
+			longitude = 357° 34.674182809857256870600394904613'
+			label = crossing
+		Position #77:
+			latitude = 48° 50.63487270461990874537150375545'
+			longitude = 357° 34.824489354354000170133076608181'
+			label = crossing
+		Position #78:
+			latitude = 48° 50.351302850262271704195882193744'
+			longitude = 357° 34.690369778303420389420352876186'
+			label = crossing
+		Position #79:
+			latitude = 48° 50.437253272070989851272315718234'
+			longitude = 357° 34.731020394967799802543595433235'
+			label = crossing
+		Position #80:
+			latitude = 48° 50.462994452441165549316792748868'
+			longitude = 357° 34.743195001167350710602477192879'
+			label = crossing
+		Position #81:
+			latitude = 57° 58.702016683372733041323954239488'
+			longitude = 2° 23.618394685353276685191303840838'
+			label = crossing
+		Position #82:
+			latitude = 48° 51.266380081960534198515233583748'
+			longitude = 357° 34.977957000918422636459581553936'
+			label = crossing
+		Position #83:
+			latitude = 48° 51.333474176306168601513491012156'
+			longitude = 357° 35.008383381200474104844033718109'
+			label = crossing
+		Position #84:
+			latitude = 48° 51.863557049180286639966652728617'
+			longitude = 357° 35.248789376215654556290246546268'
+			label = crossing
+		Position #85:
+			latitude = 48° 51.943906616770618711598217487335'
+			longitude = 357° 35.285232986331038773641921579838'
+			label = crossing
+		Position #86:
+			latitude = 48° 50.519191890339669726017746143043'
+			longitude = 357° 34.639153739540233800653368234634'
+			label = crossing
+		Position #87:
+			latitude = 48° 50.851142667995645751943811774254'
+			longitude = 357° 34.78966416742650835658423602581'
+			label = crossing
+		Position #88:
+			latitude = 48° 49.378824915864214517569052986801'
+			longitude = 357° 34.12220188751575733476784080267'
+			label = crossing
+		Position #89:
+			latitude = 48° 50.138012778413667547283694148064'
+			longitude = 357° 34.466339458964512232341803610325'
+			label = crossing
+		Position #90:
+			latitude = 48° 49.882180384261829431125079281628'
+			longitude = 357° 34.350363427980710184783674776554'
+			label = crossing
+		Position #91:
+			latitude = 48° 50.418869780111776890407782047987'
+			longitude = 357° 34.593669192469178597093559801579'
+			label = crossing
+		Position #92:
+			latitude = 48° 50.737672088121996694098925217986'
+			longitude = 357° 34.73821371980875483131967484951'
+			label = crossing
+		Position #93:
+			latitude = 48° 50.447541207027626342096482403576'
+			longitude = 357° 34.606668261995991997537203133106'
+			label = crossing
+		Position #94:
+			latitude = 48° 50.532700868183013653833768330514'
+			longitude = 357° 34.645278603787801330327056348324'
+			label = crossing
+		Position #95:
+			latitude = 48° 50.553502579311242470794240944088'
+			longitude = 357° 34.654709980188727058703079819679'
+			label = crossing
+		Position #96:
+			latitude = 57° 55.325204394389828621569904498756'
+			longitude = 2° 7.1477023131485228901738082640804'
+			label = crossing
+		Position #97:
+			latitude = 48° 51.223099297833556420300737954676'
+			longitude = 357° 35.329769086048372628283686935902'
+			label = crossing
+		Position #98:
+			latitude = 48° 51.298685352386428348836489021778'
+			longitude = 357° 35.341460026977529196301475167274'
+			label = crossing
+		Position #99:
+			latitude = 48° 50.276985658343988916385569609702'
+			longitude = 357° 35.183390763310171678313054144382'
+			label = crossing
+		Position #100:
+			latitude = 48° 48.318683927051466753255226649344'
+			longitude = 357° 34.880162347162695368751883506775'
+			label = crossing
+		Position #101:
+			latitude = 48° 49.362223888172707120247650891542'
+			longitude = 357° 35.041788506317743667750619351864'
+			label = crossing
+		Position #102:
+			latitude = 48° 49.040821626304307301325025036931'
+			longitude = 357° 34.992019051048828259808942675591'
+			label = crossing
+		Position #103:
+			latitude = 48° 49.771853674628800945356488227844'
+			longitude = 357° 35.105206973380518320482224225998'
+			label = crossing
+		Position #104:
+			latitude = 48° 50.217945045878025212005013599992'
+			longitude = 357° 35.174253673554858323768712580204'
+			label = crossing
+		Position #105:
+			latitude = 48° 49.858646692566708225058391690254'
+			longitude = 357° 35.118642293986113145365379750729'
+			label = crossing
+		Position #106:
+			latitude = 48° 49.983956521532491024117916822433'
+			longitude = 357° 35.138038747375048842513933777809'
+			label = crossing
+		Position #107:
+			latitude = 48° 50.048696957574776433830265887082'
+			longitude = 357° 35.14805924896791111677885055542'
+			label = crossing
+		Position #108:
+			latitude = 48° 50.808714530881928794769919477403'
+			longitude = 357° 35.265667045928239531349390745163'
+			label = crossing
+		Position #109:
+			latitude = 48° 50.808714530881928794769919477403'
+			longitude = 357° 35.265667045928239531349390745163'
+			label = crossing
+		Position #110:
+			latitude = 48° 49.098510293530779335924307815731'
+			longitude = 357° 35.000952863492784672416746616364'
+			label = crossing
+		Position #111:
+			latitude = 57° 5.2394658573554409031203249469399'
+			longitude = 358° 39.513417734135600767331197857857'
+			label = crossing
+		Position #112:
+			latitude = 48° 51.34605475728548640290682669729'
+			longitude = 357° 34.329787540963252467918209731579'
+			label = crossing
+		Position #113:
+			latitude = 48° 51.403461898697457854723324999213'
+			longitude = 357° 34.33766998361534206196665763855'
+			label = crossing
+		Position #114:
+			latitude = 48° 49.452363977338791301008313894272'
+			longitude = 357° 34.06957707961964842979796230793'
+			label = crossing
+		Position #115:
+			latitude = 48° 50.481831569443187390788807533681'
+			longitude = 357° 34.211081612178304567351005971432'
+			label = crossing
+		Position #116:
+			latitude = 48° 50.12829979580857298060436733067'
+			longitude = 357° 34.162499643355204170802608132362'
+			label = crossing
+		Position #117:
+			latitude = 48° 50.840157802640817408246221020818'
+			longitude = 357° 34.260309168785170186311006546021'
+			label = crossing
+		Position #118:
+			latitude = 48° 51.241225409602009221998741850257'
+			longitude = 357° 34.315392779375315512879751622677'
+			label = crossing
+		Position #119:
+			latitude = 48° 50.844873150759610780369257554412'
+			longitude = 357° 34.260956883483686397084966301918'
+			label = crossing
+		Position #120:
+			latitude = 48° 50.945038706179133214391185902059'
+			longitude = 357° 34.27471538548047647054772824049'
+			label = crossing
+		Position #121:
+			latitude = 48° 50.942398755362887641240376979113'
+			longitude = 357° 34.274352781518473420874215662479'
+			label = crossing
+		Position #122:
+			latitude = 48° 50.108168848813647855422459542751'
+			longitude = 357° 34.159732878525801424984820187092'
+			label = crossing
+		Position #123:
+			latitude = 48° 50.108168848813647855422459542751'
+			longitude = 357° 34.159732878525801424984820187092'
+			label = crossing
+		Position #124:
+			latitude = 48° 48.190971235053723376040579751134'
+			longitude = 357° 33.896043369796871047583408653736'
+			label = crossing
+		Position #125:
+			latitude = 57° 1.7986163803065835509187309071422'
+			longitude = 358° 27.186788866882807269576005637646'
+			label = crossing
+		Position #126:
+			latitude = 48° 51.444361907309144044120330363512'
+			longitude = 357° 33.529096946688241587253287434578'
+			label = crossing
+		Position #127:
+			latitude = 48° 51.487247948292349519761046394706'
+			longitude = 357° 33.533605545399041147902607917786'
+			label = crossing
+		Position #128:
+			latitude = 48° 51.016290356608919864811468869448'
+			longitude = 357° 33.484080325749800977064296603203'
+			label = crossing
+		Position #129:
+			latitude = 48° 51.72590803830871664104051887989'
+			longitude = 357° 33.558691298163694227696396410465'
+			label = crossing
+		Position #130:
+			latitude = 48° 52.095252825063482760015176609159'
+			longitude = 357° 33.597498306675106505281291902065'
+			label = crossing
+		Position #131:
+			latitude = 48° 51.659244865727487194817513227463'
+			longitude = 357° 33.551685050590549508342519402504'
+			label = crossing
+		Position #132:
+			latitude = 48° 51.73941315359400050510885193944'
+			longitude = 357° 33.560110602389841005788184702396'
+			label = crossing
+		Position #133:
+			latitude = 48° 51.678519360330312792939366772771'
+			longitude = 357° 33.553710846458670857828110456467'
+			label = crossing
+		Position #134:
+			latitude = 48° 49.583894055737971484631998464465'
+			longitude = 357° 33.333268233093349408591166138649'
+			label = crossing
+		Position #135:
+			latitude = 48° 49.583894055737971484631998464465'
+			longitude = 357° 33.333268233093349408591166138649'
+			label = crossing
+		Position #136:
+			latitude = 48° 47.551604160980502911115763708949'
+			longitude = 357° 33.118822343976717093028128147125'
+			label = crossing
+		Position #137:
+			latitude = 56° 55.726815958649638105271151289344'
+			longitude = 358° 5.9088550607953038706909865140915'
+			label = crossing
+		Position #138:
+			latitude = 48° 51.537162226797335051742265932262'
+			longitude = 357° 32.77229999729456721979659050703'
+			label = crossing
+		Position #139:
+			latitude = 48° 51.566170830341775399574544280767'
+			longitude = 357° 32.775092800136462756199762225151'
+			label = crossing
+		Position #140:
+			latitude = 48° 51.900874628794468890191637910903'
+			longitude = 357° 32.807307695092049470986239612103'
+			label = crossing
+		Position #141:
+			latitude = 48° 52.58964469665400542908173520118'
+			longitude = 357° 32.873550662656043641618452966213'
+			label = crossing
+		Position #142:
+			latitude = 48° 52.917841127661375821844558231533'
+			longitude = 357° 32.905091304660345485899597406387'
+			label = crossing
+		Position #143:
+			latitude = 48° 52.452015431647964760486502200365'
+			longitude = 357° 32.860319495791827648645266890526'
+			label = crossing
+		Position #144:
+			latitude = 48° 52.510116763215535229392116889358'
+			longitude = 357° 32.865905472986014501657336950302'
+			label = crossing
+		Position #145:
+			latitude = 48° 52.391840392964610373383038677275'
+			longitude = 357° 32.85453363883561905822716653347'
+			label = crossing
+		Position #146:
+			latitude = 48° 49.076889743168692348262993618846'
+			longitude = 357° 32.534999577928829239681363105774'
+			label = crossing
+		Position #147:
+			latitude = 48° 49.076889743168692348262993618846'
+			longitude = 357° 32.534999577928829239681363105774'
+			label = crossing
+		Position #148:
+			latitude = 48° 46.896929015924939676551730372012'
+			longitude = 357° 32.324014012384623129037208855152'
+			label = crossing
+		Position #149:
+			latitude = 56° 53.899870768670155030122259631753'
+			longitude = 357° 59.620360345194285400793887674809'
+			label = crossing
+		Position #150:
+			latitude = 48° 51.475589677802560117925168015063'
+			longitude = 357° 33.274535065420423052273690700531'
+			label = crossing
+		Position #151:
+			latitude = 48° 51.513874128988987877164618112147'
+			longitude = 357° 33.277827913263990922132506966591'
+			label = crossing
+		Position #152:
+			latitude = 48° 52.0247519407713809869164833799'
+			longitude = 357° 33.321747096759963824297301471233'
+			label = crossing
+		Position #153:
+			latitude = 48° 52.386098036323431870187050662935'
+			longitude = 357° 33.352787226727969027706421911716'
+			label = crossing
+		Position #154:
+			latitude = 48° 51.932149622301011504532652907073'
+			longitude = 357° 33.313789214721509779337793588638'
+			label = crossing
+		Position #155:
+			latitude = 48° 52.005947886156747017594170756638'
+			longitude = 357° 33.320131255768501432612538337708'
+			label = crossing
+		Position #156:
+			latitude = 48° 51.924097482583562168656499125063'
+			longitude = 357° 33.313097183271338508347980678082'
+			label = crossing
+		Position #157:
+			latitude = 48° 49.434974031945984052072162739933'
+			longitude = 357° 33.098697553518832137342542409897'
+			label = crossing
+		Position #158:
+			latitude = 48° 49.434974031945984052072162739933'
+			longitude = 357° 33.098697553518832137342542409897'
+			label = crossing
+		Position #159:
+			latitude = 48° 47.389393725955102354419068433344'
+			longitude = 357° 32.921794538124231621623039245605'
+			label = crossing
+		Position #160:
+			latitude = 56° 52.186895580758800861076451838017'
+			longitude = 357° 53.77045238470373078598640859127'
+			label = crossing
+		Position #161:
+			latitude = 48° 51.397848214063515115412883460522'
+			longitude = 357° 33.908070921692115007317624986172'
+			label = crossing
+		Position #162:
+			latitude = 48° 51.448122876253847834959742613137'
+			longitude = 357° 33.909226586295062588760629296303'
+			label = crossing
+		Position #163:
+			latitude = 48° 51.253985600948652745501021854579'
+			longitude = 357° 33.904760963923763483762741088867'
+			label = crossing
+		Position #164:
+			latitude = 48° 51.353865026813991789822466671467'
+			longitude = 357° 33.907059436209010527818463742733'
+			label = crossing
+		Position #165:
+			latitude = 48° 51.31852600062288161097967531532'
+			longitude = 357° 33.906246441699749993858858942986'
+			label = crossing
+		Position #166:
+			latitude = 48° 49.926998697441149488440714776516'
+			longitude = 357° 33.874021442396724523860029876232'
+			label = crossing
+		Position #167:
+			latitude = 48° 49.926998697441149488440714776516'
+			longitude = 357° 33.874021442396724523860029876232'
+			label = crossing
+		Position #168:
+			latitude = 48° 48.13831113242002857077750377357'
+			longitude = 357° 33.831991930908316135173663496971'
+			label = crossing
+		Position #169:
+			latitude = 56° 40.989935770400762748977285809815'
+			longitude = 357° 16.584301590478389698546379804611'
+			label = crossing
+		Position #170:
+			latitude = 48° 51.185449990077671600374742411077'
+			longitude = 357° 35.635641872671612873091362416744'
+			label = crossing
+		Position #171:
+			latitude = 48° 51.167123403263161662835045717657'
+			longitude = 357° 35.784476930980417819228023290634'
+			label = crossing
+		Position #172:
+			latitude = 48° 51.378404841205309594442951492965'
+			longitude = 357° 34.066418129254998348187655210495'
+			label = crossing
+		Position #173:
+			latitude = 48° 51.329924155474628832962480373681'
+			longitude = 357° 34.461068338423501700162887573242'
+			label = crossing
+		Position #174:
+			latitude = 48° 51.563649948283796220493968576193'
+			longitude = 357° 32.556118471635500100092031061649'
+			label = crossing
+		Position #175:
+			latitude = 48° 51.448865850450999914755811914802'
+			longitude = 357° 33.492388305119220603955909609795'
+			label = crossing
+		Position #176:
+			latitude = 48° 51.494770352975081095792120322585'
+			longitude = 357° 33.118126139351033998536877334118'
+			label = crossing
+		Position #177:
+			latitude = 48° 51.410005995375342990882927551866'
+			longitude = 357° 33.809036990483036788646131753922'
+			label = crossing
+		Position #178:
+			latitude = 48° 51.360090331613008629574324004352'
+			longitude = 357° 34.21553457642630746704526245594'
+			label = crossing
+		Position #179:
+			latitude = 48° 51.415528460259878329452476464212'
+			longitude = 357° 33.764047246688733139308169484138'
+			label = crossing
+		Position #180:
+			latitude = 48° 51.403448796039299395488342270255'
+			longitude = 357° 33.862452108060097089037299156189'
+			label = crossing
+		Position #181:
+			latitude = 48° 51.408939341541497469734167680144'
+			longitude = 357° 33.817726296593946244684047996998'
+			label = crossing
+		Position #182:
+			latitude = 48° 51.221396974153776682214811444283'
+			longitude = 357° 35.343602484794018891989253461361'
+			label = crossing
+		Position #183:
+			latitude = 48° 51.329142717902271897401078604162'
+			longitude = 357° 34.467427448686294155777432024479'
+			label = crossing
+		Position #184:
+			latitude = 48° 51.238985097188134432144579477608'
+			longitude = 357° 35.20066315131089140777476131916'
+			label = crossing
+		Position #185:
+			latitude = 48° 51.27931395639492961890937294811'
+			longitude = 357° 34.872783726846137142274528741837'
+			label = crossing
+		Position #186:
+			latitude = 48° 51.162205612928204345735139213502'
+			longitude = 357° 35.824409493093298806343227624893'
+			label = crossing
+		Position #187:
+			latitude = 48° 51.162205612928204345735139213502'
+			longitude = 357° 35.824409493093298806343227624893'
+			label = crossing
+		Position #188:
+			latitude = 48° 50.980441718849505150501499883831'
+			longitude = 357° 37.298526023947715657413937151432'
+			label = crossing
+		Position #189:
+			latitude = 49° 27.784705724969853690708987414837'
+			longitude = 343° 57.423738333104665798600763082504'
+			label = crossing
+		Position #190:
+			latitude = 48° 50.743312426735656117671169340611'
+			longitude = 357° 39.216388398715480434475466609001'
+			label = crossing
+		Position #191:
+			latitude = 48° 50.98331286780222626475733704865'
+			longitude = 357° 37.275268163847385949338786303997'
+			label = crossing
+		Position #192:
+			latitude = 48° 51.273169514029888205186580307782'
+			longitude = 357° 35.585622135151879774639382958412'
+			label = crossing
+		Position #193:
+			latitude = 48° 51.258518418464973365189507603645'
+			longitude = 357° 35.725768378074462816584855318069'
+			label = crossing
+		Position #194:
+			latitude = 48° 51.435726693347874061146285384893'
+			longitude = 357° 34.028180851423712738323956727982'
+			label = crossing
+		Position #195:
+			latitude = 48° 51.395272035439063529338454827666'
+			longitude = 357° 34.416199735029522344120778143406'
+			label = crossing
+		Position #196:
+			latitude = 48° 51.590973011867617969983257353306'
+			longitude = 357° 32.53649898290404962608590722084'
+			label = crossing
+		Position #197:
+			latitude = 48° 51.495121432175778863893356174231'
+			longitude = 357° 33.45798379286634371965192258358'
+			label = crossing
+		Position #198:
+			latitude = 48° 51.5335819898204761102533666417'
+			longitude = 357° 33.08842972648562863469123840332'
+			label = crossing
+		Position #199:
+			latitude = 48° 51.462929676274171697514248080552'
+			longitude = 357° 33.767104931848734850063920021057'
+			label = crossing
+		Position #200:
+			latitude = 48° 51.421583519133804429657175205648'
+			longitude = 357° 34.163866711960508837364614009857'
+			label = crossing
+		Position #201:
+			latitude = 48° 51.468010976303020242994534783065'
+			longitude = 357° 33.718323770190181676298379898071'
+			label = crossing
+		Position #202:
+			latitude = 48° 51.458121219836669979486032389104'
+			longitude = 357° 33.813262621841886357287876307964'
+			label = crossing
+		Position #203:
+			latitude = 48° 51.463190090098862583545269444585'
+			longitude = 357° 33.764605033436509984312579035759'
+			label = crossing
+		Position #204:
+			latitude = 48° 51.2980406123882914926070952788'
+			longitude = 357° 35.347630952859390163212083280087'
+			label = crossing
+		Position #205:
+			latitude = 48° 51.390105890036181790492264553905'
+			longitude = 357° 34.465730126165681213024072349072'
+			label = crossing
+		Position #206:
+			latitude = 48° 51.31385444564642739351256750524'
+			longitude = 357° 35.196253134405424134456552565098'
+			label = crossing
+		Position #207:
+			latitude = 48° 51.350065580656405472836922854185'
+			longitude = 357° 34.849459619683784694643691182137'
+			label = crossing
+		Position #208:
+			latitude = 48° 51.235998861291704997711349278688'
+			longitude = 357° 35.941109000252708938205614686012'
+			label = crossing
+		Position #209:
+			latitude = 48° 51.235998861291704997711349278688'
+			longitude = 357° 35.941109000252708938205614686012'
+			label = crossing
+		Position #210:
+			latitude = 48° 51.08094161208640571203432045877'
+			longitude = 357° 37.421464321673738595563918352127'
+			label = crossing
+		Position #211:
+			latitude = 49° 12.194016310471909037005389109254'
+			longitude = 343° 40.566817589182164738303981721401'
+			label = crossing
+		Position #212:
+			latitude = 48° 50.882690551134999168425565585494'
+			longitude = 357° 39.30822938503524710540659725666'
+			label = crossing
+		Position #213:
+			latitude = 48° 51.089542728931718329477007500827'
+			longitude = 357° 37.339455858399333010311238467693'
+			label = crossing
+		Position #214:
+			latitude = 48° 51.080619448777042634901590645313'
+			longitude = 357° 35.695409648772056243615224957466'
+			label = crossing
+		Position #215:
+			latitude = 48° 51.080619448777042634901590645313'
+			longitude = 357° 35.695409648772056243615224957466'
+			label = crossing
+		Position #216:
+			latitude = 48° 50.117572484983128333624335937202'
+			longitude = 357° 36.244016751551271227071993052959'
+			label = crossing
+		Position #217:
+			latitude = 55° 2.225064864335024594765854999423'
+			longitude = 352° 47.650069790562383786891587078571'
+			label = crossing
+		Position #218:
+			latitude = 48° 48.027986811884773032943485304713'
+			longitude = 357° 37.431506335167341603664681315422'
+			label = crossing
+		Position #219:
+			latitude = 48° 49.683671006615668375161476433277'
+			longitude = 357° 36.490920169005676143569871783257'
+			label = crossing
+		Position #220:
+			latitude = 48° 51.145667438547093297529499977827'
+			longitude = 357° 35.798258173330168574466370046139'
+			label = crossing
+		Position #221:
+			latitude = 48° 51.145667438547093297529499977827'
+			longitude = 357° 35.798258173330168574466370046139'
+			label = crossing
+		Position #222:
+			latitude = 48° 50.232496349874651286881999112666'
+			longitude = 357° 36.384360317407526963506825268269'
+			label = crossing
+		Position #223:
+			latitude = 54° 51.333187862960443226256757043302'
+			longitude = 352° 22.873176719440380111336708068848'
+			label = crossing
+		Position #224:
+			latitude = 48° 48.309251987955263984986231662333'
+			longitude = 357° 37.616009514961206150474026799202'
+			label = crossing
+		Position #225:
+			latitude = 48° 49.880870577659663922531763091683'
+			longitude = 357° 36.609820501195144970552064478397'
+			label = crossing
+		Position #226:
+			latitude = 48° 50.443806376685671466475469060242'
+			longitude = 357° 34.689367373300683539127930998802'
+			label = crossing
+		Position #227:
+			latitude = 48° 50.443806376685671466475469060242'
+			longitude = 357° 34.689367373300683539127930998802'
+			label = crossing
+		Position #228:
+			latitude = 48° 49.408265297009421601615031249821'
+			longitude = 357° 35.378529268870124724344350397587'
+			label = crossing
+		Position #229:
+			latitude = 54° 47.224844946336759221594547852874'
+			longitude = 352° 13.725196717335848006769083440304'
+			label = crossing
+		Position #230:
+			latitude = 48° 47.16624138677346422809932846576'
+			longitude = 357° 36.866771521906684938585385680199'
+			label = crossing
+		Position #231:
+			latitude = 48° 48.661155048935853528746520169079'
+			longitude = 357° 35.875040455748603562824428081512'
+			label = crossing
+		Position #232:
+			latitude = 48° 50.611454729800442464693333022296'
+			longitude = 357° 34.954072868740695412270724773407'
+			label = crossing
+		Position #233:
+			latitude = 48° 50.611454729800442464693333022296'
+			longitude = 357° 34.954072868740695412270724773407'
+			label = crossing
+		Position #234:
+			latitude = 48° 49.618279001260532368178246542811'
+			longitude = 357° 35.634658107727545939269475638866'
+			label = crossing
+		Position #235:
+			latitude = 54° 44.44224195692896728360210545361'
+			longitude = 352° 7.5888184871553221455542370676994'
+			label = crossing
+		Position #236:
+			latitude = 48° 47.497965709919895971324876882136'
+			longitude = 357° 37.084065158147723195725120604038'
+			label = crossing
+		Position #237:
+			latitude = 48° 48.983508509114983553445199504495'
+			longitude = 357° 36.069083906119203675189055502415'
+			label = crossing
+		Position #238:
+			latitude = 48° 49.864085851669983640022110193968'
+			longitude = 357° 33.77483431891960208304226398468'
+			label = crossing
+		Position #239:
+			latitude = 48° 49.864085851669983640022110193968'
+			longitude = 357° 33.77483431891960208304226398468'
+			label = crossing
+		Position #240:
+			latitude = 48° 48.747685895386894117109477519989'
+			longitude = 357° 34.573595425932808211655355989933'
+			label = crossing
+		Position #241:
+			latitude = 54° 39.383317339017622771280002780259'
+			longitude = 351° 56.553319210790959914447739720345'
+			label = crossing
+		Position #242:
+			latitude = 48° 46.314648119159329553440329618752'
+			longitude = 357° 36.309502792393004710902459919453'
+			label = crossing
+		Position #243:
+			latitude = 48° 47.718876737156961098662577569485'
+			longitude = 357° 35.308438780150481761666014790535'
+			label = crossing
+		Position #244:
+			latitude = 48° 50.249880457127460431365761905909'
+			longitude = 357° 34.383301990095560540794394910336'
+			label = crossing
+		Position #245:
+			latitude = 48° 50.249880457127460431365761905909'
+			longitude = 357° 34.383301990095560540794394910336'
+			label = crossing
+		Position #246:
+			latitude = 48° 49.219077721547392911816132254899'
+			longitude = 357° 35.147891113481364300241693854332'
+			label = crossing
+		Position #247:
+			latitude = 54° 35.90031160992225522932130843401'
+			longitude = 351° 49.044358355249642045237123966217'
+			label = crossing
+		Position #248:
+			latitude = 48° 47.022759218007053050314425490797'
+			longitude = 357° 36.772822552695743070216849446297'
+			label = crossing
+		Position #249:
+			latitude = 48° 48.427299910898398138670017942786'
+			longitude = 357° 35.734336041515462056850083172321'
+			label = crossing
+		Position #250:
+			latitude = 48° 50.115916375301736707115196622908'
+			longitude = 357° 34.171953711576179557596333324909'
+			label = crossing
+		Position #251:
+			latitude = 48° 50.115916375301736707115196622908'
+			longitude = 357° 34.171953711576179557596333324909'
+			label = crossing
+		Position #252:
+			latitude = 48° 49.071801871436662167980102822185'
+			longitude = 357° 34.968407468655868797213770449162'
+			label = crossing
+		Position #253:
+			latitude = 54° 32.758036540565882432929356582463'
+			longitude = 351° 42.33092510642222805472556501627'
+			label = crossing
+		Position #254:
+			latitude = 48° 46.849339420357409835560247302055'
+			longitude = 357° 36.6593016963236095762113109231'
+			label = crossing
+		Position #255:
+			latitude = 48° 48.225524751505446374721941538155'
+			longitude = 357° 35.612978357547717678244225680828'
+			label = crossing
+		Position #256:
+			latitude = 48° 50.39509506640513336606090888381'
+			longitude = 357° 34.61247512165982698206789791584'
+			label = crossing
+		Position #257:
+			latitude = 48° 50.39509506640513336606090888381'
+			longitude = 357° 34.61247512165982698206789791584'
+			label = crossing
+		Position #258:
+			latitude = 48° 49.415184797899343038807273842394'
+			longitude = 357° 35.386966461201154743321239948273'
+			label = crossing
+		Position #259:
+			latitude = 54° 29.074664705156152422205195762217'
+			longitude = 351° 34.533801115076130372472107410431'
+			label = crossing
+		Position #260:
+			latitude = 48° 47.369499740549088073748862370849'
+			longitude = 357° 36.999899893712608900386840105057'
+			label = crossing
+		Position #261:
+			latitude = 48° 48.738139726397093909326940774918'
+			longitude = 357° 35.921372358490089027327485382557'
+			label = crossing
+		Position #262:
+			latitude = 48° 50.087272005922898188146064057946'
+			longitude = 357° 35.283827826709739383659325540066'
+			label = crossing
+		Position #263:
+			latitude = 48° 50.565996286987342500651720911264'
+			longitude = 357° 34.8822866871830683521693572402'
+			label = crossing
+		Position #264:
+			latitude = 48° 50.565996286987342500651720911264'
+			longitude = 357° 34.8822866871830683521693572402'
+			label = crossing
+		Position #265:
+			latitude = 48° 49.638810137569890912345726974308'
+			longitude = 357° 35.659703240925182399223558604717'
+			label = crossing
+		Position #266:
+			latitude = 54° 22.48004034397581563098356127739'
+			longitude = 351° 20.764837068300039391033351421356'
+			label = crossing
+		Position #267:
+			latitude = 48° 47.74367011598130261518235784024'
+			longitude = 357° 37.245091157128626946359872817993'
+			label = crossing
+		Position #268:
+			latitude = 48° 49.080344511559843567738425917923'
+			longitude = 357° 36.12739599911833465739618986845'
+			label = crossing
+		Position #269:
+			latitude = 48° 49.692553136543864411578397266567'
+			longitude = 357° 35.262951971302527454099617898464'
+			label = crossing
+		Position #270:
+			latitude = 48° 50.4113554725296353353769518435'
+			longitude = 357° 34.638141673282234478392638266087'
+			label = crossing
+		Position #271:
+			latitude = 48° 50.4113554725296353353769518435'
+			longitude = 357° 34.638141673282234478392638266087'
+			label = crossing
+		Position #272:
+			latitude = 48° 49.471171654717380761212552897632'
+			longitude = 357° 35.455237485356292381766252219677'
+			label = crossing
+		Position #273:
+			latitude = 54° 18.116680986861410929122939705849'
+			longitude = 351° 11.786018788881165164639241993427'
+			label = crossing
+		Position #274:
+			latitude = 48° 47.551863960279803222874761559069'
+			longitude = 357° 37.119382405509213640470989048481'
+			label = crossing
+		Position #275:
+			latitude = 48° 48.853874558656116278143599629402'
+			longitude = 357° 35.991036814467634030734188854694'
+			label = crossing
+		Position #276:
+			latitude = 48° 49.836296070975123484458890743554'
+			longitude = 357° 35.270558536142289085546508431435'
+			label = crossing
+		Position #277:
+			latitude = 48° 50.458246431656732511328300461173'
+			longitude = 357° 34.712163128226620756322517991066'
+			label = crossing
+		Position #278:
+			latitude = 48° 50.458246431656732511328300461173'
+			longitude = 357° 34.712163128226620756322517991066'
+			label = crossing
+		Position #279:
+			latitude = 48° 49.538676231587572829084820114076'
+			longitude = 357° 35.537563454901146542397327721119'
+			label = crossing
+		Position #280:
+			latitude = 54° 14.267549972804545177496038377285'
+			longitude = 351° 3.9502633004860854271100834012032'
+			label = crossing
+		Position #281:
+			latitude = 48° 47.679181983799594490847084671259'
+			longitude = 357° 37.202821393951808204292319715023'
+			label = crossing
+		Position #282:
+			latitude = 48° 48.960941328844143072274164296687'
+			longitude = 357° 36.055495926469802725478075444698'
+			label = crossing
+		Position #283:
+			latitude = 48° 49.918817493860956346907187253237'
+			longitude = 357° 35.274923164868141611805185675621'
+			label = crossing
+		Position #284:
+			latitude = 48° 50.727973060083684231358347460628'
+			longitude = 357° 34.484101232731063646497204899788'
+			label = crossing
+		Position #285:
+			latitude = 48° 49.915358438748427261089091189206'
+			longitude = 357° 35.278301527237090340349823236465'
+			label = crossing
+		Position #286:
+			latitude = 48° 50.472201646978618327921140007675'
+			longitude = 357° 34.734194230584307661047205328941'
+			label = crossing
+		Position #287:
+			latitude = 48° 50.472201646978618327921140007675'
+			longitude = 357° 34.734194230584307661047205328941'
+			label = crossing
+		Position #288:
+			latitude = 48° 49.588095773210056904645171016455'
+			longitude = 357° 35.597840619884664192795753479004'
+			label = crossing
+		Position #289:
+			latitude = 54° 3.6926059071305417091934941709042'
+			longitude = 350° 42.820509218062170475604943931103'
+			label = crossing
+		Position #290:
+			latitude = 48° 47.835981309864621380256721749902'
+			longitude = 357° 37.305606057585691814892925322056'
+			label = crossing
+		Position #291:
+			latitude = 48° 49.058704713089582583052106201649'
+			longitude = 357° 36.114364246830064075766131281853'
+			label = crossing
+		Position #292:
+			latitude = 48° 50.845522738399608897452708333731'
+			longitude = 357° 35.323825844989187316969037055969'
+			label = crossing
+		Position #293:
+			latitude = 48° 50.845522738399608897452708333731'
+			longitude = 357° 35.323825844989187316969037055969'
+			label = crossing
+		Position #294:
+			latitude = 48° 49.296244647302955854684114456177'
+			longitude = 357° 35.241954670061659271595999598503'
+			label = crossing
+		Position #295:
+			latitude = 56° 44.605412220120967958791879937053'
+			longitude = 357° 28.398003849672477372223511338234'
+			label = crossing
+		Position #296:
+			latitude = 48° 50.320870632548349021817557513714'
+			longitude = 357° 34.495326641547308099688962101936'
+			label = crossing
+		Position #297:
+			latitude = 48° 50.320870632548349021817557513714'
+			longitude = 357° 34.495326641547308099688962101936'
+			label = crossing
+		Position #298:
+			latitude = 48° 48.719254029922041127065313048661'
+			longitude = 357° 34.538974139270521845901384949684'
+			label = crossing
+		Position #299:
+			latitude = 56° 29.858675857704071177067817188799'
+			longitude = 356° 41.295341637490992070524953305721'
+			label = crossing
+		Position #300:
+			latitude = 48° 50.784488686710460569884162396193'
+			longitude = 357° 35.22739176547702300013042986393'
+			label = crossing
+		Position #301:
+			latitude = 48° 50.784488686710460569884162396193'
+			longitude = 357° 35.22739176547702300013042986393'
+			label = crossing
+		Position #302:
+			latitude = 48° 49.352963509621474713640054687858'
+			longitude = 357° 35.311102011773982667364180088043'
+			label = crossing
+		Position #303:
+			latitude = 56° 24.517839392403715237378492020071'
+			longitude = 356° 24.910625514789899170864373445511'
+			label = crossing
+		Position #304:
+			latitude = 48° 50.684133010866361246371525339782'
+			longitude = 357° 35.068859552745834662346169352531'
+			label = crossing
+		Position #305:
+			latitude = 48° 50.684133010866361246371525339782'
+			longitude = 357° 35.068859552745834662346169352531'
+			label = crossing
+		Position #306:
+			latitude = 48° 49.479237801133137963915942236781'
+			longitude = 357° 35.465074064242116946843452751637'
+			label = crossing
+		Position #307:
+			latitude = 55° 37.490946189973186619681655429304'
+			longitude = 354° 13.617727881155587965622544288635'
+			label = crossing
+		Position #308:
+			latitude = 48° 46.510070684881981151193031109869'
+			longitude = 357° 36.437312738189575611613690853119'
+			label = crossing
+		Position #309:
+			latitude = 48° 48.508928374925801563222194090486'
+			longitude = 357° 35.783443345366094945347867906094'
+			label = crossing
+		Position #310:
+			latitude = 48° 48.508928374925801563222194090486'
+			longitude = 357° 35.783443345366094945347867906094'
+			label = crossing
+		Position #311:
+			latitude = 59° 1.6929110078288545082614291459322'
+			longitude = 9° 53.601974855398211161627841647714'
+			label = crossing
+		Position #312:
+			latitude = 58° 53.571856066597405288121080957353'
+			longitude = 8° 26.019036900507295229090232169256'
+			label = crossing
+		Position #313:
+			latitude = 49° 30.348596859505647671539918519557'
+			longitude = 350° 21.618670189614022092428058385849'
+			label = astronomical position

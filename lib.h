@@ -4072,26 +4072,29 @@ void Plot::compute_crossings(String prefix){
  
       cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
       
-      (route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix);
+      if((route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix)){
+	//in this case, the two routes under consideration intercept
 
-      //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle.value), then I add this crossing to the list of sensible crossings
-      if(fabs(x) < cos(min_crossing_angle.value)){
+	//if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle.value), then I add this crossing to the list of sensible crossings
+	if(fabs(x) < cos(min_crossing_angle.value)){
 
-	p.resize(l+1);
-	(p[l]).resize(2);
+	  p.resize(l+1);
+	  (p[l]).resize(2);
 
-	p[l] = q_temp;
+	  p[l] = q_temp;
 
-	q.push_back(q_temp[0]);  
-	q.push_back(q_temp[1]);  
+	  q.push_back(q_temp[0]);  
+	  q.push_back(q_temp[1]);  
 
-	l++;
+	  l++;
 
-	cout << new_prefix.value << "Crossing accepted\n";
+	  cout << new_prefix.value << "Crossing accepted\n";
 
-      }else{
+	}else{
 
-	cout << new_prefix.value << "Crossing not accepted\n";
+	  cout << new_prefix.value << "Crossing not accepted\n";
+
+	}
 
       }
       

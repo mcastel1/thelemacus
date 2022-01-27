@@ -1,0 +1,676 @@
+reset 
+
+#notes:
+#to kill all gnuplot processes type: pkill -9 gnuplot
+#- using webgeocals improves agreement between circle of equal altitude and true position by ~ 100 m
+#do not use stellarium to compute hour angle and declination: they are calculated with the reference frame sitting on the surface of the earth at the observer's location! 
+#here 0 <= lambda < 360.0, and it grows in the W direction
+#notes
+#this command is such that when two points of a curve are both outisde the plotting window, the line that joins them is plotted
+set clip two
+K = 360.0/(2.0*pi);
+k = 1.0/K;
+n_intervals_tics = 6;
+n_points_routes = 1000;
+n_points_coastline = 200000;
+epsilon=1e-10
+myint(x) = x>0.0 ? int(x) : int(x)-1.0
+clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
+#extracts degrees and minutes from floating-point angle in degree format
+degrees(x) = floor(x);
+minutes(x) = (x > 0.0 ? (x - floor(x))*60.0 : (1.0 - (x - floor(x)))*60.0)
+is_int(x) = ((( abs(x - floor(x)) < epsilon ) || ( abs(x - ceil(x)) < epsilon)) ? 1 : 0)
+key_y = 0.98;
+key_x = 0.07;
+key_spacing = 0.04;
+
+
+#Mercator for the sphere
+#MINUS SIGN ADDED BY HAND TO FLIP THE MAP
+xe(lambda) =  (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k
+ye(phi) = (log(1./cos(phi*k) + tan(phi*k)))
+lambda_inv(xe) = ( ((xe <= 0.0) & (xe > -pi)) ? -xe*K: -xe*K + 360.0 )
+#given xe, this returns the corresponding lambda in non-standard format, i.e., lying in the interval [-pi, pi)
+lambda_inv_pm(xe) = -xe*K 
+phi_inv(ye) = K*atan(sinh(ye))	
+
+myf(x,y)=sprintf("%g\260 %g' %s , %g\260 %g' %s", myint(abs(phi_inv(y))), (abs(phi_inv(y)) - myint(abs(phi_inv(y))))*60.0, (phi_inv(y) > 0.0 ? 'N': 'S'), myint(abs(lambda_inv_pm(x))), (abs(lambda_inv_pm(x)) - myint(abs(lambda_inv_pm(x))))*60.0, ((lambda_inv_pm(x) > 0.0) ? 'W': 'E'))
+set mouse mouseformat function myf(x, y)
+set mouse mouseformat 8
+
+
+#clear
+set parametric
+set multiplot
+
+set size ratio -1
+set key top left
+#size of minor x and y tics with respect to screen size (1 = tic as long as screen size)
+mtics_size = 0.01
+set xtics rotate by 45 offset 0,graph -0.09
+
+set format x "";     
+set xtics ();
+
+set format y "";     
+set ytics ();
+
+set ticscale 3,1
+set samples n_points_routes
+#increments in degrees
+increment_phi = 20.0;
+increment_lambda = 60.0;
+list(start,end,increment)=system(sprintf("seq %g %g %g", start, increment, end))
+
+
+#set tics scale 0
+
+#latitude and longitude for a circle of equal altitude whose ground position has coordinates d, GHA, and whose angular aperture is omega
+phi_cea(t, d, GHA, omega) =pi/2.-acos(cos(omega) * sin(d)-cos(d) * cos(t) * sin(omega))
+lambda_cea(t, d, GHA, omega) = ( lambda = -(atan((-sin(GHA) * (cos(d)* cos(omega)+cos(t) * sin(d) * sin(omega))+cos(GHA) * sin(omega) * sin(t))/(cos(d) * cos(GHA) * cos(omega)+sin(omega)*  (cos(GHA) * cos(t) * sin(d)+sin(GHA)* sin(t)))) + (cos(d)* cos(GHA)* cos(omega) +  sin(omega) * (cos(GHA)* cos(t) * sin(d) + sin(GHA)  *sin(t)) >0.0 ? 0.0 : pi)) , lambda - 2.0*pi*floor(lambda/(2.0*pi)))
+
+#latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a
+phi_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, tt = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), asin( tanh( tau*sqrt(C/(1.0-C))*tt + atanh(sin(d)) ) ) )
+
+lambda_lox(l, d, GHA, a, Re) = ( ( (( (0.0 <= a) && (a < pi/2.0) ) || ( (3.0*pi/2.0 <= a) && (a < 2.0*pi) )) ? tau = 1 : tau =-1 ), ( ((0.0 <= a) && (a < pi)) ? sigma = -1 : sigma = 1 ), C = (cos(a))**2.0, tt = -tau*sqrt((1.0-C)/C) * log( sqrt((1.0+sin(d))/(1.0-sin(d))) * tan( -tau*sqrt(C)*l/(2.0*Re) + atan(sqrt((1.0-sin(d))/(1.0+sin(d)))) ) ), lambda = GHA + sigma*tt, lambda - 2.0*pi*floor(lambda/(2.0*pi)) )
+
+
+#latitude and longitude for an orthodrome whose starting point has coordinates d, GHA and whose initial heading is a
+phi_ort(l, d, GHA, a, Re) = asin(cos(a) * cos(d) * sin(l/Re) + cos(l/Re) * sin(d))
+lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) + sin(GHA) * (-cos(l/Re) * cos(d) +  cos(a) * sin(l/Re) * sin(d)))/( cos(l/Re) * cos(GHA) * cos(d) +  sin(l/Re) * (sin(a) * sin(GHA) -  cos(a) * cos(GHA) * sin(d)))) + ( ( cos(l/Re) * cos(GHA) * cos(d) + sin(l/Re) * (sin(a) * sin(GHA) - cos(a) * cos(GHA) * sin(d)) ) >= 0.0 ? 0.0 : pi ) ), lambda - 2.0*pi*floor(lambda/(2.0*pi)))
+
+#angles are in degrees
+#lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
+lambda_min = 357.71666666666664013973786495626;
+lambda_max = 357.48333333333334849157836288214;
+phi_min = 48.799999999999997157829056959599;
+phi_max = 48.916666666666664298190880799666;
+
+set xrange [xe(lambda_min):xe(lambda_max)]
+set yrange [ye(phi_min):ye(phi_max)]
+
+dx = ye((phi_min+phi_max)/2.0+1./60.) -  ye((phi_min+phi_max)/2.0)
+
+set style arrow 1 nohead ls 1 lw 1 linecolor rgb 'black'
+set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
+
+
+label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
+label_deg_latitude(x) = ( x == 0.0 ) ? sprintf("0\260") : ( x > 0.0 ? sprintf("%.f\260 N", x - myint(x/360.0)*360.0) : sprintf("%.f\260 S", ((-x) - myint((-x)/360.0)*360.0)) )
+label_deg_longitude(x) = ( x == 0.0 ) ? sprintf("0\260") : ( x < 180.0 ? sprintf("%.f\260 W", x - myint(x/360.0)*360.0) : sprintf("%.f\260 E", 360.0 - (x - myint(x/360.0)*360.0)) )
+#this prints the arcminutes only of angle x
+label_min(x) = sprintf("%.f'", minutes(x) ) 
+#if the arcminutes are zero, I print out only the degrees for clarity
+label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprintf("%.f\260 %.f'", degrees(x), minutes(x)) )
+#this function outputs angle x in the format which can be read from file from lib.h 
+label_deg_min_c_lib(x) = sprintf("%.f° %.f'", degrees(x), minutes(x))
+
+
+#GPS position
+#lambda0 = 360.0 -(2.0 + 24./60. + 26.07/(60.**2.))
+#phi0 = 48.0 + 51./60. + 19.63/(60.**2.)
+#set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
+
+#coastlines
+#	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "gray" noti
+p 0,0 w l noti
+
+#unset parametric
+unset multiplot
+
+x_max_old = 0.0;
+
+while(1){
+
+	if(GPVAL_X_MAX!=x_max_old){
+
+
+	unset arrow;
+	set bmargin 6;
+	
+
+	#print "Recalculating tics ... ";
+
+	lambda_min = lambda_inv(GPVAL_X_MIN);
+	lambda_max = lambda_inv(GPVAL_X_MAX);
+	
+	phi_min = phi_inv(GPVAL_Y_MIN);
+	phi_max = phi_inv(GPVAL_Y_MAX);
+
+	set xrange [xe(lambda_min):xe(lambda_max)]
+	set yrange [ye(phi_min):ye(phi_max)]
+
+	phi_span = phi_max - phi_min;
+	lambda_span = -(-(GPVAL_X_MAX - GPVAL_X_MIN)*K);
+	
+	#print "lambda in [" , lambda_min , " , " , lambda_max , "]";
+	#print "phi in [" , phi_min , " , " , phi_max , "]";
+
+	#print "x in [" , GPVAL_X_MIN , " , " , GPVAL_X_MAX , "]";
+	#print "y in [" , GPVAL_Y_MIN , " , " , GPVAL_Y_MAX , "]";
+
+
+	#print "Determining dlambda ...";
+
+	#gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+	if(lambda_span > 1.0){gamma_lambda = 1.0;}
+	else{gamma_lambda = 60.0;}
+
+	dlambda=1.0/gamma_lambda;
+	while(n_intervals_tics*dlambda<lambda_span){
+	#print dlambda;
+	if(dlambda == 1.0/gamma_lambda){dlambda = dlambda + 4.0/gamma_lambda;}
+	else{dlambda = dlambda + 5.0/gamma_lambda;}
+	}
+	if(dlambda > 1.0/gamma_lambda){
+		   if(dlambda == 5.0/gamma_lambda){dlambda = dlambda - 4.0/gamma_lambda;}
+		   else{dlambda = dlambda - 5.0/gamma_lambda;}
+	}
+	#print "... dlambda = " , dlambda;
+
+
+	#print "Determining dphi ...";
+	#print "phi_span = ", phi_span;
+
+	#gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+	if(phi_span > 1.0){gamma_phi = 1.0;}
+	else{gamma_phi = 60.0;}
+	
+	dphi=1.0/gamma_phi;
+	while(n_intervals_tics*dphi<phi_span){
+		#print dphi;
+		if(dphi == 1.0/gamma_phi){dphi = dphi + 4.0/gamma_phi;}
+		else{dphi = dphi + 5.0/gamma_phi;}
+	}
+	if(dphi > 1.0/gamma_phi){
+		   if(dphi == 5.0/gamma_phi){dphi = dphi - 4.0/gamma_phi;}
+		   else{dphi = dphi - 5.0/gamma_phi;}
+	}
+	#print "... dphi = " , dphi;
+
+
+
+	#print "Setting xtics at dlambda intervals:";
+
+	set format x "";     
+	set xtics ();
+
+	lambda= (int(lambda_min/dlambda))*dlambda;
+	x = xe(lambda);
+
+	#plot the first few custom-made myxics close to the left edge of the x axis. Here I consider 		x = x + dlambda*k (the first value of x which is an 'integer multiple of dlambda' and which is contained in the x axis), and then decrease it by one tenth of arcminute in the while loop
+	if(gamma_lambda == 60.0){
+					i=0.0;
+					while(x + (dlambda + (i/10.0)*1.0/60.0)*k > GPVAL_X_MIN){
+				             #set custom-made minor xtics every tenths (i/10.0) of arcminutes (1.0/60.0) 
+					     set arrow from first x + (dlambda + (i/10.0)*1.0/60.0)*k, graph 0 to first x + (dlambda + (i/10.0)*1.0/60.0)*k, graph mtics_size nohead  linecolor "blue";
+					     i=i-1.0;
+					}
+			 	   
+	}
+
+
+	while(x <= GPVAL_X_MAX){
+ 
+		lambda = lambda_inv(x);
+
+		if(x >= GPVAL_X_MIN){
+
+		          if(is_int(lambda) == 1){
+		       		      set xtics add (label_deg_longitude(lambda) x);
+		          }else{
+		       		      set xtics add (label_min(lambda) x);
+		          }
+
+			  if(gamma_lambda == 60.0){
+			  	   i=0.0;
+				   #plot the custom-made xtics from x to the next x (x + dlambda*k)
+				   while(x + (i/10.0)*1.0/60.0*k <  x + dlambda*k){
+					if(x + (i/10.0)*1.0/60.0*k <= GPVAL_X_MAX){
+					     #set custom-made minor xtics every tenths (i/10.0) of arcminutes (1.0/60.0) 
+					     set arrow from first x + (i/10.0)*1.0/60.0*k, graph 0 to first x + (i/10.0)*1.0/60.0*k, graph mtics_size nohead  linecolor "blue";
+					}
+					i=i+1.0;
+			 	   }
+		          }
+
+
+			  set arrow from first x, graph 0 to first x, graph 1 nohead  linecolor "gray";
+
+
+		}
+
+		
+		#print lambda_inv(x);
+		x = x + dlambda*k;
+		#lambda = lambda + dlambda;
+
+	}
+
+
+
+
+ 
+	#if(dlambda == 1.0){
+	#	print "Setting mxtics";
+	#	set mxtics 60;
+	#	show mxtics;
+	#}
+
+
+	#print "Setting ytics at dphi intervals:";
+	
+	set format y "";     
+	set ytics ();
+	phi = (int(phi_min/dphi))*dphi;
+
+	#plot the first few custom-made mytics close to the lower edge of the y axis. Here I consider phi + dphi (the first value of phi which is an 'integer multiple of dphi' and which is contained in the y axis), and then decrease it by one tenth of arcminute in the while loop
+	if(gamma_phi == 60.0){
+					i=0.0;
+					while(ye(phi + dphi + (i/10.0)*1.0/60.0) >= GPVAL_Y_MIN){
+						  #set custom-made minor ytics every tenths (i/10.0) of arcminutes (1.0/60.0) 
+		       	 		       	  set arrow from graph 0,first ye(phi + dphi + (i/10.0)*1.0/60.0) to graph mtics_size, first ye(phi + dphi + (i/10.0)*1.0/60.0) nohead  linecolor "blue";
+					i=i-1.0;
+					}
+			 	   
+	}
+
+	while(phi<=phi_max){
+		if(phi >= phi_min){
+		       if(is_int(phi) == 1){
+		       		      set ytics add (label_deg_latitude(phi) ye(phi));
+		       }else{
+		       		      set ytics add (label_min(phi) ye(phi));
+		       }
+
+		       if(gamma_phi == 60.0){
+			  	   i=0.0;
+				   #plot the custom-made ytics from phi to the next phi (phi + dphi)
+			 	   while(phi + (i/10.0)*1.0/60.0 < phi + dphi){
+					if(phi + (i/10.0)*1.0/60.0 <= phi_max){
+						#set custom-made minor ytics every tenths (i/10.0) of arcminutes (1.0/60.0) 
+		       	 		       set arrow from graph 0,first ye(phi + (i/10.0)*1.0/60.0) to graph mtics_size, first ye(phi + (i/10.0)*1.0/60.0) nohead  linecolor "blue";
+					}
+					i=i+1.0;
+			 	   }
+		       }
+
+		       set arrow from graph 0,first ye(phi) to graph 1, first ye(phi) nohead  linecolor "gray";
+		}
+		#print phi;
+		phi = phi + dphi;
+
+
+	}
+
+
+	clear;
+
+	set multiplot	
+	#set the values lambda_min_get_coastline_data,  lambda_max_get_coastline_data which I will feed into get_coastline_data.cpp
+	if((lambda_min < 180.0) && (lambda_max >= 180.0)){
+		lambda_min_get_coastline_data = lambda_max - 360.0;
+		lambda_max_get_coastline_data = lambda_min;
+	}else{
+		lambda_min_get_coastline_data = lambda_max;
+		lambda_max_get_coastline_data = lambda_min;
+	}
+
+	#fetch coastline data in path_file_coastline_data_blocked, and produce file path_file_selected_coastline_data which contains n_points_coastline points of the coastline of the world
+	system(sprintf("./get_coastline_data.o -p %g -P %g -l %g -L %g -N %g > /dev/null 2>&1", floor(phi_min), floor(phi_max), floor(lambda_min_get_coastline_data), floor(lambda_max_get_coastline_data), n_points_coastline));
+
+
+	set key top right
+plot [0.:2.*pi] "+" u (xe(K*lambda_cea(t, 5.9458048621362600272277632029727, 6.1026182720272093007451985613443, 1.1965015775636649308921732881572))) : (ye(K*phi_cea(t, 5.9458048621362600272277632029727, 6.1026182720272093007451985613443, 1.1965015775636649308921732881572))) w l dashtype 1 lt 1 ti "sun 2021-11-18 11:04:27 TAI, MP",\
+[0.:2.0949668887294916608254879974993 - epsilon] "+" u (xe(K*lambda_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) : (ye(K*phi_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) w l dashtype 2 lt 2 ti "moon 2021-11-22 20:10:15 TAI, MP" ,\
+[2.0949668887294916608254879974993 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) : (ye(K*phi_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) w l dashtype 2 lt 2 noti,\
+[0.:2.2110503123438305372872036969056 - epsilon] "+" u (xe(K*lambda_cea(t, 0.45964246546832737694288084639993, 4.6571790867676545744302529783454, 1.2384329688916302369960931173409))) : (ye(K*phi_cea(t, 0.45964246546832737694288084639993, 4.6571790867676545744302529783454, 1.2384329688916302369960931173409))) w l dashtype 3 lt 3 ti "moon 2021-11-22 20:16:35 TAI, MP" ,\
+[2.2110503123438305372872036969056 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 0.45964246546832737694288084639993, 4.6571790867676545744302529783454, 1.2384329688916302369960931173409))) : (ye(K*phi_cea(t, 0.45964246546832737694288084639993, 4.6571790867676545744302529783454, 1.2384329688916302369960931173409))) w l dashtype 3 lt 3 noti,\
+[0.:2.3561473623376998354217448650161 - epsilon] "+" u (xe(K*lambda_cea(t, 0.4596538628351821698103663038637, 4.6894927859929653735093779687304, 1.218103610124587232732551456138))) : (ye(K*phi_cea(t, 0.4596538628351821698103663038637, 4.6894927859929653735093779687304, 1.218103610124587232732551456138))) w l dashtype 4 lt 4 ti "moon 2021-11-22 20:24:15 TAI, MP" ,\
+[2.3561473623376998354217448650161 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 0.4596538628351821698103663038637, 4.6894927859929653735093779687304, 1.218103610124587232732551456138))) : (ye(K*phi_cea(t, 0.4596538628351821698103663038637, 4.6894927859929653735093779687304, 1.218103610124587232732551456138))) w l dashtype 4 lt 4 noti,\
+[0.:2.4348252344487524290173041663365 - epsilon] "+" u (xe(K*lambda_cea(t, 0.45965971032051594624689982993004, 4.7067735719524836923710608971305, 1.2071966565555940498200016008923))) : (ye(K*phi_cea(t, 0.45965971032051594624689982993004, 4.7067735719524836923710608971305, 1.2071966565555940498200016008923))) w l dashtype 5 lt 5 ti "moon 2021-11-22 20:28:21 TAI, MP" ,\
+[2.4348252344487524290173041663365 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 0.45965971032051594624689982993004, 4.7067735719524836923710608971305, 1.2071966565555940498200016008923))) : (ye(K*phi_cea(t, 0.45965971032051594624689982993004, 4.7067735719524836923710608971305, 1.2071966565555940498200016008923))) w l dashtype 5 lt 5 noti,\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.36429428489997617290896414488088, 4.872465542318730413740013318602, 1.1682728814055294286333719355753))) : (ye(K*phi_cea(t, 0.36429428489997617290896414488088, 4.872465542318730413740013318602, 1.1682728814055294286333719355753))) w l dashtype 6 lt 6 ti "moon 2021-11-25 23:37:35 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.36414259295948320227509498181462, 4.8875938083653114318849475239404, 1.1582788506675369966103517072042))) : (ye(K*phi_cea(t, 0.36414259295948320227509498181462, 4.8875938083653114318849475239404, 1.1582788506675369966103517072042))) w l dashtype 7 lt 7 ti "moon 2021-11-25 23:41:010 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.36385867219106582393095550287399, 4.9158802414402433811346782022156, 1.1397743841303358269811951686279))) : (ye(K*phi_cea(t, 0.36385867219106582393095550287399, 4.9158802414402433811346782022156, 1.1397743841303358269811951686279))) w l dashtype 8 lt 8 ti "moon 2021-11-25 23:47:52 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.36378233012667338108769854443381, 4.9234796025048987999639393819962, 1.1346935478399537977622912876541))) : (ye(K*phi_cea(t, 0.36378233012667338108769854443381, 4.9234796025048987999639393819962, 1.1346935478399537977622912876541))) w l dashtype 9 lt 9 ti "moon 2021-11-25 23:49:40 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.36368969318462324169516364236188, 4.9326973578750763493872000253759, 1.1288027995639788869652875291649))) : (ye(K*phi_cea(t, 0.36368969318462324169516364236188, 4.9326973578750763493872000253759, 1.1288027995639788869652875291649))) w l dashtype 10 lt 10 ti "moon 2021-11-25 23:51:51 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.36313160549830530987591714620066, 4.9881448926199265514469516347162, 1.0928665663416565756449472246459))) : (ye(K*phi_cea(t, 0.36313160549830530987591714620066, 4.9881448926199265514469516347162, 1.0928665663416565756449472246459))) w l dashtype 11 lt 11 ti "moon 2021-11-26 00:04:59 TAI, MP",\
+[0.:3.3020157154938090116047533228993 - epsilon] "+" u (xe(K*lambda_cea(t, 5.9070713287650393752414856862742, 6.0530480482491935134703453513794, 1.2402020788664185335647971442086))) : (ye(K*phi_cea(t, 5.9070713287650393752414856862742, 6.0530480482491935134703453513794, 1.2402020788664185335647971442086))) w l dashtype 12 lt 12 ti "sun 2021-11-29 10:56:14 TAI, MP" ,\
+[3.3020157154938090116047533228993 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 5.9070713287650393752414856862742, 6.0530480482491935134703453513794, 1.2402020788664185335647971442086))) : (ye(K*phi_cea(t, 5.9070713287650393752414856862742, 6.0530480482491935134703453513794, 1.2402020788664185335647971442086))) w l dashtype 12 lt 12 noti,\
+[0.:3.2826226895143446604663495236309 - epsilon] "+" u (xe(K*lambda_cea(t, 5.9070583080309058132684185693506, 6.0811118396807213315469198278151, 1.2370915053316604570454728673212))) : (ye(K*phi_cea(t, 5.9070583080309058132684185693506, 6.0811118396807213315469198278151, 1.2370915053316604570454728673212))) w l dashtype 13 lt 13 ti "sun 2021-11-29 11:02:40 TAI, MP" ,\
+[3.2826226895143446604663495236309 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 5.9070583080309058132684185693506, 6.0811118396807213315469198278151, 1.2370915053316604570454728673212))) : (ye(K*phi_cea(t, 5.9070583080309058132684185693506, 6.0811118396807213315469198278151, 1.2370915053316604570454728673212))) w l dashtype 13 lt 13 noti,\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34392250449859329552992903700215, 5.4165366475455298811425564053934, 0.83064121865521078902361296059098))) : (ye(K*phi_cea(t, 0.34392250449859329552992903700215, 5.4165366475455298811425564053934, 0.83064121865521078902361296059098))) w l dashtype 14 lt 14 ti "moon 2021-12-16 18:47:02 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34435984749136028248983620869694, 5.4586951484653507549182904767804, 0.80456622317250903186902633024147))) : (ye(K*phi_cea(t, 0.34435984749136028248983620869694, 5.4586951484653507549182904767804, 0.80456622317250903186902633024147))) w l dashtype 15 lt 15 ti "moon 2021-12-16 18:56:60 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34449646941021194734844357299153, 5.4718784045260822068712514010258, 0.79621717383402335066477917280281))) : (ye(K*phi_cea(t, 0.34449646941021194734844357299153, 5.4718784045260822068712514010258, 0.79621717383402335066477917280281))) w l dashtype 16 lt 16 ti "moon 2021-12-16 19:00:07 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34460820162342553629741814802401, 5.4826646738540949499451926385518, 0.78971128990343664177942173409974))) : (ye(K*phi_cea(t, 0.34460820162342553629741814802401, 5.4826646738540949499451926385518, 0.78971128990343664177942173409974))) w l dashtype 17 lt 17 ti "moon 2021-12-16 19:02:40 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34477462207411779804289153616992, 5.4987382780218387878790053946432, 0.77968003033643973331834331474965))) : (ye(K*phi_cea(t, 0.34477462207411779804289153616992, 5.4987382780218387878790053946432, 0.77968003033643973331834331474965))) w l dashtype 18 lt 18 ti "moon 2021-12-16 19:06:28 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34491541836954742183962707713363, 5.512344394287454818481819529552, 0.77165017211454833834238797862781))) : (ye(K*phi_cea(t, 0.34491541836954742183962707713363, 5.512344394287454818481819529552, 0.77165017211454833834238797862781))) w l dashtype 19 lt 19 ti "moon 2021-12-16 19:09:41 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34502552571166333894581157437642, 5.522989562958073861409502569586, 0.76523261337105319412899007147644))) : (ye(K*phi_cea(t, 0.34502552571166333894581157437642, 5.522989562958073861409502569586, 0.76523261337105319412899007147644))) w l dashtype 20 lt 20 ti "moon 2021-12-16 19:12:12 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34516619584237817619509769428987, 5.536595599672560652493302768562, 0.75726172904266131347128521156264))) : (ye(K*phi_cea(t, 0.34516619584237817619509769428987, 5.536595599672560652493302768562, 0.75726172904266131347128521156264))) w l dashtype 21 lt 21 ti "moon 2021-12-16 19:15:25 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34540218747170270408020087415935, 5.5594367215785531755045667523518, 0.74389711333796859626943387411302))) : (ye(K*phi_cea(t, 0.34540218747170270408020087415935, 5.5594367215785531755045667523518, 0.74389711333796859626943387411302))) w l dashtype 22 lt 22 ti "moon 2021-12-16 19:20:49 TAI, 2022-01-26 17:21:22",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34554630625876942007224101871543, 5.5733951229774953972651019284967, 0.73571251813899385396666730230208))) : (ye(K*phi_cea(t, 0.34554630625876942007224101871543, 5.5733951229774953972651019284967, 0.73571251813899385396666730230208))) w l dashtype 23 lt 23 ti "moon 2021-12-16 19:24:07 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34567653123860059283245504957449, 5.5860140413491849997740246180911, 0.72844917167922096368215534312185))) : (ye(K*phi_cea(t, 0.34567653123860059283245504957449, 5.5860140413491849997740246180911, 0.72844917167922096368215534312185))) w l dashtype 24 lt 24 ti "moon 2021-12-16 19:27:06 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.34601889871155383504586211529386, 5.6192178273451389713954995386302, 0.70958171610843434606863411318045))) : (ye(K*phi_cea(t, 0.34601889871155383504586211529386, 5.6192178273451389713954995386302, 0.70958171610843434606863411318045))) w l dashtype 25 lt 25 ti "moon 2021-12-16 19:34:57 TAI, PGP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.42830772294977287328876514038711, 5.0343160546136278554740783874877, 1.0170778626193057725402013602434))) : (ye(K*phi_cea(t, 0.42830772294977287328876514038711, 5.0343160546136278554740783874877, 1.0170778626193057725402013602434))) w l dashtype 26 lt 26 ti "moon 2021-12-21 21:23:30 TAI, BGCB",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.4278944385538696604243114052224, 5.1041029584494310711306752637029, 0.97128445975979071924655272596283))) : (ye(K*phi_cea(t, 0.4278944385538696604243114052224, 5.1041029584494310711306752637029, 0.97128445975979071924655272596283))) w l dashtype 27 lt 27 ti "moon 2021-12-21 21:40:03 TAI, BGCB",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.42773558010375717364226488825807, 5.1308091068704664294841677474324, 0.95396935058027476639352926213178))) : (ye(K*phi_cea(t, 0.42773558010375717364226488825807, 5.1308091068704664294841677474324, 0.95396935058027476639352926213178))) w l dashtype 28 lt 28 ti "moon 2021-12-21 21:46:23 TAI, BGCB",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.42646565777505518468615264282562, 5.3420021180645536063025247131009, 0.81707965813358418571965557930525))) : (ye(K*phi_cea(t, 0.42646565777505518468615264282562, 5.3420021180645536063025247131009, 0.81707965813358418571965557930525))) w l dashtype 29 lt 29 ti "moon 2021-12-21 22:36:28 TAI, BGCB",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.39524959708966223015380592187284, 0.36913041613194275125664489678456, 0.56119663236333905409480848902604))) : (ye(K*phi_cea(t, 0.39524959708966223015380592187284, 0.36913041613194275125664489678456, 0.56119663236333905409480848902604))) w l dashtype 30 lt 30 ti "moon 2022-01-13 22:22:14 TAI, MP",\
+[0.:4.4580904866126198626830046123359 - epsilon] "+" u (xe(K*lambda_cea(t, 5.8836257115287668995051717502065, 2.5580279003488466393889666505856, 0.59267717894562732539043281576596))) : (ye(K*phi_cea(t, 5.8836257115287668995051717502065, 2.5580279003488466393889666505856, 0.59267717894562732539043281576596))) w l dashtype 31 lt 31 ti "moon 2021-01-13 22:38:46 TAI, MP",\
+[4.4580904866126198626830046123359 + epsilon:5.4695282290590432339172366482671 - epsilon] "+" u (xe(K*lambda_cea(t, 5.8836257115287668995051717502065, 2.5580279003488466393889666505856, 0.59267717894562732539043281576596))) : (ye(K*phi_cea(t, 5.8836257115287668995051717502065, 2.5580279003488466393889666505856, 0.59267717894562732539043281576596))) w l dashtype 31 lt 31 noti,\
+[5.4695282290590432339172366482671 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 5.8836257115287668995051717502065, 2.5580279003488466393889666505856, 0.59267717894562732539043281576596))) : (ye(K*phi_cea(t, 5.8836257115287668995051717502065, 2.5580279003488466393889666505856, 0.59267717894562732539043281576596))) w l dashtype 31 lt 31 noti,\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.39596768240995694476680455409223, 0.45833841503745453849205659935251, 0.60364878382648412546984673099359))) : (ye(K*phi_cea(t, 0.39596768240995694476680455409223, 0.45833841503745453849205659935251, 0.60364878382648412546984673099359))) w l dashtype 32 lt 32 ti "moon 2022-01-13 22:43:21 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.3944850830950822340170702773321, 0.27463965634558629158590292718145, 0.63989593776475672814996187298675))) : (ye(K*phi_cea(t, 0.3944850830950822340170702773321, 0.27463965634558629158590292718145, 0.63989593776475672814996187298675))) w l dashtype 33 lt 33 ti "moon 2022-01-13 21:59:52 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.39776413615071581908466669119662, 0.68349733781581367697555151607958, 0.72875817554161770317477930802852))) : (ye(K*phi_cea(t, 0.39776413615071581908466669119662, 0.68349733781581367697555151607958, 0.72875817554161770317477930802852))) w l dashtype 34 lt 34 ti "moon 2022-01-13 23:36:39 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.39799445546451117650121886981651, 0.71257419365295537883042698013014, 0.74662480330791969329595758608775))) : (ye(K*phi_cea(t, 0.39799445546451117650121886981651, 0.71257419365295537883042698013014, 0.74662480330791969329595758608775))) w l dashtype 35 lt 35 ti "moon 2022-01-13 23:43:32 TAI, MP",\
+[0.:2.*pi] "+" u (xe(K*lambda_cea(t, 0.865064065675024695956096820737, 6.1038518988140433307876264734659, 0.028919563257060607736059765215941))) : (ye(K*phi_cea(t, 0.865064065675024695956096820737, 6.1038518988140433307876264734659, 0.028919563257060607736059765215941))) w l dashtype 36 linecolor rgb "purple" noti,\
+	"+" u (xe(K*(6.2410583415053171307818047353067))):(ye(K*(0.85264552071863697335629694862291))) w p lw 2 lt 1 ti "Centre Sportif Maryse Hilsz (MH)",\
+"+" u (xe(K*(6.241171014205057154811129294103))):(ye(K*(0.85268850862179457195111353939865))) w p lw 2 lt 2 ti "Baby Gym Campo (BGC)",\
+"+" u (xe(K*(6.2411274295520877686271887796465))):(ye(K*(0.8526832726340385359975471146754))) w p lw 2 lt 3 ti "My Place (MP)",\
+"+" u (xe(K*(6.2406478822852093912842974532396))):(ye(K*(0.85272800038349960694006313133286))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240728686584088080735455150716))):(ye(K*(0.85276195729873205397808533234638))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412126046691387415421559126116))):(ye(K*(0.85271700075296552601145094740787))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410704585300589286589456605725))):(ye(K*(0.85273022306256796021273203223245))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.241028797338850964138146082405))):(ye(K*(0.85273409570662983547606472711777))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411129652548087420882438891567))):(ye(K*(0.85272627058631655927456449717283))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408197305695427559157906216569))):(ye(K*(0.85275351155450185292039577689138))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405841937002719532756600528955))):(ye(K*(0.85277534951268074703278898596182))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403629559200624044024152681231))):(ye(K*(0.85279582684610000242741989495698))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.24050895405337868737660755869))):(ye(K*(0.85278231733700782246643257167307))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406901845691642449764913180843))):(ye(K*(0.85276552723734833083568673828267))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411482432896061567362266941927))):(ye(K*(0.85272298932053092190841425690451))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411848381395618190481400233693))):(ye(K*(0.85271958466768538187352532986552))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406937291056179262227487924974))):(ye(K*(0.85276519862776611891064248993644))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408047039117802157193182210904))):(ye(K*(0.85275490590474156693545637608622))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240261196537047361232453113189))):(ye(K*(0.85280523415253250973933063505683))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240525673506851056515642994782))):(ye(K*(0.85278076931260049509120335642365))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2404181969610066360587552480865))):(ye(K*(0.85279071700842323799918176518986))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406124340659294702504666929599))):(ye(K*(0.85277273320872082340571296299458))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407243109568257821706538379658))):(ye(K*(0.85276236306204167281208583517582))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405945588869062845560620189644))):(ye(K*(0.85277438930297844166261711507104))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406204663858142467347533965949))):(ye(K*(0.85277198896092554214476422203006))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406025204382826743199075281154))):(ye(K*(0.85277365171077879058003645695862))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411100815826054954982282652054))):(ye(K*(0.85272653876323700750106127088657))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408498804649461533244902966544))):(ye(K*(0.85275071342207720004324755791458))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410608649858527741116631659679))):(ye(K*(0.85273111494312447966592571901856))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409473971659839008907511015423))):(ye(K*(0.85274165885656427743555241249851))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2413474352580697868120296334382))):(ye(K*(0.85270444603659822924157651868882))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2417698094485150051013988559134))):(ye(K*(0.85266503550760197605029588885373))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(5.9945717200386470224771073844749))):(ye(K*(0.85523972368817358091774849526701))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2422969449913221495762627455406))):(ye(K*(0.85261567713609165419796909191064))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2417175759235847820605158631224))):(ye(K*(0.85266991594492069772570630448172))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406994008403398055406796629541))):(ye(K*(0.85270777816999854259449875826249))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407070019378503289431137091015))):(ye(K*(0.85272184070732970351258472874179))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409219163527973606164778175298))):(ye(K*(0.85311933747673962535884584212909))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409245497708667471670196391642))):(ye(K*(0.8531242068285701529717357516347))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407140087438115472195931943133))):(ye(K*(0.85273480353190234115601242592675))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407600300487100497548453859054))):(ye(K*(0.85281993890623519760652015975211))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405411786201270274432317819446))):(ye(K*(0.85241499659792197007845970802009))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406491267928130284303733787965))):(ye(K*(0.85261476118449908145890958621749))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406092317406685054947956814431))):(ye(K*(0.85254093918988871347863778282772))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406850045092578938010774436407))):(ye(K*(0.85268114327414579189934329406242))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407271073843872954967082478106))):(ye(K*(0.85275903585210099944191597387544))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406814794183391725823639717419))):(ye(K*(0.85267462129948656812672425076016))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406914604725498563198016199749))):(ye(K*(0.85269308767819673722243578595226))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406878865674499934357299935073))):(ye(K*(0.85268647549458154166757140046684))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408603239489703895515049225651))):(ye(K*(0.85300544029922098498985860715038))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(0.05822490178036260344285324208613))):(ye(K*(1.0151048704709921821631724014878))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411778869967662330964230932295))):(ye(K*(0.85264895062767342981402407531277))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411893871412544854138104710728))):(ye(K*(0.85267149268727182587213064834941))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411838277898343818606008426286))):(ye(K*(0.85266059557658369083554816825199))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412010502036796566471821279265))):(ye(K*(0.85269435346267907771533600680414))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410015708365564890414134424645))):(ye(K*(0.85230326669301248454502228923957))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410497606013368709909627796151))):(ye(K*(0.85239776148733048533046030570404))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408433389181308115212232223712))):(ye(K*(0.85199291548313094146749335777713))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409522402611461444621454575099))):(ye(K*(0.85220652371004679270782844469068))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409171238391492053665388084482))):(ye(K*(0.85213764943747405400387151530595))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409946902576809435458926600404))):(ye(K*(0.85228977375844439112739792108187))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410424550258145615089233615436))):(ye(K*(0.85238343675695549261916994510102))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410026856371123571420866937842))):(ye(K*(0.85230545281552361203125656174961))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410161269085753232843671867158))):(ye(K*(0.85233181067731556002087245360599))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410225111027726185852770868223))):(ye(K*(0.85234432956387229385342152454541))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410563955491982213175106153358))):(ye(K*(0.85241077103976226059245391297736))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(0.051120481281128934969437693780492))):(ye(K*(1.0137603227176763542871640311205))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410400348617773857995416619815))):(ye(K*(0.85266591499473354254234891413944))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410495842706694702428649179637))):(ye(K*(0.85268610053381976854325330350548))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.24110384985821742276357326773))):(ye(K*(0.85280079906690942070923711071373))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411160551572466559377971861977))):(ye(K*(0.85282659492583601235082824132405))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240923769874870075113904022146))):(ye(K*(0.85242012005684331121813102072338))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409689411580533402457149350084))):(ye(K*(0.85251562379728040852455706044566))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407701452831556565570281236432))):(ye(K*(0.85209524706017403250513098100782))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408731633030152252672451140825))):(ye(K*(0.85231311344478266622814999209368))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408387648708361084004536678549))):(ye(K*(0.85224037183165535225271014496684))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409117405442637860346621891949))):(ye(K*(0.85239468535009221827891678913147))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409554629457426599969949165825))):(ye(K*(0.85248712837434192923780074124807))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409164491425181964245894050691))):(ye(K*(0.85240464124737624906913424638333))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409282739275813156609729048796))):(ye(K*(0.85242964321161018848016510673915))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409318153769701709165929059964))):(ye(K*(0.85243713101745699489697472017724))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(0.041776897561469003572476310637285))):(ye(K*(1.0119133981148593637300336922635))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410001048745398222195035486948))):(ye(K*(0.85267082642409564030572255433071))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410089555497965108088465058245))):(ye(K*(0.85269034330501192187057313276455))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410788868190394396151532419026))):(ye(K*(0.85284453816234673251273079586099))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410894878355032133754320966545))):(ye(K*(0.8528679109041300554494569041708))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240901551000747282671454740921))):(ye(K*(0.85245347818949890328354968005442))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409453327095008035030332393944))):(ye(K*(0.85255003875657642264940250242944))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407511758025462356158641341608))):(ye(K*(0.85212175888307217785921920949477))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408512813642396110935806063935))):(ye(K*(0.85234259768044995375646522006718))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408175453043384095508372411132))):(ye(K*(0.85226817905359653071428738257964))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408883200823286330205519334413))):(ye(K*(0.85242429567056521300116855854867))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409303663809581053101283032447))):(ye(K*(0.8525170315028607337382027253625))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408921013583773529376230726484))):(ye(K*(0.85243263585058060005650304447045))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240903332651536850050888460828))):(ye(K*(0.85245740779186462976468874330749))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240906076127723522972701175604))):(ye(K*(0.85246345876435192234765736429836))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(0.036985767361834197275438640417633))):(ye(K*(1.0109311232371167577070991683286))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411024428617709602917784650344))):(ye(K*(0.85265823655433137240322594152531))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.241105843618634629876851249719))):(ye(K*(0.8526802236463403295019247707387))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.241059863133681773206262732856))):(ye(K*(0.85238302325254600155801654182142))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409716575628921830798390146811))):(ye(K*(0.85181337636990339667875105078565))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410186727068026613096662913449))):(ye(K*(0.85211692983986497829107520374237))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410041953591131047573981049936))):(ye(K*(0.85202343771164901209402842141571))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410371203910823822980091790669))):(ye(K*(0.85223608631466341023497079731897))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410572052620105765186053758953))):(ye(K*(0.85236584903454726269700358898262))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410410285674258190624641429167))):(ye(K*(0.85226133338017595608704368714825))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410466707670071428992741857655))):(ye(K*(0.85229778453185200959296707878821))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410495856127656821854543522932))):(ye(K*(0.85231661676132064453526027136832))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410837963341485590262891491875))):(ye(K*(0.85253769691177438971863011829555))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410067940998112945294451492373))):(ye(K*(0.85204021866471879587123794408399))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2597727094426423022355265857186))):(ye(K*(0.9963617724743791814745463852887))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240811560021422010891001264099))):(ye(K*(0.8526940028476769350973540895211))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408138529310450692833001085091))):(ye(K*(0.85271070190820696943490020203171))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407358678664452966700082470197))):(ye(K*(0.85214315052893152557800249269349))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240777029866439562511004623957))):(ye(K*(0.85244261051267822271171326065087))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407628979445552985794165579136))):(ye(K*(0.85233977228833923689421681046952))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407913495821976113120399531908))):(ye(K*(0.85254684338877095850506293572835))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408073727550092968385797576047))):(ye(K*(0.85266350922651379384831216157181))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407915379947667133819777518511))):(ye(K*(0.85254821502793842746825703216018))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407955401807662099145090905949))):(ye(K*(0.85257735200692441601688642549561))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407954347035490272332936001476))):(ye(K*(0.85257658407636061070888899848796))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240762093125290732587018283084))):(ye(K*(0.85233391643322908848290353489574))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406853889564519732857661438175))):(ye(K*(0.85177622625370430498037421784829))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2561870384525599675384910369758))):(ye(K*(0.9953608699337120890859864630329))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405786485687579911996181181166))):(ye(K*(0.85272259923844639928347532986663))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405799600669604743075069563929))):(ye(K*(0.85273507428208483727161137721851))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405655537645330355189798865467))):(ye(K*(0.85259807827188249795824503962649))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405872572166449785413533390965))):(ye(K*(0.85280449768814969857544383557979))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405985457178347886042502068449))):(ye(K*(0.85291193573154877594078016045387))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405852191818391716537917091046))):(ye(K*(0.85278510615729352650760120013729))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405876700755094077521789586172))):(ye(K*(0.85280842616694285673872855113586))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405858084619705294926461647265))):(ye(K*(0.8527907128805014558281527570216))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405216843050546060567285167053))):(ye(K*(0.85218141107782274801252242468763))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2404593045245144722343866305891))):(ye(K*(0.85159024191084720101230232103262))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2499975384035995062959045753814))):(ye(K*(0.99359465478568043117491015436826))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403585052598247173705203749705))):(ye(K*(0.85274959375714587395123089663684))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403593176532412556412054982502))):(ye(K*(0.8527580320178669293085249591968))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403686885863267619356520299334))):(ye(K*(0.85285539340623239823457879538182))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403879578844980713370205194224))):(ye(K*(0.85305574849745458010374932200648))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403971326853513446053511870559))):(ye(K*(0.85315121696936080386564071886824))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403841090940703750788998149801))):(ye(K*(0.85301571376709706129304322530515))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403857339889698963020236988086))):(ye(K*(0.85303261475935776569912150080199))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2403824260565050607851844688412))):(ye(K*(0.85299820955788807630426617834019))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.24028947736591987904830602929))):(ye(K*(0.85203392950155365515030325695989))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2402281041527043470296121085994))):(ye(K*(0.85139980463064413029883326089475))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2481682894405743411425646627322))):(ye(K*(0.99306321797203689349942123953952))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405045995191210650432367401663))):(ye(K*(0.85273168302866586554245031948085))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405055573697314486025788937695))):(ye(K*(0.8527428195240912556229773144878))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240518332942345480773838062305))):(ye(K*(0.85289142785560767556773953401716))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405273621501482494977608439513))):(ye(K*(0.85299653917405116043681800874765))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405160180882939258140140736941))):(ye(K*(0.85286449093306959667870614794083))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405178629132533885126576933544))):(ye(K*(0.85288595797784516605588578386232))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405158167845051764288655249402))):(ye(K*(0.85286214866057119543540920858504))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240453450460267781352285965113))):(ye(K*(0.85213809199886736411855281403405))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2404019914590120876596301968675))):(ye(K*(0.85154305680797581779017946246313))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2464666201930887368121148028877))):(ye(K*(0.99256493368813647482085116280359))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406888876294779322506656171754))):(ye(K*(0.85270906895353981713725488589262))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406892237986841820429617655464))):(ye(K*(0.85272369325996555389224340615328))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406879248017919081803484004922))):(ye(K*(0.85266722101571679193199315704987))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406885934002778171247882710304))):(ye(K*(0.85269627476298937018839296797523))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406883569097608699394186260179))):(ye(K*(0.85268599505696462959036807660596))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240678983037439842007643164834))):(ye(K*(0.85228121617243268737240668997401))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240666757148131793542233936023))):(ye(K*(0.85176090805078097378810753070866))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2356496074013829655768859083764))):(ye(K*(0.98930787010639942291589932210627))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411914176487508498780698573682))):(ye(K*(0.85264728481464069353989998489851))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412347120122486643367665237747))):(ye(K*(0.85264195382663132694034402447869))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407349489650325580214484944008))):(ye(K*(0.85270341310563857462057058000937))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408497480574274263176448585))):(ye(K*(0.85268931064581154899428838689346))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2402956206030797403627730091102))):(ye(K*(0.85275729872300076728208750864724))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405679704577696753631244064309))):(ye(K*(0.85272390938239883695359822013415))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2404591020067972095830555190332))):(ye(K*(0.85273726246090775227060021279613))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406600798266307350559145561419))):(ye(K*(0.85271260550876692985156068971264))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407783251812327662833013164345))):(ye(K*(0.85269808563075077945114799149451))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406469928406504976692303898744))):(ye(K*(0.85271421192868457339386623061728))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406756176544986303156292706262))):(ye(K*(0.85271069809679822526504722191021))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406626074433200201951876806561))):(ye(K*(0.85271229523174385533934582781512))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411064668343518846427286916878))):(ye(K*(0.85265774136844563191317547534709))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408515978476204466574017715175))):(ye(K*(0.85268908333483595107793462375412))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410648874676866171284927986562))):(ye(K*(0.85266285754604886903962324140593))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409695112092462565556161280256))):(ye(K*(0.85267458873566104315955271886196))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412463279237098134899497381411))):(ye(K*(0.85264052329941020236248050423455))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2416751310407345698649805854075))):(ye(K*(0.85258765032586147913917784535442))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.0031832227191559425705236208159))):(ye(K*(0.86329357675386220183355590052088))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2422330145913980103955509548541))):(ye(K*(0.85251867221085630976773472866626))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2416683656034726013217550644185))):(ye(K*(0.85258848550923715947646996937692))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411768674969057002499539521523))):(ye(K*(0.85267280138982826098725809060852))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412176343864613770051619212609))):(ye(K*(0.85266853955888433080900767890853))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407238261917798993749784131069))):(ye(K*(0.85272008735652582434028090574429))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408366963097607893473650619853))):(ye(K*(0.85270831957355452956903718586545))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2402899135251477247265938785858))):(ye(K*(0.85276524668002195994631620123982))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2405579625908300656078608881216))):(ye(K*(0.85273736458570759122466142798658))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2404504636704549724868229532149))):(ye(K*(0.85274855230842516728984037399641))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407632956086933617712020350154))):(ye(K*(0.85271597327391379650407543522306))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406336924204781624325732991565))):(ye(K*(0.85272947847376268093455564667238))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406613090129674503714340971783))):(ye(K*(0.85272660166021996275276251253672))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406471550942379522552982962225))):(ye(K*(0.85272807613481049759940333387931))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411076386682102778991065861192))):(ye(K*(0.85268003609907727646799457943416))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408511041165128929719685402233))):(ye(K*(0.8527068168027724937019229400903))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410636046457685921495794900693))):(ye(K*(0.85268463615670586630557181706536))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409627265014950836530260858126))):(ye(K*(0.85269516954890267612654497497715))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.241280274434299002450643456541))):(ye(K*(0.85266198888523825338836559240008))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2417108923419357680018038081471))):(ye(K*(0.85261688455977624467863051904715))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(5.9982797432403369697340167476796))):(ye(K*(0.85875842903821519858098554323078))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.242259730051390675953371101059))):(ye(K*(0.85255921566379011533598486494157))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2416870370469590412199067941401))):(ye(K*(0.85261938652324797960346813852084))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412088033900765537964616669342))):(ye(K*(0.85261679084626829094872846326325))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2413683867274656336121552158147))):(ye(K*(0.85233665184010931614722039739718))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.157419810464213050238413416082))):(ye(K*(0.96057833372943268734900357230799))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2417138134452523345885310845915))):(ye(K*(0.8517288160068082758513696717273))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2414402080202826539334637345746))):(ye(K*(0.85221043501632964822789517711499))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.241238720813149676303055457538))):(ye(K*(0.8526357125394898872627891250886))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2414092110159353765652667789254))):(ye(K*(0.85237008183730056387616969004739))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1502125044224520422631030669436))):(ye(K*(0.95741001513949541834591627775808))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2417674832447165300663982634433))):(ye(K*(0.85181063273003543301342688209843))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2414747947249225035193376243114))):(ye(K*(0.85226779804630026227130201732507))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409161575547233979932570946403))):(ye(K*(0.85243154943247279042850550467847))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411166266240059030678821727633))):(ye(K*(0.85213032274280597899718259213842))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1475514649067299899343197466806))):(ye(K*(0.95621494662789430218907682501595))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2415495387470523169781699834857))):(ye(K*(0.85147814442377167676312410549144))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412610558737391386330273235217))):(ye(K*(0.85191299718106805460848818256636))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409931572621157869207308976911))):(ye(K*(0.85248031636159604662594801993691))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411911314831289843141348683275))):(ye(K*(0.8521914132530308272350794140948))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1457664648356580272547944332473))):(ye(K*(0.9554055202288775916485974448733))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.241612746903652642060933430912))):(ye(K*(0.85157463911790265420620471559232))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2413175008254206943547615082934))):(ye(K*(0.85200676600165670127040584702627))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2406501306727681921415751276072))):(ye(K*(0.85226291556742417299119551898912))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408824808603391431915952125564))):(ye(K*(0.85193816798398658285407236689935))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1425563682194246339918208832387))):(ye(K*(0.95393393870899845232713687437354))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2413874358445786683091682789382))):(ye(K*(0.85123042598364362376628378115129))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410962381272971910561864206102))):(ye(K*(0.8516388995308901144198898691684))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408271267436674634154769591987))):(ye(K*(0.85237513866911862603359395507141))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410495367041347591907651803922))):(ye(K*(0.85207529030787798607349259327748))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1403721000472151203553039522376))):(ye(K*(0.9529207734116894590314927881991))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2415222100996921028581709833816))):(ye(K*(0.85143640715272372876398776497808))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412201266187317116873600753024))):(ye(K*(0.85184497147887705548185977022513))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2407656480215250027754336770158))):(ye(K*(0.85233617009733075864374995944672))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.240997327028206420607148174895))):(ye(K*(0.85203244949965961652083024091553))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1384192414754661371034671901725))):(ye(K*(0.95200672264562935520615383211407))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2414891882211360751853135298006))):(ye(K*(0.85138596137843824962487815355416))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411848250994346187781047774479))):(ye(K*(0.85178627746420798594328971375944))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408937905053827321921744442079))):(ye(K*(0.85241737988668353498411534019397))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411190809037693227878662582953))):(ye(K*(0.85213233554402467717636682209559))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1361511500448795430884274537675))):(ye(K*(0.95093527321057724766006913341698))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2415882642206490515945915831253))):(ye(K*(0.85153726988219780036359907171573))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412745332779318019333913980518))):(ye(K*(0.85193539111598948210257731261663))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410890790911377479233124176972))):(ye(K*(0.85232783778803378194055540006957))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409722755083549827759270556271))):(ye(K*(0.85246709303659740086800411518198))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411984168170606679382217407692))):(ye(K*(0.8521973855184937773898923296656))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1321459207581296979583385109436))):(ye(K*(0.94901697474333024384662849115557))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2416595874680451672134040563833))):(ye(K*(0.8516461116324430813406820561795))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2413344631256970629351599200163))):(ye(K*(0.85203493445294231634079551440664))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410830065509541597634779463988))):(ye(K*(0.85221301872319354941964775207452))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409012566026067503344165743329))):(ye(K*(0.85242210984709321230923251278))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411389401396890619366786268074))):(ye(K*(0.85214862146051328917195633039228))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1295340883928952635528730752412))):(ye(K*(0.94774772495617443102133847787627))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2416230202744724664398745517246))):(ye(K*(0.85159031748340008327602390636457))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412947978467387954992773302365))):(ye(K*(0.85196905701402547705924916954245))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410852192109738112435479706619))):(ye(K*(0.85225483184789863067010173836024))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409227885710381045214489859063))):(ye(K*(0.8524357498741963468091853428632))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411628877934965942131384508684))):(ye(K*(0.85216825774595583720127933702315))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1272547595153330490802545682527))):(ye(K*(0.94662805813057571135971102194162))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2416472916923542157974225119688))):(ye(K*(0.8516273527951926380907821112487))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2413135482423616196001603384502))):(ye(K*(0.85200020147501309697446458812919))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410864888300059405423780845013))):(ye(K*(0.85227883635677847973255438773776))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408564480547932262766153144184))):(ye(K*(0.85251421016996886681482692438294))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410874715557831393653032137081))):(ye(K*(0.85227783015843305847170086053666))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2409291971589384573348979756702))):(ye(K*(0.85243980928178286760044102265965))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411804217100428360254227300175))):(ye(K*(0.85218263330789145726384958834387))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1211083632007490251680792425759))):(ye(K*(0.94355193159457162455083789609489))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2416771905390362462640041485429))):(ye(K*(0.85167296387027158210969446372474))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2413306723426185129710574983619))):(ye(K*(0.85202863969072939465121407920378))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411007140430250217377761146054))):(ye(K*(0.85254840398532349965421417437028))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410768986836089311509567778558))):(ye(K*(0.85209773725667925514670741904411))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2390860740892701841175949084572))):(ye(K*(0.99035956957433157743508900239249))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408597133938554790688613138627))):(ye(K*(0.85239578887407962959343876718776))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2408724099362808956925618986133))):(ye(K*(0.85192989748957248519189988655853))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2253844650549821082563539675903))):(ye(K*(0.98606991785020248197923820043798))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410726625063812633698034915142))):(ye(K*(0.85253064989936000461767662272905))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410970128299743109323571843561))):(ye(K*(0.85211423610493663982623502306524))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2206183443325526738476582977455))):(ye(K*(0.98451633149803474687189464020776))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2410265473550046166906213329639))):(ye(K*(0.85250145761658424614637397098704))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2411418014845008173097085091285))):(ye(K*(0.85215096780739507664748089155182))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1824267885293728852502681547776))):(ye(K*(0.97083676277526553821672905542073))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2414246142507607828520121984184))):(ye(K*(0.85128727210371957223600247743889))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.2412344113543811729982735414524))):(ye(K*(0.85186871623655413543474423931912))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(0.17267181512612148064356176746514))):(ye(K*(1.0302367065271522683644889184507))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(0.14719497119474223012502989149652))):(ye(K*(1.0278743874028215543603437254205))) w p lw 2 lt 1linecolor rgb "gray" noti,\
+"+" u (xe(K*(6.1038518988140433307876264734659))):(ye(K*(0.865064065675024695956096820737))) w p lw 2 linecolor rgb "purple"  ti "astronomical position"
+
+
+	#coastlines
+	number_of_lines_map_conv_selected = system("wc -l < /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt")
+	if(number_of_lines_map_conv_selected != 0){
+			plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
+	}
+
+
+	x_max_old = GPVAL_X_MAX;
+
+        set print "boundary.txt";
+	print "GPVAL_X_MIN = ", GPVAL_X_MIN, "\n", "GPVAL_X_MAX = ", GPVAL_X_MAX, "\n", "GPVAL_Y_MIN = ", GPVAL_Y_MIN, "\n", "GPVAL_Y_MAX = ", GPVAL_Y_MAX, "\n", "minimal longitude = ", label_deg_min_c_lib(lambda_min), "\n", "maximal longitude = ", label_deg_min_c_lib(lambda_max), "\n", "minimal latitude = ", label_deg_min_c_lib(phi_min), "\n", "maximal latitude = ", label_deg_min_c_lib(phi_max), "\n";
+	unset print;
+	system("chmod 777 boundary.txt");
+
+	}
+
+
+    	pause 1e-1      # waiting time in seconds
+}

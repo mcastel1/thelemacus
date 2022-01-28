@@ -1336,18 +1336,17 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
 
   //these are the two lengths along Route (*this) which correspond to the two crossings with route
   String new_prefix;
-  bool output;
+  bool check;
 
   //append \t to prefix
   new_prefix = prefix.append(String("\t"));
 
-
-
+  check = true;
 
   if(!(((*this).type == String("c")) && (route.type == String("c")))){
     
     cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
-    output = false; 
+    check &= false; 
     
   }else{
 
@@ -1357,6 +1356,7 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
     theta.set(String("angle between the two GPs"), acos(cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*cos(((*this).GP.lambda.value) - (route.GP.lambda.value)) + sin(((*this).GP.phi.value))*sin((route.GP.phi.value))), prefix);
 
     if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
+      //in this case routes intersect
 
       //t contains the parametric angle of Route (*this) where (*this) crosses route
       //u contains the parametric angle of Route route where route crosses (*this)
@@ -1377,57 +1377,52 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
       (*p)[1] = ((*this).end);
       ((*p)[1]).label.set(String(""), String("crossing"), prefix);
 
-
-
-      //
-
       (route.l).set(String("l of intersection"), Re * sin(route.omega.value) * ((u[0]).value), prefix);
       route.compute_end(prefix);
       
-      ((*p)[0]).distance(route.end, &r, String(""), prefix);
-      ((*p)[1]).distance(route.end, &s, String(""), prefix);
+      check &= ((*p)[0]).distance(route.end, &r, String(""), prefix);
+      check &= ((*p)[1]).distance(route.end, &s, String(""), prefix);
 
-      if(r>s){
+      if(check){
 
-	cout << new_prefix.value << "Exchanging ts!\n";
+	if(r>s){
+
+	  cout << new_prefix.value << "Exchanging ts!\n";
 	
-	t_temp = u[0];
-	u[0] = u[1];
-	u[1] = t_temp;
+	  t_temp = u[0];
+	  u[0] = u[1];
+	  u[1] = t_temp;
 	
+	}
+
+	((*this).l).set(String("l of intersection 1 for Route 1"), Re * sin((*this).omega.value) * ((t[0]).value), prefix);
+	(*this).compute_end(prefix);
+	((*this).end).print(String("position of intersection 1 for Route 1"), prefix, cout);
+      
+	(route.l).set(String("l of intersection 1 for Route 2"), Re * sin(route.omega.value) * ((u[0]).value), prefix);
+	route.compute_end(prefix);
+	(route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);
+
+	(*cos_crossing_angle) = cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[0]).value))*sin(((u[0]).value)) + (cos(((t[0]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[0]).value)))*(cos(((u[0]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[0]).value))) + 
+	  (cos(((*this).GP.lambda.value))*cos(((t[0]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[0]).value)))*(cos((route.GP.lambda.value))*cos(((u[0]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[0]).value)));
+      
+	cout << prefix.value << "cos(angle 1 between tangents) = " << (*cos_crossing_angle)  << "\n";
+      
+	t.clear();
+	u.clear();
+
       }
-
-      ((*this).l).set(String("l of intersection 1 for Route 1"), Re * sin((*this).omega.value) * ((t[0]).value), prefix);
-      (*this).compute_end(prefix);
-      ((*this).end).print(String("position of intersection 1 for Route 1"), prefix, cout);
-      
-      (route.l).set(String("l of intersection 1 for Route 2"), Re * sin(route.omega.value) * ((u[0]).value), prefix);
-      route.compute_end(prefix);
-      (route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);
-
-      (*cos_crossing_angle) = cos(((*this).GP.phi.value))*cos((route.GP.phi.value))*sin(((t[0]).value))*sin(((u[0]).value)) + (cos(((t[0]).value))*sin(((*this).GP.lambda.value)) - cos(((*this).GP.lambda.value))*sin(((*this).GP.phi.value))*sin(((t[0]).value)))*(cos(((u[0]).value))*sin((route.GP.lambda.value)) - cos((route.GP.lambda.value))*sin((route.GP.phi.value))*sin(((u[0]).value))) + 
-	(cos(((*this).GP.lambda.value))*cos(((t[0]).value)) + sin(((*this).GP.phi.value))*sin(((*this).GP.lambda.value))*sin(((t[0]).value)))*(cos((route.GP.lambda.value))*cos(((u[0]).value)) + sin((route.GP.phi.value))*sin((route.GP.lambda.value))*sin(((u[0]).value)));
-      
-      cout << prefix.value << "cos(angle 1 between tangents) = " << (*cos_crossing_angle)  << "\n";
-      
-      //
-	
- 
-      output = true;
-
-      t.clear();
-      u.clear();
       
     }else{
 
       cout << prefix.value << "Routes do no intersect\n";
-      output = false;
+      check &= false;
       
     }
     
   }
 
-  return output;
+  return check;
 
 }
 
@@ -4073,7 +4068,7 @@ void Plot::compute_crossings(String prefix){
       cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
       
       if((route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix)){
-	//in this case, the two routes under consideration intercept
+	//in this case, the two routes under consideration intercept with no error message
 
 	//if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle.value), then I add this crossing to the list of sensible crossings
 	if(fabs(x) < cos(min_crossing_angle.value)){

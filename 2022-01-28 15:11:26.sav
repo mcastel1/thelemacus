@@ -509,82 +509,15 @@
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = MP
-		Sight #35:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 105° 8.6999999999997612576407846063375'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2022-01-13
-				hour of master-clock date and hour of sight = 22:59:15
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
-		Sight #36:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 91° 39.300000000000068212102632969618'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2022-01-13
-				hour of master-clock date and hour of sight = 23:46:42
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
-		Sight #37:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 90° 57.399999999999806732375873252749'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2022-01-13
-				hour of master-clock date and hour of sight = 23:49:01
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
-		Sight #38:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 89° 26.499999999999772626324556767941'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2022-01-13
-				hour of master-clock date and hour of sight = 23:54:02
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
-		Sight #39:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 78° 3.9999999999997726263245567679405'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2022-01-14
-				hour of master-clock date and hour of sight = 00:30:57
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
 	Routes in the plot:
+		Route #1:
+			type = c
+			ground position:
+				latitude = 48° 50.355445228740478569307015277445'
+				longitude = 357° 34.837359488805077489814721047878'
+				label = astronomical position
+			aperture angle = 0° 1.9862917810825873043967249031994'
+			label = error on astronomical position
 	Positions in the plot:
 		Position #1:
 			latitude = 48° 51.179385474737415506751858629286'

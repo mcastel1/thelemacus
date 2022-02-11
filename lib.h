@@ -28,7 +28,11 @@
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
-#define days_per_month_leap {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+
+static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
+
+
 #define days_per_month_common {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 #define path_file_utc_date "utc_date.txt"
 #define path_file_init "data/init.txt"

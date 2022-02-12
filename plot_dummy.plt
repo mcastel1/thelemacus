@@ -35,7 +35,7 @@ lambda_inv(xe) = ( ((xe <= 0.0) & (xe > -pi)) ? -xe*K: -xe*K + 360.0 )
 lambda_inv_pm(xe) = -xe*K 
 phi_inv(ye) = K*atan(sinh(ye))	
 
-myf(x,y)=sprintf("%g\260 %g' %s , %g\260 %g' %s", myint(abs(phi_inv(y))), (abs(phi_inv(y)) - myint(abs(phi_inv(y))))*60.0, (phi_inv(y) > 0.0 ? 'N': 'S'), myint(abs(lambda_inv_pm(x))), (abs(lambda_inv_pm(x)) - myint(abs(lambda_inv_pm(x))))*60.0, ((lambda_inv_pm(x) > 0.0) ? 'W': 'E'))
+myf(x,y)=sprintf("%g° %g' %s , %g° %g' %s", myint(abs(phi_inv(y))), (abs(phi_inv(y)) - myint(abs(phi_inv(y))))*60.0, (phi_inv(y) > 0.0 ? 'N': 'S'), myint(abs(lambda_inv_pm(x))), (abs(lambda_inv_pm(x)) - myint(abs(lambda_inv_pm(x))))*60.0, ((lambda_inv_pm(x) > 0.0) ? 'W': 'E'))
 set mouse mouseformat function myf(x, y)
 set mouse mouseformat 8
 
@@ -97,12 +97,12 @@ set style arrow 2 nohead ls 1 lw 1 linecolor rgb 'gray'
 
 
 label_rose(n) = sprintf("\\scalebox{0.3}{$\\color{mygray}{%d}$}",n)
-label_deg_latitude(x) = ( x == 0.0 ) ? sprintf("0\260") : ( x > 0.0 ? sprintf("%.f\260 N", x - myint(x/360.0)*360.0) : sprintf("%.f\260 S", ((-x) - myint((-x)/360.0)*360.0)) )
-label_deg_longitude(x) = ( x == 0.0 ) ? sprintf("0\260") : ( x < 180.0 ? sprintf("%.f\260 W", x - myint(x/360.0)*360.0) : sprintf("%.f\260 E", 360.0 - (x - myint(x/360.0)*360.0)) )
+label_deg_latitude(x) = ( x == 0.0 ) ? sprintf("0°") : ( x > 0.0 ? sprintf("%.f° N", x - myint(x/360.0)*360.0) : sprintf("%.f° S", ((-x) - myint((-x)/360.0)*360.0)) )
+label_deg_longitude(x) = ( x == 0.0 ) ? sprintf("0°") : ( x < 180.0 ? sprintf("%.f° W", x - myint(x/360.0)*360.0) : sprintf("%.f° E", 360.0 - (x - myint(x/360.0)*360.0)) )
 #this prints the arcminutes only of angle x
 label_min(x) = sprintf("%.f'", minutes(x) ) 
 #if the arcminutes are zero, I print out only the degrees for clarity
-label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f\260", degrees(x)) : sprintf("%.f\260 %.f'", degrees(x), minutes(x)) )
+label_deg_min(x) =  ( minutes(x) == 0.0 ? sprintf("%.f°", degrees(x)) : sprintf("%.f° %.f'", degrees(x), minutes(x)) )
 #this function outputs angle x in the format which can be read from file from lib.h 
 label_deg_min_c_lib(x) = sprintf("%.f° %.f'", degrees(x), minutes(x))
 

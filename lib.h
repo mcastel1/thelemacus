@@ -4594,6 +4594,8 @@ void Plot::show(bool zoom_out, String prefix){
     
     file_id.remove(prefix);
     file_gnuplot.remove(prefix);
+
+
     
     //replace line with number of intervals for tics in plot_dummy.plt
     cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
@@ -4625,11 +4627,15 @@ void Plot::show(bool zoom_out, String prefix){
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
-    //read from init_file with and height of plot window
+    //replace line with window size in plot_dummy.plt
     cout << prefix.value << YELLOW << "Reading width and height of plot window from file " << file_init.name.value << " ...\n" << RESET;
     width_plot_window.read_from_file(String("width of plot window"), file_init, true, new_prefix);
     height_plot_window.read_from_file(String("height of plot window"), file_init, true, new_prefix);
+    command.str("");
+    command << "LANG=C sed 's/#window size/set terminal qt size " << width_plot_window.value << "," << height_plot_window.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    system(command.str().c_str());
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
     
     
     //replace line with min_latitude in plot_dummy.plt
@@ -5030,7 +5036,7 @@ void Plot::show(bool zoom_out, String prefix){
     
     //add the overall plotting command to command string
     //here -0+0 is to open the xterm window on the top right edge of the screen
-    command << "gnuplot -geometry " << (width_plot_window.value) << "x" << (height_plot_window.value) << "-0+0 '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
+    command << "gnuplot '" << ((file_gnuplot.name).value) << "' & \n echo $! >> " << ((file_id.name).value) << "\n";
     command << "rm -rf plot_temp.plt";
     
     

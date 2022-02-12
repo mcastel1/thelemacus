@@ -1,4 +1,5 @@
 reset 
+#window size
 
 #notes:
 #to kill all gnuplot processes type: pkill -9 gnuplot

@@ -16,9 +16,9 @@
 #define floor_max_lat (floor(max_lat))
 #define span_lat ((floor_max_lat-floor_min_lat+1)
 #define outfile_precision 16
-#define path_file_coastline_data_blocked "/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
-#define path_file_n_line "/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
-#define path_file_selected_coastline_data "/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt"
+#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
+#define path_file_n_line "/Users/mcastellana/macbookpro/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
+#define path_file_selected_coastline_data "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt"
 
 //mac
 /*

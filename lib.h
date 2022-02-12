@@ -1555,7 +1555,7 @@ public:
     void to_TAI(void);
     void add(Chrono);
     
-    stringstream to_string(unsigned int);
+    string to_string(unsigned int);
     bool operator==(const Time&), operator!=(const Time&), operator> (const Time&);
     
 };
@@ -1596,13 +1596,13 @@ bool Time::operator>(const Time& t){
     
 }
 
-stringstream Time::to_string(unsigned int precision){
+string Time::to_string(unsigned int precision){
     
     stringstream output;
     
     output << date.to_string().str() << " " << chrono.to_string(precision).str();
     
-    return output;
+    return (output.str().c_str());
     
 }
 
@@ -5159,7 +5159,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
     
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp <<  (*this).body.name.value << " " << (*this).time.to_string(display_precision).str().c_str() << " TAI, " << (*this).label.value;
+    temp <<  (*this).body.name.value << " " << (*this).time.to_string(display_precision) << " TAI, " << (*this).label.value;
     ((*circle_of_equal_altitude).label).set(String(""), String(temp.str()), new_prefix);
     
     check &= compute_H_o(new_prefix);

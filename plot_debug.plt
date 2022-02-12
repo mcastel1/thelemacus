@@ -1,5 +1,5 @@
 reset 
-#window size
+set terminal qt size 705,792;
 
 #notes:
 #to kill all gnuplot processes type: pkill -9 gnuplot
@@ -11,9 +11,9 @@ reset
 set clip two
 K = 360.0/(2.0*pi);
 k = 1.0/K;
-#number of intervals for tics
-#number of points for routes
-#n_points_coastline
+n_intervals_tics = 6;
+n_points_routes = 1000;
+n_points_coastline = 200000;
 epsilon=1e-10
 myint(x) = x>0.0 ? int(x) : int(x)-1.0
 clint(x) = abs(x-myint(x))<abs(x-(myint(x)+1.)) ? myint(x) : myint(x)+1.
@@ -82,10 +82,10 @@ lambda_ort(l, d, GHA, a, Re) = (lambda = - (atan((cos(GHA) * sin(l/Re) * sin(a) 
 
 #angles are in degrees
 #lambda_min is the angle which corresponds to the leftmost x coordinate x_min in the Mercator plot, and simiarly for lambda_max
-#min_longitude
-#max_longitude
-#min_latitude
-#max_latitude
+lambda_min = 357.71666666666664013973786495626;
+lambda_max = 357.48333333333334849157836288214;
+phi_min = 48.799999999999997157829056959599;
+phi_max = 48.916666666666664298190880799666;
 
 set xrange [xe(lambda_min):xe(lambda_max)]
 set yrange [ye(phi_min):ye(phi_max)]
@@ -113,7 +113,7 @@ label_deg_min_c_lib(x) = sprintf("%.f° %.f'", degrees(x), minutes(x))
 #set object circle at  xe(lambda0),ye(phi0) radius char 1  fillcolor rgb 'red' fillstyle solid noborder
 
 #coastlines
-#	plot   '/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "gray" noti
+#	plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "gray" noti
 p 0,0 w l noti
 
 #unset parametric
@@ -321,13 +321,16 @@ while(1){
 	system(sprintf("./get_coastline_data.o -p %g -P %g -l %g -L %g -N %g > /dev/null 2>&1", floor(phi_min), floor(phi_max), floor(lambda_min_get_coastline_data), floor(lambda_max_get_coastline_data), n_points_coastline));
 
 
-	#route_plots
-	#position_plots
+	set key top right
+plot [0.:2.*pi] "+" u (xe(K*lambda_cea(t, 5.9458048621362600272277632029727, 6.1026182720272093007451985613443, 1.1965015775636649308921732881572))) : (ye(K*phi_cea(t, 5.9458048621362600272277632029727, 6.1026182720272093007451985613443, 1.1965015775636649308921732881572))) w l dashtype 1 lt 1 ti "sun 2021-11-18 11:04:27 TAI, MP",\
+[0.:2.0949668887294916608254879974993 - epsilon] "+" u (xe(K*lambda_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) : (ye(K*phi_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) w l dashtype 2 lt 2 ti "moon 2021-11-22 20:10:15 TAI, MP	Routes in the plot:" ,\
+[2.0949668887294916608254879974993 + epsilon:2.*pi] "+" u (xe(K*lambda_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) : (ye(K*phi_cea(t, 0.45963259516071180987850652854831, 4.6304851271552811553533501864877, 1.2547233420281749260993819916621))) w l dashtype 2 lt 2 noti
+	
 
 	#coastlines
-	number_of_lines_map_conv_selected = system("wc -l < /Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt")
+	number_of_lines_map_conv_selected = system("wc -l < /Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt")
 	if(number_of_lines_map_conv_selected != 0){
-			plot   '/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
+			plot   '/Users/mcastellana/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt' u (xe($2)):(ye($1)) w d linecolor rgb "black" noti
 	}
 
 

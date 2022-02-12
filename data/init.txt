@@ -4,10 +4,10 @@ plot coastline every = 10
 index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 #entire world
-#minimal latitude = -76° 13.9'
-#maximal latitude = 80° 53.2'
-#minimal longitude = 170° 12.45'
-#maximal longitude = 190° 0.01'
+minimal latitude = -76° 13.9'
+maximal latitude = 80° 53.2'
+minimal longitude = 170° 12.45'
+maximal longitude = 190° 0.01'
 #entire world
 #north of france
 #minimal longitude = 5° 47'
@@ -16,10 +16,10 @@ hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 #maximal latitude = 50° 10'
 #north of france
 #paris
-minimal longitude = 357° 43'
-maximal longitude = 357° 29'
-minimal latitude = 48° 48'
-maximal latitude = 48° 55'
+#minimal longitude = 357° 43'
+#maximal longitude = 357° 29'
+#minimal latitude = 48° 48'
+#maximal latitude = 48° 55'
 #paris
 minimal crossing angle between circles of equal altitude = 30° 2.15'
 #values for mac

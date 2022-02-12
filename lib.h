@@ -936,7 +936,7 @@ public:
     void set(String, double, String);
     void print(String, String, ostream&);
     void read_from_file(String, File&, bool, String);
-    stringstream to_string(unsigned int);
+    string to_string(unsigned int);
     
     bool operator==(const Angle&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
@@ -1008,7 +1008,7 @@ public:
     void read_from_file(File&, String);
     //this function transports the position and returns the Route with which it has been transported
     Route transport(String);
-    stringstream to_string(unsigned int);
+    string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool operator==(const Position&);
     
@@ -1473,7 +1473,7 @@ public:
     void print(String, String, ostream&);
     void enter(String, String);
     bool read_from_file(String, File&, bool, String);
-    stringstream to_string(void);
+    string to_string(void);
     void check_leap_year(void);
     
 };
@@ -1488,7 +1488,7 @@ public:
     bool set(String, double, String);
     void enter(String, String);
     bool read_from_file(String, File&, bool, String);
-    stringstream to_string(unsigned int);
+    string to_string(unsigned int);
     
     bool operator==(const Chrono&), operator!=(const Chrono&);
     
@@ -1600,20 +1600,20 @@ string Time::to_string(unsigned int precision){
     
     stringstream output;
     
-    output << date.to_string().str() << " " << chrono.to_string(precision).str();
+    output << date.to_string() << " " << chrono.to_string(precision);
     
     return (output.str().c_str());
     
 }
 
-stringstream Position::to_string(unsigned int precision){
+string Position::to_string(unsigned int precision){
     
     stringstream output;
     
-    output << phi.to_string(precision).str() << " " << lambda.to_string(precision).str();
+    output << phi.to_string(precision) << " " << lambda.to_string(precision);
     
-    return output;
-    
+    return (output.str().c_str());
+
 }
 
 
@@ -1832,7 +1832,7 @@ Route Position::transport(String prefix){
     
     route.compute_end(new_prefix);
     
-    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(display_precision).str().c_str() << ", l = " << (route.l).value << " nm";
+    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(display_precision) << ", l = " << (route.l).value << " nm";
     (route.end.label).set(String(""), temp_label.str(), prefix);
     
     (*this) = route.end;
@@ -3041,7 +3041,7 @@ void Route::transport(String prefix){
         
         
         //append 'translated to ...' to the label of sight, and make this the new label of sight
-        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision).str().c_str() << ", l = " << transporting_route.l.value << " nm";
+        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision) << ", l = " << transporting_route.l.value << " nm";
         label.set(String(""), temp_label.str(), prefix);
         //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set
         related_sight = -1;
@@ -4718,7 +4718,7 @@ void Plot::show(bool zoom_out, String prefix){
             {
                 
                 //I assume that  the loxodrome is not cut through the meridian lambda = M_PI, and I make a single plot
-                plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
+                plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision) << ", heading = " << (route_list[i]).alpha.to_string(display_precision) << "\"";
                 
                 break;
             }
@@ -4728,7 +4728,7 @@ void Plot::show(bool zoom_out, String prefix){
             {
                 
                 //I assume that the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
-                plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision).str().c_str() << ", heading = " << (route_list[i]).alpha.to_string(display_precision).str().c_str() << "\"";
+                plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision) << ", heading = " << (route_list[i]).alpha.to_string(display_precision) << "\"";
                 
                 break;
             }
@@ -6101,7 +6101,7 @@ void Angle::print(String name, String prefix, ostream& ostr){
     
 }
 
-stringstream Angle::to_string(unsigned int precision){
+string Angle::to_string(unsigned int precision){
     
     stringstream output;
     
@@ -6110,7 +6110,7 @@ stringstream Angle::to_string(unsigned int precision){
     normalize();
     output << floor(K*value - 360.0*floor(K*value/360.0)) << "'\260' " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\\''";
     
-    return output;
+    return (output.str().c_str());
     
 }
 
@@ -6143,7 +6143,7 @@ void Limb::print(String name, String prefix, ostream& ostr){
 
 
 
-stringstream Chrono::to_string(unsigned int precision){
+string Chrono::to_string(unsigned int precision){
     
     stringstream output;
     
@@ -6156,13 +6156,13 @@ stringstream Chrono::to_string(unsigned int precision){
     if(s<10.0){output << 0;}
     output << s;
     
-    return output;
+    return (output.str().c_str());
     
 }
 
 void Date::print(String name, String prefix, ostream& ostr){
     
-    ostr << prefix.value << name.value << " = " << to_string().str().c_str() << "\n";
+    ostr << prefix.value << name.value << " = " << to_string() << "\n";
     
 };
 
@@ -6316,7 +6316,7 @@ void Date::enter(String name, String prefix) {
 }
 
 
-stringstream Date::to_string(void){
+string Date::to_string(void){
     
     stringstream output;
     
@@ -6326,7 +6326,7 @@ stringstream Date::to_string(void){
     if(D<10){output << 0;}
     output << D;
     
-    return output;
+    return (output.str().c_str());
     
 }
 
@@ -6342,7 +6342,7 @@ void Chrono::print(String name, String prefix, ostream& ostr){
         precision = data_precision;
     }
     
-    ostr << prefix.value << "hour of " << name.value << " = " << to_string(precision).str().c_str() << "\n";
+    ostr << prefix.value << "hour of " << name.value << " = " << to_string(precision) << "\n";
     
 };
 void Chrono::enter(String name, String prefix) {

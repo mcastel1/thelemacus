@@ -5599,8 +5599,14 @@ Sight::Sight(void){
     all_items.push_back(String("use of stopwatch"));
     all_items.push_back(String("stopwatch reading"));
     all_items.push_back(String("label"));
-    items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[6], all_items[8]};
     
+    items.push_back(all_items[0]);
+    items.push_back(all_items[2]);
+    items.push_back(all_items[3]);
+    items.push_back(all_items[5]);
+    items.push_back(all_items[6]);
+    items.push_back(all_items[8]);
+
     //initiazlie the limb to a 'n/a' value
     limb.value = 'n';
     atmosphere.set();

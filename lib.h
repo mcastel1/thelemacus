@@ -1031,7 +1031,9 @@ bool Position::operator==(const Position& p){
 
 Position::Position(void){
 
-  items = {String("latitude"), String("longitude"), String("label")};
+    items.push_back(String("latitude"));
+    items.push_back(String("longitude"));
+    items.push_back(String("label"));
 
 }
 

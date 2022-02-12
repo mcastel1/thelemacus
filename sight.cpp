@@ -1,13 +1,13 @@
 #include <iostream>
-#include <cstdio>
-#include <cmath>
+//#include <cstdio>
+//#include <cmath>
 #include <vector>
 #include <fstream>
-#include <strstream>
-#include <string.h>
+//#include <strstream>
+//#include <string.h>
 #include <sstream>
-#include <algorithm>
-#include <list>
+//#include <algorithm>
+//#include <list>
 
 
 //mac

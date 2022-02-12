@@ -5590,7 +5590,15 @@ void Body::enter(String name, Catalog catalog, String prefix){
 Sight::Sight(void){
     
     //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element.
-    all_items  = {String("body"), String("limb"), String("sextant altitude"), String("artificial horizon"), String("height of eye"), String("master-clock date and hour of sight"), String("use of stopwatch"), String("stopwatch reading"), String("label")};
+    all_items.push_back(String("body"));
+    all_items.push_back(String("limb"));
+    all_items.push_back(String("sextant altitude"));
+    all_items.push_back(String("artificial horizon"));
+    all_items.push_back(String("height of eye"));
+    all_items.push_back(String("master-clock date and hour of sight"));
+    all_items.push_back(String("use of stopwatch"));
+    all_items.push_back(String("stopwatch reading"));
+    all_items.push_back(String("label"));
     items = {all_items[0], all_items[2], all_items[3], all_items[5], all_items[6], all_items[8]};
     
     //initiazlie the limb to a 'n/a' value

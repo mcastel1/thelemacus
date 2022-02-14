@@ -93,10 +93,10 @@ int main(int argc, char *argv[]){
     //turn off the GSL error handler, so the GSL routines will return an error message if they fail, and this error message can be handled by my code
     gsl_set_error_handler_off();
     
-    //
-    cout << "Check = " << check_double("123.242", NULL, false, 0.0, 0.0);
+    /*
+    cout << "Check = " << check_unsigned_int("", NULL, false, 0.0, 0.0);
     return 0;
-    //
+    */
     
     
     /*

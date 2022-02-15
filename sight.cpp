@@ -69,6 +69,7 @@
  - in print_to_kml include also loxodromes and orthodromes
  - make file_init a variable of the Sight class
  - the line width of gnuplot curves should be a variable in the init_file
+ - fix issue arising when reading date from command line
  */
 
 

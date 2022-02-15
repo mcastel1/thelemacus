@@ -1476,6 +1476,7 @@ public:
     bool read_from_file(String, File&, bool, String);
     string to_string(void);
     void check_leap_year(void);
+    bool set_current(String);
     
 };
 
@@ -6202,20 +6203,80 @@ void Date::print(String name, String prefix, ostream& ostr){
     
 };
 
+//this function sets (*this) to the current UTC date
+bool Date::set_current(String prefix){
+    
+    stringstream line_ins;
+    string input;
+    File file_utc_date;
+    size_t pos;
+    String new_prefix;
+    bool check;
+ 
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+     
+    check = true;
+
+    file_utc_date.set_name(String(path_file_utc_date));
+    file_utc_date.remove(prefix);
+    
+    line_ins.str("");
+    line_ins << "date -u \"+DATE: %Y-%m-%d%nTIME: %H:%M:%S\"  >> " << path_file_utc_date;
+    
+    //execute the date command in the terminal and writes the UTC date to file_utc_date
+    system(line_ins.str().c_str());
+    
+    //reads the utc date from file_utc_date
+    cout << prefix.value << YELLOW << "Reading utc date from file " << file_utc_date.name.value << " ...\n" << RESET;
+    
+    check &= (file_utc_date.open(String("in"), new_prefix));
+
+    if(check){
+        
+        getline(file_utc_date.value, input);
+        
+        pos = input.find(" ");
+        //load into input the string from pos+1 until its end
+        input  =  (input.substr(pos+1).c_str());
+
+        //read the part of input containing the year
+        pos = input.find("-");
+        Y = stoi(input.substr(0, pos).c_str(), NULL, 10);
+        
+        //now I am no longer interested in the year, the string runs from the month to days
+        input  =  (input.substr(pos+1).c_str());
+        //find the position of the second '-'
+        pos = input.find("-");
+        //check whether month part is formatted correctly
+        M = stoi(input.substr(0, pos).c_str(), NULL, 10);
+        
+        //now I am no longer interested in the month, the string runs from the days to the end of the string
+        input  =  (input.substr(pos+1).c_str());
+        D = stoi(input.c_str());
+        
+        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+        
+    }
+    
+    file_utc_date.close(new_prefix);
+    file_utc_date.remove(new_prefix);
+    
+    return check;
+
+    
+}
+
 void Date::enter(String name, String prefix) {
     
     string input;
-    stringstream line_ins;
-    String new_prefix, new_new_prefix;
+    String new_prefix;
     bool check;
     size_t pos;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    //append \t to new_prefix
-    new_new_prefix = new_prefix.append(String("\t"));
-    
-    
+        
     do{
         
         check = true;
@@ -6225,54 +6286,8 @@ void Date::enter(String name, String prefix) {
         
         if(input.empty()){
             
-            File file_utc_date;
-            
             cout << prefix.value << YELLOW << "Entered an empty date, setting it to current UTC date!\n" << RESET;
-            
-            file_utc_date.set_name(String(path_file_utc_date));
-            file_utc_date.remove(new_prefix);
-            
-            line_ins.str("");
-            line_ins << "date -u \"+DATE: %Y-%m-%d%nTIME: %H:%M:%S\"  >> " << path_file_utc_date;
-            
-            //execute the date command in the terminal and writes the UTC date to file_utc_date
-            system(line_ins.str().c_str());
-            
-            //reads the utc date from file_utc_date
-            cout << new_prefix.value << YELLOW << "Reading utc date from file " << file_utc_date.name.value << " ...\n" << RESET;
-            
-            check &= (file_utc_date.open(String("in"), new_new_prefix));
-            
-            if(check){
-                
-                getline(file_utc_date.value, input);
-                
-                pos = input.find(" ");
-                //load into input the string from pos+1 until its end
-                input  =  (input.substr(pos+1).c_str());
-
-                //read the part of input containing the year
-                pos = input.find("-");
-                Y = stoi(input.substr(0, pos).c_str(), NULL, 10);
-                
-                //now I am no longer interested in the year, the string runs from the month to days
-                input  =  (input.substr(pos+1).c_str());
-                //find the position of the second '-'
-                pos = input.find("-");
-                //check whether month part is formatted correctly
-                M = stoi(input.substr(0, pos).c_str(), NULL, 10);
-                
-                //now I am no longer interested in the month, the string runs from the days to the end of the string
-                input  =  (input.substr(pos+1).c_str());
-                D = stoi(input.c_str());
-                
-                cout << new_prefix.value << YELLOW << "... done.\n" << RESET;
-                
-            }
-            
-            file_utc_date.close(new_prefix);
-            file_utc_date.remove(new_prefix);
-            
+            check &= set_current(new_prefix);
             print(String("entered date"), prefix, cout);
             
         }else{

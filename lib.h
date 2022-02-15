@@ -37,8 +37,8 @@ vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_
 
 
 #define path_file_utc_date "utc_date.txt"
-#define path_file_init "data/init.txt"
-#define path_file_catalog "data/catalog.txt"
+#define path_file_init "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/init.txt"
+#define path_file_catalog "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
 string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
@@ -935,6 +935,7 @@ public:
     void enter(String, String);
     void set(String, double, String);
     void print(String, String, ostream&);
+    void to_deg_min(unsigned int*, double*);
     void read_from_file(String, File&, bool, String);
     string to_string(unsigned int);
     
@@ -1613,7 +1614,7 @@ string Position::to_string(unsigned int precision){
     output << phi.to_string(precision) << " " << lambda.to_string(precision);
     
     return (output.str().c_str());
-
+    
 }
 
 
@@ -1962,6 +1963,7 @@ public:
     Length radius;
     Angle RA, d;
     void enter(String, Catalog, String);
+    bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);
     void read_from_file(String, File&, String);
     
@@ -3136,9 +3138,9 @@ bool Sight::check_data_time_interval(String prefix){
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
     temp.clear();
     if((body.type.value) != "star"){
-        temp << "data/" << body.name.value << ".txt";
+        temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/" << body.name.value << ".txt";
     }else{
-        temp << "data/j2000_to_itrf93.txt";
+        temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/j2000_to_itrf93.txt";
     }
     data_file.set_name(temp.str());
     data_file.count_lines(new_prefix);
@@ -4594,8 +4596,8 @@ void Plot::show(bool zoom_out, String prefix){
     
     file_id.remove(prefix);
     file_gnuplot.remove(prefix);
-
-
+    
+    
     
     //replace line with number of intervals for tics in plot_dummy.plt
     cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
@@ -4635,7 +4637,7 @@ void Plot::show(bool zoom_out, String prefix){
     command << "LANG=C sed 's/#window size/set terminal qt size " << width_plot_window.value << "," << height_plot_window.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
     system(command.str().c_str());
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     
     
     //replace line with min_latitude in plot_dummy.plt
@@ -5115,7 +5117,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
             
         }
         
-        //read TAI_minus_UTC from data/index.txt
+        //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
         cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
         TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
         cout << prefix.value << YELLOW << "... done.\n" << RESET;
@@ -5561,7 +5563,6 @@ void Body::print(String name_in, String prefix, ostream& ostr){
 void Body::enter(String name, Catalog catalog, String prefix){
     
     unsigned int i;
-    bool check;
     string s;
     String new_prefix;
     
@@ -5571,23 +5572,44 @@ void Body::enter(String name, Catalog catalog, String prefix){
     
     do{
         
-        s.clear();
         
         cout << prefix.value << "Enter " << name.value << ":";
+        s.clear();
         getline(cin >> ws, s);
         
-        for(i=0, check=true; (i<(catalog).list.size()) && check; i++){if((((catalog).list)[i]).name.value == s){check=false;}}
-        if(check){cout << prefix.value << RED << "Body not found in catalog!\n" << RESET;}
+        ((*this).name) = String(s);
         
-    }while(check);
+    }while(!check(&i, catalog, prefix));
     
-    i--;
     (*this) = (catalog.list)[i];
     
     print(name, prefix, cout);
     
 }
 
+//this function checks whether the Body's name  is found in the body list comprised in catalog
+bool Body::check(unsigned int* j, Catalog catalog, String prefix){
+    
+    unsigned int i;
+    bool check;
+    
+    for(i=0, check=false; (i<(catalog).list.size()) && (!check); i++){
+        
+        if(((((catalog).list)[i]).name) == name){
+            check=true;
+        }
+        
+    }
+    
+    if(check){
+        (*j)=i-1;
+    }else{
+        cout << prefix.value << RED << "Body not found in catalog!\n" << RESET;
+    }
+    
+    return check;
+    
+}
 
 
 
@@ -5612,7 +5634,7 @@ Sight::Sight(void){
     items.push_back(all_items[5]);
     items.push_back(all_items[6]);
     items.push_back(all_items[8]);
-
+    
     //initiazlie the limb to a 'n/a' value
     limb.value = 'n';
     atmosphere.set();
@@ -5742,9 +5764,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
     cout << prefix.value << "Fetching ephemerides' data ...\n";
     
     if((body.type.value) != "star"){
-        filename << "data/" << body.name.value << ".txt";
+        filename << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/" << body.name.value << ".txt";
     }else{
-        filename << "data/j2000_to_itrf93.txt";
+        filename << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/j2000_to_itrf93.txt";
     }
     temp = filename.str();
     
@@ -6103,7 +6125,15 @@ void Angle::normalize(void){
 void Angle::print(String name, String prefix, ostream& ostr){
     
     normalize();
-    ostr << prefix.value << name.value << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'\n";
+    ostr << prefix.value << name.value << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60.0 << "'\n";
+    
+}
+
+void Angle::to_deg_min(unsigned int* deg, double* min){
+    
+    normalize();
+    (*deg) = (unsigned int) floor(K*value - 360.0*floor(K*value/360.0));
+    (*min) = (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60.0;
     
 }
 

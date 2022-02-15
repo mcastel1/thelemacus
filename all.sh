@@ -4,4 +4,5 @@ clear; clear;
 
 ./compile.sh
 ./kill_gnuplot.sh
-valgrind ./sight.o
+#valgrind ./sight.o
+./sight.o

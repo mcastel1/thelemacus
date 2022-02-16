@@ -1488,6 +1488,7 @@ public:
     
     void print(String, String, ostream&);
     bool set(String, double, String);
+    bool set_current(String);
     void enter(String, String);
     bool read_from_file(String, File&, bool, String);
     string to_string(unsigned int);
@@ -6262,6 +6263,68 @@ bool Date::set_current(String prefix){
 
     
 }
+
+//this function sets (*this) to the current UTC time
+bool Chrono::set_current(String prefix){
+    
+    stringstream line_ins;
+    string input;
+    File file_utc_time;
+    size_t pos;
+    String new_prefix;
+    bool check;
+ 
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+     
+    check = true;
+
+    file_utc_time.set_name(String(path_file_utc_date_and_time));
+    file_utc_time.remove(prefix);
+    
+    line_ins.str("");
+    line_ins << "date -u \"+%H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    
+    //execute the date command in the terminal and writes the UTC date to file_utc_time
+    system(line_ins.str().c_str());
+    
+    //reads the utc date from file_utc_time
+    cout << prefix.value << YELLOW << "Reading utc time from file " << file_utc_time.name.value << " ...\n" << RESET;
+    
+    check &= (file_utc_time.open(String("in"), new_prefix));
+
+    if(check){
+        
+        getline(file_utc_time.value, input);
+        
+        //read the part of input containing the hour
+        pos = input.find(":");
+        h = stoi(input.substr(0, pos).c_str(), NULL, 10);
+        
+        //now I am no longer interested in the hour, the string runs from the minutes to seconds
+        input  =  (input.substr(pos+1).c_str());
+        //find the position of the second ':'
+        pos = input.find(":");
+        //check whether the minute part is formatted correctly
+        m = stoi(input.substr(0, pos).c_str(), NULL, 10);
+        
+        //now I am no longer interested in the minute, the string runs from the days to the end of the string
+        input  =  (input.substr(pos+1).c_str());
+        s = stod(input.c_str());
+        
+        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+        
+    }
+    
+    file_utc_time.close(new_prefix);
+    file_utc_time.remove(new_prefix);
+    
+    return check;
+
+    
+}
+
+
 
 void Date::enter(String name, String prefix) {
     

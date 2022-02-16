@@ -73,12 +73,12 @@ public:
     wxPanel *panel;
     
     wxGridSizer *grid_sizer;
-    wxBoxSizer *sizer, *box_sizer_1, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5;
+    wxBoxSizer *sizer, *box_sizer_1, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
     wxArrayString bodies, limbs, signs, degrees, months, days, hours, minutes;
-    wxTextCtrl *box_H_s_min, *box_index_error_deg, *box_index_error_min, *box_year, *box_second_masterclock, *box_second_stopwatch;
+    wxTextCtrl *box_H_s_min, *box_index_error_deg, *box_index_error_min, *box_year, *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
-    wxComboBox* combo_body, *combo_limb, *combo_sign, *combo_H_s_deg, *combo_month, *combo_day, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch;
+    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_H_s_deg, *combo_month, *combo_day, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
     wxButton* button_ok, *button_cancel;
     wxMenuBar *menuBar;
     
@@ -95,7 +95,7 @@ public:
     void CheckHsMinutes(wxFocusEvent& event);
     void CheckIndexErrorMinutes(wxFocusEvent& event);
     void PrintErrorMessage(wxControl*, String);
-
+    
     
     // The Path to the file we have open
     wxString CurrentDocPath;
@@ -116,7 +116,7 @@ enum{
     ID_artificial_horizon =  wxID_HIGHEST + 8,
     ID_combo_body = wxID_HIGHEST + 9,
     ID_combo_limb = wxID_HIGHEST + 10,
-    ID_combo_sign = wxID_HIGHEST + 11,
+    ID_combo_sign_index_error = wxID_HIGHEST + 11,
     ID_box_year = wxID_HIGHEST + 12,
     ID_combo_month = wxID_HIGHEST + 13,
     ID_combo_day = wxID_HIGHEST + 14,
@@ -124,7 +124,10 @@ enum{
     ID_combo_hour_masterclock = wxID_HIGHEST + 16,
     ID_combo_minute_masterclock = wxID_HIGHEST + 17,
     ID_combo_hour_stopwatch = wxID_HIGHEST + 18,
-    ID_combo_minute_stopwatch = wxID_HIGHEST + 19
+    ID_combo_minute_stopwatch = wxID_HIGHEST + 19,
+    ID_combo_sign_TAI_minus_UTC = wxID_HIGHEST + 20,
+    ID_combo_hour_TAI_minus_UTC = wxID_HIGHEST + 21,
+    ID_combo_minute_TAI_minus_UTC = wxID_HIGHEST + 22
 
 };
 
@@ -150,7 +153,7 @@ bool MyApp::OnInit(){
     wxRect rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-
+    
     MyFrame *frame = new MyFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
     
     frame->Show( true );
@@ -191,7 +194,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     for(i=0; i<60; i++){
         minutes.Add(wxString::Format(wxT("%i"),i));
     }
-
+    
     
     menuFile->Append(ID_Open, "&Open...\tCtrl-O", "This is to open a file");
     //this adds a separator, a horizontal line in the menu
@@ -205,12 +208,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetMenuBar( menuBar );
     
     
-    grid_sizer = new wxGridSizer(8, 2, 0, 0);
+    grid_sizer = new wxGridSizer(9, 2, 0, 0);
     box_sizer_1 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_5 = new wxBoxSizer(wxHORIZONTAL);
+    box_sizer_6 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
     for(i=0; i<(*catalog).list.size(); i++){
@@ -228,7 +232,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     combo_limb->SetValue("");
     combo_limb->Enable(false);
-
+    
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_H_s_deg = new wxComboBox(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);;
     combo_H_s_deg->SetInitialSize(combo_H_s_deg->GetSizeFromTextSize(combo_H_s_deg->GetTextExtent(wxS("000"))));
@@ -237,14 +241,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_H_s_min = new wxTextCtrl(panel, ID_box_H_s_min, "", wxDefaultPosition, wxDefaultSize);
     box_H_s_min->SetInitialSize(box_H_s_min->GetSizeFromTextSize(box_H_s_min->GetTextExtent(wxS("0.000000"))));
     box_H_s_min->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::CheckHsMinutes), this);
-//    box_H_s_min->SetBackgroundStyle( wxBG_STYLE_COLOUR );
+    //    box_H_s_min->SetBackgroundStyle( wxBG_STYLE_COLOUR );
     wxStaticText* text_H_s_min = new wxStaticText(panel, wxID_ANY, wxT("'"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     signs.Add(wxT("+"));
     signs.Add(wxT("-"));
-    combo_sign = new wxComboBox(panel, ID_combo_sign, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
-    combo_sign->SetValue("");
-
+    combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+    combo_sign_index_error->SetValue("");
+    
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     box_index_error_deg = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
@@ -261,7 +265,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     box_index_error_deg->SetValue(wxString::Format(wxT("%i"), deg));
     box_index_error_min->SetValue(wxString::Format(wxT("%f"), min));
-
+    
     
     //artificial horizon
     wxStaticText* text_artificial_horizon = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -277,11 +281,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_year->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.Y));
     
     wxStaticText* text_hyphen_1 = new wxStaticText(panel, wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     combo_month = new wxComboBox(panel, ID_combo_month, wxT(""), wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     combo_month->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::TabulateDays), this);
     combo_month->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.M));
-
+    
     wxStaticText* text_hyphen_2 = new wxStaticText(panel, wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[1-1]; i++){
@@ -291,52 +295,60 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_day->SetValue("");
     combo_day->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.D));
     //combo_day->Enable(false);
-
+    
     
     //master-clock hour
     sight.master_clock_date_and_hour.chrono.set_current(prefix);
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_hour_masterclock = new wxComboBox(panel, ID_combo_hour_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     combo_hour_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.h));
-
+    
     wxStaticText* text_colon_1 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     combo_minute_masterclock = new wxComboBox(panel, ID_combo_minute_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     combo_minute_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.m));
-
+    
     wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     box_second_masterclock = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.000000"))));
     box_second_masterclock->SetValue(wxString::Format(wxT("%f"),sight.master_clock_date_and_hour.chrono.s));
-
-
-//use of stopwatch
+    
+    
+    //use of stopwatch
     wxStaticText* text_stopwatch = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch = new wxCheckBox(panel, ID_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     combo_hour_stopwatch = new wxComboBox(panel, ID_combo_hour_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     combo_hour_stopwatch->Enable(false);
     combo_hour_stopwatch->SetValue("");
-
+    
     wxStaticText* text_colon_3 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     combo_minute_stopwatch = new wxComboBox(panel, ID_combo_minute_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     combo_minute_stopwatch->Enable(false);
     combo_minute_stopwatch->SetValue("");
-
+    
     wxStaticText* text_colon_4 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     box_second_stopwatch = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     box_second_stopwatch->SetInitialSize(box_second_stopwatch->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.000000"))));
     box_second_stopwatch->Enable(false);
     
+    //TAI-UTC
+    wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
+    combo_sign_TAI_minus_UTC = new wxComboBox(panel, ID_combo_sign_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+    combo_hour_TAI_minus_UTC = new wxComboBox(panel, ID_combo_hour_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
+    wxStaticText* text_colon_5 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    combo_minute_TAI_minus_UTC = new wxComboBox(panel, ID_combo_minute_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
+    wxStaticText* text_colon_6 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    box_second_TAI_minus_UTC = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     
-    
-    
+    //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_ok = new wxButton(panel, ID_button_ok, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
@@ -355,7 +367,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(box_sizer_1);
     
     grid_sizer->Add(text_index_error);
-    box_sizer_3->Add(combo_sign);
+    box_sizer_3->Add(combo_sign_index_error);
     box_sizer_3->Add(box_index_error_deg);
     box_sizer_3->Add(text_index_error_deg);
     box_sizer_3->Add(box_index_error_min);
@@ -377,9 +389,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_sizer_4->Add(combo_minute_masterclock);
     box_sizer_4->Add(text_colon_2);
     box_sizer_4->Add(box_second_masterclock);
-
+    
     grid_sizer->Add(box_sizer_4);
-
+    
     grid_sizer->Add(text_stopwatch);
     grid_sizer->Add(stopwatch);
     
@@ -389,8 +401,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_sizer_5->Add(combo_minute_stopwatch);
     box_sizer_5->Add(text_colon_4);
     box_sizer_5->Add(box_second_stopwatch);
-
+    
     grid_sizer->Add(box_sizer_5);
+    
+    grid_sizer->Add(text_TAI_minus_UTC);
+    box_sizer_6->Add(combo_hour_TAI_minus_UTC);
+    box_sizer_6->Add(text_colon_5);
+    box_sizer_6->Add(combo_minute_TAI_minus_UTC);
+    box_sizer_6->Add(text_colon_6);
+    box_sizer_6->Add(box_second_TAI_minus_UTC);
+
+    grid_sizer->Add(box_sizer_6);
 
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
@@ -420,11 +441,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     //Maximize();
     
     file_init.close(prefix);
-
+    
     if(!check){
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
-
+    
     
 }
 
@@ -449,7 +470,7 @@ void MyFrame::OnOpen(wxCommandEvent& event){
         CurrentDocPath = OpenDialog->GetPath();
         
         // Sets our current document to the file the user selected
-//        combo_H_s_deg->LoadFile(CurrentDocPath); //Opens that file
+        //        combo_H_s_deg->LoadFile(CurrentDocPath); //Opens that file
         // Set the Title to reflect the  file open
         SetTitle(wxString("Edit - ") << OpenDialog->GetFilename());
     }
@@ -466,7 +487,7 @@ void MyFrame::OnSaveAs(wxCommandEvent& event){
     if(SaveDialog->ShowModal() == wxID_OK) {
         
         CurrentDocPath = SaveDialog->GetPath();
-//        combo_H_s_deg->SaveFile(CurrentDocPath);
+        //        combo_H_s_deg->SaveFile(CurrentDocPath);
         
         SetTitle(SaveDialog->GetFilename());
         
@@ -483,7 +504,7 @@ void MyFrame::OnSave(wxCommandEvent& event){
     if(CurrentDocPath == ""){
         OnSaveAs(event);
     }else{
-//        combo_H_s_deg->SaveFile(CurrentDocPath);
+        //        combo_H_s_deg->SaveFile(CurrentDocPath);
     }
     
 }
@@ -518,13 +539,13 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
         }else{
             combo_limb->Enable(false);
         }
-
+        
         combo_body->SetBackgroundColour(*wxWHITE);
-
+        
     }else{
         
         CallAfter(&MyFrame::PrintErrorMessage, combo_body, String("Body not found in catalog!\nBody must be in catalog."));
-
+        
     }
     
     
@@ -540,9 +561,9 @@ void MyFrame::CheckHsMinutes(wxFocusEvent& event){
     }else{
         box_H_s_min->SetBackgroundColour(*wxWHITE);
     }
-
+    
     event.Skip(true);
-
+    
 }
 
 void MyFrame::CheckIndexErrorMinutes(wxFocusEvent& event){
@@ -552,9 +573,9 @@ void MyFrame::CheckIndexErrorMinutes(wxFocusEvent& event){
     }else{
         box_index_error_min->SetBackgroundColour(*wxWHITE);
     }
-
+    
     event.Skip(true);
-
+    
 }
 
 void MyFrame::PrintErrorMessage(wxControl* parent, String message){
@@ -562,7 +583,7 @@ void MyFrame::PrintErrorMessage(wxControl* parent, String message){
     wxMessageBox(message.value);
     parent->SetBackgroundColour(*wxRED);
     parent->SetFocus();
-
+    
 }
 
 
@@ -583,17 +604,17 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
         if(sight.master_clock_date_and_hour.date.Y_is_leap_year){
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
             
-           for(days.Clear(), i=0; i<days_per_month_leap[(sight.master_clock_date_and_hour.date.M)-1]; i++){
+            for(days.Clear(), i=0; i<days_per_month_leap[(sight.master_clock_date_and_hour.date.M)-1]; i++){
                 days.Add(wxString::Format(wxT("%i"),i+1));
             }
-    
+            
         }else{
             //in this case the year is a common year: I fill the list of days from days_per_month_common
             
             for(days.Clear(), i=0; i<days_per_month_common[(sight.master_clock_date_and_hour.date.M)-1]; i++){
                 days.Add(wxString::Format(wxT("%i"),i+1));
             }
-    //
+            //
         }
         
         combo_day->Set(days);
@@ -607,7 +628,7 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
     }
     
     event.Skip(true);
-
+    
 }
 
 
@@ -624,11 +645,11 @@ void MyFrame::OnCheckStopwatch(wxCommandEvent& event){
         box_second_stopwatch->Enable(true);
         
     }else{
-
+        
         combo_hour_stopwatch->Enable(false);
         combo_minute_stopwatch->Enable(false);
         box_second_stopwatch->Enable(false);
-
+        
     }
     
 }
@@ -658,7 +679,7 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
     str_min = box_index_error_min->GetValue();
     str_min.ToDouble(&min);
     
-    s << "Index error = " << combo_sign->GetValue() << " " << wxAtoi(str_deg) << "° " << min << "'\n";
+    s << "Index error = " << combo_sign_index_error->GetValue() << " " << wxAtoi(str_deg) << "° " << min << "'\n";
     
     s << "Artificial horizon = ";
     

@@ -45,11 +45,13 @@
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
 
+wxArrayString degrees;
+
 
 using namespace std;
 
 #include "lib.h"
-#include "lib_h.h"
+#include "lib_gui.h"
 
 /*
  notes:
@@ -73,10 +75,12 @@ public:
     Sight sight;
     wxPanel *panel;
     
+    angle_field* H_s;
+    
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_1, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
-    wxArrayString bodies, limbs, signs, degrees, months, days, hours, minutes;
+    wxArrayString bodies, limbs, signs, months, days, hours, minutes;
     wxTextCtrl *box_H_s_min, *box_index_error_deg, *box_index_error_min, *box_year, *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
     wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_H_s_deg, *combo_month, *combo_day, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
@@ -149,11 +153,18 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
+    unsigned int i;
+    
     //obtain width and height of the display, and create a wxRect with height and width half ot the height and width of the display
     wxDisplay display;
     wxRect rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
+    
+    for(degrees.Clear(), i=0; i<360; i++){
+        degrees.Add(wxString::Format(wxT("%i"), i));
+    }
+
     
     MyFrame *frame = new MyFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
     
@@ -183,9 +194,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    for(degrees.Clear(), i=0; i<360; i++){
-        degrees.Add(wxString::Format(wxT("%i"),i));
-    }
+    H_s = new angle_field(panel);
+    
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"),i+1));
     }
@@ -235,6 +245,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_limb->Enable(false);
     
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+/*
     combo_H_s_deg = new wxComboBox(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);;
     combo_H_s_deg->SetInitialSize(combo_H_s_deg->GetSizeFromTextSize(combo_H_s_deg->GetTextExtent(wxS("000"))));
     combo_H_s_deg->SetValue("");
@@ -244,6 +255,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_H_s_min->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::CheckHsMinutes), this);
     //    box_H_s_min->SetBackgroundStyle( wxBG_STYLE_COLOUR );
     wxStaticText* text_H_s_min = new wxStaticText(panel, wxID_ANY, wxT("'"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+  */
     
     signs.Add(wxT("+"));
     signs.Add(wxT("-"));
@@ -377,11 +389,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(combo_limb);
     
     grid_sizer->Add(text_H_s);
+    /*
     box_sizer_1->Add(combo_H_s_deg);
     box_sizer_1->Add(text_H_s_deg);
     box_sizer_1->Add(box_H_s_min);
     box_sizer_1->Add(text_H_s_min);
     grid_sizer->Add(box_sizer_1);
+    */
+    H_s->insert(grid_sizer);
     
     grid_sizer->Add(text_index_error);
     box_sizer_3->Add(combo_sign_index_error);

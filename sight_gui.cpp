@@ -49,6 +49,7 @@
 using namespace std;
 
 #include "lib.h"
+#include "lib_h.h"
 
 /*
  notes:

@@ -36,7 +36,7 @@ static const int days_per_month_common_temp[] = {31, 28, 31, 30, 31, 30, 31, 31,
 vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_month_common_temp + sizeof(days_per_month_common_temp)/sizeof(days_per_month_common_temp[0]));
 
 
-#define path_file_utc_date "utc_date.txt"
+#define path_file_utc_date_and_time "utc.txt"
 #define path_file_init "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/init.txt"
 #define path_file_catalog "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
@@ -6218,11 +6218,11 @@ bool Date::set_current(String prefix){
      
     check = true;
 
-    file_utc_date.set_name(String(path_file_utc_date));
+    file_utc_date.set_name(String(path_file_utc_date_and_time));
     file_utc_date.remove(prefix);
     
     line_ins.str("");
-    line_ins << "date -u \"+DATE: %Y-%m-%d%nTIME: %H:%M:%S\"  >> " << path_file_utc_date;
+    line_ins << "date -u \"+DATE: %Y-%m-%d%nTIME: %H:%M:%S\"  >> " << path_file_utc_date_and_time;
     
     //execute the date command in the terminal and writes the UTC date to file_utc_date
     system(line_ins.str().c_str());

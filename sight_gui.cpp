@@ -94,7 +94,7 @@ public:
     void OnCheckStopwatch(wxCommandEvent& event);
     void CheckHsMinutes(wxFocusEvent& event);
     void CheckIndexErrorMinutes(wxFocusEvent& event);
-    void PrintErrorMessage(String, String);
+    void PrintErrorMessage(wxControl*, String);
 
     
     // The Path to the file we have open
@@ -520,8 +520,7 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 
     }else{
         
-        CallAfter(&MyFrame::PrintErrorMessage, String("Body must be in catalog."), String("Body not found in catalog!"));
-        combo_body->SetBackgroundColour(*wxRED);
+        CallAfter(&MyFrame::PrintErrorMessage, combo_body, String("Body not found in catalog!\nBody must be in catalog."));
 
     }
     
@@ -534,8 +533,7 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 void MyFrame::CheckHsMinutes(wxFocusEvent& event){
     
     if(!check_double((box_H_s_min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        CallAfter(&MyFrame::PrintErrorMessage, String("Arcminutes must be floating-point numbers >= 0' and < 60'"), String("Entered value is not valid!"));
-        box_H_s_min->SetBackgroundColour(*wxRED);
+        CallAfter(&MyFrame::PrintErrorMessage, box_H_s_min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
     }else{
         box_H_s_min->SetBackgroundColour(*wxWHITE);
     }
@@ -547,8 +545,7 @@ void MyFrame::CheckHsMinutes(wxFocusEvent& event){
 void MyFrame::CheckIndexErrorMinutes(wxFocusEvent& event){
     
     if(!check_double((box_index_error_min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        CallAfter(&MyFrame::PrintErrorMessage, String("Arcminutes must be floating-point numbers >= 0' and < 60'"), String("Entered value is not valid!"));
-        box_index_error_min->SetBackgroundColour(*wxRED);
+        CallAfter(&MyFrame::PrintErrorMessage, box_index_error_min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
     }else{
         box_index_error_min->SetBackgroundColour(*wxWHITE);
     }
@@ -557,9 +554,11 @@ void MyFrame::CheckIndexErrorMinutes(wxFocusEvent& event){
 
 }
 
-void MyFrame::PrintErrorMessage(String message, String header){
+void MyFrame::PrintErrorMessage(wxControl* parent, String message){
     
-    wxMessageBox(message.value, header.value);
+    wxMessageBox(message.value);
+    parent->SetBackgroundColour(*wxRED);
+    parent->SetFocus();
 
 }
 

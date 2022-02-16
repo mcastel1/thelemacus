@@ -269,29 +269,28 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     
     //master-clock date
+    sight.master_clock_date_and_hour.date.set_current(prefix);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     box_year = new wxTextCtrl(panel, ID_box_year, "", wxDefaultPosition, wxDefaultSize);
     box_year->SetInitialSize(box_year->GetSizeFromTextSize(box_year->GetTextExtent(wxS("0000"))));
     box_year->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, this);
-
+    box_year->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.Y));
     
     wxStaticText* text_hyphen_1 = new wxStaticText(panel, wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
-    
     combo_month = new wxComboBox(panel, ID_combo_month, wxT(""), wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     combo_month->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::TabulateDays), this);
-
-    combo_month->SetValue("");
+    combo_month->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.M));
 
     wxStaticText* text_hyphen_2 = new wxStaticText(panel, wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
     
     for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[1-1]; i++){
         days.Add(wxString::Format(wxT("%i"),i+1));
     }
     combo_day = new wxComboBox(panel, ID_combo_day, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
     combo_day->SetValue("");
-    combo_day->Enable(false);
+    combo_day->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.D));
+    //combo_day->Enable(false);
 
     
     //master-clock hour

@@ -339,14 +339,30 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_second_stopwatch->Enable(false);
     
     //TAI-UTC
+    //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
+    cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
+    sight.TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     combo_sign_TAI_minus_UTC = new wxComboBox(panel, ID_combo_sign_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+    combo_sign_TAI_minus_UTC->SetValue(wxT("+"));
+    
     combo_hour_TAI_minus_UTC = new wxComboBox(panel, ID_combo_hour_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
+    combo_hour_TAI_minus_UTC->SetValue(wxString::Format(wxT("%i"),sight.TAI_minus_UTC.h));
+
     wxStaticText* text_colon_5 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
     combo_minute_TAI_minus_UTC = new wxComboBox(panel, ID_combo_minute_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
+    combo_minute_TAI_minus_UTC->SetValue(wxString::Format(wxT("%i"),sight.TAI_minus_UTC.m));
+
     wxStaticText* text_colon_6 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
     box_second_TAI_minus_UTC = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    box_second_TAI_minus_UTC->SetValue(wxString::Format(wxT("%f"),sight.TAI_minus_UTC.s));
+
+
     
     //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -405,6 +421,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(box_sizer_5);
     
     grid_sizer->Add(text_TAI_minus_UTC);
+    box_sizer_6->Add(combo_sign_TAI_minus_UTC);
     box_sizer_6->Add(combo_hour_TAI_minus_UTC);
     box_sizer_6->Add(text_colon_5);
     box_sizer_6->Add(combo_minute_TAI_minus_UTC);

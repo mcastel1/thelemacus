@@ -1,5 +1,5 @@
 #!/bin/bash
-clear; clear; 
+clear; clear;
 
 
 rm sight_gui_app.cpp lib_app.h
@@ -29,4 +29,4 @@ ln -f sight_gui_app sight_gui_app.app/Contents/MacOS/sight_gui_app
 cp -f jolly_roger.icns sight_gui_app.app/Contents/Resources/wxmac.icns
 cp -r data/* sight_gui_app.app/Contents/Resources/
 
-#rm lib_app.h sight_gui_app.cpp
+rm lib_app.h sight_gui_app.cpp sight_gui_app.o

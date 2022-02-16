@@ -6222,7 +6222,7 @@ bool Date::set_current(String prefix){
     file_utc_date.remove(prefix);
     
     line_ins.str("");
-    line_ins << "date -u \"+DATE: %Y-%m-%d%nTIME: %H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    line_ins << "date -u \"+%Y-%m-%d\"  >> " << path_file_utc_date_and_time;
     
     //execute the date command in the terminal and writes the UTC date to file_utc_date
     system(line_ins.str().c_str());
@@ -6236,10 +6236,6 @@ bool Date::set_current(String prefix){
         
         getline(file_utc_date.value, input);
         
-        pos = input.find(" ");
-        //load into input the string from pos+1 until its end
-        input  =  (input.substr(pos+1).c_str());
-
         //read the part of input containing the year
         pos = input.find("-");
         Y = stoi(input.substr(0, pos).c_str(), NULL, 10);

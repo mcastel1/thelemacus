@@ -294,19 +294,22 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     
     //master-clock hour
+    sight.master_clock_date_and_hour.chrono.set_current(prefix);
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_hour_masterclock = new wxComboBox(panel, ID_combo_hour_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-    combo_hour_masterclock->SetValue("");
+    combo_hour_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.h));
 
     wxStaticText* text_colon_1 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     combo_minute_masterclock = new wxComboBox(panel, ID_combo_minute_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    combo_minute_masterclock->SetValue("");
-    
+    combo_minute_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.m));
+
     wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     box_second_masterclock = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.000000"))));
+    box_second_masterclock->SetValue(wxString::Format(wxT("%f"),sight.master_clock_date_and_hour.chrono.s));
+
 
 //use of stopwatch
     wxStaticText* text_stopwatch = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

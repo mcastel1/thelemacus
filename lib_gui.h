@@ -26,7 +26,6 @@ class AngleField{
     template<class T> void InsertIn(T*);
     
     void CheckDegrees(wxFocusEvent& event);
-    void CheckMinutes(wxFocusEvent& event);
     
 };
 
@@ -69,6 +68,8 @@ public:
     void OnCheckStopwatch(wxCommandEvent& event);
     void CheckIndexErrorMinutes(wxFocusEvent& event);
     void PrintErrorMessage(wxControl*, String);
+    void CheckMinutes(wxFocusEvent& event);
+
     
     
     // The Path to the file we have open
@@ -568,16 +569,21 @@ void AngleField::CheckDegrees(wxFocusEvent& event){
     
 }
 
-void AngleField::CheckMinutes(wxFocusEvent& event){
+void MyFrame::CheckMinutes(wxFocusEvent& event){
+
+    wxTextCtrl* control;
     
-    if(!check_double((this->min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        parent_frame->CallAfter(&MyFrame::PrintErrorMessage, min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
-//        min->SetBackgroundColour(*wxBLUE);
+    control = (wxTextCtrl*)(event.GetEventUserData());
+    
+    if(!check_double((control->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        CallAfter(&MyFrame::PrintErrorMessage, control, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
 
     }else{
-        min->SetBackgroundColour(*wxWHITE);
+        control->SetBackgroundColour(*wxWHITE);
     }
-    
+
+
+  
     event.Skip(true);
     
 }
@@ -728,7 +734,7 @@ AngleField::AngleField(MyFrame* frame){
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.000000"))));
     min->SetValue("");
-    min->Bind(wxEVT_KILL_FOCUS, &AngleField::CheckMinutes, this);
+    min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, min);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 

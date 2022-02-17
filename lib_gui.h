@@ -226,7 +226,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_index_error_deg->SetInitialSize(box_index_error_deg->GetSizeFromTextSize(box_index_error_deg->GetTextExtent(wxS("000"))));
     wxStaticText* text_index_error_deg = new wxStaticText(panel, wxID_ANY, wxT("°"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     box_index_error_min = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_index_error_min->SetInitialSize(box_index_error_min->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.000000"))));
+    box_index_error_min->SetInitialSize(box_index_error_min->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.0000"))));
     box_index_error_min->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::CheckIndexErrorMinutes), this);
     wxStaticText* text_index_error_min = new wxStaticText(panel, wxID_ANY, wxT("'"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //read index error from init file
@@ -281,7 +281,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     box_second_masterclock = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.000000"))));
+    box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.0000"))));
     box_second_masterclock->SetValue(wxString::Format(wxT("%f"),sight.master_clock_date_and_hour.chrono.s));
     
     
@@ -305,7 +305,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_colon_4 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     box_second_stopwatch = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_second_stopwatch->SetInitialSize(box_second_stopwatch->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.000000"))));
+    box_second_stopwatch->SetInitialSize(box_second_stopwatch->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.0000"))));
     box_second_stopwatch->Enable(false);
     
     //TAI-UTC
@@ -719,7 +719,7 @@ AngleField::AngleField(MyFrame* frame){
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.000000"))));
+    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0000"))));
     //min->SetValue("");
     min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, min);
 

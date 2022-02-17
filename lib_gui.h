@@ -164,6 +164,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     H_s = new AngleField(this);
     
+    limbs.Clear();
+    limbs.Add(wxT("upper"));
+    limbs.Add(wxT("lower"));
+    limbs.Add(wxT("center"));
+    
+    signs.Clear();
+    signs.Add(wxT("+"));
+    signs.Add(wxT("-"));
+
+
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"),i+1));
     }
@@ -203,9 +213,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
     //combo_body->SetValue("");
     
-    limbs.Add(wxT("upper"));
-    limbs.Add(wxT("lower"));
-    limbs.Add(wxT("center"));
     wxStaticText* text_combo_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     //combo_limb->SetValue("");
@@ -214,8 +221,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     
-    signs.Add(wxT("+"));
-    signs.Add(wxT("-"));
     combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     //combo_sign_index_error->SetValue("");
     

@@ -25,7 +25,6 @@ class AngleField{
     AngleField(MyFrame*);
     template<class T> void InsertIn(T*);
     
-    void CheckDegrees(wxFocusEvent& event);
     
 };
 
@@ -68,6 +67,7 @@ public:
     void OnCheckStopwatch(wxCommandEvent& event);
     void CheckIndexErrorMinutes(wxFocusEvent& event);
     void PrintErrorMessage(wxControl*, String);
+    void CheckDegrees(wxFocusEvent& event);
     void CheckMinutes(wxFocusEvent& event);
 
     
@@ -557,17 +557,25 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 }
 
 
-void AngleField::CheckDegrees(wxFocusEvent& event){
+void MyFrame::CheckDegrees(wxFocusEvent& event){
+
+    wxComboBox* control;
     
-    if(!check_unsigned_int((this->deg->GetValue()).ToStdString(), NULL, true, 0, 360)){
-        parent_frame->CallAfter(&MyFrame::PrintErrorMessage, deg, String("Entered value is not valid!\nDegrees must be unsigned integer numbers >= 0° and < 360°"));
+    control = (wxComboBox*)(event.GetEventUserData());
+    
+    if(!check_unsigned_int((control->GetValue()).ToStdString(), NULL, true, 0, 360)){
+        CallAfter(&MyFrame::PrintErrorMessage, control, String("Entered value is not valid!\nArcdegrees must be floating-point numbers >= 0° and < 360°"));
+
     }else{
-        min->SetBackgroundColour(*wxWHITE);
+        control->SetBackgroundColour(*wxWHITE);
     }
-    
+
+
+  
     event.Skip(true);
     
 }
+
 
 void MyFrame::CheckMinutes(wxFocusEvent& event){
 
@@ -727,7 +735,7 @@ AngleField::AngleField(MyFrame* frame){
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     deg->SetValue("");
-    deg->Bind(wxEVT_KILL_FOCUS, &AngleField::CheckDegrees, this);
+    deg->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDegrees, parent_frame, wxID_ANY, wxID_ANY, deg);
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

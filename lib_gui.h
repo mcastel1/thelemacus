@@ -46,12 +46,12 @@ public:
     AngleField* H_s;
     
     wxGridSizer *grid_sizer;
-    wxBoxSizer *sizer, *box_sizer_1, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
+    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
     wxArrayString bodies, limbs, signs, months, days, hours, minutes;
-    wxTextCtrl *box_H_s_min, *box_index_error_deg, *box_index_error_min, *box_year, *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
+    wxTextCtrl *box_index_error_deg, *box_index_error_min, *box_year, *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
-    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_H_s_deg, *combo_month, *combo_day, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
+    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_month, *combo_day, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
     wxButton* button_ok, *button_cancel;
     wxMenuBar *menuBar;
     
@@ -84,7 +84,6 @@ enum{
     ID_Open =  wxID_HIGHEST + 1,
     ID_Save =  wxID_HIGHEST + 2,
     ID_SaveAs =  wxID_HIGHEST + 3,
-    ID_box_H_s_min = wxID_HIGHEST + 4,
     ID_Close =  wxID_HIGHEST + 5,
     ID_button_ok =  wxID_HIGHEST + 6,
     ID_button_cancel =  wxID_HIGHEST + 7,
@@ -190,7 +189,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     
     grid_sizer = new wxGridSizer(9, 2, 0, 0);
-    box_sizer_1 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
@@ -215,17 +213,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_limb->Enable(false);
     
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-/*
-    combo_H_s_deg = new wxComboBox(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);;
-    combo_H_s_deg->SetInitialSize(combo_H_s_deg->GetSizeFromTextSize(combo_H_s_deg->GetTextExtent(wxS("000"))));
-    combo_H_s_deg->SetValue("");
-    wxStaticText* text_H_s_deg = new wxStaticText(panel, wxID_ANY, wxT("°"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    box_H_s_min = new wxTextCtrl(panel, ID_box_H_s_min, "", wxDefaultPosition, wxDefaultSize);
-    box_H_s_min->SetInitialSize(box_H_s_min->GetSizeFromTextSize(box_H_s_min->GetTextExtent(wxS("0.000000"))));
-    box_H_s_min->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::CheckHsMinutes), this);
-    //    box_H_s_min->SetBackgroundStyle( wxBG_STYLE_COLOUR );
-    wxStaticText* text_H_s_min = new wxStaticText(panel, wxID_ANY, wxT("'"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-  */
+
     
     signs.Add(wxT("+"));
     signs.Add(wxT("-"));
@@ -359,13 +347,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(combo_limb);
     
     grid_sizer->Add(text_H_s);
-    /*
-    box_sizer_1->Add(combo_H_s_deg);
-    box_sizer_1->Add(text_H_s_deg);
-    box_sizer_1->Add(box_H_s_min);
-    box_sizer_1->Add(text_H_s_min);
-    grid_sizer->Add(box_sizer_1);
-    */
     H_s->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_index_error);
@@ -454,7 +435,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
 void MyFrame::OnClose(wxCommandEvent& event){
     
-    combo_H_s_deg->Clear();
     CurrentDocPath = wxT("");
     SetTitle(_("untitled"));
     
@@ -699,8 +679,8 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
         s << "Limb : " << (combo_limb->GetValue()) << "\n";
     }
     
-    str_deg = combo_H_s_deg->GetValue();
-    str_min = box_H_s_min->GetValue();
+    str_deg = H_s->deg->GetValue();
+    str_min = H_s->min->GetValue();
     str_min.ToDouble(&min);
     
     s << "Sextant altitude = " << wxAtoi(str_deg) << "° " << min << "'\n";

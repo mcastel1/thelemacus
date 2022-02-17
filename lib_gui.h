@@ -23,8 +23,9 @@ class AngleField{
     wxBoxSizer *sizer_h, *sizer_v;
     
     AngleField(MyFrame*);
-    template<class T> void insert(T*);
+    template<class T> void InsertIn(T*);
     
+    void CheckDegrees(wxFocusEvent& event);
     void CheckMinutes(wxFocusEvent& event);
     
 };
@@ -364,7 +365,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_sizer_1->Add(text_H_s_min);
     grid_sizer->Add(box_sizer_1);
     */
-    H_s->insert<wxGridSizer>(grid_sizer);
+    H_s->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_index_error);
     box_sizer_3->Add(combo_sign_index_error);
@@ -555,6 +556,18 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 }
 
 
+void AngleField::CheckDegrees(wxFocusEvent& event){
+    
+    if(!check_unsigned_int((this->deg->GetValue()).ToStdString(), NULL, true, 0, 360)){
+        parent_frame->CallAfter(&MyFrame::PrintErrorMessage, deg, String("Entered value is not valid!\nDegrees must be unsigned integer numbers >= 0° and < 360°"));
+    }else{
+        min->SetBackgroundColour(*wxWHITE);
+    }
+    
+    event.Skip(true);
+    
+}
+
 void AngleField::CheckMinutes(wxFocusEvent& event){
     
     if(!check_double((this->min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
@@ -708,11 +721,13 @@ AngleField::AngleField(MyFrame* frame){
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     deg->SetValue("");
+    deg->Bind(wxEVT_KILL_FOCUS, &AngleField::CheckDegrees, this);
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.000000"))));
+    min->SetValue("");
     min->Bind(wxEVT_KILL_FOCUS, &AngleField::CheckMinutes, this);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -731,7 +746,7 @@ AngleField::AngleField(MyFrame* frame){
     
 }
 
-template<class T> void AngleField::insert(T* host){
+template<class T> void AngleField::InsertIn(T* host){
     
     host->Add(sizer_v);
     

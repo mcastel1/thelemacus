@@ -39,7 +39,7 @@ class DateField{
     wxTextCtrl *year;
     wxComboBox* month, *day;
     //texts
-    wxStaticText* text_colon;
+    wxStaticText* text_hyphen_1, *text_hyphen_2;
     wxBoxSizer *sizer_h, *sizer_v;
     
     DateField(MyFrame*);
@@ -89,6 +89,7 @@ public:
     void PrintErrorMessage(wxControl*, String);
     void CheckDegrees(wxFocusEvent& event);
     void CheckMinutes(wxFocusEvent& event);
+    void CheckYear(wxFocusEvent& event);
 
     
     
@@ -565,11 +566,27 @@ void MyFrame::CheckDegrees(wxFocusEvent& event){
         control->SetBackgroundColour(*wxWHITE);
     }
 
-
-  
     event.Skip(true);
     
 }
+
+void MyFrame::CheckYear(wxFocusEvent& event){
+
+    wxTextCtrl* control;
+    
+    control = (wxTextCtrl*)(event.GetEventUserData());
+    
+    if(!check_unsigned_int((control->GetValue()).ToStdString(), NULL, false, 0, 0)){
+        CallAfter(&MyFrame::PrintErrorMessage, control, String("Entered value is not valid!\nYear must be an unsigned integer"));
+
+    }else{
+        control->SetBackgroundColour(*wxWHITE);
+    }
+
+    event.Skip(true);
+    
+}
+
 
 
 void MyFrame::CheckMinutes(wxFocusEvent& event){
@@ -739,9 +756,45 @@ AngleField::AngleField(MyFrame* frame){
     sizer_h->Add(min, 0, wxALIGN_CENTER);
     sizer_h->Add(text_min);
     
+}
+
+
+//constructor of a DateField object, based on the parent frame frame
+DateField::DateField(MyFrame* frame){
+    
+    parent_frame = frame;
+    
+    year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+    year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
+    year->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckYear, parent_frame, wxID_ANY, wxID_ANY, year);
+
+    text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
+    
+    month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, parent_frame->months, wxCB_DROPDOWN);
+    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
+    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame);
+
+    text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
+
+    (parent_frame->days).Clear();
+    day = new wxComboBox(parent_frame, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, parent_frame->days, wxCB_DROPDOWN);
+
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(year, 0, wxALIGN_CENTER);
+    sizer_h->Add(text_hyphen_1);
+    sizer_h->Add(month, 0, wxALIGN_CENTER);
+    sizer_h->Add(text_hyphen_2);
+    sizer_h->Add(day, 0, wxALIGN_CENTER);
+
 
     
 }
+
+
 
 template<class T> void AngleField::InsertIn(T* host){
     

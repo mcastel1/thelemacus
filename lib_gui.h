@@ -65,6 +65,7 @@ public:
     wxPanel *panel;
     
     AngleField* H_s, *index_error;
+    DateField *master_clock_date;
     
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
@@ -266,6 +267,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     //master-clock date
     sight.master_clock_date_and_hour.date.set_current(prefix);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+   
+    /*
     box_year = new wxTextCtrl(panel, ID_box_year, "", wxDefaultPosition, wxDefaultSize);
     box_year->SetInitialSize(box_year->GetSizeFromTextSize(box_year->GetTextExtent(wxS("0000"))));
     box_year->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, this);
@@ -285,7 +288,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_day = new wxComboBox(panel, ID_combo_day, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
     combo_day->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.D));
     //combo_day->Enable(false);
+    */
     
+    (master_clock_date->year)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.Y));
+    (master_clock_date->month)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.M));
+    for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[1-1]; i++){
+        days.Add(wxString::Format(wxT("%i"), i+1));
+    }
+    (master_clock_date->day)->Set(days);
+
     
     //master-clock hour
     sight.master_clock_date_and_hour.chrono.set_current(prefix);
@@ -377,6 +388,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(artificial_horizon);
     
     grid_sizer->Add(text_date);
+/*
     box_sizer_4->Add(box_year);
     box_sizer_4->Add(text_hyphen_1);
     box_sizer_4->Add(combo_month);
@@ -388,8 +400,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_sizer_4->Add(combo_minute_masterclock);
     box_sizer_4->Add(text_colon_2);
     box_sizer_4->Add(box_second_masterclock);
+ grid_sizer->Add(box_sizer_4);
+ */
+    master_clock_date->InsertIn<wxGridSizer>(grid_sizer);
+
     
-    grid_sizer->Add(box_sizer_4);
     
     grid_sizer->Add(text_stopwatch);
     grid_sizer->Add(stopwatch);
@@ -797,6 +812,12 @@ DateField::DateField(MyFrame* frame){
 
 
 template<class T> void AngleField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}
+
+template<class T> void DateField::InsertIn(T* host){
     
     host->Add(sizer_v);
     

@@ -29,6 +29,27 @@ class AngleField{
 };
 
 
+class DateField{
+    
+    
+    public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    //year, month and day boxes
+    wxTextCtrl *year;
+    wxComboBox* month, *day;
+    //texts
+    wxStaticText* text_colon;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    DateField(MyFrame*);
+    template<class T> void InsertIn(T*);
+    
+    
+};
+
+
+
 class MyApp: public wxApp{
 public:
     virtual bool OnInit();

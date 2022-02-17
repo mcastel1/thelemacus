@@ -202,14 +202,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
-    combo_body->SetValue("");
+    //combo_body->SetValue("");
     
     limbs.Add(wxT("upper"));
     limbs.Add(wxT("lower"));
     limbs.Add(wxT("center"));
     wxStaticText* text_combo_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    combo_limb->SetValue("");
+    //combo_limb->SetValue("");
     combo_limb->Enable(false);
     
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -218,7 +218,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     signs.Add(wxT("+"));
     signs.Add(wxT("-"));
     combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
-    combo_sign_index_error->SetValue("");
+    //combo_sign_index_error->SetValue("");
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -263,7 +263,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         days.Add(wxString::Format(wxT("%i"),i+1));
     }
     combo_day = new wxComboBox(panel, ID_combo_day, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-    combo_day->SetValue("");
     combo_day->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.D));
     //combo_day->Enable(false);
     
@@ -295,13 +294,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     combo_hour_stopwatch = new wxComboBox(panel, ID_combo_hour_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     combo_hour_stopwatch->Enable(false);
-    combo_hour_stopwatch->SetValue("");
+//    combo_hour_stopwatch->SetValue("");
     
     wxStaticText* text_colon_3 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     combo_minute_stopwatch = new wxComboBox(panel, ID_combo_minute_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     combo_minute_stopwatch->Enable(false);
-    combo_minute_stopwatch->SetValue("");
+//    combo_minute_stopwatch->SetValue("");
     
     wxStaticText* text_colon_4 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -714,14 +713,14 @@ AngleField::AngleField(MyFrame* frame){
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
-    deg->SetValue("");
+    //deg->SetValue("");
     deg->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDegrees, parent_frame, wxID_ANY, wxID_ANY, deg);
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.000000"))));
-    min->SetValue("");
+    //min->SetValue("");
     min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, min);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -735,7 +734,6 @@ AngleField::AngleField(MyFrame* frame){
     sizer_h->Add(min, 0, wxALIGN_CENTER);
     sizer_h->Add(text_min);
     
-    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.000000"))));
 
     
 }

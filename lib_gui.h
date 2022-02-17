@@ -43,13 +43,13 @@ public:
     Sight sight;
     wxPanel *panel;
     
-    AngleField* H_s;
+    AngleField* H_s, *index_error;
     
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
     wxArrayString bodies, limbs, signs, months, days, hours, minutes;
-    wxTextCtrl *box_index_error_deg, *box_index_error_min, *box_year, *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
+    wxTextCtrl *box_year, *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
     wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_month, *combo_day, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
     wxButton* button_ok, *button_cancel;
@@ -65,7 +65,6 @@ public:
     void OnSelectBody(wxFocusEvent& event);
     void TabulateDays(wxFocusEvent& event);
     void OnCheckStopwatch(wxCommandEvent& event);
-    void CheckIndexErrorMinutes(wxFocusEvent& event);
     void PrintErrorMessage(wxControl*, String);
     void CheckDegrees(wxFocusEvent& event);
     void CheckMinutes(wxFocusEvent& event);
@@ -222,20 +221,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    box_index_error_deg = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_index_error_deg->SetInitialSize(box_index_error_deg->GetSizeFromTextSize(box_index_error_deg->GetTextExtent(wxS("000"))));
-    wxStaticText* text_index_error_deg = new wxStaticText(panel, wxID_ANY, wxT("°"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    box_index_error_min = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_index_error_min->SetInitialSize(box_index_error_min->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.0000"))));
-    box_index_error_min->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::CheckIndexErrorMinutes), this);
-    wxStaticText* text_index_error_min = new wxStaticText(panel, wxID_ANY, wxT("'"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //read index error from init file
     cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
     sight.index_error.read_from_file(String("index error"), file_init, true, new_prefix);
     sight.index_error.to_deg_min(&deg, &min);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    box_index_error_deg->SetValue(wxString::Format(wxT("%i"), deg));
-    box_index_error_min->SetValue(wxString::Format(wxT("%f"), min));
+    index_error = new AngleField(this);
+    index_error->deg->SetValue(wxString::Format(wxT("%i"), deg));
+    index_error->min->SetValue(wxString::Format(wxT("%f"), min));
     
     
     //artificial horizon
@@ -281,7 +274,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     box_second_masterclock = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.0000"))));
+    box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_second_masterclock->GetTextExtent(wxS("0.0000"))));
     box_second_masterclock->SetValue(wxString::Format(wxT("%f"),sight.master_clock_date_and_hour.chrono.s));
     
     
@@ -305,7 +298,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_colon_4 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     box_second_stopwatch = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_second_stopwatch->SetInitialSize(box_second_stopwatch->GetSizeFromTextSize(box_index_error_min->GetTextExtent(wxS("0.0000"))));
+    box_second_stopwatch->SetInitialSize(box_second_stopwatch->GetSizeFromTextSize(box_second_stopwatch->GetTextExtent(wxS("0.0000"))));
     box_second_stopwatch->Enable(false);
     
     //TAI-UTC
@@ -350,12 +343,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     grid_sizer->Add(text_index_error);
     box_sizer_3->Add(combo_sign_index_error);
-    box_sizer_3->Add(box_index_error_deg);
-    box_sizer_3->Add(text_index_error_deg);
-    box_sizer_3->Add(box_index_error_min);
-    box_sizer_3->Add(text_index_error_min);
+    index_error->InsertIn<wxBoxSizer>(box_sizer_3);
     grid_sizer->Add(box_sizer_3);
-    
+
     grid_sizer->Add(text_artificial_horizon);
     grid_sizer->Add(artificial_horizon);
     
@@ -575,17 +565,6 @@ void MyFrame::CheckMinutes(wxFocusEvent& event){
     
 }
 
-void MyFrame::CheckIndexErrorMinutes(wxFocusEvent& event){
-    
-    if(!check_double((box_index_error_min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        CallAfter(&MyFrame::PrintErrorMessage, box_index_error_min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
-    }else{
-        box_index_error_min->SetBackgroundColour(*wxWHITE);
-    }
-    
-    event.Skip(true);
-    
-}
 
 void MyFrame::PrintErrorMessage(wxControl* parent, String message){
     
@@ -684,8 +663,8 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
     
     s << "Sextant altitude = " << wxAtoi(str_deg) << "° " << min << "'\n";
     
-    str_deg = box_index_error_deg->GetValue();
-    str_min = box_index_error_min->GetValue();
+    str_deg = index_error->deg->GetValue();
+    str_min = index_error->min->GetValue();
     str_min.ToDouble(&min);
     
     s << "Index error = " << combo_sign_index_error->GetValue() << " " << wxAtoi(str_deg) << "° " << min << "'\n";

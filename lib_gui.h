@@ -4,20 +4,25 @@
 //
 //  Created by MacBook Pro on 16/02/2022.
 //
-class angle_field;
+class AngleField;
 class MyApp;
 class MyFrame;
 
-class angle_field{
+//class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
+class AngleField{
     
     
     public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    //degrees and minutes boxes
     wxComboBox* deg;
     wxTextCtrl *min;
+    //texts
     wxStaticText* text_deg, *text_min;
     wxBoxSizer *sizer_h, *sizer_v;
     
-    angle_field(MyFrame*);
+    AngleField(MyFrame*);
     template<class T> void insert(T*);
     
     void CheckMinutes(wxFocusEvent& event);
@@ -39,7 +44,7 @@ public:
     Sight sight;
     wxPanel *panel;
     
-    angle_field* H_s;
+    AngleField* H_s;
     
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_1, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
@@ -157,7 +162,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    H_s = new angle_field(this);
+    H_s = new AngleField(this);
     
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"),i+1));
@@ -550,10 +555,10 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 }
 
 
-void angle_field::CheckMinutes(wxFocusEvent& event){
+void AngleField::CheckMinutes(wxFocusEvent& event){
     
     if(!check_double((this->min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-//        CallAfter(&MyFrame::PrintErrorMessage, min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+        parent_frame->CallAfter(&MyFrame::PrintErrorMessage, min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
 //        min->SetBackgroundColour(*wxBLUE);
 
     }else{
@@ -695,20 +700,22 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
 }
 
 
-
-angle_field::angle_field(MyFrame* frame){
+//constructor of an AngleField object, based on the parent frame frame
+AngleField::AngleField(MyFrame* frame){
     
-    deg = new wxComboBox(frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
+    parent_frame = frame;
+    
+    deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     deg->SetValue("");
 
-    text_deg = new wxStaticText((frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
-    min = new wxTextCtrl((frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.000000"))));
-    min->Bind(wxEVT_KILL_FOCUS, &angle_field::CheckMinutes, this);
+    min->Bind(wxEVT_KILL_FOCUS, &AngleField::CheckMinutes, this);
 
-    text_min = new wxStaticText((frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -724,7 +731,7 @@ angle_field::angle_field(MyFrame* frame){
     
 }
 
-template<class T> void angle_field::insert(T* host){
+template<class T> void AngleField::insert(T* host){
     
     host->Add(sizer_v);
     

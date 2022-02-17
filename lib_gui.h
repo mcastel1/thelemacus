@@ -67,9 +67,9 @@ public:
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
     wxArrayString bodies, limbs, signs, months, days, hours, minutes;
-    wxTextCtrl *box_year, *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
+    wxTextCtrl *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
-    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_month, *combo_day, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
+    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
     wxButton* button_ok, *button_cancel;
     wxMenuBar *menuBar;
     
@@ -110,7 +110,6 @@ enum{
     ID_combo_limb = wxID_HIGHEST + 10,
     ID_combo_sign_index_error = wxID_HIGHEST + 11,
     ID_box_year = wxID_HIGHEST + 12,
-    ID_combo_month = wxID_HIGHEST + 13,
     ID_combo_day = wxID_HIGHEST + 14,
     ID_stopwatch = wxID_HIGHEST + 15,
     ID_combo_hour_masterclock = wxID_HIGHEST + 16,
@@ -297,16 +296,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     //master-clock hour
     sight.master_clock_date_and_hour.chrono.set_current(prefix);
-    wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_hour_masterclock = new wxComboBox(panel, ID_combo_hour_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     combo_hour_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.h));
     
-    wxStaticText* text_colon_1 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    wxStaticText* text_colon_1 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     combo_minute_masterclock = new wxComboBox(panel, ID_combo_minute_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     combo_minute_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.m));
     
-    wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     box_second_masterclock = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_second_masterclock->GetTextExtent(wxS("0.0000"))));
@@ -633,16 +632,19 @@ void MyFrame::PrintErrorMessage(wxControl* parent, String message){
 
 void MyFrame::TabulateDays(wxFocusEvent& event){
     
+    DateField* p;
     unsigned int i;
     
-    if(((box_year->GetValue()) != wxT("")) && ((combo_month->GetValue()) != wxT(""))){
+    p = (DateField*)(event.GetEventUserData());
+    
+    if((((p->year)->GetValue()) != wxT("")) && (((p->month)->GetValue()) != wxT(""))){
         
         //read the year
-        sight.master_clock_date_and_hour.date.Y = ((unsigned int)wxAtoi(box_year->GetValue()));
+        sight.master_clock_date_and_hour.date.Y = ((unsigned int)wxAtoi((p->year)->GetValue()));
         sight.master_clock_date_and_hour.date.check_leap_year();
         
         //read the month
-        sight.master_clock_date_and_hour.date.M = ((unsigned int)wxAtoi(combo_month->GetValue()));
+        sight.master_clock_date_and_hour.date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
         
         if(sight.master_clock_date_and_hour.date.Y_is_leap_year){
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
@@ -660,13 +662,12 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
             //
         }
         
-        combo_day->Set(days);
-        
-        combo_day->Enable(true);
+        (p->day)->Set(days);
+        (p->day)->Enable(true);
         
     }else{
         
-        combo_day->Enable(false);
+        (p->day)->Enable(false);
         
     }
     
@@ -784,7 +785,7 @@ DateField::DateField(MyFrame* frame){
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, parent_frame->months, wxCB_DROPDOWN);
     month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
-    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame);
+    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, this);
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 

@@ -10,8 +10,7 @@ class MyFrame;
 
 //class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
 class AngleField{
-    
-    
+        
     public:
     //the parent frame to which this object is attached
     MyFrame* parent_frame;
@@ -25,12 +24,10 @@ class AngleField{
     AngleField(MyFrame*);
     template<class T> void InsertIn(T*);
     
-    
 };
 
 
 class DateField{
-    
     
     public:
     //the parent frame to which this object is attached
@@ -44,7 +41,6 @@ class DateField{
     
     DateField(MyFrame*);
     template<class T> void InsertIn(T*);
-    
     
 };
 
@@ -289,13 +285,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_day->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.D));
     //combo_day->Enable(false);
     */
-    
+    master_clock_date = new DateField(this);
     (master_clock_date->year)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.Y));
     (master_clock_date->month)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.M));
-    for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[1-1]; i++){
+    for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[(sight.master_clock_date_and_hour.date.M)-1]; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));
     }
     (master_clock_date->day)->Set(days);
+    (master_clock_date->day)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.D));
 
     
     //master-clock hour
@@ -792,7 +789,7 @@ DateField::DateField(MyFrame* frame){
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 
     (parent_frame->days).Clear();
-    day = new wxComboBox(parent_frame, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, parent_frame->days, wxCB_DROPDOWN);
+    day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, parent_frame->days, wxCB_DROPDOWN);
 
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -805,8 +802,6 @@ DateField::DateField(MyFrame* frame){
     sizer_h->Add(text_hyphen_2);
     sizer_h->Add(day, 0, wxALIGN_CENTER);
 
-
-    
 }
 
 

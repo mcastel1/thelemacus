@@ -20,8 +20,13 @@ class AngleField{
     //texts
     wxStaticText* text_deg, *text_min;
     wxBoxSizer *sizer_h, *sizer_v;
+    Angle* angle;
     
-    AngleField(MyFrame*);
+    //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
+    bool deg_ok, min_ok;
+   
+    
+    AngleField(MyFrame*, Angle*);
     template<class T> void InsertIn(T*);
     
 };
@@ -241,7 +246,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_limb->Enable(false);
     
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    H_s = new AngleField(this);
+    H_s = new AngleField(this, NULL);
 
     
     combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
@@ -254,10 +259,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     sight.index_error.read_from_file(String("index error"), file_init, true, new_prefix);
     sight.index_error.to_deg_min(&deg, &min);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    index_error = new AngleField(this);
-    index_error->deg->SetValue(wxString::Format(wxT("%i"), deg));
-    index_error->min->SetValue(wxString::Format(wxT("%f"), min));
-    
+    index_error = new AngleField(this, &(sight.index_error));
+//    index_error->deg->SetValue(wxString::Format(wxT("%i"), deg));
+//    index_error->min->SetValue(wxString::Format(wxT("%f"), min));
+//
     
     //artificial horizon
     wxStaticText* text_artificial_horizon = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -566,15 +571,30 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 
 void MyFrame::CheckDegrees(wxFocusEvent& event){
 
-    wxComboBox* control;
+    AngleField* p;
     
-    control = (wxComboBox*)(event.GetEventUserData());
+    p = (AngleField*)(event.GetEventUserData());
     
-    if(!check_unsigned_int((control->GetValue()).ToStdString(), NULL, true, 0, 360)){
-        CallAfter(&MyFrame::PrintErrorMessage, control, String("Entered value is not valid!\nArcdegrees must be floating-point numbers >= 0° and < 360°"));
-
+    if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
+        
+        CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be floating-point numbers >= 0° and < 360°"));
+        (p->deg_ok) = false;
+        
     }else{
-        control->SetBackgroundColour(*wxWHITE);
+        
+        (p->deg)->SetBackgroundColour(*wxWHITE);
+        
+        if((p->min_ok)){
+            
+            double min_temp;
+            
+            ((p->min)->GetValue()).ToDouble(&min_temp);
+            
+            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
+                
+        }
+        (p->deg_ok) = true;
+    
     }
 
     event.Skip(true);
@@ -844,14 +864,15 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
 
 
 //constructor of an AngleField object, based on the parent frame frame
-AngleField::AngleField(MyFrame* frame){
+AngleField::AngleField(MyFrame* frame, Angle* p){
     
     parent_frame = frame;
+    angle = p;
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     //deg->SetValue("");
-    deg->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDegrees, parent_frame, wxID_ANY, wxID_ANY, deg);
+    deg->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDegrees, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -861,7 +882,28 @@ AngleField::AngleField(MyFrame* frame){
     min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, min);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
+    
+    if(p != NULL){
+        
+        unsigned int deg_temp;
+        double min_temp;
+        
+        p->to_deg_min(&deg_temp, &min_temp);
+        
+        deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
+        deg_ok = true;
+        
+        min->SetValue(wxString::Format(wxT("%f"), min_temp));
+        min_ok = true;
+        
+    }else{
+        
+        deg_ok = false;
+        min_ok = false;
+        
+    }
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

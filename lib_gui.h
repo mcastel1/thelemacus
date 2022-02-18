@@ -28,6 +28,7 @@ class AngleField{
     
     AngleField(MyFrame*, Angle*);
     template<class T> void InsertIn(T*);
+    bool is_ok(void);
     
 };
 
@@ -52,6 +53,7 @@ class DateField{
     
     DateField(MyFrame*, Date*);
     template<class T> void InsertIn(T*);
+    bool is_ok(void);
     
 };
 
@@ -81,7 +83,7 @@ public:
     wxTextCtrl *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
     wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
-    wxButton* button_ok, *button_cancel;
+    wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
     void OnOpen(wxCommandEvent& event);
@@ -116,7 +118,7 @@ enum{
     ID_Save =  wxID_HIGHEST + 2,
     ID_SaveAs =  wxID_HIGHEST + 3,
     ID_Close =  wxID_HIGHEST + 5,
-    ID_button_ok =  wxID_HIGHEST + 6,
+    ID_button_reduce =  wxID_HIGHEST + 6,
     ID_button_cancel =  wxID_HIGHEST + 7,
     ID_artificial_horizon =  wxID_HIGHEST + 8,
     ID_combo_body = wxID_HIGHEST + 9,
@@ -142,7 +144,7 @@ EVT_MENU(ID_SaveAs,   MyFrame::OnSaveAs)
 EVT_MENU(ID_Close,  MyFrame::OnClose)
 EVT_BUTTON(ID_artificial_horizon,   MyFrame::OnCheckArtificialHorizon)
 EVT_BUTTON(ID_button_cancel,   MyFrame::OnPressCancel)
-EVT_BUTTON(ID_button_ok,   MyFrame::OnPressReduce)
+EVT_BUTTON(ID_button_reduce,   MyFrame::OnPressReduce)
 //EVT_COMBOBOX(ID_combo_body, MyFrame::OnSelectBody)
 EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
 //EVT_COMBOBOX(ID_combo_month, MyFrame::TabulateDays)
@@ -246,9 +248,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_limb->Enable(false);
     
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    H_s = new AngleField(this, NULL);
+    H_s = new AngleField(this, &(sight.H_s));
 
-    
     combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     //combo_sign_index_error->SetValue("");
     
@@ -368,8 +369,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_ok = new wxButton(panel, ID_button_ok, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    
+    button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_reduce->Enable(false);
     
     grid_sizer->Add(text_combo_body);
     grid_sizer->Add(combo_body);
@@ -431,7 +432,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer_2->Add(button_ok, 0, wxALIGN_BOTTOM);
+    box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
     
     //here '0' means that the size of grid_sizer cannot be changed in the vertical direction, and wxEXPAND implies that grid_sizer is expanded horizontally
     sizer->Add(grid_sizer, 0, wxEXPAND);
@@ -596,6 +597,10 @@ void MyFrame::CheckDegrees(wxFocusEvent& event){
         (p->deg_ok) = true;
     
     }
+    
+//    if((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok())){
+//        button_reduce->Enable(true);
+//    }
 
     event.Skip(true);
     
@@ -873,6 +878,7 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
 }
 
 
+
 //constructor of an AngleField object, based on the parent frame frame
 AngleField::AngleField(MyFrame* frame, Angle* p){
     
@@ -925,6 +931,11 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     
 }
 
+bool AngleField::is_ok(void){
+    
+    return(deg_ok && min_ok);
+    
+}
 
 //constructor of a DateField object, based on the parent frame frame
 DateField::DateField(MyFrame* frame, Date* p){
@@ -990,6 +1001,11 @@ DateField::DateField(MyFrame* frame, Date* p){
 
 }
 
+bool DateField::is_ok(void){
+    
+    return(year_ok && month_ok && day_ok);
+    
+}
 
 
 template<class T> void AngleField::InsertIn(T* host){

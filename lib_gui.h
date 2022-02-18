@@ -598,13 +598,43 @@ void MyFrame::CheckDegrees(wxFocusEvent& event){
     
     }
     
-//    if((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok())){
-//        button_reduce->Enable(true);
-//    }
-
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    
     event.Skip(true);
     
 }
+
+void MyFrame::CheckMinutes(wxFocusEvent& event){
+
+    AngleField* p;
+    
+    p = (AngleField*)(event.GetEventUserData());
+    
+    if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+        (p->min_ok) = false;
+        
+    }else{
+        (p->min)->SetBackgroundColour(*wxWHITE);
+        if((p->deg_ok)){
+            
+            double min_temp;
+            
+            ((p->min)->GetValue()).ToDouble(&min_temp);
+            
+            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
+            
+            
+        }
+        (p->min_ok) = true;
+    }
+
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    
+    event.Skip(true);
+    
+}
+
 
 void MyFrame::CheckYear(wxFocusEvent& event){
 
@@ -631,6 +661,9 @@ void MyFrame::CheckYear(wxFocusEvent& event){
         }
 
     }
+    
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    
 
     event.Skip(true);
     
@@ -663,6 +696,8 @@ void MyFrame::CheckMonth(wxFocusEvent& event){
 
     }
 
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    
     event.Skip(true);
     
 }
@@ -713,6 +748,7 @@ void MyFrame::CheckDay(wxFocusEvent& event){
         
     }
     
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
    
     event.Skip(true);
     
@@ -721,34 +757,6 @@ void MyFrame::CheckDay(wxFocusEvent& event){
 
 
 
-void MyFrame::CheckMinutes(wxFocusEvent& event){
-
-    AngleField* p;
-    
-    p = (AngleField*)(event.GetEventUserData());
-    
-    if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
-        (p->min_ok) = false;
-        
-    }else{
-        (p->min)->SetBackgroundColour(*wxWHITE);
-        if((p->deg_ok)){
-            
-            double min_temp;
-            
-            ((p->min)->GetValue()).ToDouble(&min_temp);
-            
-            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
-            
-            
-        }
-        (p->min_ok) = true;
-    }
-
-    event.Skip(true);
-    
-}
 
 
 void MyFrame::PrintErrorMessage(wxControl* parent, String message){

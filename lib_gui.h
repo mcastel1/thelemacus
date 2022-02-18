@@ -32,7 +32,7 @@ class DateField{
     public:
     //the parent frame to which this object is attached
     MyFrame* parent_frame;
-    wxArrayString days;
+    wxArrayString days, months;
     //year, month and day boxes
     wxTextCtrl *year;
     wxComboBox *month, *day;
@@ -72,7 +72,7 @@ public:
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
-    wxArrayString bodies, limbs, signs, months, hours, minutes;
+    wxArrayString bodies, limbs, signs, hours, minutes;
     wxTextCtrl *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
     wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
@@ -198,9 +198,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     signs.Add(wxT("-"));
 
 
-    for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
-        months.Add(wxString::Format(wxT("%i"),i+1));
-    }
     for(i=0; i<24; i++){
         hours.Add(wxString::Format(wxT("%i"),i));
     }
@@ -597,6 +594,7 @@ void MyFrame::CheckYear(wxFocusEvent& event){
     }else{
         
         (p->year)->SetBackgroundColour(*wxWHITE);
+        (p->date->Y) = (unsigned int)wxAtoi((p->year)->GetValue());
         (p->year_ok) = true;
         
     }
@@ -833,13 +831,17 @@ DateField::DateField(MyFrame* frame, Date* p){
     parent_frame = frame;
     date = p;
     
+    for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
+        months.Add(wxString::Format(wxT("%i"), i+1));
+    }
+    
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckYear, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
-    month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, parent_frame->months, wxCB_DROPDOWN);
+    month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
     month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 

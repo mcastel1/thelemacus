@@ -39,6 +39,9 @@ class DateField{
     wxStaticText* text_hyphen_1, *text_hyphen_2;
     wxBoxSizer *sizer_h, *sizer_v;
     
+    //year_ok = true if the year is formatted properly, and similarly for the other variables
+    bool year_ok, month_ok, day_ok;
+    
     DateField(MyFrame*);
     template<class T> void InsertIn(T*);
     
@@ -87,6 +90,7 @@ public:
     void CheckDegrees(wxFocusEvent& event);
     void CheckMinutes(wxFocusEvent& event);
     void CheckYear(wxFocusEvent& event);
+    void CheckDay(wxFocusEvent& event);
 
     
     
@@ -286,12 +290,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     */
     master_clock_date = new DateField(this);
     (master_clock_date->year)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.Y));
+    (master_clock_date->year_ok) = true;
     (master_clock_date->month)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.M));
+    (master_clock_date->month_ok) = true;
     for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[(sight.master_clock_date_and_hour.date.M)-1]; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));
     }
     (master_clock_date->day)->Set(days);
     (master_clock_date->day)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.D));
+    (master_clock_date->day_ok) = true;
+
 
     
     //master-clock hour
@@ -584,20 +592,48 @@ void MyFrame::CheckDegrees(wxFocusEvent& event){
 
 void MyFrame::CheckYear(wxFocusEvent& event){
 
-    wxTextCtrl* control;
+    DateField* p;
     
-    control = (wxTextCtrl*)(event.GetEventUserData());
+    p = (DateField*)(event.GetEventUserData());
     
-    if(!check_unsigned_int((control->GetValue()).ToStdString(), NULL, false, 0, 0)){
-        CallAfter(&MyFrame::PrintErrorMessage, control, String("Entered value is not valid!\nYear must be an unsigned integer"));
+    if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
+        
+        CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
+        (p->year_ok) = false;
 
     }else{
-        control->SetBackgroundColour(*wxWHITE);
+        
+        (p->year)->SetBackgroundColour(*wxWHITE);
+        (p->year_ok) = true;
+        
     }
 
     event.Skip(true);
     
 }
+
+void MyFrame::CheckDay(wxFocusEvent& event){
+
+    DateField* p;
+    
+    p = (DateField*)(event.GetEventUserData());
+    
+    if(!check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, false, 0, 0)){
+        
+        CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+        (p->day_ok) = false;
+
+    }else{
+        
+        (p->day)->SetBackgroundColour(*wxWHITE);
+        (p->day_ok) = true;
+        
+    }
+
+    event.Skip(true);
+    
+}
+
 
 
 
@@ -638,7 +674,7 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
     
     p = (DateField*)(event.GetEventUserData());
     
-    if((((p->year)->GetValue()) != wxT("")) && (((p->month)->GetValue()) != wxT(""))){
+    if((p->year_ok) && (p->month_ok)){
         
         //read the year
         sight.master_clock_date_and_hour.date.Y = ((unsigned int)wxAtoi((p->year)->GetValue()));
@@ -780,20 +816,23 @@ DateField::DateField(MyFrame* frame){
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
-    year->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckYear, parent_frame, wxID_ANY, wxID_ANY, year);
+    year->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckYear, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    year_ok = false;
 
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, parent_frame->months, wxCB_DROPDOWN);
     month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
     month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    month_ok = false;
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 
     (parent_frame->days).Clear();
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, parent_frame->days, wxCB_DROPDOWN);
     day->SetInitialSize(day->GetSizeFromTextSize(day->GetTextExtent(wxS("00"))));
-
+    day->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDay, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    day_ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

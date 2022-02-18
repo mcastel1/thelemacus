@@ -718,19 +718,29 @@ void MyFrame::CheckDay(wxFocusEvent& event){
 
 void MyFrame::CheckMinutes(wxFocusEvent& event){
 
-    wxTextCtrl* control;
+    AngleField* p;
     
-    control = (wxTextCtrl*)(event.GetEventUserData());
+    p = (AngleField*)(event.GetEventUserData());
     
-    if(!check_double((control->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        CallAfter(&MyFrame::PrintErrorMessage, control, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
-
+    if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+        (p->min_ok) = false;
+        
     }else{
-        control->SetBackgroundColour(*wxWHITE);
+        (p->min)->SetBackgroundColour(*wxWHITE);
+        if((p->deg_ok)){
+            
+            double min_temp;
+            
+            ((p->min)->GetValue()).ToDouble(&min_temp);
+            
+            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
+            
+            
+        }
+        (p->min_ok) = true;
     }
 
-
-  
     event.Skip(true);
     
 }
@@ -879,7 +889,7 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0000"))));
     min->SetValue("0.0");
-    min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, min);
+    min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

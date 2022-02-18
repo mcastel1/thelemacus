@@ -34,7 +34,7 @@ class DateField{
     MyFrame* parent_frame;
     //year, month and day boxes
     wxTextCtrl *year;
-    wxComboBox* month, *day;
+    wxComboBox *month, *day;
     //texts
     wxStaticText* text_hyphen_1, *text_hyphen_2;
     wxBoxSizer *sizer_h, *sizer_v;
@@ -67,7 +67,7 @@ public:
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
     wxArrayString bodies, limbs, signs, months, days, hours, minutes;
-    wxTextCtrl *box_second_masterclock, *box_second_stopwatch, *box_second_TAI_minus_UTC;
+    wxTextCtrl *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
     wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
     wxButton* button_ok, *button_cancel;
@@ -295,22 +295,23 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     
     //master-clock hour
+    /*
     sight.master_clock_date_and_hour.chrono.set_current(prefix);
-//    wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     combo_hour_masterclock = new wxComboBox(panel, ID_combo_hour_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     combo_hour_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.h));
     
-//    wxStaticText* text_colon_1 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    wxStaticText* text_colon_1 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     combo_minute_masterclock = new wxComboBox(panel, ID_combo_minute_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     combo_minute_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.m));
     
-//    wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     box_second_masterclock = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_second_masterclock->GetTextExtent(wxS("0.0000"))));
     box_second_masterclock->SetValue(wxString::Format(wxT("%f"),sight.master_clock_date_and_hour.chrono.s));
-    
+    */
     
     //use of stopwatch
     wxStaticText* text_stopwatch = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -785,23 +786,24 @@ DateField::DateField(MyFrame* frame){
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, parent_frame->months, wxCB_DROPDOWN);
     month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
-    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, this);
+    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 
     (parent_frame->days).Clear();
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, parent_frame->days, wxCB_DROPDOWN);
+    day->SetInitialSize(day->GetSizeFromTextSize(day->GetTextExtent(wxS("00"))));
 
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(year, 0, wxALIGN_CENTER);
-    sizer_h->Add(text_hyphen_1);
-    sizer_h->Add(month, 0, wxALIGN_CENTER);
-    sizer_h->Add(text_hyphen_2);
-    sizer_h->Add(day, 0, wxALIGN_CENTER);
+    sizer_h->Add(year, 0, wxALIGN_LEFT);
+    sizer_h->Add(text_hyphen_1, wxALIGN_CENTER);
+    sizer_h->Add(month, 0, wxALIGN_LEFT);
+    sizer_h->Add(text_hyphen_2, wxALIGN_CENTER);
+    sizer_h->Add(day, 0, wxALIGN_LEFT);
 
 }
 

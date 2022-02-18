@@ -93,6 +93,7 @@ public:
     void CheckDegrees(wxFocusEvent& event);
     void CheckMinutes(wxFocusEvent& event);
     void CheckYear(wxFocusEvent& event);
+    void CheckMonth(wxFocusEvent& event);
     void CheckDay(wxFocusEvent& event);
 
     
@@ -597,11 +598,40 @@ void MyFrame::CheckYear(wxFocusEvent& event){
         (p->date->Y) = (unsigned int)wxAtoi((p->year)->GetValue());
         (p->year_ok) = true;
         
+        if(p->month_ok){TabulateDays(event);}
+
     }
 
     event.Skip(true);
     
 }
+
+void MyFrame::CheckMonth(wxFocusEvent& event){
+
+    DateField* p;
+    
+    p = (DateField*)(event.GetEventUserData());
+    
+    if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
+        
+        //(p->month->GetBackgroundColour()) != *wxRED
+        CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+        (p->month_ok) = false;
+
+    }else{
+        
+        (p->month)->SetBackgroundColour(*wxWHITE);
+        (p->date->M) = (unsigned int)wxAtoi((p->month)->GetValue());
+        (p->month_ok) = true;
+
+        if(p->year_ok){TabulateDays(event);}
+
+    }
+
+    event.Skip(true);
+    
+}
+
 
 void MyFrame::CheckDay(wxFocusEvent& event){
 
@@ -843,7 +873,8 @@ DateField::DateField(MyFrame* frame, Date* p){
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
-    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMonth, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+//    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 

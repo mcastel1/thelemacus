@@ -32,17 +32,20 @@ class DateField{
     public:
     //the parent frame to which this object is attached
     MyFrame* parent_frame;
+    wxArrayString days;
     //year, month and day boxes
     wxTextCtrl *year;
     wxComboBox *month, *day;
     //texts
     wxStaticText* text_hyphen_1, *text_hyphen_2;
     wxBoxSizer *sizer_h, *sizer_v;
+    //this points to a Date object, which contains the date written in the GUI fields of this
+    Date* date;
     
-    //year_ok = true if the year is formatted properly, and similarly for the other variables
+    //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
     bool year_ok, month_ok, day_ok;
     
-    DateField(MyFrame*);
+    DateField(MyFrame*, Date*);
     template<class T> void InsertIn(T*);
     
 };
@@ -69,7 +72,7 @@ public:
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
     
-    wxArrayString bodies, limbs, signs, months, days, hours, minutes;
+    wxArrayString bodies, limbs, signs, months, hours, minutes;
     wxTextCtrl *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
     wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
@@ -264,9 +267,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     
     //master-clock date
+    //sets  sight.master_clock_date_and_hour.date to the current UTC date
     sight.master_clock_date_and_hour.date.set_current(prefix);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-   
+    master_clock_date = new DateField(this, &(sight.master_clock_date_and_hour.date));
+
     /*
     box_year = new wxTextCtrl(panel, ID_box_year, "", wxDefaultPosition, wxDefaultSize);
     box_year->SetInitialSize(box_year->GetSizeFromTextSize(box_year->GetTextExtent(wxS("0000"))));
@@ -288,18 +293,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     combo_day->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.D));
     //combo_day->Enable(false);
     */
-    master_clock_date = new DateField(this);
-    (master_clock_date->year)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.Y));
-    (master_clock_date->year_ok) = true;
-    (master_clock_date->month)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.M));
-    (master_clock_date->month_ok) = true;
-    for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[(sight.master_clock_date_and_hour.date.M)-1]; i++){
-        days.Add(wxString::Format(wxT("%i"), i+1));
-    }
-    (master_clock_date->day)->Set(days);
-    (master_clock_date->day)->SetValue(wxString::Format(wxT("%i"), sight.master_clock_date_and_hour.date.D));
-    (master_clock_date->day_ok) = true;
-
 
     
     //master-clock hour
@@ -615,19 +608,43 @@ void MyFrame::CheckYear(wxFocusEvent& event){
 void MyFrame::CheckDay(wxFocusEvent& event){
 
     DateField* p;
+    //this variable = true if the day field is formatted correctly
+    bool ok;
     
     p = (DateField*)(event.GetEventUserData());
     
-    if(!check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, false, 0, 0)){
+    //to check whether the p->day is formatted correctly, I first check whether p->year and p->month are formatted correctly, so I can extract a valid value of p->month. Then, I check whether p-> day is an unsigned int formatted correctly with check_unsigned_int, and whether this unsigned int lies in the correct interval relative to p->month
+    if((p->year_ok) && (p->month_ok)){
         
-        CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
-        (p->day_ok) = false;
+        (p->date)->check_leap_year();
+        
+        if((p->date)->Y_is_leap_year){
+            
+            ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue()))-1]+1);
+        
+        }else{
+
+            ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue()))-1]+1);
+            
+        }
+        
+    }else{
+        
+        ok = false;
+        
+    }
+    
+    if(ok){
+        
+        (p->day)->SetBackgroundColour(*wxWHITE);
+        (p->date->D) = (unsigned int)wxAtoi((p->day)->GetValue());
+        (p->day_ok) = true;
 
     }else{
         
-        (p->day)->SetBackgroundColour(*wxWHITE);
-        (p->day_ok) = true;
-        
+        CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+        (p->day_ok) = false;
+ 
     }
 
     event.Skip(true);
@@ -686,20 +703,20 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
         if(sight.master_clock_date_and_hour.date.Y_is_leap_year){
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
             
-            for(days.Clear(), i=0; i<days_per_month_leap[(sight.master_clock_date_and_hour.date.M)-1]; i++){
-                days.Add(wxString::Format(wxT("%i"),i+1));
+            for((p->days).Clear(), i=0; i<days_per_month_leap[(sight.master_clock_date_and_hour.date.M)-1]; i++){
+                (p->days).Add(wxString::Format(wxT("%i"),i+1));
             }
             
         }else{
             //in this case the year is a common year: I fill the list of days from days_per_month_common
             
-            for(days.Clear(), i=0; i<days_per_month_common[(sight.master_clock_date_and_hour.date.M)-1]; i++){
-                days.Add(wxString::Format(wxT("%i"),i+1));
+            for((p->days).Clear(), i=0; i<days_per_month_common[(sight.master_clock_date_and_hour.date.M)-1]; i++){
+                (p->days).Add(wxString::Format(wxT("%i"),i+1));
             }
             //
         }
         
-        (p->day)->Set(days);
+        (p->day)->Set((p->days));
         (p->day)->Enable(true);
         
     }else{
@@ -810,30 +827,52 @@ AngleField::AngleField(MyFrame* frame){
 
 
 //constructor of a DateField object, based on the parent frame frame
-DateField::DateField(MyFrame* frame){
+DateField::DateField(MyFrame* frame, Date* p){
     
+    unsigned int i;
     parent_frame = frame;
+    date = p;
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckYear, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
-    year_ok = false;
 
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, parent_frame->months, wxCB_DROPDOWN);
     month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
     month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
-    month_ok = false;
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 
-    (parent_frame->days).Clear();
-    day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, parent_frame->days, wxCB_DROPDOWN);
+    days.Clear();
+    day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
     day->SetInitialSize(day->GetSizeFromTextSize(day->GetTextExtent(wxS("00"))));
     day->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDay, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
-    day_ok = false;
+
+    if(p != NULL){
+        
+        year->SetValue(wxString::Format(wxT("%i"), (*p).Y));
+        year_ok = true;
+
+        month->SetValue(wxString::Format(wxT("%i"), (*p).M));
+        month_ok = true;
+
+        for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[((*p).M)-1]; i++){
+            days.Add(wxString::Format(wxT("%i"), i+1));
+        }
+        day->Set(days);
+        day->SetValue(wxString::Format(wxT("%i"), (*p).D));
+        day_ok = true;
     
+    }else{
+  
+        year_ok = false;
+        month_ok = false;
+        day_ok = false;
+        
+    }
+  
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

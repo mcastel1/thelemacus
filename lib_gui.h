@@ -591,6 +591,8 @@ void MyFrame::CheckYear(wxFocusEvent& event){
         
         CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
         (p->year_ok) = false;
+        (p->day)->Enable(false);
+
 
     }else{
         
@@ -598,7 +600,10 @@ void MyFrame::CheckYear(wxFocusEvent& event){
         (p->date->Y) = (unsigned int)wxAtoi((p->year)->GetValue());
         (p->year_ok) = true;
         
-        if(p->month_ok){TabulateDays(event);}
+        if(p->month_ok){
+            TabulateDays(event);
+            (p->day)->Enable(true);
+        }
 
     }
 
@@ -614,9 +619,10 @@ void MyFrame::CheckMonth(wxFocusEvent& event){
     
     if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
         
-        //(p->month->GetBackgroundColour()) != *wxRED
         CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+
         (p->month_ok) = false;
+        (p->day)->Enable(false);
 
     }else{
         
@@ -624,7 +630,11 @@ void MyFrame::CheckMonth(wxFocusEvent& event){
         (p->date->M) = (unsigned int)wxAtoi((p->month)->GetValue());
         (p->month_ok) = true;
 
-        if(p->year_ok){TabulateDays(event);}
+        if(p->year_ok){
+            TabulateDays(event);
+            (p->day)->Enable(true);
+
+        }
 
     }
 
@@ -656,25 +666,29 @@ void MyFrame::CheckDay(wxFocusEvent& event){
             
         }
         
+        if(ok){
+            
+            (p->day)->Enable(true);
+            (p->day)->SetBackgroundColour(*wxWHITE);
+            (p->date->D) = (unsigned int)wxAtoi((p->day)->GetValue());
+            (p->day_ok) = true;
+            
+        }else{
+            
+            CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+            (p->day)->Enable(true);
+            (p->day_ok) = false;
+            
+        }
+        
+        
     }else{
         
-        ok = false;
+        (p->day)->Enable(false);
         
     }
     
-    if(ok){
-        
-        (p->day)->SetBackgroundColour(*wxWHITE);
-        (p->date->D) = (unsigned int)wxAtoi((p->day)->GetValue());
-        (p->day_ok) = true;
-
-    }else{
-        
-        CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
-        (p->day_ok) = false;
- 
-    }
-
+   
     event.Skip(true);
     
 }
@@ -704,9 +718,14 @@ void MyFrame::CheckMinutes(wxFocusEvent& event){
 
 void MyFrame::PrintErrorMessage(wxControl* parent, String message){
     
-    wxMessageBox(message.value);
-    parent->SetBackgroundColour(*wxRED);
-    parent->SetFocus();
+    if((parent->GetBackgroundColour()) != *wxRED){
+        
+        wxMessageBox(message.value);
+        parent->SetFocus();
+        parent->SetBackgroundColour(*wxRED);
+     
+    }
+    
     
 }
 
@@ -745,6 +764,7 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
         }
         
         (p->day)->Set((p->days));
+        (p->day)->SetValue(wxString("1"));
         (p->day)->Enable(true);
         
     }else{
@@ -837,7 +857,7 @@ AngleField::AngleField(MyFrame* frame){
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0000"))));
-    //min->SetValue("");
+    min->SetValue("0.0");
     min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, min);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

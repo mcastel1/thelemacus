@@ -106,7 +106,7 @@ public:
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4,  *box_sizer_6;
     
     wxArrayString bodies, limbs, signs;
-    wxCheckBox *artificial_horizon, *stopwatch;
+    wxCheckBox *artificial_horizon, *stopwatch_check;
     wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
@@ -155,7 +155,7 @@ enum{
     ID_combo_sign_index_error = wxID_HIGHEST + 11,
     ID_box_year = wxID_HIGHEST + 12,
     ID_combo_day = wxID_HIGHEST + 14,
-    ID_stopwatch = wxID_HIGHEST + 15,
+    ID_stopwatch_check = wxID_HIGHEST + 15,
     ID_combo_hour_masterclock = wxID_HIGHEST + 16,
     ID_combo_minute_masterclock = wxID_HIGHEST + 17,
     ID_combo_hour_stopwatch = wxID_HIGHEST + 18,
@@ -250,6 +250,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer = new wxGridSizer(9, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
+    box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_6 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
@@ -340,8 +341,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     */
     
     //use of stopwatch
-    wxStaticText* text_stopwatch = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    stopwatch = new wxCheckBox(panel, ID_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize);
+    wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -417,7 +418,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(artificial_horizon);
     
     grid_sizer->Add(text_date);
-    master_clock_date->InsertIn<wxGridSizer>(grid_sizer);
+    master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
+    box_sizer_4->Add(text_space_1);
+    master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
+    grid_sizer->Add(box_sizer_4);
+
 /*
     box_sizer_4->Add(box_year);
     box_sizer_4->Add(text_hyphen_1);
@@ -433,12 +438,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
  grid_sizer->Add(box_sizer_4);
  */
 
+   
     
-    
-    grid_sizer->Add(text_stopwatch);
-    box_sizer_4->Add(text_space_1);
-    master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
-    grid_sizer->Add(box_sizer_4);
+    grid_sizer->Add(text_stopwatch_check);
+    grid_sizer->Add(stopwatch_check);
+
     
     grid_sizer->Add(text_stopwatch_reading);
 //    box_sizer_5->Add(combo_hour_stopwatch);
@@ -459,7 +463,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 //    box_sizer_6->Add(text_colon_6);
 //    box_sizer_6->Add(box_second_TAI_minus_UTC);
     TAI_minus_UTC->InsertIn<wxBoxSizer>(box_sizer_6);
-
     grid_sizer->Add(box_sizer_6);
 
     

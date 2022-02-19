@@ -127,6 +127,7 @@ public:
     void CheckYear(wxFocusEvent& event);
     void CheckMonth(wxFocusEvent& event);
     void CheckDay(wxFocusEvent& event);
+    void CheckHour(wxFocusEvent& event);
 
     
     
@@ -595,7 +596,7 @@ void MyFrame::CheckDegrees(wxFocusEvent& event){
     
     if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
         
-        CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be floating-point numbers >= 0° and < 360°"));
+        CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
         (p->deg_ok) = false;
         
     }else{
@@ -620,6 +621,46 @@ void MyFrame::CheckDegrees(wxFocusEvent& event){
     event.Skip(true);
     
 }
+
+
+
+void MyFrame::CheckHour(wxFocusEvent& event){
+
+    ChronoField* p;
+    
+    p = (ChronoField*)(event.GetEventUserData());
+    
+    if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
+        
+        CallAfter(&MyFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+        (p->hour_ok) = false;
+        
+    }else{
+        
+        (p->hour)->SetBackgroundColour(*wxWHITE);
+        
+        if((p->minute_ok) && (p->second_ok)){
+            
+            double s_temp;
+            
+            ((p->second )->GetValue()).ToDouble(&s_temp);
+            
+            ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
+            ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
+            ((p->chrono)->s) = s_temp;
+                
+        }
+        
+        (p->hour_ok) = true;
+    
+    }
+    
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    
+    event.Skip(true);
+    
+}
+
 
 void MyFrame::CheckMinutes(wxFocusEvent& event){
 
@@ -962,6 +1003,12 @@ bool AngleField::is_ok(void){
     
 }
 
+bool ChronoField::is_ok(void){
+    
+    return(hour_ok && minute_ok&& second_ok);
+    
+}
+
 //constructor of a DateField object, based on the parent frame frame
 DateField::DateField(MyFrame* frame, Date* p){
     
@@ -1047,7 +1094,7 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    minute->SetInitialSize(minute->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
+    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinute, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);

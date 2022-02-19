@@ -100,14 +100,14 @@ public:
     
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
+    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     
     wxGridSizer *grid_sizer;
-    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4, *box_sizer_5, *box_sizer_6;
+    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4,  *box_sizer_6;
     
     wxArrayString bodies, limbs, signs;
-    wxTextCtrl *box_second_stopwatch, *box_second_TAI_minus_UTC;
     wxCheckBox *artificial_horizon, *stopwatch;
-    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_hour_masterclock, *combo_minute_masterclock, *combo_hour_stopwatch, *combo_minute_stopwatch, *combo_sign_TAI_minus_UTC, *combo_hour_TAI_minus_UTC, *combo_minute_TAI_minus_UTC;
+    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
@@ -120,7 +120,7 @@ public:
     void OnCheckArtificialHorizon(wxCommandEvent& event);
     void OnSelectBody(wxFocusEvent& event);
     void TabulateDays(wxFocusEvent& event);
-    void OnCheckStopwatch(wxCommandEvent& event);
+//    void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
     void CheckArcDegree(wxFocusEvent& event);
     void CheckArcMinute(wxFocusEvent& event);
@@ -175,7 +175,7 @@ EVT_BUTTON(ID_artificial_horizon,   MyFrame::OnCheckArtificialHorizon)
 EVT_BUTTON(ID_button_cancel,   MyFrame::OnPressCancel)
 EVT_BUTTON(ID_button_reduce,   MyFrame::OnPressReduce)
 //EVT_COMBOBOX(ID_combo_body, MyFrame::OnSelectBody)
-EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
+//EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
 //EVT_COMBOBOX(ID_combo_month, MyFrame::TabulateDays)
 wxEND_EVENT_TABLE()
 
@@ -250,8 +250,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer = new wxGridSizer(9, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
-    box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
-    box_sizer_5 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_6 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
@@ -321,9 +319,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     
     //master-clock hour
-    /*
     sight.master_clock_date_and_hour.chrono.set_current(prefix);
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    master_clock_chrono = new ChronoField(this, &(sight.master_clock_date_and_hour.chrono));
+
+    /*
     combo_hour_masterclock = new wxComboBox(panel, ID_combo_hour_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     combo_hour_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.h));
     
@@ -345,6 +345,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
+    stopwatch_reading = new ChronoField(this, NULL);
+
     
 //    combo_hour_stopwatch = new wxComboBox(panel, ID_combo_hour_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
 //    combo_hour_stopwatch->Enable(false);
@@ -372,6 +375,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     combo_sign_TAI_minus_UTC = new wxComboBox(panel, ID_combo_sign_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     combo_sign_TAI_minus_UTC->SetValue(wxT("+"));
+    
+    TAI_minus_UTC = new ChronoField(this, &(sight.TAI_minus_UTC));
+
     
 //    combo_hour_TAI_minus_UTC = new wxComboBox(panel, ID_combo_hour_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
 //    combo_hour_TAI_minus_UTC->SetValue(wxString::Format(wxT("%i"),sight.TAI_minus_UTC.h));
@@ -411,6 +417,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(artificial_horizon);
     
     grid_sizer->Add(text_date);
+    master_clock_date->InsertIn<wxGridSizer>(grid_sizer);
 /*
     box_sizer_4->Add(box_year);
     box_sizer_4->Add(text_hyphen_1);
@@ -425,12 +432,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_sizer_4->Add(box_second_masterclock);
  grid_sizer->Add(box_sizer_4);
  */
-    master_clock_date->InsertIn<wxGridSizer>(grid_sizer);
 
     
     
     grid_sizer->Add(text_stopwatch);
-    grid_sizer->Add(stopwatch);
+    box_sizer_4->Add(text_space_1);
+    master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
+    grid_sizer->Add(box_sizer_4);
     
     grid_sizer->Add(text_stopwatch_reading);
 //    box_sizer_5->Add(combo_hour_stopwatch);
@@ -439,7 +447,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 //    box_sizer_5->Add(text_colon_4);
 //    box_sizer_5->Add(box_second_stopwatch);
     
-    grid_sizer->Add(box_sizer_5);
+   // grid_sizer->Add(box_sizer_5);
+    stopwatch_reading->InsertIn<wxGridSizer>(grid_sizer);
+
     
     grid_sizer->Add(text_TAI_minus_UTC);
     box_sizer_6->Add(combo_sign_TAI_minus_UTC);
@@ -448,6 +458,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 //    box_sizer_6->Add(combo_minute_TAI_minus_UTC);
 //    box_sizer_6->Add(text_colon_6);
 //    box_sizer_6->Add(box_second_TAI_minus_UTC);
+    TAI_minus_UTC->InsertIn<wxBoxSizer>(box_sizer_6);
 
     grid_sizer->Add(box_sizer_6);
 
@@ -619,7 +630,7 @@ void MyFrame::CheckArcDegree(wxFocusEvent& event){
     
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
     
     event.Skip(true);
     
@@ -646,7 +657,7 @@ void MyFrame::CheckHour(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
     
     event.Skip(true);
     
@@ -672,7 +683,7 @@ void MyFrame::CheckMinute(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
     
     event.Skip(true);
     
@@ -704,7 +715,7 @@ void MyFrame::CheckArcMinute(wxFocusEvent& event){
         (p->min_ok) = true;
     }
 
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
     
     event.Skip(true);
     
@@ -732,7 +743,7 @@ void MyFrame::CheckSecond(wxFocusEvent& event){
     
     (p->second_ok) = true;
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
     
     event.Skip(true);
     
@@ -766,7 +777,7 @@ void MyFrame::CheckYear(wxFocusEvent& event){
 
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
     
 
     event.Skip(true);
@@ -800,7 +811,7 @@ void MyFrame::CheckMonth(wxFocusEvent& event){
 
     }
 
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
     
     event.Skip(true);
     
@@ -852,7 +863,7 @@ void MyFrame::CheckDay(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
    
     event.Skip(true);
     
@@ -929,23 +940,23 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
 
 
 
-void MyFrame::OnCheckStopwatch(wxCommandEvent& event){
-    
-    if(stopwatch->GetValue()){
-        
-        combo_hour_stopwatch->Enable(true);
-        combo_minute_stopwatch->Enable(true);
-        box_second_stopwatch->Enable(true);
-        
-    }else{
-        
-        combo_hour_stopwatch->Enable(false);
-        combo_minute_stopwatch->Enable(false);
-        box_second_stopwatch->Enable(false);
-        
-    }
-    
-}
+//void MyFrame::OnCheckStopwatch(wxCommandEvent& event){
+//
+//    if(stopwatch->GetValue()){
+//
+//        combo_hour_stopwatch->Enable(true);
+//        combo_minute_stopwatch->Enable(true);
+//        box_second_stopwatch->Enable(true);
+//
+//    }else{
+//
+//        combo_hour_stopwatch->Enable(false);
+//        combo_minute_stopwatch->Enable(false);
+//        box_second_stopwatch->Enable(false);
+//
+//    }
+//
+//}
 
 
 
@@ -1201,3 +1212,8 @@ template<class T> void DateField::InsertIn(T* host){
     
 }
 
+template<class T> void ChronoField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}

@@ -303,13 +303,19 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
     stopwatch_check->Bind(wxEVT_CHECKBOX, &MyFrame::OnCheckStopwatch, this);
-    stopwatch_check->SetValue(false);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
+
+    //initialize stopwatch_check and stopwatch_reading
+    stopwatch_check->SetValue(false);
     stopwatch_reading->Enable(false);
+    (stopwatch_reading->hour)->SetValue(wxString("0"));
+    (stopwatch_reading->minute)->SetValue(wxString("0"));
+    (stopwatch_reading->second)->SetValue(wxString("0.0"));
+
 
     //TAI-UTC
     //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
@@ -633,10 +639,10 @@ void MyFrame::CheckSecond(wxFocusEvent& event){
         (p->second)->SetBackgroundColour(*wxWHITE);
         ((p->second)->GetValue()).ToDouble(&s_temp);
         ((p->chrono)->s) = s_temp;
-        
+        (p->second_ok) = true;
+
     }
     
-    (p->second_ok) = true;
     
     button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
@@ -838,6 +844,10 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
 void MyFrame::OnCheckStopwatch(wxCommandEvent& event){
 
     stopwatch_reading->Enable(stopwatch_check->GetValue());
+    
+    (stopwatch_reading->hour)->SetValue(wxString("0"));
+    (stopwatch_reading->minute)->SetValue(wxString("0"));
+    (stopwatch_reading->second)->SetValue(wxString("0.0"));
 
 }
 
@@ -945,7 +955,7 @@ bool AngleField::is_ok(void){
 
 bool ChronoField::is_ok(void){
     
-    return(hour_ok && minute_ok&& second_ok);
+    return(hour_ok && minute_ok && second_ok);
     
 }
 

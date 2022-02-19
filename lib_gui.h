@@ -122,8 +122,8 @@ public:
     void TabulateDays(wxFocusEvent& event);
     void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
-    void CheckDegrees(wxFocusEvent& event);
-    void CheckMinutes(wxFocusEvent& event);
+    void CheckArcDegree(wxFocusEvent& event);
+    void CheckArcMinute(wxFocusEvent& event);
     void CheckYear(wxFocusEvent& event);
     void CheckMonth(wxFocusEvent& event);
     void CheckDay(wxFocusEvent& event);
@@ -588,7 +588,7 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 }
 
 
-void MyFrame::CheckDegrees(wxFocusEvent& event){
+void MyFrame::CheckArcDegree(wxFocusEvent& event){
 
     AngleField* p;
     
@@ -662,7 +662,7 @@ void MyFrame::CheckHour(wxFocusEvent& event){
 }
 
 
-void MyFrame::CheckMinutes(wxFocusEvent& event){
+void MyFrame::CheckArcMinute(wxFocusEvent& event){
 
     AngleField* p;
     
@@ -954,14 +954,14 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     //deg->SetValue("");
-    deg->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDegrees, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    deg->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckArcDegree, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0000"))));
     min->SetValue("0.0");
-    min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinutes, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckArcMinute, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

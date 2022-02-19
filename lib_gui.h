@@ -128,6 +128,9 @@ public:
     void CheckMonth(wxFocusEvent& event);
     void CheckDay(wxFocusEvent& event);
     void CheckHour(wxFocusEvent& event);
+    void CheckMinute(wxFocusEvent& event);
+    void CheckSecond(wxFocusEvent& event);
+
 
     
     
@@ -638,21 +641,35 @@ void MyFrame::CheckHour(wxFocusEvent& event){
     }else{
         
         (p->hour)->SetBackgroundColour(*wxWHITE);
-        
-        if((p->minute_ok) && (p->second_ok)){
-            
-            double s_temp;
-            
-            ((p->second )->GetValue()).ToDouble(&s_temp);
-            
-            ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
-            ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
-            ((p->chrono)->s) = s_temp;
-                
-        }
-        
+        ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
         (p->hour_ok) = true;
+        
+    }
     
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    
+    event.Skip(true);
+    
+}
+
+
+void MyFrame::CheckMinute(wxFocusEvent& event){
+
+    ChronoField* p;
+    
+    p = (ChronoField*)(event.GetEventUserData());
+    
+    if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
+        
+        CallAfter(&MyFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+        (p->minute_ok) = false;
+        
+    }else{
+        
+        (p->minute)->SetBackgroundColour(*wxWHITE);
+        ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
+        (p->minute_ok) = true;
+        
     }
     
     button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
@@ -692,6 +709,35 @@ void MyFrame::CheckArcMinute(wxFocusEvent& event){
     event.Skip(true);
     
 }
+
+void MyFrame::CheckSecond(wxFocusEvent& event){
+
+    ChronoField* p;
+    
+    p = (ChronoField*)(event.GetEventUserData());
+    
+    if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        CallAfter(&MyFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+        (p->second_ok) = false;
+        
+    }else{
+        
+        double s_temp;
+
+        (p->second)->SetBackgroundColour(*wxWHITE);
+        ((p->second)->GetValue()).ToDouble(&s_temp);
+        ((p->chrono)->s) = s_temp;
+        
+    }
+    
+    (p->second_ok) = true;
+    
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
+    
+    event.Skip(true);
+    
+}
+
 
 
 void MyFrame::CheckYear(wxFocusEvent& event){

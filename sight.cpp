@@ -71,6 +71,7 @@
  - the line width of gnuplot curves should be a variable in the init_file
  - solve issue in lib_gui.h that there is a bus error when one presses Reduce
  - remove warning unused event variable
+ - add other enable checks to button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()));
  */
 
 

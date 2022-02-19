@@ -58,6 +58,31 @@ class DateField{
 };
 
 
+class ChronoField{
+    
+    public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    wxArrayString hours, minutes;
+    //hour and minute  boxes
+    wxComboBox *hour, *minute;
+    //second text control
+    wxTextCtrl *second;
+    //texts
+    wxStaticText* text_colon_1, *text_colon_2;
+    wxBoxSizer *sizer_h, *sizer_v;
+    //this points to a Date object, which contains the date written in the GUI fields of this
+    Chrono* chrono;
+    
+    //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
+    bool hour_ok, minute_ok, second_ok;
+    
+    ChronoField(MyFrame*, Chrono*);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
 
 class MyApp: public wxApp{
 public:

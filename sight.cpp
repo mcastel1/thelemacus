@@ -69,6 +69,7 @@
  - in print_to_kml include also loxodromes and orthodromes
  - make file_init a variable of the Sight class
  - the line width of gnuplot curves should be a variable in the init_file
+ - solve issue in lib_gui.h that there is a bus error when one presses Reduce
  */
 
 

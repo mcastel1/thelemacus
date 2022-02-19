@@ -281,9 +281,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     sight.index_error.to_deg_min(&deg, &min);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     index_error = new AngleField(this, &(sight.index_error));
-//    index_error->deg->SetValue(wxString::Format(wxT("%i"), deg));
-//    index_error->min->SetValue(wxString::Format(wxT("%f"), min));
-//
     
     //artificial horizon
     wxStaticText* text_artificial_horizon = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -295,50 +292,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     sight.master_clock_date_and_hour.date.set_current(prefix);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_date = new DateField(this, &(sight.master_clock_date_and_hour.date));
-
-    /*
-    box_year = new wxTextCtrl(panel, ID_box_year, "", wxDefaultPosition, wxDefaultSize);
-    box_year->SetInitialSize(box_year->GetSizeFromTextSize(box_year->GetTextExtent(wxS("0000"))));
-    box_year->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, this);
-    box_year->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.Y));
-    
-    wxStaticText* text_hyphen_1 = new wxStaticText(panel, wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
-    combo_month = new wxComboBox(panel, ID_combo_month, wxT(""), wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-    combo_month->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::TabulateDays), this);
-    combo_month->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.M));
-    
-    wxStaticText* text_hyphen_2 = new wxStaticText(panel, wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
-    for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[1-1]; i++){
-        days.Add(wxString::Format(wxT("%i"),i+1));
-    }
-    combo_day = new wxComboBox(panel, ID_combo_day, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-    combo_day->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.date.D));
-    //combo_day->Enable(false);
-    */
-
     
     //master-clock hour
     sight.master_clock_date_and_hour.chrono.set_current(prefix);
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight.master_clock_date_and_hour.chrono));
-
-    /*
-    combo_hour_masterclock = new wxComboBox(panel, ID_combo_hour_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-    combo_hour_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.h));
-    
-    wxStaticText* text_colon_1 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
-    combo_minute_masterclock = new wxComboBox(panel, ID_combo_minute_masterclock, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    combo_minute_masterclock->SetValue(wxString::Format(wxT("%i"),sight.master_clock_date_and_hour.chrono.m));
-    
-    wxStaticText* text_colon_2 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
-    box_second_masterclock = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    box_second_masterclock->SetInitialSize(box_second_masterclock->GetSizeFromTextSize(box_second_masterclock->GetTextExtent(wxS("0.0000"))));
-    box_second_masterclock->SetValue(wxString::Format(wxT("%f"),sight.master_clock_date_and_hour.chrono.s));
-    */
     
     //use of stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -346,26 +304,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
+    //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, NULL);
 
-    
-//    combo_hour_stopwatch = new wxComboBox(panel, ID_combo_hour_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-//    combo_hour_stopwatch->Enable(false);
-////    combo_hour_stopwatch->SetValue("");
-    
-//    wxStaticText* text_colon_3 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//
-//    combo_minute_stopwatch = new wxComboBox(panel, ID_combo_minute_stopwatch, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-//    combo_minute_stopwatch->Enable(false);
-////    combo_minute_stopwatch->SetValue("");
-    
-//    wxStaticText* text_colon_4 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
-//    box_second_stopwatch = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-//    box_second_stopwatch->SetInitialSize(box_second_stopwatch->GetSizeFromTextSize(box_second_stopwatch->GetTextExtent(wxS("0.0000"))));
-//    box_second_stopwatch->Enable(false);
-//
     //TAI-UTC
     //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
     cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
@@ -380,21 +321,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     TAI_minus_UTC = new ChronoField(this, &(sight.TAI_minus_UTC));
 
     
-//    combo_hour_TAI_minus_UTC = new wxComboBox(panel, ID_combo_hour_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-//    combo_hour_TAI_minus_UTC->SetValue(wxString::Format(wxT("%i"),sight.TAI_minus_UTC.h));
-//
-//    wxStaticText* text_colon_5 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//
-//    combo_minute_TAI_minus_UTC = new wxComboBox(panel, ID_combo_minute_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-//    combo_minute_TAI_minus_UTC->SetValue(wxString::Format(wxT("%i"),sight.TAI_minus_UTC.m));
-//
-//    wxStaticText* text_colon_6 = new wxStaticText(panel, wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//
-//    box_second_TAI_minus_UTC = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-//    box_second_TAI_minus_UTC->SetValue(wxString::Format(wxT("%f"),sight.TAI_minus_UTC.s));
 
-
-    
     //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -423,45 +350,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
     grid_sizer->Add(box_sizer_4);
 
-/*
-    box_sizer_4->Add(box_year);
-    box_sizer_4->Add(text_hyphen_1);
-    box_sizer_4->Add(combo_month);
-    box_sizer_4->Add(text_hyphen_2);
-    box_sizer_4->Add(combo_day);
-    box_sizer_4->Add(text_space_1);
-    box_sizer_4->Add(combo_hour_masterclock);
-    box_sizer_4->Add(text_colon_1);
-    box_sizer_4->Add(combo_minute_masterclock);
-    box_sizer_4->Add(text_colon_2);
-    box_sizer_4->Add(box_second_masterclock);
- grid_sizer->Add(box_sizer_4);
- */
-
-   
     
     grid_sizer->Add(text_stopwatch_check);
     grid_sizer->Add(stopwatch_check);
 
     
     grid_sizer->Add(text_stopwatch_reading);
-//    box_sizer_5->Add(combo_hour_stopwatch);
-//    box_sizer_5->Add(text_colon_3);
-//    box_sizer_5->Add(combo_minute_stopwatch);
-//    box_sizer_5->Add(text_colon_4);
-//    box_sizer_5->Add(box_second_stopwatch);
-    
-   // grid_sizer->Add(box_sizer_5);
     stopwatch_reading->InsertIn<wxGridSizer>(grid_sizer);
 
     
     grid_sizer->Add(text_TAI_minus_UTC);
     box_sizer_6->Add(combo_sign_TAI_minus_UTC);
-//    box_sizer_6->Add(combo_hour_TAI_minus_UTC);
-//    box_sizer_6->Add(text_colon_5);
-//    box_sizer_6->Add(combo_minute_TAI_minus_UTC);
-//    box_sizer_6->Add(text_colon_6);
-//    box_sizer_6->Add(box_second_TAI_minus_UTC);
     TAI_minus_UTC->InsertIn<wxBoxSizer>(box_sizer_6);
     grid_sizer->Add(box_sizer_6);
 
@@ -476,20 +375,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     
     
-    
-    
     panel->SetSizer(sizer);
     //Maximize(panel);
-    
-    
-    
+
     CurrentDocPath = wxT("");
     
     CreateStatusBar();
     SetStatusText( "Welcome to Michele's text editor!" );
     
     //SetSizerAndFit(panelSizer);
-    
     //Maximize();
     
     file_init.close(prefix);

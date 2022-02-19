@@ -103,7 +103,7 @@ public:
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     
     wxGridSizer *grid_sizer;
-    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4,  *box_sizer_6;
+    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     
     wxArrayString bodies, limbs, signs;
     wxCheckBox *artificial_horizon, *stopwatch_check;
@@ -251,7 +251,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
-    box_sizer_6 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
     for(i=0; i<(*catalog).list.size(); i++){
@@ -314,10 +313,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
-    combo_sign_TAI_minus_UTC = new wxComboBox(panel, ID_combo_sign_TAI_minus_UTC, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
-    combo_sign_TAI_minus_UTC->SetValue(wxT("+"));
-    
     TAI_minus_UTC = new ChronoField(this, &(sight.TAI_minus_UTC));
 
     
@@ -360,9 +355,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     
     grid_sizer->Add(text_TAI_minus_UTC);
-    box_sizer_6->Add(combo_sign_TAI_minus_UTC);
-    TAI_minus_UTC->InsertIn<wxBoxSizer>(box_sizer_6);
-    grid_sizer->Add(box_sizer_6);
+    TAI_minus_UTC->InsertIn<wxGridSizer>(grid_sizer);
 
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);

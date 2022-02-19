@@ -78,6 +78,7 @@ class ChronoField{
     bool hour_ok, minute_ok, second_ok;
     
     ChronoField(MyFrame*, Chrono*);
+    void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -120,7 +121,7 @@ public:
     void OnCheckArtificialHorizon(wxCommandEvent& event);
     void OnSelectBody(wxFocusEvent& event);
     void TabulateDays(wxFocusEvent& event);
-//    void OnCheckStopwatch(wxCommandEvent& event);
+    void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
     void CheckArcDegree(wxFocusEvent& event);
     void CheckArcMinute(wxFocusEvent& event);
@@ -297,14 +298,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight.master_clock_date_and_hour.chrono));
     
-    //use of stopwatch
+    //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
+    //EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
+    stopwatch_check->Bind(wxEVT_CHECKBOX, &MyFrame::OnCheckStopwatch, this);
+    stopwatch_check->SetValue(false);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
-    stopwatch_reading = new ChronoField(this, NULL);
+    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
+    stopwatch_reading->Enable(false);
 
     //TAI-UTC
     //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
@@ -520,7 +525,7 @@ void MyFrame::CheckArcDegree(wxFocusEvent& event){
     
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
     event.Skip(true);
     
@@ -547,7 +552,7 @@ void MyFrame::CheckHour(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
     event.Skip(true);
     
@@ -573,7 +578,7 @@ void MyFrame::CheckMinute(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
     event.Skip(true);
     
@@ -605,7 +610,7 @@ void MyFrame::CheckArcMinute(wxFocusEvent& event){
         (p->min_ok) = true;
     }
 
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
     event.Skip(true);
     
@@ -633,7 +638,7 @@ void MyFrame::CheckSecond(wxFocusEvent& event){
     
     (p->second_ok) = true;
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
     event.Skip(true);
     
@@ -667,7 +672,7 @@ void MyFrame::CheckYear(wxFocusEvent& event){
 
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
 
     event.Skip(true);
@@ -701,7 +706,7 @@ void MyFrame::CheckMonth(wxFocusEvent& event){
 
     }
 
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
     
     event.Skip(true);
     
@@ -753,7 +758,7 @@ void MyFrame::CheckDay(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
    
     event.Skip(true);
     
@@ -829,24 +834,12 @@ void MyFrame::TabulateDays(wxFocusEvent& event){
 
 
 
+//this function enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
+void MyFrame::OnCheckStopwatch(wxCommandEvent& event){
 
-//void MyFrame::OnCheckStopwatch(wxCommandEvent& event){
-//
-//    if(stopwatch->GetValue()){
-//
-//        combo_hour_stopwatch->Enable(true);
-//        combo_minute_stopwatch->Enable(true);
-//        box_second_stopwatch->Enable(true);
-//
-//    }else{
-//
-//        combo_hour_stopwatch->Enable(false);
-//        combo_minute_stopwatch->Enable(false);
-//        box_second_stopwatch->Enable(false);
-//
-//    }
-//
-//}
+    stopwatch_reading->Enable(stopwatch_check->GetValue());
+
+}
 
 
 
@@ -1081,6 +1074,15 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
 
 }
 
+
+//this function enables/disable the whole ChronoField
+void ChronoField::Enable(bool is_enabled){
+    
+    hour->Enable(is_enabled);
+    minute->Enable(is_enabled);
+    second->Enable(is_enabled);
+
+}
 
 
 bool DateField::is_ok(void){

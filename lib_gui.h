@@ -14,6 +14,7 @@ class AngleField{
     public:
     //the parent frame to which this object is attached
     MyFrame* parent_frame;
+    wxArrayString degrees;
     //degrees and minutes boxes
     wxComboBox* deg;
     wxTextCtrl *min;
@@ -191,11 +192,6 @@ bool MyApp::OnInit(){
     wxRect rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-    
-    for(degrees.Clear(), i=0; i<360; i++){
-        degrees.Add(wxString::Format(wxT("%i"), i));
-    }
-
     
     MyFrame *frame = new MyFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
     
@@ -897,9 +893,15 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
 
 //constructor of an AngleField object, based on the parent frame frame
 AngleField::AngleField(MyFrame* frame, Angle* p){
-    
+
+    unsigned int i;
     parent_frame = frame;
     angle = p;
+    
+    for(degrees.Clear(), i=0; i<360; i++){
+        degrees.Add(wxString::Format(wxT("%i"), i));
+    }
+
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));

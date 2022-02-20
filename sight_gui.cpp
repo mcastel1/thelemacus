@@ -45,7 +45,6 @@
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
 
-wxArrayString degrees;
 
 
 using namespace std;

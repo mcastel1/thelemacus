@@ -527,7 +527,7 @@ void MyFrame::CheckArcDegree(wxFocusEvent& event){
     
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
     event.Skip(true);
     
@@ -554,7 +554,7 @@ void MyFrame::CheckHour(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
     event.Skip(true);
     
@@ -580,7 +580,7 @@ void MyFrame::CheckMinute(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
     event.Skip(true);
     
@@ -612,7 +612,7 @@ void MyFrame::CheckArcMinute(wxFocusEvent& event){
         (p->min_ok) = true;
     }
 
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
     event.Skip(true);
     
@@ -640,7 +640,7 @@ void MyFrame::CheckSecond(wxFocusEvent& event){
     }
     
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
     event.Skip(true);
     
@@ -674,7 +674,7 @@ void MyFrame::CheckYear(wxFocusEvent& event){
 
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
 
     event.Skip(true);
@@ -708,7 +708,7 @@ void MyFrame::CheckMonth(wxFocusEvent& event){
 
     }
 
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
     event.Skip(true);
     
@@ -760,7 +760,7 @@ void MyFrame::CheckDay(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())));
+    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
    
     event.Skip(true);
     

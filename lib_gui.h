@@ -10,6 +10,7 @@ class ChronoField;
 class MyApp;
 class MyFrame;
 struct CheckArcDegree;
+struct CheckArcMinute;
 
 //class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
 class AngleField{
@@ -46,6 +47,14 @@ struct CheckArcDegree{
     
 };
 
+struct CheckArcMinute{
+    
+    AngleField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
 
 
 
@@ -57,7 +66,11 @@ public:
     Catalog* catalog;
     Sight sight;
     wxPanel *panel;
+    
+    //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckArcDegree checkarcdegree;
+    CheckArcMinute checkarcminute;
+    
     
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
@@ -83,7 +96,6 @@ public:
     void TabulateDays(wxFocusEvent& event);
     void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
-    void CheckArcMinute(wxFocusEvent& event);
     void CheckYear(wxFocusEvent& event);
     void CheckMonth(wxFocusEvent& event);
     void CheckDay(wxFocusEvent& event);
@@ -187,7 +199,35 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
 
 }
 
-
+void CheckArcMinute::operator()(wxFocusEvent &event){
+    
+    MyFrame* f = (p->parent_frame);
+    
+    if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        f->CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+        (p->min_ok) = false;
+        
+    }else{
+        (p->min)->SetBackgroundColour(*wxWHITE);
+        if((p->deg_ok)){
+            
+            double min_temp;
+            
+            ((p->min)->GetValue()).ToDouble(&min_temp);
+            
+            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
+            
+            
+        }
+        (p->min_ok) = true;
+    }
+    
+    (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+ 
+    
+    event.Skip(true);
+    
+}
 
 class MyApp: public wxApp{
 public:
@@ -606,36 +646,6 @@ void MyFrame::CheckMinute(wxFocusEvent& event){
 }
 
 
-void MyFrame::CheckArcMinute(wxFocusEvent& event){
-
-    AngleField* p;
-    
-    p = (AngleField*)(event.GetEventUserData());
-    
-    if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
-        (p->min_ok) = false;
-        
-    }else{
-        (p->min)->SetBackgroundColour(*wxWHITE);
-        if((p->deg_ok)){
-            
-            double min_temp;
-            
-            ((p->min)->GetValue()).ToDouble(&min_temp);
-            
-            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
-            
-            
-        }
-        (p->min_ok) = true;
-    }
-
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
-    
-    event.Skip(true);
-    
-}
 
 void MyFrame::CheckSecond(wxFocusEvent& event){
 
@@ -921,8 +931,9 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
         degrees.Add(wxString::Format(wxT("%i"), i));
     }
 
-    (parent_frame->checkarcdegree).p = this;
-    
+    ((parent_frame->checkarcdegree).p) = this;
+    ((parent_frame->checkarcminute).p) = this;
+
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     //deg->SetValue("");
@@ -933,7 +944,7 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0000"))));
     min->SetValue("0.0");
-    min->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckArcMinute, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    min->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcminute);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

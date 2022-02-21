@@ -11,6 +11,13 @@ class MyApp;
 class MyFrame;
 struct CheckArcDegree;
 struct CheckArcMinute;
+struct CheckYear;
+struct CheckMonth;
+struct CheckDay;
+struct CheckHour;
+struct CheckMinute;
+struct CheckSecond;
+
 
 //class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
 class AngleField{
@@ -56,6 +63,59 @@ struct CheckArcMinute{
     
 };
 
+struct CheckYear{
+    
+    DateField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
+struct CheckMonth{
+    
+    DateField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
+struct CheckDay{
+    
+    DateField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
+struct CheckHour{
+    
+    ChronoField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
+struct CheckMinute{
+    
+    ChronoField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
+struct CheckSecond{
+    
+    ChronoField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
 
 
 class MyFrame: public wxFrame{
@@ -96,7 +156,6 @@ public:
     void TabulateDays(wxFocusEvent& event);
     void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
-    void CheckYear(wxFocusEvent& event);
     void CheckMonth(wxFocusEvent& event);
     void CheckDay(wxFocusEvent& event);
     void CheckHour(wxFocusEvent& event);
@@ -613,7 +672,7 @@ void MyFrame::CheckHour(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -639,7 +698,7 @@ void MyFrame::CheckMinute(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -669,7 +728,7 @@ void MyFrame::CheckSecond(wxFocusEvent& event){
     }
     
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -677,15 +736,13 @@ void MyFrame::CheckSecond(wxFocusEvent& event){
 
 
 
-void MyFrame::CheckYear(wxFocusEvent& event){
-
-    DateField* p;
+void CheckYear::operator()(wxFocusEvent &event){
     
-    p = (DateField*)(event.GetEventUserData());
+    MyFrame* f = (p->parent_frame);
     
     if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
         
-        CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
+        f->CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
         (p->year_ok) = false;
         (p->day)->Enable(false);
 
@@ -697,28 +754,26 @@ void MyFrame::CheckYear(wxFocusEvent& event){
         (p->year_ok) = true;
         
         if(p->month_ok){
-            TabulateDays(event);
+            f->TabulateDays(event);
             (p->day)->Enable(true);
         }
 
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
-    
+    (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+
 
     event.Skip(true);
     
 }
 
-void MyFrame::CheckMonth(wxFocusEvent& event){
+void CheckMonth::operator()(wxFocusEvent &event){
+    
+    MyFrame* f = (p->parent_frame);
 
-    DateField* p;
-    
-    p = (DateField*)(event.GetEventUserData());
-    
     if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
         
-        CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+        f->CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
 
         (p->month_ok) = false;
         (p->day)->Enable(false);
@@ -737,20 +792,19 @@ void MyFrame::CheckMonth(wxFocusEvent& event){
 
     }
 
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
 }
 
 
-void MyFrame::CheckDay(wxFocusEvent& event){
-
-    DateField* p;
+void CheckDay::operator()(wxFocusEvent &event){
+    
+    MyFrame* f = (p->parent_frame);
     //this variable = true if the day field is formatted correctly
     bool ok;
     
-    p = (DateField*)(event.GetEventUserData());
     
     //to check whether the p->day is formatted correctly, I first check whether p->year and p->month are formatted correctly, so I can extract a valid value of p->month. Then, I check whether p-> day is an unsigned int formatted correctly with check_unsigned_int, and whether this unsigned int lies in the correct interval relative to p->month
     if((p->year_ok) && (p->month_ok)){
@@ -776,7 +830,7 @@ void MyFrame::CheckDay(wxFocusEvent& event){
             
         }else{
             
-            CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+            f->CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
             (p->day)->Enable(true);
             (p->day_ok) = false;
             
@@ -789,7 +843,7 @@ void MyFrame::CheckDay(wxFocusEvent& event){
         
     }
     
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
    
     event.Skip(true);
     

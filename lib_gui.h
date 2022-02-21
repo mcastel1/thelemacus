@@ -5,8 +5,62 @@
 //  Created by MacBook Pro on 16/02/2022.
 //
 class AngleField;
+class DateField;
+class ChronoField;
 class MyApp;
 class MyFrame;
+
+class MyFrame: public wxFrame{
+    
+public:
+    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
+    
+    Catalog* catalog;
+    Sight sight;
+    wxPanel *panel;
+    
+    AngleField* H_s, *index_error;
+    DateField *master_clock_date;
+    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
+    
+    wxGridSizer *grid_sizer;
+    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
+    
+    wxArrayString bodies, limbs, signs;
+    wxCheckBox *artificial_horizon, *stopwatch_check;
+    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
+    wxButton* button_reduce, *button_cancel;
+    wxMenuBar *menuBar;
+    
+    void OnOpen(wxCommandEvent& event);
+    void OnSave(wxCommandEvent& event);
+    void OnSaveAs(wxCommandEvent& event);
+    void OnClose(wxCommandEvent& event);
+    void OnPressCancel(wxCommandEvent& event);
+    void OnPressReduce(wxCommandEvent& event);
+    void OnCheckArtificialHorizon(wxCommandEvent& event);
+    void OnSelectBody(wxFocusEvent& event);
+    void TabulateDays(wxFocusEvent& event);
+    void OnCheckStopwatch(wxCommandEvent& event);
+    void PrintErrorMessage(wxControl*, String);
+    void CheckArcMinute(wxFocusEvent& event);
+    void CheckYear(wxFocusEvent& event);
+    void CheckMonth(wxFocusEvent& event);
+    void CheckDay(wxFocusEvent& event);
+    void CheckHour(wxFocusEvent& event);
+    void CheckMinute(wxFocusEvent& event);
+    void CheckSecond(wxFocusEvent& event);
+
+
+    
+    
+    // The Path to the file we have open
+    wxString CurrentDocPath;
+    
+    wxDECLARE_EVENT_TABLE();
+    
+};
+
 
 //class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
 class AngleField{
@@ -85,63 +139,49 @@ class ChronoField{
     
 };
 
+struct CheckArcDegree
+{
+    AngleField* p;
+    
+    void operator()(wxCommandEvent &event){
+        
+        MyFrame* f = (p->parent_frame);
+        
+        if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
+            
+            f->CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+            (p->deg_ok) = false;
+            
+        }else{
+            
+            (p->deg)->SetBackgroundColour(*wxWHITE);
+            
+            if((p->min_ok)){
+                
+                double min_temp;
+                
+                ((p->min)->GetValue()).ToDouble(&min_temp);
+                
+                (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
+                
+            }
+            (p->deg_ok) = true;
+            
+        }
+        
+        (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        
+        event.Skip(true);
+    
+    }
+};
+
 
 class MyApp: public wxApp{
 public:
     virtual bool OnInit();
 };
 
-class MyFrame: public wxFrame{
-    
-public:
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
-    
-    Catalog* catalog;
-    Sight sight;
-    wxPanel *panel;
-    
-    AngleField* H_s, *index_error;
-    DateField *master_clock_date;
-    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
-    
-    wxGridSizer *grid_sizer;
-    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
-    
-    wxArrayString bodies, limbs, signs;
-    wxCheckBox *artificial_horizon, *stopwatch_check;
-    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
-    wxButton* button_reduce, *button_cancel;
-    wxMenuBar *menuBar;
-    
-    void OnOpen(wxCommandEvent& event);
-    void OnSave(wxCommandEvent& event);
-    void OnSaveAs(wxCommandEvent& event);
-    void OnClose(wxCommandEvent& event);
-    void OnPressCancel(wxCommandEvent& event);
-    void OnPressReduce(wxCommandEvent& event);
-    void OnCheckArtificialHorizon(wxCommandEvent& event);
-    void OnSelectBody(wxFocusEvent& event);
-    void TabulateDays(wxFocusEvent& event);
-    void OnCheckStopwatch(wxCommandEvent& event);
-    void PrintErrorMessage(wxControl*, String);
-    void CheckArcDegree(wxFocusEvent& event);
-    void CheckArcMinute(wxFocusEvent& event);
-    void CheckYear(wxFocusEvent& event);
-    void CheckMonth(wxFocusEvent& event);
-    void CheckDay(wxFocusEvent& event);
-    void CheckHour(wxFocusEvent& event);
-    void CheckMinute(wxFocusEvent& event);
-    void CheckSecond(wxFocusEvent& event);
-
-
-    
-    
-    // The Path to the file we have open
-    wxString CurrentDocPath;
-    
-    wxDECLARE_EVENT_TABLE();
-    
-};
 
 enum{
     
@@ -499,39 +539,7 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 }
 
 
-void MyFrame::CheckArcDegree(wxFocusEvent& event){
 
-    AngleField* p;
-    
-    p = (AngleField*)(event.GetEventUserData());
-    
-    if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
-        
-        CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
-        (p->deg_ok) = false;
-        
-    }else{
-        
-        (p->deg)->SetBackgroundColour(*wxWHITE);
-        
-        if((p->min_ok)){
-            
-            double min_temp;
-            
-            ((p->min)->GetValue()).ToDouble(&min_temp);
-            
-            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
-                
-        }
-        (p->deg_ok) = true;
-    
-    }
-    
-    button_reduce->Enable((H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && /*this logical construct is such that if stopwatch_check is disabled, then no check is necessary on stopwatch reading, while if stopwatch_check is enabled, stopwatch reading must be ok*/((!(stopwatch_check->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
-    
-    event.Skip(true);
-    
-}
 
 
 

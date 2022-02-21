@@ -9,6 +9,45 @@ class DateField;
 class ChronoField;
 class MyApp;
 class MyFrame;
+struct CheckArcDegree;
+
+//class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
+class AngleField{
+        
+    public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    wxArrayString degrees;
+    //degrees and minutes boxes
+    wxComboBox* deg;
+    wxTextCtrl *min;
+    //texts
+    wxStaticText* text_deg, *text_min;
+    wxBoxSizer *sizer_h, *sizer_v;
+    Angle* angle;
+    
+    //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
+    bool deg_ok, min_ok;
+   
+    
+    AngleField(MyFrame*, Angle*);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+
+struct CheckArcDegree{
+    
+    AngleField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
+
+
 
 class MyFrame: public wxFrame{
     
@@ -18,6 +57,7 @@ public:
     Catalog* catalog;
     Sight sight;
     wxPanel *panel;
+    CheckArcDegree checkarcdegree;
     
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
@@ -62,30 +102,6 @@ public:
 };
 
 
-//class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
-class AngleField{
-        
-    public:
-    //the parent frame to which this object is attached
-    MyFrame* parent_frame;
-    wxArrayString degrees;
-    //degrees and minutes boxes
-    wxComboBox* deg;
-    wxTextCtrl *min;
-    //texts
-    wxStaticText* text_deg, *text_min;
-    wxBoxSizer *sizer_h, *sizer_v;
-    Angle* angle;
-    
-    //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
-    bool deg_ok, min_ok;
-   
-    
-    AngleField(MyFrame*, Angle*);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
-    
-};
 
 
 class DateField{
@@ -139,42 +155,38 @@ class ChronoField{
     
 };
 
-struct CheckArcDegree
-{
-    AngleField* p;
+void CheckArcDegree::operator()(wxFocusEvent &event){
     
-    void operator()(wxCommandEvent &event){
+    MyFrame* f = (p->parent_frame);
+    
+    if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
         
-        MyFrame* f = (p->parent_frame);
+        f->CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+        (p->deg_ok) = false;
         
-        if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
+    }else{
+        
+        (p->deg)->SetBackgroundColour(*wxWHITE);
+        
+        if((p->min_ok)){
             
-            f->CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
-            (p->deg_ok) = false;
+            double min_temp;
             
-        }else{
+            ((p->min)->GetValue()).ToDouble(&min_temp);
             
-            (p->deg)->SetBackgroundColour(*wxWHITE);
-            
-            if((p->min_ok)){
-                
-                double min_temp;
-                
-                ((p->min)->GetValue()).ToDouble(&min_temp);
-                
-                (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
-                
-            }
-            (p->deg_ok) = true;
+            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
             
         }
+        (p->deg_ok) = true;
         
-        (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
-        
-        event.Skip(true);
-    
     }
-};
+    
+    (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    
+    event.Skip(true);
+
+}
+
 
 
 class MyApp: public wxApp{
@@ -910,11 +922,12 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
         degrees.Add(wxString::Format(wxT("%i"), i));
     }
 
+    (parent_frame->checkarcdegree).p = this;
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     //deg->SetValue("");
-    deg->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckArcDegree, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    deg->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcdegree);
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

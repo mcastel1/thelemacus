@@ -17,6 +17,7 @@ struct CheckDay;
 struct CheckHour;
 struct CheckMinute;
 struct CheckSecond;
+struct TabulateDays;
 
 
 //class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
@@ -118,6 +119,16 @@ struct CheckSecond{
 };
 
 
+
+struct TabulateDays{
+    
+    DateField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
 class MyFrame: public wxFrame{
     
 public:
@@ -136,6 +147,7 @@ public:
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
+    TabulateDays tabulatedays;
     
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
@@ -158,7 +170,6 @@ public:
     void OnPressReduce(wxCommandEvent& event);
     void OnCheckArtificialHorizon(wxCommandEvent& event);
     void OnSelectBody(wxFocusEvent& event);
-    void TabulateDays(wxFocusEvent& event);
     void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
     
@@ -746,7 +757,7 @@ void CheckYear::operator()(wxFocusEvent &event){
         (p->year_ok) = true;
         
         if(p->month_ok){
-            f->TabulateDays(event);
+            (f->tabulatedays)(event);
             (p->day)->Enable(true);
         }
 
@@ -777,7 +788,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
         (p->month_ok) = true;
 
         if(p->year_ok){
-            f->TabulateDays(event);
+            (f->tabulatedays)(event);
             (p->day)->Enable(true);
 
         }
@@ -861,33 +872,31 @@ void MyFrame::PrintErrorMessage(wxControl* parent, String message){
 
 
 
-void MyFrame::TabulateDays(wxFocusEvent& event){
+void TabulateDays::operator()(wxFocusEvent &event){
     
-    DateField* p;
     unsigned int i;
-    
-    p = (DateField*)(event.GetEventUserData());
-    
+    MyFrame* f = (p->parent_frame);
+
     if((p->year_ok) && (p->month_ok)){
         
         //read the year
-        sight.master_clock_date_and_hour.date.Y = ((unsigned int)wxAtoi((p->year)->GetValue()));
-        sight.master_clock_date_and_hour.date.check_leap_year();
+        (f->sight).master_clock_date_and_hour.date.Y = ((unsigned int)wxAtoi((p->year)->GetValue()));
+        (f->sight).master_clock_date_and_hour.date.check_leap_year();
         
         //read the month
-        sight.master_clock_date_and_hour.date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
+        (f->sight).master_clock_date_and_hour.date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
         
-        if(sight.master_clock_date_and_hour.date.Y_is_leap_year){
+        if((f->sight).master_clock_date_and_hour.date.Y_is_leap_year){
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
             
-            for((p->days).Clear(), i=0; i<days_per_month_leap[(sight.master_clock_date_and_hour.date.M)-1]; i++){
+            for((p->days).Clear(), i=0; i<days_per_month_leap[((f->sight).master_clock_date_and_hour.date.M)-1]; i++){
                 (p->days).Add(wxString::Format(wxT("%i"),i+1));
             }
             
         }else{
             //in this case the year is a common year: I fill the list of days from days_per_month_common
             
-            for((p->days).Clear(), i=0; i<days_per_month_common[(sight.master_clock_date_and_hour.date.M)-1]; i++){
+            for((p->days).Clear(), i=0; i<days_per_month_common[((f->sight).master_clock_date_and_hour.date.M)-1]; i++){
                 (p->days).Add(wxString::Format(wxT("%i"),i+1));
             }
             //
@@ -1045,6 +1054,11 @@ DateField::DateField(MyFrame* frame, Date* p){
     parent_frame = frame;
     date = p;
     
+    ((parent_frame->checkyear).p) = this;
+    ((parent_frame->checkmonth).p) = this;
+    ((parent_frame->checkday).p) = this;
+    ((parent_frame->tabulatedays).p) = this;
+
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"), i+1));
     }
@@ -1107,6 +1121,10 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     unsigned int i;
     parent_frame = frame;
     chrono = p;
+    
+    ((parent_frame->checkhour).p) = this;
+    ((parent_frame->checkminute).p) = this;
+    ((parent_frame->checksecond).p) = this;
 
     for(hours.Clear(), hours.Add(wxT("")), i=0; i<24; i++){
         hours.Add(wxString::Format(wxT("%i"), i+1));

@@ -237,7 +237,6 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
-    unsigned int i;
     
     //obtain width and height of the display, and create a wxRect with height and width half ot the height and width of the display
     wxDisplay display;

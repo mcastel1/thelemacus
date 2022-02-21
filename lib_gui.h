@@ -130,7 +130,12 @@ public:
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
-    
+    CheckYear checkyear;
+    CheckMonth checkmonth;
+    CheckDay checkday;
+    CheckHour checkhour;
+    CheckMinute checkminute;
+    CheckSecond checksecond;
     
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
@@ -156,14 +161,6 @@ public:
     void TabulateDays(wxFocusEvent& event);
     void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
-    void CheckMonth(wxFocusEvent& event);
-    void CheckDay(wxFocusEvent& event);
-    void CheckHour(wxFocusEvent& event);
-    void CheckMinute(wxFocusEvent& event);
-    void CheckSecond(wxFocusEvent& event);
-
-
-    
     
     // The Path to the file we have open
     wxString CurrentDocPath;
@@ -653,15 +650,13 @@ void MyFrame::OnSelectBody(wxFocusEvent& event){
 
 
 
-void MyFrame::CheckHour(wxFocusEvent& event){
+void CheckHour::operator()(wxFocusEvent &event){
+    
+    MyFrame* f = (p->parent_frame);
 
-    ChronoField* p;
-    
-    p = (ChronoField*)(event.GetEventUserData());
-    
     if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
         
-        CallAfter(&MyFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+        f->CallAfter(&MyFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
         (p->hour_ok) = false;
         
     }else{
@@ -679,15 +674,13 @@ void MyFrame::CheckHour(wxFocusEvent& event){
 }
 
 
-void MyFrame::CheckMinute(wxFocusEvent& event){
+void CheckMinute::operator()(wxFocusEvent &event){
+    
+    MyFrame* f = (p->parent_frame);
 
-    ChronoField* p;
-    
-    p = (ChronoField*)(event.GetEventUserData());
-    
     if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
         
-        CallAfter(&MyFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+        f->CallAfter(&MyFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
         (p->minute_ok) = false;
         
     }else{
@@ -706,14 +699,13 @@ void MyFrame::CheckMinute(wxFocusEvent& event){
 
 
 
-void MyFrame::CheckSecond(wxFocusEvent& event){
-
-    ChronoField* p;
+void CheckSecond::operator()(wxFocusEvent &event){
     
-    p = (ChronoField*)(event.GetEventUserData());
+    MyFrame* f = (p->parent_frame);
+
     
     if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        CallAfter(&MyFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+        f->CallAfter(&MyFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
         (p->second_ok) = false;
         
     }else{
@@ -785,7 +777,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
         (p->month_ok) = true;
 
         if(p->year_ok){
-            TabulateDays(event);
+            f->TabulateDays(event);
             (p->day)->Enable(true);
 
         }
@@ -1059,21 +1051,20 @@ DateField::DateField(MyFrame* frame, Date* p){
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
-    year->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckYear, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    year->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkyear));
 
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
-    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMonth, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
-//    month->Bind(wxEVT_KILL_FOCUS, &MyFrame::TabulateDays, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    month->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkmonth));
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 
     days.Clear();
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
     day->SetInitialSize(day->GetSizeFromTextSize(day->GetTextExtent(wxS("00"))));
-    day->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckDay, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    day->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkday));
 
     if(p != NULL){
         
@@ -1126,19 +1117,19 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
-    hour->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckHour, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    hour->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkhour));
 
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
-    minute->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckMinute, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    minute->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkminute));
 
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
 
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS("0.0000"))));
-    second->Bind(wxEVT_KILL_FOCUS, &MyFrame::CheckSecond, parent_frame, wxID_ANY, wxID_ANY, ((wxObject*)this));
+    second->Bind(wxEVT_KILL_FOCUS, (parent_frame->checksecond));
 
     if(p != NULL){
         

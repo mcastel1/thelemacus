@@ -11,6 +11,7 @@ class DateField;
 class ChronoField;
 class MyApp;
 class MyFrame;
+struct CheckArtificialHorizon;
 struct CheckStopWatch;
 struct CheckArcDegree;
 struct CheckArcMinute;
@@ -126,6 +127,15 @@ struct CheckBody{
     
 };
 
+struct CheckArtificialHorizon{
+    
+    CheckField* p;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
+
 struct CheckStopWatch{
     
     CheckField* p;
@@ -229,15 +239,16 @@ public:
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckBody checkbody;
-    CheckStopWatch checkstopwatch;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
+    CheckArtificialHorizon checkartificialhorizon;
     CheckYear checkyear;
     CheckMonth checkmonth;
     CheckDay checkday;
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
+    CheckStopWatch checkstopwatch;
     TabulateDays tabulatedays;
     
     BodyField* body;
@@ -262,7 +273,7 @@ public:
     void OnPressReduce(wxCommandEvent& event);
     void OnCheckArtificialHorizon(wxCommandEvent& event);
 //    void OnSelectBody(wxFocusEvent& event);
-    void OnCheckStopwatch(wxCommandEvent& event);
+//    void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
     
     // The Path to the file we have open
@@ -583,7 +594,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_artificial_horizon = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
     artificial_horizon = new CheckField(this, &(sight.artificial_horizon));
+    (checkartificialhorizon.p) = artificial_horizon;
+    (artificial_horizon->check)->Bind(wxEVT_CHECKBOX, checkartificialhorizon);
     
+
     
     //master-clock date
     //sets  sight.master_clock_date_and_hour.date to the current UTC date
@@ -601,6 +615,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     stopwatch_check = new CheckField(this, &(sight.use_stopwatch));
 //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
+    (checkstopwatch.p) = stopwatch_check;
     (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, checkstopwatch);
     
     //stopwatch reading
@@ -1034,14 +1049,25 @@ void TabulateDays::operator()(wxFocusEvent &event){
 
 
 
+//this function writes into sight.artificial_horizon the value entered in the GUI box
+void CheckArtificialHorizon::operator()(wxCommandEvent& event){
+    
+    //I set p->answer to the value entered in the GUI checkbox
+    if((p->check)->GetValue()){
+        ((p->answer)->value) = 'y';
+    }else{
+        ((p->answer)->value) = 'n';
+    }
+  
 
+}
 
-//this function enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
+//this function writes into sight.use_stopwatch the value written into the respective GUI box and it enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
 void CheckStopWatch::operator()(wxCommandEvent& event){
     
     MyFrame* f = (p->parent_frame);
 
-    //I set p->answetr to the value entered in the checkbox
+    //I set p->answetr to the value entered in the GUI checkbox
     if((p->check)->GetValue()){
         ((p->answer)->value) = 'y';
     }else{
@@ -1152,7 +1178,6 @@ CheckField::CheckField(MyFrame* frame, Answer* p){
     answer = p;
     
 
-    ((parent_frame->checkstopwatch).p) = this;
 
 
     check = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);

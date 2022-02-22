@@ -6144,7 +6144,7 @@ void Angle::to_deg_min(unsigned int* deg, double* min){
 //convert the angle stored in degrees and minutes format in deg an min in to (*this).vaule
 void Angle::from_deg_min(unsigned int deg, double min){
     
-    value = K*(((double)deg) + min/60.0);
+    value = k*(((double)deg) + min/60.0);
     normalize();
     
 }

@@ -1060,6 +1060,8 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
 
 void MyFrame::OnPressReduce(wxCommandEvent& event){
     
+    sight.print(String("body entered via GUI"), String(""), cout);
+    
     //here I write the content of combo_H_s_deg into the string str
     wxString str_deg, str_min;
     double min;

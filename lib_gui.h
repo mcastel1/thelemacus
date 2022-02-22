@@ -1086,38 +1086,9 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
 
 void MyFrame::OnPressReduce(wxCommandEvent& event){
     
-    sight.print(String("body entered via GUI"), String(""), cout);
-    
-    //here I write the content of combo_H_s_deg into the string str
-    wxString str_deg, str_min;
-    double min;
     stringstream s;
+    sight.print(String("body entered via GUI"), String(""), s);
     
-    s << "Body : " << (body->name)->GetValue() << "\n";
-    
-    if((((body->name)->GetValue()) == wxT("Sun")) || (((body->name)->GetValue()) == wxT("Moon"))){
-        s << "Limb : " << (combo_limb->GetValue()) << "\n";
-    }
-    
-    str_deg = H_s->deg->GetValue();
-    str_min = H_s->min->GetValue();
-    str_min.ToDouble(&min);
-    
-    s << "Sextant altitude = " << wxAtoi(str_deg) << "° " << min << "'\n";
-    
-    str_deg = index_error->deg->GetValue();
-    str_min = index_error->min->GetValue();
-    str_min.ToDouble(&min);
-    
-    s << "Index error = " << combo_sign_index_error->GetValue() << " " << wxAtoi(str_deg) << "° " << min << "'\n";
-    
-    s << "Artificial horizon = ";
-    
-    if(((artificial_horizon_check->check)->GetValue()) == wxCHK_CHECKED){
-        s << "y";
-    }else{
-        s << "n";
-    }
     
     
     wxMessageBox(s.str().c_str(), wxT("Here is the data which you entered:"));

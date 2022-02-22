@@ -714,9 +714,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     limb = new LimbField(this, &(sight->limb));
-    (limb->name)->SetValue("");
-    (limb->name)->Enable(false);
-    
+//    (limb->name)->SetValue("");
+//    (limb->name)->Enable(false);
+
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     H_s = new AngleField(this, &(sight->H_s));
@@ -1306,16 +1306,27 @@ LimbField::LimbField(MyFrame* frame, Limb* p){
     //name->SetValue("");
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, parent_frame->checklimb);
-
-    if(p != NULL){
+    
+    if(((((frame->body)->name)->GetValue()) == wxString("sun")) || ((((frame->body)->name)->GetValue()) == wxString("moon"))){
         
-        name->SetValue(wxString((p->value)));
-        ok = true;
+        name->Enable(true);
+        
+        if(p != NULL){
+            
+            name->SetValue(wxString((p->value)));
+            ok = true;
+            
+        }else{
+            
+            name->SetValue("");
+            ok = false;
+            
+        }
         
     }else{
         
-        name->SetValue("");
-        ok = false;
+        name->Enable(false);
+        
         
     }
     

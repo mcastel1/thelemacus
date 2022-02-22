@@ -56,7 +56,7 @@ using namespace std;
 /*
  notes:
 - the limb in MyFrame should update the relatd Limb object in Sight
- 
+ - insert height of eye GUI field
  */
 
 

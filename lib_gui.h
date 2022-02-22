@@ -4,6 +4,7 @@
 //
 //  Created by MacBook Pro on 16/02/2022.
 //
+class BodyField;
 class AngleField;
 class DateField;
 class ChronoField;
@@ -45,6 +46,14 @@ class AngleField{
     
 };
 
+struct CheckBody{
+    
+    BodyField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
 
 struct CheckArcDegree{
     
@@ -139,6 +148,7 @@ public:
     wxPanel *panel;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
+    CheckBody checkbody;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckYear checkyear;
@@ -180,7 +190,30 @@ public:
     
 };
 
+class BodyField{
+    
+public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    wxArrayString bodies;
+    wxComboBox* combo_body;
+    //this points to a Body object, which contains the date written in the GUI field of this
+    Body* body;
+    Catalog* catalog;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
 
+    BodyField(MyFrame*, Body*, Catalog*);
+
+    
+    template<class T> void InsertIn(T*);
+    bool ok;
+    bool is_ok(void);
+    
+    
+};
 
 
 class DateField{
@@ -233,6 +266,41 @@ class ChronoField{
     bool is_ok(void);
     
 };
+
+
+void CheckBody::operator()(wxFocusEvent &event){
+    
+    
+    unsigned int i;
+    
+    //(p->body)->name = String((combo_body->GetValue()).ToStdString());
+    
+    if((p->body)->check(&i, *(p->catalog), String(""))){
+        
+        sight.body = ((*catalog).list)[i];
+        
+        if((sight.body.name == String("sun")) || (sight.body.name == String("moon"))){
+            combo_limb->Enable(true);
+        }else{
+            combo_limb->Enable(false);
+        }
+        
+        combo_body->SetBackgroundColour(*wxWHITE);
+        
+    }else{
+        
+        CallAfter(&MyFrame::PrintErrorMessage, combo_body, String("Body not found in catalog!\nBody must be in catalog."));
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+}
+
 
 void CheckArcDegree::operator()(wxFocusEvent &event){
     
@@ -627,34 +695,6 @@ void MyFrame::OnCheckArtificialHorizon(wxCommandEvent& event){
 }
 
 
-void MyFrame::OnSelectBody(wxFocusEvent& event){
-    
-    unsigned int i;
-    
-    sight.body.name = String((combo_body->GetValue()).ToStdString());
-    
-    if(sight.body.check(&i, *catalog, String(""))){
-        
-        sight.body = ((*catalog).list)[i];
-        
-        if((sight.body.name == String("sun")) || (sight.body.name == String("moon"))){
-            combo_limb->Enable(true);
-        }else{
-            combo_limb->Enable(false);
-        }
-        
-        combo_body->SetBackgroundColour(*wxWHITE);
-        
-    }else{
-        
-        CallAfter(&MyFrame::PrintErrorMessage, combo_body, String("Body not found in catalog!\nBody must be in catalog."));
-        
-    }
-    
-    
-    
-    
-}
 
 
 
@@ -974,6 +1014,44 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
 }
 
 
+//constructor of a BodyField object, based on the parent frame frame
+BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
+
+    unsigned int i;
+    parent_frame = frame;
+    body = p;
+    
+    for(bodies.Clear(), i=0; i<(catalog->list).size(); i++){
+        bodies.Add(((catalog->list)[i]).name.value.c_str());
+    }
+
+    ((parent_frame->checkbody).p) = this;
+
+    name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
+    //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
+    //name->SetValue("");
+    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
+
+    if(p != NULL){
+        
+        name->SetValue(wxString((p->name).value.c_str()));
+        ok = true;
+        
+    }else{
+        
+        ok = false;
+        
+    }
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
+     
+}
+
+
 
 //constructor of an AngleField object, based on the parent frame frame
 AngleField::AngleField(MyFrame* frame, Angle* p){
@@ -1194,6 +1272,12 @@ void ChronoField::Enable(bool is_enabled){
 bool DateField::is_ok(void){
     
     return(year_ok && month_ok && day_ok);
+    
+}
+
+template<class T> void BodyField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
     
 }
 

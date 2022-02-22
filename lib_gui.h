@@ -1041,9 +1041,15 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
     
     MyFrame* f = (p->parent_frame);
 
-
-    (f->stopwatch_reading)->Enable(((f->stopwatch_check)->check)->GetValue());
+    //I set p->answetr to the value entered in the checkbox
+    if((p->check)->GetValue()){
+        ((p->answer)->value) = 'y';
+    }else{
+        ((p->answer)->value) = 'n';
+    }
     
+    //I enable f->stopwatch reading GUI field and set all its entries to zero
+    (f->stopwatch_reading)->Enable((p->check)->GetValue());
     ((f->stopwatch_reading)->hour)->SetValue(wxString("0"));
     ((f->stopwatch_reading)->minute)->SetValue(wxString("0"));
     ((f->stopwatch_reading)->second)->SetValue(wxString("0.0"));

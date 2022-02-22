@@ -152,6 +152,15 @@ struct CheckBody{
     
 };
 
+struct CheckLimb{
+    
+    LimbField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
 struct CheckArtificialHorizon{
     
     CheckField* p;
@@ -264,6 +273,7 @@ public:
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckBody checkbody;
+    CheckLimb checklimb;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckArtificialHorizon checkartificialhorizon;
@@ -277,6 +287,7 @@ public:
     TabulateDays tabulatedays;
     
     BodyField* body;
+    LimbField* limb;
     CheckField* artificial_horizon_check, *stopwatch_check;
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
@@ -286,7 +297,7 @@ public:
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     
     wxArrayString bodies, limbs, signs;
-    wxComboBox *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
+    wxComboBox *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
@@ -385,9 +396,9 @@ void CheckBody::operator()(wxFocusEvent &event){
         (*(p->body)) = ((p->catalog)->list)[i];
         
         if(((*(p->body)).name == String("sun")) || ((*(p->body)).name == String("moon"))){
-            (f->combo_limb)->Enable(true);
+            ((f->limb)->name)->Enable(true);
         }else{
-            (f->combo_limb)->Enable(false);
+            ((f->limb)->name)->Enable(false);
         }
         
         (p->name)->SetBackgroundColour(*wxWHITE);
@@ -402,7 +413,41 @@ void CheckBody::operator()(wxFocusEvent &event){
     
     
   
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    
+    event.Skip(true);
+    
+}
+
+
+void CheckLimb::operator()(wxFocusEvent &event){
+    
+    
+    bool check;
+    String s;
+    MyFrame* f = (p->parent_frame);
+
+    
+    s = String(((p->name)->GetValue().ToStdString()));
+    //I check whether the name in the GUI field body matches one of the valid limb names
+    check = (s == String("upper")) || (s == String("lower")) || (s == String("center"));
+    
+    if(check){
+        
+        //I set the char in ((p->limb)->value) to the first letter in the string (s.value)
+        ((p->limb)->value) = (s.value)[0];
+        
+        (p->name)->SetBackgroundColour(*wxWHITE);
+        (p->ok) = true;
+        
+    }else{
+        
+        f->CallAfter(&MyFrame::PrintErrorMessage, p->name, String("Limb not valid!\nLimb must be upper, lower or center."));
+        (p->ok) = false;
+        
+    }
+
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -435,7 +480,7 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
         
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
 
@@ -464,7 +509,7 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
         (p->min_ok) = true;
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
  
     
     event.Skip(true);
@@ -487,7 +532,7 @@ enum{
     ID_button_cancel =  wxID_HIGHEST + 7,
 //    ID_artificial_horizon =  wxID_HIGHEST + 8,
     ID_combo_body = wxID_HIGHEST + 9,
-    ID_combo_limb = wxID_HIGHEST + 10,
+//    ID_combo_limb = wxID_HIGHEST + 10,
     ID_combo_sign_index_error = wxID_HIGHEST + 11,
     ID_box_year = wxID_HIGHEST + 12,
     ID_combo_day = wxID_HIGHEST + 14,
@@ -555,11 +600,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
-    limbs.Clear();
-    limbs.Add(wxT("upper"));
-    limbs.Add(wxT("lower"));
-    limbs.Add(wxT("center"));
-    
+     
     signs.Clear();
     signs.Add(wxT("+"));
     signs.Add(wxT("-"));
@@ -593,11 +634,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
     //combo_body->SetValue("");
     
-    wxStaticText* text_combo_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
+    wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     //combo_limb->SetValue("");
-    AdjustWidth(combo_limb);
-    combo_limb->Enable(false);
+    limb = new LimbField(this, &(sight.limb));
+    (limb->name)->Enable(false);
     
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     H_s = new AngleField(this, &(sight.H_s));
@@ -676,8 +717,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     body->InsertIn<wxGridSizer>(grid_sizer);
 //    grid_sizer->Add(combo_body);
     
-    grid_sizer->Add(text_combo_limb);
-    grid_sizer->Add(combo_limb);
+    grid_sizer->Add(text_limb);
+    limb->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_H_s);
     H_s->InsertIn<wxGridSizer>(grid_sizer);
@@ -834,7 +875,7 @@ void CheckHour::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -858,7 +899,7 @@ void CheckMinute::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -887,7 +928,7 @@ void CheckSecond::operator()(wxFocusEvent &event){
     }
     
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -919,7 +960,7 @@ void CheckYear::operator()(wxFocusEvent &event){
 
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
 
 
     event.Skip(true);
@@ -951,7 +992,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
 
     }
 
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -1002,7 +1043,7 @@ void CheckDay::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
    
     event.Skip(true);
     
@@ -1163,6 +1204,48 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
     sizer_h->Add(name, 0, wxALIGN_CENTER);
      
 }
+
+//constructor of a LimbField object, based on the parent frame frame
+LimbField::LimbField(MyFrame* frame, Limb* p){
+
+    parent_frame = frame;
+    //I link the internal pointers p the respective Limb object
+    limb = p;
+    
+    limbs.Clear();
+    limbs.Add(wxT("upper"));
+    limbs.Add(wxT("lower"));
+    limbs.Add(wxT("center"));
+
+
+    ((parent_frame->checklimb).p) = this;
+
+    name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
+    //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
+    //name->SetValue("");
+    AdjustWidth(name);
+    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checklimb);
+
+    if(p != NULL){
+        
+        name->SetValue(wxString((p->value)));
+        ok = true;
+        
+    }else{
+        
+        name->SetValue("");
+        ok = false;
+        
+    }
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
+     
+}
+
 
 
 //constructor of a CheckField object, based on the parent frame frame
@@ -1427,6 +1510,12 @@ bool BodyField::is_ok(void){
     
 }
 
+bool LimbField::is_ok(void){
+    
+    return(ok);
+    
+}
+
 bool DateField::is_ok(void){
     
     return(year_ok && month_ok && day_ok);
@@ -1434,6 +1523,12 @@ bool DateField::is_ok(void){
 }
 
 template<class T> void BodyField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}
+
+template<class T> void LimbField::InsertIn(T* host){
     
     host->Add(sizer_v);
     

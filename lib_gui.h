@@ -305,7 +305,7 @@ public:
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
     
     Catalog* catalog;
-    Sight sight;
+    Sight* sight;
     wxPanel *panel;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
@@ -695,7 +695,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         bodies.Add((((*catalog).list)[i]).name.value.c_str());
     }
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    body = new BodyField(this, &(sight.body), catalog);
+    body = new BodyField(this, &(sight->body), catalog);
 
 //    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
@@ -703,13 +703,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    limb = new LimbField(this, &(sight.limb));
+    limb = new LimbField(this, &(sight->limb));
     (limb->name)->SetValue("");
     (limb->name)->Enable(false);
     
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    H_s = new AngleField(this, &(sight.H_s));
+    H_s = new AngleField(this, &(sight->H_s));
 
     combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     AdjustWidth(combo_sign_index_error);
@@ -719,36 +719,36 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //read index error from init file
     cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
-    sight.index_error.read_from_file(String("index error"), file_init, true, new_prefix);
-    sight.index_error.to_deg_min(&deg, &min);
+    (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
+    (sight->index_error).to_deg_min(&deg, &min);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    index_error = new AngleField(this, &(sight.index_error));
+    index_error = new AngleField(this, &(sight->index_error));
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
-    artificial_horizon_check = new CheckField(this, &(sight.artificial_horizon));
+    artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
     (checkartificialhorizon.p) = artificial_horizon_check;
     (artificial_horizon_check->check)->Bind(wxEVT_CHECKBOX, checkartificialhorizon);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    height_of_eye = new LengthField(this, &(sight.height_of_eye));
+    height_of_eye = new LengthField(this, &(sight->height_of_eye));
     
     //master-clock date
     //sets  sight.master_clock_date_and_hour.date to the current UTC date
-    sight.master_clock_date_and_hour.date.set_current(prefix);
+    (sight->master_clock_date_and_hour).date.set_current(prefix);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    master_clock_date = new DateField(this, &(sight.master_clock_date_and_hour.date));
+    master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     
     //master-clock hour
-    sight.master_clock_date_and_hour.chrono.set_current(prefix);
+    (sight->master_clock_date_and_hour).chrono.set_current(prefix);
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    master_clock_chrono = new ChronoField(this, &(sight.master_clock_date_and_hour.chrono));
+    master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    stopwatch_check = new CheckField(this, &(sight.use_stopwatch));
+    stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
 //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
     (checkstopwatch.p) = stopwatch_check;
@@ -757,7 +757,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
-    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
+    stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
 
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->check)->SetValue(false);
@@ -770,11 +770,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     //TAI-UTC
     //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
     cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
-    sight.TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
+    (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    TAI_minus_UTC = new ChronoField(this, &(sight.TAI_minus_UTC));
+    TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
 
     
 
@@ -1150,23 +1150,23 @@ void TabulateDays::operator()(wxFocusEvent &event){
     if((p->year_ok) && (p->month_ok)){
         
         //read the year
-        (f->sight).master_clock_date_and_hour.date.Y = ((unsigned int)wxAtoi((p->year)->GetValue()));
-        (f->sight).master_clock_date_and_hour.date.check_leap_year();
+        ((f->sight)->master_clock_date_and_hour).date.Y = ((unsigned int)wxAtoi((p->year)->GetValue()));
+        ((f->sight)->master_clock_date_and_hour).date.check_leap_year();
         
         //read the month
-        (f->sight).master_clock_date_and_hour.date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
+       ((f->sight)->master_clock_date_and_hour).date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
         
-        if((f->sight).master_clock_date_and_hour.date.Y_is_leap_year){
+        if(((f->sight)->master_clock_date_and_hour).date.Y_is_leap_year){
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
             
-            for((p->days).Clear(), i=0; i<days_per_month_leap[((f->sight).master_clock_date_and_hour.date.M)-1]; i++){
+            for((p->days).Clear(), i=0; i<days_per_month_leap[(((f->sight)->master_clock_date_and_hour).date.M)-1]; i++){
                 (p->days).Add(wxString::Format(wxT("%i"),i+1));
             }
             
         }else{
             //in this case the year is a common year: I fill the list of days from days_per_month_common
             
-            for((p->days).Clear(), i=0; i<days_per_month_common[((f->sight).master_clock_date_and_hour.date.M)-1]; i++){
+            for((p->days).Clear(), i=0; i<days_per_month_common[(((f->sight)->master_clock_date_and_hour).date.M)-1]; i++){
                 (p->days).Add(wxString::Format(wxT("%i"),i+1));
             }
             //
@@ -1226,7 +1226,7 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
 void MyFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
-    sight.print(String("body entered via GUI"), String(""), s);
+    sight->print(String("body entered via GUI"), String(""), s);
     
     
     
@@ -1324,7 +1324,6 @@ LimbField::LimbField(MyFrame* frame, Limb* p){
 //constructor of a CheckField object, based on the parent frame frame
 CheckField::CheckField(MyFrame* frame, Answer* p){
 
-    unsigned int i;
     parent_frame = frame;
     //I link the internal pointers p and c to the respective Answer object
     answer = p;

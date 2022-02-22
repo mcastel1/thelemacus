@@ -252,7 +252,7 @@ public:
     TabulateDays tabulatedays;
     
     BodyField* body;
-    CheckField* artificial_horizon, *stopwatch_check;
+    CheckField* artificial_horizon_check, *stopwatch_check;
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
@@ -591,11 +591,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     index_error = new AngleField(this, &(sight.index_error));
     
     //artificial horizon
-    wxStaticText* text_artificial_horizon = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
-    artificial_horizon = new CheckField(this, &(sight.artificial_horizon));
-    (checkartificialhorizon.p) = artificial_horizon;
-    (artificial_horizon->check)->Bind(wxEVT_CHECKBOX, checkartificialhorizon);
+    artificial_horizon_check = new CheckField(this, &(sight.artificial_horizon));
+    (checkartificialhorizon.p) = artificial_horizon_check;
+    (artificial_horizon_check->check)->Bind(wxEVT_CHECKBOX, checkartificialhorizon);
     
 
     
@@ -662,8 +662,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     index_error->InsertIn<wxBoxSizer>(box_sizer_3);
     grid_sizer->Add(box_sizer_3);
 
-    grid_sizer->Add(text_artificial_horizon);
-    artificial_horizon->InsertIn<wxGridSizer>(grid_sizer);
+    grid_sizer->Add(text_artificial_horizon_check);
+    artificial_horizon_check->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_date);
     master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
@@ -1113,7 +1113,7 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
     
     s << "Artificial horizon = ";
     
-    if(((artificial_horizon->check)->GetValue()) == wxCHK_CHECKED){
+    if(((artificial_horizon_check->check)->GetValue()) == wxCHK_CHECKED){
         s << "y";
     }else{
         s << "n";

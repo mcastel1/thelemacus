@@ -55,8 +55,7 @@ using namespace std;
 
 /*
  notes:
- - the utc date boxes must be filled with the current date by default
- 
+- the limb in MyFrame should update the relatd Limb object in Sight
  
  */
 

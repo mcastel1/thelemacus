@@ -1,4 +1,4 @@
-		body:
+    	body:
 				Type = sun
 				Name = sun
 				Radius = 375647.94816414685919880867004395 nm

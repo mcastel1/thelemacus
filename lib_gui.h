@@ -664,6 +664,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxMenu *menuFile = new wxMenu;
     catalog = new Catalog(String(path_file_catalog), String(""));
     
+    sight = new Sight();
+    
+    //
+    File file_sample_sight;
+    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
+    file_sample_sight.open(String("in"), String(""));
+    sight->read_from_file(file_sample_sight, String(""));
+    file_sample_sight.close(String(""));
+    //
+    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
@@ -827,8 +837,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     //here '0' means that the size of grid_sizer cannot be changed in the vertical direction, and wxEXPAND implies that grid_sizer is expanded horizontally
     sizer->Add(grid_sizer, 0, wxEXPAND);
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);
-    
-    
     
     
     panel->SetSizer(sizer);

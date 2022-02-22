@@ -5,6 +5,7 @@
 //  Created by MacBook Pro on 16/02/2022.
 //
 class BodyField;
+class LimbField;
 class CheckField;
 class AngleField;
 class DateField;
@@ -83,6 +84,30 @@ public:
     wxComboBox* name;
 
     BodyField(MyFrame*, Body*, Catalog*);
+
+    
+    template<class T> void InsertIn(T*);
+    bool ok;
+    bool is_ok(void);
+    
+    
+};
+
+
+class LimbField{
+    
+public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    wxArrayString limbs;
+    //this points to a Limn object, which contains the data written in the GUI field of this
+    Limb* limb;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+
+    LimbField(MyFrame*, Limb*);
 
     
     template<class T> void InsertIn(T*);

@@ -11,7 +11,7 @@ class DateField;
 class ChronoField;
 class MyApp;
 class MyFrame;
-struct CheckCheck;
+struct CheckStopWatch;
 struct CheckArcDegree;
 struct CheckArcMinute;
 struct CheckYear;
@@ -126,7 +126,7 @@ struct CheckBody{
     
 };
 
-struct CheckCheck{
+struct CheckStopWatch{
     
     CheckField* p;
     
@@ -229,7 +229,7 @@ public:
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckBody checkbody;
-    CheckCheck checkcheck;
+    CheckStopWatch checkstopwatch;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckYear checkyear;
@@ -601,7 +601,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     stopwatch_check = new CheckField(this, &(sight.use_stopwatch));
 //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
-//    stopwatch_check->Bind(wxEVT_CHECKBOX, &MyFrame::OnCheckStopwatch, this);
+    (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, checkstopwatch);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1037,7 +1037,7 @@ void TabulateDays::operator()(wxFocusEvent &event){
 
 
 //this function enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
-void CheckCheck::operator()(wxCommandEvent& event){
+void CheckStopWatch::operator()(wxCommandEvent& event){
     
     MyFrame* f = (p->parent_frame);
 
@@ -1144,7 +1144,7 @@ CheckField::CheckField(MyFrame* frame, Answer* p){
     answer = p;
     
 
-    ((parent_frame->checkcheck).p) = this;
+    ((parent_frame->checkstopwatch).p) = this;
 
 
     check = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);

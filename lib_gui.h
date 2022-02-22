@@ -5,6 +5,7 @@
 //  Created by MacBook Pro on 16/02/2022.
 //
 class BodyField;
+class CheckField;
 class AngleField;
 class DateField;
 class ChronoField;
@@ -43,6 +44,26 @@ void AdjustWidth(wxComboBox *control){
     control->SetMinSize(wxSize(max_width + additional, -1));
     
 }
+
+
+class CheckField{
+    
+public:
+    
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    Answer* answer;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxCheckBox with the name of the bodies
+    wxCheckBox* check;
+
+    CheckField(MyFrame*, Answer*);
+    
+    template<class T> void InsertIn(T*);
+    
+    
+};
 
 
 class BodyField{
@@ -209,6 +230,7 @@ public:
     TabulateDays tabulatedays;
     
     BodyField* body;
+    CheckField* artificial_horizon, stopwatch_check;
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
@@ -217,7 +239,6 @@ public:
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     
     wxArrayString bodies, limbs, signs;
-    wxCheckBox *artificial_horizon, *stopwatch_check;
     wxComboBox *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
@@ -417,7 +438,7 @@ enum{
     ID_Close =  wxID_HIGHEST + 5,
     ID_button_reduce =  wxID_HIGHEST + 6,
     ID_button_cancel =  wxID_HIGHEST + 7,
-    ID_artificial_horizon =  wxID_HIGHEST + 8,
+//    ID_artificial_horizon =  wxID_HIGHEST + 8,
     ID_combo_body = wxID_HIGHEST + 9,
     ID_combo_limb = wxID_HIGHEST + 10,
     ID_combo_sign_index_error = wxID_HIGHEST + 11,
@@ -439,7 +460,7 @@ EVT_MENU(ID_Open,   MyFrame::OnOpen)
 EVT_MENU(ID_Save,   MyFrame::OnSave)
 EVT_MENU(ID_SaveAs,   MyFrame::OnSaveAs)
 EVT_MENU(ID_Close,  MyFrame::OnClose)
-EVT_BUTTON(ID_artificial_horizon,   MyFrame::OnCheckArtificialHorizon)
+//EVT_BUTTON(ID_artificial_horizon,   MyFrame::OnCheckArtificialHorizon)
 EVT_BUTTON(ID_button_cancel,   MyFrame::OnPressCancel)
 EVT_BUTTON(ID_button_reduce,   MyFrame::OnPressReduce)
 //EVT_COMBOBOX(ID_combo_body, MyFrame::OnSelectBody)
@@ -549,7 +570,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     //artificial horizon
     wxStaticText* text_artificial_horizon = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
+//    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
+    artificial_horizon = new CheckField(this, &(sight.artificial_horizon));
     
     
     //master-clock date
@@ -565,9 +587,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
+    stopwatch_check = new CheckField(this, &(sight.use_stopwatch));
+//    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
-    stopwatch_check->Bind(wxEVT_CHECKBOX, &MyFrame::OnCheckStopwatch, this);
+//    stopwatch_check->Bind(wxEVT_CHECKBOX, &MyFrame::OnCheckStopwatch, this);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -614,7 +637,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(box_sizer_3);
 
     grid_sizer->Add(text_artificial_horizon);
-    grid_sizer->Add(artificial_horizon);
+    artificial_horizon->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_date);
     master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
@@ -622,10 +645,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
     grid_sizer->Add(box_sizer_4);
 
-    
     grid_sizer->Add(text_stopwatch_check);
-    grid_sizer->Add(stopwatch_check);
-
+    stopwatch_check->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_stopwatch_reading);
     stopwatch_reading->InsertIn<wxGridSizer>(grid_sizer);
@@ -1044,7 +1065,7 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
     
     s << "Artificial horizon = ";
     
-    if((artificial_horizon->GetValue()) == wxCHK_CHECKED){
+    if(((artificial_horizon->check)->GetValue()) == wxCHK_CHECKED){
         s << "y";
     }else{
         s << "n";

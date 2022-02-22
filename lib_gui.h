@@ -159,6 +159,7 @@ public:
     CheckSecond checksecond;
     TabulateDays tabulatedays;
     
+    BodyField* body;
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
@@ -168,7 +169,7 @@ public:
     
     wxArrayString bodies, limbs, signs;
     wxCheckBox *artificial_horizon, *stopwatch_check;
-    wxComboBox* combo_body, *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
+    wxComboBox *combo_limb, *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
@@ -179,7 +180,7 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void OnCheckArtificialHorizon(wxCommandEvent& event);
-    void OnSelectBody(wxFocusEvent& event);
+//    void OnSelectBody(wxFocusEvent& event);
     void OnCheckStopwatch(wxCommandEvent& event);
     void PrintErrorMessage(wxControl*, String);
     
@@ -196,7 +197,6 @@ public:
     //the parent frame to which this object is attached
     MyFrame* parent_frame;
     wxArrayString bodies;
-    wxComboBox* combo_body;
     //this points to a Body object, which contains the date written in the GUI field of this
     Body* body;
     Catalog* catalog;
@@ -272,24 +272,33 @@ void CheckBody::operator()(wxFocusEvent &event){
     
     
     unsigned int i;
+    bool check;
     
     //(p->body)->name = String((combo_body->GetValue()).ToStdString());
     
-    if((p->body)->check(&i, *(p->catalog), String(""))){
+    //I check whether the name in the GUI field body matches one of the body names in catalog
+    for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
+        if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
+            check = true;
+        }
+    }
+    i--;
+    
+    if(check){
         
-        sight.body = ((*catalog).list)[i];
+        (*(p->body)) = ((p->catalog)->list)[i];
         
-        if((sight.body.name == String("sun")) || (sight.body.name == String("moon"))){
-            combo_limb->Enable(true);
+        if(((*(p->body)).name == String("sun")) || ((*(p->body)).name == String("moon"))){
+            (p->parent_frame->combo_limb)->Enable(true);
         }else{
-            combo_limb->Enable(false);
+            (p->parent_frame->combo_limb)->Enable(false);
         }
         
-        combo_body->SetBackgroundColour(*wxWHITE);
+        (p->name)->SetBackgroundColour(*wxWHITE);
         
     }else{
         
-        CallAfter(&MyFrame::PrintErrorMessage, combo_body, String("Body not found in catalog!\nBody must be in catalog."));
+        (p->parent_frame)->CallAfter(&MyFrame::PrintErrorMessage, (p->name), String("Body not found in catalog!\nBody must be in catalog."));
         
     }
     
@@ -480,8 +489,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         bodies.Add((((*catalog).list)[i]).name.value.c_str());
     }
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
-    combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
+//    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
+    //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
     //combo_body->SetValue("");
     
     wxStaticText* text_combo_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -556,7 +565,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     button_reduce->Enable(false);
     
     grid_sizer->Add(text_combo_body);
-    grid_sizer->Add(combo_body);
+    body->InsertIn<wxGridSizer>(grid_sizer);
+//    grid_sizer->Add(combo_body);
     
     grid_sizer->Add(text_combo_limb);
     grid_sizer->Add(combo_limb);
@@ -980,9 +990,9 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
     double min;
     stringstream s;
     
-    s << "Body : " << combo_body->GetValue() << "\n";
+    s << "Body : " << (body->name)->GetValue() << "\n";
     
-    if(((combo_body->GetValue()) == wxT("Sun")) || ((combo_body->GetValue()) == wxT("Moon"))){
+    if((((body->name)->GetValue()) == wxT("Sun")) || (((body->name)->GetValue()) == wxT("Moon"))){
         s << "Limb : " << (combo_limb->GetValue()) << "\n";
     }
     

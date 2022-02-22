@@ -485,10 +485,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
-    for(i=0; i<(*catalog).list.size(); i++){
+    for(i=0; i<((*catalog).list).size(); i++){
         bodies.Add((((*catalog).list)[i]).name.value.c_str());
     }
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    body = new BodyField(this, &(sight.body), catalog);
+
 //    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
     //combo_body->SetValue("");
@@ -1030,6 +1032,7 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
     unsigned int i;
     parent_frame = frame;
     body = p;
+    catalog = c;
     
     for(bodies.Clear(), i=0; i<(catalog->list).size(); i++){
         bodies.Add(((catalog->list)[i]).name.value.c_str());

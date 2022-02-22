@@ -21,6 +21,31 @@ struct CheckSecond;
 struct TabulateDays;
 
 
+class BodyField{
+    
+public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    wxArrayString bodies;
+    //this points to a Body object, which contains the date written in the GUI field of this
+    Body* body;
+    Catalog* catalog;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+
+    BodyField(MyFrame*, Body*, Catalog*);
+
+    
+    template<class T> void InsertIn(T*);
+    bool ok;
+    bool is_ok(void);
+    
+    
+};
+
+
 //class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
 class AngleField{
         
@@ -191,29 +216,6 @@ public:
     
 };
 
-class BodyField{
-    
-public:
-    //the parent frame to which this object is attached
-    MyFrame* parent_frame;
-    wxArrayString bodies;
-    //this points to a Body object, which contains the date written in the GUI field of this
-    Body* body;
-    Catalog* catalog;
-    wxBoxSizer *sizer_h, *sizer_v;
-    
-    //this is the wxComboBox with the name of the bodies
-    wxComboBox* name;
-
-    BodyField(MyFrame*, Body*, Catalog*);
-
-    
-    template<class T> void InsertIn(T*);
-    bool ok;
-    bool is_ok(void);
-    
-    
-};
 
 
 class DateField{
@@ -1031,6 +1033,7 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
 
     unsigned int i;
     parent_frame = frame;
+    //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;
     
@@ -1052,6 +1055,7 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
         
     }else{
         
+        name->SetValue("");
         ok = false;
         
     }

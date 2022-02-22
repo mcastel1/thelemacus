@@ -8,6 +8,7 @@ class BodyField;
 class LimbField;
 class CheckField;
 class AngleField;
+class LengthField;
 class DateField;
 class ChronoField;
 class MyApp;
@@ -16,6 +17,7 @@ struct CheckArtificialHorizon;
 struct CheckStopWatch;
 struct CheckArcDegree;
 struct CheckArcMinute;
+struct CheckLength;
 struct CheckYear;
 struct CheckMonth;
 struct CheckDay;
@@ -143,6 +145,31 @@ class AngleField{
     
 };
 
+//class for graphical object: a field to enter a length, composed of a box
+class LengthField{
+        
+    public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    //degrees and minutes boxes
+    wxTextCtrl *value;
+    //texts
+    wxStaticText* text;
+    wxBoxSizer *sizer_h, *sizer_v;
+    Length* length;
+    
+    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
+    bool ok;
+   
+    
+    LengthField(MyFrame*, Length*);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+
+
 struct CheckBody{
     
     BodyField* p;
@@ -196,6 +223,16 @@ struct CheckArcMinute{
     
     
 };
+
+struct CheckLength{
+    
+    LengthField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
 
 struct CheckYear{
     
@@ -276,6 +313,7 @@ public:
     CheckLimb checklimb;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
+    CheckLength checklength;
     CheckArtificialHorizon checkartificialhorizon;
     CheckYear checkyear;
     CheckMonth checkmonth;
@@ -290,6 +328,7 @@ public:
     LimbField* limb;
     CheckField* artificial_horizon_check, *stopwatch_check;
     AngleField* H_s, *index_error;
+    LengthField* height_of_eye;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     
@@ -516,6 +555,34 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
     
 }
 
+void CheckLength::operator()(wxFocusEvent &event){
+    
+    MyFrame* f = (p->parent_frame);
+    
+    if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
+        f->CallAfter(&MyFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
+        (p->ok) = false;
+        
+    }else{
+        
+        double length_temp;
+        
+        (p->value)->SetBackgroundColour(*wxWHITE);
+        
+        (p->value)->GetValue().ToDouble(&length_temp);
+        (p->length)->set(String("height of eye"), length_temp, String(""));
+        
+        (p->ok) = true;
+        
+    }
+    
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+ 
+    event.Skip(true);
+    
+}
+
+
 class MyApp: public wxApp{
 public:
     virtual bool OnInit();
@@ -618,7 +685,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetMenuBar( menuBar );
     
     
-    grid_sizer = new wxGridSizer(9, 2, 0, 0);
+    grid_sizer = new wxGridSizer(10, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
@@ -640,6 +707,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     (limb->name)->SetValue("");
     (limb->name)->Enable(false);
     
+    //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     H_s = new AngleField(this, &(sight.H_s));
 
@@ -663,7 +731,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     (checkartificialhorizon.p) = artificial_horizon_check;
     (artificial_horizon_check->check)->Bind(wxEVT_CHECKBOX, checkartificialhorizon);
     
-
+    //height of eye
+    wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    height_of_eye = new LengthField(this, &(sight.height_of_eye));
     
     //master-clock date
     //sets  sight.master_clock_date_and_hour.date to the current UTC date
@@ -730,6 +800,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     grid_sizer->Add(text_artificial_horizon_check);
     artificial_horizon_check->InsertIn<wxGridSizer>(grid_sizer);
+    
+    grid_sizer->Add(text_height_of_eye);
+    height_of_eye->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_date);
     master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
@@ -1340,9 +1413,54 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     
 }
 
+//constructor of a LengthField object, based on the parent frame frame
+LengthField::LengthField(MyFrame* frame, Length* p){
+
+    unsigned int i;
+    parent_frame = frame;
+    length = p;
+    
+    ((parent_frame->checklength).p) = this;
+
+    
+    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS("0.0"))));
+    value->SetValue("0.0");
+    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklength);
+
+    text = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("m"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    
+    if(p != NULL){
+        
+        value->SetValue(wxString::Format(wxT("%f"), p->value));
+        ok = true;
+        
+    }else{
+        
+        ok = false;
+        
+    }
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(value, 0, wxALIGN_CENTER);
+    sizer_h->Add(text);
+    
+}
+
+
 bool AngleField::is_ok(void){
     
     return(deg_ok && min_ok);
+    
+}
+
+bool LengthField::is_ok(void){
+    
+    return(ok);
     
 }
 
@@ -1546,6 +1664,13 @@ template<class T> void AngleField::InsertIn(T* host){
     host->Add(sizer_v);
     
 }
+
+template<class T> void LengthField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}
+
 
 template<class T> void DateField::InsertIn(T* host){
     

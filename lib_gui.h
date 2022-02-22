@@ -299,6 +299,8 @@ void CheckBody::operator()(wxFocusEvent &event){
     
     unsigned int i;
     bool check;
+    MyFrame* f = (p->parent_frame);
+
     
     //(p->body)->name = String((combo_body->GetValue()).ToStdString());
     
@@ -315,24 +317,26 @@ void CheckBody::operator()(wxFocusEvent &event){
         (*(p->body)) = ((p->catalog)->list)[i];
         
         if(((*(p->body)).name == String("sun")) || ((*(p->body)).name == String("moon"))){
-            (p->parent_frame->combo_limb)->Enable(true);
+            (f->combo_limb)->Enable(true);
         }else{
-            (p->parent_frame->combo_limb)->Enable(false);
+            (f->combo_limb)->Enable(false);
         }
         
         (p->name)->SetBackgroundColour(*wxWHITE);
+        (p->ok) = true;
         
     }else{
         
-        (p->parent_frame)->CallAfter(&MyFrame::PrintErrorMessage, (p->name), String("Body not found in catalog!\nBody must be in catalog."));
+        f->CallAfter(&MyFrame::PrintErrorMessage, p->name, String("Body not found in catalog!\nBody must be in catalog."));
+        (p->ok) = false;
         
     }
     
     
+  
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
-    
-    
-    
+    event.Skip(true);
     
 }
 
@@ -363,7 +367,7 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
         
     }
     
-    (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
 
@@ -392,7 +396,7 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
         (p->min_ok) = true;
     }
     
-    (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
  
     
     event.Skip(true);
@@ -758,7 +762,7 @@ void CheckHour::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -782,7 +786,7 @@ void CheckMinute::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -811,7 +815,7 @@ void CheckSecond::operator()(wxFocusEvent &event){
     }
     
     
-     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -843,7 +847,7 @@ void CheckYear::operator()(wxFocusEvent &event){
 
     }
     
-    (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
 
 
     event.Skip(true);
@@ -875,7 +879,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
 
     }
 
-     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -926,7 +930,7 @@ void CheckDay::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
    
     event.Skip(true);
     
@@ -1322,6 +1326,11 @@ void ChronoField::Enable(bool is_enabled){
 
 }
 
+bool BodyField::is_ok(void){
+    
+    return(ok);
+    
+}
 
 bool DateField::is_ok(void){
     

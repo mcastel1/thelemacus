@@ -531,6 +531,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     H_s = new AngleField(this, &(sight.H_s));
 
     combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+    AdjustWidth(combo_sign_index_error);
     //combo_sign_index_error->SetValue("");
     
     //index error
@@ -1113,6 +1114,7 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     //deg->SetValue("");
+    AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcdegree);
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1191,14 +1193,21 @@ DateField::DateField(MyFrame* frame, Date* p){
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
+//    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
+    AdjustWidth(month);
     month->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkmonth));
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
 
-    days.Clear();
+    
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-    day->SetInitialSize(day->GetSizeFromTextSize(day->GetTextExtent(wxS("00"))));
+//I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
+    for(days.Clear(), i=0; i<31; i++){
+        days.Add(wxString::Format(wxT("%i"), i+1));
+    }
+    day->Set(days);
+    AdjustWidth(day);
+    days.Clear();
     day->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkday));
 
     if(p != NULL){
@@ -1255,13 +1264,15 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
+//    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
+    AdjustWidth(hour);
     hour->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkhour));
 
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
+    AdjustWidth(minute);
+//    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkminute));
 
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);

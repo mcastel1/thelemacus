@@ -11,6 +11,7 @@ class DateField;
 class ChronoField;
 class MyApp;
 class MyFrame;
+struct CheckCheck;
 struct CheckArcDegree;
 struct CheckArcMinute;
 struct CheckYear;
@@ -125,6 +126,15 @@ struct CheckBody{
     
 };
 
+struct CheckCheck{
+    
+    CheckField* p;
+    
+    void operator()(wxCommandEvent&);
+    
+    
+};
+
 struct CheckArcDegree{
     
     AngleField* p;
@@ -219,6 +229,7 @@ public:
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckBody checkbody;
+    CheckCheck checkcheck;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckYear checkyear;
@@ -230,7 +241,7 @@ public:
     TabulateDays tabulatedays;
     
     BodyField* body;
-    CheckField* artificial_horizon, stopwatch_check;
+    CheckField* artificial_horizon, *stopwatch_check;
     AngleField* H_s, *index_error;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
@@ -355,7 +366,7 @@ void CheckBody::operator()(wxFocusEvent &event){
     
     
   
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -388,7 +399,7 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
         
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
 
@@ -417,7 +428,7 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
         (p->min_ok) = true;
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
  
     
     event.Skip(true);
@@ -598,7 +609,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
 
     //initialize stopwatch_check and stopwatch_reading
-    stopwatch_check->SetValue(false);
+    (stopwatch_check->check)->SetValue(false);
     stopwatch_reading->Enable(false);
     (stopwatch_reading->hour)->SetValue(wxString("0"));
     (stopwatch_reading->minute)->SetValue(wxString("0"));
@@ -783,7 +794,7 @@ void CheckHour::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -807,7 +818,7 @@ void CheckMinute::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -836,7 +847,7 @@ void CheckSecond::operator()(wxFocusEvent &event){
     }
     
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -868,7 +879,7 @@ void CheckYear::operator()(wxFocusEvent &event){
 
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
 
 
     event.Skip(true);
@@ -900,7 +911,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
 
     }
 
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
     
@@ -951,7 +962,7 @@ void CheckDay::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!((f->stopwatch_check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
    
     event.Skip(true);
     
@@ -1026,13 +1037,16 @@ void TabulateDays::operator()(wxFocusEvent &event){
 
 
 //this function enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
-void MyFrame::OnCheckStopwatch(wxCommandEvent& event){
-
-    stopwatch_reading->Enable(stopwatch_check->GetValue());
+void CheckCheck::operator()(wxCommandEvent& event){
     
-    (stopwatch_reading->hour)->SetValue(wxString("0"));
-    (stopwatch_reading->minute)->SetValue(wxString("0"));
-    (stopwatch_reading->second)->SetValue(wxString("0.0"));
+    MyFrame* f = (p->parent_frame);
+
+
+    (f->stopwatch_reading)->Enable(((f->stopwatch_check)->check)->GetValue());
+    
+    ((f->stopwatch_reading)->hour)->SetValue(wxString("0"));
+    ((f->stopwatch_reading)->minute)->SetValue(wxString("0"));
+    ((f->stopwatch_reading)->second)->SetValue(wxString("0.0"));
 
 }
 
@@ -1117,6 +1131,37 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
+     
+}
+
+
+//constructor of a CheckField object, based on the parent frame frame
+CheckField::CheckField(MyFrame* frame, Answer* p){
+
+    unsigned int i;
+    parent_frame = frame;
+    //I link the internal pointers p and c to the respective Answer object
+    answer = p;
+    
+
+    ((parent_frame->checkcheck).p) = this;
+
+
+    check = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+//    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
+
+    if(p != NULL){
+        
+        //if p->answer = 'y', then I check with a tikmark check, otherwise I do not chck with a tickmark
+        check->SetValue(((p->value) == 'y'));
+        
+    }
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(check, 0, wxALIGN_CENTER);
      
 }
 
@@ -1360,6 +1405,12 @@ bool DateField::is_ok(void){
 }
 
 template<class T> void BodyField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}
+
+template<class T> void CheckField::InsertIn(T* host){
     
     host->Add(sizer_v);
     

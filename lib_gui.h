@@ -1120,7 +1120,7 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0000"))));
+    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0"))));
     min->SetValue("0.0");
     min->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcminute);
 

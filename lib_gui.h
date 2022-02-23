@@ -24,6 +24,7 @@ struct CheckDay;
 struct CheckHour;
 struct CheckMinute;
 struct CheckSecond;
+struct CheckString;
 struct TabulateDays;
 struct PrintErrorMessage;
 
@@ -287,6 +288,15 @@ struct CheckSign{
     
 };
 
+struct CheckString{
+    
+    StringField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
 struct CheckArcDegree{
     
     AngleField* p;
@@ -408,6 +418,7 @@ public:
     CheckBody checkbody;
     CheckLimb checklimb;
     CheckSign checksign;
+    CheckString checkstring;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckLength checklength;
@@ -606,6 +617,25 @@ void CheckSign::operator()(wxFocusEvent &event){
             (p->sign_ok) = false;
             
         }
+        
+        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        
+        event.Skip(true);
+        
+    }
+    
+}
+
+
+void CheckString::operator()(wxFocusEvent &event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is in idling mode
+    if(!(f->idling)){
+        
+        //I write in the non-GUI object (p->string) the value entered in the GUI object (p->value)
+        (*(p->string)) = String(((p->value)->GetValue().ToStdString()));
         
         (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
         
@@ -1819,10 +1849,13 @@ StringField::StringField(SightFrame* frame, String* p){
     parent_frame = frame;
     string = p;
     
+    ((parent_frame->checkstring).p) = this;
+
+    
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");
-//    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklength);
+    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checkstring);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

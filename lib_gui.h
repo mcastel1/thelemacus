@@ -800,25 +800,33 @@ void PrintErrorMessage::operator()(void){
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);
     
-    if((control->GetBackgroundColour()) != *wxRED){
+    if(control != NULL){
         
-        //        wxMessageBox(message.value, title.value);
+        if(((control->GetBackgroundColour()) != *wxRED)){
+            
+            message_frame = new MessageFrame(title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame ->Show(true);
+           
+            control->SetFocus();
+            control->SetBackgroundColour(*wxRED);
+            
+        }
         
-        
-        //        wxIconLocation dlgIconLoc = wxIconLocation("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample.ico");
-        //        const wxIcon dlgIcon = wxIcon(dlgIconLoc);
-        
-        //        dialog = new wxMessageDialog(f, wxString(message.value), wxString(title.value));
-        //        dialog->SetIcon(dlgIcon);
-        //        dialog->ShowModal();
-        
+    }else{
+       
         message_frame = new MessageFrame(title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
-        control->SetFocus();
-        control->SetBackgroundColour(*wxRED);
-     
     }
+    
+    //        wxMessageBox(message.value, title.value);
+    //        wxIconLocation dlgIconLoc = wxIconLocation("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample.ico");
+    //        const wxIcon dlgIcon = wxIcon(dlgIconLoc);
+    //        dialog = new wxMessageDialog(f, wxString(message.value), wxString(title.value));
+    //        dialog->SetIcon(dlgIcon);
+    //        dialog->ShowModal();
+    
+   
     
     //The temporary dialog window may have been closed, thus I set f->idling to false
     f->SetIdling(false);
@@ -1633,11 +1641,18 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
 void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
-    sight->print(String("body entered via GUI"), String(""), s);
     
-    
-    
-    wxMessageBox(s.str().c_str(), wxT("Here is the data which you entered:"));
+//    sight->print(String("body entered via GUI"), String(""), s);
+    (sight->body).print(String("body entered via GUI"), String(""), s);
+
+
+    (printerrormessage.control) = NULL;
+    (printerrormessage.title) = String("Here is the data which you entered:");
+    (printerrormessage.message) = String(s.str().c_str());
+
+
+    CallAfter(printerrormessage);
+
     
     Close(TRUE);
     

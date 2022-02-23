@@ -163,6 +163,7 @@ class LengthField{
     
     LengthField(MyFrame*, Length*);
     void set(void);
+    void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -775,13 +776,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
     sight = new Sight();
     
-    //
-    File file_sample_sight;
-    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
-    file_sample_sight.open(String("in"), String(""));
-    sight->read_from_file(file_sample_sight, String(""));
-    file_sample_sight.close(String(""));
-    //
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
@@ -883,9 +877,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->check)->SetValue(false);
     stopwatch_reading->Enable(false);
-    (stopwatch_reading->hour)->SetValue(wxString("0"));
-    (stopwatch_reading->minute)->SetValue(wxString("0"));
-    (stopwatch_reading->second)->SetValue(wxString("0.0"));
+//    (stopwatch_reading->hour)->SetValue(wxString("0"));
+//    (stopwatch_reading->minute)->SetValue(wxString("0"));
+//    (stopwatch_reading->second)->SetValue(wxString("0.0"));
 
 
     //TAI-UTC
@@ -967,6 +961,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
     
+    //
+    //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
+    File file_sample_sight;
+    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
+    file_sample_sight.open(String("in"), String(""));
+    sight->read_from_file(file_sample_sight, String(""));
+    file_sample_sight.close(String(""));
+    set();
+    //
+
+    
     
 }
 
@@ -976,13 +981,27 @@ void MyFrame::set(void){
     body->set();
     limb->set();
     artificial_horizon_check->set();
-    stopwatch_check->set();
     H_s->set();
     index_error->set();
-    height_of_eye->set();
+    
+    if(!((artificial_horizon_check->check)->GetValue())){
+        height_of_eye->Enable(true);
+        height_of_eye->set();
+    }else{
+        height_of_eye->Enable(false);
+    }
+    
     master_clock_date->set();
     master_clock_chrono->set();
-    stopwatch_reading->set();
+    stopwatch_check->set();
+    
+    if(((stopwatch_check->check)->GetValue())){
+        stopwatch_reading->Enable(true);
+        stopwatch_reading->set();
+    }else{
+        stopwatch_reading->Enable(false);
+   }
+    
     TAI_minus_UTC->set();
     
 }
@@ -1392,11 +1411,15 @@ void TabulateDays::operator()(wxFocusEvent &event){
 //this function writes into sight.artificial_horizon the value entered in the GUI box
 void CheckArtificialHorizon::operator()(wxCommandEvent& event){
     
+    MyFrame* f = (p->parent_frame);
+    
     //I set p->answer to the value entered in the GUI checkbox
     if((p->check)->GetValue()){
         ((p->answer)->value) = 'y';
+        (f->height_of_eye)->Enable(false);
     }else{
         ((p->answer)->value) = 'n';
+        (f->height_of_eye)->Enable(true);
     }
   
 
@@ -1416,9 +1439,9 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
     
     //I enable f->stopwatch reading GUI field and set all its entries to zero
     (f->stopwatch_reading)->Enable((p->check)->GetValue());
-    ((f->stopwatch_reading)->hour)->SetValue(wxString("0"));
-    ((f->stopwatch_reading)->minute)->SetValue(wxString("0"));
-    ((f->stopwatch_reading)->second)->SetValue(wxString("0.0"));
+    ((f->stopwatch_reading)->hour)->SetValue(wxString(""));
+    ((f->stopwatch_reading)->minute)->SetValue(wxString(""));
+    ((f->stopwatch_reading)->second)->SetValue(wxString(""));
 
 }
 
@@ -1482,7 +1505,16 @@ void BodyField::set(void){
 //sets the value in the GUI object name equal to the value in the non-GUI limb object limb
 void LimbField::set(void){
     
-    name->SetValue((limb->value));
+    if((limb->value) == 'u'){
+        name->SetValue("upper");
+    }
+    if((limb->value) == 'l'){
+        name->SetValue("lower");
+    }
+    if((limb->value) == 'c'){
+        name->SetValue("center");
+    }
+
     ok = true;
     
 }
@@ -1625,15 +1657,13 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
 
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
-    //deg->SetValue("");
     AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcdegree);
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.0"))));
-    min->SetValue("0.0");
+    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.00000"))));
     min->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcminute);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1665,8 +1695,8 @@ LengthField::LengthField(MyFrame* frame, Length* p){
 
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS("0.0"))));
-    value->SetValue("0.0");
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS("0.00000"))));
+    value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklength);
 
     text = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("m"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1798,7 +1828,7 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
 
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
-    second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS("0.0000"))));
+    second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS("0.00000"))));
     second->Bind(wxEVT_KILL_FOCUS, (parent_frame->checksecond));
     
     
@@ -1823,6 +1853,12 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
 
 }
 
+//this function enables/disable the LengthField
+void LengthField::Enable(bool is_enabled){
+    
+    value->Enable(is_enabled);
+  
+}
 
 //this function enables/disable the whole ChronoField
 void ChronoField::Enable(bool is_enabled){

@@ -307,6 +307,8 @@ public:
     Catalog* catalog;
     Sight* sight;
     wxPanel *panel;
+    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
+    bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckBody checkbody;
@@ -340,6 +342,7 @@ public:
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
+    void SetIdling(bool);
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnSaveAs(wxCommandEvent& event);
@@ -857,6 +860,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     }
     
     
+}
+
+void MyFrame::SetIdling(<#bool#> b){
+
+    idling = b;
+
 }
 
 void MyFrame::OnClose(wxCommandEvent& event){

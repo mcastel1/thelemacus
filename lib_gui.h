@@ -410,14 +410,11 @@ public:
     MessageFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
     
     wxPanel *panel;
-    
-    
-    wxBoxSizer *sizer;
-    
-    
+    wxBoxSizer *sizer_h, *sizer_v;
+    wxGridSizer* grid_sizer;
     wxButton* button_ok;
-        
-//    wxDECLARE_EVENT_TABLE();
+    
+    //    wxDECLARE_EVENT_TABLE();
     
 };
 
@@ -1109,26 +1106,31 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
 
-    sizer = new wxBoxSizer(wxVERTICAL);
-    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    grid_sizer = new wxGridSizer(2, 1, 0, 0);
+
+
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     //buttons
-    button_ok = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_ok = new wxButton(panel, ID_button_reduce, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     
+    grid_sizer->Add(text, 0, wxALIGN_CENTER);
+    grid_sizer->Add(button_ok, 0, wxALIGN_CENTER);
     
-    panel->SetSizer(sizer);
+    panel->SetSizerAndFit(sizer_v);
   
-    sizer->Add(text, 0, wxALIGN_CENTER);
-    sizer->Add(button_ok, 0, wxALIGN_CENTER);
-  //Maximize(panel);
+    sizer_h->Add(grid_sizer, 0, wxALIGN_CENTER_VERTICAL);
+    sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
+//  Maximize(panel);
 
     
 //    CreateStatusBar();
 //    SetStatusText( "Welcome to Michele's text editor!" );
     
-    //SetSizerAndFit(panelSizer);
+//SetSizerAndFit(sizer_v);
     //Maximize();
     
     

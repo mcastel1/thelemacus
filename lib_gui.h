@@ -414,7 +414,7 @@ public:
     
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v;
-    wxGridSizer* grid_sizer;
+    wxGridSizer* sizer_grid;
     wxButton* button_ok;
     wxStaticBitmap* image;
     
@@ -429,10 +429,13 @@ public:
 
     wxListBox* listbox;
     wxPanel *panel;
-    wxButton* button_ok;
+    wxButton* button_add, * button_delete;
     wxSizer* sizer_h, *sizer_v;
+    wxGridSizer* sizer_grid;
     
-    void OnPressOk(wxCommandEvent&);
+    void OnAdd(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
+
 };
 
 
@@ -476,7 +479,7 @@ public:
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField *label;
     
-    wxGridSizer *grid_sizer;
+    wxGridSizer *sizer_grid;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     
     wxArrayString bodies, limbs;
@@ -949,7 +952,7 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     SetMenuBar( menuBar );
     
     
-    grid_sizer = new wxGridSizer(11, 2, 0, 0);
+    sizer_grid = new wxGridSizer(11, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
@@ -1048,50 +1051,50 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce->Enable(false);
     
-    grid_sizer->Add(text_combo_body);
-    body->InsertIn<wxGridSizer>(grid_sizer);
-//    grid_sizer->Add(combo_body);
+    sizer_grid->Add(text_combo_body);
+    body->InsertIn<wxGridSizer>(sizer_grid);
+//    sizer_grid->Add(combo_body);
     
-    grid_sizer->Add(text_limb);
-    limb->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_limb);
+    limb->InsertIn<wxGridSizer>(sizer_grid);
     
-    grid_sizer->Add(text_H_s);
-    H_s->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_H_s);
+    H_s->InsertIn<wxGridSizer>(sizer_grid);
     
-    grid_sizer->Add(text_index_error);
+    sizer_grid->Add(text_index_error);
     index_error->InsertIn<wxBoxSizer>(box_sizer_3);
-    grid_sizer->Add(box_sizer_3);
+    sizer_grid->Add(box_sizer_3);
 
-    grid_sizer->Add(text_artificial_horizon_check);
-    artificial_horizon_check->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_artificial_horizon_check);
+    artificial_horizon_check->InsertIn<wxGridSizer>(sizer_grid);
     
-    grid_sizer->Add(text_height_of_eye);
-    height_of_eye->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_height_of_eye);
+    height_of_eye->InsertIn<wxGridSizer>(sizer_grid);
     
-    grid_sizer->Add(text_date);
+    sizer_grid->Add(text_date);
     master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
     box_sizer_4->Add(text_space_1);
     master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
-    grid_sizer->Add(box_sizer_4);
+    sizer_grid->Add(box_sizer_4);
 
-    grid_sizer->Add(text_stopwatch_check);
-    stopwatch_check->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_stopwatch_check);
+    stopwatch_check->InsertIn<wxGridSizer>(sizer_grid);
     
-    grid_sizer->Add(text_stopwatch_reading);
-    stopwatch_reading->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_stopwatch_reading);
+    stopwatch_reading->InsertIn<wxGridSizer>(sizer_grid);
 
-    grid_sizer->Add(text_TAI_minus_UTC);
-    TAI_minus_UTC->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_TAI_minus_UTC);
+    TAI_minus_UTC->InsertIn<wxGridSizer>(sizer_grid);
     
-    grid_sizer->Add(text_label);
-    label->InsertIn<wxGridSizer>(grid_sizer);
+    sizer_grid->Add(text_label);
+    label->InsertIn<wxGridSizer>(sizer_grid);
 
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
     
-    //here '0' means that the size of grid_sizer cannot be changed in the vertical direction, and wxEXPAND implies that grid_sizer is expanded horizontally
-    sizer->Add(grid_sizer, 0, wxEXPAND);
+    //here '0' means that the size of sizer_grid cannot be changed in the vertical direction, and wxEXPAND implies that sizer_grid is expanded horizontally
+    sizer->Add(sizer_grid, 0, wxEXPAND);
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);
     
     
@@ -1134,7 +1137,7 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    grid_sizer = new wxGridSizer(3, 1, 0, 0);
+    sizer_grid = new wxGridSizer(3, 1, 0, 0);
 
 
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1158,12 +1161,12 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
 
     
-    grid_sizer->Add(text, 0, wxALIGN_CENTER);
-    grid_sizer->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    grid_sizer->Add(button_ok, 0, wxALIGN_CENTER);
+    sizer_grid->Add(text, 0, wxALIGN_CENTER);
+    sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
+    sizer_grid->Add(button_ok, 0, wxALIGN_CENTER);
     
   
-    sizer_h->Add(grid_sizer, 0, wxALIGN_CENTER_VERTICAL);
+    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
 //  Maximize(panel);
 
@@ -1191,19 +1194,49 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     listbox->Append(wxString("Croissant"));
     listbox->Append(wxString("Pain au chocolat"));
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    sizer_grid = new wxGridSizer(1, 2, 0, 0);
 
-    //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    //    sizer_v = new wxBoxSizer(wxVERTICAL);
-    
-    
     
     //buttons
-    //    button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    button_add->Bind(wxEVT_BUTTON, &ListFrame::OnAdd, this);
 
+    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    button_delete->Bind(wxEVT_BUTTON, &ListFrame::OnDelete, this);
     
+    sizer_grid->Add(button_add);
+    sizer_grid->Add(button_delete);
+
+    sizer_v->Add(sizer_grid, 0, wxALIGN_LEFT);
+    sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM);
     
+    panel->SetSizer(sizer_h);
+
+}
+
+void ListFrame::OnAdd(wxCommandEvent& event){
     
+    wxString string = wxGetTextFromUser(wxT("Enter namw of new item"));
+    
+    if(string.Len()>0){
+        listbox->Append(string);
+    }
+    
+}
+
+
+void ListFrame::OnDelete(wxCommandEvent& event){
+    
+    int i;
+    
+    i = listbox->GetSelection();
+    
+    if(i != -1){
+        listbox->Delete(i);
+    }
     
 }
 

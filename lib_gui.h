@@ -667,12 +667,18 @@ void CheckLength::operator()(wxFocusEvent &event){
 
 void PrintErrorMessage::operator()(void){
     
+    wxMessageDialog* dialog;
+    
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);
     
     if((control->GetBackgroundColour()) != *wxRED){
         
-        wxMessageBox(message.value, title.value);
+//        wxMessageBox(message.value, title.value);
+
+        dialog = new wxMessageDialog(f, wxString(message.value), wxString(title.value), wxOK | wxICON_ERROR);
+        dialog->ShowModal();
+
         control->SetFocus();
         control->SetBackgroundColour(*wxRED);
      

@@ -936,7 +936,7 @@ public:
     void set(String, double, String);
     void print(String, String, ostream&);
     void to_deg_min(unsigned int*, double*);
-    void from_deg_min(unsigned int, double);
+    void from_sign_deg_min(char, unsigned int, double);
     void read_from_file(String, File&, bool, String);
     string to_string(unsigned int);
     
@@ -6142,9 +6142,11 @@ void Angle::to_deg_min(unsigned int* deg, double* min){
 }
 
 //convert the angle stored in degrees and minutes format in deg an min in to (*this).vaule
-void Angle::from_deg_min(unsigned int deg, double min){
+void Angle::from_sign_deg_min(char sign, unsigned int deg, double min){
     
     value = k*(((double)deg) + min/60.0);
+    if(sign == '-'){value*=-1.0;}
+    
     normalize();
     
 }

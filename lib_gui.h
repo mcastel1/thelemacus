@@ -14,6 +14,7 @@ class MyApp;
 class SightFrame;
 struct CheckArtificialHorizon;
 struct CheckStopWatch;
+struct CheckSign;
 struct CheckArcDegree;
 struct CheckArcMinute;
 struct CheckLength;
@@ -120,22 +121,22 @@ public:
 };
 
 
-//class for graphical object: a field to enter an angle, composed of a box for degrees, a degree symbol, another box for minutes and a minute symbol
+//class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
 class AngleField{
         
     public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
-    wxArrayString degrees;
+    wxArrayString signs, degrees;
     //degrees and minutes boxes
-    wxComboBox* deg;
+    wxComboBox*sign, * deg;
     wxTextCtrl *min;
     //texts
     wxStaticText* text_deg, *text_min;
     wxBoxSizer *sizer_h, *sizer_v;
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
-    bool deg_ok, min_ok;
+    bool sign_ok, deg_ok, min_ok;
    
     
     AngleField(SightFrame*, Angle*);
@@ -277,6 +278,15 @@ struct CheckStopWatch{
     
 };
 
+struct CheckSign{
+    
+    AngleField* p;
+    
+    void operator()(wxFocusEvent&);
+    
+    
+};
+
 struct CheckArcDegree{
     
     AngleField* p;
@@ -397,6 +407,7 @@ public:
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckBody checkbody;
     CheckLimb checklimb;
+    CheckSign checksign;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckLength checklength;
@@ -423,8 +434,7 @@ public:
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     
-    wxArrayString bodies, limbs, signs;
-    wxComboBox *combo_sign_index_error, *combo_sign_TAI_minus_UTC;
+    wxArrayString bodies, limbs;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
@@ -551,6 +561,62 @@ void CheckLimb::operator()(wxFocusEvent &event){
 }
 
 
+void CheckSign::operator()(wxFocusEvent &event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is in idling mode
+    if(!(f->idling)){
+        
+        unsigned int i;
+        bool check;
+        
+        
+        //I check whether the name in the GUI field sign matches one of the sign values in the list signs
+        for(check = false, i=0; (i<((p->signs).GetCount())) && (!check); i++){
+            if(((p->sign)->GetValue()) == (p->signs)[i]){
+                check = true;
+            }
+        }
+        
+        if(check){
+            
+            (p->sign)->SetBackgroundColour(*wxWHITE);
+            
+            if((p->deg_ok) && (p->min_ok)){
+                
+                double min_temp;
+                
+                ((p->min)->GetValue()).ToDouble(&min_temp);
+                
+                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+                
+            }
+            
+            (p->sign_ok) = true;
+            
+        }else{
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->sign);
+            ((f->printerrormessage).title) = String("Sign is not valid!");
+            ((f->printerrormessage).message) = String("Sign must be + or -.");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->sign_ok) = false;
+            
+        }
+        
+        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        
+        event.Skip(true);
+        
+    }
+    
+}
+
+
+
 void CheckArcDegree::operator()(wxFocusEvent &event){
     
     SightFrame* f = (p->parent_frame);
@@ -580,7 +646,7 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
             
             ((p->min)->GetValue()).ToDouble(&min_temp);
             
-            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
+            (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
             
         }
         (p->deg_ok) = true;
@@ -622,7 +688,7 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
             
             ((p->min)->GetValue()).ToDouble(&min_temp);
             
-            (p->angle)->from_deg_min(wxAtoi((p->deg)->GetValue()), min_temp);
+            (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
             
             
         }
@@ -724,7 +790,6 @@ enum{
 //    ID_artificial_horizon =  wxID_HIGHEST + 8,
     ID_combo_body = wxID_HIGHEST + 9,
 //    ID_combo_limb = wxID_HIGHEST + 10,
-    ID_combo_sign_index_error = wxID_HIGHEST + 11,
     ID_box_year = wxID_HIGHEST + 12,
     ID_combo_day = wxID_HIGHEST + 14,
     ID_stopwatch_check = wxID_HIGHEST + 15,
@@ -732,7 +797,6 @@ enum{
     ID_combo_minute_masterclock = wxID_HIGHEST + 17,
     ID_combo_hour_stopwatch = wxID_HIGHEST + 18,
     ID_combo_minute_stopwatch = wxID_HIGHEST + 19,
-    ID_combo_sign_TAI_minus_UTC = wxID_HIGHEST + 20,
     ID_combo_hour_TAI_minus_UTC = wxID_HIGHEST + 21,
     ID_combo_minute_TAI_minus_UTC = wxID_HIGHEST + 22
 
@@ -794,14 +858,7 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     
     sight = new Sight();
     
-    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    
-    
-     
-    signs.Clear();
-    signs.Add(wxT("+"));
-    signs.Add(wxT("-"));
 
     
     menuFile->Append(ID_Open, "&Open...\tCtrl-O", "This is to open a file");
@@ -841,10 +898,6 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     H_s = new AngleField(this, &(sight->H_s));
-
-    combo_sign_index_error = new wxComboBox(panel, ID_combo_sign_index_error, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
-    AdjustWidth(combo_sign_index_error);
-    //combo_sign_index_error->SetValue("");
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -930,7 +983,6 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     H_s->InsertIn<wxGridSizer>(grid_sizer);
     
     grid_sizer->Add(text_index_error);
-    box_sizer_3->Add(combo_sign_index_error);
     index_error->InsertIn<wxBoxSizer>(box_sizer_3);
     grid_sizer->Add(box_sizer_3);
 
@@ -1564,7 +1616,7 @@ void AngleField::set(void){
     
     angle->to_deg_min(&deg_temp, &min_temp);
 
-    
+    sign->SetValue(wxString("+"));
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
     min->SetValue(wxString::Format(wxT("%f"), min_temp));
     
@@ -1680,12 +1732,23 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
     parent_frame = frame;
     angle = p;
     
+    //tabulate signs and degrees wxArrayStrings
+    signs.Clear();
+    signs.Add(wxString("+"));
+    signs.Add(wxString("-"));
+    
     for(degrees.Clear(), i=0; i<360; i++){
         degrees.Add(wxString::Format(wxT("%i"), i));
     }
 
+    
+    ((parent_frame->checksign).p) = this;
     ((parent_frame->checkarcdegree).p) = this;
     ((parent_frame->checkarcminute).p) = this;
+
+    sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+    AdjustWidth(sign);
+    sign->Bind(wxEVT_KILL_FOCUS, parent_frame->checksign);
 
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
@@ -1699,9 +1762,11 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
     min->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcminute);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
+
+    sign->SetValue(wxString(""));
     deg->SetValue(wxString(""));
     min->SetValue(wxString(""));
+    sign_ok = false;
     deg_ok = false;
     min_ok = false;
     
@@ -1710,6 +1775,7 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(sign, 0, wxALIGN_CENTER);
     sizer_h->Add(deg, 0, wxALIGN_CENTER);
     sizer_h->Add(text_deg);
     sizer_h->Add(min, 0, wxALIGN_CENTER);
@@ -1771,7 +1837,7 @@ StringField::StringField(SightFrame* frame, String* p){
 
 bool AngleField::is_ok(void){
     
-    return(deg_ok && min_ok);
+    return(sign_ok && deg_ok && min_ok);
     
 }
 

@@ -1079,7 +1079,7 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);
     
     
-    panel->SetSizer(sizer);
+//    panel->SetSizer(sizer);
     //Maximize(panel);
 
     CurrentDocPath = wxT("");
@@ -1087,7 +1087,7 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     CreateStatusBar();
     SetStatusText( "Welcome to Michele's text editor!" );
     
-    //SetSizerAndFit(panelSizer);
+    SetSizerAndFit(sizer);
     //Maximize();
     
     file_init.close(prefix);

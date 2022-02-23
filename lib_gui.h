@@ -677,11 +677,11 @@ void PrintErrorMessage::operator()(void){
 //        wxMessageBox(message.value, title.value);
 
         
-        wxIconLocation dlgIconLoc = wxIconLocation("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample.ico");
-        const wxIcon dlgIcon = wxIcon(dlgIconLoc);
+//        wxIconLocation dlgIconLoc = wxIconLocation("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample.ico");
+//        const wxIcon dlgIcon = wxIcon(dlgIconLoc);
 
         dialog = new wxMessageDialog(f, wxString(message.value), wxString(title.value));
-        dialog->SetIcon(dlgIcon);
+//        dialog->SetIcon(dlgIcon);
         dialog->ShowModal();
 
         control->SetFocus();

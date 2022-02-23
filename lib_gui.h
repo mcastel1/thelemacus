@@ -410,6 +410,7 @@ public:
     wxMenuBar *menuBar;
     
     void SetIdling(bool);
+    void set(void);
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnSaveAs(wxCommandEvent& event);
@@ -966,6 +967,23 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
     
+    
+}
+
+//set all the GUI fields in this equal to those in the non-GUI object this->sight
+void MyFrame::set(void){
+    
+    body->set();
+    limb->set();
+    artificial_horizon_check->set();
+    stopwatch_check->set();
+    H_s->set();
+    index_error->set();
+    height_of_eye->set();
+    master_clock_date->set();
+    master_clock_chrono->set();
+    stopwatch_reading->set();
+    TAI_minus_UTC->set();
     
 }
 

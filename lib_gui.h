@@ -67,6 +67,7 @@ public:
     CheckField(MyFrame*, Answer*);
     
     template<class T> void InsertIn(T*);
+    void set(void);
     
     
 };
@@ -139,7 +140,7 @@ class AngleField{
    
     
     AngleField(MyFrame*, Angle*);
-    bool set(void);
+    void set(void);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -1457,6 +1458,55 @@ void BodyField::set(void){
     ok = true;
     
 }
+
+//sets the value in the GUI object name equal to the value in the non-GUI limb object limb
+void LimbField::set(void){
+    
+    name->SetValue((limb->value));
+    ok = true;
+    
+}
+
+//sets the value in the GUI object check equal to the value in the non-GUI limb object answer
+void CheckField::set(void){
+    
+    if((answer->value) == 'y'){
+        check->SetValue(true);
+    }
+    
+    if((answer->value) == 'n'){
+        check->SetValue(false);
+    }
+    
+}
+
+//sets the value in the GUI objects deg and min equal to the value in the non-GUI limb object angle
+void AngleField::set(void){
+    
+    unsigned int deg_temp;
+    double min_temp;
+    
+    angle->to_deg_min(&deg_temp, &min_temp);
+
+    
+    deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
+    min->SetValue(wxString::Format(wxT("%f"), min_temp));
+    
+    deg_ok = true;
+    min_ok = true;
+    
+}
+
+
+//sets the value in the GUI object value equal to the value in the non-GUI  object length
+void LengthField::set(void){
+    
+    value->SetValue(wxString::Format(wxT("%f"), length->value));
+    
+    ok = true;
+    
+}
+
 
 //constructor of a LimbField object, based on the parent frame frame
 LimbField::LimbField(MyFrame* frame, Limb* p){

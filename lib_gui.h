@@ -1507,6 +1507,31 @@ void LengthField::set(void){
     
 }
 
+//sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date
+void DateField::set(void){
+    
+    year->SetValue(wxString::Format(wxT("%i"), date->Y));
+    month->SetValue(wxString::Format(wxT("%i"), date->M));
+    day->SetValue(wxString::Format(wxT("%i"), date->D));
+    
+    year_ok = true;
+    month_ok = true;
+    day_ok = true;
+}
+
+//sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono
+void ChronoField::set(void){
+    
+    hour->SetValue(wxString::Format(wxT("%i"), chrono->h));
+    minute->SetValue(wxString::Format(wxT("%i"), chrono->m));
+    second->SetValue(wxString::Format(wxT("%f"), chrono->s));
+    
+    hour_ok = true;
+    minute_ok = true;
+    second_ok = true;
+    
+}
+
 
 //constructor of a LimbField object, based on the parent frame frame
 LimbField::LimbField(MyFrame* frame, Limb* p){

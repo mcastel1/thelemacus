@@ -1266,17 +1266,8 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
 
-    if(p != NULL){
-        
-        name->SetValue(wxString((p->name).value.c_str()));
-        ok = true;
-        
-    }else{
-        
-        name->SetValue("");
-        ok = false;
-        
-    }
+    name->SetValue("");
+    ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -1307,29 +1298,9 @@ LimbField::LimbField(MyFrame* frame, Limb* p){
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, parent_frame->checklimb);
     
-    if(((((frame->body)->name)->GetValue()) == wxString("sun")) || ((((frame->body)->name)->GetValue()) == wxString("moon"))){
+    name->SetValue(wxString(""));
+    ok = false;
         
-        name->Enable(true);
-        
-        if(p != NULL){
-            
-            name->SetValue(wxString((p->value)));
-            ok = true;
-            
-        }else{
-            
-            name->SetValue("");
-            ok = false;
-            
-        }
-        
-    }else{
-        
-        name->Enable(false);
-        
-        
-    }
-    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -1346,19 +1317,11 @@ CheckField::CheckField(MyFrame* frame, Answer* p){
     parent_frame = frame;
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
-    
-
-
 
     check = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
 //    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
 
-    if(p != NULL){
-        
-        //if p->answer = 'y', then I check with a tikmark check, otherwise I do not chck with a tickmark
-        check->SetValue(((p->value) == 'y'));
-        
-    }
+    check->SetValue(false);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -1399,26 +1362,11 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
+    deg->SetValue(wxString(""));
+    min->SetValue(wxString(""));
+    deg_ok = false;
+    min_ok = false;
     
-    if(p != NULL){
-        
-        unsigned int deg_temp;
-        double min_temp;
-        
-        p->to_deg_min(&deg_temp, &min_temp);
-        
-        deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
-        deg_ok = true;
-        
-        min->SetValue(wxString::Format(wxT("%f"), min_temp));
-        min_ok = true;
-        
-    }else{
-        
-        deg_ok = false;
-        min_ok = false;
-        
-    }
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -1520,29 +1468,16 @@ DateField::DateField(MyFrame* frame, Date* p){
     days.Clear();
     day->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkday));
 
-    if(p != NULL){
-        
-        year->SetValue(wxString::Format(wxT("%i"), (*p).Y));
-        year_ok = true;
-
-        month->SetValue(wxString::Format(wxT("%i"), (*p).M));
-        month_ok = true;
-
-        for(days.Clear(), days.Add(wxT("")), i=0; i<days_per_month_common[((*p).M)-1]; i++){
-            days.Add(wxString::Format(wxT("%i"), i+1));
-        }
-        day->Set(days);
-        day->SetValue(wxString::Format(wxT("%i"), (*p).D));
-        day_ok = true;
     
-    }else{
-  
-        year_ok = false;
-        month_ok = false;
-        day_ok = false;
-        
-    }
-  
+    year->SetValue(wxString(""));
+    year_ok = false;
+    
+    month->SetValue(wxString(""));
+    month_ok = false;
+    
+    day->SetValue(wxString(""));
+    day_ok = false;
+      
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -1590,26 +1525,17 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS("0.0000"))));
     second->Bind(wxEVT_KILL_FOCUS, (parent_frame->checksecond));
-
-    if(p != NULL){
-        
-        hour->SetValue(wxString::Format(wxT("%i"), p->h));
-        hour_ok = true;
-
-        minute->SetValue(wxString::Format(wxT("%i"), p->m));
-        minute_ok = true;
-
-        second->SetValue(wxString::Format(wxT("%f"), p->s));
-        second_ok = true;
     
-    }else{
-  
-        hour_ok = false;
-        minute_ok = false;
-        second_ok = false;
-        
-    }
-  
+    
+    hour->SetValue(wxString(""));
+    hour_ok = false;
+    
+    minute->SetValue(wxString(""));
+    minute_ok = false;
+    
+    second->SetValue(wxString(""));
+    second_ok = false;
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

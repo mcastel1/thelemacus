@@ -413,6 +413,7 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     wxGridSizer* grid_sizer;
     wxButton* button_ok;
+    wxStaticBitmap* image;
     
     //    wxDECLARE_EVENT_TABLE();
     
@@ -1116,6 +1117,12 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     //buttons
     button_ok = new wxButton(panel, ID_button_reduce, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
+    
+    //image
+    wxPNGHandler *handler = new wxPNGHandler;
+    wxImage::AddHandler(handler);
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers.png", wxBITMAP_TYPE_PNG), wxPoint(50,100), wxSize(100, 500));
+
     
     grid_sizer->Add(text, 0, wxALIGN_CENTER);
     grid_sizer->Add(button_ok, 0, wxALIGN_CENTER);

@@ -874,7 +874,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     
 }
 
-void MyFrame::SetIdling(<#bool#> b){
+void MyFrame::SetIdling(bool b){
 
     idling = b;
 

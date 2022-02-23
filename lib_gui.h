@@ -11,6 +11,7 @@ class DateField;
 class ChronoField;
 class StringField;
 class MyApp;
+class MessageFrame;
 class SightFrame;
 struct CheckArtificialHorizon;
 struct CheckStopWatch;
@@ -401,6 +402,24 @@ struct PrintErrorMessage{
     
     
 };
+
+
+class MessageFrame: public wxFrame{
+    
+public:
+    MessageFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
+    
+    wxPanel *panel;
+    
+    
+    wxBoxSizer *sizer;
+    
+    wxButton* button_ok;
+        
+//    wxDECLARE_EVENT_TABLE();
+    
+};
+
 
 
 class SightFrame: public wxFrame{
@@ -1076,6 +1095,38 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     set();
     //
 
+    
+    
+}
+
+
+MessageFrame::MessageFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+    
+    
+    
+    
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+
+    sizer = new wxBoxSizer(wxVERTICAL);
+    
+    wxStaticText* text = new wxStaticText(panel, wxID_ANY, wxT("Text!"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
+    
+
+    //buttons
+    button_ok = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    
+    
+    
+    panel->SetSizer(sizer);
+    //Maximize(panel);
+
+    
+//    CreateStatusBar();
+//    SetStatusText( "Welcome to Michele's text editor!" );
+    
+    //SetSizerAndFit(panelSizer);
+    //Maximize();
     
     
 }

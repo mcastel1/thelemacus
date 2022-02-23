@@ -1109,7 +1109,7 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    grid_sizer = new wxGridSizer(2, 1, 0, 0);
+    grid_sizer = new wxGridSizer(3, 1, 0, 0);
 
 
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1121,23 +1121,35 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     //image
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers.png", wxBITMAP_TYPE_PNG), wxPoint(50,100), wxSize(100, 500));
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    wxDisplay display;
+    wxRect rectangle = (display.GetClientArea());
+    rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
+    rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
+
+    
+    
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
 
     
     grid_sizer->Add(text, 0, wxALIGN_CENTER);
+    grid_sizer->Add(image, 0, 0, wxALIGN_CENTER);
     grid_sizer->Add(button_ok, 0, wxALIGN_CENTER);
     
-    panel->SetSizerAndFit(sizer_v);
   
     sizer_h->Add(grid_sizer, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
 //  Maximize(panel);
 
+    sizer_v->Fit(panel);
+    panel->SetSizer(sizer_v);
     
-//    CreateStatusBar();
-//    SetStatusText( "Welcome to Michele's text editor!" );
+//    SetSize(wxSize(100,100));
     
-//SetSizerAndFit(sizer_v);
+    //    CreateStatusBar();
+    //    SetStatusText( "Welcome to Michele's text editor!" );
+    
+    //SetSizerAndFit(sizer_v);
     //Maximize();
     
     

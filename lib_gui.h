@@ -1448,17 +1448,9 @@ LengthField::LengthField(MyFrame* frame, Length* p){
 
     text = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("m"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
-    
-    if(p != NULL){
-        
-        value->SetValue(wxString::Format(wxT("%f"), p->value));
-        ok = true;
-        
-    }else{
-        
-        ok = false;
-        
-    }
+    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
+    value->SetValue(wxString(""));
+    ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

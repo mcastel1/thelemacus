@@ -13,6 +13,7 @@ class StringField;
 class MyApp;
 class MessageFrame;
 class SightFrame;
+
 struct CheckArtificialHorizon;
 struct CheckStopWatch;
 struct CheckSign;
@@ -404,6 +405,7 @@ struct PrintErrorMessage{
 };
 
 
+
 class MessageFrame: public wxFrame{
     
 public:
@@ -415,8 +417,7 @@ public:
     wxButton* button_ok;
     wxStaticBitmap* image;
     
-    //    wxDECLARE_EVENT_TABLE();
-    
+    void OnPressOk(wxCommandEvent&);
 };
 
 
@@ -1115,8 +1116,9 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     //buttons
-    button_ok = new wxButton(panel, ID_button_reduce, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    
+    button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -2078,6 +2080,14 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     sizer_h->Add(minute, 0, wxALIGN_CENTER);
     sizer_h->Add(text_colon_2, wxALIGN_CENTER);
     sizer_h->Add(second, 0, wxALIGN_CENTER);
+
+}
+
+//this functor quits the MessageFrame when Ok button is pressed
+void MessageFrame::OnPressOk(wxCommandEvent& event){
+    
+ 
+    Close(TRUE);
 
 }
 

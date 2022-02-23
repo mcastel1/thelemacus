@@ -542,6 +542,9 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
     
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
     if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
         
 //        f->CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
@@ -575,12 +578,17 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
     
     event.Skip(true);
 
+    }
+    
 }
 
 void CheckArcMinute::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
     
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
     if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
         
 //        f->CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
@@ -612,6 +620,8 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
  
     
     event.Skip(true);
+        
+    }
     
 }
 
@@ -619,6 +629,9 @@ void CheckLength::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
     
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
     if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
         
 //        f->CallAfter(&MyFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
@@ -647,6 +660,8 @@ void CheckLength::operator()(wxFocusEvent &event){
     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
  
     event.Skip(true);
+        
+    }
     
 }
 
@@ -1037,7 +1052,10 @@ void MyFrame::OnCheckArtificialHorizon(wxCommandEvent& event){
 void CheckHour::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
-
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
     if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
         
 //        f->CallAfter(&MyFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
@@ -1062,6 +1080,8 @@ void CheckHour::operator()(wxFocusEvent &event){
      (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
+        
+    }
     
 }
 
@@ -1069,7 +1089,10 @@ void CheckHour::operator()(wxFocusEvent &event){
 void CheckMinute::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
-
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
     if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
         
 //        f->CallAfter(&MyFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
@@ -1093,6 +1116,8 @@ void CheckMinute::operator()(wxFocusEvent &event){
      (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
+        
+    }
     
 }
 
@@ -1101,7 +1126,9 @@ void CheckMinute::operator()(wxFocusEvent &event){
 void CheckSecond::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
-
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
     
     if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
         
@@ -1131,6 +1158,8 @@ void CheckSecond::operator()(wxFocusEvent &event){
      (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
+        
+    }
     
 }
 
@@ -1140,6 +1169,9 @@ void CheckYear::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
     
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
     if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
         
 //        f->CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
@@ -1171,13 +1203,18 @@ void CheckYear::operator()(wxFocusEvent &event){
 
 
     event.Skip(true);
+        
+    }
     
 }
 
 void CheckMonth::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
-
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
     if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
         
 //        f->CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
@@ -1208,6 +1245,8 @@ void CheckMonth::operator()(wxFocusEvent &event){
      (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
+        
+    }
     
 }
 
@@ -1215,6 +1254,10 @@ void CheckMonth::operator()(wxFocusEvent &event){
 void CheckDay::operator()(wxFocusEvent &event){
     
     MyFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+
     //this variable = true if the day field is formatted correctly
     bool ok;
     
@@ -1266,6 +1309,8 @@ void CheckDay::operator()(wxFocusEvent &event){
      (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
    
     event.Skip(true);
+        
+    }
     
 }
 

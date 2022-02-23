@@ -901,10 +901,11 @@ bool MyApp::OnInit(){
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
     
-    SightFrame *frame = new SightFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
-    
-    frame->Show( true );
-    
+    SightFrame *sight_frame = new SightFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
+    ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
+    sight_frame->Show(true);
+    list_frame->Show(true);
+
     return true;
     
 }
@@ -1189,7 +1190,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     
     listbox->Append(wxString("Croissant"));
-    listbox->Append(wxString("Croissant"));
+    listbox->Append(wxString("Pain au chocolat"));
 
     //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     //    sizer_v = new wxBoxSizer(wxVERTICAL);

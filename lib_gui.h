@@ -417,47 +417,59 @@ class ChronoField{
 
 void CheckBody::operator()(wxFocusEvent &event){
     
-    
-    unsigned int i;
-    bool check;
     MyFrame* f = (p->parent_frame);
-
     
-    //(p->body)->name = String((combo_body->GetValue()).ToStdString());
-    
-    //I check whether the name in the GUI field body matches one of the body names in catalog
-    for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
-        if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
-            check = true;
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        unsigned int i;
+        bool check;
+        
+        
+        //(p->body)->name = String((combo_body->GetValue()).ToStdString());
+        
+        //I check whether the name in the GUI field body matches one of the body names in catalog
+        for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
+            if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
+                check = true;
+            }
         }
-    }
-    i--;
-    
-    if(check){
+        i--;
         
-        (*(p->body)) = ((p->catalog)->list)[i];
-        
-        if(((*(p->body)).name == String("sun")) || ((*(p->body)).name == String("moon"))){
-            ((f->limb)->name)->Enable(true);
+        if(check){
+            
+            (*(p->body)) = ((p->catalog)->list)[i];
+            
+            if(((*(p->body)).name == String("sun")) || ((*(p->body)).name == String("moon"))){
+                ((f->limb)->name)->Enable(true);
+            }else{
+                ((f->limb)->name)->Enable(false);
+            }
+            
+            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->ok) = true;
+            
         }else{
-            ((f->limb)->name)->Enable(false);
+            
+            //I am about to prompt a temporary dialog window, thus I set f->idling to true
+            f->CallAfter(&MyFrame::SetIdling, true);
+            
+            f->CallAfter(&MyFrame::PrintErrorMessage, p->name, String("Body not found in catalog!\nBody must be in catalog."));
+            
+            //The temporary dialog window has been closed, thus I set f->idling to false
+            f->CallAfter(&MyFrame::SetIdling, false);
+            
+            (p->ok) = false;
+            
         }
         
-        (p->name)->SetBackgroundColour(*wxWHITE);
-        (p->ok) = true;
         
-    }else{
         
-        f->CallAfter(&MyFrame::PrintErrorMessage, p->name, String("Body not found in catalog!\nBody must be in catalog."));
-        (p->ok) = false;
+        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        
+        event.Skip(true);
         
     }
-    
-    
-  
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
-    
-    event.Skip(true);
     
 }
 

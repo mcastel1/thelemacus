@@ -11,7 +11,7 @@ class DateField;
 class ChronoField;
 class StringField;
 class MyApp;
-class MyFrame;
+class SightFrame;
 struct CheckArtificialHorizon;
 struct CheckStopWatch;
 struct CheckArcDegree;
@@ -56,14 +56,14 @@ class CheckField{
 public:
     
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     Answer* answer;
     wxBoxSizer *sizer_h, *sizer_v;
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* check;
 
-    CheckField(MyFrame*, Answer*);
+    CheckField(SightFrame*, Answer*);
     
     template<class T> void InsertIn(T*);
     void set(void);
@@ -76,7 +76,7 @@ class BodyField{
     
 public:
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     wxArrayString bodies;
     //this points to a Body object, which contains the date written in the GUI field of this
     Body* body;
@@ -88,7 +88,7 @@ public:
 
     bool ok;
 
-    BodyField(MyFrame*, Body*, Catalog*);
+    BodyField(SightFrame*, Body*, Catalog*);
     void set(void);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
@@ -101,7 +101,7 @@ class LimbField{
     
 public:
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     wxArrayString limbs;
     //this points to a Limn object, which contains the data written in the GUI field of this
     Limb* limb;
@@ -111,7 +111,7 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
 
-    LimbField(MyFrame*, Limb*);
+    LimbField(SightFrame*, Limb*);
     void set(void);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
@@ -125,7 +125,7 @@ class AngleField{
         
     public:
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     wxArrayString degrees;
     //degrees and minutes boxes
     wxComboBox* deg;
@@ -138,7 +138,7 @@ class AngleField{
     bool deg_ok, min_ok;
    
     
-    AngleField(MyFrame*, Angle*);
+    AngleField(SightFrame*, Angle*);
     void set(void);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
@@ -150,7 +150,7 @@ class LengthField{
         
     public:
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     //degrees and minutes boxes
     wxTextCtrl *value;
     //texts
@@ -160,7 +160,7 @@ class LengthField{
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool ok;
     
-    LengthField(MyFrame*, Length*);
+    LengthField(SightFrame*, Length*);
     void set(void);
     void Enable(bool);
     template<class T> void InsertIn(T*);
@@ -173,14 +173,14 @@ class StringField{
         
     public:
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     //label box
     wxTextCtrl *value;
     wxBoxSizer *sizer_h, *sizer_v;
     //non-GUI object related to this
     String* string;
      
-    StringField(MyFrame*, String*);
+    StringField(SightFrame*, String*);
     void set(void);
     template<class T> void InsertIn(T*);
     
@@ -192,7 +192,7 @@ class DateField{
     
     public:
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     wxArrayString days, months;
     //year, month and day boxes
     wxTextCtrl *year;
@@ -205,7 +205,7 @@ class DateField{
     //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
     bool year_ok, month_ok, day_ok;
     
-    DateField(MyFrame*, Date*);
+    DateField(SightFrame*, Date*);
     void set(void);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
@@ -217,7 +217,7 @@ class ChronoField{
     
     public:
     //the parent frame to which this object is attached
-    MyFrame* parent_frame;
+    SightFrame* parent_frame;
     wxArrayString hours, minutes;
     //hour and minute  boxes
     wxComboBox *hour, *minute;
@@ -231,7 +231,7 @@ class ChronoField{
     //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
     bool hour_ok, minute_ok, second_ok;
     
-    ChronoField(MyFrame*, Chrono*);
+    ChronoField(SightFrame*, Chrono*);
     void set(void);
     void Enable(bool);
     template<class T> void InsertIn(T*);
@@ -373,7 +373,7 @@ struct TabulateDays{
 //this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control
 struct PrintErrorMessage{
     
-    MyFrame* f;
+    SightFrame* f;
     wxControl* control;
     String title, message;
     
@@ -383,10 +383,10 @@ struct PrintErrorMessage{
 };
 
 
-class MyFrame: public wxFrame{
+class SightFrame: public wxFrame{
     
 public:
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
+    SightFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
     
     Catalog* catalog;
     Sight* sight;
@@ -451,7 +451,7 @@ public:
 
 void CheckBody::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -508,7 +508,7 @@ void CheckBody::operator()(wxFocusEvent &event){
 
 void CheckLimb::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -553,14 +553,14 @@ void CheckLimb::operator()(wxFocusEvent &event){
 
 void CheckArcDegree::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
     if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->deg);
@@ -597,14 +597,14 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
 
 void CheckArcMinute::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
     if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->min);
@@ -640,14 +640,14 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
 
 void CheckLength::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
     if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->value);
@@ -738,17 +738,17 @@ enum{
 
 };
 
-wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(ID_Open,   MyFrame::OnOpen)
-EVT_MENU(ID_Save,   MyFrame::OnSave)
-EVT_MENU(ID_SaveAs,   MyFrame::OnSaveAs)
-EVT_MENU(ID_Close,  MyFrame::OnClose)
-//EVT_BUTTON(ID_artificial_horizon,   MyFrame::OnCheckArtificialHorizon)
-EVT_BUTTON(ID_button_cancel,   MyFrame::OnPressCancel)
-EVT_BUTTON(ID_button_reduce,   MyFrame::OnPressReduce)
-//EVT_COMBOBOX(ID_combo_body, MyFrame::OnSelectBody)
-//EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
-//EVT_COMBOBOX(ID_combo_month, MyFrame::TabulateDays)
+wxBEGIN_EVENT_TABLE(SightFrame, wxFrame)
+EVT_MENU(ID_Open,   SightFrame::OnOpen)
+EVT_MENU(ID_Save,   SightFrame::OnSave)
+EVT_MENU(ID_SaveAs,   SightFrame::OnSaveAs)
+EVT_MENU(ID_Close,  SightFrame::OnClose)
+//EVT_BUTTON(ID_artificial_horizon,   SightFrame::OnCheckArtificialHorizon)
+EVT_BUTTON(ID_button_cancel,   SightFrame::OnPressCancel)
+EVT_BUTTON(ID_button_reduce,   SightFrame::OnPressReduce)
+//EVT_COMBOBOX(ID_combo_body, SightFrame::OnSelectBody)
+//EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
+//EVT_COMBOBOX(ID_combo_month, SightFrame::TabulateDays)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MyApp);
@@ -762,7 +762,7 @@ bool MyApp::OnInit(){
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
     
-    MyFrame *frame = new MyFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
+    SightFrame *frame = new SightFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
     
     frame->Show( true );
     
@@ -770,7 +770,7 @@ bool MyApp::OnInit(){
     
 }
 
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     //pointer to init.txt to read fixed sight data from in there
     File file_init;
@@ -829,7 +829,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     body = new BodyField(this, &(sight->body), catalog);
 
 //    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
-    //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(MyFrame::OnSelectBody), this);
+    //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(SightFrame::OnSelectBody), this);
     //combo_body->SetValue("");
     
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -883,7 +883,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
 //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
-    //EVT_CHECKBOX(ID_stopwatch, MyFrame::OnCheckStopwatch)
+    //EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
     (checkstopwatch.p) = stopwatch_check;
     (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, checkstopwatch);
     
@@ -999,7 +999,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 }
 
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
-void MyFrame::set(void){
+void SightFrame::set(void){
     
     body->set();
     limb->set();
@@ -1030,20 +1030,20 @@ void MyFrame::set(void){
     
 }
 
-void MyFrame::SetIdling(bool b){
+void SightFrame::SetIdling(bool b){
 
     idling = b;
 
 }
 
-void MyFrame::OnClose(wxCommandEvent& event){
+void SightFrame::OnClose(wxCommandEvent& event){
     
     CurrentDocPath = wxT("");
     SetTitle(_("untitled"));
     
 }
 
-void MyFrame::OnOpen(wxCommandEvent& event){
+void SightFrame::OnOpen(wxCommandEvent& event){
     
     wxFileDialog* OpenDialog = new wxFileDialog(this, _("Choose a file to open"), wxEmptyString, wxEmptyString,  _("Text files (*.txt)|*.txt|C++ Source Files (*.cpp, *.cxx)|*.cpp;*.cxx|C Source files (*.c)|*.c|C header files (*.h)|*.h"), wxFD_OPEN, wxDefaultPosition);
     
@@ -1064,7 +1064,7 @@ void MyFrame::OnOpen(wxCommandEvent& event){
     
 }
 
-void MyFrame::OnSaveAs(wxCommandEvent& event){
+void SightFrame::OnSaveAs(wxCommandEvent& event){
     
     
     wxFileDialog *SaveDialog = new wxFileDialog(this, _("Save File As _?"), wxEmptyString, wxEmptyString, _("Text files (*.txt)|*.txt|C++ Source Files (*.cpp)|*.cpp| C Source files (*.c)|*.c|C header files (*.h)|*.h"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
@@ -1085,7 +1085,7 @@ void MyFrame::OnSaveAs(wxCommandEvent& event){
 }
 
 
-void MyFrame::OnSave(wxCommandEvent& event){
+void SightFrame::OnSave(wxCommandEvent& event){
     
     if(CurrentDocPath == ""){
         OnSaveAs(event);
@@ -1096,14 +1096,14 @@ void MyFrame::OnSave(wxCommandEvent& event){
 }
 
 
-void MyFrame::OnPressCancel(wxCommandEvent& event){
+void SightFrame::OnPressCancel(wxCommandEvent& event){
     
     
     Close(TRUE);
 }
 
 
-void MyFrame::OnCheckArtificialHorizon(wxCommandEvent& event){
+void SightFrame::OnCheckArtificialHorizon(wxCommandEvent& event){
     
     
     Close(TRUE);
@@ -1118,14 +1118,14 @@ void MyFrame::OnCheckArtificialHorizon(wxCommandEvent& event){
 
 void CheckHour::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
     if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->hour);
@@ -1155,14 +1155,14 @@ void CheckHour::operator()(wxFocusEvent &event){
 
 void CheckMinute::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
     if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->minute);
@@ -1192,7 +1192,7 @@ void CheckMinute::operator()(wxFocusEvent &event){
 
 void CheckSecond::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -1200,7 +1200,7 @@ void CheckSecond::operator()(wxFocusEvent &event){
     if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
         
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->second);
@@ -1234,14 +1234,14 @@ void CheckSecond::operator()(wxFocusEvent &event){
 
 void CheckYear::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
     if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->year);
@@ -1277,14 +1277,14 @@ void CheckYear::operator()(wxFocusEvent &event){
 
 void CheckMonth::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
     if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
         
-//        f->CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+//        f->CallAfter(&SightFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
         
         //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         ((f->printerrormessage).control) = (p->month);
@@ -1320,7 +1320,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
 
 void CheckDay::operator()(wxFocusEvent &event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -1353,7 +1353,7 @@ void CheckDay::operator()(wxFocusEvent &event){
             
         }else{
             
-//            f->CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+//            f->CallAfter(&SightFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
             ((f->printerrormessage).control) = (p->day);
@@ -1389,7 +1389,7 @@ void CheckDay::operator()(wxFocusEvent &event){
 void TabulateDays::operator()(wxFocusEvent &event){
     
     unsigned int i;
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
 
     if((p->year_ok) && (p->month_ok)){
         
@@ -1435,7 +1435,7 @@ void TabulateDays::operator()(wxFocusEvent &event){
 //this function writes into sight.artificial_horizon the value entered in the GUI box
 void CheckArtificialHorizon::operator()(wxCommandEvent& event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
     
     //I set p->answer to the value entered in the GUI checkbox
     if((p->check)->GetValue()){
@@ -1452,7 +1452,7 @@ void CheckArtificialHorizon::operator()(wxCommandEvent& event){
 //this function writes into sight.use_stopwatch the value written into the respective GUI box and it enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
 void CheckStopWatch::operator()(wxCommandEvent& event){
     
-    MyFrame* f = (p->parent_frame);
+    SightFrame* f = (p->parent_frame);
 
     //I set p->answetr to the value entered in the GUI checkbox
     if((p->check)->GetValue()){
@@ -1471,7 +1471,7 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
 
 
 
-void MyFrame::OnPressReduce(wxCommandEvent& event){
+void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
     sight->print(String("body entered via GUI"), String(""), s);
@@ -1486,7 +1486,7 @@ void MyFrame::OnPressReduce(wxCommandEvent& event){
 
 
 //constructor of a BodyField object, based on the parent frame frame
-BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
+BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
 
     unsigned int i;
     parent_frame = frame;
@@ -1618,7 +1618,7 @@ void StringField::set(void){
 
 
 //constructor of a LimbField object, based on the parent frame frame
-LimbField::LimbField(MyFrame* frame, Limb* p){
+LimbField::LimbField(SightFrame* frame, Limb* p){
 
     parent_frame = frame;
     //I link the internal pointers p the respective Limb object
@@ -1652,7 +1652,7 @@ LimbField::LimbField(MyFrame* frame, Limb* p){
 
 
 //constructor of a CheckField object, based on the parent frame frame
-CheckField::CheckField(MyFrame* frame, Answer* p){
+CheckField::CheckField(SightFrame* frame, Answer* p){
 
     parent_frame = frame;
     //I link the internal pointers p and c to the respective Answer object
@@ -1674,7 +1674,7 @@ CheckField::CheckField(MyFrame* frame, Answer* p){
 
 
 //constructor of an AngleField object, based on the parent frame frame
-AngleField::AngleField(MyFrame* frame, Angle* p){
+AngleField::AngleField(SightFrame* frame, Angle* p){
 
     unsigned int i;
     parent_frame = frame;
@@ -1718,7 +1718,7 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
 }
 
 //constructor of a LengthField object, based on the parent frame frame
-LengthField::LengthField(MyFrame* frame, Length* p){
+LengthField::LengthField(SightFrame* frame, Length* p){
 
     parent_frame = frame;
     length = p;
@@ -1748,7 +1748,7 @@ LengthField::LengthField(MyFrame* frame, Length* p){
 
 
 //constructor of a StringField object, based on the parent frame frame
-StringField::StringField(MyFrame* frame, String* p){
+StringField::StringField(SightFrame* frame, String* p){
 
     parent_frame = frame;
     string = p;
@@ -1788,7 +1788,7 @@ bool ChronoField::is_ok(void){
 }
 
 //constructor of a DateField object, based on the parent frame frame
-DateField::DateField(MyFrame* frame, Date* p){
+DateField::DateField(SightFrame* frame, Date* p){
     
     unsigned int i;
     parent_frame = frame;
@@ -1850,7 +1850,7 @@ DateField::DateField(MyFrame* frame, Date* p){
 }
 
 //constructor of a ChronoField object, based on the parent frame frame
-ChronoField::ChronoField(MyFrame* frame, Chrono* p){
+ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     
     unsigned int i;
     parent_frame = frame;

@@ -106,15 +106,14 @@ public:
     //this points to a Limn object, which contains the data written in the GUI field of this
     Limb* limb;
     wxBoxSizer *sizer_h, *sizer_v;
-    
+    bool ok;
+
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
 
     LimbField(MyFrame*, Limb*);
-
-    
+    void set(void);
     template<class T> void InsertIn(T*);
-    bool ok;
     bool is_ok(void);
     
     
@@ -135,12 +134,12 @@ class AngleField{
     wxStaticText* text_deg, *text_min;
     wxBoxSizer *sizer_h, *sizer_v;
     Angle* angle;
-    
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool deg_ok, min_ok;
    
     
     AngleField(MyFrame*, Angle*);
+    bool set(void);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -158,12 +157,64 @@ class LengthField{
     wxStaticText* text;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
-    
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool ok;
-   
     
     LengthField(MyFrame*, Length*);
+    void set(void);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+
+
+class DateField{
+    
+    public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    wxArrayString days, months;
+    //year, month and day boxes
+    wxTextCtrl *year;
+    wxComboBox *month, *day;
+    //texts
+    wxStaticText* text_hyphen_1, *text_hyphen_2;
+    wxBoxSizer *sizer_h, *sizer_v;
+    //this points to a Date object, which contains the date written in the GUI fields of this
+    Date* date;
+    //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
+    bool year_ok, month_ok, day_ok;
+    
+    DateField(MyFrame*, Date*);
+    void set(void);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+
+class ChronoField{
+    
+    public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    wxArrayString hours, minutes;
+    //hour and minute  boxes
+    wxComboBox *hour, *minute;
+    //second text control
+    wxTextCtrl *second;
+    //texts
+    wxStaticText* text_colon_1, *text_colon_2;
+    wxBoxSizer *sizer_h, *sizer_v;
+    //this points to a Date object, which contains the date written in the GUI fields of this
+    Chrono* chrono;
+    //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
+    bool hour_ok, minute_ok, second_ok;
+    
+    ChronoField(MyFrame*, Chrono*);
+    void set(void);
+    void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -313,12 +364,6 @@ struct PrintErrorMessage{
 };
 
 
-
-
-
-
-
-
 class MyFrame: public wxFrame{
     
 public:
@@ -379,59 +424,6 @@ public:
     wxString CurrentDocPath;
     
     wxDECLARE_EVENT_TABLE();
-    
-};
-
-
-
-class DateField{
-    
-    public:
-    //the parent frame to which this object is attached
-    MyFrame* parent_frame;
-    wxArrayString days, months;
-    //year, month and day boxes
-    wxTextCtrl *year;
-    wxComboBox *month, *day;
-    //texts
-    wxStaticText* text_hyphen_1, *text_hyphen_2;
-    wxBoxSizer *sizer_h, *sizer_v;
-    //this points to a Date object, which contains the date written in the GUI fields of this
-    Date* date;
-    
-    //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
-    bool year_ok, month_ok, day_ok;
-    
-    DateField(MyFrame*, Date*);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
-    
-};
-
-
-class ChronoField{
-    
-    public:
-    //the parent frame to which this object is attached
-    MyFrame* parent_frame;
-    wxArrayString hours, minutes;
-    //hour and minute  boxes
-    wxComboBox *hour, *minute;
-    //second text control
-    wxTextCtrl *second;
-    //texts
-    wxStaticText* text_colon_1, *text_colon_2;
-    wxBoxSizer *sizer_h, *sizer_v;
-    //this points to a Date object, which contains the date written in the GUI fields of this
-    Chrono* chrono;
-    
-    //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
-    bool hour_ok, minute_ok, second_ok;
-    
-    ChronoField(MyFrame*, Chrono*);
-    void Enable(bool);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
     
 };
 

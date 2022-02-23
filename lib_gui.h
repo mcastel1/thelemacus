@@ -25,6 +25,7 @@ struct CheckHour;
 struct CheckMinute;
 struct CheckSecond;
 struct TabulateDays;
+struct PrintErrorMessage;
 
 
 //this function adjusts the width of a wxComboBox according to its largest entry
@@ -299,6 +300,25 @@ struct TabulateDays{
     
 };
 
+//this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control
+struct PrintErrorMessage{
+    
+    MyFrame* f;
+    wxControl* control;
+    String title, message;
+    
+    void operator()(void);
+    
+    
+};
+
+
+
+
+
+
+
+
 class MyFrame: public wxFrame{
     
 public:
@@ -325,6 +345,7 @@ public:
     CheckSecond checksecond;
     CheckStopWatch checkstopwatch;
     TabulateDays tabulatedays;
+    PrintErrorMessage printerrormessage;
     
     BodyField* body;
     LimbField* limb;
@@ -352,7 +373,7 @@ public:
     void OnCheckArtificialHorizon(wxCommandEvent& event);
 //    void OnSelectBody(wxFocusEvent& event);
 //    void OnCheckStopwatch(wxCommandEvent& event);
-    void PrintErrorMessage(wxControl*, String);
+//    void PrintErrorMessage(wxControl*, String);
     
     // The Path to the file we have open
     wxString CurrentDocPath;
@@ -451,13 +472,11 @@ void CheckBody::operator()(wxFocusEvent &event){
             
         }else{
             
-            //I am about to prompt a temporary dialog window, thus I set f->idling to true
-            f->CallAfter(&MyFrame::SetIdling, true);
-            
-            f->CallAfter(&MyFrame::PrintErrorMessage, p->name, String("Body not found in catalog!\nBody must be in catalog."));
-            
-            //The temporary dialog window has been closed, thus I set f->idling to false
-            f->CallAfter(&MyFrame::SetIdling, false);
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->name);
+            ((f->printerrormessage).title) = String("Body not found in catalog!");
+            ((f->printerrormessage).message) = String("Body must be in catalog.");
+            f->CallAfter((f->printerrormessage));
             
             (p->ok) = false;
             
@@ -500,13 +519,11 @@ void CheckLimb::operator()(wxFocusEvent &event){
         
     }else{
         
-        //I am about to prompt a temporary dialog window, thus I set f->idling to true
-        f->CallAfter(&MyFrame::SetIdling, true);
-
-        f->CallAfter(&MyFrame::PrintErrorMessage, p->name, String("Limb not valid!\nLimb must be upper, lower or center."));
-      
-        //The temporary dialog window has been closed, thus I set f->idling to false
-        f->CallAfter(&MyFrame::SetIdling, false);
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->name);
+        ((f->printerrormessage).title) = String("Limb not valid!");
+        ((f->printerrormessage).message) = String("Limb must be upper, lower or center.");
+        f->CallAfter((f->printerrormessage));
         
         (p->ok) = false;
         
@@ -527,7 +544,14 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
     
     if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
         
-        f->CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+//        f->CallAfter(&MyFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->deg);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
+        f->CallAfter((f->printerrormessage));
+    
         (p->deg_ok) = false;
         
     }else{
@@ -558,7 +582,15 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
     MyFrame* f = (p->parent_frame);
     
     if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        f->CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+        
+//        f->CallAfter(&MyFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->min);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
+        f->CallAfter((f->printerrormessage));
+
         (p->min_ok) = false;
         
     }else{
@@ -588,7 +620,15 @@ void CheckLength::operator()(wxFocusEvent &event){
     MyFrame* f = (p->parent_frame);
     
     if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
-        f->CallAfter(&MyFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
+        
+//        f->CallAfter(&MyFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->value);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Lengths must be floating-point numbers >= 0 m");
+        f->CallAfter((f->printerrormessage));
+        
         (p->ok) = false;
         
     }else{
@@ -610,6 +650,23 @@ void CheckLength::operator()(wxFocusEvent &event){
     
 }
 
+void PrintErrorMessage::operator()(void){
+    
+    //I may be about to prompt a temporary dialog window, thus I set f->idling to true
+    f->SetIdling(true);
+    
+    if((control->GetBackgroundColour()) != *wxRED){
+        
+        wxMessageBox(message.value, title.value);
+        control->SetFocus();
+        control->SetBackgroundColour(*wxRED);
+     
+    }
+    
+    //The temporary dialog window may have been closed, thus I set f->idling to false
+    f->SetIdling(false);
+
+}
 
 class MyApp: public wxApp{
 public:
@@ -683,8 +740,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     double min;
     bool check = true;
     
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
+    
+    idling = false;
+    (printerrormessage.f) = this;
     
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));
@@ -979,7 +1040,15 @@ void CheckHour::operator()(wxFocusEvent &event){
 
     if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
         
-        f->CallAfter(&MyFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+//        f->CallAfter(&MyFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->hour);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+        f->CallAfter((f->printerrormessage));
+        
+        
         (p->hour_ok) = false;
         
     }else{
@@ -1003,7 +1072,14 @@ void CheckMinute::operator()(wxFocusEvent &event){
 
     if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
         
-        f->CallAfter(&MyFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+//        f->CallAfter(&MyFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->minute);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
+        f->CallAfter((f->printerrormessage));
+        
         (p->minute_ok) = false;
         
     }else{
@@ -1028,7 +1104,16 @@ void CheckSecond::operator()(wxFocusEvent &event){
 
     
     if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        f->CallAfter(&MyFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+        
+        
+//        f->CallAfter(&MyFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->second);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
+        f->CallAfter((f->printerrormessage));
+        
         (p->second_ok) = false;
         
     }else{
@@ -1057,7 +1142,14 @@ void CheckYear::operator()(wxFocusEvent &event){
     
     if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
         
-        f->CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
+//        f->CallAfter(&MyFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->year);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Year must be an unsigned integer");
+        f->CallAfter((f->printerrormessage));
+        
         (p->year_ok) = false;
         (p->day)->Enable(false);
 
@@ -1088,7 +1180,13 @@ void CheckMonth::operator()(wxFocusEvent &event){
 
     if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
         
-        f->CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+//        f->CallAfter(&MyFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+        
+        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        ((f->printerrormessage).control) = (p->month);
+        ((f->printerrormessage).title) = String("Entered value is not valid!");
+        ((f->printerrormessage).message) = String("Month must be an unsigned integer >= 1 and <= 12");
+        f->CallAfter((f->printerrormessage));
 
         (p->month_ok) = false;
         (p->day)->Enable(false);
@@ -1145,7 +1243,14 @@ void CheckDay::operator()(wxFocusEvent &event){
             
         }else{
             
-            f->CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+//            f->CallAfter(&MyFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->day);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Day must be an unsigned integer comprised between the days of the relative month");
+            f->CallAfter((f->printerrormessage));
+            
             (p->day)->Enable(true);
             (p->day_ok) = false;
             
@@ -1166,21 +1271,6 @@ void CheckDay::operator()(wxFocusEvent &event){
 
 
 
-
-
-
-void MyFrame::PrintErrorMessage(wxControl* parent, String message){
-    
-    if((parent->GetBackgroundColour()) != *wxRED){
-        
-        wxMessageBox(message.value);
-        parent->SetFocus();
-        parent->SetBackgroundColour(*wxRED);
-     
-    }
-    
-    
-}
 
 
 
@@ -1416,7 +1506,6 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
 //constructor of a LengthField object, based on the parent frame frame
 LengthField::LengthField(MyFrame* frame, Length* p){
 
-    unsigned int i;
     parent_frame = frame;
     length = p;
     

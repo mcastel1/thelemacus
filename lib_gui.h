@@ -476,10 +476,14 @@ void CheckBody::operator()(wxFocusEvent &event){
 
 void CheckLimb::operator()(wxFocusEvent &event){
     
+    MyFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+  
     
     bool check;
     String s;
-    MyFrame* f = (p->parent_frame);
 
     
     s = String(((p->name)->GetValue().ToStdString()));
@@ -496,7 +500,14 @@ void CheckLimb::operator()(wxFocusEvent &event){
         
     }else{
         
+        //I am about to prompt a temporary dialog window, thus I set f->idling to true
+        f->CallAfter(&MyFrame::SetIdling, true);
+
         f->CallAfter(&MyFrame::PrintErrorMessage, p->name, String("Limb not valid!\nLimb must be upper, lower or center."));
+      
+        //The temporary dialog window has been closed, thus I set f->idling to false
+        f->CallAfter(&MyFrame::SetIdling, false);
+        
         (p->ok) = false;
         
     }
@@ -504,6 +515,8 @@ void CheckLimb::operator()(wxFocusEvent &event){
     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
     
     event.Skip(true);
+        
+    }
     
 }
 

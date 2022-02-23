@@ -1,9 +1,6 @@
-//
-//  lib_h.h
-//  
-//
-//  Created by MacBook Pro on 16/02/2022.
-//
+//this string defines the width of GUI fields hosting floating-point numbers
+#define sample_width_floating_point_field "0.000000000"
+
 class BodyField;
 class LimbField;
 class CheckField;
@@ -1663,7 +1660,7 @@ AngleField::AngleField(MyFrame* frame, Angle* p){
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS("0.00000"))));
+    min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
     min->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcminute);
 
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1695,7 +1692,7 @@ LengthField::LengthField(MyFrame* frame, Length* p){
 
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS("0.00000"))));
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklength);
 
@@ -1787,11 +1784,11 @@ DateField::DateField(MyFrame* frame, Date* p){
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(year, 0, wxALIGN_LEFT);
+    sizer_h->Add(year, 0, wxALIGN_CENTER);
     sizer_h->Add(text_hyphen_1, wxALIGN_CENTER);
-    sizer_h->Add(month, 0, wxALIGN_LEFT);
+    sizer_h->Add(month, 0, wxALIGN_CENTER);
     sizer_h->Add(text_hyphen_2, wxALIGN_CENTER);
-    sizer_h->Add(day, 0, wxALIGN_LEFT);
+    sizer_h->Add(day, 0, wxALIGN_CENTER);
 
 }
 
@@ -1828,7 +1825,7 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
 
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
-    second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS("0.00000"))));
+    second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
     second->Bind(wxEVT_KILL_FOCUS, (parent_frame->checksecond));
     
     
@@ -1845,11 +1842,11 @@ ChronoField::ChronoField(MyFrame* frame, Chrono* p){
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(hour, 0, wxALIGN_LEFT);
+    sizer_h->Add(hour, 0, wxALIGN_CENTER);
     sizer_h->Add(text_colon_1, wxALIGN_CENTER);
-    sizer_h->Add(minute, 0, wxALIGN_LEFT);
+    sizer_h->Add(minute, 0, wxALIGN_CENTER);
     sizer_h->Add(text_colon_2, wxALIGN_CENTER);
-    sizer_h->Add(second, 0, wxALIGN_LEFT);
+    sizer_h->Add(second, 0, wxALIGN_CENTER);
 
 }
 

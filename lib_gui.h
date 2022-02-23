@@ -1,5 +1,6 @@
 //this string defines the width of GUI fields hosting floating-point numbers
 #define sample_width_floating_point_field "0.000000000"
+#define sample_width_string_field "Lorem ipsum dolor sit amet. Et repellat optio nam iste voluptatum in magnam?"
 
 class BodyField;
 class LimbField;
@@ -8,6 +9,7 @@ class AngleField;
 class LengthField;
 class DateField;
 class ChronoField;
+class StringField;
 class MyApp;
 class MyFrame;
 struct CheckArtificialHorizon;
@@ -163,6 +165,24 @@ class LengthField{
     void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
+    
+};
+
+//class for graphical object: a field to enter a String, composed of a box
+class StringField{
+        
+    public:
+    //the parent frame to which this object is attached
+    MyFrame* parent_frame;
+    //label box
+    wxTextCtrl *value;
+    wxBoxSizer *sizer_h, *sizer_v;
+    //non-GUI object related to this
+    String* string;
+     
+    StringField(MyFrame*, String*);
+    void set(void);
+    template<class T> void InsertIn(T*);
     
 };
 
@@ -398,6 +418,7 @@ public:
     LengthField* height_of_eye;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
+    StringField *label;
     
     wxGridSizer *grid_sizer;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
@@ -795,7 +816,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetMenuBar( menuBar );
     
     
-    grid_sizer = new wxGridSizer(10, 2, 0, 0);
+    grid_sizer = new wxGridSizer(11, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
@@ -888,6 +909,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
 
+    //label
+    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    label = new StringField(this, &(sight->label));
     
 
     //buttons
@@ -928,9 +952,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     grid_sizer->Add(text_stopwatch_reading);
     stopwatch_reading->InsertIn<wxGridSizer>(grid_sizer);
 
-    
     grid_sizer->Add(text_TAI_minus_UTC);
     TAI_minus_UTC->InsertIn<wxGridSizer>(grid_sizer);
+    
+    grid_sizer->Add(text_label);
+    label->InsertIn<wxGridSizer>(grid_sizer);
 
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
@@ -1000,6 +1026,7 @@ void MyFrame::set(void){
    }
     
     TAI_minus_UTC->set();
+    label->set();
     
 }
 
@@ -1581,6 +1608,14 @@ void ChronoField::set(void){
     
 }
 
+//sets the value in the GUI object value equal to the value in the non-GUI String object string
+void StringField::set(void){
+    
+    value->SetValue(wxString(string->value));
+    
+}
+
+
 
 //constructor of a LimbField object, based on the parent frame frame
 LimbField::LimbField(MyFrame* frame, Limb* p){
@@ -1710,6 +1745,28 @@ LengthField::LengthField(MyFrame* frame, Length* p){
     sizer_h->Add(text);
     
 }
+
+
+//constructor of a StringField object, based on the parent frame frame
+StringField::StringField(MyFrame* frame, String* p){
+
+    parent_frame = frame;
+    string = p;
+    
+    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
+    value->SetValue("");
+//    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklength);
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(value, 0, wxALIGN_CENTER);
+    
+}
+
+
 
 
 bool AngleField::is_ok(void){
@@ -1917,6 +1974,12 @@ template<class T> void LengthField::InsertIn(T* host){
 
 
 template<class T> void DateField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}
+
+template<class T> void StringField::InsertIn(T* host){
     
     host->Add(sizer_v);
     

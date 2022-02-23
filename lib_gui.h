@@ -858,12 +858,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     (sight->master_clock_date_and_hour).date.set_current(prefix);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
+    master_clock_date->set();
     
     //master-clock hour
     (sight->master_clock_date_and_hour).chrono.set_current(prefix);
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
-    
+    master_clock_chrono->set();
+
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));

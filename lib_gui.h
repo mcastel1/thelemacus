@@ -1162,6 +1162,8 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     //SetSizerAndFit(sizer_v);
     //Maximize();
     
+    Centre();
+    
     
 }
 

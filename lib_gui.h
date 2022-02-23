@@ -13,6 +13,7 @@ class StringField;
 class MyApp;
 class MessageFrame;
 class SightFrame;
+class ListFrame;
 
 struct CheckArtificialHorizon;
 struct CheckStopWatch;
@@ -405,7 +406,7 @@ struct PrintErrorMessage{
 };
 
 
-
+//this is a wxFrame designed to show a message to the GUI user
 class MessageFrame: public wxFrame{
     
 public:
@@ -416,6 +417,20 @@ public:
     wxGridSizer* grid_sizer;
     wxButton* button_ok;
     wxStaticBitmap* image;
+    
+    void OnPressOk(wxCommandEvent&);
+};
+
+//this is a wxFrame designed to contain the list of sights, routes, etc...
+class ListFrame: public wxFrame{
+    
+public:
+    ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
+
+    wxListBox* listbox;
+    wxPanel *panel;
+    wxButton* button_ok;
+    wxSizer* sizer_h, *sizer_v;
     
     void OnPressOk(wxCommandEvent&);
 };
@@ -1166,6 +1181,31 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     
     
 }
+
+ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+    
+    
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    
+    listbox->Append(wxString("Croissant"));
+    listbox->Append(wxString("Croissant"));
+
+    //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    //    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    
+    
+    //buttons
+    //    button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+
+    
+    
+    
+    
+}
+
 
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
 void SightFrame::set(void){

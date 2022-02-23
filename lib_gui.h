@@ -86,11 +86,11 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
 
-    BodyField(MyFrame*, Body*, Catalog*);
-
-    
-    template<class T> void InsertIn(T*);
     bool ok;
+
+    BodyField(MyFrame*, Body*, Catalog*);
+    void set(void);
+    template<class T> void InsertIn(T*);
     bool is_ok(void);
     
     
@@ -1455,6 +1455,14 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
      
+}
+
+
+//sets the value in the GUI object name equal to the value in the non-GUI Body object body
+void BodyField::set(void){
+    
+    name->SetValue((body->name).value);
+    
 }
 
 //constructor of a LimbField object, based on the parent frame frame

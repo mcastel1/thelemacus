@@ -1133,7 +1133,7 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
 
     
     grid_sizer->Add(text, 0, wxALIGN_CENTER);
-    grid_sizer->Add(image, 0, 0, wxALIGN_CENTER);
+    grid_sizer->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
     grid_sizer->Add(button_ok, 0, wxALIGN_CENTER);
     
   

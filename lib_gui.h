@@ -1462,6 +1462,7 @@ BodyField::BodyField(MyFrame* frame, Body* p, Catalog* c){
 void BodyField::set(void){
     
     name->SetValue((body->name).value);
+    ok = true;
     
 }
 

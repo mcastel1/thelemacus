@@ -407,12 +407,13 @@ struct PrintErrorMessage{
 class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
+    MessageFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
     
     wxPanel *panel;
     
     
     wxBoxSizer *sizer;
+    
     
     wxButton* button_ok;
         
@@ -795,23 +796,26 @@ void CheckLength::operator()(wxFocusEvent &event){
 
 void PrintErrorMessage::operator()(void){
     
-    wxMessageDialog* dialog;
+    MessageFrame* message_frame;
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);
     
     if((control->GetBackgroundColour()) != *wxRED){
         
-//        wxMessageBox(message.value, title.value);
-
+        //        wxMessageBox(message.value, title.value);
         
-//        wxIconLocation dlgIconLoc = wxIconLocation("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample.ico");
-//        const wxIcon dlgIcon = wxIcon(dlgIconLoc);
-
-        dialog = new wxMessageDialog(f, wxString(message.value), wxString(title.value));
-//        dialog->SetIcon(dlgIcon);
-        dialog->ShowModal();
-
+        
+        //        wxIconLocation dlgIconLoc = wxIconLocation("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample.ico");
+        //        const wxIcon dlgIcon = wxIcon(dlgIconLoc);
+        
+        //        dialog = new wxMessageDialog(f, wxString(message.value), wxString(title.value));
+        //        dialog->SetIcon(dlgIcon);
+        //        dialog->ShowModal();
+        
+        message_frame = new MessageFrame(title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame ->Show(true);
+        
         control->SetFocus();
         control->SetBackgroundColour(*wxRED);
      
@@ -1100,18 +1104,14 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 }
 
 
-MessageFrame::MessageFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
-    
-    
+MessageFrame::MessageFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
 
     sizer = new wxBoxSizer(wxVERTICAL);
     
-    wxStaticText* text = new wxStaticText(panel, wxID_ANY, wxT("Text!"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
-    
+    wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     //buttons
     button_ok = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -1119,7 +1119,10 @@ MessageFrame::MessageFrame(const wxString& title, const wxPoint& pos, const wxSi
     
     
     panel->SetSizer(sizer);
-    //Maximize(panel);
+  
+    sizer->Add(text, 0, wxALIGN_CENTER);
+    sizer->Add(button_ok, 0, wxALIGN_CENTER);
+  //Maximize(panel);
 
     
 //    CreateStatusBar();

@@ -512,6 +512,7 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void OnCheckArtificialHorizon(wxCommandEvent& event);
+    void TryToEnableReduce(void);
 //    void OnSelectBody(wxFocusEvent& event);
 //    void OnCheckStopwatch(wxCommandEvent& event);
 //    void PrintErrorMessage(wxControl*, String);
@@ -572,7 +573,7 @@ void CheckBody::operator()(wxFocusEvent &event){
         
         
         
-        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        f->TryToEnableReduce();
         
         event.Skip(true);
         
@@ -617,7 +618,7 @@ void CheckLimb::operator()(wxFocusEvent &event){
         
     }
 
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    f->TryToEnableReduce();
     
     event.Skip(true);
         
@@ -672,7 +673,7 @@ void CheckSign::operator()(wxFocusEvent &event){
             
         }
         
-        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        f->TryToEnableReduce();
         
         event.Skip(true);
         
@@ -703,7 +704,7 @@ void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
         //I write in the non-GUI object (p->string) the value entered in the GUI object (p->value)
         (*(p->string)) = String(((p->value)->GetValue().ToStdString()));
         
-        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        f->TryToEnableReduce();
         
         event.Skip(true);
         
@@ -722,7 +723,7 @@ void CheckLabel::operator()(wxFocusEvent &event){
         //I write in the non-GUI object (p->string) the value entered in the GUI object (p->value)
         (*(p->string)) = String(((p->value)->GetValue().ToStdString()));
         
-        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        f->TryToEnableReduce();
         
         event.Skip(true);
         
@@ -768,7 +769,7 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
         
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    f->TryToEnableReduce();
     
     event.Skip(true);
 
@@ -810,7 +811,7 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
         (p->min_ok) = true;
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    f->TryToEnableReduce();
  
     
     event.Skip(true);
@@ -851,7 +852,7 @@ void CheckLength::operator()(wxFocusEvent &event){
         
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    f->TryToEnableReduce();
  
     event.Skip(true);
         
@@ -1384,6 +1385,14 @@ void SightFrame::OnSaveAs(wxCommandEvent& event){
     
 }
 
+//this function checks whether all the fields in SightFrame are ok, and if they are, it enables the button_reduce
+void SightFrame::TryToEnableReduce(void){
+    
+    
+    button_reduce->Enable((body->is_ok()) && (limb->is_ok()) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->check)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+    
+}
+
 
 void SightFrame::OnSave(wxCommandEvent& event){
     
@@ -1444,7 +1453,7 @@ void CheckHour::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     f->TryToEnableReduce();
     
     event.Skip(true);
         
@@ -1480,7 +1489,7 @@ void CheckMinute::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     f->TryToEnableReduce();
     
     event.Skip(true);
         
@@ -1522,7 +1531,7 @@ void CheckSecond::operator()(wxFocusEvent &event){
     }
     
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     f->TryToEnableReduce();
     
     event.Skip(true);
         
@@ -1566,7 +1575,7 @@ void CheckYear::operator()(wxFocusEvent &event){
 
     }
     
-    (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+    f->TryToEnableReduce();
 
 
     event.Skip(true);
@@ -1609,7 +1618,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
 
     }
 
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     f->TryToEnableReduce();
     
     event.Skip(true);
         
@@ -1673,7 +1682,7 @@ void CheckDay::operator()(wxFocusEvent &event){
         
     }
     
-     (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+     f->TryToEnableReduce();
    
     event.Skip(true);
         

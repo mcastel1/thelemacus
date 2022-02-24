@@ -1789,16 +1789,16 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
     
-    sight->print(String("body entered via GUI"), String(""), s);
+    sight->print(String("body entered via GUI"), String(""), cout);
   //  (sight->body).print(String("body entered via GUI"), String(""), s);
 
 
-    (printerrormessage.control) = NULL;
-    (printerrormessage.title) = String("Here is the data which you entered:");
-    (printerrormessage.message) = String(s.str().c_str());
-
-
-    CallAfter(printerrormessage);
+//    (printerrormessage.control) = NULL;
+//    (printerrormessage.title) = String("Here is the data which you entered:");
+//    (printerrormessage.message) = String(s.str().c_str());
+//
+//
+//    CallAfter(printerrormessage);
 
     
     Close(TRUE);

@@ -1274,11 +1274,12 @@ void PlotFrame::OnAdd(wxCommandEvent& event){
 //        listbox->Append(string);
 //    }
   
-    //obtain width and height of the display, and create a wxRect with height and width half ot the height and width of the display
-    wxDisplay display;
-    wxRect rectangle = (display.GetClientArea());
-    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
-    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
+//    //obtain width and height of the display, and create a wxRect with height and width half ot the height and width of the display
+//    wxDisplay display;
+//    wxRect rectangle = (display.GetClientArea());
+//    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
+//    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
+
     SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
 

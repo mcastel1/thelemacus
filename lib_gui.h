@@ -459,8 +459,9 @@ public:
 class SightFrame: public wxFrame{
     
 public:
-    SightFrame(wxWindow* parent, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
+    SightFrame(PlotFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
+    PlotFrame* parent;
     Catalog* catalog;
     Sight* sight;
     wxPanel *panel;
@@ -683,7 +684,6 @@ void CheckSign::operator()(wxFocusEvent &event){
 
 void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
     
-    
     //if the label is empty, I replace it with the local time and date
     if(((p->value)->GetValue()).IsEmpty()){
         
@@ -696,6 +696,9 @@ void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
         p->set();
         
     }
+    
+    event.Skip(true);
+
     
 }
 
@@ -931,7 +934,9 @@ bool MyApp::OnInit(){
     
 }
 
-SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+    
+    parent = parent_input;
     
     //pointer to init.txt to read fixed sight data from in there
     File file_init;
@@ -1223,7 +1228,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
     
     //append the elements in plot->sight_list to listbox
     for(i=0; i<(plot->sight_list).size(); i++){
@@ -1248,6 +1253,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_grid->Add(button_delete);
 
     sizer_v->Add(sizer_grid, 0, wxALIGN_LEFT);
+    sizer_v->Add(listbox, wxEXPAND);
     sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM);
     
     panel->SetSizer(sizer_h);
@@ -1786,9 +1792,20 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
 //
 //
 //    CallAfter(printerrormessage);
+    
+    //add the sight (*sight) to the list of sights contained in the parent PlotFrame
+    (((this->parent)->plot)->sight_list).push_back(*sight);
+    
+    //append the label of (*sight) to the listbox in the parent PlotFrame
+    ((this->parent)->listbox)->Append(wxString((sight->label).value));
+
+
 
     
     Close(TRUE);
+
+    event.Skip(true);
+
     
 }
 

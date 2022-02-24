@@ -1071,6 +1071,7 @@ SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& p
 
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
+    TAI_minus_UTC->set();
 
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

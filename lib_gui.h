@@ -1284,6 +1284,9 @@ void PlotFrame::OnAdd(wxCommandEvent& event){
     SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
     
+    cout << "xxx" << ((sight_frame->sight)->label).value << "xx";
+
+    
     event.Skip(true);
 
 
@@ -1799,6 +1802,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
 //
 //
 //    CallAfter(printerrormessage);
+    
+    cout << "-----" << ((this->sight)->label).value << "----";
 
     
     Close(TRUE);

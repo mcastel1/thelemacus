@@ -54,7 +54,7 @@ using namespace std;
 #include "lib_gui.h"
 
 /*
- notes:
+ notes: set parents to constructors of all frames that you defined
  */
 
 

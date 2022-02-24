@@ -458,7 +458,7 @@ public:
 class SightFrame: public wxFrame{
     
 public:
-    SightFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
+    SightFrame(wxWindow* parent, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
     
     Catalog* catalog;
     Sight* sight;
@@ -944,23 +944,14 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
-    
-    //obtain width and height of the display, and create a wxRect with height and width half ot the height and width of the display
-    wxDisplay display;
-    wxRect rectangle = (display.GetClientArea());
-    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
-    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-    
-    SightFrame *sight_frame = new SightFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
     PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
-    sight_frame->Show(true);
     list_frame->Show(true);
 
     return true;
     
 }
 
-SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     //pointer to init.txt to read fixed sight data from in there
     File file_init;
@@ -1284,11 +1275,20 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 
 void PlotFrame::OnAdd(wxCommandEvent& event){
     
-    wxString string = wxGetTextFromUser(wxT("Enter namw of new item"));
-    
-    if(string.Len()>0){
-        listbox->Append(string);
-    }
+//    wxString string = wxGetTextFromUser(wxT("Enter namw of new item"));
+//
+//    if(string.Len()>0){
+//        listbox->Append(string);
+//    }
+  
+    //obtain width and height of the display, and create a wxRect with height and width half ot the height and width of the display
+    wxDisplay display;
+    wxRect rectangle = (display.GetClientArea());
+    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
+    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
+    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, rectangle.GetSize(), String(""));
+    sight_frame->Show(true);
+
     
 }
 

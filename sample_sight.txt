@@ -29,51 +29,6 @@
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = MP Saturn
-		Sight #3:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 36° 0.59999999999988062882039230316877'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2021-11-22
-				hour of master-clock date and hour of sight = 20:15:58
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
-		Sight #4:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 38° 20.699999999999931787897367030382'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2021-11-22
-				hour of master-clock date and hour of sight = 20:23:38
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Finestra UTC+2
-		Sight #5:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.12095032397405702795367687941 nm
-			limb = l
-			sextant altitude = 39° 35.900000000000176214598468504846'
-			index error = 0° 1.8999999999999996891375531049562'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2021-11-22
-				hour of master-clock date and hour of sight = 20:27:44
-			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Carteret at dawn
 	Routes in the plot:
 	Positions in the plot:
 		Position #1:

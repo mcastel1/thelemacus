@@ -421,7 +421,7 @@ struct PrintErrorMessage{
 class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
+    MessageFrame(wxWindow* parent, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
     
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v;
@@ -869,7 +869,7 @@ void PrintErrorMessage::operator()(void){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame(title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
            
             control->SetFocus();
@@ -879,20 +879,11 @@ void PrintErrorMessage::operator()(void){
         
     }else{
        
-        message_frame = new MessageFrame(title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
-    
-    //        wxMessageBox(message.value, title.value);
-    //        wxIconLocation dlgIconLoc = wxIconLocation("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample.ico");
-    //        const wxIcon dlgIcon = wxIcon(dlgIconLoc);
-    //        dialog = new wxMessageDialog(f, wxString(message.value), wxString(title.value));
-    //        dialog->SetIcon(dlgIcon);
-    //        dialog->ShowModal();
-    
-   
-    
+        
     //The temporary dialog window may have been closed, thus I set f->idling to false
     f->SetIdling(false);
 
@@ -1170,7 +1161,7 @@ SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& p
 }
 
 
-MessageFrame::MessageFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));

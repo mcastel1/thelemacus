@@ -1132,7 +1132,7 @@ SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& p
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);
     
     
-    panel->SetSizer(sizer);
+    //panel->SetSizer(sizer);
     Maximize(panel);
 
     CurrentDocPath = wxT("");

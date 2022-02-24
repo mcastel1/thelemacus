@@ -1283,6 +1283,9 @@ void PlotFrame::OnAdd(wxCommandEvent& event){
 
     SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
+    
+    event.Skip(true);
+
 
     
 }

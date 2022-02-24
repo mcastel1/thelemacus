@@ -1394,7 +1394,7 @@ void SightFrame::OnSaveAs(wxCommandEvent& event){
 void SightFrame::TryToEnableReduce(void){
     
     
-    button_reduce->Enable((body->is_ok()) && (limb->is_ok()) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->check)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+    button_reduce->Enable((body->is_ok()) && ((!(((limb->name)->IsEnabled()))) || (limb->is_ok())) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->check)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
 }
 

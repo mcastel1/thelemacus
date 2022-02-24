@@ -436,6 +436,7 @@ public:
 class PlotFrame: public wxFrame{
     
 public:
+    //this frame has no parent, because it is supposed to be the main frame of the appplication
     PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
 
     //this is a pointer to the non-GUI object Plot which is related to the GUI object this

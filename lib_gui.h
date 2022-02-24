@@ -1253,8 +1253,8 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_grid->Add(button_add);
     sizer_grid->Add(button_delete);
 
-    sizer_v->Add(listbox, wxEXPAND);
-    sizer_v->Add(sizer_grid, 0, wxALIGN_LEFT);
+    sizer_v->Add(listbox, wxEXPAND, wxALL, 5);
+    sizer_v->Add(sizer_grid, wxALIGN_LEFT, wxALL, 5);
     sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM);
     
     panel->SetSizer(sizer_h);

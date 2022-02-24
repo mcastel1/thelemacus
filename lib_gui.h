@@ -1009,6 +1009,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     (sight->index_error).to_deg_min(&deg, &min);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     index_error = new AngleField(this, &(sight->index_error));
+    index_error->set();
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1252,8 +1253,8 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_grid->Add(button_add);
     sizer_grid->Add(button_delete);
 
-    sizer_v->Add(sizer_grid, 0, wxALIGN_LEFT);
     sizer_v->Add(listbox, wxEXPAND);
+    sizer_v->Add(sizer_grid, 0, wxALIGN_LEFT);
     sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM);
     
     panel->SetSizer(sizer_h);

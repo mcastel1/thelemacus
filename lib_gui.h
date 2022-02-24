@@ -13,7 +13,7 @@ class StringField;
 class MyApp;
 class MessageFrame;
 class SightFrame;
-class ListFrame;
+class PlotFrame;
 
 struct CheckArtificialHorizon;
 struct CheckStopWatch;
@@ -433,10 +433,10 @@ public:
 };
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...
-class ListFrame: public wxFrame{
+class PlotFrame: public wxFrame{
     
 public:
-    ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
+    PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
 
     wxListBox* listbox;
     wxPanel *panel;
@@ -948,7 +948,7 @@ bool MyApp::OnInit(){
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
     
     SightFrame *sight_frame = new SightFrame( "Sight", wxDefaultPosition, rectangle.GetSize(), String(""));
-    ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
+    PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
     list_frame->Show(true);
 
@@ -1231,7 +1231,7 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
     
 }
 
-ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -1247,10 +1247,10 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //buttons
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    button_add->Bind(wxEVT_BUTTON, &ListFrame::OnAdd, this);
+    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
 
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    button_delete->Bind(wxEVT_BUTTON, &ListFrame::OnDelete, this);
+    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
     sizer_grid->Add(button_add);
     sizer_grid->Add(button_delete);
@@ -1262,7 +1262,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 
 }
 
-void ListFrame::OnAdd(wxCommandEvent& event){
+void PlotFrame::OnAdd(wxCommandEvent& event){
     
     wxString string = wxGetTextFromUser(wxT("Enter namw of new item"));
     
@@ -1273,7 +1273,7 @@ void ListFrame::OnAdd(wxCommandEvent& event){
 }
 
 
-void ListFrame::OnDelete(wxCommandEvent& event){
+void PlotFrame::OnDelete(wxCommandEvent& event){
     
     int i;
     

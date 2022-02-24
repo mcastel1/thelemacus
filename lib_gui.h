@@ -27,7 +27,8 @@ struct CheckDay;
 struct CheckHour;
 struct CheckMinute;
 struct CheckSecond;
-struct CheckString;
+struct CheckLabel;
+struct SetLabelToCurrentTime;
 struct TabulateDays;
 struct PrintErrorMessage;
 
@@ -291,7 +292,7 @@ struct CheckSign{
     
 };
 
-struct CheckString{
+struct CheckLabel{
     
     StringField* p;
     
@@ -299,6 +300,16 @@ struct CheckString{
     
     
 };
+
+struct SetLabelToCurrentTime{
+    
+    StringField* p;
+    
+    void operator()(wxCommandEvent&);
+    
+    
+};
+
 
 struct CheckArcDegree{
     
@@ -455,7 +466,8 @@ public:
     CheckBody checkbody;
     CheckLimb checklimb;
     CheckSign checksign;
-    CheckString checkstring;
+    CheckLabel checklabel;
+    SetLabelToCurrentTime setlabeltocurrenttime;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckLength checklength;
@@ -663,8 +675,39 @@ void CheckSign::operator()(wxFocusEvent &event){
     
 }
 
+void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is in idling mode
+    if(!(f->idling)){
+        
+        //if the label is empty, I replace it with the local time and date
+        if(((p->value)->GetValue()).IsEmpty()){
+            
+            Time time_temp;
+            
+            time_temp.set_current(String(""));
+            (*(p->string)) = String(time_temp.to_string(display_precision));
+            
+            p->set();
+            
+            
+        }
+        
+        //I write in the non-GUI object (p->string) the value entered in the GUI object (p->value)
+        (*(p->string)) = String(((p->value)->GetValue().ToStdString()));
+        
+        (f->button_reduce)->Enable(((f->body->is_ok())) && ((f->limb->is_ok())) && ((f->H_s)->is_ok()) && ((f->index_error)->is_ok()) && ((f->master_clock_date)->is_ok()) && ((f->master_clock_chrono)->is_ok()) && ((!(((f->stopwatch_check)->check)->GetValue())) || ((f->stopwatch_reading)->is_ok())) && ((f->TAI_minus_UTC)->is_ok()));
+        
+        event.Skip(true);
+        
+    }
+    
+}
 
-void CheckString::operator()(wxFocusEvent &event){
+
+void CheckLabel::operator()(wxFocusEvent &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -1049,6 +1092,8 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
+
     button_reduce->Enable(false);
     
     sizer_grid->Add(text_combo_body);
@@ -1718,8 +1763,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
     
-//    sight->print(String("body entered via GUI"), String(""), s);
-    (sight->body).print(String("body entered via GUI"), String(""), s);
+    sight->print(String("body entered via GUI"), String(""), s);
+  //  (sight->body).print(String("body entered via GUI"), String(""), s);
 
 
     (printerrormessage.control) = NULL;
@@ -2017,13 +2062,13 @@ StringField::StringField(SightFrame* frame, String* p){
     parent_frame = frame;
     string = p;
     
-    ((parent_frame->checkstring).p) = this;
-
+    ((parent_frame->checklabel).p) = this;
+    ((parent_frame->setlabeltocurrenttime).p) = this;
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");
-    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checkstring);
+    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklabel);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

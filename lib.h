@@ -1553,6 +1553,7 @@ public:
     double s, MJD;
     void enter(String, String);
     void print(String, String, ostream&);
+    bool set_current(String);
     bool read_from_file(String, File&, String);
     
     void to_MJD(void);
@@ -1604,7 +1605,7 @@ string Time::to_string(unsigned int precision){
     
     stringstream output;
     
-    output << date.to_string() << " " << chrono.to_string(precision);
+    output << date.to_string() << " " << chrono.to_string(precision) << " UTC";
     
     return (output.str().c_str());
     
@@ -6217,14 +6218,32 @@ void Date::print(String name, String prefix, ostream& ostr){
     
 };
 
+//this function sets (*this) to the current UTC date and time
+bool Time::set_current(String prefix){
+    
+    String new_prefix;
+    bool check;
+
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    check=true;
+    
+    check &= (date.set_current(new_prefix));
+    check &= (chrono.set_current(new_prefix));
+
+    return check;
+    
+}
+
 //this function sets (*this) to the current UTC date
 bool Date::set_current(String prefix){
     
+    String new_prefix;
     stringstream line_ins;
     string input;
     File file_utc_date;
     size_t pos;
-    String new_prefix;
     bool check;
  
     //append \t to prefix

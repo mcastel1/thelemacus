@@ -683,30 +683,17 @@ void CheckSign::operator()(wxFocusEvent &event){
 
 void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
     
-    SightFrame* f = (p->parent_frame);
     
-    //I proceed only if the progam is not is in idling mode
-    if(!(f->idling)){
+    //if the label is empty, I replace it with the local time and date
+    if(((p->value)->GetValue()).IsEmpty()){
         
-        //if the label is empty, I replace it with the local time and date
-        if(((p->value)->GetValue()).IsEmpty()){
-            
-            Time time_temp;
-            
-            time_temp.set_current(String(""));
-            (*(p->string)) = String(time_temp.to_string(display_precision));
-            
-            p->set();
-            
-            
-        }
+        Time time_temp;
         
-        //I write in the non-GUI object (p->string) the value entered in the GUI object (p->value)
-        (*(p->string)) = String(((p->value)->GetValue().ToStdString()));
+        time_temp.set_current(String(""));
+        //I write in the non-GUI object (p->string)
+        (*(p->string)) = String(time_temp.to_string(display_precision));
         
-        f->TryToEnableReduce();
-        
-        event.Skip(true);
+        p->set();
         
     }
     

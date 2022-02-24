@@ -1164,7 +1164,7 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
     
-    //
+    /*
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
@@ -1172,7 +1172,7 @@ SightFrame::SightFrame(const wxString& title, const wxPoint& pos, const wxSize& 
     sight->read_from_file(file_sample_sight, String(""));
     file_sample_sight.close(String(""));
     set();
-    //
+    */
 
     
     
@@ -1237,15 +1237,28 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
 
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
+    unsigned int i;
+    
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
-  
+    
+    //
+    //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
+    File file_sample_sight;
+    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
+    plot->read_from_file(file_sample_sight, String(""));
+    plot->print(true, String(""), cout);
+    //
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     
-    listbox->Append(wxString("Croissant"));
-    listbox->Append(wxString("Pain au chocolat"));
+    //append the elements in plot->sight_list to listbox
+    for(i=0; i<(plot->sight_list).size(); i++){
+        
+        listbox->Append(wxString(((plot->sight_list)[i]).label.value));
+
+    }
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

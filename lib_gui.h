@@ -1,6 +1,6 @@
 //this string defines the width of GUI fields hosting floating-point numbers
 #define sample_width_floating_point_field "0.000000000"
-#define sample_width_string_field "Lorem ipsum dolor sit amet. Et repellat optio nam iste voluptatum in magnam?"
+#define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
 
 class BodyField;
 class LimbField;
@@ -1130,8 +1130,8 @@ SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& p
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);
     
     
-//    panel->SetSizer(sizer);
-    //Maximize(panel);
+    panel->SetSizer(sizer);
+    Maximize(panel);
 
     CurrentDocPath = wxT("");
     
@@ -1278,7 +1278,7 @@ void PlotFrame::OnAdd(wxCommandEvent& event){
     wxRect rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, rectangle.GetSize(), String(""));
+    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
 
     

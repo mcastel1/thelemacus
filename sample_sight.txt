@@ -13,7 +13,7 @@
 				hour of master-clock date and hour of sight = 11:03:50
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
+			label = Moon 12
 		Sight #2:
 			body:
 				Type = moon
@@ -28,7 +28,7 @@
 				hour of master-clock date and hour of sight = 20:09:38
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
+			label = MP Saturn
 		Sight #3:
 			body:
 				Type = moon
@@ -58,7 +58,7 @@
 				hour of master-clock date and hour of sight = 20:23:38
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
+			label = Finestra UTC+2
 		Sight #5:
 			body:
 				Type = moon
@@ -73,7 +73,7 @@
 				hour of master-clock date and hour of sight = 20:27:44
 			use of stopwatch = n
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = MP
+			label = Carteret at dawn
 	Routes in the plot:
 	Positions in the plot:
 		Position #1:

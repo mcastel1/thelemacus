@@ -33,6 +33,7 @@ struct TabulateDays;
 struct PrintErrorMessage;
 
 
+
 //this function adjusts the width of a wxComboBox according to its largest entry
 void AdjustWidth(wxComboBox *control){
     
@@ -404,6 +405,10 @@ struct TabulateDays{
     
 };
 
+
+
+
+
 //this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control
 struct PrintErrorMessage{
     
@@ -451,6 +456,7 @@ public:
     
     void OnAdd(wxCommandEvent& event);
     void OnDelete(wxCommandEvent& event);
+    void AppendToListbox(wxListBox*, wxString);
 
 };
 
@@ -459,7 +465,7 @@ public:
 class SightFrame: public wxFrame{
     
 public:
-    SightFrame(wxWindow* parent, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
+    SightFrame(wxWindow* parent, Sight* sight_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix);
     
     Catalog* catalog;
     Sight* sight;
@@ -685,30 +691,25 @@ void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
     
     SightFrame* f = (p->parent_frame);
     
-    //I proceed only if the progam is not is in idling mode
-    if(!(f->idling)){
+    
+    //if the label is empty, I replace it with the local time and date
+    if(((p->value)->GetValue()).IsEmpty()){
         
-        //if the label is empty, I replace it with the local time and date
-        if(((p->value)->GetValue()).IsEmpty()){
-            
-            Time time_temp;
-            
-            time_temp.set_current(String(""));
-            (*(p->string)) = String(time_temp.to_string(display_precision));
-            
-            p->set();
-            
-            
-        }
+        Time time_temp;
         
-        //I write in the non-GUI object (p->string) the value entered in the GUI object (p->value)
-        (*(p->string)) = String(((p->value)->GetValue().ToStdString()));
+        time_temp.set_current(String(""));
+        (*(p->string)) = String(time_temp.to_string(display_precision));
         
-        f->TryToEnableReduce();
+        p->set();
         
-        event.Skip(true);
         
     }
+    
+    
+    f->TryToEnableReduce();
+    
+    event.Skip(true);
+    
     
 }
 
@@ -944,7 +945,7 @@ bool MyApp::OnInit(){
     
 }
 
-SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(wxWindow* parent, Sight* sight_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     //pointer to init.txt to read fixed sight data from in there
     File file_init;
@@ -966,8 +967,11 @@ SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& p
     wxMenu *menuFile = new wxMenu;
     catalog = new Catalog(String(path_file_catalog), String(""));
     
-    sight = new Sight();
-    
+    //the cause of the error is here
+//    sight = new Sight();
+    sight = sight_input;
+    //the cause of the error is here
+
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
 
     
@@ -1081,7 +1085,7 @@ SightFrame::SightFrame(wxWindow* parent, const wxString& title, const wxPoint& p
     //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
+//    button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
 
     button_reduce->Enable(false);
     
@@ -1227,6 +1231,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
     
+    
     //
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
@@ -1281,10 +1286,22 @@ void PlotFrame::OnAdd(wxCommandEvent& event){
 //    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
 //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
 
-    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
+    
+    //expand plot->sight list, by allocating space for one additional element
+    (plot->sight_list).resize(((plot->sight_list).size()+1));
+    
+    SightFrame *sight_frame = new SightFrame(this,
+                                             
+                                             &((plot->sight_list).back())
+                                             
+                                             ,"New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
     
-    cout << "xxx" << ((sight_frame->sight)->label).value << "xx";
+    cout << "xxx " << &((sight_frame->sight)->label) << " , " << ((sight_frame->sight)->label).value << " xxx";
+    
+    CallAfter(&PlotFrame::AppendToListbox, listbox, wxString(((sight_frame->sight)->label).value));
+    
+//    listbox->Append(wxString(((sight_frame->sight)->label).value));
 
     
     event.Skip(true);
@@ -1298,12 +1315,16 @@ void PlotFrame::OnDelete(wxCommandEvent& event){
     
     int i;
     
-    i = listbox->GetSelection();
     
-    if(i != -1){
-        listbox->Delete(i);
-    }
-    
+    cout << "yyy " << &((((plot->sight_list).back())).label) << " , " << ((((plot->sight_list).back())).label).value << " yyy";
+    listbox->Append(wxString(((((plot->sight_list).back())).label).value));
+//
+//    i = listbox->GetSelection();
+//    
+//    if(i != -1){
+//        listbox->Delete(i);
+//    }
+//    
 }
 
 
@@ -1700,7 +1721,16 @@ void CheckDay::operator()(wxFocusEvent &event){
 
 
 
+void PlotFrame::AppendToListbox(wxListBox* l, wxString s){
+    
+    
+    
 
+    
+    l->Append(s);
+    
+    
+}
 
 
 void TabulateDays::operator()(wxFocusEvent &event){
@@ -1803,10 +1833,27 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
 //
 //    CallAfter(printerrormessage);
     
-    cout << "-----" << ((this->sight)->label).value << "----";
+    
+    //if the label is empty, I replace it with the local time and date
+    if(((label->value)->GetValue()).IsEmpty()){
+        
+        Time time_temp;
+        
+        time_temp.set_current(String(""));
+        (*(label->string)) = String(time_temp.to_string(display_precision));
+                
+        
+    }
+    
+    
+    cout << "--- " << &((this->sight)->label) << ", " << ((this->sight)->label).value << " ---";
+
 
     
     Close(TRUE);
+    
+    event.Skip(true);
+
     
 }
 

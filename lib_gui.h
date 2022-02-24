@@ -438,6 +438,10 @@ class PlotFrame: public wxFrame{
 public:
     PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
 
+    //this is a pointer to the non-GUI object Plot which is related to the GUI object this
+    Plot* plot;
+    //this is a pointer to a Catalog object which will be used by plot
+    Catalog *catalog;
     wxListBox* listbox;
     wxPanel *panel;
     wxButton* button_add, * button_delete;
@@ -1233,6 +1237,9 @@ MessageFrame::MessageFrame(const wxString& title, const wxString& message, const
 
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
+    catalog = new Catalog(String(path_file_catalog), String(""));
+    plot = new Plot(catalog, String(""));
+  
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize);

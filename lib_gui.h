@@ -1241,7 +1241,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,100));
     
     //append the elements in plot->sight_list to listbox
     for(i=0; i<(plot->sight_list).size(); i++){
@@ -1266,6 +1266,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_grid->Add(button_delete);
 
     sizer_v->Add(sizer_grid, 0, wxALIGN_LEFT);
+    sizer_v->Add(listbox, wxEXPAND);
     sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM);
     
     panel->SetSizer(sizer_h);
@@ -1320,11 +1321,11 @@ void PlotFrame::OnDelete(wxCommandEvent& event){
     listbox->Append(wxString(((((plot->sight_list).back())).label).value));
 //
 //    i = listbox->GetSelection();
-//    
+//
 //    if(i != -1){
 //        listbox->Delete(i);
 //    }
-//    
+//
 }
 
 

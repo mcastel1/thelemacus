@@ -31,6 +31,7 @@ struct CheckLabel;
 struct SetLabelToCurrentTime;
 struct TabulateDays;
 struct PrintErrorMessage;
+struct OnSelectInListBox;
 
 
 //this function adjusts the width of a wxComboBox according to its largest entry
@@ -416,6 +417,15 @@ struct PrintErrorMessage{
     
 };
 
+struct OnSelectInListBox{
+    
+    PlotFrame* f;
+    
+    void operator()(wxCommandEvent &event);
+    
+    
+};
+
 
 //this is a wxFrame designed to show a message to the GUI user
 class MessageFrame: public wxFrame{
@@ -445,7 +455,7 @@ public:
     Catalog *catalog;
     wxListBox* listbox;
     wxPanel *panel;
-    wxButton* button_add, * button_delete;
+    wxButton* button_add, *button_modify, *button_delete;
     wxSizer* sizer_h, *sizer_v;
     wxGridSizer* sizer_grid;
     
@@ -718,6 +728,16 @@ void CheckLabel::operator()(wxFocusEvent &event){
         event.Skip(true);
         
     }
+    
+}
+
+
+void OnSelectInListBox::operator()(wxCommandEvent &event){
+       
+    cout <<"vetro";
+    (f->button_modify)->Enable(((f->listbox)->GetSelection()) != -1);
+        
+    event.Skip(true);
     
 }
 
@@ -1216,9 +1236,17 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i;
+    OnSelectInListBox onselectinlistbox;
+    
+    (onselectinlistbox.f) = this;
     
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    sizer_grid = new wxGridSizer(1, 3, 0, 0);
+
     
     //
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
@@ -1229,28 +1257,28 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
     
+    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
+    listbox->Bind(wxEVT_COMMAND_LISTBOX_SELECTED, onselectinlistbox);
     //append the elements in plot->sight_list to listbox
     for(i=0; i<(plot->sight_list).size(); i++){
-        
         listbox->Append(wxString(((plot->sight_list)[i]).label.value));
-
     }
     
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
-    sizer_grid = new wxGridSizer(1, 2, 0, 0);
-
     
     //buttons
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
 
+    button_modify = new wxButton(panel, wxID_ANY, "Modify", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
+    button_modify->Enable(false);
+    
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
     sizer_grid->Add(button_add);
+    sizer_grid->Add(button_modify);
     sizer_grid->Add(button_delete);
 
     sizer_v->Add(listbox, wxEXPAND, wxALL, 5);
@@ -1283,6 +1311,8 @@ void PlotFrame::OnAdd(wxCommandEvent& event){
 
     
 }
+
+
 
 
 void PlotFrame::OnDelete(wxCommandEvent& event){

@@ -507,9 +507,9 @@ public:
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField *label;
     
-    wxFlexGridSizer *sizer_grid_instrument, *sizer_grid_time;
+    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
-    wxStaticBoxSizer *sizer_box_instrument, *sizer_box_time;
+    wxStaticBoxSizer *sizer_box_measurement, *sizer_box_time;
     
     wxArrayString bodies, limbs;
     wxButton* button_reduce, *button_cancel;
@@ -996,8 +996,9 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     SetMenuBar( menuBar );
     
     
-    sizer_grid_instrument = new wxFlexGridSizer(5, 2, 0, 0);
-    sizer_grid_time = new wxFlexGridSizer(6, 2, 0, 0);
+    sizer_grid_measurement = new wxFlexGridSizer(6, 2, 0, 0);
+    sizer_grid_time = new wxFlexGridSizer(4, 2, 0, 0);
+    sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
@@ -1100,25 +1101,25 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
 
     button_reduce->Enable(false);
     
-    sizer_grid_instrument->Add(text_combo_body);
-    body->InsertIn<wxGridSizer>(sizer_grid_instrument);
-//    sizer_grid_instrument->Add(combo_body);
+    sizer_grid_measurement->Add(text_combo_body);
+    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+//    sizer_grid_measurement->Add(combo_body);
     
-    sizer_grid_instrument->Add(text_limb);
-    limb->InsertIn<wxGridSizer>(sizer_grid_instrument);
+    sizer_grid_measurement->Add(text_limb);
+    limb->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
-    sizer_grid_instrument->Add(text_H_s);
-    H_s->InsertIn<wxGridSizer>(sizer_grid_instrument);
+    sizer_grid_measurement->Add(text_H_s);
+    H_s->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
-    sizer_grid_instrument->Add(text_index_error);
+    sizer_grid_measurement->Add(text_index_error);
     index_error->InsertIn<wxBoxSizer>(box_sizer_3);
-    sizer_grid_instrument->Add(box_sizer_3);
+    sizer_grid_measurement->Add(box_sizer_3);
 
-    sizer_grid_instrument->Add(text_artificial_horizon_check);
-    artificial_horizon_check->InsertIn<wxGridSizer>(sizer_grid_instrument);
+    sizer_grid_measurement->Add(text_artificial_horizon_check);
+    artificial_horizon_check->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
-    sizer_grid_time->Add(text_height_of_eye);
-    height_of_eye->InsertIn<wxGridSizer>(sizer_grid_time);
+    sizer_grid_measurement->Add(text_height_of_eye);
+    height_of_eye->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
     sizer_grid_time->Add(text_date);
     master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
@@ -1127,36 +1128,38 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     sizer_grid_time->Add(box_sizer_4);
 
     sizer_grid_time->Add(text_stopwatch_check);
-    stopwatch_check->InsertIn<wxGridSizer>(sizer_grid_time);
+    stopwatch_check->InsertIn<wxFlexGridSizer>(sizer_grid_time);
     
     sizer_grid_time->Add(text_stopwatch_reading);
-    stopwatch_reading->InsertIn<wxGridSizer>(sizer_grid_time);
+    stopwatch_reading->InsertIn<wxFlexGridSizer>(sizer_grid_time);
 
     sizer_grid_time->Add(text_TAI_minus_UTC);
-    TAI_minus_UTC->InsertIn<wxGridSizer>(sizer_grid_time);
+    TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
     
-    sizer_grid_time->Add(text_label);
-    label->InsertIn<wxGridSizer>(sizer_grid_time);
-
+    sizer_grid_label->Add(text_label);
+    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
     
-    sizer_box_instrument = new wxStaticBoxSizer(wxVERTICAL, panel, "Instrument");
+    sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
     sizer_box_time = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
 
-    sizer_box_instrument->Add(sizer_grid_instrument);
+    sizer_box_measurement->Add(sizer_grid_measurement);
     sizer_box_time->Add(sizer_grid_time);
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Master-clock UTC date and hour of sight"
-    common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight")).GetWidth();
+    common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight   ")).GetWidth();
     text_combo_body->SetMinSize(wxSize(common_width,-1));
+    text_date->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    sizer->Add(sizer_box_instrument, 0, wxEXPAND);
-    sizer->Add(sizer_box_time, 0, wxEXPAND);
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);
+    //add the various elements to sizer, by inserting a border of 5 in all directions
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, 5);
+    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, 5);
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, 5);
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, 5);
     
     
     //panel->SetSizer(sizer);

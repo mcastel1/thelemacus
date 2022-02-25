@@ -1412,8 +1412,13 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         //set use of stopwatch
         listcontrol->SetItem(i, 7, wxString((((plot->sight_list)[i]).use_stopwatch.value)));
         
+        
         //set stopwatch reading
-        listcontrol->SetItem(i, 8, wxString((((plot->sight_list)[i]).stopwatch).to_string(display_precision)));
+        if((((plot->sight_list)[i]).use_stopwatch.value) == 'y'){
+            listcontrol->SetItem(i, 8, wxString((((plot->sight_list)[i]).stopwatch).to_string(display_precision)));
+        }else{
+            listcontrol->SetItem(i, 8, wxString(""));
+        }
 
         
     }

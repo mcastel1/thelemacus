@@ -1261,8 +1261,9 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i;
-    
     OnSelectInListBox onselectinlistbox;
+    wxListItem column, item;
+
     
     (onselectinlistbox.f) = this;
     
@@ -1295,54 +1296,68 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
     int n_columns = 6;
     
-    wxListItem col_body;
-    col_body.SetId(0);
-    col_body.SetText(wxT("Body"));
-    col_body.SetAlign(wxLIST_FORMAT_LEFT);
-    col_body.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(0, col_body);
+    column.SetId(0);
+    column.SetText(wxT("Body"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(0, column);
     
-    wxListItem col_limb;
-    col_limb.SetId(1);
-    col_limb.SetText(wxT(""));
-    col_limb.SetAlign(wxLIST_FORMAT_LEFT);
-    col_limb.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(1, col_limb);
+    column.SetId(1);
+    column.SetText(wxT(""));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(1, column);
     
-    wxListItem col_artificial_horizon;
-    col_artificial_horizon.SetId(2);
-    col_artificial_horizon.SetText(wxT("Artificial horizon"));
-    col_artificial_horizon.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    col_artificial_horizon.SetAlign(wxLIST_FORMAT_LEFT);
-    listcontrol->InsertColumn(2, col_artificial_horizon);
+    column.SetId(2);
+    column.SetText(wxT("Artificial horizon"));
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    listcontrol->InsertColumn(2, column);
  
- 
-    wxListItem col_height_of_eye;
-    col_height_of_eye.SetId(3);
-    col_height_of_eye.SetText(wxT("Height of eye"));
-    col_height_of_eye.SetAlign(wxLIST_FORMAT_LEFT);
-    col_height_of_eye.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(3, col_height_of_eye);
+    column.SetId(3);
+    column.SetText(wxT("Sextant altitude"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(3, column);
 
-    wxListItem col_sextant_altitude;
-    col_sextant_altitude.SetId(4);
-    col_sextant_altitude.SetText(wxT("Sextant altitude"));
-    col_sextant_altitude.SetAlign(wxLIST_FORMAT_LEFT);
-    col_sextant_altitude.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(4, col_sextant_altitude);
+    column.SetId(4);
+    column.SetText(wxT("Index error"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(4, column);
+    
+    column.SetId(5);
+    column.SetText(wxT("Height of eye"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(5, column);
+    
+    column.SetId(5);
+    column.SetText(wxT("Height of eye"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(5, column);
 
-    wxListItem col_index_error;
-    col_index_error.SetId(5);
-    col_index_error.SetText(wxT("Index error"));
-    col_index_error.SetAlign(wxLIST_FORMAT_LEFT);
-    col_index_error.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(5, col_index_error);
+    
+    /*    master_clock_date->set();
+     master_clock_chrono->set();
+     stopwatch_check->set();
+     
+     if(((stopwatch_check->check)->GetValue())){
+     stopwatch_reading->Enable(true);
+     stopwatch_reading->set();
+     }else{
+     stopwatch_reading->Enable(false);
+     }
+     
+     TAI_minus_UTC->set();
+     label->set();
+     */
 
     
     //
     for(i=0; i<((plot->sight_list).size()); i++){
         
-        wxListItem item;
         item.SetId(i);
         item.SetText(wxT(""));
         
@@ -1365,17 +1380,18 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         //set artificial horizon column
         listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
         
-        //set height of eye column
-        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 3, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
-        else{listcontrol->SetItem(i, 3, wxString(""));}
-
+      
         //set sextant altitude column
-        listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
+        listcontrol->SetItem(i, 3, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
         
         //set index error
-        listcontrol->SetItem(i, 5, wxString((((plot->sight_list)[i]).index_error).to_string(display_precision)));
+        listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).index_error).to_string(display_precision)));
 
-     
+        //set height of eye column
+        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
+        else{listcontrol->SetItem(i, 5, wxString(""));}
+
+        
     }
     
     

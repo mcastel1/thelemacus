@@ -507,7 +507,7 @@ public:
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField *label;
     
-    wxFlexGridSizer *sizer_grid;
+    wxFlexGridSizer *sizer_grid_instrument, *sizer_grid_time;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     
     wxArrayString bodies, limbs;
@@ -995,7 +995,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     SetMenuBar( menuBar );
     
     
-    sizer_grid = new wxFlexGridSizer(11, 2, 0, 0);
+    sizer_grid_instrument = new wxFlexGridSizer(5, 2, 0, 0);
+    sizer_grid_time = new wxFlexGridSizer(6, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
@@ -1098,50 +1099,57 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
 
     button_reduce->Enable(false);
     
-    sizer_grid->Add(text_combo_body);
-    body->InsertIn<wxGridSizer>(sizer_grid);
-//    sizer_grid->Add(combo_body);
+    sizer_grid_instrument->Add(text_combo_body);
+    body->InsertIn<wxGridSizer>(sizer_grid_instrument);
+//    sizer_grid_instrument->Add(combo_body);
     
-    sizer_grid->Add(text_limb);
-    limb->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_instrument->Add(text_limb);
+    limb->InsertIn<wxGridSizer>(sizer_grid_instrument);
     
-    sizer_grid->Add(text_H_s);
-    H_s->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_instrument->Add(text_H_s);
+    H_s->InsertIn<wxGridSizer>(sizer_grid_instrument);
     
-    sizer_grid->Add(text_index_error);
+    sizer_grid_instrument->Add(text_index_error);
     index_error->InsertIn<wxBoxSizer>(box_sizer_3);
-    sizer_grid->Add(box_sizer_3);
+    sizer_grid_instrument->Add(box_sizer_3);
 
-    sizer_grid->Add(text_artificial_horizon_check);
-    artificial_horizon_check->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_instrument->Add(text_artificial_horizon_check);
+    artificial_horizon_check->InsertIn<wxGridSizer>(sizer_grid_instrument);
     
-    sizer_grid->Add(text_height_of_eye);
-    height_of_eye->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_time->Add(text_height_of_eye);
+    height_of_eye->InsertIn<wxGridSizer>(sizer_grid_time);
     
-    sizer_grid->Add(text_date);
+    sizer_grid_time->Add(text_date);
     master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
     box_sizer_4->Add(text_space_1);
     master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
-    sizer_grid->Add(box_sizer_4);
+    sizer_grid_time->Add(box_sizer_4);
 
-    sizer_grid->Add(text_stopwatch_check);
-    stopwatch_check->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_time->Add(text_stopwatch_check);
+    stopwatch_check->InsertIn<wxGridSizer>(sizer_grid_time);
     
-    sizer_grid->Add(text_stopwatch_reading);
-    stopwatch_reading->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_time->Add(text_stopwatch_reading);
+    stopwatch_reading->InsertIn<wxGridSizer>(sizer_grid_time);
 
-    sizer_grid->Add(text_TAI_minus_UTC);
-    TAI_minus_UTC->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_time->Add(text_TAI_minus_UTC);
+    TAI_minus_UTC->InsertIn<wxGridSizer>(sizer_grid_time);
     
-    sizer_grid->Add(text_label);
-    label->InsertIn<wxGridSizer>(sizer_grid);
+    sizer_grid_time->Add(text_label);
+    label->InsertIn<wxGridSizer>(sizer_grid_time);
 
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
     
     //here '0' means that the size of sizer_grid cannot be changed in the vertical direction, and wxEXPAND implies that sizer_grid is expanded horizontally
-    sizer->Add(sizer_grid, 0, wxEXPAND);
+    wxStaticBoxSizer *sizer_box_instrument = new wxStaticBoxSizer(wxVERTICAL, panel, "Instrument");
+    wxStaticBoxSizer *sizer_box_time = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
+
+    sizer_box_instrument->Add(sizer_grid_instrument);
+    sizer_box_time->Add(sizer_grid_time);
+
+    sizer->Add(sizer_box_instrument, 0, wxEXPAND);
+    sizer->Add(sizer_box_time, 0, wxEXPAND);
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);
     
     

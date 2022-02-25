@@ -1293,7 +1293,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //
     //add columns to wxlistcontrol
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
-    int n_columns = 5;
+    int n_columns = 6;
     
     wxListItem col_body;
     col_body.SetId(0);
@@ -1331,6 +1331,13 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     col_sextant_altitude.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(4, col_sextant_altitude);
 
+    wxListItem col_index_error;
+    col_index_error.SetId(5);
+    col_index_error.SetText(wxT("Index error"));
+    col_index_error.SetAlign(wxLIST_FORMAT_LEFT);
+    col_index_error.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(5, col_index_error);
+
     
     //
     for(i=0; i<((plot->sight_list).size()); i++){
@@ -1365,6 +1372,9 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         //set sextant altitude column
         listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
         
+        //set index error
+        listcontrol->SetItem(i, 5, wxString((((plot->sight_list)[i]).index_error).to_string(display_precision)));
+
      
     }
     

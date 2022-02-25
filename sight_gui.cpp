@@ -57,6 +57,7 @@ using namespace std;
 
 /*
  notes: set parents to constructors of all frames that you defined
+- when you print out index error, print it with its sign rather than normalized
  */
 
 

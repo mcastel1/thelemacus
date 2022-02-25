@@ -858,7 +858,7 @@ void CheckLength::operator()(wxFocusEvent &event){
             (p->value)->SetBackgroundColour(*wxWHITE);
             
             (p->value)->GetValue().ToDouble(&length_temp);
-            (p->length)->set(String("height of eye"), length_temp, String(""));
+            (p->length)->set(String("height of eye"), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
             
             (p->ok) = true;
             
@@ -1993,9 +1993,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //    ((this->parent)->listbox)->Append(wxString((sight->label).value));
     
     sight->add_to_wxListCtrl(((this->parent)->listcontrol));
-//    
+//
 //    wxListItem item;
-//    
+//
 //    item.SetId(0);
 //    item.SetText(wxT(""));
 //

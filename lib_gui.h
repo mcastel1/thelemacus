@@ -459,7 +459,7 @@ public:
     wxButton* button_add, *button_modify, *button_delete;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons;
     
-    //    void OnAdd(wxCommandEvent& event);
+    void OnAdd(wxCommandEvent& event);
     //    void OnDelete(wxCommandEvent& event);
     
 };
@@ -1433,7 +1433,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     //buttons
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    //    //    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
+    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
     //
     button_modify = new wxButton(panel, wxID_ANY, "/", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     //    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
@@ -1462,16 +1462,14 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
 }
 
-//void PlotFrame::OnAdd(wxCommandEvent& event){
-//
-//    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
-//    sight_frame->Show(true);
-//
-//    event.Skip(true);
-//
-//
-//
-//}
+void PlotFrame::OnAdd(wxCommandEvent& event){
+
+    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
+    sight_frame->Show(true);
+
+    event.Skip(true);
+
+}
 
 
 

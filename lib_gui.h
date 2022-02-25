@@ -39,10 +39,10 @@ void AdjustWidth(wxComboBox *control){
     
     unsigned int i;
     int max_width, width, additional;
-
+    
     //this is the additional width occupied by the sqare with the arrow
     control->GetTextExtent(wxString("-----"), &additional, NULL);
-
+    
     for(max_width=0, i=0; i<(control->GetCount()); i++){
         
         control->GetTextExtent(control->GetString(i), &width, NULL);
@@ -69,7 +69,7 @@ public:
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* check;
-
+    
     CheckField(SightFrame*, Answer*);
     
     template<class T> void InsertIn(T*);
@@ -92,9 +92,9 @@ public:
     
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
-
+    
     bool ok;
-
+    
     BodyField(SightFrame*, Body*, Catalog*);
     void set(void);
     template<class T> void InsertIn(T*);
@@ -114,10 +114,10 @@ public:
     Limb* limb;
     wxBoxSizer *sizer_h, *sizer_v;
     bool ok;
-
+    
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
-
+    
     LimbField(SightFrame*, Limb*);
     void set(void);
     template<class T> void InsertIn(T*);
@@ -129,8 +129,8 @@ public:
 
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
 class AngleField{
-        
-    public:
+    
+public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     wxArrayString signs, degrees;
@@ -143,7 +143,7 @@ class AngleField{
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool sign_ok, deg_ok, min_ok;
-   
+    
     
     AngleField(SightFrame*, Angle*);
     void set(void);
@@ -154,8 +154,8 @@ class AngleField{
 
 //class for graphical object: a field to enter a length, composed of a box
 class LengthField{
-        
-    public:
+    
+public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     //degrees and minutes boxes
@@ -177,8 +177,8 @@ class LengthField{
 
 //class for graphical object: a field to enter a String, composed of a box
 class StringField{
-        
-    public:
+    
+public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     //label box
@@ -186,7 +186,7 @@ class StringField{
     wxBoxSizer *sizer_h, *sizer_v;
     //non-GUI object related to this
     String* string;
-     
+    
     StringField(SightFrame*, String*);
     void set(void);
     template<class T> void InsertIn(T*);
@@ -197,7 +197,7 @@ class StringField{
 
 class DateField{
     
-    public:
+public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     wxArrayString days, months;
@@ -222,7 +222,7 @@ class DateField{
 
 class ChronoField{
     
-    public:
+public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     wxArrayString hours, minutes;
@@ -448,20 +448,20 @@ class PlotFrame: public wxFrame{
 public:
     //this frame has no parent, because it is supposed to be the main frame of the appplication
     PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
-
+    
     //this is a pointer to the non-GUI object Plot which is related to the GUI object this
     Plot* plot;
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
-//    wxListBox* listbox;
+    //    wxListBox* listbox;
     wxListCtrl* listcontrol;
     wxPanel *panel;
     wxButton* button_add, *button_modify, *button_delete;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons;
     
-//    void OnAdd(wxCommandEvent& event);
-//    void OnDelete(wxCommandEvent& event);
-
+    //    void OnAdd(wxCommandEvent& event);
+    //    void OnDelete(wxCommandEvent& event);
+    
 };
 
 
@@ -525,9 +525,9 @@ public:
     void OnPressReduce(wxCommandEvent& event);
     void OnCheckArtificialHorizon(wxCommandEvent& event);
     void TryToEnableReduce(void);
-//    void OnSelectBody(wxFocusEvent& event);
-//    void OnCheckStopwatch(wxCommandEvent& event);
-//    void PrintErrorMessage(wxControl*, String);
+    //    void OnSelectBody(wxFocusEvent& event);
+    //    void OnCheckStopwatch(wxCommandEvent& event);
+    //    void PrintErrorMessage(wxControl*, String);
     
     // The Path to the file we have open
     wxString CurrentDocPath;
@@ -600,39 +600,39 @@ void CheckLimb::operator()(wxFocusEvent &event){
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
-  
-    
-    bool check;
-    String s;
-
-    
-    s = String(((p->name)->GetValue().ToStdString()));
-    //I check whether the name in the GUI field body matches one of the valid limb names
-    check = (s == String("upper")) || (s == String("lower")) || (s == String("center"));
-    
-    if(check){
         
-        //I set the char in ((p->limb)->value) to the first letter in the string (s.value)
-        ((p->limb)->value) = (s.value)[0];
         
-        (p->name)->SetBackgroundColour(*wxWHITE);
-        (p->ok) = true;
+        bool check;
+        String s;
         
-    }else{
         
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->name);
-        ((f->printerrormessage).title) = String("Limb not valid!");
-        ((f->printerrormessage).message) = String("Limb must be upper, lower or center.");
-        f->CallAfter((f->printerrormessage));
+        s = String(((p->name)->GetValue().ToStdString()));
+        //I check whether the name in the GUI field body matches one of the valid limb names
+        check = (s == String("upper")) || (s == String("lower")) || (s == String("center"));
         
-        (p->ok) = false;
+        if(check){
+            
+            //I set the char in ((p->limb)->value) to the first letter in the string (s.value)
+            ((p->limb)->value) = (s.value)[0];
+            
+            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->ok) = true;
+            
+        }else{
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->name);
+            ((f->printerrormessage).title) = String("Limb not valid!");
+            ((f->printerrormessage).message) = String("Limb must be upper, lower or center.");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->ok) = false;
+            
+        }
         
-    }
-
-    f->TryToEnableReduce();
-    
-    event.Skip(true);
+        f->TryToEnableReduce();
+        
+        event.Skip(true);
         
     }
     
@@ -709,7 +709,7 @@ void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
     }
     
     event.Skip(true);
-
+    
     
 }
 
@@ -751,39 +751,39 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-    if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
-        
-//        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
-        
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->deg);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
-        f->CallAfter((f->printerrormessage));
-    
-        (p->deg_ok) = false;
-        
-    }else{
-        
-        (p->deg)->SetBackgroundColour(*wxWHITE);
-        
-        if((p->min_ok)){
+        if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
             
-            double min_temp;
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
             
-            ((p->min)->GetValue()).ToDouble(&min_temp);
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->deg);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
+            f->CallAfter((f->printerrormessage));
             
-            (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+            (p->deg_ok) = false;
+            
+        }else{
+            
+            (p->deg)->SetBackgroundColour(*wxWHITE);
+            
+            if((p->min_ok)){
+                
+                double min_temp;
+                
+                ((p->min)->GetValue()).ToDouble(&min_temp);
+                
+                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+                
+            }
+            (p->deg_ok) = true;
             
         }
-        (p->deg_ok) = true;
         
-    }
-    
-    f->TryToEnableReduce();
-    
-    event.Skip(true);
-
+        f->TryToEnableReduce();
+        
+        event.Skip(true);
+        
     }
     
 }
@@ -795,37 +795,37 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-    if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-        
-//        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
-        
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->min);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
-        f->CallAfter((f->printerrormessage));
-
-        (p->min_ok) = false;
-        
-    }else{
-        (p->min)->SetBackgroundColour(*wxWHITE);
-        if((p->deg_ok)){
+        if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
             
-            double min_temp;
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
             
-            ((p->min)->GetValue()).ToDouble(&min_temp);
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->min);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
+            f->CallAfter((f->printerrormessage));
             
-            (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+            (p->min_ok) = false;
             
-            
+        }else{
+            (p->min)->SetBackgroundColour(*wxWHITE);
+            if((p->deg_ok)){
+                
+                double min_temp;
+                
+                ((p->min)->GetValue()).ToDouble(&min_temp);
+                
+                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+                
+                
+            }
+            (p->min_ok) = true;
         }
-        (p->min_ok) = true;
-    }
-    
-    f->TryToEnableReduce();
- 
-    
-    event.Skip(true);
+        
+        f->TryToEnableReduce();
+        
+        
+        event.Skip(true);
         
     }
     
@@ -838,34 +838,34 @@ void CheckLength::operator()(wxFocusEvent &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-    if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
+        if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->value);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Lengths must be floating-point numbers >= 0 m");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->ok) = false;
+            
+        }else{
+            
+            double length_temp;
+            
+            (p->value)->SetBackgroundColour(*wxWHITE);
+            
+            (p->value)->GetValue().ToDouble(&length_temp);
+            (p->length)->set(String("height of eye"), length_temp, String(""));
+            
+            (p->ok) = true;
+            
+        }
         
-//        f->CallAfter(&SightFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
+        f->TryToEnableReduce();
         
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->value);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Lengths must be floating-point numbers >= 0 m");
-        f->CallAfter((f->printerrormessage));
-        
-        (p->ok) = false;
-        
-    }else{
-        
-        double length_temp;
-        
-        (p->value)->SetBackgroundColour(*wxWHITE);
-        
-        (p->value)->GetValue().ToDouble(&length_temp);
-        (p->length)->set(String("height of eye"), length_temp, String(""));
-        
-        (p->ok) = true;
-        
-    }
-    
-    f->TryToEnableReduce();
- 
-    event.Skip(true);
+        event.Skip(true);
         
     }
     
@@ -884,22 +884,22 @@ void PrintErrorMessage::operator()(void){
             
             message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
-           
+            
             control->SetFocus();
             control->SetBackgroundColour(*wxRED);
             
         }
         
     }else{
-       
+        
         message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
-        
+    
     //The temporary dialog window may have been closed, thus I set f->idling to false
     f->SetIdling(false);
-
+    
 }
 
 class MyApp: public wxApp{
@@ -916,9 +916,9 @@ enum{
     ID_Close =  wxID_HIGHEST + 5,
     ID_button_reduce =  wxID_HIGHEST + 6,
     ID_button_cancel =  wxID_HIGHEST + 7,
-//    ID_artificial_horizon =  wxID_HIGHEST + 8,
+    //    ID_artificial_horizon =  wxID_HIGHEST + 8,
     ID_combo_body = wxID_HIGHEST + 9,
-//    ID_combo_limb = wxID_HIGHEST + 10,
+    //    ID_combo_limb = wxID_HIGHEST + 10,
     ID_box_year = wxID_HIGHEST + 12,
     ID_combo_day = wxID_HIGHEST + 14,
     ID_stopwatch_check = wxID_HIGHEST + 15,
@@ -928,7 +928,7 @@ enum{
     ID_combo_minute_stopwatch = wxID_HIGHEST + 19,
     ID_combo_hour_TAI_minus_UTC = wxID_HIGHEST + 21,
     ID_combo_minute_TAI_minus_UTC = wxID_HIGHEST + 22
-
+    
 };
 
 wxBEGIN_EVENT_TABLE(SightFrame, wxFrame)
@@ -953,11 +953,11 @@ bool MyApp::OnInit(){
     wxRect rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-
+    
     
     PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
     list_frame->Show(true);
-
+    
     return true;
     
 }
@@ -989,7 +989,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     sight = new Sight();
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-
+    
     
     menuFile->Append(ID_Open, "&Open...\tCtrl-O", "This is to open a file");
     //this adds a separator, a horizontal line in the menu
@@ -1016,17 +1016,17 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     }
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     body = new BodyField(this, &(sight->body), catalog);
-
-//    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
+    
+    //    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(SightFrame::OnSelectBody), this);
     //combo_body->SetValue("");
     
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
+    //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     limb = new LimbField(this, &(sight->limb));
-//    (limb->name)->SetValue("");
-//    (limb->name)->Enable(false);
-
+    //    (limb->name)->SetValue("");
+    //    (limb->name)->Enable(false);
+    
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     H_s = new AngleField(this, &(sight->H_s));
@@ -1043,7 +1043,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
+    //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
     (checkartificialhorizon.p) = artificial_horizon_check;
     (artificial_horizon_check->check)->Bind(wxEVT_CHECKBOX, checkartificialhorizon);
@@ -1064,11 +1064,11 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     master_clock_chrono->set();
-
+    
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
-//    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
+    //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
     (checkstopwatch.p) = stopwatch_check;
     (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, checkstopwatch);
@@ -1077,40 +1077,40 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
-
+    
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->check)->SetValue(false);
     stopwatch_reading->Enable(false);
-//    (stopwatch_reading->hour)->SetValue(wxString("0"));
-//    (stopwatch_reading->minute)->SetValue(wxString("0"));
-//    (stopwatch_reading->second)->SetValue(wxString("0.0"));
-
-
+    //    (stopwatch_reading->hour)->SetValue(wxString("0"));
+    //    (stopwatch_reading->minute)->SetValue(wxString("0"));
+    //    (stopwatch_reading->second)->SetValue(wxString("0.0"));
+    
+    
     //TAI-UTC
     //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
     cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
     (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
     TAI_minus_UTC->set();
-
+    
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     label = new StringField(this, &(sight->label));
     
-
+    
     //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
-
+    
     button_reduce->Enable(false);
     
     sizer_grid_measurement->Add(text_combo_body);
     body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-//    sizer_grid_measurement->Add(combo_body);
+    //    sizer_grid_measurement->Add(combo_body);
     
     sizer_grid_measurement->Add(text_limb);
     limb->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
@@ -1121,7 +1121,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     sizer_grid_measurement->Add(text_index_error);
     index_error->InsertIn<wxBoxSizer>(box_sizer_3);
     sizer_grid_measurement->Add(box_sizer_3);
-
+    
     sizer_grid_measurement->Add(text_artificial_horizon_check);
     artificial_horizon_check->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
@@ -1133,13 +1133,13 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     box_sizer_4->Add(text_space_1);
     master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
     sizer_grid_time->Add(box_sizer_4);
-
+    
     sizer_grid_time->Add(text_stopwatch_check);
     stopwatch_check->InsertIn<wxFlexGridSizer>(sizer_grid_time);
     
     sizer_grid_time->Add(text_stopwatch_reading);
     stopwatch_reading->InsertIn<wxFlexGridSizer>(sizer_grid_time);
-
+    
     sizer_grid_time->Add(text_TAI_minus_UTC);
     TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
     
@@ -1151,7 +1151,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
     sizer_box_time = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
-
+    
     sizer_box_measurement->Add(sizer_grid_measurement);
     sizer_box_time->Add(sizer_grid_time);
     
@@ -1171,7 +1171,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-
+    
     CurrentDocPath = wxT("");
     
     CreateStatusBar();
@@ -1187,15 +1187,15 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     }
     
     /*
-    //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
-    File file_sample_sight;
-    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
-    file_sample_sight.open(String("in"), String(""));
-    sight->read_from_file(file_sample_sight, String(""));
-    file_sample_sight.close(String(""));
-    set();
-    */
-
+     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
+     File file_sample_sight;
+     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
+     file_sample_sight.open(String("in"), String(""));
+     sight->read_from_file(file_sample_sight, String(""));
+     file_sample_sight.close(String(""));
+     set();
+     */
+    
     
     
 }
@@ -1205,18 +1205,18 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
-
-
+    
+    
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
-
+    
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1226,25 +1226,25 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     wxRect rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
-
+    
     
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-
+    
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
     sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
     sizer_grid->Add(button_ok, 0, wxALIGN_CENTER);
     
-  
+    
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
-//  Maximize(panel);
-
+    //  Maximize(panel);
+    
     sizer_v->Fit(panel);
     panel->SetSizer(sizer_v);
     
-//    SetSize(wxSize(100,100));
+    //    SetSize(wxSize(100,100));
     
     //    CreateStatusBar();
     //    SetStatusText( "Welcome to Michele's text editor!" );
@@ -1262,7 +1262,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     unsigned int i;
     OnSelectInListBox onselectinlistbox;
     wxListItem column, item;
-
+    
     
     (onselectinlistbox.f) = this;
     
@@ -1272,7 +1272,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
-
+    
     
     //
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
@@ -1284,16 +1284,16 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-//    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
-//    listbox->Bind(wxEVT_COMMAND_LISTBOX_SELECTED, onselectinlistbox);
-//    //append the elements in plot->sight_list to listbox
-//    for(i=0; i<(plot->sight_list).size(); i++){
-//        listbox->Append(wxString(((plot->sight_list)[i]).label.value));
-//    }
-//
+    //    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
+    //    listbox->Bind(wxEVT_COMMAND_LISTBOX_SELECTED, onselectinlistbox);
+    //    //append the elements in plot->sight_list to listbox
+    //    for(i=0; i<(plot->sight_list).size(); i++){
+    //        listbox->Append(wxString(((plot->sight_list)[i]).label.value));
+    //    }
+    //
     //add columns to wxlistcontrol
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight()*0.8), wxLC_REPORT);
-  
+    
     
     int n_columns = 11;
     
@@ -1314,13 +1314,13 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     column.SetAlign(wxLIST_FORMAT_LEFT);
     listcontrol->InsertColumn(2, column);
- 
+    
     column.SetId(3);
     column.SetText(wxT("Sextant altitude"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(3, column);
-
+    
     column.SetId(4);
     column.SetText(wxT("Index error"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
@@ -1332,45 +1332,45 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(5, column);
-
+    
     column.SetId(6);
     column.SetText(wxT("Master-clock date and hour (UTC)"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(6, column);
-
+    
     column.SetId(7);
     column.SetText(wxT("Stopwatch"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(7, column);
-
+    
     column.SetId(8);
     column.SetText(wxT("Stopwatch reading"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(8, column);
-
+    
     column.SetId(9);
     column.SetText(wxT("TAI - UTC"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(9, column);
-
+    
     column.SetId(10);
     column.SetText(wxT("Label"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(10, column);
-
     
-
+    
+    
     
     /*
      TAI_minus_UTC->set();
      label->set();
      */
-
+    
     
     //
     for(i=0; i<((plot->sight_list).size()); i++){
@@ -1397,13 +1397,13 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         //set artificial horizon column
         listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
         
-      
+        
         //set sextant altitude column
         listcontrol->SetItem(i, 3, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
         
         //set index error
         listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).index_error).to_string(display_precision)));
-
+        
         //set height of eye column
         if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
         else{listcontrol->SetItem(i, 5, wxString(""));}
@@ -1420,42 +1420,42 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         }else{
             listcontrol->SetItem(i, 8, wxString(""));
         }
-
+        
         //set TAI-UTC
         listcontrol->SetItem(i, 9, wxString((((plot->sight_list)[i]).TAI_minus_UTC).to_string(display_precision)));
-
+        
         //set label
         listcontrol->SetItem(i, 10, wxString((((plot->sight_list)[i]).label).value));
-
+        
         
     }
     
     
     //buttons
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-//    //    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
-//
+    //    //    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
+    //
     button_modify = new wxButton(panel, wxID_ANY, "/", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-//    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
-//    button_modify->Enable(false);
-//
+    //    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
+    //    button_modify->Enable(false);
+    //
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-//    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
+    //    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
     sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
-   sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
-   sizer_buttons->Add(button_delete, 0, wxALIGN_CENTER);
-//
+    sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
+    sizer_buttons->Add(button_delete, 0, wxALIGN_CENTER);
+    //
     
-//resize uniformly all column
-//    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
-//        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
-//    }
+    //resize uniformly all column
+    //    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
+    //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
+    //    }
     sizer_v->Add(listcontrol, 1, wxEXPAND | wxALL, 10);
-       sizer_v->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, 5);
-//    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
-//    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
-//    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
+    sizer_v->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, 5);
+    //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
+    //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
+    //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
     panel->SetSizer(sizer_v);
     
@@ -1514,7 +1514,7 @@ void SightFrame::set(void){
         stopwatch_reading->set();
     }else{
         stopwatch_reading->Enable(false);
-   }
+    }
     
     TAI_minus_UTC->set();
     label->set();
@@ -1522,9 +1522,9 @@ void SightFrame::set(void){
 }
 
 void SightFrame::SetIdling(bool b){
-
+    
     idling = b;
-
+    
 }
 
 void SightFrame::OnClose(wxCommandEvent& event){
@@ -1622,30 +1622,30 @@ void CheckHour::operator()(wxFocusEvent &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-    if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
+        if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->hour);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+            f->CallAfter((f->printerrormessage));
+            
+            
+            (p->hour_ok) = false;
+            
+        }else{
+            
+            (p->hour)->SetBackgroundColour(*wxWHITE);
+            ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
+            (p->hour_ok) = true;
+            
+        }
         
-//        f->CallAfter(&SightFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+        f->TryToEnableReduce();
         
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->hour);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-        f->CallAfter((f->printerrormessage));
-        
-        
-        (p->hour_ok) = false;
-        
-    }else{
-        
-        (p->hour)->SetBackgroundColour(*wxWHITE);
-        ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
-        (p->hour_ok) = true;
-        
-    }
-    
-     f->TryToEnableReduce();
-    
-    event.Skip(true);
+        event.Skip(true);
         
     }
     
@@ -1659,29 +1659,29 @@ void CheckMinute::operator()(wxFocusEvent &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-    if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
+        if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->minute);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->minute_ok) = false;
+            
+        }else{
+            
+            (p->minute)->SetBackgroundColour(*wxWHITE);
+            ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
+            (p->minute_ok) = true;
+            
+        }
         
-//        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+        f->TryToEnableReduce();
         
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->minute);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-        f->CallAfter((f->printerrormessage));
-        
-        (p->minute_ok) = false;
-        
-    }else{
-        
-        (p->minute)->SetBackgroundColour(*wxWHITE);
-        ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
-        (p->minute_ok) = true;
-        
-    }
-    
-     f->TryToEnableReduce();
-    
-    event.Skip(true);
+        event.Skip(true);
         
     }
     
@@ -1695,35 +1695,35 @@ void CheckSecond::operator()(wxFocusEvent &event){
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
-    
-    if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        
+        if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+            
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->second);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->second_ok) = false;
+            
+        }else{
+            
+            double s_temp;
+            
+            (p->second)->SetBackgroundColour(*wxWHITE);
+            ((p->second)->GetValue()).ToDouble(&s_temp);
+            ((p->chrono)->s) = s_temp;
+            (p->second_ok) = true;
+            
+        }
         
         
-//        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+        f->TryToEnableReduce();
         
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->second);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
-        f->CallAfter((f->printerrormessage));
-        
-        (p->second_ok) = false;
-        
-    }else{
-        
-        double s_temp;
-
-        (p->second)->SetBackgroundColour(*wxWHITE);
-        ((p->second)->GetValue()).ToDouble(&s_temp);
-        ((p->chrono)->s) = s_temp;
-        (p->second_ok) = true;
-
-    }
-    
-    
-     f->TryToEnableReduce();
-    
-    event.Skip(true);
+        event.Skip(true);
         
     }
     
@@ -1738,37 +1738,37 @@ void CheckYear::operator()(wxFocusEvent &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-    if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
-        
-//        f->CallAfter(&SightFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
-        
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->year);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Year must be an unsigned integer");
-        f->CallAfter((f->printerrormessage));
-        
-        (p->year_ok) = false;
-        (p->day)->Enable(false);
-
-
-    }else{
-        
-        (p->year)->SetBackgroundColour(*wxWHITE);
-        (p->date->Y) = (unsigned int)wxAtoi((p->year)->GetValue());
-        (p->year_ok) = true;
-        
-        if(p->month_ok){
-            (f->tabulatedays)(event);
-            (p->day)->Enable(true);
+        if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->year);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Year must be an unsigned integer");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->year_ok) = false;
+            (p->day)->Enable(false);
+            
+            
+        }else{
+            
+            (p->year)->SetBackgroundColour(*wxWHITE);
+            (p->date->Y) = (unsigned int)wxAtoi((p->year)->GetValue());
+            (p->year_ok) = true;
+            
+            if(p->month_ok){
+                (f->tabulatedays)(event);
+                (p->day)->Enable(true);
+            }
+            
         }
-
-    }
-    
-    f->TryToEnableReduce();
-
-
-    event.Skip(true);
+        
+        f->TryToEnableReduce();
+        
+        
+        event.Skip(true);
         
     }
     
@@ -1781,36 +1781,36 @@ void CheckMonth::operator()(wxFocusEvent &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-    if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
-        
-//        f->CallAfter(&SightFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
-        
-        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        ((f->printerrormessage).control) = (p->month);
-        ((f->printerrormessage).title) = String("Entered value is not valid!");
-        ((f->printerrormessage).message) = String("Month must be an unsigned integer >= 1 and <= 12");
-        f->CallAfter((f->printerrormessage));
-
-        (p->month_ok) = false;
-        (p->day)->Enable(false);
-
-    }else{
-        
-        (p->month)->SetBackgroundColour(*wxWHITE);
-        (p->date->M) = (unsigned int)wxAtoi((p->month)->GetValue());
-        (p->month_ok) = true;
-
-        if(p->year_ok){
-            (f->tabulatedays)(event);
-            (p->day)->Enable(true);
-
+        if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->month);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Month must be an unsigned integer >= 1 and <= 12");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->month_ok) = false;
+            (p->day)->Enable(false);
+            
+        }else{
+            
+            (p->month)->SetBackgroundColour(*wxWHITE);
+            (p->date->M) = (unsigned int)wxAtoi((p->month)->GetValue());
+            (p->month_ok) = true;
+            
+            if(p->year_ok){
+                (f->tabulatedays)(event);
+                (p->day)->Enable(true);
+                
+            }
+            
         }
-
-    }
-
-     f->TryToEnableReduce();
-    
-    event.Skip(true);
+        
+        f->TryToEnableReduce();
+        
+        event.Skip(true);
         
     }
     
@@ -1823,58 +1823,58 @@ void CheckDay::operator()(wxFocusEvent &event){
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
-
-    //this variable = true if the day field is formatted correctly
-    bool ok;
-    
-    
-    //to check whether the p->day is formatted correctly, I first check whether p->year and p->month are formatted correctly, so I can extract a valid value of p->month. Then, I check whether p-> day is an unsigned int formatted correctly with check_unsigned_int, and whether this unsigned int lies in the correct interval relative to p->month
-    if((p->year_ok) && (p->month_ok)){
         
-        (p->date)->check_leap_year();
+        //this variable = true if the day field is formatted correctly
+        bool ok;
         
-        if((p->date)->Y_is_leap_year){
+        
+        //to check whether the p->day is formatted correctly, I first check whether p->year and p->month are formatted correctly, so I can extract a valid value of p->month. Then, I check whether p-> day is an unsigned int formatted correctly with check_unsigned_int, and whether this unsigned int lies in the correct interval relative to p->month
+        if((p->year_ok) && (p->month_ok)){
             
-            ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue()))-1]+1);
-        
+            (p->date)->check_leap_year();
+            
+            if((p->date)->Y_is_leap_year){
+                
+                ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue()))-1]+1);
+                
+            }else{
+                
+                ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue()))-1]+1);
+                
+            }
+            
+            if(ok){
+                
+                (p->day)->Enable(true);
+                (p->day)->SetBackgroundColour(*wxWHITE);
+                (p->date->D) = (unsigned int)wxAtoi((p->day)->GetValue());
+                (p->day_ok) = true;
+                
+            }else{
+                
+                //            f->CallAfter(&SightFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
+                
+                //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+                ((f->printerrormessage).control) = (p->day);
+                ((f->printerrormessage).title) = String("Entered value is not valid!");
+                ((f->printerrormessage).message) = String("Day must be an unsigned integer comprised between the days of the relative month");
+                f->CallAfter((f->printerrormessage));
+                
+                (p->day)->Enable(true);
+                (p->day_ok) = false;
+                
+            }
+            
+            
         }else{
-
-            ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue()))-1]+1);
+            
+            (p->day)->Enable(false);
             
         }
         
-        if(ok){
-            
-            (p->day)->Enable(true);
-            (p->day)->SetBackgroundColour(*wxWHITE);
-            (p->date->D) = (unsigned int)wxAtoi((p->day)->GetValue());
-            (p->day_ok) = true;
-            
-        }else{
-            
-//            f->CallAfter(&SightFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
-            
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->day);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Day must be an unsigned integer comprised between the days of the relative month");
-            f->CallAfter((f->printerrormessage));
-            
-            (p->day)->Enable(true);
-            (p->day_ok) = false;
-            
-        }
+        f->TryToEnableReduce();
         
-        
-    }else{
-        
-        (p->day)->Enable(false);
-        
-    }
-    
-     f->TryToEnableReduce();
-   
-    event.Skip(true);
+        event.Skip(true);
         
     }
     
@@ -1889,7 +1889,7 @@ void TabulateDays::operator()(wxFocusEvent &event){
     
     unsigned int i;
     SightFrame* f = (p->parent_frame);
-
+    
     if((p->year_ok) && (p->month_ok)){
         
         //read the year
@@ -1897,7 +1897,7 @@ void TabulateDays::operator()(wxFocusEvent &event){
         ((f->sight)->master_clock_date_and_hour).date.check_leap_year();
         
         //read the month
-       ((f->sight)->master_clock_date_and_hour).date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
+        ((f->sight)->master_clock_date_and_hour).date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
         
         if(((f->sight)->master_clock_date_and_hour).date.Y_is_leap_year){
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
@@ -1944,15 +1944,15 @@ void CheckArtificialHorizon::operator()(wxCommandEvent& event){
         ((p->answer)->value) = 'n';
         (f->height_of_eye)->Enable(true);
     }
-  
-
+    
+    
 }
 
 //this function writes into sight.use_stopwatch the value written into the respective GUI box and it enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
 void CheckStopWatch::operator()(wxCommandEvent& event){
     
     SightFrame* f = (p->parent_frame);
-
+    
     //I set p->answetr to the value entered in the GUI checkbox
     if((p->check)->GetValue()){
         ((p->answer)->value) = 'y';
@@ -1965,7 +1965,7 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
     ((f->stopwatch_reading)->hour)->SetValue(wxString(""));
     ((f->stopwatch_reading)->minute)->SetValue(wxString(""));
     ((f->stopwatch_reading)->second)->SetValue(wxString(""));
-
+    
 }
 
 
@@ -1975,36 +1975,36 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     stringstream s;
     
     sight->print(String("body entered via GUI"), String(""), cout);
-  //  (sight->body).print(String("body entered via GUI"), String(""), s);
-
-
-//    (printerrormessage.control) = NULL;
-//    (printerrormessage.title) = String("Here is the data which you entered:");
-//    (printerrormessage.message) = String(s.str().c_str());
-//
-//
-//    CallAfter(printerrormessage);
+    //  (sight->body).print(String("body entered via GUI"), String(""), s);
+    
+    
+    //    (printerrormessage.control) = NULL;
+    //    (printerrormessage.title) = String("Here is the data which you entered:");
+    //    (printerrormessage.message) = String(s.str().c_str());
+    //
+    //
+    //    CallAfter(printerrormessage);
     
     //add the sight (*sight) to the list of sights contained in the parent PlotFrame
     (((this->parent)->plot)->sight_list).push_back(*sight);
     
     //append the label of (*sight) to the listbox in the parent PlotFrame
-//    ((this->parent)->listbox)->Append(wxString((sight->label).value));
-
-
-
+    //    ((this->parent)->listbox)->Append(wxString((sight->label).value));
+    
+    
+    
     
     Close(TRUE);
-
+    
     event.Skip(true);
-
+    
     
 }
 
 
 //constructor of a BodyField object, based on the parent frame frame
 BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
-
+    
     unsigned int i;
     parent_frame = frame;
     //I link the internal pointers p and c to the respective body and body catalog
@@ -2014,15 +2014,15 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     for(bodies.Clear(), i=0; i<(catalog->list).size(); i++){
         bodies.Add(((catalog->list)[i]).name.value.c_str());
     }
-
+    
     ((parent_frame->checkbody).p) = this;
-
+    
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
-
+    
     name->SetValue("");
     ok = false;
     
@@ -2031,7 +2031,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
-     
+    
 }
 
 
@@ -2055,7 +2055,7 @@ void LimbField::set(void){
     if((limb->value) == 'c'){
         name->SetValue("center");
     }
-
+    
     ok = true;
     
 }
@@ -2080,7 +2080,7 @@ void AngleField::set(void){
     double min_temp;
     
     angle->to_deg_min(&deg_temp, &min_temp);
-
+    
     sign->SetValue(wxString("+"));
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
     min->SetValue(wxString::Format(wxT("%f"), min_temp));
@@ -2136,7 +2136,7 @@ void StringField::set(void){
 
 //constructor of a LimbField object, based on the parent frame frame
 LimbField::LimbField(SightFrame* frame, Limb* p){
-
+    
     parent_frame = frame;
     //I link the internal pointers p the respective Limb object
     limb = p;
@@ -2145,10 +2145,10 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     limbs.Add(wxT("upper"));
     limbs.Add(wxT("lower"));
     limbs.Add(wxT("center"));
-
-
+    
+    
     ((parent_frame->checklimb).p) = this;
-
+    
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
@@ -2157,27 +2157,27 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     name->SetValue(wxString(""));
     ok = false;
-        
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
-     
+    
 }
 
 
 
 //constructor of a CheckField object, based on the parent frame frame
 CheckField::CheckField(SightFrame* frame, Answer* p){
-
+    
     parent_frame = frame;
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
-
+    
     check = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-//    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
-
+    //    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
+    
     check->SetValue(false);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -2185,14 +2185,14 @@ CheckField::CheckField(SightFrame* frame, Answer* p){
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(check, 0, wxALIGN_CENTER);
-     
+    
 }
 
 
 
 //constructor of an AngleField object, based on the parent frame frame
 AngleField::AngleField(SightFrame* frame, Angle* p){
-
+    
     unsigned int i;
     parent_frame = frame;
     angle = p;
@@ -2205,29 +2205,29 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
     for(degrees.Clear(), i=0; i<360; i++){
         degrees.Add(wxString::Format(wxT("%i"), i));
     }
-
+    
     
     ((parent_frame->checksign).p) = this;
     ((parent_frame->checkarcdegree).p) = this;
     ((parent_frame->checkarcminute).p) = this;
-
+    
     sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     AdjustWidth(sign);
     sign->Bind(wxEVT_KILL_FOCUS, parent_frame->checksign);
-
+    
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcdegree);
-
+    
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
     min->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcminute);
-
+    
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     sign->SetValue(wxString(""));
     deg->SetValue(wxString(""));
     min->SetValue(wxString(""));
@@ -2250,18 +2250,18 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
 
 //constructor of a LengthField object, based on the parent frame frame
 LengthField::LengthField(SightFrame* frame, Length* p){
-
+    
     parent_frame = frame;
     length = p;
     
     ((parent_frame->checklength).p) = this;
-
+    
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklength);
-
+    
     text = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("m"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
@@ -2280,7 +2280,7 @@ LengthField::LengthField(SightFrame* frame, Length* p){
 
 //constructor of a StringField object, based on the parent frame frame
 StringField::StringField(SightFrame* frame, String* p){
-
+    
     parent_frame = frame;
     string = p;
     
@@ -2332,7 +2332,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     ((parent_frame->checkmonth).p) = this;
     ((parent_frame->checkday).p) = this;
     ((parent_frame->tabulatedays).p) = this;
-
+    
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"), i+1));
     }
@@ -2340,19 +2340,19 @@ DateField::DateField(SightFrame* frame, Date* p){
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkyear));
-
+    
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-//    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
+    //    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
     AdjustWidth(month);
     month->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkmonth));
-
+    
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
-
+    
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-//I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
+    //I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
     for(days.Clear(), i=0; i<31; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));
     }
@@ -2360,7 +2360,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     AdjustWidth(day);
     days.Clear();
     day->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkday));
-
+    
     
     year->SetValue(wxString(""));
     year_ok = false;
@@ -2370,7 +2370,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     day->SetValue(wxString(""));
     day_ok = false;
-      
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -2380,7 +2380,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     sizer_h->Add(month, 0, wxALIGN_CENTER);
     sizer_h->Add(text_hyphen_2, wxALIGN_CENTER);
     sizer_h->Add(day, 0, wxALIGN_CENTER);
-
+    
 }
 
 //constructor of a ChronoField object, based on the parent frame frame
@@ -2393,7 +2393,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     ((parent_frame->checkhour).p) = this;
     ((parent_frame->checkminute).p) = this;
     ((parent_frame->checksecond).p) = this;
-
+    
     for(hours.Clear(), hours.Add(wxT("")), i=0; i<24; i++){
         hours.Add(wxString::Format(wxT("%i"), i+1));
     }
@@ -2402,19 +2402,19 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-//    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
+    //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
     hour->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkhour));
-
+    
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     AdjustWidth(minute);
-//    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
+    //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkminute));
-
+    
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
-
+    
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
     second->Bind(wxEVT_KILL_FOCUS, (parent_frame->checksecond));
@@ -2438,22 +2438,22 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     sizer_h->Add(minute, 0, wxALIGN_CENTER);
     sizer_h->Add(text_colon_2, wxALIGN_CENTER);
     sizer_h->Add(second, 0, wxALIGN_CENTER);
-
+    
 }
 
 //this functor quits the MessageFrame when Ok button is pressed
 void MessageFrame::OnPressOk(wxCommandEvent& event){
     
- 
+    
     Close(TRUE);
-
+    
 }
 
 //this function enables/disable the LengthField
 void LengthField::Enable(bool is_enabled){
     
     value->Enable(is_enabled);
-  
+    
 }
 
 //this function enables/disable the whole ChronoField
@@ -2462,7 +2462,7 @@ void ChronoField::Enable(bool is_enabled){
     hour->Enable(is_enabled);
     minute->Enable(is_enabled);
     second->Enable(is_enabled);
-
+    
 }
 
 bool BodyField::is_ok(void){

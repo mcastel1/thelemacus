@@ -1293,10 +1293,9 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    }
 //
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
-    listcontrol->SetMinSize(this->GetSize());
-               
-    int n_columns = 7;
+    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight())*0.9, wxLC_REPORT);
+    int n_columns = 6;
+    
     
     column.SetId(0);
     column.SetText(wxT("Body"));
@@ -1305,7 +1304,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol->InsertColumn(0, column);
     
     column.SetId(1);
-    column.SetText(wxT(""));
+    column.SetText(wxT("Limb"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(1, column);
@@ -1334,11 +1333,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(5, column);
     
-    column.SetId(6);
-    column.SetText(wxT("Master-clock date and hour"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(6, column);
+    
 
     
     /*    master_clock_date->set();
@@ -1392,9 +1387,6 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         //set height of eye column
         if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
         else{listcontrol->SetItem(i, 5, wxString(""));}
-        
-        //set master-clock date and hour
-        listcontrol->SetItem(i, 6, wxString((((plot->sight_list)[i]).time).to_string(display_precision)));
 
         
     }

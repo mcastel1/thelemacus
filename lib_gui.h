@@ -509,6 +509,7 @@ public:
     
     wxFlexGridSizer *sizer_grid_instrument, *sizer_grid_time;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
+    wxStaticBoxSizer *sizer_box_instrument, *sizer_box_time;
     
     wxArrayString bodies, limbs;
     wxButton* button_reduce, *button_cancel;
@@ -961,7 +962,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     //pointer to init.txt to read fixed sight data from in there
     File file_init;
     String new_prefix;
-    unsigned int i, deg;
+    unsigned int i, deg, common_width;
     double min;
     bool check = true;
     
@@ -1141,13 +1142,18 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
     
-    //here '0' means that the size of sizer_grid cannot be changed in the vertical direction, and wxEXPAND implies that sizer_grid is expanded horizontally
-    wxStaticBoxSizer *sizer_box_instrument = new wxStaticBoxSizer(wxVERTICAL, panel, "Instrument");
-    wxStaticBoxSizer *sizer_box_time = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
+    sizer_box_instrument = new wxStaticBoxSizer(wxVERTICAL, panel, "Instrument");
+    sizer_box_time = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
 
     sizer_box_instrument->Add(sizer_grid_instrument);
     sizer_box_time->Add(sizer_grid_time);
-
+    
+    //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
+    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Master-clock UTC date and hour of sight"
+    common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight")).GetWidth();
+    text_combo_body->SetMinSize(wxSize(common_width,-1));
+    text_label->SetMinSize(wxSize(common_width,-1));
+    
     sizer->Add(sizer_box_instrument, 0, wxEXPAND);
     sizer->Add(sizer_box_time, 0, wxEXPAND);
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT);

@@ -1293,7 +1293,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //
     //add columns to wxlistcontrol
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
-    int n_columns = 4;
+    int n_columns = 5;
     
     wxListItem col_body;
     col_body.SetId(0);
@@ -1302,26 +1302,34 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     col_body.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(0, col_body);
     
-    wxListItem col_artificial_horizon;
-    col_artificial_horizon.SetId(1);
-    col_artificial_horizon.SetText(wxT("Limb"));
-    col_artificial_horizon.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    col_artificial_horizon.SetAlign(wxLIST_FORMAT_LEFT);
-    listcontrol->InsertColumn(1, col_artificial_horizon);
- 
     wxListItem col_limb;
-    col_limb.SetId(0);
-    col_limb.SetText(wxT("Artificial horizon"));
+    col_limb.SetId(1);
+    col_limb.SetText(wxT(""));
     col_limb.SetAlign(wxLIST_FORMAT_LEFT);
     col_limb.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(2, col_limb);
+    listcontrol->InsertColumn(1, col_limb);
+    
+    wxListItem col_artificial_horizon;
+    col_artificial_horizon.SetId(2);
+    col_artificial_horizon.SetText(wxT("Artificial horizon"));
+    col_artificial_horizon.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    col_artificial_horizon.SetAlign(wxLIST_FORMAT_LEFT);
+    listcontrol->InsertColumn(2, col_artificial_horizon);
+ 
+ 
+    wxListItem col_height_of_eye;
+    col_height_of_eye.SetId(3);
+    col_height_of_eye.SetText(wxT("Height of eye"));
+    col_height_of_eye.SetAlign(wxLIST_FORMAT_LEFT);
+    col_height_of_eye.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(3, col_height_of_eye);
 
     wxListItem col_sextant_altitude;
-    col_sextant_altitude.SetId(0);
-    col_sextant_altitude.SetText(wxT("Height of eye"));
+    col_sextant_altitude.SetId(4);
+    col_sextant_altitude.SetText(wxT("Sextant altitude"));
     col_sextant_altitude.SetAlign(wxLIST_FORMAT_LEFT);
     col_sextant_altitude.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(3, col_sextant_altitude);
+    listcontrol->InsertColumn(4, col_sextant_altitude);
 
     
     //
@@ -1329,11 +1337,11 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         
         wxListItem item;
         item.SetId(i);
-        item.SetText(wxT("ciao"));
+        item.SetText(wxT(""));
         
         listcontrol->InsertItem(item);
         
-      //set body column
+        //set body column
         listcontrol->SetItem(i, 0, wxString(((plot->sight_list)[i]).body.name.value));
         
         //set limb column
@@ -1354,6 +1362,10 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 3, wxString::Format(wxT("%f m"), (((plot->sight_list)[i]).height_of_eye.value)*1e3*nm));}
         else{listcontrol->SetItem(i, 3, wxString(""));}
 
+        //set sextant altitude column
+        listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
+        
+        cout << "\ni =" << i << "\tH_s = " << (((plot->sight_list)[i]).H_s).to_string(display_precision);
      
     }
     

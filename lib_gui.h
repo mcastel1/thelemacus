@@ -58,6 +58,7 @@ void AdjustWidth(wxComboBox *control){
 }
 
 
+
 class CheckField{
     
 public:

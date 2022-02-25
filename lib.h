@@ -2040,6 +2040,8 @@ public:
     bool reduce(Route*, String);
     bool check_data_time_interval(String);
     
+    void add_to_wxListCtrl(wxListCtrl*);
+    
 };
 
 class Catalog{
@@ -3063,6 +3065,67 @@ void Route::transport(String prefix){
     
 }
 
+void Sight::add_to_wxListCtrl(wxListCtrl* listcontrol){
+    
+    wxListItem item;
+    unsigned int i;
+    
+    i = (listcontrol->GetItemCount());
+    
+    item.SetId(i);
+    item.SetText(wxT(""));
+    
+    listcontrol->InsertItem(item);
+    
+    //set body column
+    listcontrol->SetItem(i, 0, wxString(body.name.value));
+    
+    //set limb column
+    if((body.name == String("sun")) || (body.name == String("moon"))){
+        
+        if(wxString(limb.value) == 'u'){listcontrol->SetItem(i, 1, wxString("upper"));}
+        if(wxString(limb.value) == 'l'){listcontrol->SetItem(i, 1, wxString("lower"));}
+        if(wxString(limb.value) == 'c'){listcontrol->SetItem(i, 1, wxString("center"));}
+        
+    }else{
+        listcontrol->SetItem(i, 1, wxString(""));
+    }
+    
+    //set artificial horizon column
+    listcontrol->SetItem(i, 2, wxString(artificial_horizon.value));
+    
+    
+    //set sextant altitude column
+    listcontrol->SetItem(i, 3, wxString((H_s).to_string(display_precision)));
+    
+    //set index error
+    listcontrol->SetItem(i, 4, wxString((index_error).to_string(display_precision)));
+    
+    //set height of eye column
+    if(artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(height_of_eye.to_string(String("m"), display_precision)));}
+    else{listcontrol->SetItem(i, 5, wxString(""));}
+    
+    //set column of master-clock date and hour of sight
+    listcontrol->SetItem(i, 6, wxString((time).to_string(display_precision)));
+    
+    //set use of stopwatch
+    listcontrol->SetItem(i, 7, wxString((use_stopwatch.value)));
+    
+    //set stopwatch reading
+    if((use_stopwatch.value) == 'y'){
+        listcontrol->SetItem(i, 8, wxString((stopwatch).to_string(display_precision)));
+    }else{
+        listcontrol->SetItem(i, 8, wxString(""));
+    }
+    
+    //set TAI-UTC
+    listcontrol->SetItem(i, 9, wxString((TAI_minus_UTC).to_string(display_precision)));
+    
+    //set label
+    listcontrol->SetItem(i, 10, wxString((label).value));
+
+    
+}
 
 
 //this function returns true if the reading operation has been performed without errors, false otherwise

@@ -57,7 +57,8 @@
             master-clock date and hour of sight:
                 master-clock date and hour of sight = 2021-11-22
                 hour of master-clock date and hour of sight = 20:09:38
-            use of stopwatch = n
+            use of stopwatch = y
+	    stopwatch reading = 12:23:4.3425463
             hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
             label = MP Saturn
 	Routes in the plot:

@@ -1294,7 +1294,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //
     //add columns to wxlistcontrol
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight())*0.9, wxLC_REPORT);
-    int n_columns = 8;
+    int n_columns = 9;
     
     
     column.SetId(0);
@@ -1344,6 +1344,12 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(7, column);
+
+    column.SetId(8);
+    column.SetText(wxT("Stopwatch reading"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(8, column);
 
     
 
@@ -1405,6 +1411,9 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         
         //set use of stopwatch
         listcontrol->SetItem(i, 7, wxString((((plot->sight_list)[i]).use_stopwatch.value)));
+        
+        //set stopwatch reading
+        listcontrol->SetItem(i, 8, wxString((((plot->sight_list)[i]).stopwatch).to_string(display_precision)));
 
         
     }

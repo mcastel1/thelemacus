@@ -453,14 +453,15 @@ public:
     Plot* plot;
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
-    wxListBox* listbox;
+//    wxListBox* listbox;
+    wxListCtrl* listcontrol;
     wxPanel *panel;
     wxButton* button_add, *button_modify, *button_delete;
     wxSizer* sizer_h, *sizer_v;
     wxGridSizer* sizer_grid;
     
-    void OnAdd(wxCommandEvent& event);
-    void OnDelete(wxCommandEvent& event);
+//    void OnAdd(wxCommandEvent& event);
+//    void OnDelete(wxCommandEvent& event);
 
 };
 
@@ -732,15 +733,15 @@ void CheckLabel::operator()(wxFocusEvent &event){
     
 }
 
-
-void OnSelectInListBox::operator()(wxCommandEvent &event){
-       
-    cout <<"vetro";
-    (f->button_modify)->Enable(((f->listbox)->GetSelection()) != -1);
-        
-    event.Skip(true);
-    
-}
+//
+//void OnSelectInListBox::operator()(wxCommandEvent &event){
+//
+//    cout <<"vetro";
+//    (f->button_modify)->Enable(((f->listbox)->GetSelection()) != -1);
+//
+//    event.Skip(true);
+//
+//}
 
 
 
@@ -1252,7 +1253,6 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i;
     OnSelectInListBox onselectinlistbox;
     
     (onselectinlistbox.f) = this;
@@ -1275,75 +1275,93 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
-    listbox->Bind(wxEVT_COMMAND_LISTBOX_SELECTED, onselectinlistbox);
-    //append the elements in plot->sight_list to listbox
-    for(i=0; i<(plot->sight_list).size(); i++){
-        listbox->Append(wxString(((plot->sight_list)[i]).label.value));
+//    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
+//    listbox->Bind(wxEVT_COMMAND_LISTBOX_SELECTED, onselectinlistbox);
+//    //append the elements in plot->sight_list to listbox
+//    for(i=0; i<(plot->sight_list).size(); i++){
+//        listbox->Append(wxString(((plot->sight_list)[i]).label.value));
+//    }
+//
+    //add columns to wxlistcontrol
+    listcontrol = new wxListCtrl(     this, wxID_ANY, wxDefaultPosition, wxSize(400, 400),     wxLC_REPORT|wxLC_SINGLE_SEL);
+    int n_columns = 2;
+    wxListItem itemCol;
+    itemCol.SetText(wxT("Body"));
+//    itemCol.SetImage(-1);
+    itemCol.SetAlign(wxLIST_FORMAT_LEFT);
+    listcontrol->InsertColumn(0, itemCol);
+    listcontrol->SetColumnWidth(0, (listcontrol->GetSize()).GetWidth()/n_columns);
+    
+    itemCol.SetText(wxT("Limb"));
+    itemCol.SetAlign(wxLIST_FORMAT_LEFT);
+    listcontrol->InsertColumn(1, itemCol);
+    listcontrol->SetColumnWidth(1, (listcontrol->GetSize()).GetWidth()/n_columns);
+
+
+
+    for( int i = 0; i < 10; i++ ){
+        int imageIndex = 0;
+        wxString buf;     // Insert an item, with a string for column 0,     // and image index 0
+        buf.Printf(wxT("This is item %d"), i); // Set a string for column 1
+        listcontrol->InsertItem(i, buf, imageIndex);     // The item may change position due to e.g. sorting, so store the original index in the item's data
+//        listcontrol->SetItemData(i, i);
+        buf.Printf(wxT("Col 1, item %d"), i);
+        listcontrol->SetItem(i, 1, buf);     // Set a string for column 2
+        
+        
     }
+    //
     
     
     //buttons
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
+//    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
 
     button_modify = new wxButton(panel, wxID_ANY, "Modify", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
     button_modify->Enable(false);
     
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
+//    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
     sizer_grid->Add(button_add);
     sizer_grid->Add(button_modify);
     sizer_grid->Add(button_delete);
 
-    sizer_v->Add(listbox, wxEXPAND, wxALL, 5);
-    sizer_v->Add(sizer_grid, wxALIGN_LEFT, wxALL, 5);
-    sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM);
+    sizer_v->Add(listcontrol, 0, wxEXPAND | wxALL, 5);
+//    sizer_v->Add(sizer_grid, wxALIGN_LEFT | wxALL, 5);
+    sizer_h->Add(sizer_v, 0, wxEXPAND | wxALL, 5);
     
     panel->SetSizer(sizer_h);
 
 }
 
-void PlotFrame::OnAdd(wxCommandEvent& event){
-    
-//    wxString string = wxGetTextFromUser(wxT("Enter namw of new item"));
+//void PlotFrame::OnAdd(wxCommandEvent& event){
 //
-//    if(string.Len()>0){
-//        listbox->Append(string);
+//    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
+//    sight_frame->Show(true);
+//
+//    event.Skip(true);
+//
+//
+//
+//}
+
+
+
+//
+//void PlotFrame::OnDelete(wxCommandEvent& event){
+//
+//    int i;
+//
+//    i = listbox->GetSelection();
+//
+//    if(i != -1){
+//        listbox->Delete(i);
 //    }
-  
-//    //obtain width and height of the display, and create a wxRect with height and width half ot the height and width of the display
-//    wxDisplay display;
-//    wxRect rectangle = (display.GetClientArea());
-//    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
-//    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-
-    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
-    sight_frame->Show(true);
-    
-    event.Skip(true);
-
-
-    
-}
-
-
-
-
-void PlotFrame::OnDelete(wxCommandEvent& event){
-    
-    int i;
-    
-    i = listbox->GetSelection();
-    
-    if(i != -1){
-        listbox->Delete(i);
-    }
-    
-}
-
+//
+//}
+//
 
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
 void SightFrame::set(void){
@@ -1845,7 +1863,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     (((this->parent)->plot)->sight_list).push_back(*sight);
     
     //append the label of (*sight) to the listbox in the parent PlotFrame
-    ((this->parent)->listbox)->Append(wxString((sight->label).value));
+//    ((this->parent)->listbox)->Append(wxString((sight->label).value));
 
 
 

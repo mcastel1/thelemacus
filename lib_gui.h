@@ -1292,8 +1292,8 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    }
 //
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(     this, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxLC_REPORT);
-    int n_columns = 2;
+    listcontrol = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
+    int n_columns = 4;
     
     wxListItem col_body;
     col_body.SetId(0);
@@ -1304,31 +1304,52 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     wxListItem col_artificial_horizon;
     col_artificial_horizon.SetId(1);
-    col_artificial_horizon.SetText(wxT("Artificial horizon"));
+    col_artificial_horizon.SetText(wxT("Limb"));
     col_artificial_horizon.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     col_artificial_horizon.SetAlign(wxLIST_FORMAT_LEFT);
     listcontrol->InsertColumn(1, col_artificial_horizon);
-//    listcontrol->SetColumnWidth(1, (listcontrol->GetSize()).GetWidth()/n_columns);
  
-//    listcontrol->SetItemCount((plot->sight_list).size());
+    wxListItem col_limb;
+    col_limb.SetId(0);
+    col_limb.SetText(wxT("Artificial horizon"));
+    col_limb.SetAlign(wxLIST_FORMAT_LEFT);
+    col_limb.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(2, col_limb);
 
+    wxListItem col_sextant_altitude;
+    col_sextant_altitude.SetId(0);
+    col_sextant_altitude.SetText(wxT("Sextant altitude"));
+    col_sextant_altitude.SetAlign(wxLIST_FORMAT_LEFT);
+    col_sextant_altitude.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(3, col_sextant_altitude);
 
-//    cout << "SIZE  = " <<(plot->sight_list).size();
-//
-    for(i=0; i<((plot->sight_list).size()); i++)
-    {
-//        Item* curritem = getItem(n);
+    
+    //
+    for(i=0; i<((plot->sight_list).size()); i++){
         
         wxListItem item;
         item.SetId(i);
         item.SetText(wxT("ciao"));
         
-        listcontrol->InsertItem( item );
+        listcontrol->InsertItem(item);
         
-      
+      //set body column
         listcontrol->SetItem(i, 0, wxString(((plot->sight_list)[i]).body.name.value));
-        listcontrol->SetItem(i, 1, wxString(((plot->sight_list)[i]).artificial_horizon.value));
         
+        //set limb column
+        if((((plot->sight_list)[i]).body.name == String("sun")) || (((plot->sight_list)[i]).body.name == String("moon"))){
+            
+            if(wxString(((plot->sight_list)[i]).limb.value) == 'u'){listcontrol->SetItem(i, 1, wxString("upper"));}
+            if(wxString(((plot->sight_list)[i]).limb.value) == 'l'){listcontrol->SetItem(i, 1, wxString("lower"));}
+            if(wxString(((plot->sight_list)[i]).limb.value) == 'c'){listcontrol->SetItem(i, 1, wxString("center"));}
+            
+        }else{
+            listcontrol->SetItem(i, 1, wxString(""));
+        }
+        
+        //set artificial horizon column
+        listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
+
      
     }
     

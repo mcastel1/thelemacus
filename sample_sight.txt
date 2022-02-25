@@ -34,7 +34,7 @@
                 Type = moon
                 Name = moon
                 Radius = 938.12095032397405702795367687941 nm
-            limb = l
+            limb = u
             sextant altitude = 34° 8.4000000000000341060513164848089'
             index error = 0° 1.8999999999999996891375531049562'
             artificial horizon = n
@@ -50,7 +50,7 @@
                 Type = moon
                 Name = moon
                 Radius = 938.12095032397405702795367687941 nm
-            limb = l
+            limb = c
             sextant altitude = 34° 8.4000000000000341060513164848089'
             index error = 0° 1.8999999999999996891375531049562'
             artificial horizon = y

@@ -457,8 +457,7 @@ public:
     wxListCtrl* listcontrol;
     wxPanel *panel;
     wxButton* button_add, *button_modify, *button_delete;
-    wxSizer* sizer_h, *sizer_v;
-    wxGridSizer* sizer_grid;
+    wxSizer* sizer_h, *sizer_v, *sizer_buttons;
     
 //    void OnAdd(wxCommandEvent& event);
 //    void OnDelete(wxCommandEvent& event);
@@ -1272,7 +1271,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    sizer_grid = new wxGridSizer(1, 3, 0, 0);
+    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
 
     
     //
@@ -1293,7 +1292,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    }
 //
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight())*0.9, wxLC_REPORT);
+    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight()*0.9), wxLC_REPORT);
   
     
     int n_columns = 11;
@@ -1433,19 +1432,19 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //buttons
-//    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
 //    //    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
 //
-//    button_modify = new wxButton(panel, wxID_ANY, "Modify", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    button_modify = new wxButton(panel, wxID_ANY, "/", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
 //    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
 //    button_modify->Enable(false);
 //
-//    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
 //    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
-//    sizer_grid->Add(button_add);
-//    sizer_grid->Add(button_modify);
-//    sizer_grid->Add(button_delete);
+    sizer_buttons->Add(button_add);
+    sizer_buttons->Add(button_modify);
+    sizer_buttons->Add(button_delete);
     
     
 //resize uniformly all column
@@ -1453,7 +1452,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
 //    }
     sizer_v->Add(listcontrol, 1, wxEXPAND | wxALL, 10);
-    //    sizer_v->Add(sizer_grid, wxALIGN_LEFT | wxALL, 5);
+       sizer_v->Add(sizer_buttons, wxALIGN_LEFT | wxALL, 5);
 //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
     panel->SetSizer(sizer_v);

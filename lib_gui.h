@@ -1359,13 +1359,12 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
         
         //set height of eye column
-        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 3, wxString::Format(wxT("%f m"), (((plot->sight_list)[i]).height_of_eye.value)*1e3*nm));}
+        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 3, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
         else{listcontrol->SetItem(i, 3, wxString(""));}
 
         //set sextant altitude column
         listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
         
-        cout << "\ni =" << i << "\tH_s = " << (((plot->sight_list)[i]).H_s).to_string(display_precision);
      
     }
     

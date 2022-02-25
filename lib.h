@@ -634,6 +634,7 @@ public:
     void print(String, String, String, ostream&);
     void read_from_file(String, File&, bool, String);
     bool check_valid(String, String);
+    string to_string(String, unsigned int);
     bool operator> (const Length&), operator==(const Length&), operator!=(const Length&);
     Length operator + (const Length&);
     
@@ -5732,6 +5733,19 @@ void Length::enter(String name, String unit, String prefix){
     }
     
     print(name, unit, prefix, cout);
+    
+}
+
+string Length::to_string(String unit, unsigned int precision){
+    
+    stringstream output;
+    
+    output.precision(precision);
+    
+    if(unit == String("nm")){output << value << " nm";}
+    if(unit == String("m")){output << value*1e3*nm << " m";}
+
+    return (output.str().c_str());
     
 }
 

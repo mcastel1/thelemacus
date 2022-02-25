@@ -1989,6 +1989,15 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //append the label of (*sight) to the listbox in the parent PlotFrame
     //    ((this->parent)->listbox)->Append(wxString((sight->label).value));
     
+    wxListItem item;
+    
+    item.SetId(0);
+    item.SetText(wxT(""));
+
+    ((this->parent)->listcontrol)->InsertItem(item);
+    ((this->parent)->listcontrol)->SetItem(0, 0, wxString("prova"));
+
+
     
     
     

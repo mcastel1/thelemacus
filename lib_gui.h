@@ -1294,7 +1294,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //
     //add columns to wxlistcontrol
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
-    int n_columns = 6;
+    int n_columns = 7;
     
     column.SetId(0);
     column.SetText(wxT("Body"));
@@ -1332,11 +1332,11 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(5, column);
     
-    column.SetId(5);
-    column.SetText(wxT("Height of eye"));
+    column.SetId(6);
+    column.SetText(wxT("Master-clock date and hour"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(5, column);
+    listcontrol->InsertColumn(6, column);
 
     
     /*    master_clock_date->set();
@@ -1390,6 +1390,9 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         //set height of eye column
         if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
         else{listcontrol->SetItem(i, 5, wxString(""));}
+        
+        //set master-clock date and hour
+        listcontrol->SetItem(i, 6, wxString((((plot->sight_list)[i]).time).to_string(display_precision)));
 
         
     }

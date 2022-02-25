@@ -1294,8 +1294,9 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //
     //add columns to wxlistcontrol
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight())*0.9, wxLC_REPORT);
-    int n_columns = 10;
+  
     
+    int n_columns = 11;
     
     column.SetId(0);
     column.SetText(wxT("Body"));
@@ -1356,6 +1357,12 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(9, column);
+
+    column.SetId(10);
+    column.SetText(wxT("Label"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(10, column);
 
     
 
@@ -1418,7 +1425,9 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         //set TAI-UTC
         listcontrol->SetItem(i, 9, wxString((((plot->sight_list)[i]).TAI_minus_UTC).to_string(display_precision)));
 
-        
+        //set label
+        listcontrol->SetItem(i, 10, wxString((((plot->sight_list)[i]).label).value));
+
         
     }
     
@@ -1437,12 +1446,18 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    sizer_grid->Add(button_add);
 //    sizer_grid->Add(button_modify);
 //    sizer_grid->Add(button_delete);
-//
-    sizer_v->Add(sizer_h, 1, wxALIGN_CENTER_HORIZONTAL);
+    
+    
+//resize uniformly all column
+//    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
+//        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
+//    }
+    sizer_v->Add(listcontrol, 1, wxEXPAND | wxALL, 10);
     //    sizer_v->Add(sizer_grid, wxALIGN_LEFT | wxALL, 5);
-    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
+//    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
     panel->SetSizer(sizer_v);
+    
     
 }
 

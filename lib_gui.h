@@ -1253,6 +1253,8 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
+    unsigned int i;
+    
     OnSelectInListBox onselectinlistbox;
     
     (onselectinlistbox.f) = this;
@@ -1283,57 +1285,68 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    }
 //
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(     this, wxID_ANY, wxDefaultPosition, wxSize(400, 400),     wxLC_REPORT|wxLC_SINGLE_SEL);
+    listcontrol = new wxListCtrl(     this, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxLC_REPORT);
     int n_columns = 2;
-    wxListItem itemCol;
-    itemCol.SetText(wxT("Body"));
-//    itemCol.SetImage(-1);
-    itemCol.SetAlign(wxLIST_FORMAT_LEFT);
-    listcontrol->InsertColumn(0, itemCol);
-    listcontrol->SetColumnWidth(0, (listcontrol->GetSize()).GetWidth()/n_columns);
     
-    itemCol.SetText(wxT("Limb"));
-    itemCol.SetAlign(wxLIST_FORMAT_LEFT);
-    listcontrol->InsertColumn(1, itemCol);
-    listcontrol->SetColumnWidth(1, (listcontrol->GetSize()).GetWidth()/n_columns);
+    wxListItem col_body;
+    col_body.SetId(0);
+    col_body.SetText(wxT("Body"));
+//    col_body.SetAlign(wxLIST_FORMAT_LEFT);
+    col_body.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    listcontrol->InsertColumn(0, col_body);
+    
+    wxListItem col_artificial_horizon;
+    col_artificial_horizon.SetId(1);
+    col_artificial_horizon.SetText(wxT("Artificial horizon"));
+    col_artificial_horizon.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+//    col_artificial_horizon.SetAlign(wxLIST_FORMAT_LEFT);
+    listcontrol->InsertColumn(1, col_artificial_horizon);
+//    listcontrol->SetColumnWidth(1, (listcontrol->GetSize()).GetWidth()/n_columns);
+ 
+//    listcontrol->SetItemCount((plot->sight_list).size());
 
 
-
-    for( int i = 0; i < 10; i++ ){
-        int imageIndex = 0;
-        wxString buf;     // Insert an item, with a string for column 0,     // and image index 0
-        buf.Printf(wxT("This is item %d"), i); // Set a string for column 1
-        listcontrol->InsertItem(i, buf, imageIndex);     // The item may change position due to e.g. sorting, so store the original index in the item's data
-//        listcontrol->SetItemData(i, i);
-        buf.Printf(wxT("Col 1, item %d"), i);
-        listcontrol->SetItem(i, 1, buf);     // Set a string for column 2
+//    cout << "SIZE  = " <<(plot->sight_list).size();
+//
+    for(i=0; i<((plot->sight_list).size()); i++)
+    {
+//        Item* curritem = getItem(n);
         
+        wxListItem item;
+        item.SetId(i);
+        item.SetText(wxT("ciao"));
         
+        listcontrol->InsertItem( item );
+        
+      
+        listcontrol->SetItem(i, 0, wxString(((plot->sight_list)[i]).body.name.value));
+        listcontrol->SetItem(i, 1, wxString(((plot->sight_list)[i]).artificial_horizon.value));
+        
+     
     }
-    //
     
     
     //buttons
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-//    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
-
+    //    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
+    
     button_modify = new wxButton(panel, wxID_ANY, "Modify", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
     button_modify->Enable(false);
     
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-//    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
+    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
     sizer_grid->Add(button_add);
     sizer_grid->Add(button_modify);
     sizer_grid->Add(button_delete);
-
-    sizer_v->Add(listcontrol, 0, wxEXPAND | wxALL, 5);
-//    sizer_v->Add(sizer_grid, wxALIGN_LEFT | wxALL, 5);
+    
+    sizer_v->Add(listcontrol, wxEXPAND | wxALL, 5);
+    //    sizer_v->Add(sizer_grid, wxALIGN_LEFT | wxALL, 5);
     sizer_h->Add(sizer_v, 0, wxEXPAND | wxALL, 5);
     
     panel->SetSizer(sizer_h);
-
+    
 }
 
 //void PlotFrame::OnAdd(wxCommandEvent& event){

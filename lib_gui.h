@@ -1376,58 +1376,60 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     for(i=0; i<((plot->sight_list).size()); i++){
         
-        item.SetId(i);
-        item.SetText(wxT(""));
+        ((plot->sight_list)[i]).add_to_wxListCtrl(listcontrol);
         
-        listcontrol->InsertItem(item);
-        
-        //set body column
-        listcontrol->SetItem(i, 0, wxString(((plot->sight_list)[i]).body.name.value));
-        
-        //set limb column
-        if((((plot->sight_list)[i]).body.name == String("sun")) || (((plot->sight_list)[i]).body.name == String("moon"))){
-            
-            if(wxString(((plot->sight_list)[i]).limb.value) == 'u'){listcontrol->SetItem(i, 1, wxString("upper"));}
-            if(wxString(((plot->sight_list)[i]).limb.value) == 'l'){listcontrol->SetItem(i, 1, wxString("lower"));}
-            if(wxString(((plot->sight_list)[i]).limb.value) == 'c'){listcontrol->SetItem(i, 1, wxString("center"));}
-            
-        }else{
-            listcontrol->SetItem(i, 1, wxString(""));
-        }
-        
-        //set artificial horizon column
-        listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
-        
-        
-        //set sextant altitude column
-        listcontrol->SetItem(i, 3, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
-        
-        //set index error
-        listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).index_error).to_string(display_precision)));
-        
-        //set height of eye column
-        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
-        else{listcontrol->SetItem(i, 5, wxString(""));}
-        
-        //set column of master-clock date and hour of sight
-        listcontrol->SetItem(i, 6, wxString((((plot->sight_list)[i]).time).to_string(display_precision)));
-        
-        //set use of stopwatch
-        listcontrol->SetItem(i, 7, wxString((((plot->sight_list)[i]).use_stopwatch.value)));
-        
-        //set stopwatch reading
-        if((((plot->sight_list)[i]).use_stopwatch.value) == 'y'){
-            listcontrol->SetItem(i, 8, wxString((((plot->sight_list)[i]).stopwatch).to_string(display_precision)));
-        }else{
-            listcontrol->SetItem(i, 8, wxString(""));
-        }
-        
-        //set TAI-UTC
-        listcontrol->SetItem(i, 9, wxString((((plot->sight_list)[i]).TAI_minus_UTC).to_string(display_precision)));
-        
-        //set label
-        listcontrol->SetItem(i, 10, wxString((((plot->sight_list)[i]).label).value));
-        
+//        item.SetId(i);
+//        item.SetText(wxT(""));
+//        
+//        listcontrol->InsertItem(item);
+//        
+//        //set body column
+//        listcontrol->SetItem(i, 0, wxString(((plot->sight_list)[i]).body.name.value));
+//        
+//        //set limb column
+//        if((((plot->sight_list)[i]).body.name == String("sun")) || (((plot->sight_list)[i]).body.name == String("moon"))){
+//            
+//            if(wxString(((plot->sight_list)[i]).limb.value) == 'u'){listcontrol->SetItem(i, 1, wxString("upper"));}
+//            if(wxString(((plot->sight_list)[i]).limb.value) == 'l'){listcontrol->SetItem(i, 1, wxString("lower"));}
+//            if(wxString(((plot->sight_list)[i]).limb.value) == 'c'){listcontrol->SetItem(i, 1, wxString("center"));}
+//            
+//        }else{
+//            listcontrol->SetItem(i, 1, wxString(""));
+//        }
+//        
+//        //set artificial horizon column
+//        listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
+//        
+//        
+//        //set sextant altitude column
+//        listcontrol->SetItem(i, 3, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
+//        
+//        //set index error
+//        listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).index_error).to_string(display_precision)));
+//        
+//        //set height of eye column
+//        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
+//        else{listcontrol->SetItem(i, 5, wxString(""));}
+//        
+//        //set column of master-clock date and hour of sight
+//        listcontrol->SetItem(i, 6, wxString((((plot->sight_list)[i]).time).to_string(display_precision)));
+//        
+//        //set use of stopwatch
+//        listcontrol->SetItem(i, 7, wxString((((plot->sight_list)[i]).use_stopwatch.value)));
+//        
+//        //set stopwatch reading
+//        if((((plot->sight_list)[i]).use_stopwatch.value) == 'y'){
+//            listcontrol->SetItem(i, 8, wxString((((plot->sight_list)[i]).stopwatch).to_string(display_precision)));
+//        }else{
+//            listcontrol->SetItem(i, 8, wxString(""));
+//        }
+//        
+//        //set TAI-UTC
+//        listcontrol->SetItem(i, 9, wxString((((plot->sight_list)[i]).TAI_minus_UTC).to_string(display_precision)));
+//        
+//        //set label
+//        listcontrol->SetItem(i, 10, wxString((((plot->sight_list)[i]).label).value));
+//        
         
     }
     

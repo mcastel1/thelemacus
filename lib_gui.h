@@ -1292,7 +1292,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    }
 //
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
+    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
     int n_columns = 4;
     
     wxListItem col_body;
@@ -1359,25 +1359,25 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //buttons
-    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    //    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
+//    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+//    //    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
+//
+//    button_modify = new wxButton(panel, wxID_ANY, "Modify", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+//    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
+//    button_modify->Enable(false);
+//
+//    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+//    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
-    button_modify = new wxButton(panel, wxID_ANY, "Modify", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
-    button_modify->Enable(false);
-    
-    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
-    
-    sizer_grid->Add(button_add);
-    sizer_grid->Add(button_modify);
-    sizer_grid->Add(button_delete);
-    
-    sizer_v->Add(listcontrol, wxEXPAND | wxALL, 5);
+//    sizer_grid->Add(button_add);
+//    sizer_grid->Add(button_modify);
+//    sizer_grid->Add(button_delete);
+//
+    sizer_v->Add(sizer_h, 1, wxALIGN_CENTER_HORIZONTAL);
     //    sizer_v->Add(sizer_grid, wxALIGN_LEFT | wxALL, 5);
-    sizer_h->Add(sizer_v, 0, wxEXPAND | wxALL, 5);
+    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
-    panel->SetSizer(sizer_h);
+    panel->SetSizer(sizer_v);
     
 }
 

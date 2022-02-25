@@ -949,7 +949,14 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
-    PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    wxDisplay display;
+    wxRect rectangle = (display.GetClientArea());
+    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
+    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
+
+    
+    PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
     list_frame->Show(true);
 
     return true;

@@ -507,7 +507,7 @@ public:
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField *label;
     
-    wxGridSizer *sizer_grid;
+    wxFlexGridSizer *sizer_grid;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     
     wxArrayString bodies, limbs;
@@ -995,7 +995,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     SetMenuBar( menuBar );
     
     
-    sizer_grid = new wxGridSizer(11, 2, 0, 0);
+    sizer_grid = new wxFlexGridSizer(11, 2, 0, 0);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);

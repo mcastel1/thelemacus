@@ -1293,7 +1293,9 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    }
 //
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 300), wxLC_REPORT);
+    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+    listcontrol->SetMinSize(this->GetSize());
+               
     int n_columns = 7;
     
     column.SetId(0);

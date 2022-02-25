@@ -2005,7 +2005,7 @@ bool Limb::operator==(const Limb& limb){
 class Sight{
     
 public:
-    Time master_clock_date_and_hour, time;
+    Time master_clock_date_and_hour, /*this is the time of the observation, in the TAI time scale*/time;
     //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
     Chrono TAI_minus_UTC, stopwatch;
     Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;

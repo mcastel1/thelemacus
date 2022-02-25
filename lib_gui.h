@@ -461,6 +461,7 @@ public:
     wxSizer* sizer_h, *sizer_v, *sizer_buttons;
     
     void OnAdd(wxCommandEvent& event);
+    void OnModify(wxCommandEvent& event);
     //    void OnDelete(wxCommandEvent& event);
     
 };
@@ -470,7 +471,7 @@ public:
 class SightFrame: public wxFrame{
     
 public:
-    SightFrame(PlotFrame*, const wxString&, const wxPoint&, const wxSize&, String);
+    SightFrame(PlotFrame*, Sight*, const wxString&, const wxPoint&, const wxSize&, String);
     
     PlotFrame* parent;
     Catalog* catalog;
@@ -963,7 +964,7 @@ bool MyApp::OnInit(){
     
 }
 
-SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -987,7 +988,12 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     wxMenu *menuFile = new wxMenu;
     catalog = new Catalog(String(path_file_catalog), String(""));
     
-    sight = new Sight();
+    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight. Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in
+    if(sight_in != NULL){
+        sight = sight_in;
+    }else{
+        sight = new Sight();
+    }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
@@ -1054,14 +1060,15 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
     height_of_eye = new LengthField(this, &(sight->height_of_eye));
     
     //master-clock date
-    //sets  sight.master_clock_date_and_hour.date to the current UTC date
-    (sight->master_clock_date_and_hour).date.set_current(prefix);
+    //sets  sight.master_clock_date_and_hour.date to the current UTC date if this constructor has been called with sight_in = NULL
+    if(sight_in == NULL){(sight->master_clock_date_and_hour).date.set_current(prefix);}
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set();
     
     //master-clock hour
-    (sight->master_clock_date_and_hour).chrono.set_current(prefix);
+    //sets  sight.master_clock_date_and_hour.chrono to the current UTC date if this constructor has been called with sight_in = NULL
+    if(sight_in == NULL){(sight->master_clock_date_and_hour).chrono.set_current(prefix);}
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     master_clock_chrono->set();
@@ -1197,7 +1204,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, const wxString& title, const wxP
      set();
      */
     
-    
+    if(sight_in != NULL){set();}
     
 }
 
@@ -1437,11 +1444,11 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //buttons
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
-    //
+    
     button_modify = new wxButton(panel, wxID_ANY, "/", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    //    //    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
+    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
     //    button_modify->Enable(false);
-    //
+    
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     //    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
@@ -1467,8 +1474,34 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 
 void PlotFrame::OnAdd(wxCommandEvent& event){
 
-    SightFrame *sight_frame = new SightFrame(this, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
+    SightFrame *sight_frame = new SightFrame(this, NULL, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
+
+    event.Skip(true);
+
+}
+
+void PlotFrame::OnModify(wxCommandEvent& event){
+    
+    long item;
+    item = listcontrol->GetNextItem(-1,
+                                    wxLIST_NEXT_ALL,
+                                    wxLIST_STATE_SELECTED);
+    
+    if(item != -1){
+        
+        stringstream s;
+        
+        s.str("");
+        s << "Sight #" << item;
+        
+        SightFrame *sight_frame = new SightFrame(this, &((plot->sight_list)[item]), s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+//        (sight_frame->sight) = &((plot->sight_list)[item]);
+        sight_frame->Show(true);
+        
+        
+    }
+
 
     event.Skip(true);
 

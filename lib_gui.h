@@ -1318,7 +1318,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 
     wxListItem col_sextant_altitude;
     col_sextant_altitude.SetId(0);
-    col_sextant_altitude.SetText(wxT("Sextant altitude"));
+    col_sextant_altitude.SetText(wxT("Height of eye"));
     col_sextant_altitude.SetAlign(wxLIST_FORMAT_LEFT);
     col_sextant_altitude.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(3, col_sextant_altitude);
@@ -1349,6 +1349,10 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         
         //set artificial horizon column
         listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
+        
+        //set height of eye column
+        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 3, wxString::Format(wxT("%f m"), (((plot->sight_list)[i]).height_of_eye.value)*1e3*nm));}
+        else{listcontrol->SetItem(i, 3, wxString(""));}
 
      
     }

@@ -1298,7 +1298,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     wxListItem col_body;
     col_body.SetId(0);
     col_body.SetText(wxT("Body"));
-//    col_body.SetAlign(wxLIST_FORMAT_LEFT);
+    col_body.SetAlign(wxLIST_FORMAT_LEFT);
     col_body.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
     listcontrol->InsertColumn(0, col_body);
     
@@ -1306,7 +1306,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     col_artificial_horizon.SetId(1);
     col_artificial_horizon.SetText(wxT("Artificial horizon"));
     col_artificial_horizon.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-//    col_artificial_horizon.SetAlign(wxLIST_FORMAT_LEFT);
+    col_artificial_horizon.SetAlign(wxLIST_FORMAT_LEFT);
     listcontrol->InsertColumn(1, col_artificial_horizon);
 //    listcontrol->SetColumnWidth(1, (listcontrol->GetSize()).GetWidth()/n_columns);
  

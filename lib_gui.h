@@ -1292,7 +1292,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 //    }
 //
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight()*0.9), wxLC_REPORT);
+    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight()*0.8), wxLC_REPORT);
   
     
     int n_columns = 11;
@@ -1442,17 +1442,19 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
 //    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
-    sizer_buttons->Add(button_add);
-    sizer_buttons->Add(button_modify);
-    sizer_buttons->Add(button_delete);
-    
+    sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
+   sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
+   sizer_buttons->Add(button_delete, 0, wxALIGN_CENTER);
+//
     
 //resize uniformly all column
 //    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
 //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
 //    }
     sizer_v->Add(listcontrol, 1, wxEXPAND | wxALL, 10);
-       sizer_v->Add(sizer_buttons, wxALIGN_LEFT | wxALL, 5);
+       sizer_v->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, 5);
+//    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
+//    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
 //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
     panel->SetSizer(sizer_v);

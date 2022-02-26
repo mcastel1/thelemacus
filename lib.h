@@ -1559,10 +1559,11 @@ public:
     
     void to_MJD(void);
     void to_TAI(void);
-    void add(Chrono);
     
     string to_string(unsigned int);
     bool operator==(const Time&), operator!=(const Time&), operator> (const Time&);
+    void operator += (const Chrono&);
+    void operator -= (const Chrono&);
     
 };
 
@@ -2258,11 +2259,11 @@ bool Sight::modify(Catalog catalog, String prefix){
                 if(use_stopwatch == Answer('y', new_new_prefix)){
                     
                     //the stopwatch value has changed -> I update the time object in the Sight
-                    time.add(stopwatch);
+                    time+=stopwatch;
                     
                 }
                 
-                time.add(TAI_minus_UTC);
+                time+=TAI_minus_UTC;
                 time.print(String("TAI date and hour of sight"), new_prefix, cout);
                 
                 cout << new_prefix.value << "master-clock date and hour of sight modified\n";
@@ -2308,13 +2309,13 @@ bool Sight::modify(Catalog catalog, String prefix){
                     stopwatch.enter(String("stopwatch"), new_new_prefix);
                     //the stopwatch value has changed -> I update the time object in the Sight
                     time = master_clock_date_and_hour;
-                    time.add(stopwatch);
+                    time+=stopwatch;
                     
                     items.insert(find(items.begin(), items.end(), all_items[6])+1, String(all_items[7]));
                     
                 }
                 
-                time.add(TAI_minus_UTC);
+                time+=TAI_minus_UTC;
                 time.print(String("TAI date and hour of sight"), new_prefix, cout);
                 
                 
@@ -2344,7 +2345,7 @@ bool Sight::modify(Catalog catalog, String prefix){
                 
                 //the stopwatch value has changed -> I update the time object in the Sight
                 time = master_clock_date_and_hour;
-                time.add(stopwatch);
+                time+=stopwatch;
                 
                 cout << new_prefix.value << "Stopwatch reading modified\n";
                 
@@ -2734,14 +2735,23 @@ bool Time::read_from_file(String name, File& file, String prefix){
     
 }
 
-void Time::add(Chrono chrono_in){
+void Time::operator += (const Chrono& chrono){
     
-    MJD += (((double)(chrono_in.h)) + ((double)(chrono_in.m))/60.0 + ((double)(chrono_in.s))/(60.0*60.0))/24.0;
+    to_MJD();
+    MJD += (((double)(chrono.h)) + ((double)(chrono.m))/60.0 + ((double)(chrono.s))/(60.0*60.0))/24.0;
     to_TAI();
-    
+  
 }
 
 
+
+void Time::operator -= (const Chrono& chrono){
+    
+    to_MJD();
+    MJD -= (((double)(chrono.h)) + ((double)(chrono.m))/60.0 + ((double)(chrono.s))/(60.0*60.0))/24.0;
+    to_TAI();
+  
+}
 
 
 
@@ -3167,12 +3177,12 @@ bool Sight::read_from_file(File& file, String prefix){
         
         items.insert(items.begin()+5+(additional_items++), String("stopwatch reading"));
         stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
-        time.add(stopwatch);
+        time+=stopwatch;
         
     }
     
     TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file, false, new_prefix);
-    time.add(TAI_minus_UTC);
+    time+=TAI_minus_UTC;
     time.print(String("TAI date and hour of sight"), new_prefix, cout);
     
     //check whether the date and hour of sight falls within the time window covered by JPL data files
@@ -5181,7 +5191,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
         if(use_stopwatch == Answer('y', new_prefix)){
             
             stopwatch.enter(String("stopwatch reading"), new_prefix);
-            time.add(stopwatch);
+            time+=stopwatch;
             
         }
         
@@ -5189,7 +5199,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
         cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
         TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
         cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        time.add(TAI_minus_UTC);
+        time+=TAI_minus_UTC;
         time.print(String("TAI date and hour of sight"), new_prefix, cout);
         
     }while(!check_data_time_interval(prefix));

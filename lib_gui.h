@@ -950,6 +950,8 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
+    
+    
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
     wxRect rectangle = (display.GetClientArea());
@@ -1525,6 +1527,7 @@ void PlotFrame::OnModify(wxCommandEvent& event){
 
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
 void SightFrame::set(void){
+    
     
     body->set();
     limb->set();
@@ -2147,6 +2150,11 @@ void LengthField::set(void){
 
 //sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date
 void DateField::set(void){
+    
+//    Time time_temp;
+//    
+//    time_temp = ((parent_frame->sight)->time)-((parent_frame->sight)->TAI_minus_UTC);
+
     
     year->SetValue(wxString::Format(wxT("%i"), date->Y));
     month->SetValue(wxString::Format(wxT("%i"), date->M));

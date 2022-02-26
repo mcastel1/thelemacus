@@ -3077,8 +3077,9 @@ void Route::transport(String prefix){
 
 void Sight::add_to_wxListCtrl(wxListCtrl* listcontrol){
     
-    wxListItem item;
     unsigned int i;
+    wxListItem item;
+    Time time_UTC;
     
     i = (listcontrol->GetItemCount());
     
@@ -3116,7 +3117,10 @@ void Sight::add_to_wxListCtrl(wxListCtrl* listcontrol){
     else{listcontrol->SetItem(i, 5, wxString(""));}
     
     //set column of master-clock date and hour of sight
-    listcontrol->SetItem(i, 6, wxString((time).to_string(display_precision)));
+    //I convert the time in TAI scale (written in time) to the time in UTC scale (written in time_TAI). I show in the GUI object the time_UTC
+    time_UTC = time;
+    time_UTC-= TAI_minus_UTC;
+    listcontrol->SetItem(i, 6, wxString(time_UTC.to_string(display_precision)));
     
     //set use of stopwatch
     listcontrol->SetItem(i, 7, wxString((use_stopwatch.value)));

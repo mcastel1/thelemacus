@@ -2151,26 +2151,34 @@ void LengthField::set(void){
 //sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date
 void DateField::set(void){
     
-//    Time time_temp;
-//    
-//    time_temp = ((parent_frame->sight)->time)-((parent_frame->sight)->TAI_minus_UTC);
+    Time time_UTC;
 
+    //((parent_frame->sight)->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+    time_UTC = ((parent_frame->sight)->time);
+    time_UTC -= ((parent_frame->sight)->TAI_minus_UTC);
     
-    year->SetValue(wxString::Format(wxT("%i"), date->Y));
-    month->SetValue(wxString::Format(wxT("%i"), date->M));
-    day->SetValue(wxString::Format(wxT("%i"), date->D));
+    year->SetValue(wxString::Format(wxT("%i"), (time_UTC.date).Y));
+    month->SetValue(wxString::Format(wxT("%i"), (time_UTC.date).M));
+    day->SetValue(wxString::Format(wxT("%i"), (time_UTC.date).D));
     
     year_ok = true;
     month_ok = true;
     day_ok = true;
+    
 }
 
 //sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono
 void ChronoField::set(void){
     
-    hour->SetValue(wxString::Format(wxT("%i"), chrono->h));
-    minute->SetValue(wxString::Format(wxT("%i"), chrono->m));
-    second->SetValue(wxString::Format(wxT("%f"), chrono->s));
+    Time time_UTC;
+
+    //((parent_frame->sight)->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+    time_UTC = ((parent_frame->sight)->time);
+    time_UTC -= ((parent_frame->sight)->TAI_minus_UTC);
+  
+    hour->SetValue(wxString::Format(wxT("%i"), (time_UTC.chrono).h));
+    minute->SetValue(wxString::Format(wxT("%i"), (time_UTC.chrono).m));
+    second->SetValue(wxString::Format(wxT("%f"), (time_UTC.chrono).s));
     
     hour_ok = true;
     minute_ok = true;

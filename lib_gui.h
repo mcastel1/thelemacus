@@ -1020,11 +1020,14 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
-    //First off, I need to set TAI_minus_UTC, which will be used in the following. Here I read it from from file_init
-    cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
-    (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-  
+    //First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
+    if(sight_in==NULL){
+        
+        cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
+        (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
+        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+        
+    }
     
     
     
@@ -1050,11 +1053,13 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //read index error from init file
-    cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
-    (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
-    (sight->index_error).to_deg_min(&deg, &min);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    //If sight_in = NULL, read index error from init file
+    if(sight_in == NULL){
+        cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
+        (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
+        (sight->index_error).to_deg_min(&deg, &min);
+        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    }
     index_error = new AngleField(this, &(sight->index_error));
     index_error->set();
     

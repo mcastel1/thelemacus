@@ -1112,8 +1112,10 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
+    //this is wrong: it sets TAI_minus_UTC to an hour of the day
     TAI_minus_UTC->set();
-    
+    //this is wrong: it sets TAI_minus_UTC to an hour of the day
+
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     label = new StringField(this, &(sight->label));

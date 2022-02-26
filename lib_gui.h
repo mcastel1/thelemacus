@@ -2142,7 +2142,7 @@ void AngleField::set(void){
 //sets the value in the GUI object value equal to the value in the non-GUI  object length
 void LengthField::set(void){
     
-    value->SetValue(wxString::Format(wxT("%f"), length->value));
+    value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
     
     ok = true;
     

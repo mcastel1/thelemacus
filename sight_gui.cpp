@@ -59,7 +59,7 @@ using namespace std;
  notes: set parents to constructors of all frames that you defined
 - when you print out index error, print it with its sign rather than normalized
  - when you click on modify and then press reduce, the code should not insert a new item in listcontrol, but replace the old one
- - fix '    //this is wrong: it sets TAI_minus_UTC to an hour of the day'
+- if you modify a field in SightFrame, do not kill the focus on the field and press Reduce, the content of the field is not written in the non-GUI object, while it should be -> fix it. 
  */
 
 

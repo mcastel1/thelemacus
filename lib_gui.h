@@ -240,7 +240,7 @@ public:
     bool hour_ok, minute_ok, second_ok;
     
     ChronoField(SightFrame*, Chrono*);
-    void set(void);
+    void set(Chrono);
     void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
@@ -1082,18 +1082,31 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
         (sight->time).date.set_current(prefix);
         (sight->time).chrono.set_current(prefix);
     }
-    (sight->master_clock_date_and_hour).date.print(String("AAAAAA"),String(""), cout);
-    (sight->master_clock_date_and_hour).chrono.print(String("CCCCC"),String(""), cout);
-    (sight->time).date.print(String("BBBBBBBBB"),String(""), cout);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set();
     
     //master-clock hour
-    //sets  sight.master_clock_date_and_hour.chrono and sight.time.chrono to the current UTC date if this constructor has been called with sight_in = NULL
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
-    master_clock_chrono->set();
+    
+    //if sight_in != NULL, then I initialize the GUI filed master_clock_chrono with the one written in sight_in. Otherwise, master_clock_chrono is initialized as empty.
+    if(sight_in!=NULL){
+        
+        Time time_UTC;
+        
+        //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+        time_UTC = (sight->time);
+        time_UTC -= (sight->TAI_minus_UTC);
+        master_clock_chrono->set(time_UTC.chrono);
+        
+    }else{
+        //if sight_in == NULL, I have previously set the non-GUI object (sight->master_clock_date_and_hour).chrono to the current hour, and I write this value into the GUI object master_clock_chrono
+        
+        master_clock_chrono->set((sight->master_clock_date_and_hour).chrono);
+        
+    }
+    
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1117,9 +1130,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
-    //this is wrong: it sets TAI_minus_UTC to an hour of the day
-    TAI_minus_UTC->set();
-    //this is wrong: it sets TAI_minus_UTC to an hour of the day
+    TAI_minus_UTC->set(sight->TAI_minus_UTC);
 
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1542,6 +1553,8 @@ void PlotFrame::OnDelete(wxCommandEvent& event){
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
 void SightFrame::set(void){
     
+    Time time_UTC;
+
     
     body->set();
     limb->set();
@@ -1557,17 +1570,22 @@ void SightFrame::set(void){
     }
     
     master_clock_date->set();
-    master_clock_chrono->set();
+    
+    //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+    time_UTC = (sight->time);
+    time_UTC -= (sight->TAI_minus_UTC);
+    master_clock_chrono->set(time_UTC.chrono);
+    
     stopwatch_check->set();
     
     if(((stopwatch_check->check)->GetValue())){
         stopwatch_reading->Enable(true);
-        stopwatch_reading->set();
+        stopwatch_reading->set(sight->stopwatch);
     }else{
         stopwatch_reading->Enable(false);
     }
     
-    TAI_minus_UTC->set();
+    TAI_minus_UTC->set(sight->TAI_minus_UTC);
     label->set();
     
 }
@@ -2181,18 +2199,12 @@ void DateField::set(void){
     
 }
 
-//sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono
-void ChronoField::set(void){
+//sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
+void ChronoField::set(Chrono chrono_in){
     
-    Time time_UTC;
-
-    //((parent_frame->sight)->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
-    time_UTC = ((parent_frame->sight)->time);
-    time_UTC -= ((parent_frame->sight)->TAI_minus_UTC);
-  
-    hour->SetValue(wxString::Format(wxT("%i"), (time_UTC.chrono).h));
-    minute->SetValue(wxString::Format(wxT("%i"), (time_UTC.chrono).m));
-    second->SetValue(wxString::Format(wxT("%f"), (time_UTC.chrono).s));
+    hour->SetValue(wxString::Format(wxT("%i"), chrono_in.h));
+    minute->SetValue(wxString::Format(wxT("%i"), chrono_in.m));
+    second->SetValue(wxString::Format(wxT("%f"), chrono_in.s));
     
     hour_ok = true;
     minute_ok = true;

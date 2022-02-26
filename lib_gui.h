@@ -1020,6 +1020,14 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
+    //First off, I need to set TAI_minus_UTC, which will be used in the following. Here I read it from from file_init
+    cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
+    (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+  
+    
+    
+    
     for(i=0; i<((*catalog).list).size(); i++){
         bodies.Add((((*catalog).list)[i]).name.value.c_str());
     }
@@ -1062,15 +1070,22 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     height_of_eye = new LengthField(this, &(sight->height_of_eye));
     
     //master-clock date
-    //sets  sight.master_clock_date_and_hour.date to the current UTC date if this constructor has been called with sight_in = NULL
-    if(sight_in == NULL){(sight->master_clock_date_and_hour).date.set_current(prefix);}
+    //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
+    if(sight_in == NULL){
+        (sight->master_clock_date_and_hour).date.set_current(prefix);
+        (sight->master_clock_date_and_hour).chrono.set_current(prefix);
+        (sight->time).date.set_current(prefix);
+        (sight->time).chrono.set_current(prefix);
+    }
+    (sight->master_clock_date_and_hour).date.print(String("AAAAAA"),String(""), cout);
+    (sight->master_clock_date_and_hour).chrono.print(String("CCCCC"),String(""), cout);
+    (sight->time).date.print(String("BBBBBBBBB"),String(""), cout);
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set();
     
     //master-clock hour
-    //sets  sight.master_clock_date_and_hour.chrono to the current UTC date if this constructor has been called with sight_in = NULL
-    if(sight_in == NULL){(sight->master_clock_date_and_hour).chrono.set_current(prefix);}
+    //sets  sight.master_clock_date_and_hour.chrono and sight.time.chrono to the current UTC date if this constructor has been called with sight_in = NULL
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     master_clock_chrono->set();
@@ -1094,13 +1109,6 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     //    (stopwatch_reading->hour)->SetValue(wxString("0"));
     //    (stopwatch_reading->minute)->SetValue(wxString("0"));
     //    (stopwatch_reading->second)->SetValue(wxString("0.0"));
-    
-    
-    //TAI-UTC
-    //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
-    cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
-    (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));

@@ -462,7 +462,7 @@ public:
     
     void OnAdd(wxCommandEvent& event);
     void OnModify(wxCommandEvent& event);
-    //    void OnDelete(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
     
 };
 
@@ -1452,7 +1452,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //    button_modify->Enable(false);
     
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    //    //    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
+    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     
     sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
@@ -1511,19 +1511,18 @@ void PlotFrame::OnModify(wxCommandEvent& event){
 
 
 
-//
-//void PlotFrame::OnDelete(wxCommandEvent& event){
-//
-//    int i;
-//
-//    i = listbox->GetSelection();
-//
-//    if(i != -1){
-//        listbox->Delete(i);
-//    }
-//
-//}
-//
+
+void PlotFrame::OnDelete(wxCommandEvent& event){
+
+    long item;
+    
+    item = listcontrol->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    listcontrol->DeleteItem(item);
+    
+    event.Skip(true);
+ 
+}
+
 
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
 void SightFrame::set(void){

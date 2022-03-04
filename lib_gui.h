@@ -2165,6 +2165,7 @@ void AngleField::set(void){
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
     min->SetValue(wxString::Format(wxT("%f"), min_temp));
     
+    sign_ok = true; 
     deg_ok = true;
     min_ok = true;
     

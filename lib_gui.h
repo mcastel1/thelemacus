@@ -476,6 +476,8 @@ public:
     PlotFrame* parent;
     Catalog* catalog;
     Sight* sight;
+    //this long represents the position in the list (this->GetParent())->listcontrol of sight. If position = -1, then sight is not in that list
+    long position;
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;

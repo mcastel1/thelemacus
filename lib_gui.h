@@ -487,7 +487,7 @@ public:
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckBody checkbody;
-    CheckLimb checklimb;
+    CheckLimb check_limb;
     CheckSign checksign;
     CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
@@ -1158,7 +1158,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, checklimb);
+    button_reduce->Bind(wxEVT_BUTTON, check_limb);
     button_reduce->Bind(wxEVT_BUTTON, check_height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
@@ -2260,13 +2260,13 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     limbs.Add(wxT("center"));
     
     
-    ((parent_frame->checklimb).p) = this;
+    ((parent_frame->check_limb).p) = this;
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, (parent_frame->checklimb));
+    name->Bind(wxEVT_KILL_FOCUS, (parent_frame->check_limb));
     
 //    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
 

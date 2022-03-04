@@ -15,7 +15,7 @@ class MessageFrame;
 class SightFrame;
 class PlotFrame;
 
-struct CheckArtificialHorizon;
+struct CheckCheck;
 struct CheckChrono;
 struct CheckSign;
 struct CheckArcDegree;
@@ -270,10 +270,12 @@ struct CheckLimb{
     
 };
 
-struct CheckArtificialHorizon{
+
+struct CheckCheck{
     
     CheckField* p;
     
+    //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
     void operator()(wxCommandEvent&);
     
 };
@@ -494,7 +496,7 @@ public:
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
     CheckLength check_height_of_eye;
-    CheckArtificialHorizon checkartificialhorizon;
+    CheckCheck check_artificial_horizon;
     CheckYear checkyear;
     CheckMonth checkmonth;
     CheckDay checkday;
@@ -530,7 +532,6 @@ public:
     void OnClose(wxCommandEvent& event);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
-    void OnCheckArtificialHorizon(wxCommandEvent& event);
     void TryToEnableReduce(void);
     //    void OnSelectBody(wxFocusEvent& event);
     //    void OnCheckStopwatch(wxCommandEvent& event);
@@ -951,7 +952,6 @@ EVT_MENU(ID_Open,   SightFrame::OnOpen)
 EVT_MENU(ID_Save,   SightFrame::OnSave)
 EVT_MENU(ID_SaveAs,   SightFrame::OnSaveAs)
 EVT_MENU(ID_Close,  SightFrame::OnClose)
-//EVT_BUTTON(ID_artificial_horizon,   SightFrame::OnCheckArtificialHorizon)
 EVT_BUTTON(ID_button_cancel,   SightFrame::OnPressCancel)
 EVT_BUTTON(ID_button_reduce,   SightFrame::OnPressReduce)
 //EVT_COMBOBOX(ID_combo_body, SightFrame::OnSelectBody)
@@ -1082,8 +1082,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
-    (checkartificialhorizon.p) = artificial_horizon_check;
-    (artificial_horizon_check->check)->Bind(wxEVT_CHECKBOX, checkartificialhorizon);
+    (check_artificial_horizon.p) = artificial_horizon_check;
+    (artificial_horizon_check->check)->Bind(wxEVT_CHECKBOX, check_artificial_horizon);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1694,12 +1694,6 @@ void SightFrame::OnPressCancel(wxCommandEvent& event){
 }
 
 
-void SightFrame::OnCheckArtificialHorizon(wxCommandEvent& event){
-    
-    
-    Close(TRUE);
-}
-
 
 
 
@@ -2023,7 +2017,7 @@ void TabulateDays::operator()(wxFocusEvent &event){
 
 
 //this function writes into sight.artificial_horizon the value entered in the GUI box
-void CheckArtificialHorizon::operator()(wxCommandEvent& event){
+void CheckCheck::operator()(wxCommandEvent& event){
     
     SightFrame* f = (p->parent_frame);
     

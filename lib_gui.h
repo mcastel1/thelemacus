@@ -977,6 +977,11 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     double min;
     bool check = true;
     
+    //
+    cout << "Size of parent list = " << ((parent->plot)->sight_list).size() << " =----------------------- \n";
+    flush(cout);
+    //
+    
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));

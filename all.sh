@@ -7,4 +7,4 @@ clear; clear;
 #valgrind ./sight.o
 #./sight.o
 
-./sight_gui.o
+./run.sh

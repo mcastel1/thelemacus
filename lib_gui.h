@@ -16,7 +16,7 @@ class SightFrame;
 class PlotFrame;
 
 struct CheckArtificialHorizon;
-struct CheckStopWatch;
+struct CheckChrono;
 struct CheckSign;
 struct CheckArcDegree;
 struct CheckArcMinute;
@@ -279,7 +279,7 @@ struct CheckArtificialHorizon{
 };
 
 
-struct CheckStopWatch{
+struct CheckChrono{
     
     CheckField* p;
     
@@ -501,7 +501,7 @@ public:
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
-    CheckStopWatch checkstopwatch;
+    CheckChrono check_stopwatch;
     TabulateDays tabulatedays;
     PrintErrorMessage printerrormessage;
     
@@ -1128,8 +1128,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
     //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
-    (checkstopwatch.p) = stopwatch_check;
-    (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, checkstopwatch);
+    (check_stopwatch.p) = stopwatch_check;
+    (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, check_stopwatch);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1160,7 +1160,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, checklimb);
     button_reduce->Bind(wxEVT_BUTTON, check_height_of_eye);
-    button_reduce->Bind(wxEVT_BUTTON, checkstopwatch);
+    button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
 
 
@@ -2041,7 +2041,7 @@ void CheckArtificialHorizon::operator()(wxCommandEvent& event){
 }
 
 //this function writes into sight.use_stopwatch the value written into the respective GUI box and it enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
-template <class T> void CheckStopWatch::operator()(T& event){
+template <class T> void CheckChrono::operator()(T& event){
     
     SightFrame* f = (p->parent_frame);
     

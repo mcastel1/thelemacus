@@ -2041,7 +2041,7 @@ public:
     bool reduce(Route*, String);
     bool check_data_time_interval(String);
     
-    void add_to_wxListCtrl(wxListCtrl*);
+    void add_to_wxListCtrl(long, wxListCtrl*);
     
 };
 
@@ -3075,14 +3075,19 @@ void Route::transport(String prefix){
     
 }
 
-void Sight::add_to_wxListCtrl(wxListCtrl* listcontrol){
+void Sight::add_to_wxListCtrl(long position, wxListCtrl* listcontrol){
     
     unsigned int i;
     wxListItem item;
     Time time_UTC;
     
-    i = (listcontrol->GetItemCount());
-    
+    if(position == -1){
+        i = (listcontrol->GetItemCount());
+    }else{
+        i = position;
+        listcontrol->DeleteItem(i);
+    }
+        
     item.SetId(i);
     item.SetText(wxT(""));
     

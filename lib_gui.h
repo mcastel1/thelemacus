@@ -979,11 +979,6 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     double min;
     bool check = true;
     
-    //
-    cout << "Size of parent list = " << ((parent->plot)->sight_list).size() << " =----------------------- \n";
-    flush(cout);
-    //
-    
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -1420,7 +1415,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     for(i=0; i<((plot->sight_list).size()); i++){
         
-        ((plot->sight_list)[i]).add_to_wxListCtrl(listcontrol);
+        ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol);
         
 //        item.SetId(i);
 //        item.SetText(wxT(""));
@@ -2069,7 +2064,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //append the label of (*sight) to the listbox in the parent PlotFrame
     //    ((this->parent)->listbox)->Append(wxString((sight->label).value));
     
-    sight->add_to_wxListCtrl(((this->parent)->listcontrol));
+    sight->add_to_wxListCtrl(position, ((this->parent)->listcontrol));
 //
 //    wxListItem item;
 //

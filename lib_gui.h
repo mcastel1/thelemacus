@@ -471,7 +471,7 @@ public:
 class SightFrame: public wxFrame{
     
 public:
-    SightFrame(PlotFrame*, Sight*, const wxString&, const wxPoint&, const wxSize&, String);
+    SightFrame(PlotFrame*, Sight*, long, const wxString&, const wxPoint&, const wxSize&, String);
     
     PlotFrame* parent;
     Catalog* catalog;
@@ -968,7 +968,7 @@ bool MyApp::OnInit(){
     
 }
 
-SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -997,11 +997,13 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     wxMenu *menuFile = new wxMenu;
     catalog = new Catalog(String(path_file_catalog), String(""));
     
-    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight. Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in
+    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set position to a 'NULL' value (position = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set position to position_in.
     if(sight_in != NULL){
         sight = sight_in;
+        position = position_in;
     }else{
         sight = new Sight();
+        position = -1;
     }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -1509,7 +1511,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
 
 void PlotFrame::OnAdd(wxCommandEvent& event){
 
-    SightFrame *sight_frame = new SightFrame(this, NULL, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
+    SightFrame *sight_frame = new SightFrame(this, NULL, -1, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
 
     event.Skip(true);
@@ -1530,7 +1532,7 @@ void PlotFrame::OnModify(wxCommandEvent& event){
         s.str("");
         s << "Sight #" << item;
         
-        SightFrame *sight_frame = new SightFrame(this, &((plot->sight_list)[item]), s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        SightFrame *sight_frame = new SightFrame(this, &((plot->sight_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
 //        (sight_frame->sight) = &((plot->sight_list)[item]);
         sight_frame->Show(true);
         

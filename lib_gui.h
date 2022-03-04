@@ -338,7 +338,7 @@ struct CheckLength{
     
     LengthField* p;
     
-    void operator()(wxFocusEvent&);
+    template<class T> void operator()(T&);
     
     
 };
@@ -493,7 +493,7 @@ public:
     SetLabelToCurrentTime setlabeltocurrenttime;
     CheckArcDegree checkarcdegree;
     CheckArcMinute checkarcminute;
-    CheckLength checklength;
+    CheckLength check_height_of_eye;
     CheckArtificialHorizon checkartificialhorizon;
     CheckYear checkyear;
     CheckMonth checkmonth;
@@ -845,7 +845,7 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
     
 }
 
-void CheckLength::operator()(wxFocusEvent &event){
+template <class T> void CheckLength::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -871,7 +871,7 @@ void CheckLength::operator()(wxFocusEvent &event){
             (p->value)->SetBackgroundColour(*wxWHITE);
             
             (p->value)->GetValue().ToDouble(&length_temp);
-            (p->length)->set(String("height of eye"), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
+            (p->length)->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
             
             (p->ok) = true;
             
@@ -1159,6 +1159,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, checklimb);
+    button_reduce->Bind(wxEVT_BUTTON, check_height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, checkstopwatch);
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
 
@@ -2369,13 +2370,13 @@ LengthField::LengthField(SightFrame* frame, Length* p){
     parent_frame = frame;
     length = p;
     
-    ((parent_frame->checklength).p) = this;
+    ((parent_frame->check_height_of_eye).p) = this;
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetValue("");
-    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklength);
+    value->Bind(wxEVT_KILL_FOCUS, parent_frame->check_height_of_eye);
     
     text = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("m"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

@@ -767,21 +767,8 @@ template<class T> void CheckLabel::operator()(T &event){
 
 }
 
-//
-//void OnSelectInListBox::operator()(wxCommandEvent &event){
-//
-//    cout <<"vetro";
-//    (f->button_modify)->Enable(((f->listbox)->GetSelection()) != -1);
-//
-//    event.Skip(true);
-//
-//}
-
+//this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
 template <class T> void CheckAngle::operator()(T& event){
-    
-    (check_sign.p) = p;
-    (check_arc_degree.p) = p;
-    (check_arc_minute.p) = p;
     
     check_sign(event);
     check_arc_degree(event);
@@ -1189,6 +1176,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, check_limb);
+    button_reduce->Bind(wxEVT_BUTTON, (index_error->check_angle));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check_angle));
     button_reduce->Bind(wxEVT_BUTTON, check_height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
@@ -2347,11 +2335,11 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
         degrees.Add(wxString::Format(wxT("%i"), i));
     }
     
-    
+    //initialize check_angle and its objects
     (check_angle.p) = this;
-//    ((check_angle.check_sign).p) = this;
-//    ((check_angle.check_arc_degree).p) = this;
-//    ((check_angle.check_arc_minute).p) = this;
+    ((check_angle.check_sign).p) = this;
+    ((check_angle.check_arc_degree).p) = this;
+    ((check_angle.check_arc_minute).p) = this;
     
     sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     AdjustWidth(sign);

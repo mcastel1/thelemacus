@@ -4,19 +4,19 @@
  
  */
 
-#include <wx/wxprec.h>
-#include <wx/checkbox.h>
-#include <wx/combobox.h>
-#include <wx/dc.h>
-#include <wx/display.h>
-#include <wx/listctrl.h>
+#include "wx/wxprec.h"
+#include "wx/checkbox.h"
+#include "wx/combobox.h"
+#include "wx/dc.h"
+#include "wx/display.h"
+#include "wx/listctrl.h"
 
 
 
 
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 #include <iostream>
@@ -31,21 +31,21 @@
 #include <list>
 
 
-#include <gsl_rng.h>
-// #include <gsl_randist.h>
-// #include <gsl_vector.h>
-// #include <gsl_matrix.h>
-// #include <gsl_eigen.h>
-#include <gsl_blas.h>
-#include <gsl_sf_pow_int.h>
-#include <gsl_sf_exp.h>
-#include <gsl_errno.h> 
-#include <gsl_math.h>
-#include <gsl_spline.h>
-#include <gsl_integration.h>
-#include <gsl_roots.h>
-// #include <gsl_complex.h>
-// #include <gsl_complex_math.h>
+#include "gsl_rng.h"
+// #include "gsl_randist.h"
+// #include "gsl_vector.h"
+// #include "gsl_matrix.h"
+// #include "gsl_eigen.h"
+#include "gsl_blas.h"
+#include "gsl_sf_pow_int.h"
+#include "gsl_sf_exp.h"
+#include "gsl_errno.h"
+#include "gsl_math.h"
+#include "gsl_spline.h"
+#include "gsl_integration.h"
+#include "gsl_roots.h"
+// #include "gsl_complex.h"
+// #include "gsl_complex_math.h"
 
 
 

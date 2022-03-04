@@ -283,7 +283,7 @@ struct CheckStopWatch{
     
     CheckField* p;
     
-    void operator()(wxCommandEvent&);
+    template<class T> void operator()(T&);
     
     
 };
@@ -593,10 +593,10 @@ void CheckBody::operator()(wxFocusEvent &event){
         
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -648,7 +648,6 @@ template<class T> void CheckLimb::operator()(T &event){
     }
 
     event.Skip(true);
-
     
 }
 
@@ -701,10 +700,11 @@ void CheckSign::operator()(wxFocusEvent &event){
         
         f->TryToEnableReduce();
         
-        event.Skip(true);
         
     }
-    
+
+    event.Skip(true);
+
 }
 
 void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
@@ -724,7 +724,6 @@ void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
     
     event.Skip(true);
     
-    
 }
 
 
@@ -741,10 +740,11 @@ template<class T> void CheckLabel::operator()(T &event){
         
         f->TryToEnableReduce();
         
-        event.Skip(true);
         
     }
-    
+
+    event.Skip(true);
+
 }
 
 //
@@ -796,10 +796,10 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
         }
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -838,11 +838,10 @@ void CheckArcMinute::operator()(wxFocusEvent &event){
         }
         
         f->TryToEnableReduce();
-        
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -879,10 +878,10 @@ void CheckLength::operator()(wxFocusEvent &event){
         }
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -914,6 +913,7 @@ void PrintErrorMessage::operator()(void){
     
     //The temporary dialog window may have been closed, thus I set f->idling to false
     f->SetIdling(false);
+    
     
 }
 
@@ -1159,6 +1159,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, checklimb);
+    button_reduce->Bind(wxEVT_BUTTON, checkstopwatch);
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
 
 
@@ -1734,10 +1735,10 @@ void CheckHour::operator()(wxFocusEvent &event){
         }
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -1770,10 +1771,10 @@ void CheckMinute::operator()(wxFocusEvent &event){
         }
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -1812,10 +1813,10 @@ void CheckSecond::operator()(wxFocusEvent &event){
         
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -1857,11 +1858,10 @@ void CheckYear::operator()(wxFocusEvent &event){
         
         f->TryToEnableReduce();
         
-        
-        event.Skip(true);
-        
     }
     
+    event.Skip(true);
+
 }
 
 void CheckMonth::operator()(wxFocusEvent &event){
@@ -1899,10 +1899,10 @@ void CheckMonth::operator()(wxFocusEvent &event){
         }
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -1963,10 +1963,10 @@ void CheckDay::operator()(wxFocusEvent &event){
         }
         
         f->TryToEnableReduce();
-        
-        event.Skip(true);
-        
+                
     }
+    
+    event.Skip(true);
     
 }
 
@@ -2035,11 +2035,12 @@ void CheckArtificialHorizon::operator()(wxCommandEvent& event){
         (f->height_of_eye)->Enable(true);
     }
     
+    event.Skip(true);
     
 }
 
 //this function writes into sight.use_stopwatch the value written into the respective GUI box and it enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
-void CheckStopWatch::operator()(wxCommandEvent& event){
+template <class T> void CheckStopWatch::operator()(T& event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -2050,12 +2051,11 @@ void CheckStopWatch::operator()(wxCommandEvent& event){
         ((p->answer)->value) = 'n';
     }
     
-    //I enable f->stopwatch reading GUI field and set all its entries to zero
+    //I enable f->stopwatch reading GUI field a
     (f->stopwatch_reading)->Enable((p->check)->GetValue());
-    ((f->stopwatch_reading)->hour)->SetValue(wxString(""));
-    ((f->stopwatch_reading)->minute)->SetValue(wxString(""));
-    ((f->stopwatch_reading)->second)->SetValue(wxString(""));
     
+    event.Skip(true);
+
 }
 
 

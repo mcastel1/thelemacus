@@ -1093,12 +1093,12 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, const wxString&
     //if sight_in != NULL, then I initialize the GUI filed master_clock_chrono with the one written in sight_in. Otherwise, master_clock_chrono is initialized as empty.
     if(sight_in!=NULL){
         
-        Time time_UTC;
-        
-        //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
-        time_UTC = (sight->time);
-        time_UTC -= (sight->TAI_minus_UTC);
-        master_clock_chrono->set(time_UTC.chrono);
+//        Time time_UTC;
+//
+//        //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+//        time_UTC = (sight->time);
+//        time_UTC -= (sight->TAI_minus_UTC);
+        master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
         
     }else{
         //if sight_in == NULL, I have previously set the non-GUI object (sight->master_clock_date_and_hour).chrono to the current hour, and I write this value into the GUI object master_clock_chrono

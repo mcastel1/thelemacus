@@ -3117,10 +3117,9 @@ void Sight::add_to_wxListCtrl(wxListCtrl* listcontrol){
     else{listcontrol->SetItem(i, 5, wxString(""));}
     
     //set column of master-clock date and hour of sight
-    //I add to master_clock_date_and_hour the value stopwatch (if any), and then convert the resulting time from TAI scale to the  in UTC scale: I write the result in time_UTC and I write in the GUI object  time_UTC
+    //I add to master_clock_date_and_hour the value stopwatch (if any): I write the result in time_UTC and I write in the GUI object  time_UTC
     time_UTC = master_clock_date_and_hour;
-    if((use_stopwatch.value)=='y'){time_UTC += stopwatch;}
-    time_UTC-= TAI_minus_UTC;
+//    if((use_stopwatch.value)=='y'){time_UTC += stopwatch;}
     listcontrol->SetItem(i, 6, wxString(time_UTC.to_string(display_precision)));
     
     //set use of stopwatch

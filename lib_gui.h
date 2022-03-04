@@ -17,6 +17,7 @@ class PlotFrame;
 
 struct CheckCheck;
 struct CheckChrono;
+struct CheckAngle;
 struct CheckSign;
 struct CheckArcDegree;
 struct CheckArcMinute;
@@ -127,6 +128,47 @@ public:
     
 };
 
+struct CheckSign{
+    
+    AngleField* p;
+    
+    template <class T> void operator()(T&);
+    
+    
+};
+
+struct CheckArcDegree{
+    
+    AngleField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+struct CheckArcMinute{
+    
+    AngleField* p;
+    
+    template <class T> void operator()(T&);
+    
+    
+};
+
+
+struct CheckAngle{
+    
+    AngleField* p;
+    CheckSign check_sign;
+    CheckArcDegree check_arc_degree;
+    CheckArcMinute check_arc_minute;
+    
+    template <class T> void operator()(T&);
+    
+};
+
+
+
 
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
 class AngleField{
@@ -144,6 +186,7 @@ public:
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool sign_ok, deg_ok, min_ok;
+    CheckAngle check_angle;
     
     
     AngleField(SightFrame*, Angle*);
@@ -290,14 +333,6 @@ struct CheckChrono{
     
 };
 
-struct CheckSign{
-    
-    AngleField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
 
 struct CheckLabel{
     
@@ -318,23 +353,9 @@ struct SetLabelToCurrentTime{
 };
 
 
-struct CheckArcDegree{
-    
-    AngleField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
 
-struct CheckArcMinute{
-    
-    AngleField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
+
+
 
 struct CheckLength{
     
@@ -493,8 +514,6 @@ public:
     CheckSign checksign;
     CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
-    CheckArcDegree checkarcdegree;
-    CheckArcMinute checkarcminute;
     CheckLength check_height_of_eye;
     CheckCheck check_artificial_horizon;
     CheckYear checkyear;
@@ -653,7 +672,7 @@ template<class T> void CheckLimb::operator()(T &event){
 }
 
 
-void CheckSign::operator()(wxFocusEvent &event){
+template <class T> void CheckSign::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -758,9 +777,20 @@ template<class T> void CheckLabel::operator()(T &event){
 //
 //}
 
+template <class T> void CheckAngle::operator()(T& event){
+    
+    (check_sign.p) = p;
+    (check_arc_degree.p) = p;
+    (check_arc_minute.p) = p;
+    
+    check_sign(event);
+    check_arc_degree(event);
+    check_arc_minute(event);
+    
+}
 
 
-void CheckArcDegree::operator()(wxFocusEvent &event){
+template<class T> void CheckArcDegree::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -804,7 +834,7 @@ void CheckArcDegree::operator()(wxFocusEvent &event){
     
 }
 
-void CheckArcMinute::operator()(wxFocusEvent &event){
+template <class T> void CheckArcMinute::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -1159,6 +1189,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, check_limb);
+    button_reduce->Bind(wxEVT_BUTTON, (H_s->check_angle));
     button_reduce->Bind(wxEVT_BUTTON, check_height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
@@ -2317,24 +2348,25 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
     }
     
     
-    ((parent_frame->checksign).p) = this;
-    ((parent_frame->checkarcdegree).p) = this;
-    ((parent_frame->checkarcminute).p) = this;
+    (check_angle.p) = this;
+//    ((check_angle.check_sign).p) = this;
+//    ((check_angle.check_arc_degree).p) = this;
+//    ((check_angle.check_arc_minute).p) = this;
     
     sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     AdjustWidth(sign);
-    sign->Bind(wxEVT_KILL_FOCUS, parent_frame->checksign);
+    sign->Bind(wxEVT_KILL_FOCUS, (check_angle.check_sign));
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     AdjustWidth(deg);
-    deg->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcdegree);
+    deg->Bind(wxEVT_KILL_FOCUS, (check_angle.check_arc_degree));
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
-    min->Bind(wxEVT_KILL_FOCUS, parent_frame->checkarcminute);
+    min->Bind(wxEVT_KILL_FOCUS, (check_angle.check_arc_minute));
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

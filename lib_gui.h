@@ -301,8 +301,8 @@ struct CheckLabel{
     
     StringField* p;
     
-    void operator()(wxFocusEvent&);
     
+    template<class T> void operator()(T&);
     
 };
 
@@ -728,7 +728,8 @@ void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
 }
 
 
-void CheckLabel::operator()(wxFocusEvent &event){
+template<class T> void CheckLabel::operator()(T &event){
+    
     
     SightFrame* f = (p->parent_frame);
     
@@ -1155,7 +1156,10 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
+    
+    //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, checklimb);
+    button_reduce->Bind(wxEVT_BUTTON, checklabel);
 
 
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL

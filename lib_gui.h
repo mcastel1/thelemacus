@@ -262,7 +262,10 @@ struct CheckLimb{
     
     LimbField* p;
     
-    void operator()(wxFocusEvent&);
+//    void operator()(wxFocusEvent&);
+    
+    template<class T> void operator()(T&);
+
     
     
 };
@@ -598,7 +601,13 @@ void CheckBody::operator()(wxFocusEvent &event){
 }
 
 
-void CheckLimb::operator()(wxFocusEvent &event){
+//template<class T> void BodyField::InsertIn(T* host){
+
+
+template<class T> void CheckLimb::operator()(T &event){
+    
+    cout << "YOU JUST CALLED CHECKLIMB\n\n\n";
+    flush(cout);
     
     SightFrame* f = (p->parent_frame);
     
@@ -636,9 +645,10 @@ void CheckLimb::operator()(wxFocusEvent &event){
         
         f->TryToEnableReduce();
         
-        event.Skip(true);
-        
     }
+
+    event.Skip(true);
+
     
 }
 
@@ -1145,8 +1155,11 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
-    
-    button_reduce->Enable(false);
+    button_reduce->Bind(wxEVT_BUTTON, checklimb);
+
+
+    //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
+    button_reduce->Enable((sight_in != NULL));
     
     sizer_grid_measurement->Add(text_combo_body);
     body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
@@ -2059,6 +2072,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //    CallAfter(printerrormessage);
     
     //add the sight (*sight) to the list of sights contained in the parent PlotFrame
+    
+
+    
     (((this->parent)->plot)->sight_list).push_back(*sight);
     
     //append the label of (*sight) to the listbox in the parent PlotFrame
@@ -2078,11 +2094,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     
     
-    Close(TRUE);
     
     event.Skip(true);
     
-    
+    Close(TRUE);
+
 }
 
 
@@ -2245,7 +2261,10 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checklimb);
+    name->Bind(wxEVT_KILL_FOCUS, (parent_frame->checklimb));
+    
+//    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+
     
     name->SetValue(wxString(""));
     ok = false;

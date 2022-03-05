@@ -58,6 +58,68 @@ void AdjustWidth(wxComboBox *control){
 }
 
 
+
+struct CheckCheck{
+    
+    CheckField* p;
+    //this is the wxControl which is enabled/disabld if p is checked/unchecked
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+
+
+struct CheckSign{
+    
+    AngleField* p;
+    
+    template <class T> void operator()(T&);
+    
+    
+};
+
+struct CheckArcDegree{
+    
+    AngleField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+struct CheckArcMinute{
+    
+    AngleField* p;
+    
+    template <class T> void operator()(T&);
+    
+    
+};
+
+
+struct CheckAngle{
+    
+    AngleField* p;
+    CheckSign check_sign;
+    CheckArcDegree check_arc_degree;
+    CheckArcMinute check_arc_minute;
+    
+    template <class T> void operator()(T&);
+    
+};
+
+struct CheckLength{
+    
+    LengthField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
 class CheckField{
     
@@ -67,11 +129,14 @@ public:
     SightFrame* parent_frame;
     Answer* answer;
     wxBoxSizer *sizer_h, *sizer_v;
+    //this is the wxControl GUI field which is related to this: when this is checked/unchecked, related_field is enabled/disabled
+    wxControl* related_field;
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* checkbox;
     
     CheckField(SightFrame*, Answer*);
+    CheckCheck check;
     
     template<class T> void InsertIn(T*);
     void set(void);
@@ -126,56 +191,6 @@ public:
     
     
 };
-
-struct CheckSign{
-    
-    AngleField* p;
-    
-    template <class T> void operator()(T&);
-    
-    
-};
-
-struct CheckArcDegree{
-    
-    AngleField* p;
-    
-    template<class T> void operator()(T&);
-    
-    
-};
-
-struct CheckArcMinute{
-    
-    AngleField* p;
-    
-    template <class T> void operator()(T&);
-    
-    
-};
-
-
-struct CheckAngle{
-    
-    AngleField* p;
-    CheckSign check_sign;
-    CheckArcDegree check_arc_degree;
-    CheckArcMinute check_arc_minute;
-    
-    template <class T> void operator()(T&);
-    
-};
-
-struct CheckLength{
-    
-    LengthField* p;
-    
-    template<class T> void operator()(T&);
-    
-    
-};
-
-
 
 
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
@@ -318,19 +333,6 @@ struct CheckLimb{
     
     template<class T> void operator()(T&);
 
-    
-    
-};
-
-
-
-struct CheckCheck{
-    
-    CheckField* p;
-    //this is the wxControl which is enabled/disabld if p is checked/unchecked
-    wxControl* related_field;
-    
-    template<class T> void operator()(T&);
     
     
 };
@@ -1090,6 +1092,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
+    (artificial_horizon_check->related_field) = (height_of_eye->value);
     (artificial_horizon_check->checkbox)->Bind(wxEVT_CHECKBOX, artificial_horizon_check->check);
     
     //height of eye
@@ -1133,9 +1136,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
-    //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
-    //EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
-//    (check_stopwatch.p) = stopwatch_check;
+    (stopwatch_check->related_field) = (stopwatch_reading->hour);
     (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, stopwatch_check->check);
     
     //stopwatch reading
@@ -2025,7 +2026,7 @@ void TabulateDays::operator()(wxFocusEvent &event){
 
 
 
-//this function writes into answer the value written into the respective GUI box and it enables/disables related_field if p->check is enabled/disabled, respectively
+//this function writes into answer the value written into the respective GUI box and it enables/disables p->related_field if p->check is enabled/disabled, respectively
 template <class T> void CheckCheck::operator()(T& event){
         
     //I set p->answer to the value entered in the GUI checkbox

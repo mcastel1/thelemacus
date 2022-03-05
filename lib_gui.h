@@ -406,13 +406,6 @@ struct SetLabelToCurrentTime{
     
 };
 
-
-
-
-
-
-
-
 struct CheckHour{
     
     ChronoField* p;
@@ -970,18 +963,6 @@ enum{
     ID_Close =  wxID_HIGHEST + 5,
     ID_button_reduce =  wxID_HIGHEST + 6,
     ID_button_cancel =  wxID_HIGHEST + 7,
-    //    ID_artificial_horizon =  wxID_HIGHEST + 8,
-    ID_combo_body = wxID_HIGHEST + 9,
-    //    ID_combo_limb = wxID_HIGHEST + 10,
-    ID_box_year = wxID_HIGHEST + 12,
-    ID_combo_day = wxID_HIGHEST + 14,
-    ID_stopwatch_check = wxID_HIGHEST + 15,
-    ID_combo_hour_masterclock = wxID_HIGHEST + 16,
-    ID_combo_minute_masterclock = wxID_HIGHEST + 17,
-    ID_combo_hour_stopwatch = wxID_HIGHEST + 18,
-    ID_combo_minute_stopwatch = wxID_HIGHEST + 19,
-    ID_combo_hour_TAI_minus_UTC = wxID_HIGHEST + 21,
-    ID_combo_minute_TAI_minus_UTC = wxID_HIGHEST + 22
     
 };
 
@@ -992,9 +973,6 @@ EVT_MENU(ID_SaveAs,   SightFrame::OnSaveAs)
 EVT_MENU(ID_Close,  SightFrame::OnClose)
 EVT_BUTTON(ID_button_cancel,   SightFrame::OnPressCancel)
 EVT_BUTTON(ID_button_reduce,   SightFrame::OnPressReduce)
-//EVT_COMBOBOX(ID_combo_body, SightFrame::OnSelectBody)
-//EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
-//EVT_COMBOBOX(ID_combo_month, SightFrame::TabulateDays)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MyApp);
@@ -1089,11 +1067,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     }
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     body = new BodyField(this, &(sight->body), catalog);
-    
-    //    combo_body = new wxComboBox(panel, ID_combo_body, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
-    //combo_body->Bind(wxEVT_KILL_FOCUS, wxFocusEventHandler(SightFrame::OnSelectBody), this);
-    //combo_body->SetValue("");
-    
+        
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     limb = new LimbField(this, &(sight->limb));
@@ -1164,8 +1138,6 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
-    //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
-    //EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
     (check_stopwatch.p) = stopwatch_check;
     (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, check_stopwatch);
     

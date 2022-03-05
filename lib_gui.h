@@ -327,6 +327,8 @@ struct CheckLimb{
 struct CheckCheck{
     
     CheckField* p;
+    //this is the wxControl which is enabled/disabld if p is checked/unchecked
+    wxControl* related_field;
     
     template<class T> void operator()(T&);
     

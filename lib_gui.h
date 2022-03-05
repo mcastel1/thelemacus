@@ -2032,10 +2032,10 @@ template <class T> void CheckCheck::operator()(T& event){
     //I set p->answer to the value entered in the GUI checkbox
     if((p->checkbox)->GetValue()){
         ((p->answer)->value) = 'y';
-        related_field->Enable(false);
+        (p->related_field)->Enable(false);
     }else{
         ((p->answer)->value) = 'n';
-        related_field->Enable(true);
+        (p->related_field)->Enable(true);
     }
     
     event.Skip(true);

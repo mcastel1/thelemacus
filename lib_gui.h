@@ -462,15 +462,6 @@ struct PrintErrorMessage{
     
 };
 
-struct OnSelectInListBox{
-    
-    PlotFrame* f;
-    
-    void operator()(wxCommandEvent &event);
-    
-    
-};
-
 
 //this is a wxFrame designed to show a message to the GUI user
 class MessageFrame: public wxFrame{
@@ -922,6 +913,23 @@ template <class T> void CheckLength::operator()(T &event){
     
 }
 
+struct OnSelectInListBox{
+    
+    PlotFrame* f;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+template<class T> void OnSelectInListBox::operator()(T& event){
+    
+    (f->button_modify)->Enable(true);
+
+    event.Skip(true);
+
+}
+
 void PrintErrorMessage::operator()(void){
     
     MessageFrame* message_frame;
@@ -1369,6 +1377,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     //add columns to wxlistcontrol
     listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight()*0.8), wxLC_REPORT);
+    listcontrol->Bind(wxEVT_LIST_ITEM_SELECTED, onselectinlistbox);
     
     
     int n_columns = 11;
@@ -1440,72 +1449,11 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol->InsertColumn(10, column);
     
     
-    
-    
-    /*
-     TAI_minus_UTC->set();
-     label->set();
-     */
-    
-    
     //
     for(i=0; i<((plot->sight_list).size()); i++){
         
         ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol);
-        
-//        item.SetId(i);
-//        item.SetText(wxT(""));
-//
-//        listcontrol->InsertItem(item);
-//
-//        //set body column
-//        listcontrol->SetItem(i, 0, wxString(((plot->sight_list)[i]).body.name.value));
-//
-//        //set limb column
-//        if((((plot->sight_list)[i]).body.name == String("sun")) || (((plot->sight_list)[i]).body.name == String("moon"))){
-//
-//            if(wxString(((plot->sight_list)[i]).limb.value) == 'u'){listcontrol->SetItem(i, 1, wxString("upper"));}
-//            if(wxString(((plot->sight_list)[i]).limb.value) == 'l'){listcontrol->SetItem(i, 1, wxString("lower"));}
-//            if(wxString(((plot->sight_list)[i]).limb.value) == 'c'){listcontrol->SetItem(i, 1, wxString("center"));}
-//
-//        }else{
-//            listcontrol->SetItem(i, 1, wxString(""));
-//        }
-//
-//        //set artificial horizon column
-//        listcontrol->SetItem(i, 2, wxString(((plot->sight_list)[i]).artificial_horizon.value));
-//
-//
-//        //set sextant altitude column
-//        listcontrol->SetItem(i, 3, wxString((((plot->sight_list)[i]).H_s).to_string(display_precision)));
-//
-//        //set index error
-//        listcontrol->SetItem(i, 4, wxString((((plot->sight_list)[i]).index_error).to_string(display_precision)));
-//
-//        //set height of eye column
-//        if(((plot->sight_list)[i]).artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(((plot->sight_list)[i]).height_of_eye.to_string(String("m"), display_precision)));}
-//        else{listcontrol->SetItem(i, 5, wxString(""));}
-//
-//        //set column of master-clock date and hour of sight
-//        listcontrol->SetItem(i, 6, wxString((((plot->sight_list)[i]).time).to_string(display_precision)));
-//
-//        //set use of stopwatch
-//        listcontrol->SetItem(i, 7, wxString((((plot->sight_list)[i]).use_stopwatch.value)));
-//
-//        //set stopwatch reading
-//        if((((plot->sight_list)[i]).use_stopwatch.value) == 'y'){
-//            listcontrol->SetItem(i, 8, wxString((((plot->sight_list)[i]).stopwatch).to_string(display_precision)));
-//        }else{
-//            listcontrol->SetItem(i, 8, wxString(""));
-//        }
-//
-//        //set TAI-UTC
-//        listcontrol->SetItem(i, 9, wxString((((plot->sight_list)[i]).TAI_minus_UTC).to_string(display_precision)));
-//
-//        //set label
-//        listcontrol->SetItem(i, 10, wxString((((plot->sight_list)[i]).label).value));
-//
-        
+                
     }
     
     
@@ -1521,6 +1469,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     my_image.Rescale(20,20);
     button_modify = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
+    button_modify->Enable(false);
     //    button_modify->Enable(false);
     
     //button to delete a sight
@@ -1544,7 +1493,6 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
     panel->SetSizer(sizer_v);
-    
     
 }
 

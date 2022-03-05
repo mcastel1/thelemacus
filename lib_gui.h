@@ -15,6 +15,7 @@ class MessageFrame;
 class SightFrame;
 class PlotFrame;
 
+struct CheckBody;
 struct CheckCheck;
 struct CheckChrono;
 struct CheckAngle;
@@ -59,75 +60,15 @@ void AdjustWidth(wxComboBox *control){
     
 }
 
-
-//this is a GUI field contaning a binary checkbox, which is either checked or unchecked
-class CheckField{
+struct CheckBody{
     
-public:
+    BodyField* p;
     
-    //the parent frame to which this object is attached
-    SightFrame* parent_frame;
-    Answer* answer;
-    wxBoxSizer *sizer_h, *sizer_v;
-    
-    //this is the wxCheckBox with the name of the bodies
-    wxCheckBox* check;
-    
-    CheckField(SightFrame*, Answer*);
-    
-    template<class T> void InsertIn(T*);
-    void set(void);
+    template<class T> void operator()(T&);
     
     
 };
 
-
-class BodyField{
-    
-public:
-    //the parent frame to which this object is attached
-    SightFrame* parent_frame;
-    wxArrayString bodies;
-    //this points to a Body object, which contains the date written in the GUI field of this
-    Body* body;
-    Catalog* catalog;
-    wxBoxSizer *sizer_h, *sizer_v;
-    
-    //this is the wxComboBox with the name of the bodies
-    wxComboBox* name;
-    
-    bool ok;
-    
-    BodyField(SightFrame*, Body*, Catalog*);
-    void set(void);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
-    
-    
-};
-
-
-class LimbField{
-    
-public:
-    //the parent frame to which this object is attached
-    SightFrame* parent_frame;
-    wxArrayString limbs;
-    //this points to a Limn object, which contains the data written in the GUI field of this
-    Limb* limb;
-    wxBoxSizer *sizer_h, *sizer_v;
-    bool ok;
-    
-    //this is the wxComboBox with the name of the bodies
-    wxComboBox* name;
-    
-    LimbField(SightFrame*, Limb*);
-    void set(void);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
-    
-    
-};
 
 struct CheckSign{
     
@@ -218,6 +159,76 @@ struct CheckLength{
     
 };
 
+
+//this is a GUI field contaning a binary checkbox, which is either checked or unchecked
+class CheckField{
+    
+public:
+    
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    Answer* answer;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxCheckBox with the name of the bodies
+    wxCheckBox* check;
+    
+    CheckField(SightFrame*, Answer*);
+    
+    template<class T> void InsertIn(T*);
+    void set(void);
+    
+    
+};
+
+
+class BodyField{
+    
+public:
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    wxArrayString bodies;
+    //this points to a Body object, which contains the date written in the GUI field of this
+    Body* body;
+    Catalog* catalog;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+    CheckBody check;
+    
+    bool ok;
+    
+    BodyField(SightFrame*, Body*, Catalog*);
+    void set(void);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+    
+};
+
+
+class LimbField{
+    
+public:
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    wxArrayString limbs;
+    //this points to a Limn object, which contains the data written in the GUI field of this
+    Limb* limb;
+    wxBoxSizer *sizer_h, *sizer_v;
+    bool ok;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+    
+    LimbField(SightFrame*, Limb*);
+    void set(void);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+    
+};
 
 
 
@@ -345,20 +356,10 @@ public:
 
 
 
-struct CheckBody{
-    
-    BodyField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
 
 struct CheckLimb{
     
     LimbField* p;
-    
-//    void operator()(wxFocusEvent&);
     
     template<class T> void operator()(T&);
 
@@ -527,7 +528,6 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    CheckBody checkbody;
     CheckLimb check_limb;
     CheckSign checksign;
     CheckLabel checklabel;
@@ -566,9 +566,6 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void TryToEnableReduce(void);
-    //    void OnSelectBody(wxFocusEvent& event);
-    //    void OnCheckStopwatch(wxCommandEvent& event);
-    //    void PrintErrorMessage(wxControl*, String);
     
     // The Path to the file we have open
     wxString CurrentDocPath;
@@ -578,7 +575,7 @@ public:
 };
 
 
-void CheckBody::operator()(wxFocusEvent &event){
+template<class T>void CheckBody::operator()(T& event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -624,8 +621,6 @@ void CheckBody::operator()(wxFocusEvent &event){
             
         }
         
-        
-        
         f->TryToEnableReduce();
                 
     }
@@ -633,9 +628,6 @@ void CheckBody::operator()(wxFocusEvent &event){
     event.Skip(true);
     
 }
-
-
-//template<class T> void BodyField::InsertIn(T* host){
 
 
 template<class T> void CheckLimb::operator()(T &event){
@@ -788,6 +780,8 @@ template <class T> void CheckAngle::operator()(T& event){
     check_arc_degree(event);
     check_arc_minute(event);
     
+    event.Skip(true);
+    
 }
 
 //this functor checks the whole date field by calling the check on its year, month and day parts‰
@@ -796,6 +790,8 @@ template <class T> void CheckDate::operator()(T& event){
     check_year(event);
     check_month(event);
     check_day(event);
+    
+    event.Skip(true);
     
 }
 
@@ -955,6 +951,7 @@ void PrintErrorMessage::operator()(void){
     
     //The temporary dialog window may have been closed, thus I set f->idling to false
     f->SetIdling(false);
+    
     
     
 }
@@ -1200,6 +1197,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, check_limb);
+    button_reduce->Bind(wxEVT_BUTTON, (body->check));
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
@@ -1622,7 +1620,6 @@ void SightFrame::set(void){
     
     Time time_UTC;
 
-    
     body->set();
     limb->set();
     artificial_horizon_check->set();
@@ -2158,13 +2155,13 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
         bodies.Add(((catalog->list)[i]).name.value.c_str());
     }
     
-    ((parent_frame->checkbody).p) = this;
+    (check.p) = this;
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
+    name->Bind(wxEVT_KILL_FOCUS, check);
     
     name->SetValue("");
     ok = false;
@@ -2330,8 +2327,6 @@ CheckField::CheckField(SightFrame* frame, Answer* p){
     answer = p;
     
     check = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-    //    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
-    
     check->SetValue(false);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);

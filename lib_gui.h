@@ -16,6 +16,7 @@ class SightFrame;
 class PlotFrame;
 
 struct CheckBody;
+struct CheckLimb;
 struct CheckCheck;
 struct CheckChrono;
 struct CheckAngle;
@@ -65,6 +66,16 @@ struct CheckBody{
     BodyField* p;
     
     template<class T> void operator()(T&);
+    
+    
+};
+
+struct CheckLimb{
+    
+    LimbField* p;
+    
+    template<class T> void operator()(T&);
+
     
     
 };
@@ -218,6 +229,7 @@ public:
     Limb* limb;
     wxBoxSizer *sizer_h, *sizer_v;
     bool ok;
+    CheckLimb check;
     
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
@@ -357,15 +369,6 @@ public:
 
 
 
-struct CheckLimb{
-    
-    LimbField* p;
-    
-    template<class T> void operator()(T&);
-
-    
-    
-};
 
 
 struct CheckCheck{
@@ -521,7 +524,6 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    CheckLimb check_limb;
     CheckSign checksign;
     CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
@@ -1171,7 +1173,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, check_limb);
+    button_reduce->Bind(wxEVT_BUTTON, (limb->check));
     button_reduce->Bind(wxEVT_BUTTON, (body->check));
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
@@ -2238,19 +2240,21 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //I link the internal pointers p the respective Limb object
     limb = p;
     
+    //initialize check
+    (check.p) = this;
+      
     limbs.Clear();
     limbs.Add(wxT("upper"));
     limbs.Add(wxT("lower"));
     limbs.Add(wxT("center"));
     
     
-    ((parent_frame->check_limb).p) = this;
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, (parent_frame->check_limb));
+    name->Bind(wxEVT_KILL_FOCUS, check);
     
 //    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
 

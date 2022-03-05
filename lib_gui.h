@@ -167,6 +167,15 @@ struct CheckAngle{
     
 };
 
+struct CheckLength{
+    
+    LengthField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
 
 
 
@@ -186,7 +195,7 @@ public:
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool sign_ok, deg_ok, min_ok;
-    CheckAngle check_angle;
+    CheckAngle check;
     
     
     AngleField(SightFrame*, Angle*);
@@ -210,6 +219,7 @@ public:
     Length* length;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool ok;
+    CheckLength check;
     
     LengthField(SightFrame*, Length*);
     void set(void);
@@ -357,14 +367,6 @@ struct SetLabelToCurrentTime{
 
 
 
-struct CheckLength{
-    
-    LengthField* p;
-    
-    template<class T> void operator()(T&);
-    
-    
-};
 
 
 struct CheckYear{
@@ -514,7 +516,6 @@ public:
     CheckSign checksign;
     CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
-    CheckLength check_height_of_eye;
     CheckCheck check_artificial_horizon;
     CheckYear checkyear;
     CheckMonth checkmonth;
@@ -1176,9 +1177,9 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, check_limb);
-    button_reduce->Bind(wxEVT_BUTTON, (index_error->check_angle));
-    button_reduce->Bind(wxEVT_BUTTON, (H_s->check_angle));
-    button_reduce->Bind(wxEVT_BUTTON, check_height_of_eye);
+    button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
+    button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
+    button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
     button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
 
@@ -2335,26 +2336,26 @@ AngleField::AngleField(SightFrame* frame, Angle* p){
         degrees.Add(wxString::Format(wxT("%i"), i));
     }
     
-    //initialize check_angle and its objects
-    (check_angle.p) = this;
-    ((check_angle.check_sign).p) = this;
-    ((check_angle.check_arc_degree).p) = this;
-    ((check_angle.check_arc_minute).p) = this;
+    //initialize check and its objects
+    (check.p) = this;
+    ((check.check_sign).p) = this;
+    ((check.check_arc_degree).p) = this;
+    ((check.check_arc_minute).p) = this;
     
     sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     AdjustWidth(sign);
-    sign->Bind(wxEVT_KILL_FOCUS, (check_angle.check_sign));
+    sign->Bind(wxEVT_KILL_FOCUS, (check.check_sign));
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     AdjustWidth(deg);
-    deg->Bind(wxEVT_KILL_FOCUS, (check_angle.check_arc_degree));
+    deg->Bind(wxEVT_KILL_FOCUS, (check.check_arc_degree));
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
-    min->Bind(wxEVT_KILL_FOCUS, (check_angle.check_arc_minute));
+    min->Bind(wxEVT_KILL_FOCUS, (check.check_arc_minute));
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -2384,13 +2385,17 @@ LengthField::LengthField(SightFrame* frame, Length* p){
     parent_frame = frame;
     length = p;
     
-    ((parent_frame->check_height_of_eye).p) = this;
+//    ((parent_frame->check_height_of_eye).p) = this;
+    
+    //initialize check
+    (check.p) = this;
+   
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetValue("");
-    value->Bind(wxEVT_KILL_FOCUS, parent_frame->check_height_of_eye);
+    value->Bind(wxEVT_KILL_FOCUS, check);
     
     text = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("m"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     

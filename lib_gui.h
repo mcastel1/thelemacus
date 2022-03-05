@@ -69,7 +69,7 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     
     //this is the wxCheckBox with the name of the bodies
-    wxCheckBox* check;
+    wxCheckBox* checkbox;
     
     CheckField(SightFrame*, Answer*);
     
@@ -514,7 +514,6 @@ public:
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
-    CheckCheck check_artificial_horizon, check_stopwatch;
     TabulateDays tabulatedays;
     PrintErrorMessage printerrormessage;
     
@@ -1091,8 +1090,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
-    (check_artificial_horizon.p) = artificial_horizon_check;
-    (artificial_horizon_check->check)->Bind(wxEVT_CHECKBOX, check_artificial_horizon);
+    (artificial_horizon_check->checkbox)->Bind(wxEVT_CHECKBOX, artificial_horizon_check->check);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1137,8 +1135,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
     //    stopwatch_check = new wxCheckBox(panel, ID_stopwatch_check, wxT(""), wxDefaultPosition, wxDefaultSize);
     //EVT_CHECKBOX(ID_stopwatch, SightFrame::OnCheckStopwatch)
-    (check_stopwatch.p) = stopwatch_check;
-    (stopwatch_check->check)->Bind(wxEVT_CHECKBOX, check_stopwatch);
+//    (check_stopwatch.p) = stopwatch_check;
+    (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, stopwatch_check->check);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1146,7 +1144,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
     
     //initialize stopwatch_check and stopwatch_reading
-    (stopwatch_check->check)->SetValue(false);
+    (stopwatch_check->checkbox)->SetValue(false);
     stopwatch_reading->Enable(false);
     //    (stopwatch_reading->hour)->SetValue(wxString("0"));
     //    (stopwatch_reading->minute)->SetValue(wxString("0"));
@@ -1171,7 +1169,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
-    button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
+    button_reduce->Bind(wxEVT_BUTTON, (stopwatch_check->check));
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
 
 
@@ -1596,7 +1594,7 @@ void SightFrame::set(void){
     H_s->set();
     index_error->set();
     
-    if(!((artificial_horizon_check->check)->GetValue())){
+    if(!((artificial_horizon_check->checkbox)->GetValue())){
         height_of_eye->Enable(true);
         height_of_eye->set();
     }else{
@@ -1612,7 +1610,7 @@ void SightFrame::set(void){
     
     stopwatch_check->set();
     
-    if(((stopwatch_check->check)->GetValue())){
+    if(((stopwatch_check->checkbox)->GetValue())){
         stopwatch_reading->Enable(true);
         stopwatch_reading->set(sight->stopwatch);
     }else{
@@ -1682,7 +1680,7 @@ void SightFrame::OnSaveAs(wxCommandEvent& event){
 void SightFrame::TryToEnableReduce(void){
     
     
-    button_reduce->Enable((body->is_ok()) && ((!(((limb->name)->IsEnabled()))) || (limb->is_ok())) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->check)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+    button_reduce->Enable((body->is_ok()) && ((!(((limb->name)->IsEnabled()))) || (limb->is_ok())) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
 }
 
@@ -2031,7 +2029,7 @@ void TabulateDays::operator()(wxFocusEvent &event){
 template <class T> void CheckCheck::operator()(T& event){
         
     //I set p->answer to the value entered in the GUI checkbox
-    if((p->check)->GetValue()){
+    if((p->checkbox)->GetValue()){
         ((p->answer)->value) = 'y';
         related_field->Enable(false);
     }else{
@@ -2153,11 +2151,11 @@ void LimbField::set(void){
 void CheckField::set(void){
     
     if((answer->value) == 'y'){
-        check->SetValue(true);
+        checkbox->SetValue(true);
     }
     
     if((answer->value) == 'n'){
-        check->SetValue(false);
+        checkbox->SetValue(false);
     }
     
 }
@@ -2275,16 +2273,16 @@ CheckField::CheckField(SightFrame* frame, Answer* p){
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
     
-    check = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+    checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     //    name->Bind(wxEVT_KILL_FOCUS, parent_frame->checkbody);
     
-    check->SetValue(false);
+    checkbox->SetValue(false);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(check, 0, wxALIGN_CENTER);
+    sizer_h->Add(checkbox, 0, wxALIGN_CENTER);
     
 }
 

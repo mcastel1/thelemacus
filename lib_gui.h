@@ -62,7 +62,6 @@ void AdjustWidth(wxComboBox *control){
 struct CheckCheck{
     
     CheckField* p;
-    //this is the wxControl which is enabled/disabld if p is checked/unchecked
     
     template<class T> void operator()(T&);
     

@@ -194,6 +194,7 @@ public:
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* checkbox;
+    CheckCheck check;
     
     CheckField(SightFrame*, Answer*);
     
@@ -529,7 +530,6 @@ public:
     CheckSign checksign;
     CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
-    CheckCheck check_artificial_horizon;
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
@@ -892,8 +892,6 @@ template <class T> void CheckLength::operator()(T &event){
         
         if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
             
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->value, String("Entered value is not valid!\nLengths must be floating-point numbers >= 0 m"));
-            
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
             ((f->printerrormessage).control) = (p->value);
             ((f->printerrormessage).title) = String("Entered value is not valid!");
@@ -1099,10 +1097,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
-    (check_artificial_horizon.p) = artificial_horizon_check;
-    (artificial_horizon_check->checkbox)->Bind(wxEVT_CHECKBOX, check_artificial_horizon);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1691,7 +1686,7 @@ void SightFrame::OnSaveAs(wxCommandEvent& event){
 void SightFrame::TryToEnableReduce(void){
     
     
-    button_reduce->Enable((body->is_ok()) && ((!(((limb->name)->IsEnabled()))) || (limb->is_ok())) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+    button_reduce->Enable((body->is_ok()) && ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok())) && ((!(((limb->name)->IsEnabled()))) || (limb->is_ok())) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
     
 }
 
@@ -2281,7 +2276,11 @@ CheckField::CheckField(SightFrame* frame, Answer* p){
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
     
+    (check.p) = this;
+    
     checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+    checkbox->Bind(wxEVT_CHECKBOX, check);
+
     checkbox->SetValue(false);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);

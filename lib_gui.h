@@ -501,7 +501,8 @@ public:
     //    wxListBox* listbox;
     wxListCtrl* listcontrol;
     wxPanel *panel;
-    wxButton* button_add, *button_modify, *button_delete;
+    wxButton* button_add, *button_delete;
+    wxBitmapButton *button_modify;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons;
     
     void OnAdd(wxCommandEvent& event);
@@ -1509,15 +1510,23 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //buttons
-    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    //button to add a sight
+    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
     
-    button_modify = new wxButton(panel, wxID_ANY, "/", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    //button to modify a sight
+    wxImage::AddHandler(new wxPNGHandler);
+    wxBitmap my_bitmap = wxBitmap(wxT("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"), wxBITMAP_TYPE_PNG);
+    wxImage my_image = my_bitmap.ConvertToImage();
+    my_image.Rescale(20,20);
+    button_modify = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
     //    button_modify->Enable(false);
     
-    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    //button to delete a sight
+    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
+    
     
     sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);

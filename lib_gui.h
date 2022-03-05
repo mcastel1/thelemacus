@@ -59,7 +59,7 @@ void AdjustWidth(wxComboBox *control){
 }
 
 
-
+//this is a GUI field contaning a binary checkbox, which is either checked or unchecked
 class CheckField{
     
 public:

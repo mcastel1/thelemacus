@@ -22,6 +22,7 @@ struct CheckSign;
 struct CheckArcDegree;
 struct CheckArcMinute;
 struct CheckLength;
+struct CheckDate;
 struct CheckYear;
 struct CheckMonth;
 struct CheckDay;
@@ -167,6 +168,47 @@ struct CheckAngle{
     
 };
 
+
+struct CheckYear{
+    
+    DateField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+struct CheckMonth{
+    
+    DateField* p;
+    
+    template<class T> void operator()(T&);
+
+    
+};
+
+struct CheckDay{
+    
+    DateField* p;
+    
+    template<class T> void operator()(T&);
+
+    
+};
+
+
+struct CheckDate{
+    
+    DateField* p;
+    CheckYear check_year;
+    CheckMonth check_month;
+    CheckDay check_day;
+    
+    template <class T> void operator()(T&);
+    
+};
+
+
 struct CheckLength{
     
     LengthField* p;
@@ -265,6 +307,7 @@ public:
     Date* date;
     //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
     bool year_ok, month_ok, day_ok;
+    CheckDate check;
     
     DateField(SightFrame*, Date*);
     void set(void);
@@ -369,33 +412,6 @@ struct SetLabelToCurrentTime{
 
 
 
-struct CheckYear{
-    
-    DateField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
-
-struct CheckMonth{
-    
-    DateField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
-
-struct CheckDay{
-    
-    DateField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
-
 struct CheckHour{
     
     ChronoField* p;
@@ -429,7 +445,7 @@ struct TabulateDays{
     
     DateField* p;
     
-    void operator()(wxFocusEvent&);
+    template<class T> void operator()(T&);
     
     
 };
@@ -776,6 +792,16 @@ template <class T> void CheckAngle::operator()(T& event){
     check_arc_minute(event);
     
 }
+
+//this functor checks the whole date field by calling the check on its year, month and day parts‰
+template <class T> void CheckDate::operator()(T& event){
+    
+    check_year(event);
+    check_month(event);
+    check_day(event);
+    
+}
+
 
 
 template<class T> void CheckArcDegree::operator()(T &event){
@@ -1180,6 +1206,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
+    button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
     button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
     button_reduce->Bind(wxEVT_BUTTON, checklabel);
 
@@ -1837,7 +1864,7 @@ void CheckSecond::operator()(wxFocusEvent &event){
 
 
 
-void CheckYear::operator()(wxFocusEvent &event){
+template<class T> void CheckYear::operator()(T&event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -1879,7 +1906,7 @@ void CheckYear::operator()(wxFocusEvent &event){
 
 }
 
-void CheckMonth::operator()(wxFocusEvent &event){
+template<class T> void CheckMonth::operator()(T&event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -1922,7 +1949,7 @@ void CheckMonth::operator()(wxFocusEvent &event){
 }
 
 
-void CheckDay::operator()(wxFocusEvent &event){
+template<class T> void CheckDay::operator()(T& event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -1990,7 +2017,7 @@ void CheckDay::operator()(wxFocusEvent &event){
 
 
 
-void TabulateDays::operator()(wxFocusEvent &event){
+template<class T> void TabulateDays::operator()(T& event){
     
     unsigned int i;
     SightFrame* f = (p->parent_frame);

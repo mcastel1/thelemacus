@@ -570,6 +570,8 @@ public:
 
 template<class T>void CheckBody::operator()(T& event){
     
+    cout << "You kjust called checkbody ----------- \n";
+    
     SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
@@ -602,6 +604,10 @@ template<class T>void CheckBody::operator()(T& event){
             (p->name)->SetBackgroundColour(*wxWHITE);
             (p->ok) = true;
             
+            cout << "Start\n";
+            (*(p->body)).print(String("XXXXX body"), String(""), cout);
+            cout << "End\n";
+            
         }else{
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
@@ -624,9 +630,6 @@ template<class T>void CheckBody::operator()(T& event){
 
 
 template<class T> void CheckLimb::operator()(T &event){
-    
-    cout << "YOU JUST CALLED CHECKLIMB\n\n\n";
-    flush(cout);
     
     SightFrame* f = (p->parent_frame);
     
@@ -2073,39 +2076,13 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     stringstream s;
     
     sight->print(String("body entered via GUI"), String(""), cout);
-    //  (sight->body).print(String("body entered via GUI"), String(""), s);
     
-    
-    //    (printerrormessage.control) = NULL;
-    //    (printerrormessage.title) = String("Here is the data which you entered:");
-    //    (printerrormessage.message) = String(s.str().c_str());
-    //
-    //
-    //    CallAfter(printerrormessage);
-    
-    //add the sight (*sight) to the list of sights contained in the parent PlotFrame
-    
-
-    
-    (((this->parent)->plot)->sight_list).push_back(*sight);
-    
-    //append the label of (*sight) to the listbox in the parent PlotFrame
-    //    ((this->parent)->listbox)->Append(wxString((sight->label).value));
+    //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list
+    if(position==-1){
+        (((this->parent)->plot)->sight_list).push_back(*sight);
+    }
     
     sight->add_to_wxListCtrl(position, ((this->parent)->listcontrol));
-//
-//    wxListItem item;
-//
-//    item.SetId(0);
-//    item.SetText(wxT(""));
-//
-//    ((this->parent)->listcontrol)->InsertItem(item);
-//    ((this->parent)->listcontrol)->SetItem(0, 0, wxString("prova"));
-
-
-    
-    
-    
     
     event.Skip(true);
     

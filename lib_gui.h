@@ -533,9 +533,6 @@ public:
     CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
     CheckCheck check_artificial_horizon;
-    CheckYear checkyear;
-    CheckMonth checkmonth;
-    CheckDay checkday;
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
@@ -2490,9 +2487,13 @@ DateField::DateField(SightFrame* frame, Date* p){
     parent_frame = frame;
     date = p;
     
-    ((parent_frame->checkyear).p) = this;
-    ((parent_frame->checkmonth).p) = this;
-    ((parent_frame->checkday).p) = this;
+ 
+    //initialize check and its objects
+    (check.p) = this;
+    ((check.check_year).p) = this;
+    ((check.check_month).p) = this;
+    ((check.check_day).p) = this;
+  
     ((parent_frame->tabulatedays).p) = this;
     
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
@@ -2501,14 +2502,14 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
-    year->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkyear));
+    year->Bind(wxEVT_KILL_FOCUS, (check.check_year));
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     //    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
     AdjustWidth(month);
-    month->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkmonth));
+    month->Bind(wxEVT_KILL_FOCUS, (check.check_month));
     
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -2521,7 +2522,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     day->Set(days);
     AdjustWidth(day);
     days.Clear();
-    day->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkday));
+    day->Bind(wxEVT_KILL_FOCUS, (check.check_day));
     
     
     year->SetValue(wxString(""));

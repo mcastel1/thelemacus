@@ -16,7 +16,6 @@ class SightFrame;
 class PlotFrame;
 
 struct CheckCheck;
-struct CheckChrono;
 struct CheckAngle;
 struct CheckSign;
 struct CheckArcDegree;
@@ -324,17 +323,8 @@ struct CheckLimb{
 };
 
 
+
 struct CheckCheck{
-    
-    CheckField* p;
-    
-    //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
-    void operator()(wxCommandEvent&);
-    
-};
-
-
-struct CheckChrono{
     
     CheckField* p;
     
@@ -516,14 +506,13 @@ public:
     CheckSign checksign;
     CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
-    CheckCheck check_artificial_horizon;
     CheckYear checkyear;
     CheckMonth checkmonth;
     CheckDay checkday;
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
-    CheckChrono check_stopwatch;
+    CheckCheck check_artificial_horizon, check_stopwatch;
     TabulateDays tabulatedays;
     PrintErrorMessage printerrormessage;
     
@@ -2036,38 +2025,17 @@ void TabulateDays::operator()(wxFocusEvent &event){
 
 
 
-//this function writes into sight.artificial_horizon the value entered in the GUI box
-void CheckCheck::operator()(wxCommandEvent& event){
-    
-    SightFrame* f = (p->parent_frame);
-    
+//this function writes into answer the value written into the respective GUI box and it enables/disables related_field if p->check is enabled/disabled, respectively
+template <class T> void CheckCheck::operator()(T& event){
+        
     //I set p->answer to the value entered in the GUI checkbox
     if((p->check)->GetValue()){
         ((p->answer)->value) = 'y';
-        (f->height_of_eye)->Enable(false);
+        related_field->Enable(false);
     }else{
         ((p->answer)->value) = 'n';
-        (f->height_of_eye)->Enable(true);
+        related_field->Enable(true);
     }
-    
-    event.Skip(true);
-    
-}
-
-//this function writes into sight.use_stopwatch the value written into the respective GUI box and it enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
-template <class T> void CheckChrono::operator()(T& event){
-    
-    SightFrame* f = (p->parent_frame);
-    
-    //I set p->answetr to the value entered in the GUI checkbox
-    if((p->check)->GetValue()){
-        ((p->answer)->value) = 'y';
-    }else{
-        ((p->answer)->value) = 'n';
-    }
-    
-    //I enable f->stopwatch reading GUI field a
-    (f->stopwatch_reading)->Enable((p->check)->GetValue());
     
     event.Skip(true);
 

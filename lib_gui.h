@@ -1092,13 +1092,14 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    artificial_horizon = new wxCheckBox(panel, ID_artificial_horizon, wxT(""), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
-    (artificial_horizon_check->related_field) = (height_of_eye->value);
     (artificial_horizon_check->checkbox)->Bind(wxEVT_CHECKBOX, artificial_horizon_check->check);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     height_of_eye = new LengthField(this, &(sight->height_of_eye));
-    
+    //I link artificial_horizon_check->related field to height_of_eye->value at this point in the code, because before this line height_of_eye had not been declared yet
+    (artificial_horizon_check->related_field) = (height_of_eye->value);
+
     //master-clock date
     //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
     if(sight_in == NULL){
@@ -1136,13 +1137,15 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
-    (stopwatch_check->related_field) = (stopwatch_reading->hour);
     (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, stopwatch_check->check);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
+    //I link stopwatch_check->related field to stopwatch_reading->hour at this point in the code, because before this line stopatch_reading had not been declared yet
+      (stopwatch_check->related_field) = (stopwatch_reading->hour);
+
     
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->checkbox)->SetValue(false);

@@ -1276,6 +1276,9 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     if(sight_in != NULL){set();}
     
+    Centre();
+
+    
 }
 
 

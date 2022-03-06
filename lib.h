@@ -1607,7 +1607,8 @@ string Time::to_string(unsigned int precision){
     
     stringstream output;
     
-    output << date.to_string() << " " << chrono.to_string(precision) << " UTC";
+    //I deleted UTC at the end of string for the sake of shortness
+    output << date.to_string() << " " << chrono.to_string(precision);
     
     return (output.str().c_str());
     

@@ -885,7 +885,7 @@ template <class T> void CheckLength::operator()(T &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
+        if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX) && ((p->value)->IsEnabled())){
             
             if(!(p->just_enabled)){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
@@ -1946,7 +1946,7 @@ template<class T> void CheckHour::operator()(T &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
+        if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24) && ((p->hour)->IsEnabled())){
      
             if(!(p->just_enabled)){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
@@ -1993,7 +1993,7 @@ template<class T> void CheckMinute::operator()(T &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
+        if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60) && ((p->minute)->IsEnabled())){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
             
@@ -2030,7 +2030,7 @@ template<class T> void CheckSecond::operator()(T &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0) && ((p->second)->IsEnabled())){
             
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));

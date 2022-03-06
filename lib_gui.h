@@ -131,10 +131,20 @@ struct CheckAngle{
     
 };
 
+struct TabulateDays{
+    
+    DateField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
 
 struct CheckYear{
     
     DateField* p;
+    TabulateDays tabulate_days;
     
     template<class T> void operator()(T&);
     
@@ -144,6 +154,7 @@ struct CheckYear{
 struct CheckMonth{
     
     DateField* p;
+    TabulateDays tabulate_days;
     
     template<class T> void operator()(T&);
 
@@ -445,14 +456,6 @@ struct SetLabelToCurrentTime{
 
 
 
-struct TabulateDays{
-    
-    DateField* p;
-    
-    template<class T> void operator()(T&);
-    
-    
-};
 
 //this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control
 struct PrintErrorMessage{
@@ -523,12 +526,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    CheckSign checksign;
     SetLabelToCurrentTime setlabeltocurrenttime;
-    CheckHour checkhour;
-    CheckMinute checkminute;
-    CheckSecond checksecond;
-    TabulateDays tabulatedays;
     PrintErrorMessage printerrormessage;
     
     BodyField* body;
@@ -1708,7 +1706,7 @@ template<class T> void CheckYear::operator()(T&event){
             (p->year_ok) = true;
             
             if(p->month_ok){
-                (f->tabulatedays)(event);
+                tabulate_days(event);
                 (p->day)->Enable(true);
             }
             
@@ -1749,7 +1747,7 @@ template<class T> void CheckMonth::operator()(T&event){
             (p->month_ok) = true;
             
             if(p->year_ok){
-                (f->tabulatedays)(event);
+                tabulate_days(event);
                 (p->day)->Enable(true);
                 
             }
@@ -2418,11 +2416,11 @@ DateField::DateField(SightFrame* frame, Date* p){
     //initialize check and its objects
     (check.p) = this;
     ((check.check_year).p) = this;
+    (((check.check_year).tabulate_days).p) = this;
     ((check.check_month).p) = this;
+    (((check.check_month).tabulate_days).p) = this;
     ((check.check_day).p) = this;
-  
-    ((parent_frame->tabulatedays).p) = this;
-    
+      
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"), i+1));
     }

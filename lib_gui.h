@@ -366,7 +366,7 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool ok;
+    bool ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckLength check;
     
     LengthField(SightFrame*, Length*);
@@ -441,7 +441,7 @@ public:
     //this points to a Date object, which contains the date written in the GUI fields of this
     Chrono* chrono;
     //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
-    bool hour_ok, minute_ok, second_ok;
+    bool hour_ok, minute_ok, second_ok, /*this variable = true if this has been just enabled, and false otherwise*/just_enabled;
     CheckChrono check;
     
     ChronoField(SightFrame*, Chrono*);
@@ -887,11 +887,21 @@ template <class T> void CheckLength::operator()(T &event){
         
         if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX)){
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->value);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Lengths must be floating-point numbers >= 0 m");
-            f->CallAfter((f->printerrormessage));
+            if(!(p->just_enabled)){
+                //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
+                
+                //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+                ((f->printerrormessage).control) = (p->value);
+                ((f->printerrormessage).title) = String("Entered value is not valid!");
+                ((f->printerrormessage).message) = String("Lengths must be floating-point numbers >= 0 m");
+                f->CallAfter((f->printerrormessage));
+                
+            }else{
+                //if the LengthField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
+                
+                (p->just_enabled) = false;
+                
+            }
             
             (p->ok) = false;
             
@@ -1902,9 +1912,15 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     //I enable/disable related_field according to whether checkbox is checked or not, and according to the value of direct_reverse
     if(((p->checkbox)->GetValue() ^ (!(p->direct_reverse)))){
         (p->related_field)->Enable(true);
+        //I write into the related_field by setting its variable just_enabled to true: this means that no error message will be prompted when the user sets its focus to the related field GUIs
+        ((p->related_field)->just_enabled) = true;
     }else{
         (p->related_field)->Enable(false);
     }
+    
+    (p->parent_frame)->TryToEnableReduce();
+
+    
     
     event.Skip(true);
     
@@ -1919,14 +1935,24 @@ template<class T> void CheckHour::operator()(T &event){
     if(!(f->idling)){
         
         if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
-            
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
-            
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->hour);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-            f->CallAfter((f->printerrormessage));
+     
+            if(!(p->just_enabled)){
+                //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
+                
+                //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+                ((f->printerrormessage).control) = (p->hour);
+                ((f->printerrormessage).title) = String("Entered value is not valid!");
+                ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+                f->CallAfter((f->printerrormessage));
+                
+            }else{
+                //if the ChronoField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
+                
+                
+                (p->just_enabled) = false;
+                
+                
+            }
             
             
             (p->hour_ok) = false;
@@ -2028,20 +2054,6 @@ template<class T> void CheckSecond::operator()(T &event){
 
 //this function writes into sight.stopwatch the value written into the respective GUI box
 template <class T> void CheckChrono::operator()(T& event){
-    
-//    SightFrame* f = (p->parent_frame);
-//
-//    //I set sight.stopwatch to the value entered in the GUI checkbox
-//    if((p->checkbox)->GetValue()){
-//        ((p->answer)->value) = 'y';
-//    }else{
-//        ((p->answer)->value) = 'n';
-//    }
-//
-//    //I enable f->stopwatch reading GUI field a
-//    (f->stopwatch_reading)->Enable((p->checkbox)->GetValue());
-//
-//    event.Skip(true);
     
     check_hour(event);
     check_minute(event);

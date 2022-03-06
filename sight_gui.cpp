@@ -61,6 +61,7 @@ using namespace std;
  - when you click on modify and then press reduce, the code should not insert a new item in listcontrol, but replace the old one
 - if you modify a field in SightFrame, do not kill the focus on the field and press Reduce, the content of the field is not written in the non-GUI object, while it should be -> fix it. 
 - add recent items to dropdown menus
+ - add instrumental error 
  */
 
 

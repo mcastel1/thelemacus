@@ -295,6 +295,7 @@ public:
     
     BodyField(SightFrame*, Body*, Catalog*);
     void set(void);
+    void get(wxCommandEvent&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -587,9 +588,9 @@ template<class T>void CheckBody::operator()(T& event){
         
         if(check){
             
-            (*(p->body)) = ((p->catalog)->list)[i];
+//            (*(p->body)) = ((p->catalog)->list)[i];
             
-            if(((*(p->body)).name == String("sun")) || ((*(p->body)).name == String("moon"))){
+            if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
                 ((f->limb)->name)->Enable(true);
             }else{
                 ((f->limb)->name)->Enable(false);
@@ -597,10 +598,6 @@ template<class T>void CheckBody::operator()(T& event){
             
             (p->name)->SetBackgroundColour(*wxWHITE);
             (p->ok) = true;
-            
-            cout << "Start\n";
-            (*(p->body)).print(String("XXXXX body"), String(""), cout);
-            cout << "End\n";
             
         }else{
             
@@ -1178,7 +1175,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, (body->check));
+    button_reduce->Bind(wxEVT_BUTTON, &BodyField::get, body);
     button_reduce->Bind(wxEVT_BUTTON, (limb->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
@@ -2130,6 +2127,32 @@ void BodyField::set(void){
     
     name->SetValue((body->name).value);
     ok = true;
+    
+}
+
+//sets the value in the non-GUI object body equal to the value in the GUI  object name
+void BodyField::get(wxCommandEvent& event){
+    
+    unsigned int i;
+    bool check;
+    
+    if(ok){
+        //If the GUI field's content is ok...
+       
+        //I find the position of the content of the GUI field in the list of  the body names in catalog
+        for(check=false, i=0; (i<(catalog->list).size()) && (!check); i++){
+            if(String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)){
+                check = true;
+            }
+        }
+        i--;
+        
+    //I set the value of the non-GUI object body to the value obtained from the GUI object.
+        (*body) = (catalog->list)[i];
+
+    }
+    
+    event.Skip(true);
     
 }
 

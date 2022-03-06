@@ -1338,7 +1338,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i;
+    unsigned int i, j, n_columns;
     OnSelectInListBox onselectinlistbox;
     wxListItem column, item;
     
@@ -1375,7 +1375,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol->Bind(wxEVT_LIST_ITEM_SELECTED, onselectinlistbox);
     
     
-    int n_columns = 11;
+    n_columns = 11;
     
     column.SetId(0);
     column.SetText(wxT("Body"));
@@ -1450,6 +1450,16 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
         ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol);
                 
     }
+    
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol->GetColumnCount()); i++){
+        listcontrol->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
+    }
+    for(j=0, i=0; i<(listcontrol->GetColumnCount()); i++){
+        j += (listcontrol->GetColumnWidth(i));
+    }
+    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - j);
+    
     
     
     //buttons

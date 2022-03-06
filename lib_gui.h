@@ -1105,11 +1105,13 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon), height_of_eye);
+    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon), NULL);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     height_of_eye = new LengthField(this, &(sight->height_of_eye));
+    //now that height_of_eye has been allocatd, I link artificial_horizon_check to height_of_eye
+    (artificial_horizon_check->related_field) = height_of_eye;
     
     //master-clock date
     //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
@@ -1141,12 +1143,15 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), stopwatch_reading);
+    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
+    //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
+    (stopwatch_check->related_field) = stopwatch_reading;
+ 
     
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->checkbox)->SetValue(false);

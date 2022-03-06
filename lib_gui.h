@@ -31,7 +31,7 @@ struct CheckDay;
 struct CheckHour;
 struct CheckMinute;
 struct CheckSecond;
-struct CheckLabel;
+struct CheckString;
 struct SetLabelToCurrentTime;
 struct TabulateDays;
 struct PrintErrorMessage;
@@ -181,6 +181,14 @@ struct CheckLength{
     
 };
 
+struct CheckString{
+    
+    StringField* p;
+    
+    template<class T> void operator()(T&);
+    
+};
+
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
 class CheckField{
@@ -317,6 +325,7 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     //non-GUI object related to this
     String* string;
+    CheckString check;
     
     StringField(SightFrame*, String*);
     void set(void);
@@ -394,14 +403,7 @@ struct CheckChrono{
 };
 
 
-struct CheckLabel{
-    
-    StringField* p;
-    
-    
-    template<class T> void operator()(T&);
-    
-};
+
 
 struct SetLabelToCurrentTime{
     
@@ -520,7 +522,6 @@ public:
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     CheckSign checksign;
-    CheckLabel checklabel;
     SetLabelToCurrentTime setlabeltocurrenttime;
     CheckHour checkhour;
     CheckMinute checkminute;
@@ -745,7 +746,7 @@ void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
 }
 
 
-template<class T> void CheckLabel::operator()(T &event){
+template<class T> void CheckString::operator()(T &event){
     
     
     SightFrame* f = (p->parent_frame);
@@ -1186,7 +1187,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
     button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
-    button_reduce->Bind(wxEVT_BUTTON, checklabel);
+    button_reduce->Bind(wxEVT_BUTTON, (label->check)        );
 
 
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
@@ -2349,13 +2350,15 @@ StringField::StringField(SightFrame* frame, String* p){
     parent_frame = frame;
     string = p;
     
-    ((parent_frame->checklabel).p) = this;
+    //initialize check
+    (check.p) = this;
+    
     ((parent_frame->setlabeltocurrenttime).p) = this;
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");
-    value->Bind(wxEVT_KILL_FOCUS, parent_frame->checklabel);
+    value->Bind(wxEVT_KILL_FOCUS, check);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

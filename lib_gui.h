@@ -568,9 +568,7 @@ public:
 
 
 template<class T>void CheckBody::operator()(T& event){
-    
-    cout << "You kjust called checkbody ----------- \n";
-    
+        
     SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
@@ -578,9 +576,6 @@ template<class T>void CheckBody::operator()(T& event){
         
         unsigned int i;
         bool check;
-        
-        
-        //(p->body)->name = String((combo_body->GetValue()).ToStdString());
         
         //I check whether the name in the GUI field body matches one of the body names in catalog
         for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){

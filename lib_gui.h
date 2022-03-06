@@ -238,14 +238,16 @@ public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     Answer* answer;
+    //related_field is a GUI field (such as ChronoField, etc) related to this CheckField, such that: if direct_reverse = true->  when the checkbox in this CheckFIeld is checked (unchecked), related_field is active (inactive). If direct_reverse = false ->  when the checkbox in this CheckFIeld is unchecked (checked), related_field is active (inactive).
     T* related_field;
+    bool direct_reverse;
     wxBoxSizer *sizer_h, *sizer_v;
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* checkbox;
     CheckCheck<T> check;
     
-    CheckField(SightFrame*, Answer*, T*);
+    CheckField(SightFrame*, Answer*, T*, bool);
     
     template<class R> void InsertIn(R*);
     void set(void);
@@ -1105,7 +1107,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon), NULL);
+    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon), NULL, false);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1143,7 +1145,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL);
+    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1874,10 +1876,15 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     //I set p->answer to the value entered in the GUI checkbox
     if((p->checkbox)->GetValue()){
         ((p->answer)->value) = 'y';
-        (p->related_field)->Enable(false);
     }else{
         ((p->answer)->value) = 'n';
+    }
+  
+    //I enable/disable related_field according to whether checkbox is checked or not, and according to the value of direct_reverse
+    if(((p->checkbox)->GetValue() ^ (!(p->direct_reverse)))){
         (p->related_field)->Enable(true);
+    }else{
+        (p->related_field)->Enable(false);
     }
     
     event.Skip(true);
@@ -2227,12 +2234,13 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
 
 
 //constructor of a CheckField object, based on the parent frame frame
-template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* related_field_in){
+template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* related_field_in, bool direct_reverse_in){
     
     parent_frame = frame;
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
     related_field = related_field_in;
+    direct_reverse = direct_reverse_in;
     
     (check.p) = this;
     

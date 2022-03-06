@@ -32,7 +32,7 @@ struct CheckHour;
 struct CheckMinute;
 struct CheckSecond;
 struct CheckString;
-struct SetLabelToCurrentTime;
+struct SetStringToCurrentTime;
 struct TabulateDays;
 struct PrintErrorMessage;
 struct OnSelectInListBox;
@@ -238,6 +238,15 @@ struct CheckChrono{
     
 };
 
+struct SetStringToCurrentTime{
+    
+    StringField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
 
 
 
@@ -380,6 +389,7 @@ public:
     //non-GUI object related to this
     String* string;
     CheckString check;
+    SetStringToCurrentTime set_string_to_current_time;
     
     StringField(SightFrame*, String*);
     void set(void);
@@ -444,14 +454,7 @@ public:
 
 
 
-struct SetLabelToCurrentTime{
-    
-    StringField* p;
-    
-    void operator()(wxCommandEvent&);
-    
-    
-};
+
 
 
 
@@ -526,7 +529,6 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    SetLabelToCurrentTime setlabeltocurrenttime;
     PrintErrorMessage printerrormessage;
     
     BodyField* body;
@@ -726,7 +728,7 @@ template <class T> void CheckSign::operator()(T &event){
 
 }
 
-void SetLabelToCurrentTime::operator()(wxCommandEvent &event){
+template <class T> void SetStringToCurrentTime::operator()(T& event){
     
     //if the label is empty, I replace it with the local time and date
     if(((p->value)->GetValue()).IsEmpty()){
@@ -1169,7 +1171,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //buttons
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_reduce->Bind(wxEVT_BUTTON, setlabeltocurrenttime);
+    //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
+    button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, (limb->check));
@@ -2369,7 +2372,7 @@ StringField::StringField(SightFrame* frame, String* p){
     //initialize check
     (check.p) = this;
     
-    ((parent_frame->setlabeltocurrenttime).p) = this;
+    (set_string_to_current_time.p) = this;
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));

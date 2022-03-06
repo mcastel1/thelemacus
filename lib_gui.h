@@ -1457,10 +1457,10 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     for(j=0, i=0; i<(listcontrol->GetColumnCount()); i++){
         j += (listcontrol->GetColumnWidth(i));
     }
-    cout << "----------------- total Column width = " << j << "\n";
-    cout << "frame width = " << this->GetSize().GetWidth() << "\n";
-    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - j);
-    
+//    cout << "----------------- total Column width = " << j << "\n";
+//    cout << "frame width = " << this->GetSize().GetWidth() << "\n";
+//    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - j);
+//    
     
     
     //buttons

@@ -1175,6 +1175,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, (limb->check));
     button_reduce->Bind(wxEVT_BUTTON, (body->check));
+    button_reduce->Bind(wxEVT_BUTTON, (artificial_horizon_check->check));
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));

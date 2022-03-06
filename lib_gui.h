@@ -1670,7 +1670,16 @@ void SightFrame::OnSaveAs(wxCommandEvent& event){
 void SightFrame::TryToEnableReduce(void){
     
     
-    button_reduce->Enable((body->is_ok()) && ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok())) && ((!(((limb->name)->IsEnabled()))) || (limb->is_ok())) && (H_s->is_ok()) && (index_error->is_ok()) && (master_clock_date->is_ok()) && (master_clock_chrono->is_ok()) && ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) && (TAI_minus_UTC->is_ok()));
+    button_reduce->Enable(
+                          (body->is_ok()) &&
+                          (( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) ) || (limb->is_ok())) &&
+                          (H_s->is_ok()) &&
+                          (index_error->is_ok()) &&
+                          ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok())) &&
+                          (master_clock_date->is_ok()) &&
+                          (master_clock_chrono->is_ok()) &&
+                          ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
+                          (TAI_minus_UTC->is_ok()));
     
 }
 

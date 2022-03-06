@@ -245,7 +245,7 @@ public:
     wxCheckBox* checkbox;
     CheckCheck<T> check;
     
-    CheckField(SightFrame*, Answer*);
+    CheckField(SightFrame*, Answer*, T*);
     
     template<class R> void InsertIn(R*);
     void set(void);
@@ -1105,7 +1105,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon));
+    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon), height_of_eye);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1141,7 +1141,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch));
+    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), stopwatch_reading);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1865,15 +1865,14 @@ template<class T> void TabulateDays::operator()(T& event){
 //this function writes into sight.artificial_horizon the value entered in the GUI box
 template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     
-    SightFrame* f = (p->parent_frame);
     
     //I set p->answer to the value entered in the GUI checkbox
     if((p->checkbox)->GetValue()){
         ((p->answer)->value) = 'y';
-        (f->height_of_eye)->Enable(false);
+        (p->related_field)->Enable(false);
     }else{
         ((p->answer)->value) = 'n';
-        (f->height_of_eye)->Enable(true);
+        (p->related_field)->Enable(true);
     }
     
     event.Skip(true);
@@ -2223,11 +2222,12 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
 
 
 //constructor of a CheckField object, based on the parent frame frame
-template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p){
+template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* related_field_in){
     
     parent_frame = frame;
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
+    related_field = related_field_in;
     
     (check.p) = this;
     

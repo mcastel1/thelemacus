@@ -996,8 +996,6 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
-    
-    
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
     wxRect rectangle = (display.GetClientArea());
@@ -1339,7 +1337,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, j, n_columns;
+    unsigned int i, j, n_columns, margin_h = 10, margin_v = 5;
     OnSelectInListBox onselectinlistbox;
     wxListItem column, item;
     
@@ -1459,6 +1457,8 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     for(j=0, i=0; i<(listcontrol->GetColumnCount()); i++){
         j += (listcontrol->GetColumnWidth(i));
     }
+    cout << "----------------- total Column width = " << j << "\n";
+    cout << "frame width = " << this->GetSize().GetWidth() << "\n";
     //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - j);
     
     
@@ -1492,14 +1492,18 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
     //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
     //    }
-    sizer_v->Add(listcontrol, 1, wxEXPAND | wxALL, 10);
-    sizer_v->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, 5);
+    sizer_v->Add(listcontrol, 1, wxEXPAND | wxALL, margin_h);
+    sizer_v->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, margin_v);
     //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
     //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
     panel->SetSizer(sizer_v);
     
+    listcontrol->SetSize(wxSize(j,-1));
+    panel->SetSize(wxSize(j,-1));
+    this->SetSize(wxSize((int)(((double)j))+margin_h,-1));
+
 }
 
 void PlotFrame::OnAdd(wxCommandEvent& event){

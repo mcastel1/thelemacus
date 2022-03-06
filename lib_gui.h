@@ -1135,7 +1135,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set();
     
-    //master-clock hour
+    //master-clock chrono
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     
@@ -1183,14 +1183,17 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, (limb->check));
     button_reduce->Bind(wxEVT_BUTTON, (body->check));
-    button_reduce->Bind(wxEVT_BUTTON, (artificial_horizon_check->check));
-    button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
+    button_reduce->Bind(wxEVT_BUTTON, (limb->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
+    button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
+    button_reduce->Bind(wxEVT_BUTTON, (artificial_horizon_check->check));
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_chrono->check));
+    button_reduce->Bind(wxEVT_BUTTON, (stopwatch_check->check));
+    button_reduce->Bind(wxEVT_BUTTON, (stopwatch_reading->check));
+    button_reduce->Bind(wxEVT_BUTTON, (TAI_minus_UTC->check));
     button_reduce->Bind(wxEVT_BUTTON, (label->check));
 
 

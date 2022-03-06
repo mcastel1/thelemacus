@@ -4,7 +4,7 @@
 
 class BodyField;
 class LimbField;
-class CheckField;
+template<class T> class CheckField;
 class AngleField;
 class LengthField;
 class DateField;
@@ -17,7 +17,7 @@ class PlotFrame;
 
 struct CheckBody;
 struct CheckLimb;
-struct CheckCheck;
+template<class T> struct CheckCheck;
 struct CheckChrono;
 struct CheckAngle;
 struct CheckSign;
@@ -81,12 +81,12 @@ struct CheckLimb{
 };
 
 
-struct CheckCheck{
+template<class T> struct CheckCheck{
     
-    CheckField* p;
+    CheckField<T>* p;
     
     //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
-    template<class T> void operator()(T&);
+    template<class R> void operator()(R&);
     
 };
 
@@ -231,22 +231,23 @@ struct CheckChrono{
 
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
-class CheckField{
+template<class T> class CheckField{
     
 public:
     
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     Answer* answer;
+    T* related_field;
     wxBoxSizer *sizer_h, *sizer_v;
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* checkbox;
-    CheckCheck check;
+    CheckCheck<T> check;
     
     CheckField(SightFrame*, Answer*);
     
-    template<class T> void InsertIn(T*);
+    template<class R> void InsertIn(R*);
     void set(void);
     
     
@@ -530,7 +531,8 @@ public:
     
     BodyField* body;
     LimbField* limb;
-    CheckField* artificial_horizon_check, *stopwatch_check;
+    CheckField<LengthField>* artificial_horizon_check;
+    CheckField<ChronoField>* stopwatch_check;
     AngleField* H_s, *index_error;
     LengthField* height_of_eye;
     DateField *master_clock_date;
@@ -1103,7 +1105,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    artificial_horizon_check = new CheckField(this, &(sight->artificial_horizon));
+    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon));
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1139,7 +1141,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
+    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch));
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1861,7 +1863,7 @@ template<class T> void TabulateDays::operator()(T& event){
 
 
 //this function writes into sight.artificial_horizon the value entered in the GUI box
-template<class T> void CheckCheck::operator()(T& event){
+template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -2100,7 +2102,7 @@ void LimbField::set(void){
 }
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer
-void CheckField::set(void){
+template<class T> void CheckField<T>::set(void){
     
     if((answer->value) == 'y'){
         checkbox->SetValue(true);
@@ -2221,7 +2223,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
 
 
 //constructor of a CheckField object, based on the parent frame frame
-CheckField::CheckField(SightFrame* frame, Answer* p){
+template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p){
     
     parent_frame = frame;
     //I link the internal pointers p and c to the respective Answer object
@@ -2561,7 +2563,7 @@ template<class T> void LimbField::InsertIn(T* host){
     
 }
 
-template<class T> void CheckField::InsertIn(T* host){
+template<class T> template<class R> void CheckField<T>::InsertIn(R* host){
     
     host->Add(sizer_v);
     

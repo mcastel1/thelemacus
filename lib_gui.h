@@ -189,6 +189,46 @@ struct CheckString{
     
 };
 
+struct CheckHour{
+    
+    ChronoField* p;
+    
+    template<class T> void operator()(T&);
+
+    
+};
+
+struct CheckMinute{
+    
+    ChronoField* p;
+    
+    template<class T> void operator()(T&);
+
+    
+};
+
+struct CheckSecond{
+    
+    ChronoField* p;
+    
+    template<class T> void operator()(T&);
+    
+};
+
+
+struct CheckChrono{
+    
+    ChronoField* p;
+    CheckHour check_hour;
+    CheckMinute check_minute;
+    CheckSecond check_second;
+    
+    template<class T> void operator()(T&);
+    
+};
+
+
+
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
 class CheckField{
@@ -378,6 +418,7 @@ public:
     Chrono* chrono;
     //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
     bool hour_ok, minute_ok, second_ok;
+    CheckChrono check;
     
     ChronoField(SightFrame*, Chrono*);
     void set(Chrono);
@@ -386,22 +427,6 @@ public:
     bool is_ok(void);
     
 };
-
-
-
-
-
-
-
-struct CheckChrono{
-    
-    CheckField* p;
-    
-    template<class T> void operator()(T&);
-    
-    
-};
-
 
 
 
@@ -414,32 +439,6 @@ struct SetLabelToCurrentTime{
     
 };
 
-struct CheckHour{
-    
-    ChronoField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
-
-struct CheckMinute{
-    
-    ChronoField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
-
-struct CheckSecond{
-    
-    ChronoField* p;
-    
-    void operator()(wxFocusEvent&);
-    
-    
-};
 
 
 
@@ -526,7 +525,6 @@ public:
     CheckHour checkhour;
     CheckMinute checkminute;
     CheckSecond checksecond;
-    CheckChrono check_stopwatch;
     TabulateDays tabulatedays;
     PrintErrorMessage printerrormessage;
     
@@ -1086,8 +1084,6 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     limb = new LimbField(this, &(sight->limb));
-    //    (limb->name)->SetValue("");
-    //    (limb->name)->Enable(false);
     
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1132,26 +1128,18 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //if sight_in != NULL, then I initialize the GUI filed master_clock_chrono with the one written in sight_in. Otherwise, master_clock_chrono is initialized as empty.
     if(sight_in!=NULL){
         
-//        Time time_UTC;
-//
-//        //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
-//        time_UTC = (sight->time);
-//        time_UTC -= (sight->TAI_minus_UTC);
         master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
         
     }else{
-        //if sight_in == NULL, I have previously set the non-GUI object (sight->master_clock_date_and_hour).chrono to the current hour, and I write this value into the GUI object master_clock_chrono
         
+        //if sight_in == NULL, I have previously set the non-GUI object (sight->master_clock_date_and_hour).chrono to the current hour, and I write this value into the GUI object master_clock_chrono
         master_clock_chrono->set((sight->master_clock_date_and_hour).chrono);
         
     }
     
-    
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     stopwatch_check = new CheckField(this, &(sight->use_stopwatch));
-    (check_stopwatch.p) = stopwatch_check;
-    (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, check_stopwatch);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1161,9 +1149,6 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->checkbox)->SetValue(false);
     stopwatch_reading->Enable(false);
-    //    (stopwatch_reading->hour)->SetValue(wxString("0"));
-    //    (stopwatch_reading->minute)->SetValue(wxString("0"));
-    //    (stopwatch_reading->second)->SetValue(wxString("0.0"));
     
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
@@ -1186,8 +1171,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
-    button_reduce->Bind(wxEVT_BUTTON, check_stopwatch);
-    button_reduce->Bind(wxEVT_BUTTON, (label->check)        );
+    button_reduce->Bind(wxEVT_BUTTON, (master_clock_chrono->check));
+    button_reduce->Bind(wxEVT_BUTTON, (label->check));
 
 
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
@@ -1674,120 +1659,6 @@ void SightFrame::OnPressCancel(wxCommandEvent& event){
 
 
 
-void CheckHour::operator()(wxFocusEvent &event){
-    
-    SightFrame* f = (p->parent_frame);
-    
-    //I proceed only if the progam is not is indling mode
-    if(!(f->idling)){
-        
-        if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
-            
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
-            
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->hour);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-            f->CallAfter((f->printerrormessage));
-            
-            
-            (p->hour_ok) = false;
-            
-        }else{
-            
-            (p->hour)->SetBackgroundColour(*wxWHITE);
-            ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
-            (p->hour_ok) = true;
-            
-        }
-        
-        f->TryToEnableReduce();
-                
-    }
-    
-    event.Skip(true);
-    
-}
-
-
-void CheckMinute::operator()(wxFocusEvent &event){
-    
-    SightFrame* f = (p->parent_frame);
-    
-    //I proceed only if the progam is not is indling mode
-    if(!(f->idling)){
-        
-        if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
-            
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
-            
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->minute);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-            f->CallAfter((f->printerrormessage));
-            
-            (p->minute_ok) = false;
-            
-        }else{
-            
-            (p->minute)->SetBackgroundColour(*wxWHITE);
-            ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
-            (p->minute_ok) = true;
-            
-        }
-        
-        f->TryToEnableReduce();
-                
-    }
-    
-    event.Skip(true);
-    
-}
-
-
-
-void CheckSecond::operator()(wxFocusEvent &event){
-    
-    SightFrame* f = (p->parent_frame);
-    
-    //I proceed only if the progam is not is indling mode
-    if(!(f->idling)){
-        
-        if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
-            
-            
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
-            
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->second);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
-            f->CallAfter((f->printerrormessage));
-            
-            (p->second_ok) = false;
-            
-        }else{
-            
-            double s_temp;
-            
-            (p->second)->SetBackgroundColour(*wxWHITE);
-            ((p->second)->GetValue()).ToDouble(&s_temp);
-            ((p->chrono)->s) = s_temp;
-            (p->second_ok) = true;
-            
-        }
-        
-        
-        f->TryToEnableReduce();
-                
-    }
-    
-    event.Skip(true);
-    
-}
-
 
 
 template<class T> void CheckYear::operator()(T&event){
@@ -2007,20 +1878,142 @@ template<class T> void CheckCheck::operator()(T& event){
     
 }
 
-//this function writes into sight.use_stopwatch the value written into the respective GUI box and it enables/disables all fields in stopwatch reading if stopwatch_check is enabled/disabled, respectively
-template <class T> void CheckChrono::operator()(T& event){
+
+template<class T> void CheckHour::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
-    //I set p->answetr to the value entered in the GUI checkbox
-    if((p->checkbox)->GetValue()){
-        ((p->answer)->value) = 'y';
-    }else{
-        ((p->answer)->value) = 'n';
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->hour), String("Entered value is not valid!\nHours must be unsigned integer numbers >= 0 and < 24"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->hour);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+            f->CallAfter((f->printerrormessage));
+            
+            
+            (p->hour_ok) = false;
+            
+        }else{
+            
+            (p->hour)->SetBackgroundColour(*wxWHITE);
+            ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
+            (p->hour_ok) = true;
+            
+        }
+        
+        f->TryToEnableReduce();
+                
     }
     
-    //I enable f->stopwatch reading GUI field a
-    (f->stopwatch_reading)->Enable((p->checkbox)->GetValue());
+    event.Skip(true);
+    
+}
+
+
+template<class T> void CheckMinute::operator()(T &event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->minute);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->minute_ok) = false;
+            
+        }else{
+            
+            (p->minute)->SetBackgroundColour(*wxWHITE);
+            ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
+            (p->minute_ok) = true;
+            
+        }
+        
+        f->TryToEnableReduce();
+                
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+
+template<class T> void CheckSecond::operator()(T &event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+            
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage).control) = (p->second);
+            ((f->printerrormessage).title) = String("Entered value is not valid!");
+            ((f->printerrormessage).message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
+            f->CallAfter((f->printerrormessage));
+            
+            (p->second_ok) = false;
+            
+        }else{
+            
+            double s_temp;
+            
+            (p->second)->SetBackgroundColour(*wxWHITE);
+            ((p->second)->GetValue()).ToDouble(&s_temp);
+            ((p->chrono)->s) = s_temp;
+            (p->second_ok) = true;
+            
+        }
+        
+        
+        f->TryToEnableReduce();
+                
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+//this function writes into sight.stopwatch the value written into the respective GUI box
+template <class T> void CheckChrono::operator()(T& event){
+    
+//    SightFrame* f = (p->parent_frame);
+//
+//    //I set sight.stopwatch to the value entered in the GUI checkbox
+//    if((p->checkbox)->GetValue()){
+//        ((p->answer)->value) = 'y';
+//    }else{
+//        ((p->answer)->value) = 'n';
+//    }
+//
+//    //I enable f->stopwatch reading GUI field a
+//    (f->stopwatch_reading)->Enable((p->checkbox)->GetValue());
+//
+//    event.Skip(true);
+    
+    check_hour(event);
+    check_minute(event);
+    check_second(event);
     
     event.Skip(true);
 
@@ -2462,9 +2455,10 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     parent_frame = frame;
     chrono = p;
     
-    ((parent_frame->checkhour).p) = this;
-    ((parent_frame->checkminute).p) = this;
-    ((parent_frame->checksecond).p) = this;
+    (check.p) = this;
+    ((check.check_hour).p) = this;
+    ((check.check_minute).p) = this;
+    ((check.check_second).p) = this;
     
     for(hours.Clear(), hours.Add(wxT("")), i=0; i<24; i++){
         hours.Add(wxString::Format(wxT("%i"), i+1));
@@ -2476,20 +2470,20 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
-    hour->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkhour));
+    hour->Bind(wxEVT_KILL_FOCUS, (check.check_hour));
     
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
-    minute->Bind(wxEVT_KILL_FOCUS, (parent_frame->checkminute));
+    minute->Bind(wxEVT_KILL_FOCUS, (check.check_minute));
     
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
-    second->Bind(wxEVT_KILL_FOCUS, (parent_frame->checksecond));
+    second->Bind(wxEVT_KILL_FOCUS, (check.check_second));
     
     
     hour->SetValue(wxString(""));

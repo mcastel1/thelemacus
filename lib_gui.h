@@ -453,6 +453,7 @@ public:
     ChronoField(SightFrame*, Chrono*);
     void set(Chrono);
     void Enable(bool);
+    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -1227,10 +1228,10 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
     button_reduce->Bind(wxEVT_BUTTON, &LengthField::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
-    button_reduce->Bind(wxEVT_BUTTON, (master_clock_chrono->check));
+    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, master_clock_chrono);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
-    button_reduce->Bind(wxEVT_BUTTON, (stopwatch_reading->check));
-    button_reduce->Bind(wxEVT_BUTTON, (TAI_minus_UTC->check));
+    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
+    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
     button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
 
     
@@ -2007,7 +2008,6 @@ template<class T> void CheckHour::operator()(T &event){
         }else{
             
             (p->hour)->SetBackgroundColour(*wxWHITE);
-            ((p->chrono)->h) = ((unsigned int)wxAtoi((p->hour)->GetValue()));
             (p->hour_ok) = true;
             
         }
@@ -2043,7 +2043,6 @@ template<class T> void CheckMinute::operator()(T &event){
         }else{
             
             (p->minute)->SetBackgroundColour(*wxWHITE);
-            ((p->chrono)->m) = ((unsigned int)wxAtoi((p->minute)->GetValue()));
             (p->minute_ok) = true;
             
         }
@@ -2080,11 +2079,8 @@ template<class T> void CheckSecond::operator()(T &event){
             
         }else{
             
-            double s_temp;
             
             (p->second)->SetBackgroundColour(*wxWHITE);
-            ((p->second)->GetValue()).ToDouble(&s_temp);
-            ((p->chrono)->s) = s_temp;
             (p->second_ok) = true;
             
         }
@@ -2110,6 +2106,24 @@ template <class T> void CheckChrono::operator()(T& event){
     
 }
 
+//this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second
+template <class T> void ChronoField::get(T& event){
+    
+    if(hour_ok && (hour->IsEnabled()) && minute_ok && (minute->IsEnabled()) && second_ok && (second->IsEnabled())){
+        //I write only if hour, minute and second are ok and enabled
+        
+        double s_temp;
+        
+        (chrono->h) = ((unsigned int)wxAtoi(hour->GetValue()));
+        ((chrono)->m) = ((unsigned int)wxAtoi(minute->GetValue()));
+        ((second)->GetValue()).ToDouble(&s_temp);
+        ((chrono)->s) = s_temp;
+        
+    }
+    
+    event.Skip(true);
+    
+}
 
 
 void SightFrame::OnPressReduce(wxCommandEvent& event){

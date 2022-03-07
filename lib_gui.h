@@ -596,28 +596,42 @@ void ChartFrame::Draw(void){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y;
+    double *x, *y, lambda, phi;
     unsigned int i;
     
-    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
-    world.count_lines(String(""));
+//    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
+    world.set_name(String("/Users/macbookpro/Desktop/map_conv.csv"));
+  world.count_lines(String(""));
     
     x = new double [world.number_of_lines];
     y = new double [world.number_of_lines];
 
     world.open(String("in"), String(""));
     
+    line.clear();
+    getline(world.value, line);
+    
+    cout << "Number of lines =" << world.number_of_lines;
+    
     for(i=0; i<(world.number_of_lines); i++){
         
-        line.str("");
-        line_ins.str("");
+        line.clear();
+        line_ins.clear();
         
         getline(world.value, line);
         line_ins << line;
-        line_ins >> number_of_lines >> dummy;
+        line_ins >> phi >> lambda;
         
-        x[i] = (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k;
-        y[i] = (log(1./cos(phi*k) + tan(phi*k)));
+        
+        x[i] = lambda;
+        if(!((0.0 <= lambda) && (lambda < 180.0))){x[i] -= 360.0;}
+        x[i] *= -k;
+     
+        y[i] = log(1./cos(phi*k) + tan(phi*k));
+        
+//        cout << "-------" << x[i] << "\t" << y[i] << "\n";
+
+        
     }
     
     
@@ -628,17 +642,7 @@ void ChartFrame::Draw(void){
 //    const int dataX0_size = (int)(sizeof(dataX0)/sizeof(*dataX0));
 //    double dataY0[] = {130, 150, 80, 110, 110, 105, 130, 115, 170, 125, 125};
 //    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
-
     
-//    xe(lambda) =  (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k
-//    ye(phi) = (log(1./cos(phi*k) + tan(phi*k)))
-
-    
-//    double dataX1[] = {6, 12, 4, 3.5, 7, 8, 9, 10, 12, 11, 8};
-//    const int dataX1_size = (int)(sizeof(dataX1)/sizeof(*dataX1));
-//    double dataY1[] = {65, 80, 40, 45, 70, 80, 80, 90, 100, 105, 60};
-//    const int dataY1_size = (int)(sizeof(dataY1)/sizeof(*dataY1));
-//
     // Create a XYChart object of size 450 x 420 pixels
     XYChart* c = new XYChart(450, 420);
     
@@ -665,8 +669,8 @@ void ChartFrame::Draw(void){
     c->yAxis()->setWidth(3);
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    c->addScatterLayer(DoubleArray(dataX0, dataX0_size), DoubleArray(dataY0, dataY0_size),
-                       "Genetically Engineered", Chart::DiamondSymbol, 13, 0xff9933);
+    c->addScatterLayer(DoubleArray(x, world.number_of_lines), DoubleArray(y, world.number_of_lines),
+                       "Coastlines of the world", Chart::CircleSymbol, 1, 000000);
     
     // Add a green (0x33ff33) scatter chart layer, using 11 pixel triangles as symbols
 //    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),

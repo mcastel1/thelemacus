@@ -375,6 +375,7 @@ public:
     
     LengthField(SightFrame*, Length*);
     void set(void);
+    template<class T> void get(T&);
     void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
@@ -897,6 +898,7 @@ template <class T> void CheckArcMinute::operator()(T &event){
     
 }
 
+//checks the value in the GUI field in LengthField
 template <class T> void CheckLength::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
@@ -926,13 +928,7 @@ template <class T> void CheckLength::operator()(T &event){
             
         }else{
             
-            double length_temp;
-            
             (p->value)->SetBackgroundColour(*wxWHITE);
-            
-            (p->value)->GetValue().ToDouble(&length_temp);
-            (p->length)->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
-            
             (p->ok) = true;
             
         }
@@ -944,6 +940,24 @@ template <class T> void CheckLength::operator()(T &event){
     event.Skip(true);
     
 }
+
+//writes the value of the GUI field in LengthField into the non-GUI field length
+template <class T> void LengthField::get(T &event){
+    
+    if(ok){
+        
+        double length_temp;
+        
+        value->GetValue().ToDouble(&length_temp);
+        length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
+        
+    }
+        
+    event.Skip(true);
+    
+}
+
+
 
 struct OnSelectInListBox{
     
@@ -1207,7 +1221,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, index_error);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
-    button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
+//    button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
+    button_reduce->Bind(wxEVT_BUTTON, &LengthField::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_chrono->check));
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);

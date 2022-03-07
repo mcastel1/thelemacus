@@ -398,6 +398,7 @@ public:
     
     StringField(SightFrame*, String*);
     void set(void);
+    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     
 };
@@ -767,26 +768,29 @@ template <class T> void SetStringToCurrentTime::operator()(T& event){
     
 }
 
-
+//this functor checks out the value in the StringField
 template<class T> void CheckString::operator()(T &event){
-    
     
     SightFrame* f = (p->parent_frame);
     
-    //I proceed only if the progam is not is in idling mode
-    if(!(f->idling)){
-        
-        //I write in the non-GUI object (p->string) the value entered in the GUI object (p->value)
-        (*(p->string)) = String(((p->value)->GetValue().ToStdString()));
-        
-        f->TryToEnableReduce();
-        
-        
-    }
+    f->TryToEnableReduce();
     
     event.Skip(true);
     
 }
+
+
+//I write in the non-GUI object string the value entered in the GUI object value
+template<class T> void StringField::get(T &event){
+    
+    //here I don't check whether the StringField is ok, because any value in the string field is ok
+    (*string) = String((value->GetValue().ToStdString()));
+    
+    event.Skip(true);
+    
+}
+
+
 
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
 template <class T> void CheckAngle::operator()(T& event){
@@ -1221,15 +1225,14 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, index_error);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
-//    button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
     button_reduce->Bind(wxEVT_BUTTON, &LengthField::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_chrono->check));
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
     button_reduce->Bind(wxEVT_BUTTON, (stopwatch_reading->check));
     button_reduce->Bind(wxEVT_BUTTON, (TAI_minus_UTC->check));
-    button_reduce->Bind(wxEVT_BUTTON, (label->check));
-    
+    button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
+
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));

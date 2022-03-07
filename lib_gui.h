@@ -593,17 +593,52 @@ public:
 
 void ChartFrame::Draw(void){
     
+    File world;
+    stringstream line_ins;
+    string line;
+    double *x, *y;
+    unsigned int i;
+    
+    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
+    world.count_lines(String(""));
+    
+    x = new double [world.number_of_lines];
+    y = new double [world.number_of_lines];
+
+    world.open(String("in"), String(""));
+    
+    for(i=0; i<(world.number_of_lines); i++){
+        
+        line.str("");
+        line_ins.str("");
+        
+        getline(world.value, line);
+        line_ins << line;
+        line_ins >> number_of_lines >> dummy;
+        
+        x[i] = (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k;
+        y[i] = (log(1./cos(phi*k) + tan(phi*k)));
+    }
+    
+    
+    world.close(String(""));
+
     // The XY points for the scatter chart
-    double dataX0[] = {10, 15, 6, 12, 14, 8, 13, 13, 16, 12, 10.5};
-    const int dataX0_size = (int)(sizeof(dataX0)/sizeof(*dataX0));
-    double dataY0[] = {130, 150, 80, 110, 110, 105, 130, 115, 170, 125, 125};
-    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
+//    double dataX0[] = {10, 15, 6, 12, 14, 8, 13, 13, 16, 12, 10.5};
+//    const int dataX0_size = (int)(sizeof(dataX0)/sizeof(*dataX0));
+//    double dataY0[] = {130, 150, 80, 110, 110, 105, 130, 115, 170, 125, 125};
+//    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
+
     
-    double dataX1[] = {6, 12, 4, 3.5, 7, 8, 9, 10, 12, 11, 8};
-    const int dataX1_size = (int)(sizeof(dataX1)/sizeof(*dataX1));
-    double dataY1[] = {65, 80, 40, 45, 70, 80, 80, 90, 100, 105, 60};
-    const int dataY1_size = (int)(sizeof(dataY1)/sizeof(*dataY1));
+//    xe(lambda) =  (-1.0) * ( ((0.0 <= lambda) & (lambda < 180.0)) ? lambda: lambda - 360.0 )*k
+//    ye(phi) = (log(1./cos(phi*k) + tan(phi*k)))
+
     
+//    double dataX1[] = {6, 12, 4, 3.5, 7, 8, 9, 10, 12, 11, 8};
+//    const int dataX1_size = (int)(sizeof(dataX1)/sizeof(*dataX1));
+//    double dataY1[] = {65, 80, 40, 45, 70, 80, 80, 90, 100, 105, 60};
+//    const int dataY1_size = (int)(sizeof(dataY1)/sizeof(*dataY1));
+//
     // Create a XYChart object of size 450 x 420 pixels
     XYChart* c = new XYChart(450, 420);
     
@@ -617,7 +652,7 @@ void ChartFrame::Draw(void){
                                                                                   );
     
     // Add a title to the chart using 18pt Times Bold Itatic font.
-    c->addTitle("Genetically Modified Predator", "Times New Roman Bold Italic", 18);
+    c->addTitle("Genetically Modified Predator", "Arial Bold", 18);
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
     c->yAxis()->setTitle("Length (cm)", "Arial Bold Italic", 12);
@@ -634,14 +669,16 @@ void ChartFrame::Draw(void){
                        "Genetically Engineered", Chart::DiamondSymbol, 13, 0xff9933);
     
     // Add a green (0x33ff33) scatter chart layer, using 11 pixel triangles as symbols
-    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),
-                       "Natural", Chart::TriangleSymbol, 11, 0x33ff33);
-    
+//    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),
+//                       "Natural", Chart::TriangleSymbol, 11, 0x33ff33);
+//
     // Output the chart
     c->makeChart("map.png");
     
     //free up resources
     delete c;
+    delete [] x;
+    delete [] y;
     
 }
 

@@ -598,7 +598,21 @@ public:
 
 ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
+
     parent = parent_input;
+
+    String new_prefix;
+    
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    idling = false;
+
+    
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+ 
+    wxStaticText* text = new wxStaticText(panel, wxID_ANY, wxT("A chart will be here"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
     
 }
 
@@ -1098,6 +1112,9 @@ bool MyApp::OnInit(){
     
     PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
     list_frame->Show(true);
+    
+    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, rectangle.GetSize(), String(""));
+    nautical_chart->Show(true);
     
     return true;
     

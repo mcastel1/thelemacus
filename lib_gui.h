@@ -623,10 +623,16 @@ public:
     // The Path to the file we have open
     wxString CurrentDocPath;
     
-    wxDECLARE_EVENT_TABLE();
+//    wxDECLARE_EVENT_TABLE();
     
 };
 
+
+ChartFrame::ChartFrame(PlotFrame* parent_input, Sight* sight_in, long position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+    
+    parent = parent_input;
+    
+}
 
 
 template<class T>void CheckBody::operator()(T& event){

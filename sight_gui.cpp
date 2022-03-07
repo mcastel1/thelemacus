@@ -54,6 +54,7 @@ using namespace std;
 
 #include "lib.h"
 #include "lib_gui.h"
+#include "chartdir.h"
 
 /*
  notes: set parents to constructors of all frames that you defined

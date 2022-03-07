@@ -578,13 +578,9 @@ public:
 class ChartFrame: public wxFrame{
     
 public:
-    ChartFrame(PlotFrame*, Sight*, long, const wxString&, const wxPoint&, const wxSize&, String);
+    ChartFrame(PlotFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
     PlotFrame* parent;
-    Catalog* catalog;
-    Sight* sight;
-    //this long represents the position in the list (this->GetParent())->listcontrol of sight. If position = -1, then sight is not in that list
-    long position;
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
@@ -592,43 +588,15 @@ public:
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     PrintErrorMessage printerrormessage;
     
-    BodyField* body;
-    LimbField* limb;
-    CheckField<LengthField>* artificial_horizon_check;
-    CheckField<ChronoField>* stopwatch_check;
-    AngleField* H_s, *index_error;
-    LengthField* height_of_eye;
-    DateField *master_clock_date;
-    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
-    StringField *label;
-    
-    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;
-    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
-    wxStaticBoxSizer *sizer_box_measurement, *sizer_box_time;
-    
-    wxArrayString bodies, limbs;
-    wxButton* button_reduce, *button_cancel;
-    wxMenuBar *menuBar;
     
     void SetIdling(bool);
-    void set(void);
-    void OnOpen(wxCommandEvent& event);
-    void OnSave(wxCommandEvent& event);
-    void OnSaveAs(wxCommandEvent& event);
-    void OnClose(wxCommandEvent& event);
-    void OnPressCancel(wxCommandEvent& event);
-    void OnPressReduce(wxCommandEvent& event);
-    void TryToEnableReduce(void);
-    
-    // The Path to the file we have open
-    wxString CurrentDocPath;
     
 //    wxDECLARE_EVENT_TABLE();
     
 };
 
 
-ChartFrame::ChartFrame(PlotFrame* parent_input, Sight* sight_in, long position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     

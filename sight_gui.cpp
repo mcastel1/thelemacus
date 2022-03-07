@@ -57,7 +57,6 @@ using namespace std;
 
 /*
  notes: set parents to constructors of all frames that you defined
-- when you print out index error, print it with its sign rather than normalized
  - when you click on modify and then press reduce, the code should not insert a new item in listcontrol, but replace the old one
 - add recent items to dropdown menus
  - add instrumental error

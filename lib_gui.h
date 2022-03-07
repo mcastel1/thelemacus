@@ -582,15 +582,9 @@ public:
     
     PlotFrame* parent;
     wxPanel *panel;
-    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
-    bool idling;
-    
-    //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    PrintErrorMessage printerrormessage;
-    
-    
-    void SetIdling(bool);
-    
+    wxBoxSizer *sizer_h, *sizer_v;
+    wxStaticBitmap* image;
+        
 //    wxDECLARE_EVENT_TABLE();
     
 };
@@ -606,12 +600,23 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    idling = false;
-
-    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
  
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, wxT("A chart will be here"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    
+    //image
+    wxPNGHandler *handler = new wxPNGHandler;
+    wxImage::AddHandler(handler);
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    wxDisplay display;
+    wxRect rectangle = (display.GetClientArea());
+    rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./10.0);
+    rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./10.0);
+    
+    
+    
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
 }

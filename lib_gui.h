@@ -584,10 +584,66 @@ public:
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v;
     wxStaticBitmap* image;
-        
-//    wxDECLARE_EVENT_TABLE();
+    
+    void Draw(void);
+    
+    //    wxDECLARE_EVENT_TABLE();
     
 };
+
+void ChartFrame::Draw(void){
+    
+    // The XY points for the scatter chart
+    double dataX0[] = {10, 15, 6, 12, 14, 8, 13, 13, 16, 12, 10.5};
+    const int dataX0_size = (int)(sizeof(dataX0)/sizeof(*dataX0));
+    double dataY0[] = {130, 150, 80, 110, 110, 105, 130, 115, 170, 125, 125};
+    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
+    
+    double dataX1[] = {6, 12, 4, 3.5, 7, 8, 9, 10, 12, 11, 8};
+    const int dataX1_size = (int)(sizeof(dataX1)/sizeof(*dataX1));
+    double dataY1[] = {65, 80, 40, 45, 70, 80, 80, 90, 100, 105, 60};
+    const int dataY1_size = (int)(sizeof(dataY1)/sizeof(*dataY1));
+    
+    // Create a XYChart object of size 450 x 420 pixels
+    XYChart* c = new XYChart(450, 420);
+    
+    // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
+    // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
+    c->setPlotArea(55, 65, 350, 300, -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    
+    // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
+    // Italic font. Set the background and border color to Transparent.
+    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent
+                                                                                  );
+    
+    // Add a title to the chart using 18pt Times Bold Itatic font.
+    c->addTitle("Genetically Modified Predator", "Times New Roman Bold Italic", 18);
+    
+    // Add a title to the y axis using 12pt Arial Bold Italic font
+    c->yAxis()->setTitle("Length (cm)", "Arial Bold Italic", 12);
+    
+    // Add a title to the x axis using 12pt Arial Bold Italic font
+    c->xAxis()->setTitle("Weight (kg)", "Arial Bold Italic", 12);
+    
+    // Set the axes line width to 3 pixels
+    c->xAxis()->setWidth(3);
+    c->yAxis()->setWidth(3);
+    
+    // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
+    c->addScatterLayer(DoubleArray(dataX0, dataX0_size), DoubleArray(dataY0, dataY0_size),
+                       "Genetically Engineered", Chart::DiamondSymbol, 13, 0xff9933);
+    
+    // Add a green (0x33ff33) scatter chart layer, using 11 pixel triangles as symbols
+    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),
+                       "Natural", Chart::TriangleSymbol, 11, 0x33ff33);
+    
+    // Output the chart
+    c->makeChart("map.png");
+    
+    //free up resources
+    delete c;
+    
+}
 
 
 ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
@@ -600,67 +656,42 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
- 
+    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-
+    
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-//    wxDisplay display;
-//    wxRect rectangle = (display.GetClientArea());
-//    rectangle.SetWidth((int)((double)rectangle.GetWidth())*2./10.0);
-//    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
-//
+    //    wxDisplay display;
+    //    wxRect rectangle = (display.GetClientArea());
+    //    rectangle.SetWidth((int)((double)rectangle.GetWidth())*2./10.0);
+    //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
+    //
     
     
     
     
-    // The data for the bar chart
-    double data[] = {85, 156, 179.5, 211, 123};
-    const int data_size = (int)(sizeof(data)/sizeof(*data));
+    Draw();
     
-    // The labels for the bar chart
-    const char* labels[] = {"Mon", "Tue", "Wed", "Thu", "Fri"};
-    const int labels_size = (int)(sizeof(labels)/sizeof(*labels));
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
-    // Create a XYChart object of size 250 x 250 pixels
-    XYChart* c = new XYChart((this->GetSize()).GetWidth()*0.95, (this->GetSize()).GetHeight()*0.95);
-    
-    // Set the plotarea at (30, 20) and of size 200 x 200 pixels
-    c->setPlotArea((this->GetSize()).GetWidth()*0.1, (this->GetSize()).GetHeight()*0.1, (this->GetSize()).GetWidth()*0.9, (this->GetSize()).GetHeight()*0.9);
-    
-    // Add a bar chart layer using the given data
-    c->addBarLayer(DoubleArray(data, data_size));
-    
-    // Set the labels on the x axis.
-    c->xAxis()->setLabels(StringArray(labels, labels_size));
-    
-    // Output the chart
-    c->makeChart("simplebar.png");
-    
-    
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("simplebar.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    
-//    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
+    //    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(image, 0, wxEXPAND | wxALL, 10);
     
     Maximize(panel);
-
-//    panel->SetSizer(sizer_v);
-//    sizer_v->Fit(this);
-
-  
+    
+    //    panel->SetSizer(sizer_v);
+    //    sizer_v->Fit(this);
+    
     SetSizerAndFit(sizer_v);
     
-//    Fit();
+    //    Fit();
     Centre();
-
     
     
-    //free up resources
-    delete c;
+    
     
     
 }
@@ -915,7 +946,7 @@ template <class T> void DateField::get(T& event){
         (date->Y) = (unsigned int)wxAtoi(year->GetValue());
         (date->M) = (unsigned int)wxAtoi(month->GetValue());
         (date->D) = (unsigned int)wxAtoi(day->GetValue());
-
+        
     }
     
     event.Skip(true);
@@ -1063,7 +1094,7 @@ template <class T> void LengthField::get(T &event){
         length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
         
     }
-        
+    
     event.Skip(true);
     
 }
@@ -1084,7 +1115,7 @@ template<class T> void OnSelectInListBox::operator()(T& event){
     
     (f->button_modify)->Enable(true);
     (f->button_delete)->Enable(true);
-
+    
     event.Skip(true);
     
 }
@@ -1347,7 +1378,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
     button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
-
+    
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));
@@ -1650,7 +1681,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
     button_delete->Enable(false);
-
+    
     
     sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
@@ -1926,7 +1957,7 @@ template<class T> void CheckMonth::operator()(T&event){
                 
                 tabulate_days(event);
                 (p->day)->Enable(true);
-        
+                
             }
             
         }

@@ -988,10 +988,12 @@ struct OnSelectInListBox{
     
 };
 
+//if an item in listbox is selected, then the modify and delete buttons are enabled
 template<class T> void OnSelectInListBox::operator()(T& event){
     
     (f->button_modify)->Enable(true);
-    
+    (f->button_delete)->Enable(true);
+
     event.Skip(true);
     
 }
@@ -1546,12 +1548,12 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
     button_modify->Enable(false);
-    //    button_modify->Enable(false);
     
     //button to delete a sight
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
-    
+    button_delete->Enable(false);
+
     
     sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);

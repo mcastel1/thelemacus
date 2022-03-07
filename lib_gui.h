@@ -616,7 +616,6 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
     // The data for the bar chart
@@ -641,6 +640,10 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     // Output the chart
     c->makeChart("simplebar.png");
+    
+    
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("simplebar.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+  
     
     //free up resources
     delete c;

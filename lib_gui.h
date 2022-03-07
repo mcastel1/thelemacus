@@ -295,7 +295,7 @@ public:
     
     BodyField(SightFrame*, Body*, Catalog*);
     void set(void);
-    void get(wxCommandEvent&);
+    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -1175,7 +1175,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, &BodyField::get, body);
+    button_reduce->Bind(wxEVT_BUTTON, &BodyField::get<wxCommandEvent>, body);
     button_reduce->Bind(wxEVT_BUTTON, (limb->check));
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
@@ -2131,7 +2131,7 @@ void BodyField::set(void){
 }
 
 //sets the value in the non-GUI object body equal to the value in the GUI  object name
-void BodyField::get(wxCommandEvent& event){
+template<class T> void BodyField::get(T& event){
     
     unsigned int i;
     bool check;

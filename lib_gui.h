@@ -425,6 +425,7 @@ public:
     
     DateField(SightFrame*, Date*);
     void set(void);
+    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -804,7 +805,7 @@ template <class T> void CheckAngle::operator()(T& event){
     
 }
 
-//this functor checks the whole date field by calling the check on its year, month and day parts‰
+//this functor checks the whole date field by calling the check on its year, month and day parts
 template <class T> void CheckDate::operator()(T& event){
     
     check_year(event);
@@ -815,6 +816,20 @@ template <class T> void CheckDate::operator()(T& event){
     
 }
 
+//this functor writes the values written inthe whole GUI date field (year, month and day) in the respective non-GUI object date->D, date->M, date->D
+template <class T> void DateField::get(T& event){
+    
+    if(year_ok && (year->IsEnabled()) && month_ok && (month->IsEnabled()) && day_ok && (month->IsEnabled())){
+        
+        (date->Y) = (unsigned int)wxAtoi(year->GetValue());
+        (date->M) = (unsigned int)wxAtoi(month->GetValue());
+        (date->D) = (unsigned int)wxAtoi(day->GetValue());
+
+    }
+    
+    event.Skip(true);
+    
+}
 
 
 template<class T> void CheckArcDegree::operator()(T &event){
@@ -1227,7 +1242,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, index_error);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
     button_reduce->Bind(wxEVT_BUTTON, &LengthField::get<wxCommandEvent>, height_of_eye);
-    button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
+    button_reduce->Bind(wxEVT_BUTTON, &DateField::get<wxCommandEvent>, master_clock_date);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, master_clock_chrono);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
@@ -1766,7 +1781,6 @@ template<class T> void CheckYear::operator()(T&event){
         }else{
             
             (p->year)->SetBackgroundColour(*wxWHITE);
-            (p->date->Y) = (unsigned int)wxAtoi((p->year)->GetValue());
             (p->year_ok) = true;
             
             if(p->month_ok){
@@ -1807,13 +1821,13 @@ template<class T> void CheckMonth::operator()(T&event){
         }else{
             
             (p->month)->SetBackgroundColour(*wxWHITE);
-            (p->date->M) = (unsigned int)wxAtoi((p->month)->GetValue());
             (p->month_ok) = true;
             
             if(p->year_ok){
+                
                 tabulate_days(event);
                 (p->day)->Enable(true);
-                
+        
             }
             
         }
@@ -1857,7 +1871,6 @@ template<class T> void CheckDay::operator()(T& event){
                 
                 (p->day)->Enable(true);
                 (p->day)->SetBackgroundColour(*wxWHITE);
-                (p->date->D) = (unsigned int)wxAtoi((p->day)->GetValue());
                 (p->day_ok) = true;
                 
             }else{

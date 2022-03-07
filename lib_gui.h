@@ -599,13 +599,13 @@ void ChartFrame::Draw(void){
     double *x, *y, lambda, phi;
     unsigned int i;
     
-//    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
+    //    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
     world.set_name(String("/Users/macbookpro/Desktop/map_conv.csv"));
-  world.count_lines(String(""));
+    world.count_lines(String(""));
     
     x = new double [world.number_of_lines];
     y = new double [world.number_of_lines];
-
+    
     world.open(String("in"), String(""));
     
     line.clear();
@@ -626,22 +626,22 @@ void ChartFrame::Draw(void){
         x[i] = lambda;
         if(!((0.0 <= lambda) && (lambda < 180.0))){x[i] -= 360.0;}
         x[i] *= -k;
-     
+        
         y[i] = log(1./cos(phi*k) + tan(phi*k));
         
-//        cout << "-------" << x[i] << "\t" << y[i] << "\n";
-
+        //        cout << "-------" << x[i] << "\t" << y[i] << "\n";
+        
         
     }
     
     
     world.close(String(""));
-
+    
     // The XY points for the scatter chart
-//    double dataX0[] = {10, 15, 6, 12, 14, 8, 13, 13, 16, 12, 10.5};
-//    const int dataX0_size = (int)(sizeof(dataX0)/sizeof(*dataX0));
-//    double dataY0[] = {130, 150, 80, 110, 110, 105, 130, 115, 170, 125, 125};
-//    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
+    //    double dataX0[] = {10, 15, 6, 12, 14, 8, 13, 13, 16, 12, 10.5};
+    //    const int dataX0_size = (int)(sizeof(dataX0)/sizeof(*dataX0));
+    //    double dataY0[] = {130, 150, 80, 110, 110, 105, 130, 115, 170, 125, 125};
+    //    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
     
     // Create a XYChart object of size 450 x 420 pixels
     XYChart* c = new XYChart(450, 420);
@@ -673,9 +673,9 @@ void ChartFrame::Draw(void){
                        "Coastlines of the world", Chart::CircleSymbol, 1, 000000);
     
     // Add a green (0x33ff33) scatter chart layer, using 11 pixel triangles as symbols
-//    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),
-//                       "Natural", Chart::TriangleSymbol, 11, 0x33ff33);
-//
+    //    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),
+    //                       "Natural", Chart::TriangleSymbol, 11, 0x33ff33);
+    //
     // Output the chart
     c->makeChart("map.png");
     

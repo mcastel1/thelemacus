@@ -75,7 +75,7 @@ struct CheckLimb{
     LimbField* p;
     
     template<class T> void operator()(T&);
-
+    
     
     
 };
@@ -157,7 +157,7 @@ struct CheckMonth{
     TabulateDays tabulate_days;
     
     template<class T> void operator()(T&);
-
+    
     
 };
 
@@ -166,7 +166,7 @@ struct CheckDay{
     DateField* p;
     
     template<class T> void operator()(T&);
-
+    
     
 };
 
@@ -205,7 +205,7 @@ struct CheckHour{
     ChronoField* p;
     
     template<class T> void operator()(T&);
-
+    
     
 };
 
@@ -214,7 +214,7 @@ struct CheckMinute{
     ChronoField* p;
     
     template<class T> void operator()(T&);
-
+    
     
 };
 
@@ -320,6 +320,7 @@ public:
     
     LimbField(SightFrame*, Limb*);
     void set(void);
+    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -569,7 +570,7 @@ public:
 
 
 template<class T>void CheckBody::operator()(T& event){
-        
+    
     SightFrame* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
@@ -588,7 +589,7 @@ template<class T>void CheckBody::operator()(T& event){
         
         if(check){
             
-//            (*(p->body)) = ((p->catalog)->list)[i];
+            //            (*(p->body)) = ((p->catalog)->list)[i];
             
             if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
                 ((f->limb)->name)->Enable(true);
@@ -612,7 +613,7 @@ template<class T>void CheckBody::operator()(T& event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -638,8 +639,7 @@ template<class T> void CheckLimb::operator()(T &event){
         
         if(check){
             
-            //I set the char in ((p->limb)->value) to the first letter in the string (s.value)
-            ((p->limb)->value) = (s.value)[0];
+            
             
             (p->name)->SetBackgroundColour(*wxWHITE);
             (p->ok) = true;
@@ -659,10 +659,26 @@ template<class T> void CheckLimb::operator()(T &event){
         f->TryToEnableReduce();
         
     }
-
+    
     event.Skip(true);
     
 }
+
+
+//writes the value contained in the GUI field into the non-GUI field
+template<class T> void LimbField::get(T &event){
+    
+    if(ok){
+        
+        //I set the char in (limb->value) to the first letter in the string contained in the GUI field
+        (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
 
 
 template <class T> void CheckSign::operator()(T &event){
@@ -715,9 +731,9 @@ template <class T> void CheckSign::operator()(T &event){
         
         
     }
-
+    
     event.Skip(true);
-
+    
 }
 
 template <class T> void SetStringToCurrentTime::operator()(T& event){
@@ -755,9 +771,9 @@ template<class T> void CheckString::operator()(T &event){
         
         
     }
-
+    
     event.Skip(true);
-
+    
 }
 
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
@@ -821,7 +837,7 @@ template<class T> void CheckArcDegree::operator()(T &event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -863,7 +879,7 @@ template <class T> void CheckArcMinute::operator()(T &event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -911,7 +927,7 @@ template <class T> void CheckLength::operator()(T &event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -930,9 +946,9 @@ struct OnSelectInListBox{
 template<class T> void OnSelectInListBox::operator()(T& event){
     
     (f->button_modify)->Enable(true);
-
+    
     event.Skip(true);
-
+    
 }
 
 void PrintErrorMessage::operator()(void){
@@ -1084,7 +1100,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     }
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     body = new BodyField(this, &(sight->body), catalog);
-        
+    
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     limb = new LimbField(this, &(sight->limb));
@@ -1153,7 +1169,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
     (stopwatch_check->related_field) = stopwatch_reading;
- 
+    
     
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->checkbox)->SetValue(false);
@@ -1162,7 +1178,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
-
+    
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     label = new StringField(this, &(sight->label));
@@ -1176,7 +1192,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &BodyField::get<wxCommandEvent>, body);
-    button_reduce->Bind(wxEVT_BUTTON, (limb->check));
+    button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
     button_reduce->Bind(wxEVT_BUTTON, (artificial_horizon_check->check));
@@ -1187,8 +1203,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, (stopwatch_reading->check));
     button_reduce->Bind(wxEVT_BUTTON, (TAI_minus_UTC->check));
     button_reduce->Bind(wxEVT_BUTTON, (label->check));
-
-
+    
+    
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));
     
@@ -1283,7 +1299,7 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     if(sight_in != NULL){set();}
     
     Centre();
-
+    
     
 }
 
@@ -1456,7 +1472,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     for(i=0; i<((plot->sight_list).size()); i++){
         
         ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol);
-                
+        
     }
     
     //    set the column width to the width of its longest item
@@ -1466,10 +1482,10 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     for(j=0, i=0; i<(listcontrol->GetColumnCount()); i++){
         j += (listcontrol->GetColumnWidth(i));
     }
-//    cout << "----------------- total Column width = " << j << "\n";
-//    cout << "frame width = " << this->GetSize().GetWidth() << "\n";
-//    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - j);
-//    
+    //    cout << "----------------- total Column width = " << j << "\n";
+    //    cout << "frame width = " << this->GetSize().GetWidth() << "\n";
+    //    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - j);
+    //
     
     
     //buttons
@@ -1512,16 +1528,16 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol->SetSize(wxSize(j,-1));
     panel->SetSize(wxSize(j,-1));
     this->SetSize(wxSize((int)(((double)j))+margin_h,-1));
-
+    
 }
 
 void PlotFrame::OnAdd(wxCommandEvent& event){
-
+    
     SightFrame *sight_frame = new SightFrame(this, NULL, -1, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
-
+    
     event.Skip(true);
-
+    
 }
 
 void PlotFrame::OnModify(wxCommandEvent& event){
@@ -1539,29 +1555,29 @@ void PlotFrame::OnModify(wxCommandEvent& event){
         s << "Sight #" << item;
         
         SightFrame *sight_frame = new SightFrame(this, &((plot->sight_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
-//        (sight_frame->sight) = &((plot->sight_list)[item]);
+        //        (sight_frame->sight) = &((plot->sight_list)[item]);
         sight_frame->Show(true);
         
         
     }
-
-
+    
+    
     event.Skip(true);
-
+    
 }
 
 
 
 
 void PlotFrame::OnDelete(wxCommandEvent& event){
-
+    
     long item;
     
     item = listcontrol->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     listcontrol->DeleteItem(item);
     
     event.Skip(true);
- 
+    
 }
 
 
@@ -1569,7 +1585,7 @@ void PlotFrame::OnDelete(wxCommandEvent& event){
 void SightFrame::set(void){
     
     Time time_UTC;
-
+    
     body->set();
     limb->set();
     artificial_horizon_check->set();
@@ -1742,7 +1758,7 @@ template<class T> void CheckYear::operator()(T&event){
     }
     
     event.Skip(true);
-
+    
 }
 
 template<class T> void CheckMonth::operator()(T&event){
@@ -1780,7 +1796,7 @@ template<class T> void CheckMonth::operator()(T&event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -1844,7 +1860,7 @@ template<class T> void CheckDay::operator()(T& event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -1912,7 +1928,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     }else{
         ((p->answer)->value) = 'n';
     }
-  
+    
     //I enable/disable related_field according to whether checkbox is checked or not, and according to the value of direct_reverse
     if(((p->checkbox)->GetValue() ^ (!(p->direct_reverse)))){
         (p->related_field)->Enable(true);
@@ -1923,7 +1939,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     }
     
     (p->parent_frame)->TryToEnableReduce();
-
+    
     
     
     event.Skip(true);
@@ -1939,7 +1955,7 @@ template<class T> void CheckHour::operator()(T &event){
     if(!(f->idling)){
         
         if(!check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24) && ((p->hour)->IsEnabled())){
-     
+            
             if(!(p->just_enabled)){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
                 
@@ -1970,7 +1986,7 @@ template<class T> void CheckHour::operator()(T &event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -2006,7 +2022,7 @@ template<class T> void CheckMinute::operator()(T &event){
         }
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -2048,7 +2064,7 @@ template<class T> void CheckSecond::operator()(T &event){
         
         
         f->TryToEnableReduce();
-                
+        
     }
     
     event.Skip(true);
@@ -2064,7 +2080,7 @@ template <class T> void CheckChrono::operator()(T& event){
     check_second(event);
     
     event.Skip(true);
-
+    
 }
 
 
@@ -2085,7 +2101,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     event.Skip(true);
     
     Close(TRUE);
-
+    
 }
 
 
@@ -2138,7 +2154,7 @@ template<class T> void BodyField::get(T& event){
     
     if(ok){
         //If the GUI field's content is ok...
-       
+        
         //I find the position of the content of the GUI field in the list of  the body names in catalog
         for(check=false, i=0; (i<(catalog->list).size()) && (!check); i++){
             if(String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)){
@@ -2147,9 +2163,9 @@ template<class T> void BodyField::get(T& event){
         }
         i--;
         
-    //I set the value of the non-GUI object body to the value obtained from the GUI object.
+        //I set the value of the non-GUI object body to the value obtained from the GUI object.
         (*body) = (catalog->list)[i];
-
+        
     }
     
     event.Skip(true);
@@ -2198,7 +2214,7 @@ void AngleField::set(void){
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
     min->SetValue(wxString::Format(wxT("%f"), min_temp));
     
-    sign_ok = true; 
+    sign_ok = true;
     deg_ok = true;
     min_ok = true;
     
@@ -2218,7 +2234,7 @@ void LengthField::set(void){
 void DateField::set(void){
     
     Time time_UTC;
-
+    
     //((parent_frame->sight)->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
     time_UTC = ((parent_frame->sight)->time);
     time_UTC -= ((parent_frame->sight)->TAI_minus_UTC);
@@ -2264,7 +2280,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     //initialize check
     (check.p) = this;
-      
+    
     limbs.Clear();
     limbs.Add(wxT("upper"));
     limbs.Add(wxT("lower"));
@@ -2278,8 +2294,8 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, check);
     
-//    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-
+    //    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    
     
     name->SetValue(wxString(""));
     ok = false;
@@ -2307,7 +2323,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
     
     checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     checkbox->Bind(wxEVT_CHECKBOX, check);
-
+    
     checkbox->SetValue(false);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -2385,11 +2401,11 @@ LengthField::LengthField(SightFrame* frame, Length* p){
     parent_frame = frame;
     length = p;
     
-//    ((parent_frame->check_height_of_eye).p) = this;
+    //    ((parent_frame->check_height_of_eye).p) = this;
     
     //initialize check
     (check.p) = this;
-   
+    
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
@@ -2465,7 +2481,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     parent_frame = frame;
     date = p;
     
- 
+    
     //initialize check and its objects
     (check.p) = this;
     ((check.check_year).p) = this;
@@ -2473,7 +2489,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     ((check.check_month).p) = this;
     (((check.check_month).tabulate_days).p) = this;
     ((check.check_day).p) = this;
-      
+    
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"), i+1));
     }

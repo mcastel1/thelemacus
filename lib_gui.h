@@ -270,6 +270,7 @@ public:
     CheckField(SightFrame*, Answer*, T*, bool);
     
     template<class R> void InsertIn(R*);
+    template<class S> void get(S&);
     void set(void);
     
     
@@ -1195,11 +1196,11 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
     button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
-    button_reduce->Bind(wxEVT_BUTTON, (artificial_horizon_check->check));
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_chrono->check));
-    button_reduce->Bind(wxEVT_BUTTON, (stopwatch_check->check));
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
     button_reduce->Bind(wxEVT_BUTTON, (stopwatch_reading->check));
     button_reduce->Bind(wxEVT_BUTTON, (TAI_minus_UTC->check));
     button_reduce->Bind(wxEVT_BUTTON, (label->check));
@@ -1918,19 +1919,11 @@ template<class T> void TabulateDays::operator()(T& event){
 
 
 
-//this function writes into sight.artificial_horizon the value entered in the GUI box
+//this function reads the value in the GUI box checkbox, and enables/disables the related_field accordingly
 template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     
-    
-    //I set p->answer to the value entered in the GUI checkbox
-    if((p->checkbox)->GetValue()){
-        ((p->answer)->value) = 'y';
-    }else{
-        ((p->answer)->value) = 'n';
-    }
-    
     //I enable/disable related_field according to whether checkbox is checked or not, and according to the value of direct_reverse
-    if(((p->checkbox)->GetValue() ^ (!(p->direct_reverse)))){
+    if((((p->checkbox)->GetValue()) ^ (!(p->direct_reverse)))){
         (p->related_field)->Enable(true);
         //I write into the related_field by setting its variable just_enabled to true: this means that no error message will be prompted when the user sets its focus to the related field GUIs
         ((p->related_field)->just_enabled) = true;
@@ -1940,6 +1933,20 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     
     (p->parent_frame)->TryToEnableReduce();
     
+    event.Skip(true);
+    
+}
+
+
+//this function writes into the non-GUI field answer the value entered in the GUI box
+template<class T> template<class S> void CheckField<T>::get(S& event){
+    
+    //I set p->answer to the value entered in the GUI checkbox
+    if(checkbox->GetValue()){
+        (answer->value) = 'y';
+    }else{
+        (answer->value) = 'n';
+    }
     
     
     event.Skip(true);

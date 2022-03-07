@@ -11,13 +11,12 @@
 #include "wx/display.h"
 #include "wx/listctrl.h"
 
-
-
-
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+
+#include "chartdir.h"
+
 
 #include <iostream>
 #include <cstdio>
@@ -54,7 +53,6 @@ using namespace std;
 
 #include "lib.h"
 #include "lib_gui.h"
-#include "chartdir.h"
 
 /*
  notes: set parents to constructors of all frames that you defined

@@ -351,6 +351,7 @@ public:
     
     AngleField(SightFrame*, Angle*);
     void set(void);
+    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
@@ -681,7 +682,7 @@ template<class T> void LimbField::get(T &event){
 }
 
 
-
+//checks the value of the sign in the GUI field
 template <class T> void CheckSign::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
@@ -691,7 +692,6 @@ template <class T> void CheckSign::operator()(T &event){
         
         unsigned int i;
         bool check;
-        
         
         //I check whether the name in the GUI field sign matches one of the sign values in the list signs
         for(check = false, i=0; (i<((p->signs).GetCount())) && (!check); i++){
@@ -703,17 +703,6 @@ template <class T> void CheckSign::operator()(T &event){
         if(check){
             
             (p->sign)->SetBackgroundColour(*wxWHITE);
-            
-            if((p->deg_ok) && (p->min_ok)){
-                
-                double min_temp;
-                
-                ((p->min)->GetValue()).ToDouble(&min_temp);
-                
-                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
-                
-            }
-            
             (p->sign_ok) = true;
             
         }else{
@@ -736,6 +725,27 @@ template <class T> void CheckSign::operator()(T &event){
     event.Skip(true);
     
 }
+
+
+//writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
+template <class T> void AngleField::get(T &event){
+    
+    
+    if(sign_ok && deg_ok && min_ok){
+        
+        double min_temp;
+        
+        (min->GetValue()).ToDouble(&min_temp);
+        
+        angle->from_sign_deg_min(*((const char*)((sign->GetValue()).mb_str())), wxAtoi(deg->GetValue()), min_temp);
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
 
 template <class T> void SetStringToCurrentTime::operator()(T& event){
     
@@ -1194,8 +1204,8 @@ SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_i
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &BodyField::get<wxCommandEvent>, body);
     button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
-    button_reduce->Bind(wxEVT_BUTTON, (H_s->check));
-    button_reduce->Bind(wxEVT_BUTTON, (index_error->check));
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, H_s);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, index_error);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
     button_reduce->Bind(wxEVT_BUTTON, (height_of_eye->check));
     button_reduce->Bind(wxEVT_BUTTON, (master_clock_date->check));
@@ -1713,13 +1723,6 @@ void SightFrame::OnPressCancel(wxCommandEvent& event){
 
 
 
-
-
-
-
-
-
-
 template<class T> void CheckYear::operator()(T&event){
     
     SightFrame* f = (p->parent_frame);
@@ -1947,7 +1950,6 @@ template<class T> template<class S> void CheckField<T>::get(S& event){
     }else{
         (answer->value) = 'n';
     }
-    
     
     event.Skip(true);
     

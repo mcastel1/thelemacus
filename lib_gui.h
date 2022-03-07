@@ -640,7 +640,7 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     c->xAxis()->setLabels(StringArray(labels, labels_size));
     
     // Output the chart
-//    c->makeChart("simplebar.png");
+    c->makeChart("simplebar.png");
     
     //free up resources
     delete c;

@@ -592,28 +592,28 @@ public:
 
 ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
-
-    parent = parent_input;
-
     String new_prefix;
     
+    parent = parent_input;
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
  
-    wxStaticText* text = new wxStaticText(panel, wxID_ANY, wxT("A chart will be here"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    wxDisplay display;
-    wxRect rectangle = (display.GetClientArea());
-    rectangle.SetWidth((int)((double)rectangle.GetWidth())*2./10.0);
-    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
-    
+//    wxDisplay display;
+//    wxRect rectangle = (display.GetClientArea());
+//    rectangle.SetWidth((int)((double)rectangle.GetWidth())*2./10.0);
+//    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
+//
     
     
     
@@ -627,10 +627,10 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     const int labels_size = (int)(sizeof(labels)/sizeof(*labels));
     
     // Create a XYChart object of size 250 x 250 pixels
-    XYChart* c = new XYChart(250, 250);
+    XYChart* c = new XYChart((this->GetSize()).GetWidth()*0.95, (this->GetSize()).GetHeight()*0.95);
     
     // Set the plotarea at (30, 20) and of size 200 x 200 pixels
-    c->setPlotArea(30, 20, 200, 200);
+    c->setPlotArea((this->GetSize()).GetWidth()*0.1, (this->GetSize()).GetHeight()*0.1, (this->GetSize()).GetWidth()*0.9, (this->GetSize()).GetHeight()*0.9);
     
     // Add a bar chart layer using the given data
     c->addBarLayer(DoubleArray(data, data_size));
@@ -643,7 +643,20 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("simplebar.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    
+    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
+    sizer_v->Add(sizer_h, 1, wxALIGN_CENTER);
+
+    panel->SetSizer(sizer_v);
+    sizer_v->Fit(this);
+
   
+//    SetSizerAndFit(sizer_v);
+    
+//    Fit();
+    Centre();
+
+    
     
     //free up resources
     delete c;
@@ -1148,6 +1161,9 @@ bool MyApp::OnInit(){
     PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
     list_frame->Show(true);
     
+    rectangle = (display.GetClientArea());
+    rectangle.SetWidth((int)((double)rectangle.GetHeight())*0.75);
+    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, rectangle.GetSize(), String(""));
     nautical_chart->Show(true);
     

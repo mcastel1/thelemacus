@@ -60,6 +60,7 @@ using namespace std;
 - add recent items to dropdown menus
  - add instrumental error
  - add condition that an error message is prompted only if the GUI field is enabled not only to CheckLength, but also to all other Check* classes
+ - make sure that aspect ratio = 1 in the plotted charts
  */
 
 

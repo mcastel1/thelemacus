@@ -593,6 +593,8 @@ public:
 
 void ChartFrame::Draw(void){
     
+    
+    
     File world;
     stringstream line_ins;
     string line;
@@ -600,7 +602,7 @@ void ChartFrame::Draw(void){
     unsigned int i;
     
     //    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
-    world.set_name(String("/Users/macbookpro/Desktop/map_conv.csv"));
+    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"));
     world.count_lines(String(""));
     
     x = new double [world.number_of_lines];
@@ -620,16 +622,16 @@ void ChartFrame::Draw(void){
         
         getline(world.value, line);
         line_ins << line;
-        line_ins >> phi >> lambda;
+        line_ins >> lambda >> phi;
         
         
         x[i] = lambda;
-        if(!((0.0 <= lambda) && (lambda < 180.0))){x[i] -= 360.0;}
-        x[i] *= -k;
+        //        if(!((0.0 <= lambda) && (lambda < 180.0))){x[i] -= 360.0;}
+        x[i] *= k;
         
         y[i] = log(1./cos(phi*k) + tan(phi*k));
         
-        //        cout << "-------" << x[i] << "\t" << y[i] << "\n";
+        //               cout << "     " << x[i] << "\t" << y[i] << "\n";
         
         
     }
@@ -644,11 +646,11 @@ void ChartFrame::Draw(void){
     //    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
     
     // Create a XYChart object of size 450 x 420 pixels
-    XYChart* c = new XYChart(450, 420);
+    XYChart* c = new XYChart(600, 600);
     
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
     // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
-    c->setPlotArea(55, 65, 350, 300, -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    c->setPlotArea(50, 50, 500, 500, -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
@@ -656,21 +658,23 @@ void ChartFrame::Draw(void){
                                                                                   );
     
     // Add a title to the chart using 18pt Times Bold Itatic font.
-    c->addTitle("Genetically Modified Predator", "Arial Bold", 18);
+//    c->addTitle("Genetically Modified Predator", "Arial Bold", 18);
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
-    c->yAxis()->setTitle("Length (cm)", "Arial Bold Italic", 12);
+    c->yAxis()->setTitle("phi", "Arial", 12);
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
-    c->xAxis()->setTitle("Weight (kg)", "Arial Bold Italic", 12);
+    c->xAxis()->setTitle("lambda", "Arial", 12);
     
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(3);
     c->yAxis()->setWidth(3);
     
+    //    c->xAxis()->setLinearScale(-2.0*M_PI, 2.0*M_PI, 1.0);
+    
+    
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    c->addScatterLayer(DoubleArray(x, world.number_of_lines), DoubleArray(y, world.number_of_lines),
-                       "Coastlines of the world", Chart::CircleSymbol, 1, 000000);
+    c->addScatterLayer(DoubleArray(x, world.number_of_lines), DoubleArray(y, world.number_of_lines), "", Chart::CircleSymbol, 1, 000000);
     
     // Add a green (0x33ff33) scatter chart layer, using 11 pixel triangles as symbols
     //    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),
@@ -1234,10 +1238,7 @@ bool MyApp::OnInit(){
     PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
     list_frame->Show(true);
     
-    rectangle = (display.GetClientArea());
-    rectangle.SetWidth((int)((double)rectangle.GetHeight())*0.75);
-    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, rectangle.GetSize(), String(""));
+    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
     nautical_chart->Show(true);
     
     return true;

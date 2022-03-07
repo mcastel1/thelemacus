@@ -601,7 +601,6 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
  
-    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
 
     
@@ -644,14 +643,16 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("simplebar.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
-    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
-    sizer_v->Add(sizer_h, 1, wxALIGN_CENTER);
+//    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
+    sizer_v->Add(image, 0, wxEXPAND | wxALL, 10);
+    
+    Maximize(panel);
 
-    panel->SetSizer(sizer_v);
-    sizer_v->Fit(this);
+//    panel->SetSizer(sizer_v);
+//    sizer_v->Fit(this);
 
   
-//    SetSizerAndFit(sizer_v);
+    SetSizerAndFit(sizer_v);
     
 //    Fit();
     Centre();

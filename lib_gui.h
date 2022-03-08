@@ -644,12 +644,13 @@ void ChartFrame::Draw(void){
     (c->yAxis())->setLinearScale(y_mercator(K*((parent->plot)->phi_min).value), y_mercator(K*(((parent->plot)->phi_max).value)), 1.7E+308);
 
     delta_phi = 30.0;
-    for(phi = K*(((parent->plot)->phi_min).value); y_mercator(phi)<y_mercator(K*(((parent->plot)->phi_max).value)); phi+=delta_phi){
-    
+    for(phi = 0.0; y_mercator(phi)<y_mercator(K*(((parent->plot)->phi_max).value)); phi+=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
-        
     }
-    
+    for(phi = 0.0; y_mercator(phi)>y_mercator(K*(((parent->plot)->phi_min).value)); phi-=delta_phi){
+        (c->yAxis())->addLabel(y_mercator(phi), "/");
+    }
+
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
@@ -898,9 +899,9 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
 
     cout << "Mouse moved at " << s.value << " ("
     << ((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
-    << ((double)(-(p.y)+((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
+    << ((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
     
-    y_mercator(K*(((parent->plot)->phi_min).value)) + (((double)(-(p.y)+((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)));
+    cout << "Phi = " << phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) );
     
     event.Skip(true);
     

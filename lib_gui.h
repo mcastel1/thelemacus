@@ -2,41 +2,6 @@
 #define sample_width_floating_point_field "0.000000000"
 #define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
 
-class BodyField;
-class LimbField;
-template<class T> class CheckField;
-class AngleField;
-class LengthField;
-class DateField;
-class ChronoField;
-class StringField;
-class MyApp;
-class MessageFrame;
-class SightFrame;
-class ChartFrame;
-class PlotFrame;
-
-struct CheckBody;
-struct CheckLimb;
-template<class T> struct CheckCheck;
-struct CheckChrono;
-struct CheckAngle;
-struct CheckSign;
-struct CheckArcDegree;
-struct CheckArcMinute;
-struct CheckLength;
-struct CheckDate;
-struct CheckYear;
-struct CheckMonth;
-struct CheckDay;
-struct CheckHour;
-struct CheckMinute;
-struct CheckSecond;
-struct CheckString;
-struct SetStringToCurrentTime;
-struct TabulateDays;
-struct PrintErrorMessage;
-struct OnSelectInListBox;
 
 
 //this function adjusts the width of a wxComboBox according to its largest entry
@@ -699,6 +664,9 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
+    (parent->plot)->show(true, String(""));
+
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -1238,8 +1206,9 @@ bool MyApp::OnInit(){
     PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
     list_frame->Show(true);
     
-    (list_frame->plot)->show(true, String(""));
-    
+    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
+    nautical_chart->Show(true);
+
     return true;
     
 }

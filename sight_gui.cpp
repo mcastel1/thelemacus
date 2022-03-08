@@ -50,6 +50,57 @@
 
 using namespace std;
 
+class BodyField;
+class LimbField;
+template<class T> class CheckField;
+class AngleField;
+class LengthField;
+class DateField;
+class ChronoField;
+class StringField;
+class MyApp;
+class MessageFrame;
+class SightFrame;
+class ChartFrame;
+class PlotFrame;
+
+struct CheckBody;
+struct CheckLimb;
+template<class T> struct CheckCheck;
+struct CheckChrono;
+struct CheckAngle;
+struct CheckSign;
+struct CheckArcDegree;
+struct CheckArcMinute;
+struct CheckLength;
+struct CheckDate;
+struct CheckYear;
+struct CheckMonth;
+struct CheckDay;
+struct CheckHour;
+struct CheckMinute;
+struct CheckSecond;
+struct CheckString;
+struct SetStringToCurrentTime;
+struct TabulateDays;
+struct PrintErrorMessage;
+struct OnSelectInListBox;
+
+class Catalog;
+class Limb;
+class Angle;
+class Length;
+class String;
+class Plot;
+class File;
+class Time;
+class Date;
+class Chrono;
+class Route;
+class Sight;
+class Atmosphere;
+class Answer;
+class Body;
 
 #include "lib.h"
 #include "lib_gui.h"

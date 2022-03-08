@@ -880,14 +880,16 @@ template <class T> void CheckSign::operator()(T &event){
 
 void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
+    wxPoint p;
     Time time;
     String s;
     
     time.set_current(String(""));
     //I write in the non-GUI object (p->string)
     s = String(time.to_string(display_precision));
-        
-    cout << "Mouse moved at " << s.value;
+    p = wxGetMousePosition();
+
+    cout << "Mouse moved at " << s.value << " (" << p.x << "," << p.y << ")\n";
     
     event.Skip(true);
     

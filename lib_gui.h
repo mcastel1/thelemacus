@@ -593,12 +593,10 @@ void ChartFrame::Draw(void){
         
         //               cout << "     " << x[i] << "\t" << y[i] << "\n";
         
-        
     }
     
-    cout << "\n\n\ndx = " << x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value));
-    cout << "\n\n\ndy = " << y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value));
-
+//    cout << "\n\n\ndx = " << x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value));
+//    cout << "\n\n\ndy = " << y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value));
     
     world.close(String(""));
     
@@ -612,8 +610,8 @@ void ChartFrame::Draw(void){
     
     c->setPlotArea(50, 50,
                    n,
+                   /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
                    n * (y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)))/(x_mercator(K*(((parent->plot)->lambda_min).value)) - x_mercator(K*(((parent->plot)->lambda_max).value))),
-                   
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
@@ -635,8 +633,8 @@ void ChartFrame::Draw(void){
 
     
     // Set the axes line width to 3 pixels
-    c->xAxis()->setWidth(3);
-    c->yAxis()->setWidth(3);
+    c->xAxis()->setWidth(2);
+    c->yAxis()->setWidth(2);
     
     //    c->xAxis()->setLinearScale(-2.0*M_PI, 2.0*M_PI, 1.0);
     

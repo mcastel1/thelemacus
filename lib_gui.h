@@ -549,7 +549,8 @@ public:
     
     PlotFrame* parent;
     XYChart* c;
-    wxPoint position_plot_area;
+    wxPoint position_image, position_plot_area;
+    wxSize size_plot_area;
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v;
     wxStaticBitmap* image;
@@ -619,7 +620,8 @@ void ChartFrame::Draw(void){
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
-
+    //stores in to size_plot_area the size of the plot area 
+    size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
@@ -883,7 +885,7 @@ template <class T> void CheckSign::operator()(T &event){
 
 void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
-    wxPoint p, position_image;
+    wxPoint p;
     Time time;
     String s;
     

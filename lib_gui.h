@@ -549,6 +549,7 @@ public:
     
     PlotFrame* parent;
     XYChart* c;
+    wxStaticText* text;
     wxPoint position_image, position_plot_area;
     wxSize size_plot_area;
     wxPanel *panel;
@@ -707,9 +708,13 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
     
+    text = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
+    
     //    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(image, 0, wxEXPAND | wxALL, 10);
-    
+    sizer_v->Add(text, 0, wxEXPAND | wxALL | wxALIGN_LEFT, 10);
+
     Maximize(panel);
     
     //    panel->SetSizer(sizer_v);
@@ -889,6 +894,7 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     wxPoint p;
     Time time;
     String s;
+    Angle phi;
     
     time.set_current(String(""));
     //I write in the non-GUI object (p->string)
@@ -901,7 +907,11 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     << ((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
     << ((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
     
-    cout << "Phi = " << phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) );
+    phi.set(String(""), k*(phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) )), String(""));
+    
+    cout << "Phi = " << phi.value;
+    
+    text->SetLabel(wxString(phi.to_string(display_precision)));
     
     event.Skip(true);
     

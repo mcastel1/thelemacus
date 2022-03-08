@@ -479,6 +479,7 @@ public:
     wxButton* button_add, *button_delete;
     wxBitmapButton *button_modify;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons;
+    wxStaticBoxSizer* sizer_box_sights;
     
     void OnAdd(wxCommandEvent& event);
     void OnModify(wxCommandEvent& event);
@@ -1210,7 +1211,7 @@ bool MyApp::OnInit(){
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
     
     
-    PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
+    PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, wxSize(rectangle.GetSize().GetWidth(), -1), String(""));
     list_frame->Show(true);
     
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
@@ -1579,15 +1580,10 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    //    listbox = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxSize(400,200));
-    //    listbox->Bind(wxEVT_COMMAND_LISTBOX_SELECTED, onselectinlistbox);
-    //    //append the elements in plot->sight_list to listbox
-    //    for(i=0; i<(plot->sight_list).size(); i++){
-    //        listbox->Append(wxString(((plot->sight_list)[i]).label.value));
-    //    }
-    //
+    sizer_box_sights = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
+    
     //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  (this->GetSize()).GetHeight()*0.8), wxLC_REPORT);
+    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol->Bind(wxEVT_LIST_ITEM_SELECTED, onselectinlistbox);
     
     
@@ -1680,6 +1676,10 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     
     
+    sizer_box_sights->Add(listcontrol);
+
+
+    
     //buttons
     //button to add a sight
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
@@ -1703,14 +1703,15 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_delete, 0, wxALIGN_CENTER);
+    sizer_box_sights->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, margin_v);
+
     //
     
     //resize uniformly all column
     //    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
     //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
     //    }
-    sizer_v->Add(listcontrol, 1, wxEXPAND | wxALL, margin_h);
-    sizer_v->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, margin_v);
+    sizer_v->Add(sizer_box_sights, 0, wxEXPAND | wxALL, 0);
     //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
     //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);

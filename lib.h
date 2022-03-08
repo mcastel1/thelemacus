@@ -60,13 +60,20 @@ inline double x_mercator(double lambda){
     
 }
 
-
 //this function returns the rectangular y value of the spherical Mercator projection from the latitude phi (expressed in degrees).
 inline double y_mercator(double phi){
     
     return log(1./cos(phi*k) + tan(phi*k));
     
 }
+
+//this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
+inline double lambda_mercator(double x){
+
+    return (x/k);
+    
+}
+
 
 inline double cot(double x){
     

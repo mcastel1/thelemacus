@@ -553,7 +553,7 @@ public:
     wxStaticBitmap* image;
     
     void Draw(void);
-    void OnMouse(wxMouseEvent&);
+    void OnMouseMovement(wxMouseEvent&);
         
 };
 
@@ -699,9 +699,7 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     Draw();
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-
-//    image->Connect(wxID_ANY, wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouse), NULL, this);
-    image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouse), this);
+    image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
     
     //    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(image, 0, wxEXPAND | wxALL, 10);
@@ -880,7 +878,7 @@ template <class T> void CheckSign::operator()(T &event){
 
 
 
-void ChartFrame::OnMouse(wxMouseEvent &event){
+void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
     Time time;
     String s;

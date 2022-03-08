@@ -548,6 +548,8 @@ public:
     ChartFrame(PlotFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
     PlotFrame* parent;
+    XYChart* c;
+    wxPoint position_plot_area;
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v;
     wxStaticBitmap* image;
@@ -559,7 +561,6 @@ public:
 
 void ChartFrame::Draw(void){
     
-    XYChart* c;
     File world;
     stringstream line_ins;
     string line;
@@ -615,6 +616,10 @@ void ChartFrame::Draw(void){
                    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
                    n * (y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)))/(x_mercator(K*(((parent->plot)->lambda_min).value)) - x_mercator(K*(((parent->plot)->lambda_max).value))),
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    
+    //stores into position_plot_area the screen position of the top-left edge of the plot area.
+    position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
+
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
@@ -692,8 +697,6 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     //    rectangle.SetWidth((int)((double)rectangle.GetWidth())*2./10.0);
     //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
     //
-    
-    
     
     
     Draw();
@@ -880,7 +883,7 @@ template <class T> void CheckSign::operator()(T &event){
 
 void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
-    wxPoint p, p0;
+    wxPoint p, position_image;
     Time time;
     String s;
     
@@ -888,10 +891,10 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     //I write in the non-GUI object (p->string)
     s = String(time.to_string(display_precision));
     p = wxGetMousePosition();
-    //p0 is the position of the top-left corner of image with respect to the screen coordinates.
-    p0 = (image->GetScreenPosition());
+    //position_image is the position of the top-left corner of image with respect to the screen coordinates.
+    position_image = (image->GetScreenPosition());
 
-    cout << "Mouse moved at " << s.value << " (" << (p.x)-(p0.x) << "," << (p.y)-(p0.y) << ")\n";
+    cout << "Mouse moved at " << s.value << " (" << (p.x)-((position_image.x)+(position_plot_area.x)) << "," << (p.y)-((position_image.y)+(position_plot_area.y)) << ")\n";
     
     event.Skip(true);
     

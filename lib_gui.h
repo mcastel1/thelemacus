@@ -620,7 +620,7 @@ void ChartFrame::Draw(void){
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
-    //stores in to size_plot_area the size of the plot area 
+    //stores in to size_plot_area the size of the plot area
     size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
@@ -896,7 +896,9 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     //position_image is the position of the top-left corner of image with respect to the screen coordinates.
     position_image = (image->GetScreenPosition());
 
-    cout << "Mouse moved at " << s.value << " (" << (p.x)-((position_image.x)+(position_plot_area.x)) << "," << (p.y)-((position_image.y)+(position_plot_area.y)) << ")\n";
+    cout << "Mouse moved at " << s.value << " ("
+    << (p.x)-((position_image.x)+(position_plot_area.x)) << ","
+    << (p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y)) << ")\n";
     
     event.Skip(true);
     

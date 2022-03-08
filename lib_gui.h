@@ -204,7 +204,7 @@ struct CheckChrono{
     
 };
 
-struct CheckMouse{
+struct CheckMouseEnter{
     
     wxPanel* p;
     
@@ -561,9 +561,7 @@ public:
     wxStaticBitmap* image;
     
     void Draw(void);
-    
-    //    wxDECLARE_EVENT_TABLE();
-    
+        
 };
 
 void ChartFrame::Draw(void){
@@ -594,30 +592,24 @@ void ChartFrame::Draw(void){
         
         line.clear();
         line_ins.clear();
-        
         getline(world.value, line);
         line_ins << line;
         line_ins >> lambda >> phi;
         
-        
         x[i] = x_mercator(lambda);
         y[i] = y_mercator(phi);
-        
-        //               cout << "     " << x[i] << "\t" << y[i] << "\n";
-        
+                
     }
-    
-//    cout << "\n\n\ndx = " << x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value));
-//    cout << "\n\n\ndy = " << y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value));
     
     world.close(String(""));
     
+    
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
-
     
     // Create a XYChart object of size 0.5 x height of the display
     XYChart* c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
+    
     
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
     // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
@@ -634,11 +626,6 @@ void ChartFrame::Draw(void){
     // Italic font. Set the background and border color to Transparent.
     c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent
                                                                                   );
-    
-    // Add a title to the chart using 18pt Times Bold Itatic font.
-//    c->addTitle("Genetically Modified Predator", "Arial Bold", 18);
-    
-    
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
@@ -647,25 +634,12 @@ void ChartFrame::Draw(void){
     delta_lambda = 15.0;
     for(x_dummy=x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy<x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy+=delta_lambda*k){
         
-        cout << "\n      *       " << x_dummy;
-        
-        line_ins.str("");
-        lambda = lambda_mercator(x_dummy);
-        line_ins << lambda << " deg";
-        
-        
         (c->xAxis())->addLabel(x_dummy, "*");
         
     }
     
-//    (c->xAxis())->addLabel(x_mercator(K*(((parent->plot)->lambda_max).value)), "minimum");
-//    (c->xAxis())->addLabel(x_mercator(K*(((parent->plot)->lambda_max).value)) + 100.0*delta_lambda*k, "minimum + 100*delta");
-//    (c->xAxis())->addLabel(x_mercator(K*(((parent->plot)->lambda_min).value)), "maximum");
-
-    
-    
     // Add a title to the y axis using 12pt Arial Bold Italic font
-    c->yAxis()->setTitle("phi", "Arial", 12);
+    (c->yAxis())->setTitle("phi", "Arial", 12);
     (c->yAxis())->setLinearScale(y_mercator(K*((parent->plot)->phi_min).value), y_mercator(K*(((parent->plot)->phi_max).value)), 1.7E+308);
 
     delta_phi = 30.0;
@@ -675,9 +649,6 @@ void ChartFrame::Draw(void){
         
     }
     
-    
-    
-//    cout << "\n\n delta = " << -x_mercator(K*(((parent->plot)->lambda_max).value)) + ceil(x_mercator(K*(((parent->plot)->lambda_max).value)));
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
@@ -706,7 +677,7 @@ void ChartFrame::Draw(void){
 ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     String new_prefix;
-    CheckMouse check_mouse;
+    CheckMouseEnter check_mouse_enter;
     
     parent = parent_input;
     
@@ -714,14 +685,13 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     new_prefix = prefix.append(String("\t"));
     
     (parent->plot)->show(true, String(""));
-
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    check_mouse.p = panel;
-    panel->Bind(wxEVT_ENTER_WINDOW, check_mouse);
+    (check_mouse_enter.p) = panel;
+    panel->Bind(wxEVT_ENTER_WINDOW, check_mouse_enter);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -916,7 +886,7 @@ template <class T> void CheckSign::operator()(T &event){
 }
 
 
-template <class T> void CheckMouse::operator()(T &event){
+template <class T> void CheckMouseEnter::operator()(T &event){
     
     cout << "Mouse is in the panel! \n\n";
 

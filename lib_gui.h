@@ -1238,8 +1238,7 @@ bool MyApp::OnInit(){
     PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, rectangle.GetSize(), String(""));
     list_frame->Show(true);
     
-    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
-    nautical_chart->Show(true);
+    (list_frame->plot)->show(true, String(""));
     
     return true;
     

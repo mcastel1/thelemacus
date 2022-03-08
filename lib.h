@@ -4649,14 +4649,14 @@ void Plot::show(bool zoom_out, String prefix){
     
     stringstream line_ins, /*plot_style contains the chunk of the gnuplot command line containing the style (dashtype, line type, color, ...) of the Routes and Position to be plotted*/plot_style, /*plot_title contains the gnuplot title of the Route to be plotted*/ plot_title;
     string line;
-    unsigned int i;
+//    unsigned int i;
     //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi.
-    Angle t_min, t_max, t_p, t_m, t_s, phi_min, phi_max, lambda_min, lambda_max;
+    Angle /*t_min, t_max, t_p, t_m, t_s,*/ phi_min, phi_max, lambda_min, lambda_max;
     Position p_min, p_max;
-    int status, iter = 0;
+    int status/*, iter = 0*/;
     //x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)
     double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
-    gsl_function F;
+//    gsl_function F;
     const gsl_root_fsolver_type *T;
     gsl_root_fsolver *s;
     Int n_points_plot_coastline, width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
@@ -4783,6 +4783,10 @@ void Plot::show(bool zoom_out, String prefix){
     command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
     
     system(command.str().c_str());
+    
+//    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
+//    nautical_chart->Show(true);
+//   
     
 //    
 //    

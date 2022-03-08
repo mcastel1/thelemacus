@@ -549,11 +549,22 @@ public:
     PlotFrame* parent;
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v;
-    wxStaticBitmap* image;
+    Image* image;
     
     void Draw(void);
     
     //    wxDECLARE_EVENT_TABLE();
+    
+};
+
+class Image: public wxStaticBitmap{
+    
+public:
+    
+    Image(wxPanel*, wxBitmap, const wxPoint&, const wxSize&);
+    wxPanel* panel;
+    
+    void OnEnter(wxMouseEvent&);
     
 };
 
@@ -721,12 +732,13 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
     //
     
-    
+//    Bind(wxEVT_ENTER_WINDOW, &ChartFrame::OnEnterFrame, image);
+
     
     
     Draw();
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image = new Image(panel, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     //    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(image, 0, wxEXPAND | wxALL, 10);
@@ -744,6 +756,22 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     
     
+    
+}
+
+
+Image::Image(wxPanel* panel_in, wxBitmap bitmap_in, const wxPoint& pos, const wxSize& size) : wxStaticBitmap(panel_in, wxID_ANY, bitmap_in, pos, size){
+    
+    panel = panel_in;
+    
+
+}
+
+void Image::OnEnter(wxMouseEvent& event){
+    
+    cout << "Mouse is on the chart!\n";
+    
+    event.Skip(true);
     
 }
 

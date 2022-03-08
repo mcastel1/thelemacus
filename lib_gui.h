@@ -596,6 +596,9 @@ void ChartFrame::Draw(void){
         
     }
     
+    cout << "\n\n\ndx = " << x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value));
+    cout << "\n\n\ndy = " << y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value));
+
     
     world.close(String(""));
     

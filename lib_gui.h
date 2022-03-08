@@ -204,6 +204,15 @@ struct CheckChrono{
     
 };
 
+struct CheckMouse{
+    
+    wxPanel* p;
+    
+    template <class T> void operator()(T&);
+    
+    
+};
+
 struct SetStringToCurrentTime{
     
     StringField* p;
@@ -697,8 +706,10 @@ void ChartFrame::Draw(void){
 ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     String new_prefix;
+    CheckMouse check_mouse;
     
     parent = parent_input;
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
@@ -709,7 +720,8 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    
+    check_mouse.p = panel;
+    panel->Bind(wxEVT_ENTER_WINDOW, check_mouse);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -903,6 +915,14 @@ template <class T> void CheckSign::operator()(T &event){
     
 }
 
+
+template <class T> void CheckMouse::operator()(T &event){
+    
+    cout << "Mouse is in the panel! \n\n";
+
+    event.Skip(true);
+    
+}
 
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
 template <class T> void AngleField::get(T &event){

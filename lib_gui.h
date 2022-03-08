@@ -897,8 +897,8 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     position_image = (image->GetScreenPosition());
 
     cout << "Mouse moved at " << s.value << " ("
-    << (p.x)-((position_image.x)+(position_plot_area.x)) << ","
-    << (p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y)) << ")\n";
+    << ((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
+    << ((double)(-(p.y)+((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
     
     event.Skip(true);
     

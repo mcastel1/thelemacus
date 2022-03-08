@@ -607,7 +607,14 @@ void ChartFrame::Draw(void){
     
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
     // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
-    c->setPlotArea(50, 50, 500, 500, -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    
+    unsigned int n = 500;
+    
+    c->setPlotArea(50, 50,
+                   n,
+                   n * (y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)))/(x_mercator(K*(((parent->plot)->lambda_min).value)) - x_mercator(K*(((parent->plot)->lambda_max).value))),
+                   
+                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
@@ -619,9 +626,13 @@ void ChartFrame::Draw(void){
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
     c->yAxis()->setTitle("phi", "Arial", 12);
+    (c->yAxis())->setLinearScale(y_mercator(K*(((parent->plot)->phi_min).value)), y_mercator(K*(((parent->plot)->phi_max).value)), 1.0);
+
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
+    (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_max).value)), x_mercator(K*(((parent->plot)->lambda_min).value)), 1.0);
+
     
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(3);

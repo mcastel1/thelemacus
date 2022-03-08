@@ -559,6 +559,7 @@ public:
 
 void ChartFrame::Draw(void){
     
+    XYChart* c;
     File world;
     stringstream line_ins;
     string line;
@@ -601,7 +602,7 @@ void ChartFrame::Draw(void){
     rectangle_display = (display.GetClientArea());
     
     // Create a XYChart object of size 0.5 x height of the display
-    XYChart* c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
+    c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
     
     
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
@@ -887,7 +888,7 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     //I write in the non-GUI object (p->string)
     s = String(time.to_string(display_precision));
     p = wxGetMousePosition();
-    //p0 is the position of the top-left corner of image with respect to the screen coordinates. 
+    //p0 is the position of the top-left corner of image with respect to the screen coordinates.
     p0 = (image->GetScreenPosition());
 
     cout << "Mouse moved at " << s.value << " (" << (p.x)-(p0.x) << "," << (p.y)-(p0.y) << ")\n";

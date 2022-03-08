@@ -59,7 +59,6 @@ class LengthField;
 class DateField;
 class ChronoField;
 class StringField;
-class Image;
 class MyApp;
 class MessageFrame;
 class SightFrame;

@@ -558,8 +558,6 @@ public:
 
 void ChartFrame::Draw(void){
     
-    
-    
     File world;
     stringstream line_ins;
     string line;
@@ -603,12 +601,6 @@ void ChartFrame::Draw(void){
     
     
     world.close(String(""));
-    
-    // The XY points for the scatter chart
-    //    double dataX0[] = {10, 15, 6, 12, 14, 8, 13, 13, 16, 12, 10.5};
-    //    const int dataX0_size = (int)(sizeof(dataX0)/sizeof(*dataX0));
-    //    double dataY0[] = {130, 150, 80, 110, 110, 105, 130, 115, 170, 125, 125};
-    //    const int dataY0_size = (int)(sizeof(dataY0)/sizeof(*dataY0));
     
     // Create a XYChart object of size 450 x 420 pixels
     XYChart* c = new XYChart(600, 600);

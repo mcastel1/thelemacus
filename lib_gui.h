@@ -617,8 +617,8 @@ void ChartFrame::Draw(void){
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
-    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent
-                                                                                  );
+//    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
+    
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
@@ -646,7 +646,6 @@ void ChartFrame::Draw(void){
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
     
-    //    c->xAxis()->setLinearScale(-2.0*M_PI, 2.0*M_PI, 1.0);
     
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
@@ -880,7 +879,7 @@ template <class T> void CheckSign::operator()(T &event){
 
 void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
-    wxPoint p;
+    wxPoint p, p0;
     Time time;
     String s;
     
@@ -888,8 +887,10 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     //I write in the non-GUI object (p->string)
     s = String(time.to_string(display_precision));
     p = wxGetMousePosition();
+    //p0 is the position of the top-left corner of image with respect to the screen coordinates. 
+    p0 = (image->GetScreenPosition());
 
-    cout << "Mouse moved at " << s.value << " (" << p.x << "," << p.y << ")\n";
+    cout << "Mouse moved at " << s.value << " (" << (p.x)-(p0.x) << "," << (p.y)-(p0.y) << ")\n";
     
     event.Skip(true);
     

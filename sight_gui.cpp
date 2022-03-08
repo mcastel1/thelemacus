@@ -28,6 +28,7 @@
 #include <sstream>
 #include <algorithm>
 #include <list>
+#include <stdio.h>
 
 
 #include "gsl_rng.h"

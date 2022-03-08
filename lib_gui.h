@@ -562,7 +562,7 @@ void ChartFrame::Draw(void){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, delta_lambda;
+    double *x, *y, lambda, phi, x_dummy, delta_lambda, delta_phi;
     unsigned int i, n;
     wxDisplay display;
     wxRect rectangle_display;
@@ -629,14 +629,12 @@ void ChartFrame::Draw(void){
     // Add a title to the chart using 18pt Times Bold Itatic font.
 //    c->addTitle("Genetically Modified Predator", "Arial Bold", 18);
     
-  
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
     (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_max).value)), x_mercator(K*(((parent->plot)->lambda_min).value)), 1.7E+308);
     
-    //    //an increase of one degree
     delta_lambda = 15.0;
     for(x_dummy=x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy<x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy+=delta_lambda*k){
         
@@ -646,7 +644,8 @@ void ChartFrame::Draw(void){
         lambda = lambda_mercator(x_dummy);
         line_ins << lambda << " deg";
         
-        (c->xAxis())->addLabel(x_dummy, "x");
+        
+        (c->xAxis())->addLabel(x_dummy, "*");
         
     }
     
@@ -658,14 +657,18 @@ void ChartFrame::Draw(void){
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
     c->yAxis()->setTitle("phi", "Arial", 12);
-    (c->yAxis())->setLinearScale(y_mercator(K*(((parent->plot)->phi_min).value)), y_mercator(K*(((parent->plot)->phi_max).value)), 1.0, 0.5);
+    (c->yAxis())->setLinearScale(y_mercator(K*((parent->plot)->phi_min).value), y_mercator(K*(((parent->plot)->phi_max).value)), 1.7E+308);
 
-
+    delta_phi = 30.0;
+    for(phi = K*(((parent->plot)->phi_min).value); y_mercator(phi)<y_mercator(K*(((parent->plot)->phi_max).value)); phi+=delta_phi){
+    
+        (c->yAxis())->addLabel(y_mercator(phi), "/");
+        
+    }
     
     
-    cout << "\n\n delta = " << -x_mercator(K*(((parent->plot)->lambda_max).value)) + ceil(x_mercator(K*(((parent->plot)->lambda_max).value)));
     
-    
+//    cout << "\n\n delta = " << -x_mercator(K*(((parent->plot)->lambda_max).value)) + ceil(x_mercator(K*(((parent->plot)->lambda_max).value)));
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);

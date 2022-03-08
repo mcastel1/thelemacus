@@ -1697,7 +1697,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //
     
     
-    sizer_box_sights->Add(listcontrol);
+    sizer_box_sights->Add(listcontrol, 1, wxEXPAND | wxALL, margin_v);
 
 
     
@@ -1732,7 +1732,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
     //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
     //    }
-    sizer_v->Add(sizer_box_sights, 0, wxEXPAND | wxALL, 0);
+    sizer_v->Add(sizer_box_sights, 1, wxEXPAND | wxALL, margin_v);
     //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
     //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
@@ -1740,8 +1740,8 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     panel->SetSizer(sizer_v);
     
     listcontrol->SetSize(wxSize(j,-1));
-    panel->SetSize(wxSize(j,-1));
-    this->SetSize(wxSize((int)(((double)j))+margin_h,-1));
+    panel->SetSize(wxSize(j+4*margin_v,-1));
+    this->SetSize(wxSize(j+6*margin_v,-1));
     
 }
 

@@ -204,14 +204,6 @@ struct CheckChrono{
     
 };
 
-struct CheckMouseEnter{
-    
-    wxPanel* p;
-    
-    template <class T> void operator()(T&);
-    
-    
-};
 
 struct SetStringToCurrentTime{
     
@@ -561,6 +553,7 @@ public:
     wxStaticBitmap* image;
     
     void Draw(void);
+    void OnMouse(wxMouseEvent&);
         
 };
 
@@ -677,7 +670,6 @@ void ChartFrame::Draw(void){
 ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     String new_prefix;
-    CheckMouseEnter check_mouse_enter;
     
     parent = parent_input;
     
@@ -690,8 +682,6 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    (check_mouse_enter.p) = panel;
-    panel->Bind(wxEVT_ENTER_WINDOW, check_mouse_enter);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -709,6 +699,9 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     Draw();
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+
+//    image->Connect(wxID_ANY, wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouse), NULL, this);
+    image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouse), this);
     
     //    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(image, 0, wxEXPAND | wxALL, 10);
@@ -886,13 +879,23 @@ template <class T> void CheckSign::operator()(T &event){
 }
 
 
-template <class T> void CheckMouseEnter::operator()(T &event){
-    
-    cout << "Mouse is in the panel! \n\n";
 
+void ChartFrame::OnMouse(wxMouseEvent &event){
+    
+    Time time;
+    String s;
+    
+    time.set_current(String(""));
+    //I write in the non-GUI object (p->string)
+    s = String(time.to_string(display_precision));
+        
+    cout << "Mouse moved at " << s.value;
+    
     event.Skip(true);
     
 }
+
+
 
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
 template <class T> void AngleField::get(T &event){

@@ -82,7 +82,6 @@ struct CheckHour;
 struct CheckMinute;
 struct CheckSecond;
 struct CheckString;
-struct CheckMouseEnter;
 struct SetStringToCurrentTime;
 struct TabulateDays;
 struct PrintErrorMessage;

@@ -563,6 +563,8 @@ void ChartFrame::Draw(void){
     string line;
     double *x, *y, lambda, phi;
     unsigned int i;
+    wxDisplay display;
+    wxRect rectangle_display;
     
     //    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
     world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"));
@@ -600,15 +602,19 @@ void ChartFrame::Draw(void){
     
     world.close(String(""));
     
-    // Create a XYChart object of size 450 x 420 pixels
-    XYChart* c = new XYChart(600, 600);
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    rectangle_display = (display.GetClientArea());
+
+    
+    // Create a XYChart object of size 0.5 x height of the display
+    XYChart* c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.5, (rectangle_display.GetSize()).GetHeight()*0.5);
     
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
     // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
     
-    unsigned int n = 500;
+    unsigned int n = (c->getHeight())*0.7;
     
-    c->setPlotArea(50, 50,
+    c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
                    n,
                    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
                    n * (y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)))/(x_mercator(K*(((parent->plot)->lambda_min).value)) - x_mercator(K*(((parent->plot)->lambda_max).value))),

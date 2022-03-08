@@ -588,11 +588,8 @@ void ChartFrame::Draw(void){
         line_ins >> lambda >> phi;
         
         
-        x[i] = lambda;
-        //        if(!((0.0 <= lambda) && (lambda < 180.0))){x[i] -= 360.0;}
-        x[i] *= k;
-        
-        y[i] = log(1./cos(phi*k) + tan(phi*k));
+        x[i] = x_mercator(lambda);
+        y[i] = y_mercator(phi);
         
         //               cout << "     " << x[i] << "\t" << y[i] << "\n";
         

@@ -44,6 +44,27 @@ string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
+
+//this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
+inline double x_mercator(double lambda){
+    
+    double x;
+    
+    x = lambda;
+    if(!((0.0 <= lambda) && (lambda < 180.0))){x += 360.0;}
+
+    return lambda;
+    
+}
+
+
+//this function returns the rectangular y value of the spherical Mercator projection from the latitude phi (expressed in degrees).
+inline double y_mercator(double phi){
+    
+    return log(1./cos(phi*k) + tan(phi*k));
+    
+}
+
 inline double cot(double x){
     
     return 1.0/tan(x);
@@ -3299,6 +3320,7 @@ public:
     vector<Route> route_list;
     vector<String> choices;
     vector<unsigned int> crossing_route_list;
+    Angle phi_min, phi_max, lambda_min, lambda_max;
     
     Plot(Catalog*, String);
     //~Plot();
@@ -4643,7 +4665,6 @@ void Plot::show(bool zoom_out, String prefix){
     string line;
     //    unsigned int i;
     //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi.
-    Angle /*t_min, t_max, t_p, t_m, t_s,*/ phi_min, phi_max, lambda_min, lambda_max;
     Position p_min, p_max;
     //    int status, iter = 0;
     //x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)

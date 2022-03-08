@@ -562,7 +562,7 @@ void ChartFrame::Draw(void){
     stringstream line_ins;
     string line;
     double *x, *y, lambda, phi;
-    unsigned int i;
+    unsigned int i, n;
     wxDisplay display;
     wxRect rectangle_display;
     
@@ -607,12 +607,12 @@ void ChartFrame::Draw(void){
 
     
     // Create a XYChart object of size 0.5 x height of the display
-    XYChart* c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.5, (rectangle_display.GetSize()).GetHeight()*0.5);
+    XYChart* c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
     
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
     // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
     
-    unsigned int n = (c->getHeight())*0.7;
+    n = (c->getHeight())*0.7;
     
     c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
                    n,
@@ -630,12 +630,12 @@ void ChartFrame::Draw(void){
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
     c->yAxis()->setTitle("phi", "Arial", 12);
-    (c->yAxis())->setLinearScale(y_mercator(K*(((parent->plot)->phi_min).value)), y_mercator(K*(((parent->plot)->phi_max).value)), 1.0);
+    (c->yAxis())->setLinearScale(y_mercator(K*(((parent->plot)->phi_min).value)), y_mercator(K*(((parent->plot)->phi_max).value)), 1.0, 0.5);
 
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
-    (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_max).value)), x_mercator(K*(((parent->plot)->lambda_min).value)), 1.0);
+    (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_max).value)), x_mercator(K*(((parent->plot)->lambda_min).value)), 1.0, 0.5);
 
     
     // Set the axes line width to 3 pixels

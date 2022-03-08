@@ -4653,12 +4653,12 @@ void Plot::show(bool zoom_out, String prefix){
     //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi.
     Angle /*t_min, t_max, t_p, t_m, t_s,*/ phi_min, phi_max, lambda_min, lambda_max;
     Position p_min, p_max;
-    int status/*, iter = 0*/;
+//    int status, iter = 0;
     //x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)
-    double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
+//    double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
 //    gsl_function F;
-    const gsl_root_fsolver_type *T;
-    gsl_root_fsolver *s;
+//    const gsl_root_fsolver_type *T;
+//    gsl_root_fsolver *s;
     Int n_points_plot_coastline, width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
     String new_prefix;
     
@@ -4668,8 +4668,8 @@ void Plot::show(bool zoom_out, String prefix){
     file_init.open(String("in"), prefix);
     
     
-    T = gsl_root_fsolver_brent;
-    s = gsl_root_fsolver_alloc(T);
+//    T = gsl_root_fsolver_brent;
+//    s = gsl_root_fsolver_alloc(T);
     
     
     
@@ -4774,16 +4774,16 @@ void Plot::show(bool zoom_out, String prefix){
     }
     
     //
-    
-    //in either case of the if above, I write the boundary values which I have read in plot_temp.plt
-    command.str("");
-    command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    
-    system(command.str().c_str());
-    
+//
+//    //in either case of the if above, I write the boundary values which I have read in plot_temp.plt
+//    command.str("");
+//    command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+//    command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+//    command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+//    command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+//
+//    system(command.str().c_str());
+//
 //    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
 //    nautical_chart->Show(true);
 //   
@@ -5147,7 +5147,7 @@ void Plot::show(bool zoom_out, String prefix){
     file_id.close(prefix);
     file_id.remove(prefix);
     file_init.close(prefix);
-    gsl_root_fsolver_free(s);
+//    gsl_root_fsolver_free(s);
     
     cout << prefix.value << "Job id = "<< job_id << "\n";
     

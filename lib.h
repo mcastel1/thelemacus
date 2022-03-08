@@ -74,6 +74,14 @@ inline double lambda_mercator(double x){
     
 }
 
+//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
+inline double phi_mercator(double y){
+
+    return(K*atan(sinh(y)));
+    
+}
+
+
 
 inline double cot(double x){
     

@@ -911,7 +911,7 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
     cout << "Phi = " << phi.value;
     
-    text->SetLabel(wxString(phi.to_string(display_precision)));
+    text->SetLabel(wxString(phi.to_string(String("NS"), display_precision)));
     
     event.Skip(true);
     

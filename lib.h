@@ -970,7 +970,7 @@ public:
     void to_deg_min(unsigned int*, double*);
     void from_sign_deg_min(char, unsigned int, double);
     void read_from_file(String, File&, bool, String);
-    string to_string(unsigned int);
+    string to_string(String, unsigned int);
     
     bool operator==(const Angle&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
@@ -1649,7 +1649,7 @@ string Position::to_string(unsigned int precision){
     
     stringstream output;
     
-    output << phi.to_string(precision) << " " << lambda.to_string(precision);
+    output << phi.to_string(String("NS"), precision) << " " << lambda.to_string(String("EW"), precision);
     
     return (output.str().c_str());
     
@@ -1871,7 +1871,7 @@ Route Position::transport(String prefix){
     
     route.compute_end(new_prefix);
     
-    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(display_precision) << ", l = " << (route.l).value << " nm";
+    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(String(""), display_precision) << ", l = " << (route.l).value << " nm";
     (route.end.label).set(String(""), temp_label.str(), prefix);
     
     (*this) = route.end;
@@ -3092,7 +3092,7 @@ void Route::transport(String prefix){
         
         
         //append 'translated to ...' to the label of sight, and make this the new label of sight
-        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(display_precision) << ", l = " << transporting_route.l.value << " nm";
+        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(String(""), display_precision) << ", l = " << transporting_route.l.value << " nm";
         label.set(String(""), temp_label.str(), prefix);
         //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set
         related_sight = -1;
@@ -3144,10 +3144,10 @@ void Sight::add_to_wxListCtrl(long position, wxListCtrl* listcontrol){
     
     
     //set sextant altitude column
-    listcontrol->SetItem(i, 3, wxString((H_s).to_string(display_precision)));
+    listcontrol->SetItem(i, 3, wxString((H_s).to_string(String(""), display_precision)));
     
     //set index error
-    listcontrol->SetItem(i, 4, wxString((index_error).to_string(display_precision)));
+    listcontrol->SetItem(i, 4, wxString((index_error).to_string(String(""), display_precision)));
     
     //set height of eye column
     if(artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(height_of_eye.to_string(String("m"), display_precision)));}
@@ -6285,14 +6285,41 @@ void Angle::from_sign_deg_min(char sign, unsigned int deg, double min){
 }
 
 
-string Angle::to_string(unsigned int precision){
+string Angle::to_string(String mode, unsigned int precision){
     
     stringstream output;
     
     output.precision(precision);
     
     normalize();
-    output << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'";
+    
+    if(mode == String("")){
+        //in this case, I print out the angle in the format >=0° and <360°
+        output << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'";
+    }else{
+        //in this case, I print out the angle in the format >=-180° and <180°
+
+        if(value>M_PI){value-=2.0*M_PI;}
+        output << floor(fabs(K*value - 360.0*floor(K*value/360.0))) << "° " << fabs((K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60) << "'";
+
+        
+        if(mode == String("NS")){
+            //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
+            if(value>0.0){output << " N";}
+            else{output << " S";}
+        }
+        if(mode == String("EW")){
+            //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
+
+            if(value>0.0){output << " W";}
+            else{output << " E";}
+        }
+
+        
+        
+    }
+    
+    
     
     return (output.str().c_str());
     

@@ -466,11 +466,11 @@ public:
 };
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...
-class PlotFrame: public wxFrame{
+class ListFrame: public wxFrame{
     
 public:
     //this frame has no parent, because it is supposed to be the main frame of the appplication
-    PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
+    ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
     
     //this is a pointer to the non-GUI object Plot which is related to the GUI object this
     Plot* plot;
@@ -495,9 +495,9 @@ public:
 class SightFrame: public wxFrame{
     
 public:
-    SightFrame(PlotFrame*, Sight*, long, const wxString&, const wxPoint&, const wxSize&, String);
+    SightFrame(ListFrame*, Sight*, long, const wxString&, const wxPoint&, const wxSize&, String);
     
-    PlotFrame* parent;
+    ListFrame* parent;
     Catalog* catalog;
     Sight* sight;
     //this long represents the position in the list (this->GetParent())->listcontrol of sight. If position = -1, then sight is not in that list
@@ -547,9 +547,9 @@ public:
 class ChartFrame: public wxFrame{
     
 public:
-    ChartFrame(PlotFrame*, const wxString&, const wxPoint&, const wxSize&, String);
+    ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
-    PlotFrame* parent;
+    ListFrame* parent;
     XYChart* c;
     wxStaticText* text_lambda, *text_phi;
     wxPoint position_image, position_plot_area;
@@ -681,7 +681,7 @@ void ChartFrame::Draw(void){
 }
 
 
-ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     String new_prefix;
     
@@ -1197,7 +1197,7 @@ template <class T> void LengthField::get(T &event){
 
 struct OnSelectInListBox{
     
-    PlotFrame* f;
+    ListFrame* f;
     
     template<class T> void operator()(T&);
     
@@ -1284,7 +1284,7 @@ bool MyApp::OnInit(){
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
     
     
-    PlotFrame *list_frame = new PlotFrame("List of sights", "", wxDefaultPosition, wxSize(rectangle.GetSize().GetWidth(), -1), String(""));
+    ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxSize(rectangle.GetSize().GetWidth(), -1), String(""));
     list_frame->Show(true);
     
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
@@ -1294,7 +1294,7 @@ bool MyApp::OnInit(){
     
 }
 
-SightFrame::SightFrame(PlotFrame* parent_input, Sight* sight_in, long position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -1626,7 +1626,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     
 }
 
-PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i, j, n_columns, margin_h = 10, margin_v = 5;
     OnSelectInListBox onselectinlistbox;
@@ -1756,7 +1756,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     //buttons
     //button to add a sight
     button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_add->Bind(wxEVT_BUTTON, &PlotFrame::OnAdd, this);
+    button_add->Bind(wxEVT_BUTTON, &ListFrame::OnAdd, this);
     
     //button to modify a sight
     wxImage::AddHandler(new wxPNGHandler);
@@ -1764,12 +1764,12 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     wxImage my_image = my_bitmap.ConvertToImage();
     my_image.Rescale(20,20);
     button_modify = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_modify->Bind(wxEVT_BUTTON, &PlotFrame::OnModify, this);
+    button_modify->Bind(wxEVT_BUTTON, &ListFrame::OnModify, this);
     button_modify->Enable(false);
     
     //button to delete a sight
     button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete->Bind(wxEVT_BUTTON, &PlotFrame::OnDelete, this);
+    button_delete->Bind(wxEVT_BUTTON, &ListFrame::OnDelete, this);
     button_delete->Enable(false);
     
     
@@ -1797,7 +1797,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
 }
 
-void PlotFrame::OnAdd(wxCommandEvent& event){
+void ListFrame::OnAdd(wxCommandEvent& event){
     
     SightFrame *sight_frame = new SightFrame(this, NULL, -1, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
@@ -1806,7 +1806,7 @@ void PlotFrame::OnAdd(wxCommandEvent& event){
     
 }
 
-void PlotFrame::OnModify(wxCommandEvent& event){
+void ListFrame::OnModify(wxCommandEvent& event){
     
     long item;
     item = listcontrol->GetNextItem(-1,
@@ -1835,7 +1835,7 @@ void PlotFrame::OnModify(wxCommandEvent& event){
 
 
 
-void PlotFrame::OnDelete(wxCommandEvent& event){
+void ListFrame::OnDelete(wxCommandEvent& event){
     
     long item;
     

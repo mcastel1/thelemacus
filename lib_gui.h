@@ -1284,7 +1284,7 @@ bool MyApp::OnInit(){
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
     
     
-    ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxSize(rectangle.GetSize().GetWidth(), -1), String(""));
+    ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
@@ -1792,7 +1792,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
-    panel->SetSizer(sizer_v);
+    Maximize(panel);
+    SetSizerAndFit(sizer_v);
+//    panel->SetSizer(sizer_v);
     
 //    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
 //    this->SetSize(wxSize(total_column_width+6*margin_v,-1));

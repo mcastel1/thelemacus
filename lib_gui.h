@@ -549,11 +549,11 @@ public:
     
     PlotFrame* parent;
     XYChart* c;
-    wxStaticText* text;
+    wxStaticText* text_lambda, *text_phi;
     wxPoint position_image, position_plot_area;
     wxSize size_plot_area;
     wxPanel *panel;
-    wxBoxSizer *sizer_h, *sizer_v;
+    wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
     
     void Draw(void);
@@ -593,7 +593,7 @@ void ChartFrame::Draw(void){
         line_ins << line;
         line_ins >> lambda >> phi;
         
-        x[i] = x_mercator(lambda);
+        x[i] = x_mercator(-lambda);
         y[i] = y_mercator(phi);
                 
     }
@@ -616,7 +616,7 @@ void ChartFrame::Draw(void){
     c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
                    n,
                    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-                   n * (y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)))/(x_mercator(K*(((parent->plot)->lambda_min).value)) - x_mercator(K*(((parent->plot)->lambda_max).value))),
+                   n * (y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)))/(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value))),
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
@@ -631,14 +631,14 @@ void ChartFrame::Draw(void){
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
-    (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_max).value)), x_mercator(K*(((parent->plot)->lambda_min).value)), 1.7E+308);
+    (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_min).value)), x_mercator(K*(((parent->plot)->lambda_max).value)), 1.7E+308);
     
     delta_lambda = 15.0;
     (c->xAxis())->addLabel(0.0, "*");
-    for(x_dummy=delta_lambda*k; x_dummy<x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy+=delta_lambda*k){
+    for(x_dummy=delta_lambda*k; x_dummy<x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy+=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
-    for(x_dummy=-delta_lambda*k; x_dummy>x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy-=delta_lambda*k){
+    for(x_dummy=-delta_lambda*k; x_dummy>x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy-=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
 
@@ -690,7 +690,7 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -711,12 +711,23 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
     
-    text = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    text_phi->SetInitialSize(text_phi->GetSizeFromTextSize(text_phi->GetTextExtent(wxS(sample_width_floating_point_field))));
+    text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    text_lambda->SetInitialSize(text_lambda->GetSizeFromTextSize(text_lambda->GetTextExtent(wxS(sample_width_floating_point_field))));
+
+
+
+
+    sizer_coordinates->Add(text_phi);
+    sizer_coordinates->Add(text_lambda);
+    
+    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
+    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
+
 
     
-    //    sizer_h->Add(image, 1, wxALIGN_CENTER_VERTICAL);
-    sizer_v->Add(image, 0, wxEXPAND | wxALL, 10);
-    sizer_v->Add(text, 0, wxEXPAND | wxALL | wxALIGN_LEFT, 10);
+//    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL | wxALIGN_LEFT, 10);
 
     Maximize(panel);
     
@@ -897,7 +908,7 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     wxPoint p;
     Time time;
     String s;
-    Angle phi;
+    Angle lambda, phi;
     
     time.set_current(String(""));
     //I write in the non-GUI object (p->string)
@@ -909,12 +920,24 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     cout << "Mouse moved at " << s.value << " ("
     << ((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
     << ((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
+
+    
+    lambda.set(String(""),
+               
+               k*lambda_mercator(
+               x_mercator(K*(((parent->plot)->lambda_min).value))+
+               (((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value))))
+               
+               
+               ,String(""));
     
     phi.set(String(""), k*(phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) )), String(""));
     
-    cout << "Phi = " << phi.value;
+    cout << "\nLambda = " << lambda.value;
+    cout << "\nPhi = " << phi.value;
     
-    text->SetLabel(wxString(phi.to_string(String("NS"), display_precision)));
+    text_phi->SetLabel(wxString(phi.to_string(String("NS"), display_precision)));
+    text_lambda->SetLabel(wxString(lambda.to_string(String("EW"), display_precision)));
     
     event.Skip(true);
     

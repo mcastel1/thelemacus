@@ -635,10 +635,10 @@ void ChartFrame::Draw(void){
     
     delta_lambda = 15.0;
     (c->xAxis())->addLabel(0.0, "*");
-    for(x_dummy=delta_lambda; x_dummy<x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy+=delta_lambda*k){
+    for(x_dummy=delta_lambda*k; x_dummy<x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy+=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
-    for(x_dummy=-delta_lambda; x_dummy>x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy-=delta_lambda*k){
+    for(x_dummy=-delta_lambda*k; x_dummy>x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy-=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
 

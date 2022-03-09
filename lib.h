@@ -6300,7 +6300,7 @@ string Angle::to_string(String mode, unsigned int precision){
         //in this case, I print out the angle in the format >=-180° and <180°
 
         if(value>M_PI){value-=2.0*M_PI;}
-        output << floor(fabs(K*value - 360.0*floor(K*value/360.0))) << "° " << fabs((K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60) << "'";
+        output << floor(fabs(K*value)) << "° " <<  (fabs(K*value) - floor(fabs(K*value)))*60.0<< "'";
 
         
         if(mode == String("NS")){

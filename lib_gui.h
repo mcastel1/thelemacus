@@ -1628,7 +1628,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, j, n_columns, margin_h = 10, margin_v = 5;
+    unsigned int i, total_column_width, n_columns, margin_h = 10, margin_v = 5;
     OnSelectInListBox onselectinlistbox;
     wxListItem column, item;
     
@@ -1740,16 +1740,19 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     for(i=0; i<(listcontrol->GetColumnCount()); i++){
         listcontrol->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
     }
-    for(j=0, i=0; i<(listcontrol->GetColumnCount()); i++){
-        j += (listcontrol->GetColumnWidth(i));
+    for(total_column_width=0, i=0; i<(listcontrol->GetColumnCount()); i++){
+        total_column_width += (listcontrol->GetColumnWidth(i));
     }
-    //    cout << "----------------- total Column width = " << j << "\n";
-    //    cout << "frame width = " << this->GetSize().GetWidth() << "\n";
-    //    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - j);
+    cout << "----------------- total Column width = " << total_column_width << "\n";
+    cout << "Listcontrol width = " << (listcontrol->GetSize()).GetWidth() << "\n";
+    //    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - total_column_width);
     //
     
+    listcontrol->SetMinSize(wxSize(total_column_width,-1));
+
     
-    sizer_box_sights->Add(listcontrol, 1, wxEXPAND | wxALL, margin_v);
+    
+    sizer_box_sights->Add(listcontrol, 0,  wxALL, margin_v);
     
     
     
@@ -1784,17 +1787,16 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
     //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
     //    }
-    sizer_v->Add(sizer_box_sights, 1, wxEXPAND | wxALL, margin_v);
+    sizer_v->Add(sizer_box_sights, 0,  wxALL, margin_v);
     //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
     //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
     
     panel->SetSizer(sizer_v);
     
-    listcontrol->SetSize(wxSize(j,-1));
-    panel->SetSize(wxSize(j+4*margin_v,-1));
-    this->SetSize(wxSize(j+6*margin_v,-1));
-    
+//    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
+//    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
+//
 }
 
 void ListFrame::OnAdd(wxCommandEvent& event){

@@ -634,21 +634,24 @@ void ChartFrame::Draw(void){
     (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_max).value)), x_mercator(K*(((parent->plot)->lambda_min).value)), 1.7E+308);
     
     delta_lambda = 15.0;
-    for(x_dummy=x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy<x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy+=delta_lambda*k){
-        
+    (c->xAxis())->addLabel(0.0, "*");
+    for(x_dummy=delta_lambda; x_dummy<x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy+=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
-        
     }
-    
+    for(x_dummy=-delta_lambda; x_dummy>x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy-=delta_lambda*k){
+        (c->xAxis())->addLabel(x_dummy, "*");
+    }
+
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
     (c->yAxis())->setLinearScale(y_mercator(K*((parent->plot)->phi_min).value), y_mercator(K*(((parent->plot)->phi_max).value)), 1.7E+308);
 
     delta_phi = 30.0;
-    for(phi = 0.0; y_mercator(phi)<y_mercator(K*(((parent->plot)->phi_max).value)); phi+=delta_phi){
+    (c->yAxis())->addLabel(0.0, "/");
+    for(phi = delta_phi; y_mercator(phi)<y_mercator(K*(((parent->plot)->phi_max).value)); phi+=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
-    for(phi = 0.0; y_mercator(phi)>y_mercator(K*(((parent->plot)->phi_min).value)); phi-=delta_phi){
+    for(phi = -delta_phi; y_mercator(phi)>y_mercator(K*(((parent->plot)->phi_min).value)); phi-=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
 

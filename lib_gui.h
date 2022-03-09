@@ -577,6 +577,7 @@ public:
     
     void Draw(void);
     void GetCoastLineData(int, int, int, int, unsigned int);
+    void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     
 };
@@ -1055,21 +1056,25 @@ template <class T> void CheckSign::operator()(T &event){
     
 }
 
-
-
-void ChartFrame::OnMouseMovement(wxMouseEvent &event){
+//This function obtains the geographical Position p of the mouse hovering on the map of the world
+void ChartFrame::GetMouseGeoPosition(Position* p){
+  
+    wxPoint mouse_position;
     
-    wxPoint p;
-    Time time;
+    mouse_position = wxGetMousePosition();
+    
+    (p->lambda).set(String(""), k*lambda_mercator(x_mercator(K*(((parent->plot)->lambda_min).value))+ (((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value)))), String(""));
+    
+    (p->phi).set(String(""), k*(phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) )), String(""));
+ 
+    //    Time time;
     //    String s;
-    Angle lambda, phi;
     
     //    time.set_current(String(""));
     //I write in the non-GUI object (p->string)
     //    s = String(time.to_string(display_precision));
-    p = wxGetMousePosition();
     //position_image is the position of the top-left corner of image with respect to the screen coordinates.
-    position_image = (image->GetScreenPosition());
+    
     
     /*
      cout << "Mouse moved at " << s.value << " ("
@@ -1077,22 +1082,21 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
      << ((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
      */
     
-    lambda.set(String(""),
-               
-               k*lambda_mercator(
-                                 x_mercator(K*(((parent->plot)->lambda_min).value))+
-                                 (((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value))))
-               
-               
-               ,String(""));
-    
-    phi.set(String(""), k*(phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) )), String(""));
     
     //    cout << "\nLambda = " << lambda.value;
     //    cout << "\nPhi = " << phi.value;
     
-    text_phi->SetLabel(wxString(phi.to_string(String("NS"), display_precision)));
-    text_lambda->SetLabel(wxString(lambda.to_string(String("EW"), display_precision)));
+}
+
+void ChartFrame::OnMouseMovement(wxMouseEvent &event){
+    
+    Position p;
+    
+    position_image = (image->GetScreenPosition());
+    GetMouseGeoPosition(&p);
+      
+    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
+    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
     
     event.Skip(true);
     

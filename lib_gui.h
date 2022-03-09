@@ -1,10 +1,26 @@
+//maximal and minimal latitude of the points in file define path_file_coastlines
+#define max_lat (83.6664731)
+#define min_lat (-78.7290778)
+#define floor_min_lat (floor(min_lat))
+#define floor_max_lat (floor(max_lat))
+//latitude span
+#define span_lat ((floor_max_lat-floor_min_lat+1)
+#define outfile_precision 16
+
+
 //this string defines the width of GUI fields hosting floating-point numbers
 #define sample_width_floating_point_field "0.000000000"
 #define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
 #define path_file_app_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png"
 #define path_file_chart "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart.png"
 #define path_file_pencil_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"
-#define path_file_coastlines "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"
+#define path_file_coastlines "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"
+#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
+#define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
+#define path_file_selected_coastline_data "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt"
+
+
+
 
 
 //this function adjusts the width of a wxComboBox according to its largest entry
@@ -560,9 +576,143 @@ public:
     wxStaticBitmap* image;
     
     void Draw(void);
+    void GetCoastLineData(int, int, int, int, unsigned int);
     void OnMouseMovement(wxMouseEvent&);
     
 };
+
+//this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
+void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int lambda_max, unsigned int n_points){
+    
+    File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
+    string data, line;
+    stringstream ins;
+    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0;
+    //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
+    vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
+    unsigned int l, n_points_coastline = 0, n = 0, every = 0, n_points_grid = 0;
+    char* buffer = NULL;
+    size_t pos_beg, pos_end;
+    bool check;
+
+    i_min = phi_min - floor_min_lat;
+    i_max = phi_max - floor_min_lat;
+    j_min = lambda_min;
+    j_max = lambda_max;
+    n_points_coastline = n_points;
+    
+    cout << "Coordinates: " << i_min << " " << i_max << " " << j_min << " " << j_max << "\n";
+
+
+    n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
+    
+    file_n_line.set_name(String(path_file_n_line));
+    file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
+    outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
+
+   
+    //read file n_line and store it into vector n_line
+    file_n_line.open(String("in"), String(""));
+    i=0;
+    while(!(file_n_line.value.eof())){
+
+      line.clear();
+      ins.clear();
+
+      getline(file_n_line.value, line);
+      ins << line;
+      ins >> (n_line[i++]);
+
+      //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+
+    }
+    file_n_line.close(String(""));
+
+
+    
+    //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
+    file_coastline_data_blocked.open(String("in"), String(""));
+    //open a new file selected coastline data and write into it the new data
+    outfile_selected_coastline_data.remove(String(""));
+    outfile_selected_coastline_data.open(String("out"), String(""));
+
+    check = true;
+    for(i=i_min; i<=i_max; i++){
+      
+      for(j=j_min; j<=j_max; j++){
+
+        j_normalized = (j % 360);
+        
+        // read data as a block:
+        file_coastline_data_blocked.value.seekg(n_line[360*i+j_normalized], file_coastline_data_blocked.value.beg);
+
+        l = n_line[360*i+j_normalized + 1] - n_line[360*i+j_normalized] - 1;
+        if(buffer != NULL){delete [] buffer;}
+        buffer = new char [l];
+
+        file_coastline_data_blocked.value.read(buffer, l);
+        string data(buffer, l);
+
+        if(!(file_coastline_data_blocked.value)){
+
+      check = false;
+        
+        }
+
+        //count how many datapoints are in data
+        n = count(data.begin(), data.end(), ',');
+
+        every = (unsigned int)(((double)n)/((double)n_points_coastline)*((double)n_points_grid));
+        if(every == 0){every = 1;}
+
+        l=0;
+        pos_beg = 0;
+        pos_end = data.find(" ", pos_beg);
+        while(pos_end != (string::npos)){
+
+      //I write points in data to outfile_selected_coastline_data in such a way to write n_points_coastline points to the most
+      if((l % every) == 0){
+      
+        line.clear();
+        line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+
+        replace(line.begin(), line.end(), ' ', '\n');
+        replace(line.begin(), line.end(), ',', ' ');
+
+        (outfile_selected_coastline_data.value) << line;
+
+      }
+
+      pos_beg = pos_end+1;
+      pos_end = data.find(" ", pos_beg);
+
+      l++;
+      
+        };
+
+
+        data.clear();
+
+      }
+
+    }
+    
+    if(check){
+
+      cout << "All characters read successfully\n";
+        
+    }else{
+        
+      cout << RED << "Error: only " << file_coastline_data_blocked.value.gcount() << " characters could be read\n" << RESET;
+      
+    }
+
+    
+    outfile_selected_coastline_data.close(String(""));
+    file_coastline_data_blocked.close(String(""));
+ 
+    
+}
 
 void ChartFrame::Draw(void){
     

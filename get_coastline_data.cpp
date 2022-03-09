@@ -22,9 +22,8 @@
 
 //mac
 /*
-  clear; clear; g++ get_coastline_data.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o get_coastline_data.o -Wall -DHAVE_INLINE
-  clear; clear; g++ get_coastline_data.cpp -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -o get_coastline_data.o -Wall -DHAVE_INLINE -g
-
+  clear; clear; g++ get_coastline_data.cpp `wx-config --cxxflags --libs` -llapack  -lgsl -lcblas -lm -O3 -Wno-deprecated -I/usr/local/include/gsl/ -I ./ -I/Applications/ChartDirector/include -L/Applications/ChartDirector/lib -lchartdir -rpath /Applications/ChartDirector/lib -o get_coastline_data.o -Wall -DHAVE_INLINE
+  
   ./get_coastline_data.o 
   valgrind ./get_coastline_data.o   -p 45 -P 50 -l 1 -L 4 -N 1000
   valgrind --leak-check=full ./get_coastline_data.o    -p 45 -P 50 -l 1 -L 4 -N 1000
@@ -48,9 +47,80 @@
 // #include <gsl_complex.h>
 // #include <gsl_complex_math.h>
 
+#include "wx/wxprec.h"
+#include "wx/checkbox.h"
+#include "wx/combobox.h"
+#include "wx/dc.h"
+#include "wx/display.h"
+#include "wx/listctrl.h"
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
+
+#include "chartdir.h"
+
+
+
 using namespace std;
 
-#include <lib.h>
+class BodyField;
+class LimbField;
+template<class T> class CheckField;
+class AngleField;
+class LengthField;
+class DateField;
+class ChronoField;
+class StringField;
+class MyApp;
+class MessageFrame;
+class SightFrame;
+class ChartFrame;
+class PlotFrame;
+
+struct CheckBody;
+struct CheckLimb;
+template<class T> struct CheckCheck;
+struct CheckChrono;
+struct CheckAngle;
+struct CheckSign;
+struct CheckArcDegree;
+struct CheckArcMinute;
+struct CheckLength;
+struct CheckDate;
+struct CheckYear;
+struct CheckMonth;
+struct CheckDay;
+struct CheckHour;
+struct CheckMinute;
+struct CheckSecond;
+struct CheckString;
+struct SetStringToCurrentTime;
+struct TabulateDays;
+struct PrintErrorMessage;
+struct OnSelectInListBox;
+
+
+class Catalog;
+class Limb;
+class Angle;
+class Length;
+class String;
+class Plot;
+class File;
+class Time;
+class Date;
+class Chrono;
+class Route;
+class Sight;
+class Atmosphere;
+class Answer;
+class Body;
+
+
+#include "lib.h"
+#include "lib_gui.h"
+
 
 //this code efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points_coastline points max 
 int main(int argc, char *argv[]){

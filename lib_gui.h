@@ -4,6 +4,7 @@
 #define path_file_app_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png"
 #define path_file_chart "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart.png"
 #define path_file_pencil_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"
+#define path_file_coastlines "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"
 
 
 //this function adjusts the width of a wxComboBox according to its largest entry
@@ -574,7 +575,7 @@ void ChartFrame::Draw(void){
     wxRect rectangle_display;
     
     //    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
-    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"));
+    world.set_name(String(path_file_coastlines));
     world.count_lines(String(""));
     
     x = new double [world.number_of_lines];

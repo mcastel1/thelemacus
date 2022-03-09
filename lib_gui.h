@@ -908,20 +908,21 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
     wxPoint p;
     Time time;
-    String s;
+//    String s;
     Angle lambda, phi;
     
-    time.set_current(String(""));
+//    time.set_current(String(""));
     //I write in the non-GUI object (p->string)
-    s = String(time.to_string(display_precision));
+//    s = String(time.to_string(display_precision));
     p = wxGetMousePosition();
     //position_image is the position of the top-left corner of image with respect to the screen coordinates.
     position_image = (image->GetScreenPosition());
 
+    /*
     cout << "Mouse moved at " << s.value << " ("
     << ((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
     << ((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
-
+*/
     
     lambda.set(String(""),
                
@@ -934,8 +935,8 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
     phi.set(String(""), k*(phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) )), String(""));
     
-    cout << "\nLambda = " << lambda.value;
-    cout << "\nPhi = " << phi.value;
+//    cout << "\nLambda = " << lambda.value;
+//    cout << "\nPhi = " << phi.value;
     
     text_phi->SetLabel(wxString(phi.to_string(String("NS"), display_precision)));
     text_lambda->SetLabel(wxString(lambda.to_string(String("EW"), display_precision)));

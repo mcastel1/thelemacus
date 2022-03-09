@@ -775,7 +775,7 @@ void ChartFrame::Draw(String data_file){
         x[i] = x_mercator(lambda);
         y[i] = y_mercator(phi);
         
-        cout << " ******* " << x[i] << " " << y[i] << "\n";
+//        cout << " ******* " << x[i] << " " << y[i] << "\n";
         
     }
     
@@ -1110,7 +1110,7 @@ void ChartFrame::GetMouseGeoPosition(Position* p){
     
 //     cout << "Mouse moved at  (" << ((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
 //     << ((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
-//     
+//
     
     
     //    cout << "\nLambda = " << lambda.value;

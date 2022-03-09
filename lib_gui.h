@@ -727,8 +727,8 @@ void ChartFrame::Draw(String data_file){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, delta_lambda, delta_phi, dummy;
-    unsigned int i, n;
+    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
+    unsigned int i, n, /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     wxDisplay display;
     wxRect rectangle_display;
     
@@ -764,7 +764,7 @@ void ChartFrame::Draw(String data_file){
     
     cout << "Number of lines = " << world.number_of_lines << "\n";
     
-    for(i=0; i<(world.number_of_lines); i++){
+    for(number_of_points=0, i=0; i<(world.number_of_lines); i++){
         
         line.clear();
         line_ins.clear();
@@ -772,8 +772,16 @@ void ChartFrame::Draw(String data_file){
         line_ins << line;
         line_ins >> phi >> lambda;
         
-        x[i] = x_mercator(lambda);
-        y[i] = y_mercator(phi);
+        x_dummy = x_mercator(lambda);
+        y_dummy = y_mercator(phi);
+        
+        if((x_MIN <= x_dummy) && (x_dummy <= x_MAX) && (y_MIN <= y_dummy) && (y_dummy <= y_MAX)){
+            
+            x[number_of_points] = x_dummy;
+            y[number_of_points] = y_dummy;
+            number_of_points++;
+            
+        }
         
 //        cout << " ******* " << x[i] << " " << y[i] << "\n";
         
@@ -843,7 +851,7 @@ void ChartFrame::Draw(String data_file){
     
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    c->addScatterLayer(DoubleArray(x, world.number_of_lines), DoubleArray(y, world.number_of_lines), "", Chart::CircleSymbol, 1, 000000);
+    c->addScatterLayer(DoubleArray(x, number_of_points), DoubleArray(y, number_of_points), "", Chart::CircleSymbol, 1, 000000);
     
     // Add a green (0x33ff33) scatter chart layer, using 11 pixel triangles as symbols
     //    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),

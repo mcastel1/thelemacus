@@ -1,7 +1,9 @@
 //this string defines the width of GUI fields hosting floating-point numbers
 #define sample_width_floating_point_field "0.000000000"
 #define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
-
+#define path_file_app_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png"
+#define path_file_chart "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart.png"
+#define path_file_pencil_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"
 
 
 //this function adjusts the width of a wxComboBox according to its largest entry
@@ -611,7 +613,7 @@ void ChartFrame::Draw(void){
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
     // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
     
-    n = (c->getHeight())*0.7;
+    n = (c->getHeight())*0.8;
     
     c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
                    n,
@@ -669,7 +671,7 @@ void ChartFrame::Draw(void){
     //                       "Natural", Chart::TriangleSymbol, 11, 0x33ff33);
     //
     // Output the chart
-    c->makeChart("map.png");
+    c->makeChart(path_file_chart);
     
     //free up resources
     delete c;
@@ -708,13 +710,12 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     
     Draw();
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("map.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
     
+    //text for the coordinates of the mouse cursor on the bottom left of the frame
     text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    text_phi->SetInitialSize(text_phi->GetSizeFromTextSize(text_phi->GetTextExtent(wxS(sample_width_floating_point_field))));
     text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    text_lambda->SetInitialSize(text_lambda->GetSizeFromTextSize(text_lambda->GetTextExtent(wxS(sample_width_floating_point_field))));
 
 
 
@@ -1596,7 +1597,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     
     
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
@@ -1758,7 +1759,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     //button to modify a sight
     wxImage::AddHandler(new wxPNGHandler);
-    wxBitmap my_bitmap = wxBitmap(wxT("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"), wxBITMAP_TYPE_PNG);
+    wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
     my_image.Rescale(20,20);
     button_modify = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);

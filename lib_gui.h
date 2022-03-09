@@ -560,7 +560,7 @@ public:
     
     void Draw(void);
     void OnMouseMovement(wxMouseEvent&);
-        
+    
 };
 
 void ChartFrame::Draw(void){
@@ -597,7 +597,7 @@ void ChartFrame::Draw(void){
         
         x[i] = x_mercator(-lambda);
         y[i] = y_mercator(phi);
-                
+        
     }
     
     world.close(String(""));
@@ -628,7 +628,7 @@ void ChartFrame::Draw(void){
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
-//    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
+    //    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
@@ -643,11 +643,11 @@ void ChartFrame::Draw(void){
     for(x_dummy=-delta_lambda*k; x_dummy>x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy-=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
-
+    
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
     (c->yAxis())->setLinearScale(y_mercator(K*((parent->plot)->phi_min).value), y_mercator(K*(((parent->plot)->phi_max).value)), 1.7E+308);
-
+    
     delta_phi = 30.0;
     (c->yAxis())->addLabel(0.0, "/");
     for(phi = delta_phi; y_mercator(phi)<y_mercator(K*(((parent->plot)->phi_max).value)); phi+=delta_phi){
@@ -656,7 +656,7 @@ void ChartFrame::Draw(void){
     for(phi = -delta_phi; y_mercator(phi)>y_mercator(K*(((parent->plot)->phi_min).value)); phi-=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
-
+    
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
@@ -716,20 +716,20 @@ ChartFrame::ChartFrame(PlotFrame* parent_input, const wxString& title, const wxP
     //text for the coordinates of the mouse cursor on the bottom left of the frame
     text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
-
-
-
+    
+    
+    
+    
     sizer_coordinates->Add(text_phi);
     sizer_coordinates->Add(text_lambda);
     
     sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
     sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
-
-
     
-//    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL | wxALIGN_LEFT, 10);
-
+    
+    
+    //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL | wxALIGN_LEFT, 10);
+    
     Maximize(panel);
     
     //    panel->SetSizer(sizer_v);
@@ -908,35 +908,35 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     
     wxPoint p;
     Time time;
-//    String s;
+    //    String s;
     Angle lambda, phi;
     
-//    time.set_current(String(""));
+    //    time.set_current(String(""));
     //I write in the non-GUI object (p->string)
-//    s = String(time.to_string(display_precision));
+    //    s = String(time.to_string(display_precision));
     p = wxGetMousePosition();
     //position_image is the position of the top-left corner of image with respect to the screen coordinates.
     position_image = (image->GetScreenPosition());
-
+    
     /*
-    cout << "Mouse moved at " << s.value << " ("
-    << ((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
-    << ((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
-*/
+     cout << "Mouse moved at " << s.value << " ("
+     << ((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
+     << ((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
+     */
     
     lambda.set(String(""),
                
                k*lambda_mercator(
-               x_mercator(K*(((parent->plot)->lambda_min).value))+
-               (((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value))))
+                                 x_mercator(K*(((parent->plot)->lambda_min).value))+
+                                 (((double)(p.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value))))
                
                
                ,String(""));
     
     phi.set(String(""), k*(phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((p.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) )), String(""));
     
-//    cout << "\nLambda = " << lambda.value;
-//    cout << "\nPhi = " << phi.value;
+    //    cout << "\nLambda = " << lambda.value;
+    //    cout << "\nPhi = " << phi.value;
     
     text_phi->SetLabel(wxString(phi.to_string(String("NS"), display_precision)));
     text_lambda->SetLabel(wxString(lambda.to_string(String("EW"), display_precision)));
@@ -1289,7 +1289,7 @@ bool MyApp::OnInit(){
     
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
     nautical_chart->Show(true);
-
+    
     return true;
     
 }
@@ -1750,8 +1750,8 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     sizer_box_sights->Add(listcontrol, 1, wxEXPAND | wxALL, margin_v);
-
-
+    
+    
     
     //buttons
     //button to add a sight
@@ -1777,7 +1777,7 @@ PlotFrame::PlotFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_delete, 0, wxALIGN_CENTER);
     sizer_box_sights->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, margin_v);
-
+    
     //
     
     //resize uniformly all column

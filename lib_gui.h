@@ -752,15 +752,15 @@ void ChartFrame::Draw(String data_file){
     world.set_name(data_file);
     world.count_lines(String(""));
     
-    x = new double [world.number_of_lines];
-    y = new double [world.number_of_lines];
+    x = new double [(world.number_of_lines)];
+    y = new double [(world.number_of_lines)];
     
     world.open(String("in"), String(""));
     
     line.clear();
     getline(world.value, line);
     
-    cout << "Number of lines =" << world.number_of_lines;
+    cout << "Number of lines = " << world.number_of_lines << "\n";
     
     for(i=0; i<(world.number_of_lines); i++){
         
@@ -768,10 +768,12 @@ void ChartFrame::Draw(String data_file){
         line_ins.clear();
         getline(world.value, line);
         line_ins << line;
-        line_ins >> lambda >> phi;
+        line_ins >> phi >> lambda;
         
-        x[i] = x_mercator(-lambda);
+        x[i] = x_mercator(lambda);
         y[i] = y_mercator(phi);
+        
+        cout << " ******* " << x[i] << " " << y[i] << "\n";
         
     }
     

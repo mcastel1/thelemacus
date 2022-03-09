@@ -55,7 +55,7 @@ inline double x_mercator(double lambda){
     //puts the x value in the range [-180.0, +180.0]
     if(lambda < -180.0){x+=360.0;}
     if(lambda > +180.0){x-=360.0;}
-
+    
     return(-k*x);
     
 }
@@ -69,14 +69,14 @@ inline double y_mercator(double phi){
 
 //this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
 inline double lambda_mercator(double x){
-
+    
     return (-x/k);
     
 }
 
 //this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
 inline double phi_mercator(double y){
-
+    
     return(K*atan(sinh(y)));
     
 }
@@ -4692,7 +4692,7 @@ void Plot::show(bool zoom_out, String prefix){
     //    gsl_function F;
     //    const gsl_root_fsolver_type *T;
     //    gsl_root_fsolver *s;
-    Int width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
+    Int /*width_plot_window, height_plot_window,*/ n_points_routes, n_intervals_tics;
     String new_prefix;
     
     //append \t to prefix
@@ -4703,21 +4703,6 @@ void Plot::show(bool zoom_out, String prefix){
     
     //    T = gsl_root_fsolver_brent;
     //    s = gsl_root_fsolver_alloc(T);
-    
-    
-    
-    //if job_id = -1 this means that there is no gnuplot script running in the background, thus there is no need to stop it. Otherwise, the gnuplot script running in the background is stopped.
-    if(job_id != -1){
-        
-        command.str("");
-        command << "kill -9 " << job_id;
-        system(command.str().c_str());
-        
-    }
-    
-    file_id.remove(prefix);
-    file_gnuplot.remove(prefix);
-    
     
     
     //replace line with number of intervals for tics in plot_dummy.plt
@@ -4750,63 +4735,30 @@ void Plot::show(bool zoom_out, String prefix){
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
-    //replace line with window size in plot_dummy.plt
-    cout << prefix.value << YELLOW << "Reading width and height of plot window from file " << file_init.name.value << " ...\n" << RESET;
-    width_plot_window.read_from_file(String("width of plot window"), file_init, true, new_prefix);
-    height_plot_window.read_from_file(String("height of plot window"), file_init, true, new_prefix);
-    command.str("");
-    command << "LANG=C sed 's/#window size/set terminal qt size " << width_plot_window.value << "," << height_plot_window.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    system(command.str().c_str());
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    //    //replace line with window size in plot_dummy.plt
+    //    cout << prefix.value << YELLOW << "Reading width and height of plot window from file " << file_init.name.value << " ...\n" << RESET;
+    //    width_plot_window.read_from_file(String("width of plot window"), file_init, true, new_prefix);
+    //    height_plot_window.read_from_file(String("height of plot window"), file_init, true, new_prefix);
+    //    command.str("");
+    //    command << "LANG=C sed 's/#window size/set terminal qt size " << width_plot_window.value << "," << height_plot_window.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    //    system(command.str().c_str());
+    //    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
     
     //replace line with min_latitude in plot_dummy.plt
     //
     
-    if((!file_boundary.check_if_exists(prefix)) || zoom_out){
-        //in this case, there is no boundary file boundary.txt ot zoom_out: a plot is made for the frist time or the boundaries need to be reset to the ones from the init file -> the boundaries of the plot are thus read from the init file.
-        
-        if(!file_boundary.check_if_exists(prefix)){
-            
-            cout << prefix.value << YELLOW << "I found no boundary file.\n" << RESET;
-            
-        }else{
-            
-            cout << prefix.value  << "Fully zooming out.\n";
-            
-            if(zoom_out){
-                file_boundary.remove(prefix);
-            }
-            
-        }
-        
-        cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
-        
-        lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
-        lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);
-        phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix);
-        phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
-        
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        
-        
-    }else{
-        //in this case, there is a boundary file boundary.txt: a plot has been already made before, and its boudaries are stored in the boudnary file > the boundaries of the plot are thus read from this boundary file so as to keep the same plotting window.
-        
-        cout << new_prefix.value << "I found a boundary file.\n" << RESET;
-        
-        file_boundary.open(String("in"), prefix);
-        
-        lambda_min.read_from_file(String("minimal longitude"), file_boundary, true, new_prefix);
-        lambda_max.read_from_file(String("maximal longitude"), file_boundary, true, new_prefix);
-        phi_min.read_from_file(String("minimal latitude"), file_boundary, true, new_prefix);
-        phi_max.read_from_file(String("maximal latitude"), file_boundary, true, new_prefix);
-        
-        file_boundary.close(prefix);
-    }
     
-   
+    cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
+    lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
+    lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);
+    phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix);
+    phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    
+    
+    
     
     //
     //
@@ -5177,12 +5129,12 @@ void Plot::show(bool zoom_out, String prefix){
     //        line_ins >> job_id;
     //    }
     
-    file_id.close(prefix);
-    file_id.remove(prefix);
+    //    file_id.close(prefix);
+    //    file_id.remove(prefix);
     file_init.close(prefix);
     //    gsl_root_fsolver_free(s);
     
-    cout << prefix.value << "Job id = "<< job_id << "\n";
+    //    cout << prefix.value << "Job id = "<< job_id << "\n";
     
 }
 
@@ -6310,10 +6262,10 @@ string Angle::to_string(String mode, unsigned int precision){
         
     }else{
         //in this case, I print out the angle in the format >=-180° and <180°
-
+        
         if(value>M_PI){value-=2.0*M_PI;}
         output << floor(fabs(K*value)) << "° " <<  (fabs(K*value) - floor(fabs(K*value)))*60.0<< "'";
-
+        
         if(mode == String("NS")){
             //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
             
@@ -6322,7 +6274,7 @@ string Angle::to_string(String mode, unsigned int precision){
         }
         if(mode == String("EW")){
             //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
-
+            
             if(value>0.0){output << " W";}
             else{output << " E";}
         }

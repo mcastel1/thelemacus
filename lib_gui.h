@@ -576,8 +576,10 @@ public:
     wxStaticBitmap* image;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     bool selection_rectangle;
+    //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
+    Position p_start, p_end;
     
-    void Draw(void);
+    void Draw(String);
     void GetCoastLineData(int, int, int, int, int);
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
@@ -718,18 +720,36 @@ void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int 
     
 }
 
-void ChartFrame::Draw(void){
+void ChartFrame::Draw(String data_file){
     
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, delta_lambda, delta_phi;
+    double *x, *y, lambda, phi, x_dummy, delta_lambda, delta_phi, /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */x_MIN, x_MAX, y_MIN, y_MAX, dummy;
     unsigned int i, n;
     wxDisplay display;
     wxRect rectangle_display;
     
+    //Here I order x_MIN, x_MAX, y_MIN, y_MAX
+    x_MIN = x_mercator(K*(((parent->plot)->lambda_min).value));
+    x_MAX = x_mercator(K*(((parent->plot)->lambda_max).value));
+    if(x_MIN > x_MAX){
+        dummy = x_MIN;
+        x_MIN = x_MAX;
+        x_MAX = dummy;
+    }
+    y_MIN = y_mercator(K*(((parent->plot)->phi_min).value));
+    y_MAX = y_mercator(K*(((parent->plot)->phi_max).value));
+    if(y_MIN > y_MAX){
+        dummy = y_MIN;
+        y_MIN = y_MAX;
+        y_MAX = dummy;
+    }
+    
+  
+    
     //
-    world.set_name(String(path_file_coastlines));
+    world.set_name(data_file);
     world.count_lines(String(""));
     
     x = new double [world.number_of_lines];
@@ -773,7 +793,7 @@ void ChartFrame::Draw(void){
     c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
                    n,
                    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-                   n * (y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value)))/(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value))),
+                   n * (y_MAX-y_MIN)/(x_MAX-x_MIN),
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
@@ -788,27 +808,27 @@ void ChartFrame::Draw(void){
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
-    (c->xAxis())->setLinearScale(x_mercator(K*(((parent->plot)->lambda_min).value)), x_mercator(K*(((parent->plot)->lambda_max).value)), 1.7E+308);
+    (c->xAxis())->setLinearScale(x_MIN, x_MAX, 1.7E+308);
     
     delta_lambda = 15.0;
     (c->xAxis())->addLabel(0.0, "*");
-    for(x_dummy=delta_lambda*k; x_dummy<x_mercator(K*(((parent->plot)->lambda_max).value)); x_dummy+=delta_lambda*k){
+    for(x_dummy=delta_lambda*k; x_dummy<x_MAX; x_dummy+=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
-    for(x_dummy=-delta_lambda*k; x_dummy>x_mercator(K*(((parent->plot)->lambda_min).value)); x_dummy-=delta_lambda*k){
+    for(x_dummy=-delta_lambda*k; x_dummy>x_MIN; x_dummy-=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
-    (c->yAxis())->setLinearScale(y_mercator(K*((parent->plot)->phi_min).value), y_mercator(K*(((parent->plot)->phi_max).value)), 1.7E+308);
+    (c->yAxis())->setLinearScale(y_MIN, y_MAX, 1.7E+308);
     
     delta_phi = 30.0;
     (c->yAxis())->addLabel(0.0, "/");
-    for(phi = delta_phi; y_mercator(phi)<y_mercator(K*(((parent->plot)->phi_max).value)); phi+=delta_phi){
+    for(phi = delta_phi; y_mercator(phi)<y_MAX; phi+=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
-    for(phi = -delta_phi; y_mercator(phi)>y_mercator(K*(((parent->plot)->phi_min).value)); phi-=delta_phi){
+    for(phi = -delta_phi; y_mercator(phi)>y_MIN; phi-=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
     
@@ -867,7 +887,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
 //    GetCoastLineData(-34, 45, 23, 90, 1000);
     
     
-    Draw();
+    Draw(String(path_file_coastlines));
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
@@ -1110,19 +1130,20 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
 
 void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
     
-    Position p;
     
-    GetMouseGeoPosition(&p);
     
     //changes the 'sign' of selection rectangle
-    selection_rectangle = !selection_rectangle;
+    selection_rectangle = (!selection_rectangle);
     
     if(selection_rectangle){
         cout << "You started drawing\n";
 //        ((parent->plot)->lambda_min) = (p.lambda);
 //        ((parent->plot)->phi_min) = (p.phi);
 //
-//        cout << "p_min = {" << ((parent->plot)->lambda_min).to_string(String("EW"), display_precision) << " , " << ((parent->plot)->phi_min).to_string(String("NS"), display_precision) << " } ";
+        
+        GetMouseGeoPosition(&p_start);
+
+        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
 
         
     }else{
@@ -1130,19 +1151,27 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         
 //        ((parent->plot)->lambda_max) = (p.lambda);
 //        ((parent->plot)->phi_max) = (p.phi);
-//
-//        cout << "p_max = {" << ((parent->plot)->lambda_max).to_string(String("EW"), display_precision) << " , " << ((parent->plot)->phi_max).to_string(String("NS"), display_precision) << " } ";
-//
+        GetMouseGeoPosition(&p_end);
+
+        cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
+
+        
+        
+        ((parent->plot)->lambda_min) = (p_start.lambda);
+        ((parent->plot)->lambda_max) = (p_end.lambda);
+        ((parent->plot)->phi_min) = (p_start.phi);
+        ((parent->plot)->phi_max) = (p_end.phi);
+
         //normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
 //        ((parent->plot)->phi_min).normalize_pm_pi();
 //        ((parent->plot)->phi_max).normalize_pm_pi();
 //
-//        GetCoastLineData(floor(K*(((parent->plot)->phi_min).value)),
-//                         ceil(K*(((parent->plot)->phi_max).value)),
-//                         floor(K*(((parent->plot)->lambda_min).value)),
-//                         ceil(K*(((parent->plot)->lambda_max).value)),
-//                         (((parent->plot)->n_points_plot_coastline).value));
-//        //        Draw();
+        GetCoastLineData(floor(K*(((parent->plot)->phi_min).value)),
+                         ceil(K*(((parent->plot)->phi_max).value)),
+                         floor(K*(((parent->plot)->lambda_min).value)),
+                         ceil(K*(((parent->plot)->lambda_max).value)),
+                         (((parent->plot)->n_points_plot_coastline).value));
+        Draw(String(path_file_selected_coastline_data));
 
         
      }

@@ -858,6 +858,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
     //
     
+    GetCoastLineData(-34, 45, 23, 90, 1000);
+    
     
     Draw();
     

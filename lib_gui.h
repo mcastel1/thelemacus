@@ -578,6 +578,8 @@ public:
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
+    /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
+    double x_MIN, x_MAX, y_MIN, y_MAX;
     
     void Draw(String);
     void GetCoastLineData(int, int, int, int, int);
@@ -725,7 +727,7 @@ void ChartFrame::Draw(String data_file){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, delta_lambda, delta_phi, /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */x_MIN, x_MAX, y_MIN, y_MAX, dummy;
+    double *x, *y, lambda, phi, x_dummy, delta_lambda, delta_phi, dummy;
     unsigned int i, n;
     wxDisplay display;
     wxRect rectangle_display;
@@ -1092,9 +1094,9 @@ void ChartFrame::GetMouseGeoPosition(Position* p){
     position_image = (image->GetScreenPosition());
     mouse_position = wxGetMousePosition();
     
-    (p->lambda).set(String(""), k*lambda_mercator(x_mercator(K*(((parent->plot)->lambda_min).value))+ (((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_mercator(K*(((parent->plot)->lambda_max).value)) - x_mercator(K*(((parent->plot)->lambda_min).value)))), String(""));
+    (p->lambda).set(String(""), k*lambda_mercator(x_MIN+ (((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_MAX - x_MIN)), String(""));
     
-    (p->phi).set(String(""), k*(phi_mercator( y_mercator(K*(((parent->plot)->phi_min).value)) - (((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_mercator(K*(((parent->plot)->phi_max).value)) - y_mercator(K*(((parent->plot)->phi_min).value))) )), String(""));
+    (p->phi).set(String(""), k*(phi_mercator( y_MIN - (((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_MAX - y_MIN) )), String(""));
  
     //    Time time;
     //    String s;

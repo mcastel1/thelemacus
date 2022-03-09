@@ -964,6 +964,7 @@ public:
     
     double value;
     void normalize(void);
+    void normalize_pm_pi(void);
     void enter(String, String);
     void set(String, double, String);
     void print(String, String, ostream&);
@@ -3339,6 +3340,7 @@ public:
     vector<String> choices;
     vector<unsigned int> crossing_route_list;
     Angle phi_min, phi_max, lambda_min, lambda_max;
+    Int n_points_plot_coastline;
     
     Plot(Catalog*, String);
     //~Plot();
@@ -4690,7 +4692,7 @@ void Plot::show(bool zoom_out, String prefix){
     //    gsl_function F;
     //    const gsl_root_fsolver_type *T;
     //    gsl_root_fsolver *s;
-    Int n_points_plot_coastline, width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
+    Int width_plot_window, height_plot_window, n_points_routes, n_intervals_tics;
     String new_prefix;
     
     //append \t to prefix
@@ -6256,6 +6258,15 @@ void Angle::normalize(void){
     value = value - 2.0*M_PI*floor(value/(2.0*M_PI));
     
 }
+
+//reports the angle in the interval [-pi, pi)
+void Angle::normalize_pm_pi(void){
+    
+    normalize();
+    if(value > M_PI){value-=2.0*M_PI;}
+    
+}
+
 
 
 void Angle::print(String name, String prefix, ostream& ostr){

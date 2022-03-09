@@ -578,7 +578,7 @@ public:
     bool selection_rectangle;
     
     void Draw(void);
-    void GetCoastLineData(int, int, int, int, unsigned int);
+    void GetCoastLineData(int, int, int, int, int);
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
@@ -586,7 +586,7 @@ public:
 };
 
 //this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
-void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int lambda_max, unsigned int n_points){
+void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int lambda_max, int n_points){
     
     File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
     string data, line;
@@ -605,7 +605,7 @@ void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int 
     j_max = lambda_max;
     n_points_coastline = n_points;
     
-    cout << "Coordinates: " << i_min << " " << i_max << " " << j_min << " " << j_max << "\n";
+    cout << "\n\n\n\n\nCoordinates: " << i_min << " " << i_max << " " << j_min << " " << j_max << "\n";
 
 
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
@@ -728,7 +728,7 @@ void ChartFrame::Draw(void){
     wxDisplay display;
     wxRect rectangle_display;
     
-    //    world.set_name(String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv.csv"));
+    //
     world.set_name(String(path_file_coastlines));
     world.count_lines(String(""));
     
@@ -864,7 +864,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
     //
     
-    GetCoastLineData(-34, 45, 23, 90, 1000);
+//    GetCoastLineData(-34, 45, 23, 90, 1000);
     
     
     Draw();
@@ -1117,8 +1117,35 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
     //changes the 'sign' of selection rectangle
     selection_rectangle = !selection_rectangle;
     
-    if(selection_rectangle){cout << "You started drawing\n";}
-    else{cout << "You ended drawing\n";}
+    if(selection_rectangle){
+        cout << "You started drawing\n";
+//        ((parent->plot)->lambda_min) = (p.lambda);
+//        ((parent->plot)->phi_min) = (p.phi);
+//
+//        cout << "p_min = {" << ((parent->plot)->lambda_min).to_string(String("EW"), display_precision) << " , " << ((parent->plot)->phi_min).to_string(String("NS"), display_precision) << " } ";
+
+        
+    }else{
+        cout << "You ended drawing\n";
+        
+//        ((parent->plot)->lambda_max) = (p.lambda);
+//        ((parent->plot)->phi_max) = (p.phi);
+//
+//        cout << "p_max = {" << ((parent->plot)->lambda_max).to_string(String("EW"), display_precision) << " , " << ((parent->plot)->phi_max).to_string(String("NS"), display_precision) << " } ";
+//
+        //normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
+//        ((parent->plot)->phi_min).normalize_pm_pi();
+//        ((parent->plot)->phi_max).normalize_pm_pi();
+//
+//        GetCoastLineData(floor(K*(((parent->plot)->phi_min).value)),
+//                         ceil(K*(((parent->plot)->phi_max).value)),
+//                         floor(K*(((parent->plot)->lambda_min).value)),
+//                         ceil(K*(((parent->plot)->lambda_max).value)),
+//                         (((parent->plot)->n_points_plot_coastline).value));
+//        //        Draw();
+
+        
+     }
     
     event.Skip(true);
     

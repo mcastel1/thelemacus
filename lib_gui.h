@@ -1174,6 +1174,7 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
                          ceil(K*(((parent->plot)->lambda_max).value)),
                          (((parent->plot)->n_points_plot_coastline).value));
         Draw(String(path_file_selected_coastline_data));
+        image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
 
         
      }

@@ -113,6 +113,7 @@ class Body;
  - add instrumental error
  - add condition that an error message is prompted only if the GUI field is enabled not only to CheckLength, but also to all other Check* classes
  - make sure that aspect ratio = 1 in the plotted charts
+ - add error message if phi_min, phi_max etc... exceed the min and max latitudes in the data file. 
  */
 
 

@@ -1017,7 +1017,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
 
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    text_position_now = new wxStaticText(this, wxID_ANY, wxT("fshdkjhlk"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_position_now = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
     
     

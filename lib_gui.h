@@ -273,8 +273,11 @@ public:
     
     void render(wxDC& dc);
     
+    
+    
     // some useful events
-    /*
+    void OnMouseMovement(wxMouseEvent&);
+/*
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
      void mouseWheelMoved(wxMouseEvent& event);
@@ -617,7 +620,6 @@ public:
     wxStaticText* text_lambda, *text_phi;
     wxPoint position_image, position_plot_area, position_screen_start, position_screen_end;
     wxSize size_plot_area;
-    wxPanel *panel;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
     wxDisplay display;
@@ -633,7 +635,6 @@ public:
     void Draw(void);
     void GetCoastLineData(void);
     void GetMouseGeoPosition(Position*);
-    void OnMouseMovement(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
     
 };
@@ -1001,7 +1002,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
-    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+//    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     drawPane = new BasicDrawPane(this);
     
     //image
@@ -1027,19 +1028,19 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Draw();
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    //    image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
+        drawPane->Bind(wxEVT_MOTION, wxMouseEventHandler(BasicDrawPane::OnMouseMovement), drawPane);
     //    image->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseRightDown), this);
     
     //text for the coordinates of the mouse cursor on the bottom left of the frame
-    text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//    text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+//
     
     
     
-    
-    sizer_coordinates->Add(text_phi);
-    sizer_coordinates->Add(text_lambda);
-    
+//    sizer_coordinates->Add(text_phi);
+//    sizer_coordinates->Add(text_lambda);
+//    
     //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
@@ -1248,15 +1249,17 @@ void ChartFrame::GetMouseGeoPosition(Position* p){
     
 }
 
-void ChartFrame::OnMouseMovement(wxMouseEvent &event){
+void BasicDrawPane::OnMouseMovement(wxMouseEvent &event){
     
     Position p;
     
-    GetMouseGeoPosition(&p);
+    cout << "\nMouse moved";
     
-    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
-    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
+//    GetMouseGeoPosition(&p);
     
+//    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
+//    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
+//    
     event.Skip(true);
     
 }

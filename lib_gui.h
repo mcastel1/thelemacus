@@ -574,6 +574,9 @@ public:
     wxPanel *panel;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
+    wxDisplay display;
+    wxRect rectangle_display;
+    TextBox* box;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
@@ -745,8 +748,6 @@ void ChartFrame::Draw(void){
     string line;
     double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
     unsigned int i, n, /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
-    wxDisplay display;
-    wxRect rectangle_display;
     
     //Here I order x_MIN, x_MAX, y_MIN, y_MAX
     x_MIN = x_mercator(K*(((parent->plot)->lambda_min).value));
@@ -806,11 +807,7 @@ void ChartFrame::Draw(void){
     world.close(String(""));
     
     
-    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    rectangle_display = (display.GetClientArea());
     
-    // Create a XYChart object of size 0.5 x height of the display
-    c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
     
     
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
@@ -864,7 +861,8 @@ void ChartFrame::Draw(void){
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
     
-    
+  
+    //    t = c->addText(0, 0, "hdkjsfhldl");
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
     c->addScatterLayer(DoubleArray(x, number_of_points), DoubleArray(y, number_of_points), "", Chart::CircleSymbol, 1, 000000);
@@ -877,7 +875,6 @@ void ChartFrame::Draw(void){
     c->makeChart(path_file_chart);
     
     //free up resources
-    delete c;
     delete [] x;
     delete [] y;
     
@@ -887,7 +884,7 @@ void ChartFrame::Draw(void){
 ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     String new_prefix;
-    
+ 
     parent = parent_input;
     
     //append \t to prefix
@@ -905,12 +902,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //image
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
+    
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    //    wxDisplay display;
-    //    wxRect rectangle = (display.GetClientArea());
-    //    rectangle.SetWidth((int)((double)rectangle.GetWidth())*2./10.0);
-    //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
-    //
+    rectangle_display = (display.GetClientArea());
+
+    // Create a XYChart object of size 0.5 x height of the display
+    c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
+
     
 //    GetCoastLineData(-34, 45, 160, 200, 100000);
     
@@ -1188,8 +1186,14 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
 
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
 
-        
-        
+//
+//        box = (c->addText(1, 1, ""));
+//        box->setSize(100, 100);
+//        box->setBackground(0x80ffff00);
+
+        //reinitialize
+        delete c;
+        c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
         ((parent->plot)->lambda_min) = (p_start.lambda);
         ((parent->plot)->lambda_max) = (p_end.lambda);
         ((parent->plot)->phi_min) = (p_start.phi);
@@ -1199,6 +1203,7 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         GetCoastLineData();
         Draw();
         image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
+         
 
         
      }

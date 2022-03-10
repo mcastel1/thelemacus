@@ -1186,22 +1186,28 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
 
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
 
-//
-//        box = (c->addText(1, 1, ""));
-//        box->setSize(100, 100);
-//        box->setBackground(0x80ffff00);
+        //add the rectangle to c
+        box = (c->addText(1, 1, ""));
+        box->setSize(100, 100);
+        box->setBackground(0x80ffff00);
+        c->makeChart(path_file_chart);
+
 
         //reinitialize
+        //re-enable this later.
+        /*
         delete c;
         c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
         ((parent->plot)->lambda_min) = (p_start.lambda);
         ((parent->plot)->lambda_max) = (p_end.lambda);
         ((parent->plot)->phi_min) = (p_start.phi);
         ((parent->plot)->phi_max) = (p_end.phi);
+         
 
         
         GetCoastLineData();
         Draw();
+         */
         image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
          
 

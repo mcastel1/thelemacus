@@ -270,7 +270,7 @@ public:
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
     double x_MIN, x_MAX, y_MIN, y_MAX;
-    wxStaticText* text_lambda, *text_phi;
+    wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
@@ -792,12 +792,12 @@ DrawPane::DrawPane(wxFrame* parent) : wxPanel(parent){
     //when the DrawPan is created there is no open selection rectangle.
     selection_rectangle = false;
     
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
-    //text for the coordinates of the mouse cursor on the bottom left of the frame
-    //    text_phi = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //    text_lambda = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //
+    //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
+    text_position_start = new wxStaticText(parent, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_position_end = new wxStaticText(parent, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
     //
@@ -1256,13 +1256,18 @@ void DrawPane::GetMouseGeoPosition(Position* p){
 void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
     Position p;
+    stringstream s;
     
     //    cout << "\nMouse moved";
     
     GetMouseGeoPosition(&p);
     
-    //    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
-    //    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
+    if(selection_rectangle){
+        s.clear();
+        s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
+        text_position_end->SetLabel(wxString(s.str().c_str()));
+        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_pane.x), (position_screen_now.y)-(position_draw_pane.y)));
+    }
     
     paintNow();
     
@@ -1279,6 +1284,8 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
     
     if(selection_rectangle){
         
+        stringstream s;
+        
         cout << "You started drawing\n";
         //        ((parent->plot)->lambda_min) = (p.lambda);
         //        ((parent->plot)->phi_min) = (p.phi);
@@ -1286,6 +1293,12 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         
         GetMouseGeoPosition(&p_start);
         position_screen_start = wxGetMousePosition();
+        
+        s.clear();
+        s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
+        text_position_start->SetLabel(wxString(s.str().c_str()));
+        text_position_start->SetPosition(wxPoint((position_screen_start.x)-(position_draw_pane.x), (position_screen_start.y)-(position_draw_pane.y)));
+
         
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
         

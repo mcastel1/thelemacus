@@ -569,7 +569,7 @@ public:
     ListFrame* parent;
     XYChart* c;
     wxStaticText* text_lambda, *text_phi;
-    wxPoint position_image, position_plot_area;
+    wxPoint position_image, position_plot_area, position_screen_start, position_screen_end;
     wxSize size_plot_area;
     wxPanel *panel;
     wxBoxSizer *sizer_coordinates, *sizer_v;
@@ -1173,6 +1173,7 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
 //
         
         GetMouseGeoPosition(&p_start);
+        position_screen_start = wxGetMousePosition();
 
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
 
@@ -1183,11 +1184,15 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
 //        ((parent->plot)->lambda_max) = (p.lambda);
 //        ((parent->plot)->phi_max) = (p.phi);
         GetMouseGeoPosition(&p_end);
+        position_screen_end = wxGetMousePosition();
+
 
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
 
         //add the rectangle to c
-        box = (c->addText(1, 1, ""));
+        box = (c->addText(((position_screen_start.x)-((position_image.x))),
+                          ((position_screen_start.y)-((position_image.y))),
+                          ""));
         box->setSize(100, 100);
         box->setBackground(0x80ffff00);
         c->makeChart(path_file_chart);

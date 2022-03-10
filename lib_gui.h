@@ -271,11 +271,11 @@ public:
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
     double x_MIN, x_MAX, y_MIN, y_MAX;
     wxStaticText* text_lambda, *text_phi;
-    bool selection_rectangle, draw_rectangle;
+    bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
-   
+    
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
     
@@ -791,19 +791,17 @@ DrawPane::DrawPane(wxFrame* parent) : wxPanel(parent){
     
     //when the DrawPan is created there is no open selection rectangle.
     selection_rectangle = false;
-    draw_rectangle = false;
- 
-        
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
     //text for the coordinates of the mouse cursor on the bottom left of the frame
-//    text_phi = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    text_lambda = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//
-//    sizer_h->Add(text_phi);
-//    sizer_h->Add(text_lambda);
-//
-//    SetSizer(sizer_h);
+    //    text_phi = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    //    text_lambda = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    //
+    //    sizer_h->Add(text_phi);
+    //    sizer_h->Add(text_lambda);
+    //
+    //    SetSizer(sizer_h);
     
 }
 
@@ -840,15 +838,6 @@ void DrawPane::paintNow(){
  */
 void DrawPane::render(wxDC&  dc){
     
-    //    // draw some text
-    //    dc.DrawText(wxT("Testing"), 40, 60);
-    //
-    //    // draw a circle
-    //    dc.SetBrush(*wxGREEN_BRUSH); // green filling
-    //    dc.SetPen( wxPen( wxColor(255,0,0), 5 ) ); // 5-pixels-thick red outline
-    //    dc.DrawCircle( wxPoint(200,100), 25 /* radius */ );
-    //
-//    // draw a rectangle
     dc.SetBrush(*wxBLUE_BRUSH); // blue filling
     dc.SetPen( wxPen( wxColor(255,175,175), 1 ) ); // 10-pixels-thick pink outline
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
@@ -861,12 +850,7 @@ void DrawPane::render(wxDC&  dc){
                          );
         
     }
-
-    //    // draw a line
-    //    dc.SetPen( wxPen( wxColor(0,0,0), 3 ) ); // black line, 3 pixels thick
-    //    dc.DrawLine( 300, 100, 700, 300 ); // draw line across the rectangle
-    //
-    //    // Look at the wxDC docs to learn how to draw other stuff
+    
 }
 
 
@@ -1026,7 +1010,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
-
+    
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1075,7 +1059,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     SetSizer(sizer_v);
     SetSize(c->getWidth(), c->getHeight());
-
+    
     //    SetAutoLayout(true);
     
     //    Fit();
@@ -1259,9 +1243,9 @@ void DrawPane::GetMouseGeoPosition(Position* p){
     
     
     
-    cout << "Mouse moved at  (" << ((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
-    << ((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
-    
+    //    cout << "Mouse moved at  (" << ((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
+    //    << ((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
+    //
     
     
     //    cout << "\nLambda = " << lambda.value;
@@ -1273,17 +1257,17 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
     Position p;
     
-    cout << "\nMouse moved";
+    //    cout << "\nMouse moved";
     
     GetMouseGeoPosition(&p);
     
-//    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
-//    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
+    //    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
+    //    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
     
     paintNow();
-
     
-//
+    
+    //
     event.Skip(true);
     
 }

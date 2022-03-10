@@ -265,7 +265,9 @@ public:
 class DrawPane : public wxPanel{
     
 public:
-    DrawPane(wxFrame*);
+    DrawPane(ChartFrame*);
+    ChartFrame* parent;
+    XYChart* c;
     wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
@@ -276,6 +278,7 @@ public:
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
     
+    void Draw(void);
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
     
@@ -625,7 +628,6 @@ public:
     
     ListFrame* parent;
     DrawPane *draw_pane;
-    XYChart* c;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
     wxDisplay display;
@@ -633,7 +635,6 @@ public:
     TextBox* box;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     
-    void Draw(void);
     void GetCoastLineData(void);
     
 };
@@ -787,10 +788,12 @@ void ChartFrame::GetCoastLineData(void){
     
 }
 
-DrawPane::DrawPane(wxFrame* parent) : wxPanel(parent){
+DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     
     //when the DrawPan is created there is no open selection rectangle.
     selection_rectangle = false;
+    
+    parent = parent_in;
     
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
@@ -854,28 +857,28 @@ void DrawPane::render(wxDC&  dc){
 }
 
 
-void ChartFrame::Draw(void){
+void DrawPane::Draw(void){
     
     File world;
     stringstream line_ins;
     string line;
     double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
-    unsigned int i, n, /*this is the number of geographical points on the map which will fall in the plot rectangle ((draw_pane->x_MIN) , (draw_pane->x_MAX)) x ((draw_pane->y_MIN), (draw_pane->y_MAX))*/number_of_points;
+    unsigned int i, n, /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     
-    //Here I order (draw_pane->x_MIN), (draw_pane->x_MAX), (draw_pane->y_MIN), (draw_pane->y_MAX)
-    (draw_pane->x_MIN) = x_mercator(K*(((parent->plot)->lambda_min).value));
-    (draw_pane->x_MAX) = x_mercator(K*(((parent->plot)->lambda_max).value));
-    if((draw_pane->x_MIN) > (draw_pane->x_MAX)){
-        dummy = (draw_pane->x_MIN);
-        (draw_pane->x_MIN) = (draw_pane->x_MAX);
-        (draw_pane->x_MAX) = dummy;
+    //Here I order x_MIN, x_MAX, y_MIN, y_MAX
+    x_MIN = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
+    x_MAX = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
+    if(x_MIN > x_MAX){
+        dummy = x_MIN;
+        x_MIN = x_MAX;
+        x_MAX = dummy;
     }
-    (draw_pane->y_MIN) = y_mercator(K*(((parent->plot)->phi_min).value));
-    (draw_pane->y_MAX) = y_mercator(K*(((parent->plot)->phi_max).value));
-    if((draw_pane->y_MIN) > (draw_pane->y_MAX)){
-        dummy = (draw_pane->y_MIN);
-        (draw_pane->y_MIN) = (draw_pane->y_MAX);
-        (draw_pane->y_MAX) = dummy;
+    y_MIN = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
+    y_MAX = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
+    if(y_MIN > y_MAX){
+        dummy = y_MIN;
+        y_MIN = y_MAX;
+        y_MAX = dummy;
     }
     
     
@@ -905,7 +908,7 @@ void ChartFrame::Draw(void){
         x_dummy = x_mercator(lambda);
         y_dummy = y_mercator(phi);
         
-        if(((draw_pane->x_MIN) <= x_dummy) && (x_dummy <= (draw_pane->x_MAX)) && ((draw_pane->y_MIN) <= y_dummy) && (y_dummy <= (draw_pane->y_MAX))){
+        if((x_MIN <= x_dummy) && (x_dummy <= x_MAX) && (y_MIN <= y_dummy) && (y_dummy <= y_MAX)){
             
             x[number_of_points] = x_dummy;
             y[number_of_points] = y_dummy;
@@ -931,13 +934,13 @@ void ChartFrame::Draw(void){
     c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
                    n,
                    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-                   n * ((draw_pane->y_MAX)-(draw_pane->y_MIN))/((draw_pane->x_MAX)-(draw_pane->x_MIN)),
+                   n * (y_MAX-y_MIN)/(x_MAX-x_MIN),
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    (draw_pane->position_plot_area) = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
+    position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
     //stores in to size_plot_area the size of the plot area
-    (draw_pane->size_plot_area) = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
+    size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
@@ -946,27 +949,27 @@ void ChartFrame::Draw(void){
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
-    (c->xAxis())->setLinearScale((draw_pane->x_MIN), (draw_pane->x_MAX), 1.7E+308);
+    (c->xAxis())->setLinearScale(x_MIN, x_MAX, 1.7E+308);
     
     delta_lambda = 15.0;
     (c->xAxis())->addLabel(0.0, "*");
-    for(x_dummy=delta_lambda*k; x_dummy<(draw_pane->x_MAX); x_dummy+=delta_lambda*k){
+    for(x_dummy=delta_lambda*k; x_dummy<x_MAX; x_dummy+=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
-    for(x_dummy=-delta_lambda*k; x_dummy>(draw_pane->x_MIN); x_dummy-=delta_lambda*k){
+    for(x_dummy=-delta_lambda*k; x_dummy>x_MIN; x_dummy-=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
-    (c->yAxis())->setLinearScale((draw_pane->y_MIN), (draw_pane->y_MAX), 1.7E+308);
+    (c->yAxis())->setLinearScale(y_MIN, y_MAX, 1.7E+308);
     
     delta_phi = 30.0;
     (c->yAxis())->addLabel(0.0, "/");
-    for(phi = delta_phi; y_mercator(phi)<(draw_pane->y_MAX); phi+=delta_phi){
+    for(phi = delta_phi; y_mercator(phi)<y_MAX; phi+=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
-    for(phi = -delta_phi; y_mercator(phi)>(draw_pane->y_MIN); phi-=delta_phi){
+    for(phi = -delta_phi; y_mercator(phi)>y_MIN; phi-=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
     
@@ -1020,7 +1023,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     rectangle_display = (display.GetClientArea());
     
     // Create a XYChart object of size 0.5 x height of the display
-    c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
+    (draw_pane->c) = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
     
     
     
@@ -1033,7 +1036,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    Draw();
+    draw_pane->Draw();
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), draw_pane);
@@ -1058,7 +1061,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Fit(this);
     
     SetSizer(sizer_v);
-    SetSize(c->getWidth(), c->getHeight());
+    SetSize((draw_pane->c)->getWidth(), (draw_pane->c)->getHeight());
     
     //    SetAutoLayout(true);
     

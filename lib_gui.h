@@ -274,6 +274,8 @@ public:
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
+    wxSizer* sizer_h, *sizer_v;
+
     
     
     
@@ -791,12 +793,17 @@ void ChartFrame::GetCoastLineData(void){
 }
 
 DrawPane::DrawPane(wxFrame* parent) : wxPanel(parent){
+        
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
     //text for the coordinates of the mouse cursor on the bottom left of the frame
     text_phi = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     text_lambda = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
+    sizer_h->Add(text_phi);
+    sizer_h->Add(text_lambda);
     
+    SetSizer(sizer_h);
     
 }
 

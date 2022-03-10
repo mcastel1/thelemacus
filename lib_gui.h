@@ -628,6 +628,7 @@ public:
     
     ListFrame* parent;
     DrawPane *draw_pane;
+    wxStaticText *text_position_now;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
     wxDisplay display;
@@ -1012,7 +1013,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    
+
+    //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
+    text_position_now = new wxStaticText(this, wxID_ANY, wxT("fshdkjhlk"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
     
     
     //image
@@ -1043,6 +1047,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
     sizer_v->Add(draw_pane, 1, wxEXPAND);
+    sizer_v->Add(text_position_now, 0, wxEXPAND | wxALL, 5);
     
     //    Maximize(panel);
     
@@ -1254,6 +1259,12 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
     GetMouseGeoPosition(&p);
     
+    //update the instantaneous position of the mouse on the chart
+    s.clear();
+    s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
+    (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
+
+    //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
         s.clear();
         s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);

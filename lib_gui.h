@@ -266,7 +266,11 @@ class DrawPane : public wxPanel{
     
 public:
     DrawPane(wxFrame*);
-    
+    wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end;
+    wxSize size_plot_area;
+    /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
+    double x_MIN, x_MAX, y_MIN, y_MAX;
+
     
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
@@ -277,6 +281,8 @@ public:
     
     // some useful events
     void OnMouseMovement(wxMouseEvent&);
+    void GetMouseGeoPosition(Position*);
+
 /*
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
@@ -615,11 +621,9 @@ public:
     ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
-    DrawPane *drawPane;
+    DrawPane *draw_pane;
     XYChart* c;
     wxStaticText* text_lambda, *text_phi;
-    wxPoint position_image, position_plot_area, position_screen_start, position_screen_end;
-    wxSize size_plot_area;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
     wxDisplay display;
@@ -629,12 +633,9 @@ public:
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
-    /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
-    double x_MIN, x_MAX, y_MIN, y_MAX;
-    
+       
     void Draw(void);
     void GetCoastLineData(void);
-    void GetMouseGeoPosition(Position*);
     void OnMouseRightDown(wxMouseEvent&);
     
 };
@@ -852,22 +853,22 @@ void ChartFrame::Draw(void){
     stringstream line_ins;
     string line;
     double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
-    unsigned int i, n, /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
+    unsigned int i, n, /*this is the number of geographical points on the map which will fall in the plot rectangle ((draw_pane->x_MIN) , (draw_pane->x_MAX)) x ((draw_pane->y_MIN), (draw_pane->y_MAX))*/number_of_points;
     
-    //Here I order x_MIN, x_MAX, y_MIN, y_MAX
-    x_MIN = x_mercator(K*(((parent->plot)->lambda_min).value));
-    x_MAX = x_mercator(K*(((parent->plot)->lambda_max).value));
-    if(x_MIN > x_MAX){
-        dummy = x_MIN;
-        x_MIN = x_MAX;
-        x_MAX = dummy;
+    //Here I order (draw_pane->x_MIN), (draw_pane->x_MAX), (draw_pane->y_MIN), (draw_pane->y_MAX)
+    (draw_pane->x_MIN) = x_mercator(K*(((parent->plot)->lambda_min).value));
+    (draw_pane->x_MAX) = x_mercator(K*(((parent->plot)->lambda_max).value));
+    if((draw_pane->x_MIN) > (draw_pane->x_MAX)){
+        dummy = (draw_pane->x_MIN);
+        (draw_pane->x_MIN) = (draw_pane->x_MAX);
+        (draw_pane->x_MAX) = dummy;
     }
-    y_MIN = y_mercator(K*(((parent->plot)->phi_min).value));
-    y_MAX = y_mercator(K*(((parent->plot)->phi_max).value));
-    if(y_MIN > y_MAX){
-        dummy = y_MIN;
-        y_MIN = y_MAX;
-        y_MAX = dummy;
+    (draw_pane->y_MIN) = y_mercator(K*(((parent->plot)->phi_min).value));
+    (draw_pane->y_MAX) = y_mercator(K*(((parent->plot)->phi_max).value));
+    if((draw_pane->y_MIN) > (draw_pane->y_MAX)){
+        dummy = (draw_pane->y_MIN);
+        (draw_pane->y_MIN) = (draw_pane->y_MAX);
+        (draw_pane->y_MAX) = dummy;
     }
     
     
@@ -897,7 +898,7 @@ void ChartFrame::Draw(void){
         x_dummy = x_mercator(lambda);
         y_dummy = y_mercator(phi);
         
-        if((x_MIN <= x_dummy) && (x_dummy <= x_MAX) && (y_MIN <= y_dummy) && (y_dummy <= y_MAX)){
+        if(((draw_pane->x_MIN) <= x_dummy) && (x_dummy <= (draw_pane->x_MAX)) && ((draw_pane->y_MIN) <= y_dummy) && (y_dummy <= (draw_pane->y_MAX))){
             
             x[number_of_points] = x_dummy;
             y[number_of_points] = y_dummy;
@@ -923,13 +924,13 @@ void ChartFrame::Draw(void){
     c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
                    n,
                    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-                   n * (y_MAX-y_MIN)/(x_MAX-x_MIN),
+                   n * ((draw_pane->y_MAX)-(draw_pane->y_MIN))/((draw_pane->x_MAX)-(draw_pane->x_MIN)),
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
+    (draw_pane->position_plot_area) = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
     //stores in to size_plot_area the size of the plot area
-    size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
+    (draw_pane->size_plot_area) = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
@@ -938,27 +939,27 @@ void ChartFrame::Draw(void){
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
-    (c->xAxis())->setLinearScale(x_MIN, x_MAX, 1.7E+308);
+    (c->xAxis())->setLinearScale((draw_pane->x_MIN), (draw_pane->x_MAX), 1.7E+308);
     
     delta_lambda = 15.0;
     (c->xAxis())->addLabel(0.0, "*");
-    for(x_dummy=delta_lambda*k; x_dummy<x_MAX; x_dummy+=delta_lambda*k){
+    for(x_dummy=delta_lambda*k; x_dummy<(draw_pane->x_MAX); x_dummy+=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
-    for(x_dummy=-delta_lambda*k; x_dummy>x_MIN; x_dummy-=delta_lambda*k){
+    for(x_dummy=-delta_lambda*k; x_dummy>(draw_pane->x_MIN); x_dummy-=delta_lambda*k){
         (c->xAxis())->addLabel(x_dummy, "*");
     }
     
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
-    (c->yAxis())->setLinearScale(y_MIN, y_MAX, 1.7E+308);
+    (c->yAxis())->setLinearScale((draw_pane->y_MIN), (draw_pane->y_MAX), 1.7E+308);
     
     delta_phi = 30.0;
     (c->yAxis())->addLabel(0.0, "/");
-    for(phi = delta_phi; y_mercator(phi)<y_MAX; phi+=delta_phi){
+    for(phi = delta_phi; y_mercator(phi)<(draw_pane->y_MAX); phi+=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
-    for(phi = -delta_phi; y_mercator(phi)>y_MIN; phi-=delta_phi){
+    for(phi = -delta_phi; y_mercator(phi)>(draw_pane->y_MIN); phi-=delta_phi){
         (c->yAxis())->addLabel(y_mercator(phi), "/");
     }
     
@@ -1003,7 +1004,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
 //    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    drawPane = new DrawPane(this);
+    draw_pane = new DrawPane(this);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1028,23 +1029,23 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Draw();
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-        drawPane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), drawPane);
+    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), draw_pane);
     //    image->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseRightDown), this);
     
     //text for the coordinates of the mouse cursor on the bottom left of the frame
-//    text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//
+    //    text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    //    text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    //
     
     
     
-//    sizer_coordinates->Add(text_phi);
-//    sizer_coordinates->Add(text_lambda);
-//
+    //    sizer_coordinates->Add(text_phi);
+    //    sizer_coordinates->Add(text_lambda);
+    //
     //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
-    sizer_v->Add(drawPane, 1, wxEXPAND);
+    sizer_v->Add(draw_pane, 1, wxEXPAND);
     
     
     
@@ -1218,16 +1219,16 @@ template <class T> void CheckSign::operator()(T &event){
 }
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
-void ChartFrame::GetMouseGeoPosition(Position* p){
+void DrawPane::GetMouseGeoPosition(Position* p){
     
     wxPoint mouse_position;
     
-    position_image = (image->GetScreenPosition());
+    position_draw_pane = (this->GetScreenPosition());
     mouse_position = wxGetMousePosition();
     
-    (p->lambda).set(String(""), k*lambda_mercator(x_MIN+ (((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_MAX - x_MIN)), String(""));
+    (p->lambda).set(String(""), k*lambda_mercator(x_MIN+ (((double)(mouse_position.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_MAX - x_MIN)), String(""));
     
-    (p->phi).set(String(""), k*(phi_mercator( y_MIN - (((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_MAX - y_MIN) )), String(""));
+    (p->phi).set(String(""), k*(phi_mercator( y_MIN - (((double)((mouse_position.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_MAX - y_MIN) )), String(""));
     
     //    Time time;
     //    String s;
@@ -1239,9 +1240,9 @@ void ChartFrame::GetMouseGeoPosition(Position* p){
     
     
     
-    //     cout << "Mouse moved at  (" << ((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
-    //     << ((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
-    //
+    cout << "Mouse moved at  (" << ((double)(mouse_position.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
+    << ((double)((mouse_position.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
+    
     
     
     //    cout << "\nLambda = " << lambda.value;
@@ -1255,7 +1256,7 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
     cout << "\nMouse moved";
     
-//    GetMouseGeoPosition(&p);
+    GetMouseGeoPosition(&p);
     
 //    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
 //    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
@@ -1277,8 +1278,8 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         //        ((parent->plot)->phi_min) = (p.phi);
         //
         
-        GetMouseGeoPosition(&p_start);
-        position_screen_start = wxGetMousePosition();
+//        GetMouseGeoPosition(&p_start);
+        (draw_pane->position_screen_start) = wxGetMousePosition();
         
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
         
@@ -1288,18 +1289,18 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         
         //        ((parent->plot)->lambda_max) = (p.lambda);
         //        ((parent->plot)->phi_max) = (p.phi);
-        GetMouseGeoPosition(&p_end);
-        position_screen_end = wxGetMousePosition();
+//        GetMouseGeoPosition(&p_end);
+        (draw_pane->position_screen_end) = wxGetMousePosition();
         
         
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
         
         //add the rectangle to c
-        box = (c->addText(((position_screen_start.x)-((position_image.x))),
-                          ((position_screen_start.y)-((position_image.y))),
-                          ""));
-        box->setSize(100, 100);
-        box->setBackground(0x80ffff00);
+//        box = (c->addText(((position_screen_start.x)-((position_image.x))),
+//                          ((position_screen_start.y)-((position_image.y))),
+//                          ""));
+//        box->setSize(100, 100);
+//        box->setBackground(0x80ffff00);
         c->makeChart(path_file_chart);
         
         

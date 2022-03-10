@@ -262,6 +262,52 @@ public:
     
 };
 
+class BasicDrawPane : public wxPanel{
+    
+public:
+    BasicDrawPane(wxFrame*, wxStaticBitmap*);
+    wxStaticBitmap* image;
+
+    
+    void paintEvent(wxPaintEvent & evt);
+    void paintNow();
+    
+    void render(wxDC& dc);
+    
+    // some useful events
+    /*
+     void mouseMoved(wxMouseEvent& event);
+     void mouseDown(wxMouseEvent& event);
+     void mouseWheelMoved(wxMouseEvent& event);
+     void mouseReleased(wxMouseEvent& event);
+     void rightClick(wxMouseEvent& event);
+     void mouseLeftWindow(wxMouseEvent& event);
+     void keyPressed(wxKeyEvent& event);
+     void keyReleased(wxKeyEvent& event);
+     */
+    
+    DECLARE_EVENT_TABLE()
+};
+
+
+BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
+// some useful events
+/*
+ EVT_MOTION(BasicDrawPane::mouseMoved)
+ EVT_LEFT_DOWN(BasicDrawPane::mouseDown)
+ EVT_LEFT_UP(BasicDrawPane::mouseReleased)
+ EVT_RIGHT_DOWN(BasicDrawPane::rightClick)
+ EVT_LEAVE_WINDOW(BasicDrawPane::mouseLeftWindow)
+ EVT_KEY_DOWN(BasicDrawPane::keyPressed)
+ EVT_KEY_UP(BasicDrawPane::keyReleased)
+ EVT_MOUSEWHEEL(BasicDrawPane::mouseWheelMoved)
+ */
+
+// catch paint events
+EVT_PAINT(BasicDrawPane::paintEvent)
+
+END_EVENT_TABLE()
+
 
 class BodyField{
     
@@ -567,6 +613,7 @@ public:
     ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
+    BasicDrawPane *drawPane;
     XYChart* c;
     wxStaticText* text_lambda, *text_phi;
     wxPoint position_image, position_plot_area, position_screen_start, position_screen_end;
@@ -741,6 +788,68 @@ void ChartFrame::GetCoastLineData(void){
     
 }
 
+BasicDrawPane::BasicDrawPane(wxFrame* parent, wxStaticBitmap* image_in) :
+wxPanel(parent)
+{
+    
+    image = image_in;
+    
+}
+
+
+void BasicDrawPane::paintEvent(wxPaintEvent & evt)
+{
+    wxPaintDC dc(this);
+    render(dc);
+}
+
+/*
+ * Alternatively, you can use a clientDC to paint on the panel
+ * at any time. Using this generally does not free you from
+ * catching paint events, since it is possible that e.g. the window
+ * manager throws away your drawing when the window comes to the
+ * background, and expects you will redraw it when the window comes
+ * back (by sending a paint event).
+ *
+ * In most cases, this will not be needed at all; simply handling
+ * paint events and calling Refresh() when a refresh is needed
+ * will do the job.
+ */
+void BasicDrawPane::paintNow()
+{
+    wxClientDC dc(this);
+    render(dc);
+}
+
+/*
+ * Here we do the actual rendering. I put it in a separate
+ * method so that it can work no matter what type of DC
+ * (e.g. wxPaintDC or wxClientDC) is used.
+ */
+void BasicDrawPane::render(wxDC&  dc)
+{
+//    // draw some text
+//    dc.DrawText(wxT("Testing"), 40, 60);
+//
+//    // draw a circle
+//    dc.SetBrush(*wxGREEN_BRUSH); // green filling
+//    dc.SetPen( wxPen( wxColor(255,0,0), 5 ) ); // 5-pixels-thick red outline
+//    dc.DrawCircle( wxPoint(200,100), 25 /* radius */ );
+//
+    // draw a rectangle
+    dc.SetBrush(*wxBLUE_BRUSH); // blue filling
+    dc.SetPen( wxPen( wxColor(255,175,175), 10 ) ); // 10-pixels-thick pink outline
+    dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0,0, 0);
+    dc.DrawRectangle( 0, 0, 400, 200 );
+    
+//    // draw a line
+//    dc.SetPen( wxPen( wxColor(0,0,0), 3 ) ); // black line, 3 pixels thick
+//    dc.DrawLine( 300, 100, 700, 300 ); // draw line across the rectangle
+//
+//    // Look at the wxDC docs to learn how to draw other stuff
+}
+
+
 void ChartFrame::Draw(void){
     
     File world;
@@ -898,6 +1007,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    drawPane = new BasicDrawPane(this, image);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -935,26 +1045,23 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_coordinates->Add(text_phi);
     sizer_coordinates->Add(text_lambda);
     
-    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
-    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
+//    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
+//    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
+
+    sizer_v->Add(drawPane, 1, wxEXPAND);
+
     
     
-    
-    //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL | wxALIGN_LEFT, 10);
-    
-    Maximize(panel);
+//    Maximize(panel);
     
     //    panel->SetSizer(sizer_v);
     //    sizer_v->Fit(this);
     
-    SetSizerAndFit(sizer_v);
+    SetSizer(sizer_v);
+//    SetAutoLayout(true);
     
     //    Fit();
     Centre();
-    
-    
-    
-    
     
 }
 

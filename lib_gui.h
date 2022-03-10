@@ -1032,6 +1032,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
     
     
+    
     //    GetCoastLineData(-34, 45, 160, 200, 100000);
     
     
@@ -1066,6 +1067,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Fit(this);
     
     SetSizer(sizer_v);
+    SetSize(c->getWidth(), c->getHeight());
+
     //    SetAutoLayout(true);
     
     //    Fit();

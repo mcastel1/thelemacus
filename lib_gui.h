@@ -854,9 +854,17 @@ void DrawPane::render(wxDC&  dc)
     //
 //    // draw a rectangle
     dc.SetBrush(*wxBLUE_BRUSH); // blue filling
-    dc.SetPen( wxPen( wxColor(255,175,175), 10 ) ); // 10-pixels-thick pink outline
+    dc.SetPen( wxPen( wxColor(255,175,175), 1 ) ); // 10-pixels-thick pink outline
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
-    if(draw_rectangle){dc.DrawRectangle(10, 10, 100, 100 );}
+    if(draw_rectangle){
+        dc.DrawRectangle(
+                         position_screen_start.x - (position_draw_pane.x),
+                         position_screen_start.y - (position_draw_pane.y),
+                         (position_screen_end.x)-(position_screen_start.x),
+                         (position_screen_end.y)-(position_screen_start.y)
+                         );
+        
+    }
 
     //    // draw a line
     //    dc.SetPen( wxPen( wxColor(0,0,0), 3 ) ); // black line, 3 pixels thick

@@ -270,7 +270,12 @@ public:
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
     double x_MIN, x_MAX, y_MIN, y_MAX;
-
+    wxStaticText* text_lambda, *text_phi;
+    bool selection_rectangle;
+    //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
+    Position p_start, p_end;
+    
+    
     
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
@@ -280,10 +285,11 @@ public:
     
     
     // some useful events
-    void OnMouseMovement(wxMouseEvent&);
     void GetMouseGeoPosition(Position*);
-
-/*
+    void OnMouseMovement(wxMouseEvent&);
+    void OnMouseRightDown(wxMouseEvent&);
+    
+    /*
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
      void mouseWheelMoved(wxMouseEvent& event);
@@ -623,20 +629,15 @@ public:
     ListFrame* parent;
     DrawPane *draw_pane;
     XYChart* c;
-    wxStaticText* text_lambda, *text_phi;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
     wxDisplay display;
     wxRect rectangle_display;
     TextBox* box;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
-    bool selection_rectangle;
-    //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
-    Position p_start, p_end;
-       
+    
     void Draw(void);
     void GetCoastLineData(void);
-    void OnMouseRightDown(wxMouseEvent&);
     
 };
 
@@ -790,6 +791,12 @@ void ChartFrame::GetCoastLineData(void){
 }
 
 DrawPane::DrawPane(wxFrame* parent) : wxPanel(parent){
+    
+    //text for the coordinates of the mouse cursor on the bottom left of the frame
+    text_phi = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_lambda = new wxStaticText(parent, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    
     
 }
 
@@ -997,14 +1004,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     new_prefix = prefix.append(String("\t"));
     
     (parent->plot)->show(true, String(""));
+    //    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    draw_pane = new DrawPane(this);
     //when the frame is created there is no open selection rectangle.
-    selection_rectangle = false;
+    (draw_pane->selection_rectangle) = false;
     
     sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
-//    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    draw_pane = new DrawPane(this);
+
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1030,12 +1038,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), draw_pane);
-    //    image->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseRightDown), this);
+    draw_pane->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPane::OnMouseRightDown), draw_pane);
     
-    //text for the coordinates of the mouse cursor on the bottom left of the frame
-    //    text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //    text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //
     
     
     
@@ -1258,14 +1262,14 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
     GetMouseGeoPosition(&p);
     
-//    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
-//    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
-//    
+    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
+    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
+    
     event.Skip(true);
     
 }
 
-void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
+void DrawPane::OnMouseRightDown(wxMouseEvent &event){
     
     
     
@@ -1278,8 +1282,8 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         //        ((parent->plot)->phi_min) = (p.phi);
         //
         
-//        GetMouseGeoPosition(&p_start);
-        (draw_pane->position_screen_start) = wxGetMousePosition();
+        //        GetMouseGeoPosition(&p_start);
+        position_screen_start = wxGetMousePosition();
         
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
         
@@ -1289,19 +1293,19 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         
         //        ((parent->plot)->lambda_max) = (p.lambda);
         //        ((parent->plot)->phi_max) = (p.phi);
-//        GetMouseGeoPosition(&p_end);
-        (draw_pane->position_screen_end) = wxGetMousePosition();
+        //        GetMouseGeoPosition(&p_end);
+        position_screen_end = wxGetMousePosition();
         
         
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
         
         //add the rectangle to c
-//        box = (c->addText(((position_screen_start.x)-((position_image.x))),
-//                          ((position_screen_start.y)-((position_image.y))),
-//                          ""));
-//        box->setSize(100, 100);
-//        box->setBackground(0x80ffff00);
-        c->makeChart(path_file_chart);
+        //        box = (c->addText(((position_screen_start.x)-((position_image.x))),
+        //                          ((position_screen_start.y)-((position_image.y))),
+        //                          ""));
+        //        box->setSize(100, 100);
+        //        box->setBackground(0x80ffff00);
+        //        c->makeChart(path_file_chart);
         
         
         //reinitialize
@@ -1319,7 +1323,7 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
          GetCoastLineData();
          Draw();
          */
-        image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
+        //        image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
         
         
         

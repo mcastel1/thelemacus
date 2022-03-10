@@ -796,6 +796,8 @@ DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     
     parent = parent_in;
     
+    SetCursor(*wxCROSS_CURSOR);
+    
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle

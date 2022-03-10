@@ -582,7 +582,7 @@ public:
     double x_MIN, x_MAX, y_MIN, y_MAX;
     
     void Draw(void);
-    void GetCoastLineData(int, int, int, int, int);
+    void GetCoastLineData(void);
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
@@ -590,36 +590,42 @@ public:
 };
 
 //this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
-void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int lambda_max, int n_points){
+void ChartFrame::GetCoastLineData(void){
     
     File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
     string data, line;
     stringstream ins;
-    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0;
+    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
     vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
-    unsigned int l, n_points_coastline = 0, n = 0, every = 0, n_points_grid = 0;
+    unsigned int l, n = 0, every = 0, n_points_grid = 0;
     char* buffer = NULL;
     size_t pos_beg, pos_end;
     bool check;
+    
+    //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
+    ((parent->plot)->phi_min).normalize_pm_pi();
+    ((parent->plot)->phi_max).normalize_pm_pi();
+    
+    lambda_min_int = floor(K*(((parent->plot)->lambda_min).value));
+    lambda_max_int = ceil(K*(((parent->plot)->lambda_max).value));
+    phi_min_int = floor(K*(((parent->plot)->phi_min).value));
+    phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
 
-    //transform the values lambda_min, lambda_max in a format appropriate for GetCoastLineData
-    if((lambda_min < 180) && (lambda_max >= 180)){
-        j_min = lambda_max - 360;
-        j_max = lambda_min;
+    //transform the values lambda_min_int, lambda_max_int in a format appropriate for GetCoastLineData
+    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
+        j_min = lambda_max_int - 360;
+        j_max = lambda_min_int;
     }else{
-        j_min = lambda_min;
-        j_max = lambda_max;
+        j_min = lambda_min_int;
+        j_max = lambda_max_int;
     }
     
+
+    i_min = phi_min_int - floor_min_lat;
+    i_max = phi_max_int - floor_min_lat;
     
-    i_min = phi_min - floor_min_lat;
-    i_max = phi_max - floor_min_lat;
-//    j_min = lambda_min;
-//    j_max = lambda_max;
-    n_points_coastline = n_points;
-    
-    cout << "\n\n\n\n\nCoordinates: " << phi_min << " " << phi_max << " " << lambda_min << " " << lambda_max << "\n";
+    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
 
 
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
@@ -680,7 +686,7 @@ void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int 
         //count how many datapoints are in data
         n = count(data.begin(), data.end(), ',');
 
-        every = (unsigned int)(((double)n)/((double)n_points_coastline)*((double)n_points_grid));
+        every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
         if(every == 0){every = 1;}
 
         l=0;
@@ -688,7 +694,7 @@ void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int 
         pos_end = data.find(" ", pos_beg);
         while(pos_end != (string::npos)){
 
-      //I write points in data to outfile_selected_coastline_data in such a way to write n_points_coastline points to the most
+      //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
       if((l % every) == 0){
       
         line.clear();
@@ -909,15 +915,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
 //    GetCoastLineData(-34, 45, 160, 200, 100000);
     
     
-    //normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
-    ((parent->plot)->phi_min).normalize_pm_pi();
-    ((parent->plot)->phi_max).normalize_pm_pi();
-    
-    GetCoastLineData(ceil(K*(((parent->plot)->phi_min).value)),
-                     floor(K*(((parent->plot)->phi_max).value)),
-                     floor(K*(((parent->plot)->lambda_min).value)),
-                     ceil(K*(((parent->plot)->lambda_max).value)),
-                     (((parent->plot)->n_points_plot_coastline).value));
+      
+    GetCoastLineData();
 
 
     
@@ -1196,15 +1195,8 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         ((parent->plot)->phi_min) = (p_start.phi);
         ((parent->plot)->phi_max) = (p_end.phi);
 
-        //normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
-        ((parent->plot)->phi_min).normalize_pm_pi();
-        ((parent->plot)->phi_max).normalize_pm_pi();
         
-        GetCoastLineData(floor(K*(((parent->plot)->phi_min).value)),
-                         ceil(K*(((parent->plot)->phi_max).value)),
-                         floor(K*(((parent->plot)->lambda_min).value)),
-                         ceil(K*(((parent->plot)->lambda_max).value)),
-                         (((parent->plot)->n_points_plot_coastline).value));
+        GetCoastLineData();
         Draw();
         image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
 

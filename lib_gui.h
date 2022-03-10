@@ -262,10 +262,10 @@ public:
     
 };
 
-class BasicDrawPane : public wxPanel{
+class DrawPane : public wxPanel{
     
 public:
-    BasicDrawPane(wxFrame*);
+    DrawPane(wxFrame*);
     
     
     void paintEvent(wxPaintEvent & evt);
@@ -292,21 +292,21 @@ public:
 };
 
 
-BEGIN_EVENT_TABLE(BasicDrawPane, wxPanel)
+BEGIN_EVENT_TABLE(DrawPane, wxPanel)
 // some useful events
 /*
- EVT_MOTION(BasicDrawPane::mouseMoved)
- EVT_LEFT_DOWN(BasicDrawPane::mouseDown)
- EVT_LEFT_UP(BasicDrawPane::mouseReleased)
- EVT_RIGHT_DOWN(BasicDrawPane::rightClick)
- EVT_LEAVE_WINDOW(BasicDrawPane::mouseLeftWindow)
- EVT_KEY_DOWN(BasicDrawPane::keyPressed)
- EVT_KEY_UP(BasicDrawPane::keyReleased)
- EVT_MOUSEWHEEL(BasicDrawPane::mouseWheelMoved)
+ EVT_MOTION(DrawPane::mouseMoved)
+ EVT_LEFT_DOWN(DrawPane::mouseDown)
+ EVT_LEFT_UP(DrawPane::mouseReleased)
+ EVT_RIGHT_DOWN(DrawPane::rightClick)
+ EVT_LEAVE_WINDOW(DrawPane::mouseLeftWindow)
+ EVT_KEY_DOWN(DrawPane::keyPressed)
+ EVT_KEY_UP(DrawPane::keyReleased)
+ EVT_MOUSEWHEEL(DrawPane::mouseWheelMoved)
  */
 
 // catch paint events
-EVT_PAINT(BasicDrawPane::paintEvent)
+EVT_PAINT(DrawPane::paintEvent)
 
 END_EVENT_TABLE()
 
@@ -615,7 +615,7 @@ public:
     ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
-    BasicDrawPane *drawPane;
+    DrawPane *drawPane;
     XYChart* c;
     wxStaticText* text_lambda, *text_phi;
     wxPoint position_image, position_plot_area, position_screen_start, position_screen_end;
@@ -788,12 +788,12 @@ void ChartFrame::GetCoastLineData(void){
     
 }
 
-BasicDrawPane::BasicDrawPane(wxFrame* parent) : wxPanel(parent){
+DrawPane::DrawPane(wxFrame* parent) : wxPanel(parent){
     
 }
 
 
-void BasicDrawPane::paintEvent(wxPaintEvent & evt)
+void DrawPane::paintEvent(wxPaintEvent & evt)
 {
     wxPaintDC dc(this);
     render(dc);
@@ -811,7 +811,7 @@ void BasicDrawPane::paintEvent(wxPaintEvent & evt)
  * paint events and calling Refresh() when a refresh is needed
  * will do the job.
  */
-void BasicDrawPane::paintNow()
+void DrawPane::paintNow()
 {
     wxClientDC dc(this);
     render(dc);
@@ -822,7 +822,7 @@ void BasicDrawPane::paintNow()
  * method so that it can work no matter what type of DC
  * (e.g. wxPaintDC or wxClientDC) is used.
  */
-void BasicDrawPane::render(wxDC&  dc)
+void DrawPane::render(wxDC&  dc)
 {
     //    // draw some text
     //    dc.DrawText(wxT("Testing"), 40, 60);
@@ -1003,7 +1003,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
 //    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    drawPane = new BasicDrawPane(this);
+    drawPane = new DrawPane(this);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1028,7 +1028,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Draw();
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-        drawPane->Bind(wxEVT_MOTION, wxMouseEventHandler(BasicDrawPane::OnMouseMovement), drawPane);
+        drawPane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), drawPane);
     //    image->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseRightDown), this);
     
     //text for the coordinates of the mouse cursor on the bottom left of the frame
@@ -1040,7 +1040,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
 //    sizer_coordinates->Add(text_phi);
 //    sizer_coordinates->Add(text_lambda);
-//    
+//
     //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
@@ -1249,7 +1249,7 @@ void ChartFrame::GetMouseGeoPosition(Position* p){
     
 }
 
-void BasicDrawPane::OnMouseMovement(wxMouseEvent &event){
+void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
     Position p;
     

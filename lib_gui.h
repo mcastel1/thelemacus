@@ -581,7 +581,7 @@ public:
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
     double x_MIN, x_MAX, y_MIN, y_MAX;
     
-    void Draw(String);
+    void Draw(void);
     void GetCoastLineData(int, int, int, int, int);
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
@@ -603,13 +603,23 @@ void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int 
     size_t pos_beg, pos_end;
     bool check;
 
+    //transform the values lambda_min, lambda_max in a format appropriate for GetCoastLineData
+    if((lambda_min < 180) && (lambda_max >= 180)){
+        j_min = lambda_max - 360;
+        j_max = lambda_min;
+    }else{
+        j_min = lambda_min;
+        j_max = lambda_max;
+    }
+    
+    
     i_min = phi_min - floor_min_lat;
     i_max = phi_max - floor_min_lat;
-    j_min = lambda_min;
-    j_max = lambda_max;
+//    j_min = lambda_min;
+//    j_max = lambda_max;
     n_points_coastline = n_points;
     
-    cout << "\n\n\n\n\nCoordinates: " << i_min << " " << i_max << " " << j_min << " " << j_max << "\n";
+    cout << "\n\n\n\n\nCoordinates: " << phi_min << " " << phi_max << " " << lambda_min << " " << lambda_max << "\n";
 
 
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
@@ -722,7 +732,7 @@ void ChartFrame::GetCoastLineData(int phi_min, int phi_max, int lambda_min, int 
     
 }
 
-void ChartFrame::Draw(String data_file){
+void ChartFrame::Draw(void){
     
     File world;
     stringstream line_ins;
@@ -751,7 +761,7 @@ void ChartFrame::Draw(String data_file){
   
     
     //
-    world.set_name(data_file);
+    world.set_name(String(path_file_selected_coastline_data));
     world.count_lines(String(""));
     
     x = new double [(world.number_of_lines)];
@@ -896,10 +906,23 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    rectangle.SetHeight((int)((double)rectangle.GetHeight())*2./10.0);
     //
     
-//    GetCoastLineData(-34, 45, 23, 90, 1000);
+//    GetCoastLineData(-34, 45, 160, 200, 100000);
     
     
-    Draw(String(path_file_coastlines));
+    //normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
+    ((parent->plot)->phi_min).normalize_pm_pi();
+    ((parent->plot)->phi_max).normalize_pm_pi();
+    
+    GetCoastLineData(ceil(K*(((parent->plot)->phi_min).value)),
+                     floor(K*(((parent->plot)->phi_max).value)),
+                     floor(K*(((parent->plot)->lambda_min).value)),
+                     ceil(K*(((parent->plot)->lambda_max).value)),
+                     (((parent->plot)->n_points_plot_coastline).value));
+
+
+    
+    
+    Draw();
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
@@ -1174,15 +1197,15 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         ((parent->plot)->phi_max) = (p_end.phi);
 
         //normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
-//        ((parent->plot)->phi_min).normalize_pm_pi();
-//        ((parent->plot)->phi_max).normalize_pm_pi();
-//
+        ((parent->plot)->phi_min).normalize_pm_pi();
+        ((parent->plot)->phi_max).normalize_pm_pi();
+        
         GetCoastLineData(floor(K*(((parent->plot)->phi_min).value)),
                          ceil(K*(((parent->plot)->phi_max).value)),
                          floor(K*(((parent->plot)->lambda_min).value)),
                          ceil(K*(((parent->plot)->lambda_max).value)),
                          (((parent->plot)->n_points_plot_coastline).value));
-        Draw(String(path_file_selected_coastline_data));
+        Draw();
         image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
 
         

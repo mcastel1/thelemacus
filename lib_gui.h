@@ -838,8 +838,8 @@ void DrawPane::paintNow(){
  */
 void DrawPane::render(wxDC&  dc){
     
-    dc.SetBrush(*wxBLUE_BRUSH); // blue filling
-    dc.SetPen( wxPen( wxColor(255,175,175), 1 ) ); // 10-pixels-thick pink outline
+    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
+    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
     if(selection_rectangle){
         dc.DrawRectangle(

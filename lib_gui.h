@@ -1029,21 +1029,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     //    GetCoastLineData(-34, 45, 160, 200, 100000);
     
-    
-    
     GetCoastLineData();
-    
-    
-    
-    
     draw_pane->Draw();
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), draw_pane);
     draw_pane->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPane::OnMouseRightDown), draw_pane);
-    
-    
-    
     
     //    sizer_coordinates->Add(text_phi);
     //    sizer_coordinates->Add(text_lambda);
@@ -1052,8 +1043,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
     sizer_v->Add(draw_pane, 1, wxEXPAND);
-    
-    
     
     //    Maximize(panel);
     
@@ -1301,7 +1290,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
         text_position_start->SetLabel(wxString(s.str().c_str()));
         text_position_start->SetPosition(wxPoint((position_screen_start.x)-(position_draw_pane.x), (position_screen_start.y)-(position_draw_pane.y)));
-
+        
         
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
         
@@ -1318,30 +1307,23 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
         
         
-        //add the rectangle to c
-        //        box = (c->addText(((position_screen_start.x)-((position_image.x))),
-        //                          ((position_screen_start.y)-((position_image.y))),
-        //                          ""));
-        //        box->setSize(100, 100);
-        //        box->setBackground(0x80ffff00);
-        //        c->makeChart(path_file_chart);
-        
         
         //reinitialize
-        //re-enable this later.
-        /*
-         delete c;
-         c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
-         ((parent->plot)->lambda_min) = (p_start.lambda);
-         ((parent->plot)->lambda_max) = (p_end.lambda);
-         ((parent->plot)->phi_min) = (p_start.phi);
-         ((parent->plot)->phi_max) = (p_end.phi);
-         
-         
-         
-         GetCoastLineData();
-         Draw();
-         */
+        delete c;
+        c = new XYChart(((parent->rectangle_display).GetSize()).GetHeight()*0.8, ((parent->rectangle_display).GetSize()).GetHeight()*0.8);
+        (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
+        (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
+        (((parent->parent)->plot)->phi_min) = (p_start.phi);
+        (((parent->parent)->plot)->phi_max) = (p_end.phi);
+        
+        //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selection triangle, which is now useless
+        text_position_start->SetLabel(wxString(""));
+        text_position_end->SetLabel(wxString(""));
+        
+        
+        parent->GetCoastLineData();
+        Draw();
+        paintNow();
         //        image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
         
         

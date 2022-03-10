@@ -266,7 +266,7 @@ class DrawPane : public wxPanel{
     
 public:
     DrawPane(wxFrame*);
-    wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end;
+    wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
     double x_MIN, x_MAX, y_MIN, y_MAX;
@@ -275,16 +275,11 @@ public:
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
-
-    
-    
-    
+   
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
     
     void render(wxDC& dc);
-    
-    
     
     // some useful events
     void GetMouseGeoPosition(Position*);
@@ -831,10 +826,11 @@ void DrawPane::paintEvent(wxPaintEvent & evt)
  * paint events and calling Refresh() when a refresh is needed
  * will do the job.
  */
-void DrawPane::paintNow()
-{
+void DrawPane::paintNow(){
+    
     wxClientDC dc(this);
     render(dc);
+    
 }
 
 /*
@@ -842,8 +838,8 @@ void DrawPane::paintNow()
  * method so that it can work no matter what type of DC
  * (e.g. wxPaintDC or wxClientDC) is used.
  */
-void DrawPane::render(wxDC&  dc)
-{
+void DrawPane::render(wxDC&  dc){
+    
     //    // draw some text
     //    dc.DrawText(wxT("Testing"), 40, 60);
     //
@@ -856,12 +852,12 @@ void DrawPane::render(wxDC&  dc)
     dc.SetBrush(*wxBLUE_BRUSH); // blue filling
     dc.SetPen( wxPen( wxColor(255,175,175), 1 ) ); // 10-pixels-thick pink outline
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
-    if(draw_rectangle){
+    if(selection_rectangle){
         dc.DrawRectangle(
                          position_screen_start.x - (position_draw_pane.x),
                          position_screen_start.y - (position_draw_pane.y),
-                         (position_screen_end.x)-(position_screen_start.x),
-                         (position_screen_end.y)-(position_screen_start.y)
+                         (position_screen_now.x)-(position_screen_start.x),
+                         (position_screen_now.y)-(position_screen_start.y)
                          );
         
     }
@@ -1246,14 +1242,12 @@ template <class T> void CheckSign::operator()(T &event){
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
 void DrawPane::GetMouseGeoPosition(Position* p){
     
-    wxPoint mouse_position;
-    
     position_draw_pane = (this->GetScreenPosition());
-    mouse_position = wxGetMousePosition();
+    position_screen_now = wxGetMousePosition();
     
-    (p->lambda).set(String(""), k*lambda_mercator(x_MIN+ (((double)(mouse_position.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_MAX - x_MIN)), String(""));
+    (p->lambda).set(String(""), k*lambda_mercator(x_MIN+ (((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_MAX - x_MIN)), String(""));
     
-    (p->phi).set(String(""), k*(phi_mercator( y_MIN - (((double)((mouse_position.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_MAX - y_MIN) )), String(""));
+    (p->phi).set(String(""), k*(phi_mercator( y_MIN - (((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_MAX - y_MIN) )), String(""));
     
     //    Time time;
     //    String s;
@@ -1265,8 +1259,8 @@ void DrawPane::GetMouseGeoPosition(Position* p){
     
     
     
-    cout << "Mouse moved at  (" << ((double)(mouse_position.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
-    << ((double)((mouse_position.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
+    cout << "Mouse moved at  (" << ((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
+    << ((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
     
     
     
@@ -1285,6 +1279,10 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
 //    text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
 //    text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
+    
+    paintNow();
+
+    
 //
     event.Skip(true);
     
@@ -1319,9 +1317,6 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
         
-        //turn on rectangle drawing
-        draw_rectangle = true;
-        paintNow();
         
         //add the rectangle to c
         //        box = (c->addText(((position_screen_start.x)-((position_image.x))),

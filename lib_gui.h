@@ -265,9 +265,8 @@ public:
 class BasicDrawPane : public wxPanel{
     
 public:
-    BasicDrawPane(wxFrame*, wxStaticBitmap*);
-    wxStaticBitmap* image;
-
+    BasicDrawPane(wxFrame*);
+    
     
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
@@ -636,7 +635,7 @@ public:
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
-
+    
 };
 
 //this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
@@ -661,7 +660,7 @@ void ChartFrame::GetCoastLineData(void){
     lambda_max_int = ceil(K*(((parent->plot)->lambda_max).value));
     phi_min_int = floor(K*(((parent->plot)->phi_min).value));
     phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
-
+    
     //transform the values lambda_min_int, lambda_max_int in a format appropriate for GetCoastLineData
     if((lambda_min_int < 180) && (lambda_max_int >= 180)){
         j_min = lambda_max_int - 360;
@@ -671,128 +670,124 @@ void ChartFrame::GetCoastLineData(void){
         j_max = lambda_max_int;
     }
     
-
+    
     i_min = phi_min_int - floor_min_lat;
     i_max = phi_max_int - floor_min_lat;
     
     cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
-
-
+    
+    
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
     file_n_line.set_name(String(path_file_n_line));
     file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
     outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
-
-   
+    
+    
     //read file n_line and store it into vector n_line
     file_n_line.open(String("in"), String(""));
     i=0;
     while(!(file_n_line.value.eof())){
-
-      line.clear();
-      ins.clear();
-
-      getline(file_n_line.value, line);
-      ins << line;
-      ins >> (n_line[i++]);
-
-      //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
-
+        
+        line.clear();
+        ins.clear();
+        
+        getline(file_n_line.value, line);
+        ins << line;
+        ins >> (n_line[i++]);
+        
+        //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+        
     }
     file_n_line.close(String(""));
-
-
+    
+    
     
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     //open a new file selected coastline data and write into it the new data
     outfile_selected_coastline_data.remove(String(""));
     outfile_selected_coastline_data.open(String("out"), String(""));
-
+    
     check = true;
     for(i=i_min; i<=i_max; i++){
-      
-      for(j=j_min; j<=j_max; j++){
-
-        j_normalized = (j % 360);
         
-        // read data as a block:
-        file_coastline_data_blocked.value.seekg(n_line[360*i+j_normalized], file_coastline_data_blocked.value.beg);
-
-        l = n_line[360*i+j_normalized + 1] - n_line[360*i+j_normalized] - 1;
-        if(buffer != NULL){delete [] buffer;}
-        buffer = new char [l];
-
-        file_coastline_data_blocked.value.read(buffer, l);
-        string data(buffer, l);
-
-        if(!(file_coastline_data_blocked.value)){
-
-      check = false;
-        
+        for(j=j_min; j<=j_max; j++){
+            
+            j_normalized = (j % 360);
+            
+            // read data as a block:
+            file_coastline_data_blocked.value.seekg(n_line[360*i+j_normalized], file_coastline_data_blocked.value.beg);
+            
+            l = n_line[360*i+j_normalized + 1] - n_line[360*i+j_normalized] - 1;
+            if(buffer != NULL){delete [] buffer;}
+            buffer = new char [l];
+            
+            file_coastline_data_blocked.value.read(buffer, l);
+            string data(buffer, l);
+            
+            if(!(file_coastline_data_blocked.value)){
+                
+                check = false;
+                
+            }
+            
+            //count how many datapoints are in data
+            n = count(data.begin(), data.end(), ',');
+            
+            every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+            if(every == 0){every = 1;}
+            
+            l=0;
+            pos_beg = 0;
+            pos_end = data.find(" ", pos_beg);
+            while(pos_end != (string::npos)){
+                
+                //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                if((l % every) == 0){
+                    
+                    line.clear();
+                    line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                    
+                    replace(line.begin(), line.end(), ' ', '\n');
+                    replace(line.begin(), line.end(), ',', ' ');
+                    
+                    (outfile_selected_coastline_data.value) << line;
+                    
+                }
+                
+                pos_beg = pos_end+1;
+                pos_end = data.find(" ", pos_beg);
+                
+                l++;
+                
+            };
+            
+            
+            data.clear();
+            
         }
-
-        //count how many datapoints are in data
-        n = count(data.begin(), data.end(), ',');
-
-        every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
-        if(every == 0){every = 1;}
-
-        l=0;
-        pos_beg = 0;
-        pos_end = data.find(" ", pos_beg);
-        while(pos_end != (string::npos)){
-
-      //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-      if((l % every) == 0){
-      
-        line.clear();
-        line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-
-        replace(line.begin(), line.end(), ' ', '\n');
-        replace(line.begin(), line.end(), ',', ' ');
-
-        (outfile_selected_coastline_data.value) << line;
-
-      }
-
-      pos_beg = pos_end+1;
-      pos_end = data.find(" ", pos_beg);
-
-      l++;
-      
-        };
-
-
-        data.clear();
-
-      }
-
+        
     }
     
     if(check){
-
-      cout << "All characters read successfully\n";
+        
+        cout << "All characters read successfully\n";
         
     }else{
         
-      cout << RED << "Error: only " << file_coastline_data_blocked.value.gcount() << " characters could be read\n" << RESET;
-      
+        cout << RED << "Error: only " << file_coastline_data_blocked.value.gcount() << " characters could be read\n" << RESET;
+        
     }
-
+    
     
     outfile_selected_coastline_data.close(String(""));
     file_coastline_data_blocked.close(String(""));
- 
+    
     
 }
 
-BasicDrawPane::BasicDrawPane(wxFrame* parent, wxStaticBitmap* image_in) :
-wxPanel(parent)
-{
-    
-    image = image_in;
+BasicDrawPane::BasicDrawPane(wxFrame* parent) : wxPanel(parent){
     
 }
 
@@ -828,25 +823,25 @@ void BasicDrawPane::paintNow()
  */
 void BasicDrawPane::render(wxDC&  dc)
 {
-//    // draw some text
-//    dc.DrawText(wxT("Testing"), 40, 60);
-//
-//    // draw a circle
-//    dc.SetBrush(*wxGREEN_BRUSH); // green filling
-//    dc.SetPen( wxPen( wxColor(255,0,0), 5 ) ); // 5-pixels-thick red outline
-//    dc.DrawCircle( wxPoint(200,100), 25 /* radius */ );
-//
+    //    // draw some text
+    //    dc.DrawText(wxT("Testing"), 40, 60);
+    //
+    //    // draw a circle
+    //    dc.SetBrush(*wxGREEN_BRUSH); // green filling
+    //    dc.SetPen( wxPen( wxColor(255,0,0), 5 ) ); // 5-pixels-thick red outline
+    //    dc.DrawCircle( wxPoint(200,100), 25 /* radius */ );
+    //
     // draw a rectangle
     dc.SetBrush(*wxBLUE_BRUSH); // blue filling
     dc.SetPen( wxPen( wxColor(255,175,175), 10 ) ); // 10-pixels-thick pink outline
-    dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0,0, 0);
-    dc.DrawRectangle( 0, 0, 400, 200 );
+    dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
+    dc.DrawRectangle(0, 0, 100, 100 );
     
-//    // draw a line
-//    dc.SetPen( wxPen( wxColor(0,0,0), 3 ) ); // black line, 3 pixels thick
-//    dc.DrawLine( 300, 100, 700, 300 ); // draw line across the rectangle
-//
-//    // Look at the wxDC docs to learn how to draw other stuff
+    //    // draw a line
+    //    dc.SetPen( wxPen( wxColor(0,0,0), 3 ) ); // black line, 3 pixels thick
+    //    dc.DrawLine( 300, 100, 700, 300 ); // draw line across the rectangle
+    //
+    //    // Look at the wxDC docs to learn how to draw other stuff
 }
 
 
@@ -874,7 +869,7 @@ void ChartFrame::Draw(void){
         y_MAX = dummy;
     }
     
-  
+    
     
     //
     world.set_name(String(path_file_selected_coastline_data));
@@ -909,7 +904,7 @@ void ChartFrame::Draw(void){
             
         }
         
-//        cout << " ******* " << x[i] << " " << y[i] << "\n";
+        //        cout << " ******* " << x[i] << " " << y[i] << "\n";
         
     }
     
@@ -970,7 +965,7 @@ void ChartFrame::Draw(void){
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
     
-  
+    
     //    t = c->addText(0, 0, "hdkjsfhldl");
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
@@ -993,7 +988,7 @@ void ChartFrame::Draw(void){
 ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     String new_prefix;
- 
+    
     parent = parent_input;
     
     //append \t to prefix
@@ -1007,7 +1002,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    drawPane = new BasicDrawPane(this, image);
+    drawPane = new BasicDrawPane(this);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1015,26 +1010,26 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
-
+    
     // Create a XYChart object of size 0.5 x height of the display
     c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
-
-    
-//    GetCoastLineData(-34, 45, 160, 200, 100000);
     
     
-      
+    //    GetCoastLineData(-34, 45, 160, 200, 100000);
+    
+    
+    
     GetCoastLineData();
-
-
+    
+    
     
     
     Draw();
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
-    image->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseRightDown), this);
-
+    //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    //    image->Bind(wxEVT_MOTION, wxMouseEventHandler(ChartFrame::OnMouseMovement), this);
+    //    image->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseRightDown), this);
+    
     //text for the coordinates of the mouse cursor on the bottom left of the frame
     text_phi = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     text_lambda = new wxStaticText(panel, wxID_ANY, wxT("                       "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -1045,20 +1040,20 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_coordinates->Add(text_phi);
     sizer_coordinates->Add(text_lambda);
     
-//    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
-//    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
-
+    //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
+    //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
+    
     sizer_v->Add(drawPane, 1, wxEXPAND);
-
     
     
-//    Maximize(panel);
+    
+    //    Maximize(panel);
     
     //    panel->SetSizer(sizer_v);
     //    sizer_v->Fit(this);
     
     SetSizer(sizer_v);
-//    SetAutoLayout(true);
+    //    SetAutoLayout(true);
     
     //    Fit();
     Centre();
@@ -1223,7 +1218,7 @@ template <class T> void CheckSign::operator()(T &event){
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
 void ChartFrame::GetMouseGeoPosition(Position* p){
-  
+    
     wxPoint mouse_position;
     
     position_image = (image->GetScreenPosition());
@@ -1232,7 +1227,7 @@ void ChartFrame::GetMouseGeoPosition(Position* p){
     (p->lambda).set(String(""), k*lambda_mercator(x_MIN+ (((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_MAX - x_MIN)), String(""));
     
     (p->phi).set(String(""), k*(phi_mercator( y_MIN - (((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_MAX - y_MIN) )), String(""));
- 
+    
     //    Time time;
     //    String s;
     
@@ -1243,9 +1238,9 @@ void ChartFrame::GetMouseGeoPosition(Position* p){
     
     
     
-//     cout << "Mouse moved at  (" << ((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
-//     << ((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
-//
+    //     cout << "Mouse moved at  (" << ((double)(mouse_position.x)-((position_image.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
+    //     << ((double)((mouse_position.y)-((position_image.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
+    //
     
     
     //    cout << "\nLambda = " << lambda.value;
@@ -1258,7 +1253,7 @@ void ChartFrame::OnMouseMovement(wxMouseEvent &event){
     Position p;
     
     GetMouseGeoPosition(&p);
-      
+    
     text_phi->SetLabel(wxString((p.phi).to_string(String("NS"), display_precision)));
     text_lambda->SetLabel(wxString((p.lambda).to_string(String("EW"), display_precision)));
     
@@ -1275,27 +1270,27 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
     
     if(selection_rectangle){
         cout << "You started drawing\n";
-//        ((parent->plot)->lambda_min) = (p.lambda);
-//        ((parent->plot)->phi_min) = (p.phi);
-//
+        //        ((parent->plot)->lambda_min) = (p.lambda);
+        //        ((parent->plot)->phi_min) = (p.phi);
+        //
         
         GetMouseGeoPosition(&p_start);
         position_screen_start = wxGetMousePosition();
-
+        
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
-
+        
         
     }else{
         cout << "You ended drawing\n";
         
-//        ((parent->plot)->lambda_max) = (p.lambda);
-//        ((parent->plot)->phi_max) = (p.phi);
+        //        ((parent->plot)->lambda_max) = (p.lambda);
+        //        ((parent->plot)->phi_max) = (p.phi);
         GetMouseGeoPosition(&p_end);
         position_screen_end = wxGetMousePosition();
-
-
+        
+        
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
-
+        
         //add the rectangle to c
         box = (c->addText(((position_screen_start.x)-((position_image.x))),
                           ((position_screen_start.y)-((position_image.y))),
@@ -1303,28 +1298,28 @@ void ChartFrame::OnMouseRightDown(wxMouseEvent &event){
         box->setSize(100, 100);
         box->setBackground(0x80ffff00);
         c->makeChart(path_file_chart);
-
-
+        
+        
         //reinitialize
         //re-enable this later.
         /*
-        delete c;
-        c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
-        ((parent->plot)->lambda_min) = (p_start.lambda);
-        ((parent->plot)->lambda_max) = (p_end.lambda);
-        ((parent->plot)->phi_min) = (p_start.phi);
-        ((parent->plot)->phi_max) = (p_end.phi);
+         delete c;
+         c = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
+         ((parent->plot)->lambda_min) = (p_start.lambda);
+         ((parent->plot)->lambda_max) = (p_end.lambda);
+         ((parent->plot)->phi_min) = (p_start.phi);
+         ((parent->plot)->phi_max) = (p_end.phi);
          
-
-        
-        GetCoastLineData();
-        Draw();
+         
+         
+         GetCoastLineData();
+         Draw();
          */
         image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
-         
-
         
-     }
+        
+        
+    }
     
     event.Skip(true);
     
@@ -2135,7 +2130,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //
     
     listcontrol->SetMinSize(wxSize(total_column_width,-1));
-
+    
     
     
     sizer_box_sights->Add(listcontrol, 0,  wxALL, margin_v);
@@ -2180,11 +2175,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);
-//    panel->SetSizer(sizer_v);
+    //    panel->SetSizer(sizer_v);
     
-//    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
-//    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
-//
+    //    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
+    //    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
+    //
 }
 
 void ListFrame::OnAdd(wxCommandEvent& event){

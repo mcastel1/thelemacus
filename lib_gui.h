@@ -271,7 +271,7 @@ public:
     wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
-    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area;
+    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis*/gamma_lambda;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
@@ -972,6 +972,23 @@ void DrawPane::Draw(void){
     }
     
     //set xtics
+    double lambda_span =  K*(x_MAX-x_MIN);
+
+    //set delta_lambda
+    if(lambda_span > 1.0){gamma_lambda = 1.0;}
+    else{gamma_lambda = 60.0;}
+    
+    delta_lambda=1.0/gamma_lambda;
+    while(((((parent->parent)->plot)->n_intervals_tics).value)*delta_lambda<lambda_span){
+        if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
+        else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
+    }
+    if(delta_lambda > 1.0/gamma_lambda){
+        if(delta_lambda == 5.0/gamma_lambda){delta_lambda = delta_lambda - 4.0/gamma_lambda;}
+        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
+    }
+    cout <<  "... delta_lambda = " << delta_lambda << "\n";
+    
     for(i=lambda_min_int; i<= lambda_max_int; i++){
         
         if((x_mercator((double)i) >= x_MIN) && (x_mercator((double)i) <= x_MAX)){
@@ -986,6 +1003,7 @@ void DrawPane::Draw(void){
         }
         
     }
+    //
     
     
       

@@ -991,8 +991,8 @@ void DrawPane::Draw(void){
                    (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
                    (position_plot_area.y),
                    (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
-                   (position_plot_area.y) + height_plot_area
-                   );
+                   (position_plot_area.y) + height_plot_area,
+                   0x808080, 1);
         
 //        Angle a;
 //        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
@@ -1021,6 +1021,23 @@ void DrawPane::Draw(void){
     }
     cout << "... delta_phi = "  << delta_phi << "\n";
     
+    
+   
+    
+    for(phi = ((int)((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi))*delta_phi; phi<(K*(((((parent->parent)->plot)->phi_max).value))); phi+= delta_phi){
+        
+        y_dummy = y_mercator(phi);
+        
+        c->addLine(
+                   (position_plot_area.x),
+                   (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
+                   (position_plot_area.x) + width_plot_area,
+                   (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
+                   0x808080, 1);
+        
+        
+    }
+
     //
     
     

@@ -660,8 +660,8 @@ void ChartFrame::GetCoastLineData(void){
     ((parent->plot)->phi_min).normalize_pm_pi();
     ((parent->plot)->phi_max).normalize_pm_pi();
     
-    lambda_min_int = floor(K*(((parent->plot)->lambda_min).value));
-    lambda_max_int = ceil(K*(((parent->plot)->lambda_max).value));
+    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
+    lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
     phi_min_int = floor(K*(((parent->plot)->phi_min).value));
     phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
     
@@ -670,10 +670,9 @@ void ChartFrame::GetCoastLineData(void){
         j_min = lambda_max_int - 360;
         j_max = lambda_min_int;
     }else{
-        j_min = lambda_min_int;
-        j_max = lambda_max_int;
+        j_min = lambda_max_int;
+        j_max = lambda_min_int;
     }
-    
     
     i_min = phi_min_int - floor_min_lat;
     i_max = phi_max_int - floor_min_lat;

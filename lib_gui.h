@@ -901,7 +901,7 @@ void DrawPane::Draw(void){
         height_chart = width_chart * ((y_MAX-y_MIN)/(x_MAX-x_MIN));
     }
     width_plot_area = width_chart*0.8;
-    height_plot_area = height_chart*0.8;
+    height_plot_area = height_chart*0.7;
     tic_length = tic_length_over_width_plot_area*width_plot_area;
 
     
@@ -992,6 +992,17 @@ void DrawPane::Draw(void){
                    (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
                    (position_plot_area.y) + height_plot_area,
                    0x808080, 1);
+        
+        c->addText(
+                   (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
+                   (position_plot_area.y) + height_plot_area,
+                   "hello",
+                   "",
+                   12,
+                   0x808080,
+                   5,
+                   45
+                   );
         
 //        Angle a;
 //        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));

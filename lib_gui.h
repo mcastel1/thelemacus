@@ -271,7 +271,7 @@ public:
     wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
-    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi;
+    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
@@ -846,6 +846,11 @@ void DrawPane::paintNow(){
  */
 void DrawPane::render(wxDC&  dc){
     
+    Angle lambda;
+    double x;
+    stringstream s;
+    wxString wx_string;
+    
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetBrush(brush);
@@ -863,6 +868,22 @@ void DrawPane::render(wxDC&  dc){
         
     }
     
+    for(x = x_mercator(((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda); x <= x_MAX; x+=k*delta_lambda){
+        
+        s.str("");
+        lambda.set(String(""), k*lambda_mercator(x), String(""));
+        
+        s << lambda.to_string(String(""), display_precision);
+        wx_string = wxString(s.str().c_str());
+        
+        dc.DrawText(
+                    wx_string,
+                    (position_plot_area.x) + (x-x_MIN)/(x_MAX-x_MIN)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                    (position_plot_area.y) + height_plot_area
+                    );
+        
+    }
+ 
 }
 
 
@@ -871,7 +892,7 @@ void DrawPane::Draw(void){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy, phi_span, lambda_span;
+    double *x, *y, lambda, phi, x_dummy, y_dummy, dummy, phi_span, lambda_span;
     int i;
     unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     
@@ -979,11 +1000,6 @@ void DrawPane::Draw(void){
     cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
     lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
-    
-    
-//    cout << "Position plot area = " << (position_plot_area.x) << " " << (position_plot_area.y) << "\n";
-//    cout << "Size plot area = " << width_plot_area << " " << height_plot_area << "\n";
-
     for(x_dummy = x_mercator(lambda); x_dummy <= x_MAX; x_dummy+=k*delta_lambda){
                 
         c->addLine(
@@ -993,16 +1009,7 @@ void DrawPane::Draw(void){
                    (position_plot_area.y) + height_plot_area,
                    0x808080, 1);
         
-        c->addText(
-                   (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
-                   (position_plot_area.y) + height_plot_area,
-                   "hello",
-                   "",
-                   12,
-                   0x808080,
-                   5,
-                   45
-                   );
+
         
 //        Angle a;
 //        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));

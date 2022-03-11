@@ -277,6 +277,7 @@ public:
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
+    unsigned int width_plot_area, height_plot_area;
     
     void Draw(void);
     void paintEvent(wxPaintEvent & evt);
@@ -866,7 +867,7 @@ void DrawPane::Draw(void){
     stringstream line_ins;
     string line;
     double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
-    unsigned int i, n, /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
+    unsigned int i, /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     
     //Here I order x_MIN, x_MAX, y_MIN, y_MAX
     x_MIN = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
@@ -884,6 +885,25 @@ void DrawPane::Draw(void){
         y_MAX = dummy;
     }
     
+    
+    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
+    if((y_MAX-y_MIN) > (x_MAX-x_MIN)){
+        height_plot_area = (((parent->rectangle_display).GetSize()).GetHeight());
+        width_plot_area = height_plot_area/((y_MAX-y_MIN)/(x_MAX-x_MIN));
+    }else{
+        width_plot_area = (((parent->rectangle_display).GetSize()).GetHeight());
+        height_plot_area = width_plot_area * ((y_MAX-y_MIN)/(x_MAX-x_MIN));
+    }
+
+    
+    // Create a XYChart object with the appropriate size
+    c = new XYChart(width_plot_area, height_plot_area);
+    //create the plot area of c with the appropriate size
+    c->setPlotArea(width_plot_area*0.1, height_plot_area*0.1,
+                   width_plot_area*0.8,
+                   height_plot_area*0.8,
+                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+
     
     
     //
@@ -929,17 +949,7 @@ void DrawPane::Draw(void){
     
     
     
-    // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with a light grey border
-    // (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color (0xc0c0c0)
-    
-    n = (c->getHeight())*0.8;
-    
-    c->setPlotArea((c->getHeight())*0.1, (c->getHeight())*0.1,
-                   n,
-                   /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-                   n * (y_MAX-y_MIN)/(x_MAX-x_MIN),
-                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
-    
+      
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
     //stores in to size_plot_area the size of the plot area
@@ -1028,8 +1038,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
     
-    // Create a XYChart object of size 0.5 x height of the display
-    (draw_pane->c) = new XYChart((rectangle_display.GetSize()).GetHeight()*0.8, (rectangle_display.GetSize()).GetHeight()*0.8);
     
     
     
@@ -1323,7 +1331,6 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         
         //reinitialize
         delete c;
-        c = new XYChart(((parent->rectangle_display).GetSize()).GetHeight()*0.8, ((parent->rectangle_display).GetSize()).GetHeight()*0.8);
         (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
         (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
         (((parent->parent)->plot)->phi_min) = (p_start.phi);
@@ -1332,15 +1339,15 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selection triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));
-        
-        
+                
         parent->GetCoastLineData();
         Draw();
         paintNow();
         //        image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
         
-        
-        
+        SetSize(c->getWidth(), c->getHeight());
+        parent->SetSize(c->getWidth(), c->getHeight());
+
     }
     
     event.Skip(true);

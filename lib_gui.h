@@ -872,8 +872,8 @@ void DrawPane::Draw(void){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
-    int i, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
+    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy, lambda_min_chart, lambda_max_chart;
+    int i, phi_min_int, phi_max_int;
     unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     
     //Here I order x_MIN, x_MAX, y_MIN, y_MAX
@@ -960,15 +960,13 @@ void DrawPane::Draw(void){
     world.close(String(""));
     
     
-    //set the values lambda_min_int, lambda_max_int in, ... and transform them in a format appropriate for GetCoastLineData
-    lambda_min_int = floor(K*((((parent->parent)->plot)->lambda_min).value));
-    lambda_max_int = ceil(K*((((parent->parent)->plot)->lambda_max).value));
-    phi_min_int = floor(K*((((parent->parent)->plot)->phi_min).value));
-    phi_max_int = ceil(K*((((parent->parent)->plot)->phi_max).value));
-    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
-        i = lambda_min_int;
-        lambda_min_int = lambda_max_int - 360;
-        lambda_max_int = i;
+    //set the values lambda_min_chart, lambda_max_chart in, ... and transform them in a format appropriate for GetCoastLineData
+    lambda_min_chart = ((((parent->parent)->plot)->lambda_min).value);
+    lambda_max_chart = ((((parent->parent)->plot)->lambda_max).value);
+    if((lambda_min_chart < M_PI) && (lambda_max_chart >= M_PI)){
+        lambda = lambda_min_chart;
+        lambda_min_chart = lambda_max_chart - 2.0*M_PI;
+        lambda_max_chart = lambda;
     }
     
     //set xtics
@@ -989,18 +987,17 @@ void DrawPane::Draw(void){
     }
     cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
-    for(i=lambda_min_int; i<= lambda_max_int; i++){
-        
-        if((x_mercator((double)i) >= x_MIN) && (x_mercator((double)i) <= x_MAX)){
-            
-            c->addLine(
-                       (position_plot_area.x) + (x_mercator((double)i)-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))/(x_mercator(K*((((parent->parent)->plot)->lambda_max).value))-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))*width_plot_area,
-                       (position_plot_area.y) + height_plot_area,
-                       (position_plot_area.x) + (x_mercator((double)i)-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))/(x_mercator(K*((((parent->parent)->plot)->lambda_max).value))-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))*width_plot_area,
-                       (position_plot_area.y) + height_plot_area - tic_length
-                       );
-            
-        }
+    lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
+    
+    
+    for(x_dummy = x_mercator(lambda); x_dummy <= x_MAX; x_dummy+=k*delta_lambda){
+                
+        c->addLine(
+                   (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
+                   (position_plot_area.y) + height_plot_area,
+                   (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
+                   (position_plot_area.y) + height_plot_area - tic_length
+                   );
         
     }
     //
@@ -1017,15 +1014,15 @@ void DrawPane::Draw(void){
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
     (c->xAxis())->setLinearScale(x_MIN, x_MAX, 1.7E+308);
     
-    delta_lambda = 15.0;
-    (c->xAxis())->addLabel(0.0, "*");
-    for(x_dummy=delta_lambda*k; x_dummy<x_MAX; x_dummy+=delta_lambda*k){
-        (c->xAxis())->addLabel(x_dummy, "*");
-    }
-    for(x_dummy=-delta_lambda*k; x_dummy>x_MIN; x_dummy-=delta_lambda*k){
-        (c->xAxis())->addLabel(x_dummy, "*");
-    }
-    
+//    delta_lambda = 15.0;
+//    (c->xAxis())->addLabel(0.0, "*");
+//    for(x_dummy=delta_lambda*k; x_dummy<x_MAX; x_dummy+=delta_lambda*k){
+//        (c->xAxis())->addLabel(x_dummy, "*");
+//    }
+//    for(x_dummy=-delta_lambda*k; x_dummy>x_MIN; x_dummy-=delta_lambda*k){
+//        (c->xAxis())->addLabel(x_dummy, "*");
+//    }
+//    
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
     (c->yAxis())->setLinearScale(y_MIN, y_MAX, 1.7E+308);

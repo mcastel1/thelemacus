@@ -271,7 +271,7 @@ public:
     wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
-    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis*/gamma_lambda;
+    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
@@ -872,7 +872,7 @@ void DrawPane::Draw(void){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
+    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy, phi_span, lambda_span;
     int i;
     unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     
@@ -962,7 +962,7 @@ void DrawPane::Draw(void){
 
     
     //set xtics
-    double lambda_span = K*(x_MAX-x_MIN);
+    lambda_span = K*(x_MAX-x_MIN);
 
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
@@ -982,8 +982,8 @@ void DrawPane::Draw(void){
     lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
     
     
-    cout << "Position plot area = " << (position_plot_area.x) << " " << (position_plot_area.y) << "\n";
-    cout << "Size plot area = " << width_plot_area << " " << height_plot_area << "\n";
+//    cout << "Position plot area = " << (position_plot_area.x) << " " << (position_plot_area.y) << "\n";
+//    cout << "Size plot area = " << width_plot_area << " " << height_plot_area << "\n";
 
     for(x_dummy = x_mercator(lambda); x_dummy <= x_MAX; x_dummy+=k*delta_lambda){
                 
@@ -994,17 +994,36 @@ void DrawPane::Draw(void){
                    (position_plot_area.y) + height_plot_area
                    );
         
-        Angle a;
-        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
-        a.to_string(String("EW"), display_precision);
-        flush(cout);
+//        Angle a;
+//        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
+        //        a.to_string(String("EW"), display_precision);
+        //        flush(cout);
         
     }
     //
     
+    //set ytics
+    phi_span = K*(((((parent->parent)->plot)->phi_max).value) - ((((parent->parent)->plot)->phi_min).value));
+
+    //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+    if(phi_span > 1.0){gamma_phi = 1.0;}
+    else{gamma_phi = 60.0;}
     
-      
-     
+    delta_phi=1.0/gamma_phi;
+    while(((((parent->parent)->plot)->n_intervals_tics).value)*delta_phi<phi_span){
+        //print delta_phi;
+        if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
+        else{delta_phi = delta_phi + 5.0/gamma_phi;}
+    }
+    if(delta_phi > 1.0/gamma_phi){
+        if(delta_phi == 5.0/gamma_phi){delta_phi = delta_phi - 4.0/gamma_phi;}
+        else{delta_phi = delta_phi - 5.0/gamma_phi;}
+    }
+    cout << "... delta_phi = "  << delta_phi << "\n";
+    
+    //
+    
+    
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
     //    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
@@ -1393,7 +1412,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
             (((parent->parent)->plot)->phi_min) = (p_start.phi);
             (((parent->parent)->plot)->phi_max) = (p_end.phi);
         }
-        //I normalize lambda_min, ..., phi_max for future use. 
+        //I normalize lambda_min, ..., phi_max for future use.
         (((parent->parent)->plot)->lambda_min).normalize();
         (((parent->parent)->plot)->lambda_max).normalize();
         (((parent->parent)->plot)->phi_min).normalize();

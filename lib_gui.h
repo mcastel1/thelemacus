@@ -921,7 +921,7 @@ void DrawPane::Draw(void){
         width_chart = (((parent->rectangle_display).GetSize()).GetHeight());
         height_chart = width_chart * ((y_MAX-y_MIN)/(x_MAX-x_MIN));
     }
-    width_plot_area = width_chart*0.8;
+    width_plot_area = width_chart*0.7;
     height_plot_area = height_chart*0.7;
     tic_length = tic_length_over_width_plot_area*width_plot_area;
 

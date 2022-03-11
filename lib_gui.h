@@ -872,8 +872,8 @@ void DrawPane::Draw(void){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy, lambda_min_chart, lambda_max_chart;
-    int i, phi_min_int, phi_max_int;
+    double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
+    int i;
     unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     
     //Here I order x_MIN, x_MAX, y_MIN, y_MAX
@@ -959,18 +959,10 @@ void DrawPane::Draw(void){
     
     world.close(String(""));
     
-    
-    //set the values lambda_min_chart, lambda_max_chart in, ... and transform them in a format appropriate for GetCoastLineData
-    lambda_min_chart = ((((parent->parent)->plot)->lambda_min).value);
-    lambda_max_chart = ((((parent->parent)->plot)->lambda_max).value);
-    if((lambda_min_chart < M_PI) && (lambda_max_chart >= M_PI)){
-        lambda = lambda_min_chart;
-        lambda_min_chart = lambda_max_chart - 2.0*M_PI;
-        lambda_max_chart = lambda;
-    }
+
     
     //set xtics
-    double lambda_span =  K*(x_MAX-x_MIN);
+    double lambda_span = K*(x_MAX-x_MIN);
 
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
@@ -990,14 +982,22 @@ void DrawPane::Draw(void){
     lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
     
     
+    cout << "Position plot area = " << (position_plot_area.x) << " " << (position_plot_area.y) << "\n";
+    cout << "Size plot area = " << width_plot_area << " " << height_plot_area << "\n";
+
     for(x_dummy = x_mercator(lambda); x_dummy <= x_MAX; x_dummy+=k*delta_lambda){
                 
         c->addLine(
                    (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
-                   (position_plot_area.y) + height_plot_area,
+                   (position_plot_area.y),
                    (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
-                   (position_plot_area.y) + height_plot_area - tic_length
+                   (position_plot_area.y) + height_plot_area
                    );
+        
+        Angle a;
+        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
+        a.to_string(String("EW"), display_precision);
+        flush(cout);
         
     }
     //
@@ -1022,35 +1022,27 @@ void DrawPane::Draw(void){
 //    for(x_dummy=-delta_lambda*k; x_dummy>x_MIN; x_dummy-=delta_lambda*k){
 //        (c->xAxis())->addLabel(x_dummy, "*");
 //    }
-//    
+//
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
     (c->yAxis())->setLinearScale(y_MIN, y_MAX, 1.7E+308);
     
-    delta_phi = 30.0;
-    (c->yAxis())->addLabel(0.0, "/");
-    for(phi = delta_phi; y_mercator(phi)<y_MAX; phi+=delta_phi){
-        (c->yAxis())->addLabel(y_mercator(phi), "/");
-    }
-    for(phi = -delta_phi; y_mercator(phi)>y_MIN; phi-=delta_phi){
-        (c->yAxis())->addLabel(y_mercator(phi), "/");
-    }
+//    delta_phi = 30.0;
+//    (c->yAxis())->addLabel(0.0, "/");
+//    for(phi = delta_phi; y_mercator(phi)<y_MAX; phi+=delta_phi){
+//        (c->yAxis())->addLabel(y_mercator(phi), "/");
+//    }
+//    for(phi = -delta_phi; y_mercator(phi)>y_MIN; phi-=delta_phi){
+//        (c->yAxis())->addLabel(y_mercator(phi), "/");
+//    }
     
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
     
-    
-    //    t = c->addText(0, 0, "hdkjsfhldl");
-    
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
     c->addScatterLayer(DoubleArray(x, number_of_points), DoubleArray(y, number_of_points), "", Chart::CircleSymbol, 1, 000000);
-    
-    // Add a green (0x33ff33) scatter chart layer, using 11 pixel triangles as symbols
-    //    c->addScatterLayer(DoubleArray(dataX1, dataX1_size), DoubleArray(dataY1, dataY1_size),
-    //                       "Natural", Chart::TriangleSymbol, 11, 0x33ff33);
-    //
-    // Output the chart
+
     c->makeChart(path_file_chart);
     
     //free up resources
@@ -1379,12 +1371,34 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         
         
         
-        //reinitialize
+        //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
         delete c;
-        (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
-        (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
-        (((parent->parent)->plot)->phi_min) = (p_start.phi);
-        (((parent->parent)->plot)->phi_max) = (p_end.phi);
+        //I convert all the angles to the format between -pi and pi, so I can sort them numerically
+        (p_start.phi).normalize_pm_pi();
+        (p_start.lambda).normalize_pm_pi();
+        (p_end.phi).normalize_pm_pi();
+        (p_end.lambda).normalize_pm_pi();
+        //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_MIN of the mercator projection, lambda_max to the rightmost one, etc.
+        if((p_start.lambda)>(p_end.lambda)){
+            (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
+            (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
+        }else{
+            (((parent->parent)->plot)->lambda_min) = (p_end.lambda);
+            (((parent->parent)->plot)->lambda_max) = (p_start.lambda);
+        }
+        if((p_start.phi)>(p_end.phi)){
+            (((parent->parent)->plot)->phi_max) = (p_start.phi);
+            (((parent->parent)->plot)->phi_min) = (p_end.phi);
+        }else{
+            (((parent->parent)->plot)->phi_min) = (p_start.phi);
+            (((parent->parent)->plot)->phi_max) = (p_end.phi);
+        }
+        //I normalize lambda_min, ..., phi_max for future use. 
+        (((parent->parent)->plot)->lambda_min).normalize();
+        (((parent->parent)->plot)->lambda_max).normalize();
+        (((parent->parent)->plot)->phi_min).normalize();
+        (((parent->parent)->plot)->phi_max).normalize();
+
         
         //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selection triangle, which is now useless
         text_position_start->SetLabel(wxString(""));

@@ -978,7 +978,7 @@ public:
     void read_from_file(String, File&, bool, String);
     string to_string(String, unsigned int);
     
-    bool operator==(const Angle&);
+    bool operator==(const Angle&), operator>(const Angle&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     
 };
@@ -989,6 +989,11 @@ bool Angle::operator==(const Angle& x){
     
 }
 
+bool Angle::operator>(const Angle& x){
+    
+    return((((*this).value) > (x.value)));
+    
+}
 
 
 //I added the booleian variable search_entire_file. If true, then this function rewinds the file pointer to the beginning of file and goes through the file until it finds the quantity 'name'. If false, it reads the angle at the position where 'file' was when it was passed to this function 

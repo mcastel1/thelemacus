@@ -1270,13 +1270,13 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     GetMouseGeoPosition(&p);
     
     //update the instantaneous position of the mouse on the chart
-    s.clear();
+    s.str("");
     s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
 
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
-        s.clear();
+        s.str("");
         s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
         text_position_end->SetLabel(wxString(s.str().c_str()));
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_pane.x), (position_screen_now.y)-(position_draw_pane.y)));

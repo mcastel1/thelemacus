@@ -845,7 +845,11 @@ void DrawPane::paintNow(){
  */
 void DrawPane::render(wxDC&  dc){
     
-    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
+    wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
+    //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
+    dc.SetBrush(brush);
+    
+    //    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
     dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
     if(selection_rectangle){

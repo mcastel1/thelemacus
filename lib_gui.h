@@ -271,7 +271,7 @@ public:
     wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
     wxSize size_plot_area;
     /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
-    double x_MIN, x_MAX, y_MIN, y_MAX;
+    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
@@ -799,7 +799,7 @@ DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     parent = parent_in;
     
     SetCursor(*wxCROSS_CURSOR);
-    tic_length = 10;
+    tic_length_over_width_plot_area = 0.01;
     
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
@@ -903,6 +903,7 @@ void DrawPane::Draw(void){
     }
     width_plot_area = width_chart*0.8;
     height_plot_area = height_chart*0.8;
+    tic_length = tic_length_over_width_plot_area*width_plot_area;
 
     
     // Create a XYChart object with the appropriate size

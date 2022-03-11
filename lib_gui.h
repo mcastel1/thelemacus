@@ -1309,7 +1309,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         //
         
         GetMouseGeoPosition(&p_start);
-        position_screen_start = wxGetMousePosition();
+        position_screen_start = position_screen_now;
         
         s.clear();
         s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
@@ -1327,7 +1327,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         //        ((parent->plot)->lambda_max) = (p.lambda);
         //        ((parent->plot)->phi_max) = (p.phi);
         GetMouseGeoPosition(&p_end);
-        position_screen_end = wxGetMousePosition();
+        position_screen_end = position_screen_now;
         
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
         

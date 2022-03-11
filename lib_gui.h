@@ -277,7 +277,8 @@ public:
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
-    unsigned int width_plot_area, height_plot_area;
+    //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
+    unsigned int width_chart, height_chart, width_plot_area, height_plot_area, tic_length;
     
     void Draw(void);
     void paintEvent(wxPaintEvent & evt);
@@ -798,6 +799,7 @@ DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     parent = parent_in;
     
     SetCursor(*wxCROSS_CURSOR);
+    tic_length = 10;
     
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
@@ -871,7 +873,8 @@ void DrawPane::Draw(void){
     stringstream line_ins;
     string line;
     double *x, *y, lambda, phi, x_dummy, y_dummy, delta_lambda, delta_phi, dummy;
-    unsigned int i, /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
+    int i, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
+    unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
     
     //Here I order x_MIN, x_MAX, y_MIN, y_MAX
     x_MIN = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
@@ -892,23 +895,29 @@ void DrawPane::Draw(void){
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_MAX-y_MIN) > (x_MAX-x_MIN)){
-        height_plot_area = (((parent->rectangle_display).GetSize()).GetHeight());
-        width_plot_area = height_plot_area/((y_MAX-y_MIN)/(x_MAX-x_MIN));
+        height_chart = (((parent->rectangle_display).GetSize()).GetHeight());
+        width_chart = height_chart/((y_MAX-y_MIN)/(x_MAX-x_MIN));
     }else{
-        width_plot_area = (((parent->rectangle_display).GetSize()).GetHeight());
-        height_plot_area = width_plot_area * ((y_MAX-y_MIN)/(x_MAX-x_MIN));
+        width_chart = (((parent->rectangle_display).GetSize()).GetHeight());
+        height_chart = width_chart * ((y_MAX-y_MIN)/(x_MAX-x_MIN));
     }
+    width_plot_area = width_chart*0.8;
+    height_plot_area = height_chart*0.8;
 
     
     // Create a XYChart object with the appropriate size
-    c = new XYChart(width_plot_area, height_plot_area);
+    c = new XYChart(width_chart, height_chart);
     //create the plot area of c with the appropriate size
-    c->setPlotArea(width_plot_area*0.1, height_plot_area*0.1,
-                   width_plot_area*0.8,
-                   height_plot_area*0.8,
+    c->setPlotArea(width_chart*0.1, height_chart*0.1,
+                   width_plot_area,
+                   height_plot_area,
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
 
-    
+    //stores into position_plot_area the screen position of the top-left edge of the plot area.
+    position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
+    //stores in to size_plot_area the size of the plot area
+    size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
+
     
     //
     world.set_name(String(path_file_selected_coastline_data));
@@ -950,21 +959,42 @@ void DrawPane::Draw(void){
     world.close(String(""));
     
     
+    //set the values lambda_min_int, lambda_max_int in, ... and transform them in a format appropriate for GetCoastLineData
+    lambda_min_int = floor(K*((((parent->parent)->plot)->lambda_min).value));
+    lambda_max_int = ceil(K*((((parent->parent)->plot)->lambda_max).value));
+    phi_min_int = floor(K*((((parent->parent)->plot)->phi_min).value));
+    phi_max_int = ceil(K*((((parent->parent)->plot)->phi_max).value));
+    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
+        i = lambda_min_int;
+        lambda_min_int = lambda_max_int - 360;
+        lambda_max_int = i;
+    }
     
+    //set xtics
+    for(i=lambda_min_int; i<= lambda_max_int; i++){
+        
+        if((x_mercator((double)i) >= x_MIN) && (x_mercator((double)i) <= x_MAX)){
+            
+            c->addLine(
+                       (position_plot_area.x) + (x_mercator((double)i)-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))/(x_mercator(K*((((parent->parent)->plot)->lambda_max).value))-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))*width_plot_area,
+                       (position_plot_area.y) + height_plot_area,
+                       (position_plot_area.x) + (x_mercator((double)i)-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))/(x_mercator(K*((((parent->parent)->plot)->lambda_max).value))-x_mercator(K*((((parent->parent)->plot)->lambda_min).value)))*width_plot_area,
+                       (position_plot_area.y) + height_plot_area - tic_length
+                       );
+            
+        }
+        
+    }
     
     
       
-    //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
-    //stores in to size_plot_area the size of the plot area
-    size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
-    
+     
     // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
     // Italic font. Set the background and border color to Transparent.
     //    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
-    c->xAxis()->setTitle("lambda", "Arial", 12);
+    (c->xAxis())->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
     (c->xAxis())->setLinearScale(x_MIN, x_MAX, 1.7E+308);
     

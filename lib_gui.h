@@ -272,8 +272,8 @@ public:
     XYChart* c;
     wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
     wxSize size_plot_area;
-    /*x_MIN, x_MAX, y_MIN, y_MAX do not necessarily correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_MIN <= x_MAX and y_MIN <= y_MAX always. */
-    double x_MIN, x_MAX, y_MIN, y_MAX, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
+    /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
+    double x_min, x_max, y_min, y_max, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
@@ -870,7 +870,7 @@ void DrawPane::render(wxDC&  dc){
         
     }
     
-    for(x = x_mercator(((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda); x <= x_MAX; x+=k*delta_lambda){
+    for(x = x_mercator(((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda); x <= x_max; x+=k*delta_lambda){
         
         s.str("");
         lambda.set(String(""), k*lambda_mercator(x), String(""));
@@ -880,7 +880,7 @@ void DrawPane::render(wxDC&  dc){
         
         dc.DrawText(
                     wx_string,
-                    (position_plot_area.x) + (x-x_MIN)/(x_MAX-x_MIN)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                    (position_plot_area.x) + (x-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
                     (position_plot_area.y) + height_plot_area
                     );
         
@@ -896,32 +896,22 @@ void DrawPane::Draw(void){
     string line;
     double *x, *y, lambda, phi, x_dummy, y_dummy, dummy, phi_span, lambda_span;
     int i;
-    unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_MIN , x_MAX) x (y_MIN, y_MAX)*/number_of_points;
+    unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
     
-    //Here I order x_MIN, x_MAX, y_MIN, y_MAX
-    x_MIN = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
-    x_MAX = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
-    if(x_MIN > x_MAX){
-        dummy = x_MIN;
-        x_MIN = x_MAX;
-        x_MAX = dummy;
-    }
-    y_MIN = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
-    y_MAX = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
-    if(y_MIN > y_MAX){
-        dummy = y_MIN;
-        y_MIN = y_MAX;
-        y_MAX = dummy;
-    }
+    //Here I order x_min, x_max, y_min, y_max
+    x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
+    x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
+    y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
+    y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
     
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-    if((y_MAX-y_MIN) > (x_MAX-x_MIN)){
+    if((y_max-y_min) > (x_max-x_min)){
         height_chart = (((parent->rectangle_display).GetSize()).GetHeight());
-        width_chart = height_chart/((y_MAX-y_MIN)/(x_MAX-x_MIN));
+        width_chart = height_chart/((y_max-y_min)/(x_max-x_min));
     }else{
         width_chart = (((parent->rectangle_display).GetSize()).GetHeight());
-        height_chart = width_chart * ((y_MAX-y_MIN)/(x_MAX-x_MIN));
+        height_chart = width_chart * ((y_max-y_min)/(x_max-x_min));
     }
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
@@ -967,7 +957,7 @@ void DrawPane::Draw(void){
         x_dummy = x_mercator(lambda);
         y_dummy = y_mercator(phi);
         
-        if((x_MIN <= x_dummy) && (x_dummy <= x_MAX) && (y_MIN <= y_dummy) && (y_dummy <= y_MAX)){
+        if((x_min <= x_dummy) && (x_dummy <= x_max) && (y_min <= y_dummy) && (y_dummy <= y_max)){
             
             x[number_of_points] = x_dummy;
             y[number_of_points] = y_dummy;
@@ -984,7 +974,7 @@ void DrawPane::Draw(void){
 
     
     //set parallels
-    lambda_span = K*(x_MAX-x_MIN);
+    lambda_span = K*(x_max-x_min);
 
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
@@ -1002,14 +992,14 @@ void DrawPane::Draw(void){
     cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
     lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
-    for(x_dummy = x_mercator(lambda); x_dummy <= x_MAX; x_dummy+=k*delta_lambda){
+    for(x_dummy = x_mercator(lambda); x_dummy <= x_max; x_dummy+=k*delta_lambda){
         
-        if((x_dummy >= x_MIN) && (x_dummy <= x_MAX)){
+        if((x_dummy >= x_min) && (x_dummy <= x_max)){
             
             c->addLine(
-                       (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
+                       (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
                        (position_plot_area.y),
-                       (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
+                       (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
                        (position_plot_area.y) + height_plot_area,
                        0x808080, 1);
             
@@ -1049,13 +1039,13 @@ void DrawPane::Draw(void){
         
         y_dummy = y_mercator(phi);
         
-        if((y_dummy > y_MIN) && (y_dummy <= x_MAX)){
+        if((y_dummy > y_min) && (y_dummy <= x_max)){
             
             c->addLine(
                        (position_plot_area.x),
-                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
+                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
                        (position_plot_area.x) + width_plot_area,
-                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
+                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
                        0x808080, 1);
             
         }
@@ -1072,27 +1062,27 @@ void DrawPane::Draw(void){
     // Add a title to the x axis using 12pt Arial Bold Italic font
     (c->xAxis())->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
-    (c->xAxis())->setLinearScale(x_MIN, x_MAX, 1.7E+308);
+    (c->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
     
 //    delta_lambda = 15.0;
 //    (c->xAxis())->addLabel(0.0, "*");
-//    for(x_dummy=delta_lambda*k; x_dummy<x_MAX; x_dummy+=delta_lambda*k){
+//    for(x_dummy=delta_lambda*k; x_dummy<x_max; x_dummy+=delta_lambda*k){
 //        (c->xAxis())->addLabel(x_dummy, "*");
 //    }
-//    for(x_dummy=-delta_lambda*k; x_dummy>x_MIN; x_dummy-=delta_lambda*k){
+//    for(x_dummy=-delta_lambda*k; x_dummy>x_min; x_dummy-=delta_lambda*k){
 //        (c->xAxis())->addLabel(x_dummy, "*");
 //    }
 //
     // Add a title to the y axis using 12pt Arial Bold Italic font
     (c->yAxis())->setTitle("phi", "Arial", 12);
-    (c->yAxis())->setLinearScale(y_MIN, y_MAX, 1.7E+308);
+    (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
 //    delta_phi = 30.0;
 //    (c->yAxis())->addLabel(0.0, "/");
-//    for(phi = delta_phi; y_mercator(phi)<y_MAX; phi+=delta_phi){
+//    for(phi = delta_phi; y_mercator(phi)<y_max; phi+=delta_phi){
 //        (c->yAxis())->addLabel(y_mercator(phi), "/");
 //    }
-//    for(phi = -delta_phi; y_mercator(phi)>y_MIN; phi-=delta_phi){
+//    for(phi = -delta_phi; y_mercator(phi)>y_min; phi-=delta_phi){
 //        (c->yAxis())->addLabel(y_mercator(phi), "/");
 //    }
     
@@ -1338,9 +1328,9 @@ void DrawPane::GetMouseGeoPosition(Position* p){
     position_draw_pane = (this->GetScreenPosition());
     position_screen_now = wxGetMousePosition();
     
-    (p->lambda).set(String(""), k*lambda_mercator(x_MIN+ (((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_MAX - x_MIN)), String(""));
+    (p->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
     
-    (p->phi).set(String(""), k*(phi_mercator( y_MIN - (((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_MAX - y_MIN) )), String(""));
+    (p->phi).set(String(""), k*(phi_mercator( y_min - (((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
     
     //    Time time;
     //    String s;
@@ -1438,7 +1428,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         (p_start.lambda).normalize_pm_pi();
         (p_end.phi).normalize_pm_pi();
         (p_end.lambda).normalize_pm_pi();
-        //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_MIN of the mercator projection, lambda_max to the rightmost one, etc.
+        //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
         if((p_start.lambda)>(p_end.lambda)){
             (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
             (((parent->parent)->plot)->lambda_max) = (p_end.lambda);

@@ -6297,7 +6297,7 @@ string Angle::to_string(String mode, unsigned int precision){
 }
 
 
-//this function prints out only the degree part of this
+//this function prints out only the integer degree closest to this
 string Angle::deg_to_string(String mode, unsigned int precision){
     
     stringstream output;
@@ -6308,25 +6308,30 @@ string Angle::deg_to_string(String mode, unsigned int precision){
     
     if(mode == String("")){
         //in this case, I print out the angle in the format >=0° and <360°
-        output << floor(K*value) << "°";
+        output << round(K*value) << "°";
         
     }else{
         //in this case, I print out the angle in the format >=-180° and <180°
         
         if(value>M_PI){value-=2.0*M_PI;}
-        output << floor(fabs(K*value)) << "°";
+        output << round(fabs(K*value)) << "°";
         
-        if(mode == String("NS")){
-            //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
+        //I append NS or EW only if the angle is != 0, otherwise it is pointless to add these labels
+        if(value != 0.0){
             
-            if(value>0.0){output << " N";}
-            else{output << " S";}
-        }
-        if(mode == String("EW")){
-            //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
+            if(mode == String("NS")){
+                //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
+                
+                if(value>0.0){output << " N";}
+                else{output << " S";}
+            }
+            if(mode == String("EW")){
+                //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
+                
+                if(value>0.0){output << " W";}
+                else{output << " E";}
+            }
             
-            if(value>0.0){output << " W";}
-            else{output << " E";}
         }
         
     }

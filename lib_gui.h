@@ -802,7 +802,7 @@ DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
-//    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     text_position_start = new wxStaticText(parent, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -848,8 +848,8 @@ void DrawPane::paintNow(){
  */
 void DrawPane::render(wxDC&  dc){
     
-    Angle lambda;
-    double x;
+    Angle lambda, phi;
+    double dummy;
     stringstream s;
     wxString wx_string;
     
@@ -870,22 +870,41 @@ void DrawPane::render(wxDC&  dc){
         
     }
     
-    for(x = x_mercator(((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda); x <= x_max; x+=k*delta_lambda){
+    //draw labels on the x axis
+    for(dummy = x_mercator(((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda); dummy <= x_max; dummy+=k*delta_lambda){
         
         s.str("");
-        lambda.set(String(""), k*lambda_mercator(x), String(""));
+        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
         
         s << lambda.deg_to_string(String("EW"), display_precision);
         wx_string = wxString(s.str().c_str());
         
         dc.DrawText(
                     wx_string,
-                    (position_plot_area.x) + (x-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                    (position_plot_area.x) + (dummy-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
                     (position_plot_area.y) + height_plot_area
                     );
         
     }
- 
+    
+    //draw labels on the y axis
+    for(dummy = ((int)((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi))*delta_phi; dummy<(K*(((((parent->parent)->plot)->phi_max).value))); dummy+= delta_phi){
+        
+        s.str("");
+        phi.set(String(""), k*dummy, String(""));
+        phi.normalize_pm_pi();
+        
+        s << phi.deg_to_string(String("NS"), display_precision);
+        wx_string = wxString(s.str().c_str());
+        
+        dc.DrawText(
+                    wx_string,
+                    (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()),
+                    (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2
+                    );
+        
+    }
+    
 }
 
 
@@ -916,7 +935,7 @@ void DrawPane::Draw(void){
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
     tic_length = tic_length_over_width_plot_area*width_plot_area;
-
+    
     
     // Create a XYChart object with the appropriate size
     c = new XYChart(width_chart, height_chart);
@@ -925,12 +944,12 @@ void DrawPane::Draw(void){
                    width_plot_area,
                    height_plot_area,
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
-
+    
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
     //stores in to size_plot_area the size of the plot area
     size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
-
+    
     
     //
     world.set_name(String(path_file_selected_coastline_data));
@@ -971,11 +990,11 @@ void DrawPane::Draw(void){
     
     world.close(String(""));
     
-
+    
     
     //set parallels
     lambda_span = K*(x_max-x_min);
-
+    
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
@@ -1005,8 +1024,8 @@ void DrawPane::Draw(void){
             
         }
         
-//        Angle a;
-//        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
+        //        Angle a;
+        //        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
         //        a.to_string(String("EW"), display_precision);
         //        flush(cout);
         
@@ -1015,7 +1034,7 @@ void DrawPane::Draw(void){
     
     //set meridians
     phi_span = K*(((((parent->parent)->plot)->phi_max).value) - ((((parent->parent)->plot)->phi_min).value));
-
+    
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > 1.0){gamma_phi = 1.0;}
     else{gamma_phi = 60.0;}
@@ -1033,7 +1052,7 @@ void DrawPane::Draw(void){
     cout << "... delta_phi = "  << delta_phi << "\n";
     
     
-   
+    
     
     for(phi = ((int)((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi))*delta_phi; phi<(K*(((((parent->parent)->plot)->phi_max).value))); phi+= delta_phi){
         
@@ -1051,7 +1070,7 @@ void DrawPane::Draw(void){
         }
         
     }
-
+    
     //
     
     
@@ -1060,31 +1079,31 @@ void DrawPane::Draw(void){
     //    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
-    (c->xAxis())->setTitle("lambda", "Arial", 12);
+    //    (c->xAxis())->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
     (c->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
     
-//    delta_lambda = 15.0;
-//    (c->xAxis())->addLabel(0.0, "*");
-//    for(x_dummy=delta_lambda*k; x_dummy<x_max; x_dummy+=delta_lambda*k){
-//        (c->xAxis())->addLabel(x_dummy, "*");
-//    }
-//    for(x_dummy=-delta_lambda*k; x_dummy>x_min; x_dummy-=delta_lambda*k){
-//        (c->xAxis())->addLabel(x_dummy, "*");
-//    }
-//
+    //    delta_lambda = 15.0;
+    //    (c->xAxis())->addLabel(0.0, "*");
+    //    for(x_dummy=delta_lambda*k; x_dummy<x_max; x_dummy+=delta_lambda*k){
+    //        (c->xAxis())->addLabel(x_dummy, "*");
+    //    }
+    //    for(x_dummy=-delta_lambda*k; x_dummy>x_min; x_dummy-=delta_lambda*k){
+    //        (c->xAxis())->addLabel(x_dummy, "*");
+    //    }
+    //
     // Add a title to the y axis using 12pt Arial Bold Italic font
-    (c->yAxis())->setTitle("phi", "Arial", 12);
+    //    (c->yAxis())->setTitle("phi", "Arial", 12);
     (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
-//    delta_phi = 30.0;
-//    (c->yAxis())->addLabel(0.0, "/");
-//    for(phi = delta_phi; y_mercator(phi)<y_max; phi+=delta_phi){
-//        (c->yAxis())->addLabel(y_mercator(phi), "/");
-//    }
-//    for(phi = -delta_phi; y_mercator(phi)>y_min; phi-=delta_phi){
-//        (c->yAxis())->addLabel(y_mercator(phi), "/");
-//    }
+    //    delta_phi = 30.0;
+    //    (c->yAxis())->addLabel(0.0, "/");
+    //    for(phi = delta_phi; y_mercator(phi)<y_max; phi+=delta_phi){
+    //        (c->yAxis())->addLabel(y_mercator(phi), "/");
+    //    }
+    //    for(phi = -delta_phi; y_mercator(phi)>y_min; phi-=delta_phi){
+    //        (c->yAxis())->addLabel(y_mercator(phi), "/");
+    //    }
     
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
@@ -1092,7 +1111,7 @@ void DrawPane::Draw(void){
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
     c->addScatterLayer(DoubleArray(x, number_of_points), DoubleArray(y, number_of_points), "", Chart::CircleSymbol, 1, 000000);
-
+    
     c->makeChart(path_file_chart);
     
     //free up resources
@@ -1117,10 +1136,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-
+    
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     
     
     //image
@@ -1365,7 +1384,7 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     s.str("");
     s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
-
+    
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
         s.str("");
@@ -1448,12 +1467,12 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         (((parent->parent)->plot)->lambda_max).normalize();
         (((parent->parent)->plot)->phi_min).normalize();
         (((parent->parent)->plot)->phi_max).normalize();
-
+        
         
         //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selection triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));
-                
+        
         parent->GetCoastLineData();
         Draw();
         paintNow();
@@ -1461,7 +1480,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         
         SetSize(c->getWidth(), c->getHeight());
         parent->SetSize(c->getWidth(), c->getHeight());
-
+        
     }
     
     event.Skip(true);

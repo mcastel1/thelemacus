@@ -977,7 +977,8 @@ public:
     void from_sign_deg_min(char, unsigned int, double);
     void read_from_file(String, File&, bool, String);
     string to_string(String, unsigned int);
-    
+    string deg_to_string(String, unsigned int);
+
     bool operator==(const Angle&), operator>(const Angle&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     
@@ -6268,13 +6269,52 @@ string Angle::to_string(String mode, unsigned int precision){
     
     if(mode == String("")){
         //in this case, I print out the angle in the format >=0° and <360°
-        output << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60 << "'";
+        output << floor(K*value) << "° " << (K*value - floor(K*value))*60.0 << "'";
         
     }else{
         //in this case, I print out the angle in the format >=-180° and <180°
         
         if(value>M_PI){value-=2.0*M_PI;}
         output << floor(fabs(K*value)) << "° " <<  (fabs(K*value) - floor(fabs(K*value)))*60.0<< "'";
+        
+        if(mode == String("NS")){
+            //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
+            
+            if(value>0.0){output << " N";}
+            else{output << " S";}
+        }
+        if(mode == String("EW")){
+            //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
+            
+            if(value>0.0){output << " W";}
+            else{output << " E";}
+        }
+        
+    }
+    
+    return (output.str().c_str());
+    
+}
+
+
+//this function prints out only the degree part of this
+string Angle::deg_to_string(String mode, unsigned int precision){
+    
+    stringstream output;
+    
+    output.precision(precision);
+    
+    normalize();
+    
+    if(mode == String("")){
+        //in this case, I print out the angle in the format >=0° and <360°
+        output << floor(K*value) << "°";
+        
+    }else{
+        //in this case, I print out the angle in the format >=-180° and <180°
+        
+        if(value>M_PI){value-=2.0*M_PI;}
+        output << floor(fabs(K*value)) << "°";
         
         if(mode == String("NS")){
             //in this case, I output the sign of the angle in the North/South format (North = +, South = -)

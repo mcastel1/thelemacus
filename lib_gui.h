@@ -875,7 +875,7 @@ void DrawPane::render(wxDC&  dc){
         s.str("");
         lambda.set(String(""), k*lambda_mercator(x), String(""));
         
-        s << lambda.to_string(String(""), display_precision);
+        s << lambda.deg_to_string(String("EW"), display_precision);
         wx_string = wxString(s.str().c_str());
         
         dc.DrawText(

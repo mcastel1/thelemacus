@@ -117,6 +117,8 @@ class Body;
  - add error message if phi_min, phi_max etc... exceed the min and max latitudes in the data file.
  - all quantities in pixels must be relative to screen size, not absolute pixel size.
  - re-arrange class definitions properly
+ - make sure that on the x and y axis the arcdegree appears at least once
+ - add lambert projection and 3D sphere with no projection 
  */
 
 

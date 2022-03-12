@@ -894,7 +894,7 @@ void DrawPane::Draw(void){
     File world;
     stringstream line_ins;
     string line;
-    double *x, *y, lambda, phi, x_dummy, y_dummy, dummy, phi_span, lambda_span;
+    double *x, *y, lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i;
     unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
     
@@ -1039,7 +1039,7 @@ void DrawPane::Draw(void){
         
         y_dummy = y_mercator(phi);
         
-        if((y_dummy > y_min) && (y_dummy <= x_max)){
+        if((y_dummy >= y_min) && (y_dummy <= y_max)){
             
             c->addLine(
                        (position_plot_area.x),

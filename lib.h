@@ -978,6 +978,7 @@ public:
     void read_from_file(String, File&, bool, String);
     string to_string(String, unsigned int);
     string deg_to_string(String, unsigned int);
+    string min_to_string(String, unsigned int);
 
     bool operator==(const Angle&), operator>(const Angle&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
@@ -6339,6 +6340,28 @@ string Angle::deg_to_string(String mode, unsigned int precision){
     return (output.str().c_str());
     
 }
+
+//this function prints out only the arcminute part of this
+string Angle::min_to_string(String mode, unsigned int precision){
+    
+    stringstream output;
+    
+    output.precision(precision);
+    
+    normalize();
+    
+    if(mode != String("")){
+        //in this case, I print out the angle in the format >=-180° and <180°
+        if(value>M_PI){value-=2.0*M_PI;}
+    }
+    
+    output << (fabs(K*value) - floor(fabs(K*value)))*60.0 << "'";
+
+    return (output.str().c_str());
+    
+}
+
+
 
 void Limb::enter(String name, String prefix){
     

@@ -876,7 +876,13 @@ void DrawPane::render(wxDC&  dc){
         s.str("");
         lambda.set(String(""), k*lambda_mercator(dummy), String(""));
         
-        s << lambda.deg_to_string(String("EW"), display_precision);
+        if(lambda_mercator(dummy) == round(lambda_mercator(dummy))){
+            //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
+            s << lambda.deg_to_string(String("EW"), display_precision);
+        }else{
+            //in this case, lambda is not an integer multiple of a degree: I write on the axis only the arcminute part of lambda, for the sake of shortness. 
+            s << lambda.min_to_string(String("EW"), display_precision);
+        }
         wx_string = wxString(s.str().c_str());
         
         dc.DrawText(
@@ -894,7 +900,14 @@ void DrawPane::render(wxDC&  dc){
         phi.set(String(""), k*dummy, String(""));
         phi.normalize_pm_pi();
         
-        s << phi.deg_to_string(String("NS"), display_precision);
+        if(dummy == round(dummy)){
+            //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+            s << phi.deg_to_string(String("NS"), display_precision);
+        }else{
+            //in this case, dummy is not an integer multiple of a degree: I write on the axis only the acrminute part of phi for the sake of shortness
+            s << phi.min_to_string(String("NS"), display_precision);
+        }
+        
         wx_string = wxString(s.str().c_str());
         
         dc.DrawText(

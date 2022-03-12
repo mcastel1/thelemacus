@@ -5,7 +5,7 @@
 #define floor_max_lat (floor(max_lat))
 //latitude span
 #define span_lat ((floor_max_lat-floor_min_lat+1)
-//the ratio between the width (height) of the plot area and the width (height) of the chart. 
+//the ratio between the width (height) of the plot area and the width (height) of the chart.
 #define length_plot_area_over_length_chart 0.7
 #define outfile_precision 16
 
@@ -983,7 +983,7 @@ void DrawPane::Draw(void){
     
 
     
-    //set xtics
+    //set parallels
     lambda_span = K*(x_MAX-x_MIN);
 
     //set delta_lambda
@@ -1003,15 +1003,17 @@ void DrawPane::Draw(void){
     
     lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
     for(x_dummy = x_mercator(lambda); x_dummy <= x_MAX; x_dummy+=k*delta_lambda){
-                
-        c->addLine(
-                   (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
-                   (position_plot_area.y),
-                   (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
-                   (position_plot_area.y) + height_plot_area,
-                   0x808080, 1);
         
-
+        if((x_dummy >= x_MIN) && (x_dummy <= x_MAX)){
+            
+            c->addLine(
+                       (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
+                       (position_plot_area.y),
+                       (position_plot_area.x) + (x_dummy-x_MIN)/(x_MAX-x_MIN)*width_plot_area,
+                       (position_plot_area.y) + height_plot_area,
+                       0x808080, 1);
+            
+        }
         
 //        Angle a;
 //        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
@@ -1021,7 +1023,7 @@ void DrawPane::Draw(void){
     }
     //
     
-    //set ytics
+    //set meridians
     phi_span = K*(((((parent->parent)->plot)->phi_max).value) - ((((parent->parent)->plot)->phi_min).value));
 
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
@@ -1047,13 +1049,16 @@ void DrawPane::Draw(void){
         
         y_dummy = y_mercator(phi);
         
-        c->addLine(
-                   (position_plot_area.x),
-                   (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
-                   (position_plot_area.x) + width_plot_area,
-                   (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
-                   0x808080, 1);
-        
+        if((y_dummy > y_MIN) && (y_dummy <= x_MAX)){
+            
+            c->addLine(
+                       (position_plot_area.x),
+                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
+                       (position_plot_area.x) + width_plot_area,
+                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_MIN)/(y_MAX-y_MIN)*height_plot_area),
+                       0x808080, 1);
+            
+        }
         
     }
 

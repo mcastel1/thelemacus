@@ -5,6 +5,8 @@
 #define floor_max_lat (floor(max_lat))
 //latitude span
 #define span_lat ((floor_max_lat-floor_min_lat+1)
+//the ratio between the width (height) of the plot area and the width (height) of the chart. 
+#define length_plot_area_over_length_chart 0.7
 #define outfile_precision 16
 
 
@@ -921,8 +923,8 @@ void DrawPane::Draw(void){
         width_chart = (((parent->rectangle_display).GetSize()).GetHeight());
         height_chart = width_chart * ((y_MAX-y_MIN)/(x_MAX-x_MIN));
     }
-    width_plot_area = width_chart*0.7;
-    height_plot_area = height_chart*0.7;
+    width_plot_area = width_chart*length_plot_area_over_length_chart;
+    height_plot_area = height_chart*length_plot_area_over_length_chart;
     tic_length = tic_length_over_width_plot_area*width_plot_area;
 
     

@@ -275,7 +275,7 @@ public:
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double x_min, x_max, y_min, y_max, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
     wxStaticText*text_position_start, *text_position_end;
-    bool selection_rectangle;
+    bool selection_rectangle, /*this is true if the mouse is dragging*/mouse_dragging;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
@@ -294,7 +294,8 @@ public:
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
-    
+    void OnMouseDrag(wxMouseEvent&);
+
     /*
      void mouseMoved(wxMouseEvent& event);
      void mouseDown(wxMouseEvent& event);
@@ -796,8 +797,9 @@ void ChartFrame::GetCoastLineData(void){
 
 DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     
-    //when the DrawPan is created there is no open selection rectangle.
+    //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
+    mouse_dragging = false;
     
     parent = parent_in;
     
@@ -1180,7 +1182,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), draw_pane);
     draw_pane->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPane::OnMouseRightDown), draw_pane);
-    
+    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseDrag), draw_pane);
+
     //    sizer_coordinates->Add(text_phi);
     //    sizer_coordinates->Add(text_lambda);
     //
@@ -1511,8 +1514,22 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
     
 }
 
+void DrawPane::OnMouseDrag(wxMouseEvent &event){
+    
+    if((event.Dragging())){
+        
+        mouse_dragging = true;
+        cout << "dragging\n";
+        
+    }
+    
+ 
+    
+    
+    event.Skip(true);
 
 
+}
 
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
 template <class T> void AngleField::get(T &event){

@@ -285,7 +285,7 @@ public:
     void Draw(void);
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
-    void plot_to_geo(wxPoint*, Position*);
+    void screen_to_geo(wxPoint*, Position*);
     
     void render(wxDC& dc);
     
@@ -1356,7 +1356,7 @@ template <class T> void CheckSign::operator()(T &event){
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area, to the relative geographic position q
-void DrawPane::plot_to_geo(wxPoint *p, Position *q){
+void DrawPane::screen_to_geo(wxPoint *p, Position *q){
     
     //updates the position of the draw pane this
     position_draw_pane = (this->GetScreenPosition());
@@ -1371,8 +1371,8 @@ void DrawPane::plot_to_geo(wxPoint *p, Position *q){
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
 void DrawPane::GetMouseGeoPosition(Position* p){
     
-    position_screen_now = wxGetMousePosition();    
-    plot_to_geo(&position_screen_now, p);
+    position_screen_now = wxGetMousePosition();
+    screen_to_geo(&position_screen_now, p);
 
 }
 

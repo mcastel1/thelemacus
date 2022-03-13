@@ -843,11 +843,7 @@ void DrawPane::paintNow(){
     
 }
 
-/*
- * Here we do the actual rendering. I put it in a separate
- * method so that it can work no matter what type of DC
- * (e.g. wxPaintDC or wxClientDC) is used.
- */
+//remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPane object!
 void DrawPane::render(wxDC&  dc){
     
     Angle lambda, phi;
@@ -920,14 +916,14 @@ void DrawPane::render(wxDC&  dc){
         
     }
     
-    //
+    /*
     Position geo;
     wxPoint screen;
     cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
     GetMouseGeoPosition(&geo);
     geo_to_screen(geo, &screen);
     dc.DrawCircle(screen.x - position_draw_pane.x, screen.y - position_draw_pane.y, 10);
-    //
+    */
     
 }
 
@@ -1382,12 +1378,10 @@ void DrawPane::geo_to_screen(Position q, wxPoint *p){
     //updates the position of the draw pane this
     position_draw_pane = (this->GetScreenPosition());
 
-    
-    
     (p->x) = (position_draw_pane.x) + (position_plot_area.x) + (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
     (p->y) = (position_draw_pane.y) + (position_plot_area.y) + (height_plot_area) - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
     
-    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
+//    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
     
     
 }

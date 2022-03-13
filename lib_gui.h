@@ -285,6 +285,7 @@ public:
     void Draw(void);
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
+    void plot_to_geo(wxPoint*, Position*);
     
     void render(wxDC& dc);
     
@@ -880,7 +881,7 @@ void DrawPane::render(wxDC&  dc){
             //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
             s << lambda.deg_to_string(String("EW"), display_precision);
         }else{
-            //in this case, lambda is not an integer multiple of a degree: I write on the axis only the arcminute part of lambda, for the sake of shortness. 
+            //in this case, lambda is not an integer multiple of a degree: I write on the axis only the arcminute part of lambda, for the sake of shortness.
             s << lambda.min_to_string(String("EW"), display_precision);
         }
         wx_string = wxString(s.str().c_str());
@@ -1354,34 +1355,25 @@ template <class T> void CheckSign::operator()(T &event){
     
 }
 
+//converts the point p on the screen (which is supposed to lie in the plot area, to the relative geographic position q
+void DrawPane::plot_to_geo(wxPoint *p, Position *q){
+    
+    //updates the position of the draw pane this
+    position_draw_pane = (this->GetScreenPosition());
+    
+    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p->x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
+    
+    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p->y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
+    
+    
+}
+
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
 void DrawPane::GetMouseGeoPosition(Position* p){
     
-    position_draw_pane = (this->GetScreenPosition());
-    position_screen_now = wxGetMousePosition();
-    
-    (p->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
-    
-    (p->phi).set(String(""), k*(phi_mercator( y_min - (((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
-    
-    //    Time time;
-    //    String s;
-    
-    //    time.set_current(String(""));
-    //I write in the non-GUI object (p->string)
-    //    s = String(time.to_string(display_precision));
-    //position_image is the position of the top-left corner of image with respect to the screen coordinates.
-    
-    
-    
-    //    cout << "Mouse moved at  (" << ((double)(position_screen_now.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)) << ","
-    //    << ((double)((position_screen_now.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)) << ")\n";
-    //
-    
-    
-    //    cout << "\nLambda = " << lambda.value;
-    //    cout << "\nPhi = " << phi.value;
-    
+    position_screen_now = wxGetMousePosition();    
+    plot_to_geo(&position_screen_now, p);
+
 }
 
 void DrawPane::OnMouseMovement(wxMouseEvent &event){

@@ -920,6 +920,12 @@ void DrawPane::render(wxDC&  dc){
         
     }
     
+    Position geo;
+    wxPoint screen;
+    cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
+    GetMouseGeoPosition(&geo);
+    geo_to_screen(geo, &screen);
+    
 }
 
 
@@ -1376,9 +1382,9 @@ void DrawPane::geo_to_screen(Position q, wxPoint *p){
     
     
     (p->x) = (position_draw_pane.x) + (position_plot_area.x) + (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
-    (p->y) = (position_plot_area.y) + height_plot_area - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
+    (p->y) = (position_draw_pane.y) + (position_plot_area.y) + (height_plot_area) - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
     
-    cout << "screen = " << (p->x) << " " << (p->y) << "\n";
+    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
     
     
 }

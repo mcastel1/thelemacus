@@ -48,22 +48,29 @@ string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#
 //this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
 inline double x_mercator(double lambda){
     
-    double x;
+    double lambda_temp;
     
-    x = lambda;
+    lambda_temp = lambda;
     
-    //puts the x value in the range [-180.0, +180.0]
-    if(lambda < -180.0){x+=360.0;}
-    if(lambda > +180.0){x-=360.0;}
+    //puts the lambda_temp value in the range [-180.0, +180.0]
+    if(lambda < -180.0){lambda_temp+=360.0;}
+    if(lambda > +180.0){lambda_temp-=360.0;}
     
-    return(-k*x);
+    return(-k*lambda_temp);
     
 }
 
 //this function returns the rectangular y value of the spherical Mercator projection from the latitude phi (expressed in degrees).
 inline double y_mercator(double phi){
     
-    return log(1./cos(phi*k) + tan(phi*k));
+    double phi_temp;
+    
+    phi_temp = phi;
+    
+    //puts the phi_temp value in the range [-180.0, +180.0]
+    if(phi > +180.0){phi_temp-=360.0;}
+    
+    return log(1./cos(phi_temp*k) + tan(phi_temp*k));
     
 }
 

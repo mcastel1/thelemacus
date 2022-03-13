@@ -270,7 +270,7 @@ public:
     DrawPane(ChartFrame*);
     ChartFrame* parent;
     XYChart* c;
-    wxPoint position_draw_pane, position_plot_area, position_screen_start, position_screen_end, position_screen_now;
+    wxPoint position_draw_pane, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag;
     wxSize size_plot_area;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double x_min, x_max, y_min, y_max, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
@@ -293,6 +293,8 @@ public:
     // some useful events
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
+    void OnMouseLeftDown(wxMouseEvent&);
+    void OnMouseLeftUp(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
 
@@ -862,10 +864,10 @@ void DrawPane::render(wxDC&  dc){
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
     if(selection_rectangle){
         dc.DrawRectangle(
-                         position_screen_start.x - (position_draw_pane.x),
-                         position_screen_start.y - (position_draw_pane.y),
-                         (position_screen_now.x)-(position_screen_start.x),
-                         (position_screen_now.y)-(position_screen_start.y)
+                         position_start_selection.x - (position_draw_pane.x),
+                         position_start_selection.y - (position_draw_pane.y),
+                         (position_screen_now.x)-(position_start_selection.x),
+                         (position_screen_now.y)-(position_start_selection.y)
                          );
         
     }
@@ -1182,6 +1184,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), draw_pane);
     draw_pane->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPane::OnMouseRightDown), draw_pane);
+
+    draw_pane->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPane::OnMouseLeftDown), draw_pane);
+    draw_pane->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPane::OnMouseLeftUp), draw_pane);
     draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseDrag), draw_pane);
 
     //    sizer_coordinates->Add(text_phi);
@@ -1428,6 +1433,33 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
     
 }
 
+//if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
+void DrawPane::OnMouseLeftDown(wxMouseEvent &event){
+    
+    position_start_drag = wxGetMousePosition();
+    
+    Position geo;
+    screen_to_geo(position_start_drag, &geo);
+    geo.print(String("Position start drag"), String("************ "), cout);
+        
+    event.Skip(true);
+
+}
+
+//if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
+void DrawPane::OnMouseLeftUp(wxMouseEvent &event){
+    
+    position_end_drag = wxGetMousePosition();
+    
+    Position geo;
+    screen_to_geo(position_end_drag, &geo);
+    geo.print(String("Position end drag"), String("************ "), cout);
+ 
+        
+    event.Skip(true);
+
+}
+
 void DrawPane::OnMouseRightDown(wxMouseEvent &event){
     
     //changes the 'sign' of selection rectangle
@@ -1443,12 +1475,12 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         //
         
         GetMouseGeoPosition(&p_start);
-        position_screen_start = position_screen_now;
+        position_start_selection = position_screen_now;
         
         s.clear();
         s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
         text_position_start->SetLabel(wxString(s.str().c_str()));
-        text_position_start->SetPosition(wxPoint((position_screen_start.x)-(position_draw_pane.x), (position_screen_start.y)-(position_draw_pane.y)));
+        text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_pane.x), (position_start_selection.y)-(position_draw_pane.y)));
         
         
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
@@ -1461,7 +1493,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
         //        ((parent->plot)->lambda_max) = (p.lambda);
         //        ((parent->plot)->phi_max) = (p.phi);
         GetMouseGeoPosition(&p_end);
-        position_screen_end = position_screen_now;
+        position_end_selection = position_screen_now;
         
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
         

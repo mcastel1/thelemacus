@@ -285,7 +285,7 @@ public:
     void Draw(void);
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
-    void screen_to_geo(wxPoint*, Position*);
+    void screen_to_geo(wxPoint, Position*);
     void geo_to_screen(Position, wxPoint*);
 
     void render(wxDC& dc);
@@ -1361,27 +1361,28 @@ template <class T> void CheckSign::operator()(T &event){
     
 }
 
-//converts the point p on the screen (which is supposed to lie in the plot area, to the relative geographic position q
-void DrawPane::screen_to_geo(wxPoint *p, Position *q){
+//converts the point p on the screen (which is supposed to lie in the plot area), to the relative geographic position q
+void DrawPane::screen_to_geo(wxPoint p, Position *q){
     
     //updates the position of the draw pane this
     position_draw_pane = (this->GetScreenPosition());
     
-    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p->x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
-    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p->y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
+    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
+    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
     
     
 }
 
+//this function converts the geographic position p into the screen position p 
 void DrawPane::geo_to_screen(Position q, wxPoint *p){
     
     //updates the position of the draw pane this
     position_draw_pane = (this->GetScreenPosition());
-
+    
     (p->x) = (position_draw_pane.x) + (position_plot_area.x) + (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
     (p->y) = (position_draw_pane.y) + (position_plot_area.y) + (height_plot_area) - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
     
-//    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
+    //    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
     
     
 }
@@ -1390,7 +1391,7 @@ void DrawPane::geo_to_screen(Position q, wxPoint *p){
 void DrawPane::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
-    screen_to_geo(&position_screen_now, p);
+    screen_to_geo(position_screen_now, p);
 
 }
 

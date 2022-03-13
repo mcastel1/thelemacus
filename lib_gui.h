@@ -941,7 +941,7 @@ void DrawPane::Draw(void){
     int i;
     unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
     
-    //Here I order x_min, x_max, y_min, y_max
+    //Here I set x_min, x_max, y_min, y_max
     x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
     x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
@@ -1449,11 +1449,36 @@ void DrawPane::OnMouseLeftDown(wxMouseEvent &event){
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
 void DrawPane::OnMouseLeftUp(wxMouseEvent &event){
     
+    double delta_x, delta_y;
+    
     position_end_drag = wxGetMousePosition();
     
     Position geo;
+//    screen_to_geo(position_start_drag, &geo_start);
     screen_to_geo(position_end_drag, &geo);
+
+    
+    //update x_min, ..., y_max according to the drag.
+    delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
+    delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+    x_min += delta_x;
+    x_max += delta_x;
+    y_min += delta_y;
+    y_max += delta_y;
+    //update lambda_min, ..., phi_max according to the drag
+    (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
+    (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
+    (((parent->parent)->plot)->phi_min).set(String("phi_min end"), k*phi_mercator(y_min), String(""));
+    (((parent->parent)->plot)->phi_max).set(String("phi_max end"), k*phi_mercator(y_max), String(""));
+
     geo.print(String("Position end drag"), String("************ "), cout);
+
+    
+    //re-draw the chart
+    parent->GetCoastLineData();
+    Draw();
+    
+    
  
         
     event.Skip(true);

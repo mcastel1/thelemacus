@@ -920,11 +920,14 @@ void DrawPane::render(wxDC&  dc){
         
     }
     
+    //
     Position geo;
     wxPoint screen;
     cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
     GetMouseGeoPosition(&geo);
     geo_to_screen(geo, &screen);
+    dc.DrawCircle(screen.x - position_draw_pane.x, screen.y - position_draw_pane.y, 10);
+    //
     
 }
 

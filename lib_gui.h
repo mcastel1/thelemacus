@@ -890,9 +890,21 @@ void DrawPane::render(wxDC&  dc){
                 s << lambda.deg_to_string(String("EW"), display_precision);
 
             }else{
-                //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree.
+                
+                cout << "epsilon = " << fabs(K*(((((parent->parent)->plot)->lambda_max) - (((parent->parent)->plot)->lambda_min)).value))  << "\n";
+                
+                if(fabs(K*(((((parent->parent)->plot)->lambda_max) - (((parent->parent)->plot)->lambda_min)).value)) > 1.0){
+                    //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    
+                    s << lambda.min_to_string(String("EW"), display_precision);
+                }else{
+                    //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
     
-                s << lambda.min_to_string(String("EW"), display_precision);
+                    s << lambda.to_string(String("EW"), display_precision);
+                }
+                
+    
 
             }
         }

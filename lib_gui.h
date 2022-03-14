@@ -1121,10 +1121,26 @@ void DrawPane::Draw(void){
             
         }
         
-        //        Angle a;
-        //        a.set(String("lambda now"), (k*lambda_mercator(x_dummy)), String("\t\t"));
-        //        a.to_string(String("EW"), display_precision);
-        //        flush(cout);
+        if(gamma_lambda == 60.0){
+            
+            //plot the xtics from lambda to the next lambda (lambda + dlambda)
+            for(i=0; (((double)i)/10.0)/60.0 < delta_lambda; i++){
+            
+                if(x_dummy + k*(((double)i)/10.0)/60.0 <= x_max){
+                    //set custom-made minor xtics every tenths (i/10.0) of arcminute (60.0)
+                    
+                    c->addLine(
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
+                               (position_plot_area.y) + height_plot_area,
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
+                               (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
+                               0x808080, 1);
+                    
+                }
+                
+            }
+            
+        }
         
     }
     //

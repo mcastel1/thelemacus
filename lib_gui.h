@@ -1461,8 +1461,8 @@ void DrawPane::OnMouseLeftUp(wxMouseEvent &event){
     //update x_min, ..., y_max according to the drag.
     delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-    x_min += delta_x;
-    x_max += delta_x;
+    x_min -= delta_x;
+    x_max -= delta_x;
     y_min += delta_y;
     y_max += delta_y;
     //update lambda_min, ..., phi_max according to the drag

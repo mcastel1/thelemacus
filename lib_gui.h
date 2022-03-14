@@ -2280,7 +2280,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width, n_columns, margin_h = 10, margin_v = 5;
+    unsigned int i, total_column_width, n_columns/*, margin_h = 10*/, margin_v = 5;
     OnSelectInListBox onselectinlistbox;
     wxListItem column, item;
     

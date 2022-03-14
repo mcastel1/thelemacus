@@ -270,7 +270,7 @@ public:
     DrawPane(ChartFrame*);
     ChartFrame* parent;
     XYChart* c;
-    wxPoint position_draw_pane, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_now_drag;
+    wxPoint position_draw_pane, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double x_min, x_max, y_min, y_max, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
@@ -1449,10 +1449,17 @@ void DrawPane::OnMouseLeftDown(wxMouseEvent &event){
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
 void DrawPane::OnMouseLeftUp(wxMouseEvent &event){
     
+    SetCursor(*wxCROSS_CURSOR);
+
+    position_end_drag = wxGetMousePosition();
     
-    
+    Position geo;
+    screen_to_geo(position_now_drag, &geo);
+
+    geo.print(String("Position end drag"), String("************ "), cout);
+
  
-        
+
     event.Skip(true);
 
 }
@@ -1550,6 +1557,7 @@ void DrawPane::OnMouseDrag(wxMouseEvent &event){
         mouse_dragging = true;
         cout << "dragging\n";
         
+        SetCursor(wxCURSOR_HAND);
         
         double delta_x, delta_y;
         
@@ -1573,7 +1581,7 @@ void DrawPane::OnMouseDrag(wxMouseEvent &event){
         (((parent->parent)->plot)->phi_min).set(String("phi_min end"), k*phi_mercator(y_min), String(""));
         (((parent->parent)->plot)->phi_max).set(String("phi_max end"), k*phi_mercator(y_max), String(""));
 
-        geo.print(String("Position end drag"), String("************ "), cout);
+        geo.print(String("Position now drag"), String("************ "), cout);
 
         
         //re-draw the chart

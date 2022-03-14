@@ -275,7 +275,7 @@ public:
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double x_min, x_max, y_min, y_max, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
     wxStaticText*text_position_start, *text_position_end;
-    bool selection_rectangle, /*this is true if the mouse is dragging*/mouse_dragging;
+    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
@@ -1593,7 +1593,6 @@ void DrawPane::OnMouseDrag(wxMouseEvent &event){
     if((event.Dragging()) && (event.LeftDown())){
         
         mouse_dragging = true;
-        cout << "dragging\n";
         
         SetCursor(wxCURSOR_HAND);
         

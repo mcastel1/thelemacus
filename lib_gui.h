@@ -878,12 +878,23 @@ void DrawPane::render(wxDC&  dc){
         s.str("");
         lambda.set(String(""), k*lambda_mercator(dummy), String(""));
         
-        if(lambda_mercator(dummy) == round(lambda_mercator(dummy))){
+        if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
             //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
             s << lambda.deg_to_string(String("EW"), display_precision);
         }else{
-            //in this case, lambda is not an integer multiple of a degree: I write on the axis only the arcminute part of lambda, for the sake of shortness.
-            s << lambda.min_to_string(String("EW"), display_precision);
+            //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
+            
+            if(fabs(lambda_mercator(dummy) - ((double)round(lambda_mercator(dummy)))) < delta_lambda/2.0){
+                //in this case, lamba_mercator(dummy) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                
+                s << lambda.deg_to_string(String("EW"), display_precision);
+
+            }else{
+                //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+    
+                s << lambda.min_to_string(String("EW"), display_precision);
+
+            }
         }
         wx_string = wxString(s.str().c_str());
         
@@ -902,12 +913,24 @@ void DrawPane::render(wxDC&  dc){
         phi.set(String(""), k*dummy, String(""));
         phi.normalize_pm_pi();
         
-        if(dummy == round(dummy)){
+        if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
             //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             s << phi.deg_to_string(String("NS"), display_precision);
         }else{
-            //in this case, dummy is not an integer multiple of a degree: I write on the axis only the acrminute part of phi for the sake of shortness
-            s << phi.min_to_string(String("NS"), display_precision);
+            
+            //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
+            if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
+                //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                
+                s << phi.deg_to_string(String("NS"), display_precision);
+                
+            }else{
+                //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                
+                s << phi.min_to_string(String("NS"), display_precision);
+                
+            }
+            
         }
         
         wx_string = wxString(s.str().c_str());

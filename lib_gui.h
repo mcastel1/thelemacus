@@ -1305,7 +1305,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
-    sizer_v->Add(draw_pane, 1, wxEXPAND);
+    sizer_v->Add(draw_pane, 1, wxEXPAND | wxALL, ((draw_pane->c)->getWidth())*0.01);
     sizer_v->Add(text_position_now, 0, wxEXPAND | wxALL, 5);
     
     //    Maximize(panel);
@@ -1314,7 +1314,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Fit(this);
     
     SetSizer(sizer_v);
-    SetSize((draw_pane->c)->getWidth(), (draw_pane->c)->getHeight());
+    SetSize((draw_pane->c)->getWidth() + ((draw_pane->c)->getWidth())*0.01, (draw_pane->c)->getHeight() + ((draw_pane->c)->getWidth())*0.01);
     
     //    SetAutoLayout(true);
     

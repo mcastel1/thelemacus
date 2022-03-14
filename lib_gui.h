@@ -802,6 +802,7 @@ DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;
+    mouse_state = wxMouseState();
     
     parent = parent_in;
     
@@ -818,6 +819,8 @@ DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
     //    sizer_h->Add(text_lambda);
     //
     //    SetSizer(sizer_h);
+    
+    
     
 }
 
@@ -1623,7 +1626,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
 
 void DrawPane::OnMouseDrag(wxMouseEvent &event){
     
-    if((event.Dragging()) && (event.LeftDown())){
+    if(wxGetMouseState().LeftIsDown()){
         
         mouse_dragging = true;
         

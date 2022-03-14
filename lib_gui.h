@@ -931,7 +931,14 @@ void DrawPane::render(wxDC&  dc){
     }
     
     //draw labels on the y axis
-    for(dummy = ((int)((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi))*delta_phi; dummy<(K*(((((parent->parent)->plot)->phi_max).value))); dummy+= delta_phi){
+    //set first value of dummy
+    if(y_min > floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi){
+        dummy = floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
+    }else{
+        dummy = ceil((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
+    }
+    //starts for loop which draws the ylabels
+    for(first_label = true; dummy<(K*(((((parent->parent)->plot)->phi_max).value))); dummy+= delta_phi){
         
         s.str("");
         phi.set(String(""), k*dummy, String(""));
@@ -951,7 +958,22 @@ void DrawPane::render(wxDC&  dc){
             }else{
                 //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                 
-                s << phi.min_to_string(String("NS"), display_precision);
+//                s << phi.min_to_string(String("NS"), display_precision);
+                
+                if(ceil((K*((((parent->parent)->plot)->phi_max).value)))  - floor((K*((((parent->parent)->plot)->phi_min).value))) != 1){
+                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    
+                    s << phi.min_to_string(String("NS"), display_precision);
+                }else{
+                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+
+                    if(first_label){
+                        s << phi.to_string(String("NS"), display_precision);
+                    }else{
+                        s << phi.min_to_string(String("NS"), display_precision);
+                    }
+                }
+                
                 
             }
             
@@ -964,6 +986,8 @@ void DrawPane::render(wxDC&  dc){
                     (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()),
                     (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2
                     );
+        
+        first_label = false;
         
     }
     

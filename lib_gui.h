@@ -1134,7 +1134,7 @@ void DrawPane::Draw(void){
                                (position_plot_area.y) + height_plot_area,
                                (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
                                (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
-                               0x808080, 1);
+                               0x0000ff, 1);
                     
                 }
                 
@@ -1193,7 +1193,7 @@ void DrawPane::Draw(void){
                                    (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
                                    (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
                                    (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
-                                   0x808080, 1);
+                                   0x0000ff, 1);
                         
                     }
                     

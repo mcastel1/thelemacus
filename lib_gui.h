@@ -854,6 +854,8 @@ void DrawPane::render(wxDC&  dc){
     double dummy;
     stringstream s;
     wxString wx_string;
+    //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
+    bool first_label;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -873,7 +875,14 @@ void DrawPane::render(wxDC&  dc){
     }
     
     //draw labels on the x axis
-    for(dummy = x_mercator(((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda); dummy <= x_max; dummy+=k*delta_lambda){
+    //set the initial value of dummy
+    if(x_min > x_mercator((floor((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda)){
+        dummy = x_mercator((ceil((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda);
+    }else{
+        dummy = x_mercator((floor((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda);
+    }
+    //starts the loop which draws the labels
+    for(first_label = true; dummy <= x_max; dummy+=k*delta_lambda){
         
         s.str("");
         lambda.set(String(""), k*lambda_mercator(dummy), String(""));
@@ -892,22 +901,20 @@ void DrawPane::render(wxDC&  dc){
             }else{
                 //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree.
                 
-                cout << "epsilon = " << fabs(K*(((((parent->parent)->plot)->lambda_max) - (((parent->parent)->plot)->lambda_min)).value))  << "\n";
                 
-                if(
-                   (fabs(K*(((((parent->parent)->plot)->lambda_max) - (((parent->parent)->plot)->lambda_min)).value)) > 1.0) ||
-                   (fabs(K*(((((parent->parent)->plot)->lambda_max) - (((parent->parent)->plot)->lambda_min)).value)) < 360.0-1.0)
-                   ){
+                if(ceil((K*((((parent->parent)->plot)->lambda_max).value)))  - floor((K*((((parent->parent)->plot)->lambda_min).value))) != 1){
                     //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
-//                    s << lambda.min_to_string(String("EW"), display_precision);
-                       s << lambda.to_string(String("EW"), display_precision);
+                    s << lambda.min_to_string(String("EW"), display_precision);
                 }else{
                     //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-    
+
+                    if(first_label){
+                        s << lambda.to_string(String("EW"), display_precision);
+                    }else{
+                        s << lambda.min_to_string(String("EW"), display_precision);
+                    }
                 }
-                
-    
 
             }
         }
@@ -918,6 +925,8 @@ void DrawPane::render(wxDC&  dc){
                     (position_plot_area.x) + (dummy-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
                     (position_plot_area.y) + height_plot_area
                     );
+        
+        first_label = false;
         
     }
     

@@ -288,11 +288,11 @@ public:
     void Draw(void);
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
-    void screen_to_geo(wxPoint, Position*);
-    void geo_to_screen(Position, wxPoint*);
-    void update_lambda_phi_min_max(void);
+    void ScreenToGeo(wxPoint, Position*);
+    void GeoToScreen(Position, wxPoint*);
+    void Update_lambda_phi_min_max(void);
 
-    void render(wxDC& dc);
+    void Render(wxDC& dc);
     
     // some useful events
     void GetMouseGeoPosition(Position*);
@@ -851,7 +851,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
 void DrawPanel::paintEvent(wxPaintEvent & evt)
 {
     wxPaintDC dc(this);
-    render(dc);
+    Render(dc);
 }
 
 /*
@@ -869,12 +869,12 @@ void DrawPanel::paintEvent(wxPaintEvent & evt)
 void DrawPanel::paintNow(){
     
     wxClientDC dc(this);
-    render(dc);
+    Render(dc);
     
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::render(wxDC&  dc){
+void DrawPanel::Render(wxDC&  dc){
     
     Angle lambda, phi;
     double dummy;
@@ -1022,7 +1022,7 @@ void DrawPanel::render(wxDC&  dc){
     wxPoint screen;
     cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
     GetMouseGeoPosition(&geo);
-    geo_to_screen(geo, &screen);
+    GeoToScreen(geo, &screen);
     dc.DrawCircle(screen.x - position_draw_panel.x, screen.y - position_draw_panel.y, 10);
     */
     
@@ -1358,7 +1358,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
 }
 
 //this function computes lambda_min, ... phi_max from x_min ... y_max
-void DrawPanel::update_lambda_phi_min_max(void){
+void DrawPanel::Update_lambda_phi_min_max(void){
     
     (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
     (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
@@ -1523,7 +1523,7 @@ template <class T> void CheckSign::operator()(T &event){
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the relative geographic position q
-void DrawPanel::screen_to_geo(wxPoint p, Position *q){
+void DrawPanel::ScreenToGeo(wxPoint p, Position *q){
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -1535,7 +1535,7 @@ void DrawPanel::screen_to_geo(wxPoint p, Position *q){
 }
 
 //this function converts the geographic position p into the screen position p 
-void DrawPanel::geo_to_screen(Position q, wxPoint *p){
+void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -1552,7 +1552,7 @@ void DrawPanel::geo_to_screen(Position q, wxPoint *p){
 void DrawPanel::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
-    screen_to_geo(position_screen_now, p);
+    ScreenToGeo(position_screen_now, p);
 
 }
 
@@ -1592,7 +1592,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     position_start_drag = wxGetMousePosition();
     
     Position geo;
-    screen_to_geo(position_start_drag, &geo);
+    ScreenToGeo(position_start_drag, &geo);
     geo.print(String("Position start drag"), String("************ "), cout);
         
     event.Skip(true);
@@ -1607,7 +1607,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     position_end_drag = wxGetMousePosition();
     
     Position geo;
-    screen_to_geo(position_now_drag, &geo);
+    ScreenToGeo(position_now_drag, &geo);
 
     geo.print(String("Position end drag"), String("************ "), cout);
 
@@ -1715,8 +1715,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         position_now_drag = wxGetMousePosition();
         
         Position geo;
-    //    screen_to_geo(position_start_drag, &geo_start);
-        screen_to_geo(position_now_drag, &geo);
+    //    ScreenToGeo(position_start_drag, &geo_start);
+        ScreenToGeo(position_now_drag, &geo);
 
         
         //update x_min, ..., y_max according to the drag.
@@ -1727,7 +1727,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         y_min += delta_y;
         y_max += delta_y;
       
-        update_lambda_phi_min_max();
+        Update_lambda_phi_min_max();
 
         geo.print(String("Position now drag"), String("************ "), cout);
 
@@ -1760,7 +1760,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     cout << "x_min = " << x_min<< "\n";
     
     
-    update_lambda_phi_min_max();
+    Update_lambda_phi_min_max();
 
     //re-draw the chart
     Draw();

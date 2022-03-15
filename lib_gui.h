@@ -639,7 +639,7 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     wxStaticText *text_position_now;
-    wxBoxSizer *sizer_coordinates, *sizer_v;
+    wxBoxSizer *sizer_v;
     wxStaticBitmap* image;
     wxDisplay display;
     wxRect rectangle_display;
@@ -1269,7 +1269,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     draw_panel = new DrawPanel(this);
     
-    sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart

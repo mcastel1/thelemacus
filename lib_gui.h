@@ -1770,6 +1770,9 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
 //    //re-draw the chart
     parent->GetCoastLineData();
     Draw();
+
+    paintNow();
+
     
     event.Skip(true);
 

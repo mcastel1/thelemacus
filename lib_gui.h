@@ -264,10 +264,10 @@ public:
     
 };
 
-class DrawPane : public wxPanel{
+class DrawPanel : public wxPanel{
     
 public:
-    DrawPane(ChartFrame*);
+    DrawPanel(ChartFrame*);
     ChartFrame* parent;
     XYChart* c;
     wxPoint position_draw_pane, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
@@ -313,21 +313,21 @@ public:
 };
 
 
-BEGIN_EVENT_TABLE(DrawPane, wxPanel)
+BEGIN_EVENT_TABLE(DrawPanel, wxPanel)
 // some useful events
 /*
- EVT_MOTION(DrawPane::mouseMoved)
- EVT_LEFT_DOWN(DrawPane::mouseDown)
- EVT_LEFT_UP(DrawPane::mouseReleased)
- EVT_RIGHT_DOWN(DrawPane::rightClick)
- EVT_LEAVE_WINDOW(DrawPane::mouseLeftWindow)
- EVT_KEY_DOWN(DrawPane::keyPressed)
- EVT_KEY_UP(DrawPane::keyReleased)
- EVT_MOUSEWHEEL(DrawPane::mouseWheelMoved)
+ EVT_MOTION(DrawPanel::mouseMoved)
+ EVT_LEFT_DOWN(DrawPanel::mouseDown)
+ EVT_LEFT_UP(DrawPanel::mouseReleased)
+ EVT_RIGHT_DOWN(DrawPanel::rightClick)
+ EVT_LEAVE_WINDOW(DrawPanel::mouseLeftWindow)
+ EVT_KEY_DOWN(DrawPanel::keyPressed)
+ EVT_KEY_UP(DrawPanel::keyReleased)
+ EVT_MOUSEWHEEL(DrawPanel::mouseWheelMoved)
  */
 
 // catch paint events
-EVT_PAINT(DrawPane::paintEvent)
+EVT_PAINT(DrawPanel::paintEvent)
 
 END_EVENT_TABLE()
 
@@ -636,7 +636,7 @@ public:
     ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
-    DrawPane *draw_pane;
+    DrawPanel *draw_pane;
     wxStaticText *text_position_now;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
@@ -797,7 +797,7 @@ void ChartFrame::GetCoastLineData(void){
     
 }
 
-DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
+DrawPanel::DrawPanel(ChartFrame* parent_in) : wxPanel(parent_in){
     
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
@@ -824,7 +824,7 @@ DrawPane::DrawPane(ChartFrame* parent_in) : wxPanel(parent_in){
 }
 
 
-void DrawPane::paintEvent(wxPaintEvent & evt)
+void DrawPanel::paintEvent(wxPaintEvent & evt)
 {
     wxPaintDC dc(this);
     render(dc);
@@ -842,15 +842,15 @@ void DrawPane::paintEvent(wxPaintEvent & evt)
  * paint events and calling Refresh() when a refresh is needed
  * will do the job.
  */
-void DrawPane::paintNow(){
+void DrawPanel::paintNow(){
     
     wxClientDC dc(this);
     render(dc);
     
 }
 
-//remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPane object!
-void DrawPane::render(wxDC&  dc){
+//remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
+void DrawPanel::render(wxDC&  dc){
     
     Angle lambda, phi;
     double dummy;
@@ -1005,7 +1005,7 @@ void DrawPane::render(wxDC&  dc){
 }
 
 
-void DrawPane::Draw(void){
+void DrawPanel::Draw(void){
     
     File world;
     stringstream line_ins;
@@ -1266,7 +1266,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     //    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    draw_pane = new DrawPane(this);
+    draw_pane = new DrawPanel(this);
     
     sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -1292,12 +1292,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_pane->Draw();
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseMovement), draw_pane);
-    draw_pane->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPane::OnMouseRightDown), draw_pane);
+    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_pane);
+    draw_pane->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_pane);
 
-    draw_pane->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPane::OnMouseLeftDown), draw_pane);
-    draw_pane->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPane::OnMouseLeftUp), draw_pane);
-    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPane::OnMouseDrag), draw_pane);
+    draw_pane->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_pane);
+    draw_pane->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_pane);
+    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_pane);
 
     //    sizer_coordinates->Add(text_phi);
     //    sizer_coordinates->Add(text_lambda);
@@ -1480,7 +1480,7 @@ template <class T> void CheckSign::operator()(T &event){
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the relative geographic position q
-void DrawPane::screen_to_geo(wxPoint p, Position *q){
+void DrawPanel::screen_to_geo(wxPoint p, Position *q){
     
     //updates the position of the draw pane this
     position_draw_pane = (this->GetScreenPosition());
@@ -1492,7 +1492,7 @@ void DrawPane::screen_to_geo(wxPoint p, Position *q){
 }
 
 //this function converts the geographic position p into the screen position p 
-void DrawPane::geo_to_screen(Position q, wxPoint *p){
+void DrawPanel::geo_to_screen(Position q, wxPoint *p){
     
     //updates the position of the draw pane this
     position_draw_pane = (this->GetScreenPosition());
@@ -1506,14 +1506,14 @@ void DrawPane::geo_to_screen(Position q, wxPoint *p){
 }
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
-void DrawPane::GetMouseGeoPosition(Position* p){
+void DrawPanel::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
     screen_to_geo(position_screen_now, p);
 
 }
 
-void DrawPane::OnMouseMovement(wxMouseEvent &event){
+void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     Position p;
     stringstream s;
@@ -1544,7 +1544,7 @@ void DrawPane::OnMouseMovement(wxMouseEvent &event){
 }
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
-void DrawPane::OnMouseLeftDown(wxMouseEvent &event){
+void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     
     position_start_drag = wxGetMousePosition();
     
@@ -1557,7 +1557,7 @@ void DrawPane::OnMouseLeftDown(wxMouseEvent &event){
 }
 
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
-void DrawPane::OnMouseLeftUp(wxMouseEvent &event){
+void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     SetCursor(*wxCROSS_CURSOR);
 
@@ -1574,7 +1574,7 @@ void DrawPane::OnMouseLeftUp(wxMouseEvent &event){
 
 }
 
-void DrawPane::OnMouseRightDown(wxMouseEvent &event){
+void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     
     //changes the 'sign' of selection rectangle
     selection_rectangle = (!selection_rectangle);
@@ -1660,7 +1660,7 @@ void DrawPane::OnMouseRightDown(wxMouseEvent &event){
     
 }
 
-void DrawPane::OnMouseDrag(wxMouseEvent &event){
+void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
     if(wxGetMouseState().LeftIsDown()){
         

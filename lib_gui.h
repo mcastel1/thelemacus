@@ -1756,10 +1756,10 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_max_old = y_max;
     
     //update x_min, ..., y_max according to the zoom.
-    x_min = (x_max_old + x_min_old)/2 - ( (x_max_old-x_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
-    x_max = (x_max_old + x_min_old)/2 + ( (x_max_old-x_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
-    y_min = (y_max_old + y_min_old)/2 - ( (y_max_old-y_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
-    y_max = (y_max_old + y_min_old)/2 + ( (y_max_old-y_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
+    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
+    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
+    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
+    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
     
     
     update_lambda_phi_min_max();

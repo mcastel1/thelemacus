@@ -642,7 +642,7 @@ public:
     DrawPanel *draw_panel;
     ChartPanel* panel;
     wxStaticText *text_position_now;
-    wxBoxSizer *sizer_v;
+    wxBoxSizer *sizer_v, *sizer_h;
     wxStaticBitmap* image;
     wxDisplay display;
     wxRect rectangle_display;
@@ -1291,7 +1291,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel = new DrawPanel(panel);
     
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -1326,17 +1327,24 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
-    sizer_v->Add(draw_panel, 1, wxEXPAND | wxALL, ((draw_panel->c)->getWidth())*0.01);
-    sizer_v->Add(text_position_now, 0, wxEXPAND | wxALL, 5);
-    sizer_v->Add(slider_zoom, 0, wxEXPAND | wxALL, 5);
+    draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
     
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP);
+    sizer_h->Add(slider_zoom, 0, wxALIGN_TOP);
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, 5);
+//    sizer_v->Fit(panel);
+
     Maximize(panel);
+    SetSizerAndFit(sizer_v);
+    
+    
+    
     
     //    panel->SetSizer(sizer_v);
     //    sizer_v->Fit(this);
     
-    SetSizer(sizer_v);
-    SetSize((draw_panel->c)->getWidth() + ((draw_panel->c)->getWidth())*0.01, (draw_panel->c)->getHeight() + ((draw_panel->c)->getWidth())*0.01);
+//    SetSize((draw_panel->c)->getWidth() + ((draw_panel->c)->getWidth())*0.01, (draw_panel->c)->getHeight() + ((draw_panel->c)->getWidth())*0.01);
     
     //    SetAutoLayout(true);
     

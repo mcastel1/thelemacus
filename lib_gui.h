@@ -1723,6 +1723,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         
         //re-draw the chart
         Draw();
+        PaintNow();
      
         
     }

@@ -270,7 +270,7 @@ public:
     DrawPanel(ChartFrame*);
     ChartFrame* parent;
     XYChart* c;
-    wxPoint position_draw_pane, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
+    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
     wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
@@ -637,7 +637,7 @@ public:
     ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
-    DrawPanel *draw_pane;
+    DrawPanel *draw_panel;
     wxStaticText *text_position_now;
     wxBoxSizer *sizer_coordinates, *sizer_v;
     wxStaticBitmap* image;
@@ -869,8 +869,8 @@ void DrawPanel::render(wxDC&  dc){
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
     if(selection_rectangle){
         dc.DrawRectangle(
-                         position_start_selection.x - (position_draw_pane.x),
-                         position_start_selection.y - (position_draw_pane.y),
+                         position_start_selection.x - (position_draw_panel.x),
+                         position_start_selection.y - (position_draw_panel.y),
                          (position_screen_now.x)-(position_start_selection.x),
                          (position_screen_now.y)-(position_start_selection.y)
                          );
@@ -1000,7 +1000,7 @@ void DrawPanel::render(wxDC&  dc){
     cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
     GetMouseGeoPosition(&geo);
     geo_to_screen(geo, &screen);
-    dc.DrawCircle(screen.x - position_draw_pane.x, screen.y - position_draw_pane.y, 10);
+    dc.DrawCircle(screen.x - position_draw_panel.x, screen.y - position_draw_panel.y, 10);
     */
     
 }
@@ -1267,7 +1267,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     //    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    draw_pane = new DrawPanel(this);
+    draw_panel = new DrawPanel(this);
     
     sizer_coordinates = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -1290,15 +1290,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    GetCoastLineData(-34, 45, 160, 200, 100000);
     
     GetCoastLineData();
-    draw_pane->Draw();
+    draw_panel->Draw();
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_pane);
-    draw_pane->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_pane);
+    draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
+    draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
 
-    draw_pane->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_pane);
-    draw_pane->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_pane);
-    draw_pane->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_pane);
+    draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
+    draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
+    draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
 
     //    sizer_coordinates->Add(text_phi);
     //    sizer_coordinates->Add(text_lambda);
@@ -1306,7 +1306,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
     //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
     
-    sizer_v->Add(draw_pane, 1, wxEXPAND | wxALL, ((draw_pane->c)->getWidth())*0.01);
+    sizer_v->Add(draw_panel, 1, wxEXPAND | wxALL, ((draw_panel->c)->getWidth())*0.01);
     sizer_v->Add(text_position_now, 0, wxEXPAND | wxALL, 5);
     
     //    Maximize(panel);
@@ -1315,7 +1315,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    sizer_v->Fit(this);
     
     SetSizer(sizer_v);
-    SetSize((draw_pane->c)->getWidth() + ((draw_pane->c)->getWidth())*0.01, (draw_pane->c)->getHeight() + ((draw_pane->c)->getWidth())*0.01);
+    SetSize((draw_panel->c)->getWidth() + ((draw_panel->c)->getWidth())*0.01, (draw_panel->c)->getHeight() + ((draw_panel->c)->getWidth())*0.01);
     
     //    SetAutoLayout(true);
     
@@ -1484,10 +1484,10 @@ template <class T> void CheckSign::operator()(T &event){
 void DrawPanel::screen_to_geo(wxPoint p, Position *q){
     
     //updates the position of the draw pane this
-    position_draw_pane = (this->GetScreenPosition());
+    position_draw_panel = (this->GetScreenPosition());
     
-    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_pane.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
-    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_pane.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
+    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
+    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
     
     
 }
@@ -1496,10 +1496,10 @@ void DrawPanel::screen_to_geo(wxPoint p, Position *q){
 void DrawPanel::geo_to_screen(Position q, wxPoint *p){
     
     //updates the position of the draw pane this
-    position_draw_pane = (this->GetScreenPosition());
+    position_draw_panel = (this->GetScreenPosition());
     
-    (p->x) = (position_draw_pane.x) + (position_plot_area.x) + (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
-    (p->y) = (position_draw_pane.y) + (position_plot_area.y) + (height_plot_area) - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
+    (p->x) = (position_draw_panel.x) + (position_plot_area.x) + (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
+    (p->y) = (position_draw_panel.y) + (position_plot_area.y) + (height_plot_area) - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
     
     //    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
     
@@ -1533,7 +1533,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         s.str("");
         s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
         text_position_end->SetLabel(wxString(s.str().c_str()));
-        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_pane.x), (position_screen_now.y)-(position_draw_pane.y)));
+        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
     }
     
     paintNow();
@@ -1595,7 +1595,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         s.clear();
         s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
         text_position_start->SetLabel(wxString(s.str().c_str()));
-        text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_pane.x), (position_start_selection.y)-(position_draw_pane.y)));
+        text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
         
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";

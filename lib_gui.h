@@ -640,7 +640,7 @@ public:
     
     ListFrame* parent;
     DrawPanel *draw_panel;
-    wxPanel* panel;
+    ChartPanel* panel;
     wxStaticText *text_position_now;
     wxBoxSizer *sizer_v;
     wxStaticBitmap* image;
@@ -1286,7 +1286,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     new_prefix = prefix.append(String("\t"));
     
     (parent->plot)->show(true, String(""));
-    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);
     
     sizer_v = new wxBoxSizer(wxVERTICAL);

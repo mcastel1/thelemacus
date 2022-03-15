@@ -66,7 +66,7 @@ class MessageFrame;
 class SightFrame;
 class ChartFrame;
 class PlotFrame;
-class BasicDrawPane;
+class ChartPanel;
 
 struct CheckBody;
 struct CheckLimb;

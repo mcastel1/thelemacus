@@ -1579,9 +1579,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
         text_position_end->SetLabel(wxString(s.str().c_str()));
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
+        paintNow();
     }
     
-    paintNow();
     
     
     //

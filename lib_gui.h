@@ -1329,10 +1329,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
     
-    sizer_h->Add(draw_panel, 0, wxALIGN_TOP);
-    sizer_h->Add(slider_zoom, 0, wxALIGN_TOP);
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, 5);
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*0.01);
+    sizer_h->Add(slider_zoom, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*0.01);
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*0.01);
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*0.01);
 //    sizer_v->Fit(panel);
 
     Maximize(panel);

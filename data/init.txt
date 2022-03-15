@@ -6,8 +6,8 @@ hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 #entire world
 minimal latitude = -73° 13.9'
 maximal latitude = 80° 53.2'
-minimal longitude = 170° 12.45'
-maximal longitude = 190° 0.01'
+minimal longitude = 175° 12.45'
+maximal longitude = 185° 0.01'
 #entire world
 #north of france
 #minimal longitude = 5° 47'

@@ -6,7 +6,7 @@
 //latitude span
 #define span_lat ((floor_max_lat-floor_min_lat+1)
 //the ratio between the width (height) of the plot area and the width (height) of the chart.
-#define length_plot_area_over_length_chart 0.7
+#define length_plot_area_over_length_chart 0.8
 #define outfile_precision 16
 
 

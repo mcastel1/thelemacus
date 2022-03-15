@@ -665,6 +665,8 @@ public:
 
 ChartPanel::ChartPanel(ChartFrame* parent_in) : wxPanel(parent_in){
     
+    parent = parent_in;
+    
 }
 
 

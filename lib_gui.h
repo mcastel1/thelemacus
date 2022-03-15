@@ -272,6 +272,7 @@ public:
     XYChart* c;
     wxPoint position_draw_pane, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
+    wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double x_min, x_max, y_min, y_max, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
     wxStaticText*text_position_start, *text_position_end;
@@ -811,8 +812,8 @@ DrawPanel::DrawPanel(ChartFrame* parent_in) : wxPanel(parent_in){
     //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
-    text_position_start = new wxStaticText(parent, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    text_position_end = new wxStaticText(parent, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_position_end = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);

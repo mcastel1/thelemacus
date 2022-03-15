@@ -10,6 +10,8 @@
 #include "wx/dc.h"
 #include "wx/display.h"
 #include "wx/listctrl.h"
+#include "wx/slider.h"
+
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"

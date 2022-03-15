@@ -290,6 +290,7 @@ public:
     void paintNow();
     void screen_to_geo(wxPoint, Position*);
     void geo_to_screen(Position, wxPoint*);
+    void update_lambda_phi_min_max(void);
 
     void render(wxDC& dc);
     
@@ -1351,6 +1352,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
 }
 
+//this function computes lambda_min, ... phi_max from x_min ... y_max
+void DrawPanel::update_lambda_phi_min_max(void){
+    
+    (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
+    (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
+    (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
+    (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
+
+}
 
 template<class T>void CheckBody::operator()(T& event){
     
@@ -1712,11 +1722,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         x_max -= delta_x;
         y_min += delta_y;
         y_max += delta_y;
-        //update lambda_min, ..., phi_max according to the drag
-        (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
-        (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
-        (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
-        (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
+      
+        update_lambda_phi_min_max();
 
         geo.print(String("Position now drag"), String("************ "), cout);
 
@@ -1755,12 +1762,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_max = (y_max_old + y_min_old)/2 + ( (y_max_old-y_min_old)/2.0/((parent->slider_zoom)->GetValue()) );
     
     
-    //update lambda_min, ..., phi_max according to the drag
-    (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
-    (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
-    (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
-    (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
-
+    update_lambda_phi_min_max();
     
     //re-draw the chart
     parent->GetCoastLineData();

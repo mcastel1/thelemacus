@@ -269,7 +269,7 @@ public:
 class DrawPanel : public wxPanel{
     
 public:
-    DrawPanel(ChartFrame*);
+    DrawPanel(ChartPanel*);
     ChartFrame* parent;
     XYChart* c;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
@@ -818,13 +818,13 @@ void ChartFrame::GetCoastLineData(void){
     
 }
 
-DrawPanel::DrawPanel(ChartFrame* parent_in) : wxPanel(parent_in){
+DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;
     
-    parent = parent_in;
+    parent = (parent_in->parent);
     
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;

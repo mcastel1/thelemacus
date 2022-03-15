@@ -1296,7 +1296,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
-    slider_zoom = new wxSlider(panel, wxID_ANY, 0, -1, 1, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider_zoom = new wxSlider(panel, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;

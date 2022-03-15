@@ -659,11 +659,11 @@ public:
 
     ChartFrame* parent;
 
-    ChartPanel(ChartFrame*);
+    ChartPanel(ChartFrame*, const wxPoint&, const wxSize&);
     
 };
 
-ChartPanel::ChartPanel(ChartFrame* parent_in) : wxPanel(parent_in){
+ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxSize& size) : wxPanel(parent_in, wxID_ANY, position, size, wxTAB_TRAVERSAL, wxT("")){
     
     parent = parent_in;
     

@@ -300,6 +300,7 @@ public:
     void OnMouseLeftUp(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
+    void OnScroll(wxScrollEvent&);
 
     /*
      void mouseMoved(wxMouseEvent& event);
@@ -1296,7 +1297,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
-    slider_zoom = new wxSlider(panel, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider_zoom = new wxSlider(panel, wxID_ANY, 0, 1, 100, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1321,11 +1322,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
 
-    //    sizer_coordinates->Add(text_phi);
-    //    sizer_coordinates->Add(text_lambda);
-    //
-    //    sizer_v->Add(image, 0, wxEXPAND | wxALL, 5);
-    //    sizer_v->Add(sizer_coordinates, 0, wxEXPAND | wxALL, 5);
+    slider_zoom->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
+
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
     
@@ -1731,6 +1729,16 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     }
     
  
+    
+    
+    event.Skip(true);
+
+
+}
+
+void DrawPanel::OnScroll(wxScrollEvent &event){
+
+    cout << "Slider = " << (parent->slider_zoom)->GetValue() << "\n";
     
     
     event.Skip(true);

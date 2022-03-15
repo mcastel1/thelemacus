@@ -264,6 +264,8 @@ public:
     
 };
 
+
+
 class DrawPanel : public wxPanel{
     
 public:
@@ -638,6 +640,7 @@ public:
     
     ListFrame* parent;
     DrawPanel *draw_panel;
+    wxPanel* panel;
     wxStaticText *text_position_now;
     wxBoxSizer *sizer_v;
     wxStaticBitmap* image;
@@ -649,6 +652,21 @@ public:
     void GetCoastLineData(void);
     
 };
+
+class ChartPanel : public wxPanel{
+  
+public:
+
+    ChartFrame* parent;
+
+    ChartPanel(ChartFrame*);
+    
+};
+
+ChartPanel::ChartPanel(ChartFrame* parent_in) : wxPanel(parent_in){
+    
+}
+
 
 //this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
 void ChartFrame::GetCoastLineData(void){
@@ -1266,13 +1284,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     new_prefix = prefix.append(String("\t"));
     
     (parent->plot)->show(true, String(""));
-    //    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    draw_panel = new DrawPanel(this);
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    draw_panel = new DrawPanel(panel);
     
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    text_position_now = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     
     

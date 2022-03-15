@@ -647,6 +647,7 @@ public:
     wxDisplay display;
     wxRect rectangle_display;
     TextBox* box;
+    wxSlider* slider_zoom;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     
     void GetCoastLineData(void);
@@ -1294,7 +1295,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
-    
+    slider_zoom = new wxSlider(panel, wxID_ANY, 0, -1, 1, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1327,6 +1328,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     sizer_v->Add(draw_panel, 1, wxEXPAND | wxALL, ((draw_panel->c)->getWidth())*0.01);
     sizer_v->Add(text_position_now, 0, wxEXPAND | wxALL, 5);
+    sizer_v->Add(slider_zoom, 0, wxEXPAND | wxALL, 5);
     
     Maximize(panel);
     

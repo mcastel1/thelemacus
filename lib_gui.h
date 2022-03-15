@@ -1038,6 +1038,9 @@ void DrawPanel::Draw(void){
     int i;
     unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
     
+    //fetch the data on the region that I am about to plot from the data files.
+    parent->GetCoastLineData();
+    
     //Here I set x_min, x_max, y_min, y_max
     x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
     x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
@@ -1309,12 +1312,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
     
-    
-    
-    
-    //    GetCoastLineData(-34, 45, 160, 200, 100000);
-    
-    GetCoastLineData();
     draw_panel->Draw();
     
     //set x_min_0 .... y_max_0 to their initial values and keep them for the future zooms
@@ -1692,10 +1689,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));
         
-        parent->GetCoastLineData();
         Draw();
+        
         paintNow();
-        //        image->SetBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG));
         
         SetSize(c->getWidth(), c->getHeight());
         parent->SetSize(c->getWidth(), c->getHeight());
@@ -1737,7 +1733,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
         
         //re-draw the chart
-        parent->GetCoastLineData();
         Draw();
      
         
@@ -1766,9 +1761,8 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     
     
     update_lambda_phi_min_max();
-//
-//    //re-draw the chart
-    parent->GetCoastLineData();
+
+    //re-draw the chart
     Draw();
 
     paintNow();

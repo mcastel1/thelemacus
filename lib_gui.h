@@ -1328,7 +1328,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v->Add(draw_panel, 1, wxEXPAND | wxALL, ((draw_panel->c)->getWidth())*0.01);
     sizer_v->Add(text_position_now, 0, wxEXPAND | wxALL, 5);
     
-    //    Maximize(panel);
+    Maximize(panel);
     
     //    panel->SetSizer(sizer_v);
     //    sizer_v->Fit(this);

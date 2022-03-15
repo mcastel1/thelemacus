@@ -286,8 +286,8 @@ public:
     unsigned int width_chart, height_chart, width_plot_area, height_plot_area, tic_length;
     
     void Draw(void);
-    void paintEvent(wxPaintEvent & evt);
-    void paintNow();
+    void PaintEvent(wxPaintEvent & evt);
+    void PaintNow();
     void ScreenToGeo(wxPoint, Position*);
     void GeoToScreen(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
@@ -332,7 +332,7 @@ BEGIN_EVENT_TABLE(DrawPanel, wxPanel)
  */
 
 // catch paint events
-EVT_PAINT(DrawPanel::paintEvent)
+EVT_PAINT(DrawPanel::PaintEvent)
 
 END_EVENT_TABLE()
 
@@ -848,7 +848,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
 }
 
 
-void DrawPanel::paintEvent(wxPaintEvent & evt)
+void DrawPanel::PaintEvent(wxPaintEvent & evt)
 {
     wxPaintDC dc(this);
     Render(dc);
@@ -866,7 +866,7 @@ void DrawPanel::paintEvent(wxPaintEvent & evt)
  * paint events and calling Refresh() when a refresh is needed
  * will do the job.
  */
-void DrawPanel::paintNow(){
+void DrawPanel::PaintNow(){
     
     wxClientDC dc(this);
     Render(dc);
@@ -1576,7 +1576,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
         text_position_end->SetLabel(wxString(s.str().c_str()));
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
-        paintNow();
+        PaintNow();
     }
     
     
@@ -1691,7 +1691,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         Draw();
         
-        paintNow();
+        PaintNow();
         
         SetSize(c->getWidth(), c->getHeight());
         parent->SetSize(c->getWidth(), c->getHeight());
@@ -1765,7 +1765,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     //re-draw the chart
     Draw();
 
-    paintNow();
+    PaintNow();
 
     
     event.Skip(true);

@@ -7,6 +7,7 @@
 #define span_lat ((floor_max_lat-floor_min_lat+1)
 //the ratio between the width (height) of the plot area and the width (height) of the chart.
 #define length_plot_area_over_length_chart 0.8
+#define length_chart_over_length_chart_frame 0.8
 #define outfile_precision 16
 
 
@@ -1036,14 +1037,30 @@ void DrawPanel::Draw(void){
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
     
+    (parent->text_position_now)->SetLabel(" ");
+    cout << "************************** Height of label = " << ((parent->text_position_now)->GetSize()).GetHeight() << "\n";
+    
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > (x_max-x_min)){
-        height_chart = (((parent->rectangle_display).GetSize()).GetHeight());
+        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+        parent->SetSize(
+                        (((parent->rectangle_display).GetSize()).GetHeight())/((y_max-y_min)/(x_max-x_min)),
+                        (((parent->rectangle_display).GetSize()).GetHeight())
+                        );
+    
+        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
+        height_chart = length_chart_over_length_chart_frame * (((parent->rectangle_display).GetSize()).GetHeight());
         width_chart = height_chart/((y_max-y_min)/(x_max-x_min));
     }else{
-        width_chart = (((parent->rectangle_display).GetSize()).GetHeight());
-        height_chart = width_chart * ((y_max-y_min)/(x_max-x_min));
+        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+        parent->SetSize(
+                        (((parent->rectangle_display).GetSize()).GetHeight()),
+                        (((parent->rectangle_display).GetSize()).GetHeight()) * ((y_max-y_min)/(x_max-x_min))
+                        );
+        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
+        width_chart = length_chart_over_length_chart_frame * (((parent->rectangle_display).GetSize()).GetHeight());
+        height_chart = width_chart*((y_max-y_min)/(x_max-x_min));
     }
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;

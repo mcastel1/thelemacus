@@ -11,6 +11,8 @@
 //this is the ratio between (the length of the borders drawn around the widgets) and (the length of the frame in which the widgets are located)
 #define length_border_over_length_frame 0.01
 #define outfile_precision 16
+//the maximum allowed value of the slider in ChartFrame
+#define value_slider_max 1000
 
 
 //this string defines the width of GUI fields hosting floating-point numbers
@@ -647,10 +649,10 @@ public:
     TextBox* box;
     wxSlider* slider;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
-    unsigned int /*this stores the value of slider*/value_slider_old, /*the maximum value of the slider when the slider is visualized for the first time*/value_slider_max_0;
+    unsigned int /*this stores the value of slider*/value_slider_old;
     
     void GetCoastLineData(void);
-    void UpdateSlider(void);
+    bool UpdateSlider(void);
     
 };
 
@@ -1345,11 +1347,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, 1, value_slider_old, 1, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
-    //I set the number of values of the slider to its height (in pixels) in such a way that the cursor of the slider moves with steps of one pixel, i.e., with its maximal precision allowed from the screen
-    value_slider_max_0 = ((slider->GetSize()).GetHeight());
-    slider->SetRange(1, value_slider_max_0);
-
+    slider = new wxSlider(panel, wxID_ANY, 1, value_slider_old, value_slider_max, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+  
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -1406,19 +1405,30 @@ void DrawPanel::Update_x_y_min_max(void){
 
 }
 
-void ChartFrame::UpdateSlider(void){
+//this function updates the slider according to the zooming factor of the chart. If the zooming factor does not exceed the maximal allowed value, it returns true and it updates the slider, otherwise it returns false and it does not update the slider.
+bool ChartFrame::UpdateSlider(void){
+    
+    bool output;
     
     //compute the zooming factor of the chart and write it into value_slider_old
     value_slider_old = ((unsigned int)((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/((draw_panel->x_max)-(draw_panel->x_min)));
     
     cout << "***************** Slider value = " << value_slider_old << "\n";
     
-    //if value_slider_old is larger than the current maximum value of the slider, then increase the maximum value of the slider and set the slider cursor to value_slider_old
-    if(value_slider_old > (slider->GetMax())){
-        slider->SetRange(1, 2*value_slider_old);
+    if(value_slider_old <= value_slider_max){
+        slider->SetValue(value_slider_old);
+        output = true;
+    }else{
+        //        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+        //        ((f->printerrormessage).control) = (p->name);
+        //        ((f->printerrormessage).title) = String("Body not found in catalog!");
+        //        ((f->printerrormessage).message) = String("Body must be in catalog.");
+        //        f->CallAfter((f->printerrormessage));
+        //
+        output = false;
     }
-    slider->SetValue(value_slider_old);
     
+    return output;
     
 }
 

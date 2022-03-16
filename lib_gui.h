@@ -279,14 +279,14 @@ public:
     wxSize size_plot_area;
     wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
-    double x_min, x_max, y_min, y_max, /*these are the values of x_min, ... y_max at the beginning of the plot, corresponding to lambda_min, ... , phi_max read from file*/x_min_0, x_max_0, y_min_0, y_max_0, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
+    double x_min, x_max, y_min, y_max, /*these are the values of x_min, ... y_max at the beginning of the plot, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
-    unsigned int width_chart, height_chart, width_plot_area, height_plot_area, tic_length;
+    unsigned int width_chart, height_chart, width_plot_area, height_plot_area, tic_length, /*this stores the value of slider_zoom*/value_slider_old;
     
     void Draw(void);
     void PaintEvent(wxPaintEvent & evt);
@@ -824,6 +824,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
+    //initialize the variable neededed for slider_zoom
+    value_slider_old = 1;
+
     //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -1320,12 +1323,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    
 
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
-    slider_zoom = new wxSlider(panel, wxID_ANY, 0, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
-    
+        
     //image
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
@@ -1335,22 +1337,19 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     draw_panel->Draw();
     
-    //set x_min_0 .... y_max_0 to their initial values and keep them for the future zooms
-    (draw_panel->x_min_0) = (draw_panel->x_min);
-    (draw_panel->x_max_0) = (draw_panel->x_max);
-    (draw_panel->y_min_0) = (draw_panel->y_min);
-    (draw_panel->y_max_0) = (draw_panel->y_max);
+  
+    
+    slider_zoom = new wxSlider(panel, wxID_ANY, 1, draw_panel->value_slider_old, 10, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
-
     draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
     draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
 
     slider_zoom->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
-
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
     
@@ -1369,7 +1368,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    panel->SetSizer(sizer_v);
     //    sizer_v->Fit(this);
     
-//    SetSize((draw_panel->c)->getWidth() + ((draw_panel->c)->getWidth())*0.01, (draw_panel->c)->getHeight() + ((draw_panel->c)->getWidth())*0.01);
+    //    SetSize((draw_panel->c)->getWidth() + ((draw_panel->c)->getWidth())*0.01, (draw_panel->c)->getHeight() + ((draw_panel->c)->getWidth())*0.01);
     
     //    SetAutoLayout(true);
     
@@ -1767,28 +1766,30 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     
-
     cout << "Slider = " << (parent->slider_zoom)->GetValue() << "\n";
     
-    //update x_min, ..., y_max according to the zoom.
-    x_min = (x_max_0 + x_min_0)/2.0 - ( (x_max_0-x_min_0)/2.0/((parent->slider_zoom)->GetValue()) );
-    x_max = (x_max_0 + x_min_0)/2.0 + ( (x_max_0-x_min_0)/2.0/((parent->slider_zoom)->GetValue()) );
-    y_min = (y_max_0 + y_min_0)/2.0 - ( (y_max_0-y_min_0)/2.0/((parent->slider_zoom)->GetValue()) );
-    y_max = (y_max_0 + y_min_0)/2.0 + ( (y_max_0-y_min_0)/2.0/((parent->slider_zoom)->GetValue()) );
+    //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
+    x_min_old = x_min;
+    x_max_old = x_max;
+    y_min_old = y_min;
+    y_max_old = y_max;
     
-    cout << "x_min = " << x_min<< "\n";
-    
-    
+    //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
+    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
+    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
+    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
+    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
     Update_lambda_phi_min_max();
 
-    //re-draw the chart
+    cout << "x_min = " << x_min<< "\n";
+    
+    //update value_slider_old
+    value_slider_old = ((parent->slider_zoom)->GetValue());
+        
     Draw();
-
     PaintNow();
 
-    
     event.Skip(true);
-
 
 }
 

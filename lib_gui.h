@@ -648,12 +648,16 @@ public:
     wxRect rectangle_display;
     TextBox* box;
     wxSlider* slider;
+    PrintErrorMessage<ChartFrame> print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int /*this stores the value of slider*/value_slider_old;
+    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
+    bool idling;
     
     void GetCoastLineData(void);
     bool UpdateSlider(void);
     void UpdateSliderLabel(void);
+    void SetIdling(bool);
 
 };
 
@@ -819,6 +823,13 @@ void ChartFrame::GetCoastLineData(void){
     outfile_selected_coastline_data.close(String(""));
     file_coastline_data_blocked.close(String(""));
     
+    
+}
+
+
+void ChartFrame::SetIdling(bool b){
+    
+    idling = b;
     
 }
 
@@ -1317,6 +1328,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     
+    idling = false;
+    (print_error_message.f) = this;
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);
@@ -1448,11 +1461,11 @@ bool ChartFrame::UpdateSlider(void){
         
     }else{
         
-        //        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-        //        ((f->printerrormessage).control) = (p->name);
-        //        ((f->printerrormessage).title) = String("Body not found in catalog!");
-        //        ((f->printerrormessage).message) = String("Body must be in catalog.");
-        //        f->CallAfter((f->printerrormessage));
+                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+        (print_error_message.control) = slider;
+        (print_error_message.title) = String("Zoom level exceeded its maximal value!");
+        (print_error_message.message) = String("Zoom level must be >= 1 and <= value_slider_max.");
+        CallAfter(print_error_message);
         
         output = false;
         

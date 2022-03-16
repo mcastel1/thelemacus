@@ -279,14 +279,17 @@ public:
     wxSize size_plot_area;
     wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
-    double x_min, x_max, y_min, y_max, /*these are the values of x_min, ... y_max at the beginning of the plot, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
+    double x_min, x_max, y_min, y_max,
+    /*these are the values of x_min .. y_max when the plot is first drawn*/
+    x_min_0, x_max_0, y_min_0, y_max_0,
+    /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
-    unsigned int width_chart, height_chart, width_plot_area, height_plot_area, tic_length, /*this stores the value of slider_zoom*/value_slider_old;
+    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length, /*this stores the value of slider_zoom*/value_slider_old;
     
     void Draw(void);
     void PaintEvent(wxPaintEvent & evt);
@@ -295,7 +298,7 @@ public:
     void GeoToScreen(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
-    void Update_value_slider(void);
+    void UpdateSlider(void);
 
     void Render(wxDC& dc);
     
@@ -1331,9 +1334,17 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     draw_panel->Draw();
     
+    //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
+    (draw_panel->x_min_0) = (draw_panel->x_min);
+    (draw_panel->x_max_0) = (draw_panel->x_max);
+    (draw_panel->y_min_0) = (draw_panel->y_min);
+    (draw_panel->y_max_0) = (draw_panel->y_max);
+    (draw_panel->width_chart_0) = (draw_panel->width_chart);
+    (draw_panel->height_chart_0) = (draw_panel->height_chart);
+
   
     
-    slider_zoom = new wxSlider(panel, wxID_ANY, 1, draw_panel->value_slider_old, 10, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider_zoom = new wxSlider(panel, wxID_ANY, 1, draw_panel->value_slider_old, 100, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
 
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
@@ -1391,9 +1402,11 @@ void DrawPanel::Update_x_y_min_max(void){
 
 }
 
-void DrawPanel::Update_value_slider(void){
+void DrawPanel::UpdateSlider(void){
     
     value_slider_old = ((unsigned int)((double)width_chart)/((double)width_chart_0)*(x_max_0-x_min_0)/(x_max-x_min));
+    
+    cout << "***************** Slider value = " << value_slider_old << "\n";
     
     (parent->slider_zoom)->SetValue(value_slider_old);
     
@@ -1725,6 +1738,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         Draw();
         
         PaintNow();
+        
+        UpdateSlider();
         
     }
     

@@ -289,7 +289,7 @@ public:
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
-    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length, /*this stores the value of slider_zoom*/value_slider_old;
+    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
     
     void Draw(void);
     void PaintEvent(wxPaintEvent & evt);
@@ -298,7 +298,6 @@ public:
     void GeoToScreen(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
-    void UpdateSlider(void);
 
     void Render(wxDC& dc);
     
@@ -646,10 +645,12 @@ public:
     wxDisplay display;
     wxRect rectangle_display;
     TextBox* box;
-    wxSlider* slider_zoom;
+    wxSlider* slider;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
+    unsigned int /*this stores the value of slider*/value_slider_old, /*the maximum value of the slider when the slider is visualized for the first time*/value_slider_max_0;
     
     void GetCoastLineData(void);
+    void UpdateSlider(void);
     
 };
 
@@ -829,8 +830,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
-    //initialize the variable neededed for slider_zoom
-    value_slider_old = 1;
 
     //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
@@ -874,11 +873,11 @@ void DrawPanel::PaintNow(){
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(wxSize(c->getWidth(), c->getHeight()));
     //        (parent->panel)->SetMinSize(wxSize(
-    //                                 (c->getWidth()) + (((parent->slider_zoom)->GetSize()).GetWidth()),
+    //                                 (c->getWidth()) + (((parent->slider)->GetSize()).GetWidth()),
     //                                 (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
     //                                 ));
     parent->SetMinSize(wxSize(
-                              (c->getWidth()) + ((parent->slider_zoom)->GetSize().GetWidth()),
+                              (c->getWidth()) + ((parent->slider)->GetSize().GetWidth()),
                               (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
                               ));
     parent->SetSizerAndFit(parent->sizer_v);
@@ -1343,10 +1342,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
 
   
-    
-    slider_zoom = new wxSlider(panel, wxID_ANY, 1, draw_panel->value_slider_old, 1, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    //initialize the variable neededed for slider
+    value_slider_old = 1;
+    //allocate the slider
+    slider = new wxSlider(panel, wxID_ANY, 1, value_slider_old, 1, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     //I set the number of values of the slider to its height (in pixels) in such a way that the cursor of the slider moves with steps of one pixel, i.e., with its maximal precision allowed from the screen
-    slider_zoom->SetRange(1, (slider_zoom->GetSize()).GetHeight());
+    value_slider_max_0 = ((slider->GetSize()).GetHeight());
+    slider->SetRange(1, value_slider_max_0);
 
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
@@ -1356,12 +1358,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
 
-    slider_zoom->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
+    slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
     
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    sizer_h->Add(slider_zoom, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_h->Add(slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
 //    sizer_v->Fit(panel);
@@ -1404,13 +1406,18 @@ void DrawPanel::Update_x_y_min_max(void){
 
 }
 
-void DrawPanel::UpdateSlider(void){
+void ChartFrame::UpdateSlider(void){
     
-    value_slider_old = ((unsigned int)((double)width_chart)/((double)width_chart_0)*(x_max_0-x_min_0)/(x_max-x_min));
+    //compute the zooming factor of the chart and write it into value_slider_old
+    value_slider_old = ((unsigned int)((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/((draw_panel->x_max)-(draw_panel->x_min)));
     
     cout << "***************** Slider value = " << value_slider_old << "\n";
     
-    (parent->slider_zoom)->SetValue(value_slider_old);
+    //if value_slider_old is larger than the current maximum value of the slider, then increase the maximum value of the slider and set the slider cursor to value_slider_old
+    if(value_slider_old > (slider->GetMax())){
+        slider->SetRange(1, 2*value_slider_old);
+    }
+    slider->SetValue(value_slider_old);
     
     
 }
@@ -1741,7 +1748,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         PaintNow();
         
-        UpdateSlider();
+        parent->UpdateSlider();
         
     }
     
@@ -1792,7 +1799,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     
-    cout << "Slider = " << (parent->slider_zoom)->GetValue() << "\n";
+    cout << "Slider = " << (parent->slider)->GetValue() << "\n";
     
     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
     x_min_old = x_min;
@@ -1801,16 +1808,16 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_max_old = y_max;
     
     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
-    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
-    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
-    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * ((double)value_slider_old)/((double)((parent->slider_zoom)->GetValue())) );
+    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
     Update_lambda_phi_min_max();
 
     cout << "x_min = " << x_min<< "\n";
     
-    //update value_slider_old
-    value_slider_old = ((parent->slider_zoom)->GetValue());
+    //update parent->value_slider_old
+    (parent->value_slider_old) = ((parent->slider)->GetValue());
         
     Draw();
     PaintNow();

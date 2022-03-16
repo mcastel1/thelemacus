@@ -526,7 +526,7 @@ public:
 
 
 
-//this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control
+//this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
 template<class T> struct PrintErrorMessage{
     
     T* f;

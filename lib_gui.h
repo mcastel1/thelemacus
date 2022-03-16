@@ -1422,6 +1422,7 @@ void DrawPanel::Update_x_y_min_max(void){
 bool ChartFrame::UpdateSlider(void){
     
     bool output;
+    stringstream s;
     
     //compute the zooming factor of the chart and write it into value_slider_old
     value_slider_old = ((unsigned int)((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/((draw_panel->x_max)-(draw_panel->x_min)));
@@ -1429,9 +1430,16 @@ bool ChartFrame::UpdateSlider(void){
     cout << "***************** Slider value = " << value_slider_old << "\n";
     
     if(value_slider_old <= value_slider_max){
+        
+        s.str("");
+        s << "1:" << value_slider_old;
+        
         slider->SetValue(value_slider_old);
+        text_slider->SetLabel(s.str().c_str());
         output = true;
+        
     }else{
+        
         //        //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
         //        ((f->printerrormessage).control) = (p->name);
         //        ((f->printerrormessage).title) = String("Body not found in catalog!");
@@ -1439,6 +1447,7 @@ bool ChartFrame::UpdateSlider(void){
         //        f->CallAfter((f->printerrormessage));
         //
         output = false;
+        
     }
     
     return output;

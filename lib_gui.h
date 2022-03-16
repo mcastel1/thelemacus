@@ -1056,7 +1056,6 @@ void DrawPanel::Draw(void){
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
     
     (parent->text_position_now)->SetLabel(" ");
-    cout << "************************** Height of label = " << ((parent->text_position_now)->GetSize()).GetHeight() << "\n";
     
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/

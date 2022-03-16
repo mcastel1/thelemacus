@@ -863,6 +863,19 @@ void DrawPanel::PaintNow(){
     wxClientDC dc(this);
     Render(dc);
     
+    //sets the size of the DrawPanel and of the ChartFrame which is its parent
+    this->SetMinSize(wxSize(c->getWidth(), c->getHeight()));
+    //        (parent->panel)->SetMinSize(wxSize(
+    //                                 (c->getWidth()) + (((parent->slider_zoom)->GetSize()).GetWidth()),
+    //                                 (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
+    //                                 ));
+    parent->SetMinSize(wxSize(
+                              (c->getWidth()) + ((parent->slider_zoom)->GetSize().GetWidth()),
+                              (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
+                              ));
+    parent->SetSizerAndFit(parent->sizer_v);
+
+    
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
@@ -1700,20 +1713,6 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         Draw();
         
         PaintNow();
-        
-        this->SetMinSize(wxSize(c->getWidth(), c->getHeight()));
-        (parent->panel)->SetMinSize(wxSize(
-                                 (c->getWidth()) + (((parent->slider_zoom)->GetSize()).GetWidth()),
-                                 (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
-                                 ));
-        parent->SetMinSize(wxSize(
-                        (c->getWidth()) + ((parent->slider_zoom)->GetSize().GetWidth()),
-                        (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
-                       ));
-        
-//        parent->Maximize(parent->panel);
-        parent->SetSizerAndFit(parent->sizer_v);
-      
         
     }
     

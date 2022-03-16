@@ -8,6 +8,8 @@
 //the ratio between the width (height) of the plot area and the width (height) of the chart.
 #define length_plot_area_over_length_chart 0.8
 #define length_chart_over_length_chart_frame 0.8
+//this is the ratio between (the length of the borders drawn around the widgets) and (the length of the frame in which the widgets are located)
+#define length_border_over_length_frame 0.01
 #define outfile_precision 16
 
 
@@ -1339,10 +1341,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
     
-    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*0.0);
-    sizer_h->Add(slider_zoom, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*0.0);
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*0.0);
-    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*0.0);
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_h->Add(slider_zoom, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
 //    sizer_v->Fit(panel);
 
     Maximize(panel);

@@ -641,8 +641,8 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;
-    wxStaticText *text_position_now;
-    wxBoxSizer *sizer_v, *sizer_h;
+    wxStaticText *text_position_now, *text_slider;
+    wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxStaticBitmap* image;
     wxDisplay display;
     wxRect rectangle_display;
@@ -1306,6 +1306,7 @@ void DrawPanel::Draw(void){
 
 ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
+    stringstream s;
     String new_prefix;
     
     parent = parent_input;
@@ -1321,11 +1322,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    
+    sizer_slider = new wxBoxSizer(wxVERTICAL);
+
 
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-        
+  
+    
     //image
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
@@ -1348,6 +1351,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     value_slider_old = 1;
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, value_slider_old, value_slider_max, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    
+    //text field showing the current value of the zoom slider
+    s.str("");
+    s << "1:" << value_slider_old;
+    text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
   
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
@@ -1360,12 +1369,16 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
-    
+
+    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    sizer_h->Add(slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-//    sizer_v->Fit(panel);
+    //    sizer_v->Fit(panel);
 
     Maximize(panel);
     SetSizerAndFit(sizer_v);

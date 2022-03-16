@@ -566,12 +566,12 @@ public:
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
     //    wxListBox* listbox;
-    wxListCtrl* listcontrol;
+    wxListCtrl* listcontrol_sights, *listcontrol_positions;
     wxPanel *panel;
     wxButton* button_add, *button_delete;
     wxBitmapButton *button_modify;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons;
-    wxStaticBoxSizer* sizer_box_sights;
+    wxStaticBoxSizer* sizer_box_sights, *sizer_box_positions;
     
     void OnAdd(wxCommandEvent& event);
     void OnModify(wxCommandEvent& event);
@@ -589,7 +589,7 @@ public:
     ListFrame* parent;
     Catalog* catalog;
     Sight* sight;
-    //this long represents the position in the list (this->GetParent())->listcontrol of sight. If position = -1, then sight is not in that list
+    //this long represents the position in the list (this->GetParent())->listcontrol_sights of sight. If position = -1, then sight is not in that list
     long position;
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
@@ -2563,7 +2563,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width, n_columns/*, margin_h = 10*/, margin_v = 5;
+    unsigned int i, total_column_width, n_columns_listcontrol_sights/*, margin_h = 10*/, margin_v = 5;
     OnSelectInListBox onselectinlistbox;
     wxListItem column, item;
     
@@ -2576,8 +2576,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
-    
-    
+    sizer_box_sights = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
+    sizer_box_positions = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
+        
     //
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
@@ -2588,107 +2589,108 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    sizer_box_sights = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
     
-    //add columns to wxlistcontrol
-    listcontrol = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
-    listcontrol->Bind(wxEVT_LIST_ITEM_SELECTED, onselectinlistbox);
+    //listcontrol_sights with sights
+    listcontrol_sights = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
+    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, onselectinlistbox);
     
     
-    n_columns = 11;
+    n_columns_listcontrol_sights = 11;
     
     column.SetId(0);
     column.SetText(wxT("Body"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(0, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(0, column);
     
     column.SetId(1);
     column.SetText(wxT("Limb"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(1, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(1, column);
     
     column.SetId(2);
     column.SetText(wxT("Artificial horizon"));
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    listcontrol->InsertColumn(2, column);
+    listcontrol_sights->InsertColumn(2, column);
     
     column.SetId(3);
     column.SetText(wxT("Sextant altitude"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(3, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(3, column);
     
     column.SetId(4);
     column.SetText(wxT("Index error"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(4, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(4, column);
     
     column.SetId(5);
     column.SetText(wxT("Height of eye"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(5, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(5, column);
     
     column.SetId(6);
     column.SetText(wxT("Master-clock date and hour (UTC)"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(6, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(6, column);
     
     column.SetId(7);
     column.SetText(wxT("Stopwatch"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(7, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(7, column);
     
     column.SetId(8);
     column.SetText(wxT("Stopwatch reading"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(8, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(8, column);
     
     column.SetId(9);
     column.SetText(wxT("TAI - UTC"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(9, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(9, column);
     
     column.SetId(10);
     column.SetText(wxT("Label"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol->GetSize()).GetWidth()/n_columns);
-    listcontrol->InsertColumn(10, column);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(10, column);
     
     
     //
     for(i=0; i<((plot->sight_list).size()); i++){
         
-        ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol);
+        ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol_sights);
         
     }
     
     //    set the column width to the width of its longest item
-    for(i=0; i<(listcontrol->GetColumnCount()); i++){
-        listcontrol->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
+    for(i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+        listcontrol_sights->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
     }
-    for(total_column_width=0, i=0; i<(listcontrol->GetColumnCount()); i++){
-        total_column_width += (listcontrol->GetColumnWidth(i));
+    for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+        total_column_width += (listcontrol_sights->GetColumnWidth(i));
     }
-    cout << "----------------- total Column width = " << total_column_width << "\n";
-    cout << "Listcontrol width = " << (listcontrol->GetSize()).GetWidth() << "\n";
-    //    //    listcontrol->SetColumnWidth((listcontrol->GetColumnCount())-1, ((listcontrol->GetSize()).GetWidth()) - total_column_width);
+    //    cout << "----------------- total Column width = " << total_column_width << "\n";
+    //    cout << "listcontrol_sights width = " << (listcontrol_sights->GetSize()).GetWidth() << "\n";
+    //    //    listcontrol_sights->SetColumnWidth((listcontrol_sights->GetColumnCount())-1, ((listcontrol_sights->GetSize()).GetWidth()) - total_column_width);
     //
     
-    listcontrol->SetMinSize(wxSize(total_column_width,-1));
+    listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
+    
+    sizer_box_sights->Add(listcontrol_sights, 0,  wxALL, margin_v);
     
     
-    
-    sizer_box_sights->Add(listcontrol, 0,  wxALL, margin_v);
-    
+    //listcontrol_positions with positions
+    listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
+
     
     
     //buttons
@@ -2719,13 +2721,13 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //
     
     //resize uniformly all column
-    //    for(i=0; i<(listcontrol->GetColumnCount()); ++i){
-    //        listcontrol->SetColumnWidth(i, ((listcontrol->GetSize()).GetWidth())/(listcontrol->GetColumnCount()));
+    //    for(i=0; i<(listcontrol_sights->GetColumnCount()); ++i){
+    //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
     sizer_v->Add(sizer_box_sights, 0,  wxALL, margin_v);
     //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
     //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
-    //    sizer_h->Add(listcontrol, 0, wxALIGN_TOP);
+    //    sizer_h->Add(listcontrol_sights, 0, wxALIGN_TOP);
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);
@@ -2748,7 +2750,7 @@ void ListFrame::OnAdd(wxCommandEvent& event){
 void ListFrame::OnModify(wxCommandEvent& event){
     
     long item;
-    item = listcontrol->GetNextItem(-1,
+    item = listcontrol_sights->GetNextItem(-1,
                                     wxLIST_NEXT_ALL,
                                     wxLIST_STATE_SELECTED);
     
@@ -2778,8 +2780,8 @@ void ListFrame::OnDelete(wxCommandEvent& event){
     
     long item;
     
-    item = listcontrol->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    listcontrol->DeleteItem(item);
+    item = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    listcontrol_sights->DeleteItem(item);
     
     event.Skip(true);
     
@@ -3310,7 +3312,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         (((this->parent)->plot)->sight_list).push_back(*sight);
     }
     
-    sight->add_to_wxListCtrl(position, ((this->parent)->listcontrol));
+    sight->add_to_wxListCtrl(position, ((this->parent)->listcontrol_sights));
     
     event.Skip(true);
     

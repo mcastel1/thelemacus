@@ -1692,6 +1692,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                         (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
                        ));
         
+//        parent->Maximize(parent->panel);
+        parent->SetSizerAndFit(parent->sizer_v);
+      
+        
     }
     
     event.Skip(true);

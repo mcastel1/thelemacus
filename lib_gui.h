@@ -1344,7 +1344,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
 
   
     
-    slider_zoom = new wxSlider(panel, wxID_ANY, 1, draw_panel->value_slider_old, 100, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider_zoom = new wxSlider(panel, wxID_ANY, 1, draw_panel->value_slider_old, 1, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    //I set the number of values of the slider to its height (in pixels) in such a way that the cursor of the slider moves with steps of one pixel, i.e., with its maximal precision allowed from the screen
+    slider_zoom->SetRange(1, (slider_zoom->GetSize()).GetHeight());
 
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);

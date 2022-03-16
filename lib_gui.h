@@ -653,7 +653,8 @@ public:
     
     void GetCoastLineData(void);
     bool UpdateSlider(void);
-    
+    void UpdateSliderLabel(void);
+
 };
 
 class ChartPanel : public wxPanel{
@@ -1418,11 +1419,20 @@ void DrawPanel::Update_x_y_min_max(void){
 
 }
 
+void ChartFrame::UpdateSliderLabel(void){
+    
+    stringstream s;
+    
+    s.str("");
+    s << "1:" << value_slider_old;
+    text_slider->SetLabel(s.str().c_str());
+
+}
+
 //this function updates the slider according to the zooming factor of the chart. If the zooming factor does not exceed the maximal allowed value, it returns true and it updates the slider, otherwise it returns false and it does not update the slider.
 bool ChartFrame::UpdateSlider(void){
     
     bool output;
-    stringstream s;
     
     //compute the zooming factor of the chart and write it into value_slider_old
     value_slider_old = ((unsigned int)((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/((draw_panel->x_max)-(draw_panel->x_min)));
@@ -1431,11 +1441,9 @@ bool ChartFrame::UpdateSlider(void){
     
     if(value_slider_old <= value_slider_max){
         
-        s.str("");
-        s << "1:" << value_slider_old;
-        
         slider->SetValue(value_slider_old);
-        text_slider->SetLabel(s.str().c_str());
+        UpdateSliderLabel();
+
         output = true;
         
     }else{
@@ -1445,7 +1453,7 @@ bool ChartFrame::UpdateSlider(void){
         //        ((f->printerrormessage).title) = String("Body not found in catalog!");
         //        ((f->printerrormessage).message) = String("Body must be in catalog.");
         //        f->CallAfter((f->printerrormessage));
-        //
+        
         output = false;
         
     }
@@ -1853,6 +1861,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         
     Draw();
     PaintNow();
+    parent->UpdateSliderLabel();
 
     event.Skip(true);
 

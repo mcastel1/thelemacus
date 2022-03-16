@@ -295,6 +295,7 @@ public:
     void GeoToScreen(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
+    void Update_value_slider(void);
 
     void Render(wxDC& dc);
     
@@ -1388,6 +1389,15 @@ void DrawPanel::Update_x_y_min_max(void){
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
 
+}
+
+void DrawPanel::Update_value_slider(void){
+    
+    value_slider_old = ((unsigned int)((double)width_chart)/((double)width_chart_0)*(x_max_0-x_min_0)/(x_max-x_min));
+    
+    (parent->slider_zoom)->SetValue(value_slider_old);
+    
+    
 }
 
 template<class T>void CheckBody::operator()(T& event){

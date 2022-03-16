@@ -972,12 +972,12 @@ void DrawPanel::Render(wxDC&  dc){
         }
         wx_string = wxString(s.str().c_str());
         
-        dc.DrawText(
+        dc.DrawRotatedText(
                     wx_string,
                     (position_plot_area.x) + (dummy-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
-                    (position_plot_area.y) + height_plot_area + /*this is the border, to allow some empty space between the text and the axis*/
-                    ((parent->GetSize()).GetWidth())*length_border_over_length_frame
-                    );
+                    (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
+                    + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                    0);
         
         first_label = false;
         
@@ -1034,12 +1034,12 @@ void DrawPanel::Render(wxDC&  dc){
         
         wx_string = wxString(s.str().c_str());
         
-        dc.DrawText(
+        dc.DrawRotatedText(
                     wx_string,
                     (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
                     ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                    (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2
-                    );
+                    (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
+                   0);
         
         first_label = false;
         

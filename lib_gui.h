@@ -294,6 +294,7 @@ public:
     void ScreenToGeo(wxPoint, Position*);
     void GeoToScreen(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
+    void Update_x_y_min_max(void);
 
     void Render(wxDC& dc);
     
@@ -1049,12 +1050,7 @@ void DrawPanel::Draw(void){
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
     
-    //Here I set x_min, x_max, y_min, y_max
-    x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
-    x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
-    y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
-    y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
-    
+    Update_x_y_min_max();
         
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > (x_max-x_min)){
@@ -1381,6 +1377,16 @@ void DrawPanel::Update_lambda_phi_min_max(void){
     (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
     (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
     (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
+
+}
+
+//this function computes x_min, ... y_max from lambda_min ... phi_max
+void DrawPanel::Update_x_y_min_max(void){
+    
+    x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
+    x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
+    y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
+    y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
 
 }
 

@@ -527,9 +527,9 @@ public:
 
 
 //this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control
-struct PrintErrorMessage{
+template<class T> struct PrintErrorMessage{
     
-    SightFrame* f;
+    T* f;
     wxControl* control;
     String title, message;
     
@@ -596,7 +596,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    PrintErrorMessage printerrormessage;
+    PrintErrorMessage<SightFrame> printerrormessage;
     
     BodyField* body;
     LimbField* limb;
@@ -2134,7 +2134,7 @@ template<class T> void OnSelectInListBox::operator()(T& event){
     
 }
 
-void PrintErrorMessage::operator()(void){
+template<class T> void PrintErrorMessage<T>::operator()(void){
     
     MessageFrame* message_frame;
     

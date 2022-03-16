@@ -1759,11 +1759,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         
     }
     
- 
-    
-    
     event.Skip(true);
-
 
 }
 

@@ -2563,7 +2563,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width, n_columns_listcontrol_sights/*, margin_h = 10*/, margin_v = 5;
+    unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions/*, margin_h = 10*/, margin_v = 5;
     OnSelectInListBox onselectinlistbox;
     wxListItem column, item;
     
@@ -2691,6 +2691,27 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //listcontrol_positions with positions
     listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
 
+    n_columns_listcontrol_positions = 3;
+    
+    column.SetId(0);
+    column.SetText(wxT("Latitude"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
+    listcontrol_positions->InsertColumn(0, column);
+
+    column.SetId(1);
+    column.SetText(wxT("Longitude"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
+    listcontrol_positions->InsertColumn(1, column);
+
+    column.SetId(2);
+    column.SetText(wxT("Label"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
+    listcontrol_positions->InsertColumn(2, column);
+
+    
     
     
     //buttons

@@ -863,7 +863,7 @@ void DrawPanel::PaintNow(){
     wxClientDC dc(this);
     Render(dc);
     
-    //sets the size of the DrawPanel and of the ChartFrame which is its parent
+    //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(wxSize(c->getWidth(), c->getHeight()));
     //        (parent->panel)->SetMinSize(wxSize(
     //                                 (c->getWidth()) + (((parent->slider_zoom)->GetSize()).GetWidth()),

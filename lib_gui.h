@@ -986,9 +986,9 @@ void DrawPanel::Render(wxDC&  dc){
     //draw labels on the y axis
     //set first value of dummy
     if(y_min > floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi){
-        dummy = floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
-    }else{
         dummy = ceil((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
+    }else{
+        dummy = floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
     }
     //starts for loop which draws the ylabels
     for(first_label = true; dummy<(K*(((((parent->parent)->plot)->phi_max).value))); dummy+= delta_phi){

@@ -2572,6 +2572,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
+
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -2587,7 +2589,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     plot->print(true, String(""), cout);
     //
     
-    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
     //listcontrol_sights with sights
@@ -2711,6 +2712,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
     listcontrol_positions->InsertColumn(2, column);
 
+    sizer_box_positions->Add(listcontrol_positions, 0,  wxALL, margin_v);
+
     
     
     
@@ -2746,6 +2749,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
     sizer_v->Add(sizer_box_sights, 0,  wxALL, margin_v);
+    sizer_v->Add(sizer_box_positions, 0,  wxALL, margin_v);
     //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
     //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol_sights, 0, wxALIGN_TOP);

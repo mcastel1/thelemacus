@@ -2653,11 +2653,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     
     //latitude
-    wxStaticText* text_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     lat = new AngleField<PositionFrame>(this, &(position->phi), String("NS"));
     
     //longitude
-    wxStaticText* text_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
     
     
@@ -2682,10 +2682,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_reduce->Enable((position_in != NULL));
     
-    sizer_grid_measurement->Add(text_phi, 0, wxALIGN_CENTER_VERTICAL);
+    sizer_grid_measurement->Add(text_lat, 0, wxALIGN_CENTER_VERTICAL);
     lat->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
-    sizer_grid_measurement->Add(text_lambda, 0, wxALIGN_CENTER_VERTICAL);
+    sizer_grid_measurement->Add(text_lon, 0, wxALIGN_CENTER_VERTICAL);
     lon->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
         
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);

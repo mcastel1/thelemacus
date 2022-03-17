@@ -1602,10 +1602,20 @@ template <class T> void CheckSign::operator()(T &event){
         bool check;
         
         //I check whether the name in the GUI field sign matches one of the sign values in the list signs
-        for(check = false, i=0; (i<((p->signs).GetCount())) && (!check); i++){
-            if(((p->sign)->GetValue()) == (p->signs)[i]){
-                check = true;
+        if((p->format) == String("")){
+            //if the AngleField p has no sign, the check is ok
+            
+            check=true;
+            
+        }else{
+            //if the AngleField p has a sign, I check it
+            
+            for(check = false, i=0; (i<((p->signs).GetCount())) && (!check); i++){
+                if(((p->sign)->GetValue()) == (p->signs)[i]){
+                    check = true;
+                }
             }
+            
         }
         
         if(check){
@@ -1618,7 +1628,7 @@ template <class T> void CheckSign::operator()(T &event){
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
             ((f->printerrormessage).control) = (p->sign);
             ((f->printerrormessage).title) = String("Sign is not valid!");
-            ((f->printerrormessage).message) = String("Sign must be + or -.");
+            ((f->printerrormessage).message) = String("Sign must be +-, NS or EW.");
             f->CallAfter((f->printerrormessage));
             
             (p->sign_ok) = false;

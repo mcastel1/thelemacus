@@ -84,27 +84,27 @@ template<class T> struct CheckCheck{
 
 
 
-struct CheckSign{
+template<class P> struct CheckSign{
     
-    AngleField* p;
+    P* p;
     
     template <class T> void operator()(T&);
     
     
 };
 
-struct CheckArcDegree{
+template<class P> struct CheckArcDegree{
     
-    AngleField* p;
+    P* p;
     
     template<class T> void operator()(T&);
     
     
 };
 
-struct CheckArcMinute{
+template<class P> struct CheckArcMinute{
     
-    AngleField* p;
+    P* p;
     
     template <class T> void operator()(T&);
     

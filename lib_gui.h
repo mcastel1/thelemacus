@@ -2313,6 +2313,11 @@ bool MyApp::OnInit(){
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
     nautical_chart->Show(true);
     
+    Position geo;
+    PositionFrame* position_frame = new PositionFrame(list_frame, &geo, -1, wxString("xxx"), wxDefaultPosition, wxDefaultSize, String(""));
+    position_frame->Show(true);
+
+    
     return true;
     
 }
@@ -2666,30 +2671,30 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-    button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+//    button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
-    button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
+//    button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
     
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_reduce->Enable((position_in != NULL));
     
-    sizer_grid_measurement->Add(text_phi);
+    sizer_grid_measurement->Add(text_phi, 0, wxALIGN_CENTER_VERTICAL);
     lat->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
-    sizer_grid_measurement->Add(text_lambda);
+    sizer_grid_measurement->Add(text_lambda, 0, wxALIGN_CENTER_VERTICAL);
     lon->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
         
-    sizer_grid_label->Add(text_label);
-    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
+    sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
+//    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
     
-    sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
+    sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
     
     sizer_box_measurement->Add(sizer_grid_measurement);
 //
@@ -2736,7 +2741,7 @@ void PositionFrame::set(void){
     
     lat->set();
     lon->set();
-    label->set();
+//    label->set();
     
 }
 

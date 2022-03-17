@@ -2732,6 +2732,15 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
 }
 
+//set all the GUI fields in this equal to those in the non-GUI object this->position
+void PositionFrame::set(void){
+    
+    lat->set();
+    lon->set();
+    label->set();
+    
+}
+
 
 //this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_reduce
 void PositionFrame::TryToEnableReduce(void){

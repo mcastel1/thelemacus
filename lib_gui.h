@@ -4026,7 +4026,8 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     ((check.check_arc_degree).p) = this;
     ((check.check_arc_minute).p) = this;
     
-    if(format != String("")){
+    //here the allocation of sign is inserted in the code in such a way that if format = "+-" the sign is allocated before deg, text_deg, min, text_min: In this way, when the user tabs through the fields in PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
+    if(format == String("+-")){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
         AdjustWidth(sign);
         sign->Bind(wxEVT_KILL_FOCUS, (check.check_sign));
@@ -4044,6 +4045,13 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min->Bind(wxEVT_KILL_FOCUS, (check.check_arc_minute));
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame) 
+    if((format == String("NS")) || (format == String("EW"))){
+        sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+        AdjustWidth(sign);
+        sign->Bind(wxEVT_KILL_FOCUS, (check.check_sign));
+    }
     
     if(format != String("")){sign->SetValue(wxString(""));}
     deg->SetValue(wxString(""));

@@ -651,11 +651,11 @@ public:
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     PrintErrorMessage<PositionFrame> printerrormessage;
     
-    AngleField* lat, lon;
+    AngleField* lat, *lon;
     StringField *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
-    wxBoxSizer *sizer;
+    wxBoxSizer *sizer, *box_sizer_2;
     wxStaticBoxSizer *sizer_box_measurement;
     
     wxButton* button_reduce, *button_cancel;
@@ -2643,18 +2643,19 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     sizer_grid_measurement = new wxFlexGridSizer(2, 2, 0, 0);
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
     sizer = new wxBoxSizer(wxVERTICAL);
-    
+    box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
+
  
     
     
     
     //latitude
     wxStaticText* text_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    phi = new AngleField(this, &(position->phi), String("NS"));
+    lat = new AngleField(this, &(position->phi), String("NS"));
     
     //longitude
     wxStaticText* text_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    index_error = new AngleField(this, &(position->lambda), String("EW"));
+    lon = new AngleField(this, &(position->lambda), String("EW"));
     
     
  
@@ -2670,8 +2671,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, phi);
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, lambda);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, lat);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, lon);
     button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
     
     
@@ -2679,10 +2680,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_reduce->Enable((position_in != NULL));
     
     sizer_grid_measurement->Add(text_phi);
-    phi->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    lat->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
     sizer_grid_measurement->Add(text_lambda);
-    lambda->InsertIn<wxBoxSizer>(sizer_grid_measurement);
+    lon->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
         
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);

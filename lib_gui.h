@@ -2602,7 +2602,6 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     parent = parent_input;
     
     String new_prefix;
-    unsigned int i;
     bool check = true;
     
     

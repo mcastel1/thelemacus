@@ -86,7 +86,7 @@ template<class T> struct CheckCheck{
 
 template<class P> struct CheckSign{
     
-    P* p;
+    AngleField<P>* p;
     
     template <class T> void operator()(T&);
     
@@ -670,7 +670,7 @@ public:
     // The Path to the file we have open
     wxString CurrentDocPath;
     
-    wxDECLARE_EVENT_TABLE();
+//    wxDECLARE_EVENT_TABLE();
     
 };
 

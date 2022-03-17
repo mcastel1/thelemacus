@@ -655,7 +655,7 @@ public:
     StringField *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
-    wxBoxSizer *sizer
+    wxBoxSizer *sizer;
     wxStaticBoxSizer *sizer_box_measurement;
     
     wxButton* button_reduce, *button_cancel;

@@ -3698,7 +3698,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
     
-    sight->print(String("body entered via GUI"), String(""), cout);
+    sight->print(String("sight entered via GUI"), String(""), cout);
     
     //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list
     if(list_position==-1){

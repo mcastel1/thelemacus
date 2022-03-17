@@ -3735,14 +3735,15 @@ AngleField::AngleField(SightFrame* frame, Angle* p, String format_in){
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     if(format != String("")){
+        
         if(format == String("+-")){
             
             //in this case I display the sign before the numerical value of the angle
             sizer_h->Add(sign, 0, wxALIGN_LEFT);
+            
             sizer_h->Add(deg, 0, wxALIGN_CENTER);
             sizer_h->Add(text_deg);
             sizer_h->Add(min, 0, wxALIGN_CENTER);
-            
             sizer_h->Add(text_min);
 
         }else{
@@ -3756,6 +3757,14 @@ AngleField::AngleField(SightFrame* frame, Angle* p, String format_in){
             sizer_h->Add(sign, 0, wxALIGN_LEFT);
 
         }
+    }else{
+        
+        //in this case I display only the numerical value of the angle
+        sizer_h->Add(deg, 0, wxALIGN_CENTER);
+        sizer_h->Add(text_deg);
+        sizer_h->Add(min, 0, wxALIGN_CENTER);
+        sizer_h->Add(text_min);
+
     }
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);

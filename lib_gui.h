@@ -2356,7 +2356,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    H_s = new AngleField(this, &(sight->H_s), String(""));
+    H_s = new AngleField(this, &(sight->H_s), String("+-"));
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

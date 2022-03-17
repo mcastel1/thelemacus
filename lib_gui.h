@@ -409,7 +409,7 @@ public:
     CheckAngle check;
     
     
-    AngleField(SightFrame*, Angle*);
+    AngleField(SightFrame*, Angle*, String);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
@@ -2310,7 +2310,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    H_s = new AngleField(this, &(sight->H_s));
+    H_s = new AngleField(this, &(sight->H_s), String("+-"));
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -2321,7 +2321,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         (sight->index_error).to_deg_min(&deg, &min);
         cout << prefix.value << YELLOW << "... done.\n" << RESET;
     }
-    index_error = new AngleField(this, &(sight->index_error));
+    index_error = new AngleField(this, &(sight->index_error), String("+-"));
     index_error->set();
     
     //artificial horizon
@@ -3580,7 +3580,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
 
 
 //constructor of an AngleField object, based on the parent frame frame
-AngleField::AngleField(SightFrame* frame, Angle* p){
+AngleField::AngleField(SightFrame* frame, Angle* p, String format){
     
     unsigned int i;
     parent_frame = frame;

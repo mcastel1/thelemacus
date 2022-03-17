@@ -2734,7 +2734,12 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 }
 
 
-
+//this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_reduce
+void PositionFrame::TryToEnableReduce(void){
+    
+    button_reduce->Enable((lat->is_ok()) && (lon->is_ok()));
+    
+}
 
 
 

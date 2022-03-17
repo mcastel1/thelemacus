@@ -3585,15 +3585,42 @@ AngleField::AngleField(SightFrame* frame, Angle* p, String format){
     unsigned int i;
     parent_frame = frame;
     angle = p;
-    
-    //tabulate signs and degrees wxArrayStrings
+
     signs.Clear();
-    signs.Add(wxString("+"));
-    signs.Add(wxString("-"));
-    
-    for(degrees.Clear(), i=0; i<360; i++){
-        degrees.Add(wxString::Format(wxT("%i"), i));
+    degrees.Clear();
+    if(format == String("+-")){
+        //tabulate signs
+        signs.Add(wxString("+"));
+        signs.Add(wxString("-"));
     }
+    if(format == String("NS")){
+        signs.Add(wxString("N"));
+        signs.Add(wxString("S"));
+    }
+    if(format == String("EW")){
+        //here W <-> + sign, E <-> - sign
+        signs.Add(wxString("E"));
+        signs.Add(wxString("W"));
+    }
+    
+    //tabuate degrees
+    if((format == String(""))){
+        for(i=0; i<360; i++){
+            degrees.Add(wxString::Format(wxT("%i"), i));
+        }
+    }else{
+        if(format == String("NS")){
+            for(i=0; i<90; i++){
+                degrees.Add(wxString::Format(wxT("%i"), i));
+            }
+        }else{
+            for(i=0; i<180; i++){
+                degrees.Add(wxString::Format(wxT("%i"), i));
+            }
+        }
+    }
+    
+
     
     //initialize check and its objects
     (check.p) = this;

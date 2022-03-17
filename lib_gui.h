@@ -2607,6 +2607,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     parent = parent_input;
     
     String new_prefix;
+    unsigned int common_width;
+    
     bool check = true;
     
     
@@ -2671,7 +2673,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-//    button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+    button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
@@ -2689,7 +2691,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     lon->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
         
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
-//    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
+    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
@@ -2697,13 +2699,13 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
     
     sizer_box_measurement->Add(sizer_grid_measurement);
-//
-//    //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
-//    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Master-clock UTC date and hour of sight"
-//    common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight   ")).GetWidth();
-//    text_combo_body->SetMinSize(wxSize(common_width,-1));
-//    text_date->SetMinSize(wxSize(common_width,-1));
-//    text_label->SetMinSize(wxSize(common_width,-1));
+
+    //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
+    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
+    common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
+    text_lat->SetMinSize(wxSize(common_width,-1));
+    text_lon->SetMinSize(wxSize(common_width,-1));
+    text_label->SetMinSize(wxSize(common_width,-1));
     
     //add the various elements to sizer, by inserting a border of 5 in all directions
     sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, 5);

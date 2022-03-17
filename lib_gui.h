@@ -3654,11 +3654,13 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
 
 
 //constructor of an AngleField object, based on the parent frame frame
-AngleField::AngleField(SightFrame* frame, Angle* p, String format){
+AngleField::AngleField(SightFrame* frame, Angle* p, String format_in){
     
     unsigned int i;
     parent_frame = frame;
     angle = p;
+    
+    format = format_in;
 
     signs.Clear();
     degrees.Clear();
@@ -3734,20 +3736,30 @@ AngleField::AngleField(SightFrame* frame, Angle* p, String format){
     
     if(format != String("")){
         if(format == String("+-")){
+            
             //in this case I display the sign before the numerical value of the angle
-            sizer_v->Add(sign, 0, wxALIGN_LEFT);
-            sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+            sizer_h->Add(sign, 0, wxALIGN_LEFT);
+            sizer_h->Add(deg, 0, wxALIGN_CENTER);
+            sizer_h->Add(text_deg);
+            sizer_h->Add(min, 0, wxALIGN_CENTER);
+            
+            sizer_h->Add(text_min);
+
         }else{
+            
             //in this case I display the sign after the numerical value of the angle
-            sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-            sizer_v->Add(sign, 0, wxALIGN_LEFT);
+            sizer_h->Add(deg, 0, wxALIGN_CENTER);
+            sizer_h->Add(text_deg);
+            sizer_h->Add(min, 0, wxALIGN_CENTER);
+            sizer_h->Add(text_min);
+            
+            sizer_h->Add(sign, 0, wxALIGN_LEFT);
+
         }
     }
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
 
-    sizer_h->Add(deg, 0, wxALIGN_CENTER);
-    sizer_h->Add(text_deg);
-    sizer_h->Add(min, 0, wxALIGN_CENTER);
-    sizer_h->Add(text_min);
     
 }
 

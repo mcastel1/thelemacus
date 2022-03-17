@@ -641,9 +641,8 @@ public:
     PositionFrame(ListFrame*, Position*, long, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
-    Catalog* catalog;
     Position* position;
-    //this long represents the position in the list (this->GetParent())->listcontrol_Positions of position. If list_position = -1, then sight is not in that list
+    //this long represents the position in the list (this->GetParent())->listcontrol_positions of position. If list_position = -1, then sight is not in that list
     long list_position;
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
@@ -652,30 +651,18 @@ public:
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     PrintErrorMessage<PositionFrame> printerrormessage;
     
-    BodyField* body;
-    LimbField* limb;
-    CheckField<LengthField>* artificial_horizon_check;
-    CheckField<ChronoField>* stopwatch_check;
-    AngleField* H_s, *index_error;
-    LengthField* height_of_eye;
-    DateField *master_clock_date;
-    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
+    AngleField* lat, lon;
     StringField *label;
     
-    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;
-    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
-    wxStaticBoxSizer *sizer_box_measurement, *sizer_box_time;
+    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
+    wxBoxSizer *sizer
+    wxStaticBoxSizer *sizer_box_measurement;
     
-    wxArrayString bodies, limbs;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
     void SetIdling(bool);
     void set(void);
-    void OnOpen(wxCommandEvent& event);
-    void OnSave(wxCommandEvent& event);
-    void OnSaveAs(wxCommandEvent& event);
-    void OnClose(wxCommandEvent& event);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void TryToEnableReduce(void);

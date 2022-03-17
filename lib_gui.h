@@ -2748,7 +2748,7 @@ void PositionFrame::set(void){
     
     lat->set();
     lon->set();
-//    label->set();
+    label->set();
     
 }
 

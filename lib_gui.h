@@ -184,9 +184,9 @@ struct CheckLength{
     
 };
 
-struct CheckString{
+template<class P> struct CheckString{
     
-    StringField* p;
+    StringField<P>* p;
     
     template<class T> void operator()(T&);
     
@@ -231,9 +231,9 @@ struct CheckChrono{
 };
 
 
-struct SetStringToCurrentTime{
+template<class P> struct SetStringToCurrentTime{
     
-    StringField* p;
+    StringField<P>* p;
     
     template<class T> void operator()(T&);
     
@@ -442,21 +442,21 @@ public:
     
 };
 
-//class for graphical object: a field to enter a String, composed of a box
-class StringField{
+//class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted
+template<class P> class StringField{
     
 public:
-    //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    //the parent where this StringField object will be inserted
+    P* parent_frame;
     //label box
     wxTextCtrl *value;
     wxBoxSizer *sizer_h, *sizer_v;
     //non-GUI object related to this
     String* string;
-    CheckString check;
-    SetStringToCurrentTime set_string_to_current_time;
+    CheckString<P> check;
+    SetStringToCurrentTime<P> set_string_to_current_time;
     
-    StringField(SightFrame*, String*);
+    StringField(P*, String*);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
@@ -608,7 +608,7 @@ public:
     LengthField* height_of_eye;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
-    StringField *label;
+    StringField<SightFrame> *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
@@ -652,7 +652,7 @@ public:
     PrintErrorMessage<PositionFrame> printerrormessage;
     
     AngleField<PositionFrame>* lat, *lon;
-    StringField *label;
+    StringField<PositionFrame> *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer_2;
@@ -1990,7 +1990,7 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
 
 
 
-template <class T> void SetStringToCurrentTime::operator()(T& event){
+template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(T& event){
     
     //if the label is empty, I replace it with the local time and date
     if(((p->value)->GetValue()).IsEmpty()){
@@ -2009,10 +2009,10 @@ template <class T> void SetStringToCurrentTime::operator()(T& event){
     
 }
 
-//this functor checks out the value in the StringField
-template<class T> void CheckString::operator()(T &event){
+//this functor checks out the value in the StringField<P>
+template<class P> template<class T> void CheckString<P>::operator()(T &event){
     
-    SightFrame* f = (p->parent_frame);
+    P* f = (p->parent_frame);
     
     f->TryToEnableReduce();
     
@@ -2022,7 +2022,7 @@ template<class T> void CheckString::operator()(T &event){
 
 
 //I write in the non-GUI object string the value entered in the GUI object value
-template<class T> void StringField::get(T &event){
+template<class P> template<class T> void StringField<P>::get(T &event){
     
     //here I don't check whether the StringField is ok, because any value in the string field is ok
     (*string) = String((value->GetValue().ToStdString()));
@@ -2475,7 +2475,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    label = new StringField(this, &(sight->label));
+    label = new StringField<SightFrame>(this, &(sight->label));
     
     
     //buttons
@@ -2496,7 +2496,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
-    button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
+    button_reduce->Bind(wxEVT_BUTTON, &StringField<SightFrame>::get<wxCommandEvent>, label);
     
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
@@ -2664,7 +2664,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
  
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-//    label = new StringField(this, &(position->label));
+    label = new StringField<PositionFrame>(this, &(position->label));
     
     
     //buttons
@@ -2676,7 +2676,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
-//    button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
+    button_reduce->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
     
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
@@ -3806,7 +3806,7 @@ void ChronoField::set(Chrono chrono_in){
 }
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string
-void StringField::set(void){
+template<class P> void StringField<P>::set(void){
     
     value->SetValue(wxString(string->value));
     
@@ -4033,9 +4033,9 @@ LengthField::LengthField(SightFrame* frame, Length* p){
 
 
 //constructor of a StringField object, based on the parent frame frame
-StringField::StringField(SightFrame* frame, String* p){
+template<class P> StringField<P>::StringField(P* parent_in, String* p){
     
-    parent_frame = frame;
+    parent_frame = parent_in;
     string = p;
     
     //initialize check
@@ -4282,7 +4282,7 @@ template<class T> void DateField::InsertIn(T* host){
     
 }
 
-template<class T> void StringField::InsertIn(T* host){
+template<class P> template<class T> void StringField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     

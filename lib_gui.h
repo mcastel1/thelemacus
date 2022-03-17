@@ -2741,6 +2741,12 @@ void PositionFrame::set(void){
     
 }
 
+void PositionFrame::SetIdling(bool b){
+    
+    idling = b;
+    
+}
+
 
 //this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_reduce
 void PositionFrame::TryToEnableReduce(void){

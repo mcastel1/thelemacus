@@ -71,7 +71,7 @@ struct CheckBody;
 struct CheckLimb;
 template<class T> struct CheckCheck;
 struct CheckChrono;
-struct CheckAngle;
+template<class P> struct CheckAngle;
 template<class P> struct CheckSign;
 template<class P> struct CheckArcDegree;
 template<class P> struct CheckArcMinute;

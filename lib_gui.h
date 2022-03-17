@@ -95,7 +95,7 @@ template<class P> struct CheckSign{
 
 template<class P> struct CheckArcDegree{
     
-    P* p;
+    AngleField<P>* p;
     
     template<class T> void operator()(T&);
     
@@ -104,7 +104,7 @@ template<class P> struct CheckArcDegree{
 
 template<class P> struct CheckArcMinute{
     
-    P* p;
+    AngleField<P>* p;
     
     template <class T> void operator()(T&);
     
@@ -115,9 +115,9 @@ template<class P> struct CheckArcMinute{
 template<class P> struct CheckAngle{
     
     AngleField<P>* p;
-    CheckSign check_sign;
-    CheckArcDegree check_arc_degree;
-    CheckArcMinute check_arc_minute;
+    CheckSign<P> check_sign;
+    CheckArcDegree<P> check_arc_degree;
+    CheckArcMinute<P> check_arc_minute;
     
     template <class T> void operator()(T&);
     
@@ -406,7 +406,7 @@ public:
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool sign_ok, deg_ok, min_ok;
-    CheckAngle check;
+    CheckAngle<P> check;
     
     
     AngleField(P*, Angle*, String);
@@ -1631,9 +1631,9 @@ template<class T> void LimbField::get(T &event){
 
 
 //checks the value of the sign in the GUI field
-template <class T> void CheckSign::operator()(T &event){
+template<class P> template <class T> void CheckSign<P>::operator()(T &event){
     
-    SightFrame* f = (p->parent_frame);
+    P* f = (p->parent_frame);
     
     //I proceed only if the progam is not is in idling mode
     if(!(f->idling)){
@@ -2034,7 +2034,7 @@ template<class T> void StringField::get(T &event){
 
 
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
-template <class T> void CheckAngle::operator()(T& event){
+template<class P> template <class T> void CheckAngle<P>::operator()(T& event){
     
     check_sign(event);
     check_arc_degree(event);
@@ -2071,9 +2071,9 @@ template <class T> void DateField::get(T& event){
 }
 
 
-template<class T> void CheckArcDegree::operator()(T &event){
+template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event){
     
-    SightFrame* f = (p->parent_frame);
+    P* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -2115,9 +2115,9 @@ template<class T> void CheckArcDegree::operator()(T &event){
     
 }
 
-template <class T> void CheckArcMinute::operator()(T &event){
+template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event){
     
-    SightFrame* f = (p->parent_frame);
+    P* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -2661,7 +2661,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
  
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    label = new StringField(this, &(position->label));
+//    label = new StringField(this, &(position->label));
     
     
     //buttons
@@ -4036,7 +4036,7 @@ StringField::StringField(SightFrame* frame, String* p){
 
 
 
-bool AngleField::is_ok(void){
+template<class P> bool AngleField<P>::is_ok(void){
     
     return(sign_ok && deg_ok && min_ok);
     

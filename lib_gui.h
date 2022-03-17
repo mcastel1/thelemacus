@@ -1901,10 +1901,46 @@ template <class T> void AngleField::get(T &event){
     if(sign_ok && deg_ok && min_ok){
         
         double min_temp;
+        char c;
+        
+        if(format == String("")){
+            //in this case there is no sign in AngleField->this:
+            
+            c='+';
+            
+        }else{
+            //in this case there is a sign in AngleField->this: I write the sign in c
+
+            wxString s;
+            s = (sign->GetValue());
+
+            if(format == String("+-")){
+            
+                if(s==wxString("+")){c='+';}
+                else{c='-';}
+                
+            }
+            
+            if(format == String("EW")){
+                
+                if(s==wxString("W")){c='+';}
+                else{c='-';}
+                
+            }
+            
+            if(format == String("NS")){
+                
+                if(s==wxString("N")){c='+';}
+                else{c='-';}
+                
+            }
+            
+        }
+        
         
         (min->GetValue()).ToDouble(&min_temp);
         
-        angle->from_sign_deg_min(*((const char*)((sign->GetValue()).mb_str())), wxAtoi(deg->GetValue()), min_temp);
+        angle->from_sign_deg_min(c, wxAtoi(deg->GetValue()), min_temp);
         
     }
     
@@ -3460,10 +3496,38 @@ void AngleField::set(void){
     
     unsigned int deg_temp;
     double min_temp;
+    Angle angle_temp;
     
-    angle->to_deg_min(&deg_temp, &min_temp);
     
-    sign->SetValue(wxString("+"));
+    if(format == String("")){
+        
+        angle->to_deg_min(&deg_temp, &min_temp);
+        
+    }else{
+        //in this case format = +-, EW or NS
+        
+        if((angle->value) < M_PI){
+            
+            if(format==String("+-")){sign->SetValue(wxString("+"));}
+            if(format==String("EW")){sign->SetValue(wxString("W"));}
+            if(format==String("NS")){sign->SetValue(wxString("N"));}
+            
+            angle->to_deg_min(&deg_temp, &min_temp);
+             
+        }else{
+            
+            if(format==String("+-")){sign->SetValue(wxString("-"));}
+            if(format==String("EW")){sign->SetValue(wxString("E"));}
+            if(format==String("NS")){sign->SetValue(wxString("S"));}
+       
+            (angle_temp.value) = 2.0*M_PI - (angle->value);
+            angle_temp.to_deg_min(&deg_temp, &min_temp);
+            
+        }
+    
+    }
+
+    //all the cases above must share these lines, so I put them here
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
     min->SetValue(wxString::Format(wxT("%f"), min_temp));
     
@@ -3620,11 +3684,11 @@ AngleField::AngleField(SightFrame* frame, Angle* p, String format){
         }
     }else{
         if(format == String("NS")){
-            for(i=0; i<90; i++){
+            for(i=0; i<=90; i++){
                 degrees.Add(wxString::Format(wxT("%i"), i));
             }
         }else{
-            for(i=0; i<180; i++){
+            for(i=0; i<=180; i++){
                 degrees.Add(wxString::Format(wxT("%i"), i));
             }
         }
@@ -3638,9 +3702,11 @@ AngleField::AngleField(SightFrame* frame, Angle* p, String format){
     ((check.check_arc_degree).p) = this;
     ((check.check_arc_minute).p) = this;
     
-    sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
-    AdjustWidth(sign);
-    sign->Bind(wxEVT_KILL_FOCUS, (check.check_sign));
+    if(format != String("")){
+        sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+        AdjustWidth(sign);
+        sign->Bind(wxEVT_KILL_FOCUS, (check.check_sign));
+    }
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
@@ -3666,8 +3732,18 @@ AngleField::AngleField(SightFrame* frame, Angle* p, String format){
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(sign, 0, wxALIGN_CENTER);
+    if(format != String("")){
+        if(format == String("+-")){
+            //in this case I display the sign before the numerical value of the angle
+            sizer_v->Add(sign, 0, wxALIGN_LEFT);
+            sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+        }else{
+            //in this case I display the sign after the numerical value of the angle
+            sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+            sizer_v->Add(sign, 0, wxALIGN_LEFT);
+        }
+    }
+
     sizer_h->Add(deg, 0, wxALIGN_CENTER);
     sizer_h->Add(text_deg);
     sizer_h->Add(min, 0, wxALIGN_CENTER);

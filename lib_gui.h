@@ -112,9 +112,9 @@ template<class P> struct CheckArcMinute{
 };
 
 
-struct CheckAngle{
+template<class P> struct CheckAngle{
     
-    AngleField* p;
+    AngleField<P>* p;
     CheckSign check_sign;
     CheckArcDegree check_arc_degree;
     CheckArcMinute check_arc_minute;
@@ -389,11 +389,11 @@ public:
 
 
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
-class AngleField{
+template<class P> class AngleField{
     
 public:
     //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    P* parent_frame;
     wxArrayString signs, degrees;
     //the format of the AngleField: String("") for angles  between 0 and 2*pi, String("+-") for angles with a sign between 0 and pi, String("NS") for latitudes between -pi/2 and pi/2, and String("EW") for longitudes between -pi and pi
     String format;
@@ -409,7 +409,7 @@ public:
     CheckAngle check;
     
     
-    AngleField(SightFrame*, Angle*, String);
+    AngleField(P*, Angle*, String);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
@@ -604,7 +604,7 @@ public:
     LimbField* limb;
     CheckField<LengthField>* artificial_horizon_check;
     CheckField<ChronoField>* stopwatch_check;
-    AngleField* H_s, *index_error;
+    AngleField<SightFrame>* H_s, *index_error;
     LengthField* height_of_eye;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
@@ -651,7 +651,7 @@ public:
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     PrintErrorMessage<PositionFrame> printerrormessage;
     
-    AngleField* lat, *lon;
+    AngleField<PositionFrame>* lat, *lon;
     StringField *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
@@ -1935,7 +1935,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
 }
 
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
-template <class T> void AngleField::get(T &event){
+template<class P> template <class T> void AngleField<P>::get(T &event){
     
     
     if(sign_ok && deg_ok && min_ok){
@@ -2396,7 +2396,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    H_s = new AngleField(this, &(sight->H_s), String("+-"));
+    H_s = new AngleField<SightFrame>(this, &(sight->H_s), String("+-"));
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -2407,7 +2407,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
         (sight->index_error).to_deg_min(&deg, &min);
         cout << prefix.value << YELLOW << "... done.\n" << RESET;
     }
-    index_error = new AngleField(this, &(sight->index_error), String("+-"));
+    index_error = new AngleField<SightFrame>(this, &(sight->index_error), String("+-"));
     index_error->set();
     
     //artificial horizon
@@ -2482,8 +2482,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &BodyField::get<wxCommandEvent>, body);
     button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, H_s);
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, index_error);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
     button_reduce->Bind(wxEVT_BUTTON, &LengthField::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, &DateField::get<wxCommandEvent>, master_clock_date);
@@ -2651,11 +2651,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //latitude
     wxStaticText* text_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    lat = new AngleField(this, &(position->phi), String("NS"));
+    lat = new AngleField<PositionFrame>(this, &(position->phi), String("NS"));
     
     //longitude
     wxStaticText* text_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    lon = new AngleField(this, &(position->lambda), String("EW"));
+    lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
     
     
  
@@ -2671,8 +2671,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, lat);
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, lon);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
     button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
     
     
@@ -3695,7 +3695,7 @@ template<class T> void CheckField<T>::set(void){
 }
 
 //sets the value in the GUI objects deg and min equal to the value in the non-GUI limb object angle
-void AngleField::set(void){
+template <class P> void AngleField<P>::set(void){
     
     unsigned int deg_temp;
     double min_temp;
@@ -3857,10 +3857,10 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
 
 
 //constructor of an AngleField object, based on the parent frame frame
-AngleField::AngleField(SightFrame* frame, Angle* p, String format_in){
+template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String format_in){
     
     unsigned int i;
-    parent_frame = frame;
+    parent_frame = parent_in;
     angle = p;
     
     format = format_in;
@@ -4240,7 +4240,7 @@ template<class T> template<class R> void CheckField<T>::InsertIn(R* host){
 }
 
 
-template<class T> void AngleField::InsertIn(T* host){
+template<class P> template<class T> void AngleField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     

@@ -2224,7 +2224,7 @@ template <class T> void LengthField::get(T &event){
 
 
 
-struct OnSelectInListBox{
+struct OnSelectInListControlSights{
     
     ListFrame* f;
     
@@ -2233,8 +2233,18 @@ struct OnSelectInListBox{
     
 };
 
-//if an item in listbox is selected, then the modify and delete buttons are enabled
-template<class T> void OnSelectInListBox::operator()(T& event){
+struct OnSelectInListControlPositions{
+    
+    ListFrame* f;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+
+//if an item in listcontrol_sights is selected, then the modify_sight and delete_sight buttons are enabled
+template<class T> void OnSelectInListControlSights::operator()(T& event){
     
     (f->button_modify_sight)->Enable(true);
     (f->button_delete_sight)->Enable(true);
@@ -2242,6 +2252,17 @@ template<class T> void OnSelectInListBox::operator()(T& event){
     event.Skip(true);
     
 }
+
+//if an item in listcontrol_positions is selected, then the modify_position and delete_position buttons are enabled
+template<class T> void OnSelectInListControlPositions::operator()(T& event){
+    
+    (f->button_modify_position)->Enable(true);
+    (f->button_delete_position)->Enable(true);
+    
+    event.Skip(true);
+    
+}
+
 
 template<class T> void PrintErrorMessage<T>::operator()(void){
     
@@ -2850,12 +2871,14 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions/*, margin_h = 10*/, margin_v = 5;
-    OnSelectInListBox onselectinlistbox;
+    OnSelectInListControlSights on_select_in_listcontrol_sights;
+    OnSelectInListControlPositions on_select_in_listcontrol_positions;
     wxListItem column, item;
     
     
-    (onselectinlistbox.f) = this;
-    
+    (on_select_in_listcontrol_sights.f) = this;
+    (on_select_in_listcontrol_positions.f) = this;
+
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
 
@@ -2880,7 +2903,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //listcontrol_sights with sights
     listcontrol_sights = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
-    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, onselectinlistbox);
+    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, on_select_in_listcontrol_sights);
     
     
     n_columns_listcontrol_sights = 11;
@@ -2978,6 +3001,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //listcontrol_positions with positions
     listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
+    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, on_select_in_listcontrol_positions);
 
     n_columns_listcontrol_positions = 3;
     
@@ -4046,7 +4070,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
-    //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame) 
+    //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if((format == String("NS")) || (format == String("EW"))){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
         AdjustWidth(sign);

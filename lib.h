@@ -1184,8 +1184,6 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     listcontrol->InsertItem(item);
     
-  
-    
     //set latitude column
     listcontrol->SetItem(i, 0, wxString(phi.to_string(String(""), display_precision)));
     
@@ -1194,7 +1192,6 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     //set label column
     listcontrol->SetItem(i, 2, wxString(label.value));
-    
     
 }
 

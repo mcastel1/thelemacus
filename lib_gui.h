@@ -575,10 +575,14 @@ public:
     wxSizer* sizer_h, *sizer_v, *sizer_buttons_sight, *sizer_buttons_position;
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position;
     
-    void OnAdd(wxCommandEvent& event);
-    void OnModify(wxCommandEvent& event);
-    void OnDelete(wxCommandEvent& event);
-    
+    void OnAddSight(wxCommandEvent& event);
+    void OnModifySight(wxCommandEvent& event);
+    void OnDeleteSight(wxCommandEvent& event);
+
+    void OnAddPosition(wxCommandEvent& event);
+    void OnModifyPosition(wxCommandEvent& event);
+    void OnDeletePosition(wxCommandEvent& event);
+
 };
 
 
@@ -2313,9 +2317,9 @@ bool MyApp::OnInit(){
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
     nautical_chart->Show(true);
     
-    Position geo;
-    PositionFrame* position_frame = new PositionFrame(list_frame, &geo, -1, wxString("xxx"), wxDefaultPosition, wxDefaultSize, String(""));
-    position_frame->Show(true);
+//    Position geo;
+//    PositionFrame* position_frame = new PositionFrame(list_frame, &geo, -1, wxString("xxx"), wxDefaultPosition, wxDefaultSize, String(""));
+//    position_frame->Show(true);
 
     
     return true;
@@ -2679,7 +2683,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
     button_reduce->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
-    
+    button_reduce->Bind(wxEVT_BUTTON, &PositionFrame::OnPressReduce, this);
+
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_reduce->Enable((position_in != NULL));
@@ -2752,6 +2757,27 @@ void PositionFrame::SetIdling(bool b){
     idling = b;
     
 }
+
+void PositionFrame::OnPressReduce(wxCommandEvent& event){
+    
+    stringstream s;
+    
+    position->print(String("position entered via GUI"), String(""), cout);
+    
+    //if the constructor of PositionFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of position_list
+    if(list_position==-1){
+        (((this->parent)->plot)->position_list).push_back(*position);
+    }
+    
+    position->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_positions));
+    
+    event.Skip(true);
+    
+    Close(TRUE);
+    
+}
+
+
 
 
 //this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_reduce
@@ -3003,7 +3029,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 
     //button to add a sight
     button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAdd, this);
+    button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
 
     //button to add a position
     button_add_position = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
@@ -3011,7 +3037,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //button to modify a sight
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModify, this);
+    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
     button_modify_sight->Enable(false);
 
     //button to modify a position
@@ -3021,7 +3047,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 
     //button to delete a sight
     button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDelete, this);
+    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDeleteSight, this);
     button_delete_sight->Enable(false);
 
     //button to delete a position
@@ -3062,7 +3088,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //
 }
 
-void ListFrame::OnAdd(wxCommandEvent& event){
+void ListFrame::OnAddSight(wxCommandEvent& event){
     
     SightFrame *sight_frame = new SightFrame(this, NULL, -1, "New sight", wxDefaultPosition, wxDefaultSize, String(""));
     sight_frame->Show(true);
@@ -3071,7 +3097,17 @@ void ListFrame::OnAdd(wxCommandEvent& event){
     
 }
 
-void ListFrame::OnModify(wxCommandEvent& event){
+void ListFrame::OnAddPosition(wxCommandEvent& event){
+    
+    PositionFrame *position_frame = new PositionFrame(this, NULL, -1, "New position", wxDefaultPosition, wxDefaultSize, String(""));
+    position_frame->Show(true);
+    
+    event.Skip(true);
+    
+}
+
+
+void ListFrame::OnModifySight(wxCommandEvent& event){
     
     long item;
     item = listcontrol_sights->GetNextItem(-1,
@@ -3097,15 +3133,48 @@ void ListFrame::OnModify(wxCommandEvent& event){
     
 }
 
+void ListFrame::OnModifyPosition(wxCommandEvent& event){
+    
+    long item;
+    item = listcontrol_positions->GetNextItem(-1,
+                                    wxLIST_NEXT_ALL,
+                                    wxLIST_STATE_SELECTED);
+    
+    if(item != -1){
+        
+        stringstream s;
+        
+        s.str("");
+        s << "Position #" << item;
+        
+        PositionFrame *position_frame = new PositionFrame(this, &((plot->position_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        position_frame->Show(true);
+        
+    }
+    
+    event.Skip(true);
+    
+}
 
 
 
-void ListFrame::OnDelete(wxCommandEvent& event){
+void ListFrame::OnDeleteSight(wxCommandEvent& event){
     
     long item;
     
     item = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     listcontrol_sights->DeleteItem(item);
+    
+    event.Skip(true);
+    
+}
+
+void ListFrame::OnDeletePosition(wxCommandEvent& event){
+    
+    long item;
+    
+    item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    listcontrol_positions->DeleteItem(item);
     
     event.Skip(true);
     

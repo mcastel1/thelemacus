@@ -2713,7 +2713,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_sights->InsertColumn(10, column);
     
     
-    //
+    //write the sights into plot->sight_list into listcontrol_sights
     for(i=0; i<((plot->sight_list).size()); i++){
         
         ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol_sights);
@@ -2759,7 +2759,25 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
     listcontrol_positions->InsertColumn(2, column);
+    
+    
+    //write the sights into plot->sight_list into listcontrol_sights
+    for(i=0; i<((plot->position_list).size()); i++){
+        ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
+    }
 
+    
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+        listcontrol_positions->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+    }
+    for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+        total_column_width += (listcontrol_positions->GetColumnWidth(i));
+    }
+
+    listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
+
+    
     sizer_box_positions->Add(listcontrol_positions, 0,  wxALL, margin_v);
 
     

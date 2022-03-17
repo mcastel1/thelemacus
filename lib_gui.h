@@ -2602,8 +2602,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     parent = parent_input;
     
     String new_prefix;
-    unsigned int i, deg, common_width;
-    double min;
+    unsigned int i;
     bool check = true;
     
     
@@ -2614,7 +2613,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     (printerrormessage.f) = this;
     
     
-    wxMenu *menuFile = new wxMenu;
+//    wxMenu *menuFile = new wxMenu;
     
     //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set list_position to list_position_in.
     if(position_in != NULL){

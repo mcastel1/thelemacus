@@ -1058,6 +1058,7 @@ public:
     Position();
     void enter(String, String);
     void modify(String);
+    void add_to_wxListCtrl(long, wxListCtrl*);
     void print(String, String, ostream&);
     void read_from_file(File&, String);
     //this function transports the position and returns the Route with which it has been transported
@@ -1165,6 +1166,39 @@ void Position::modify(String prefix){
     cout << prefix.value << "Position modified\n";
     
 }
+
+void Position::add_to_wxListCtrl(long position, wxListCtrl* listcontrol){
+    
+    unsigned int i;
+    wxListItem item;
+    
+    if(position == -1){
+        i = (listcontrol->GetItemCount());
+    }else{
+        i = position;
+        listcontrol->DeleteItem(i);
+    }
+    
+    item.SetId(i);
+    item.SetText(wxT(""));
+    
+    listcontrol->InsertItem(item);
+    
+  
+    
+    //set latitude column
+    listcontrol->SetItem(i, 0, wxString(phi.to_string(String(""), display_precision)));
+    
+    //set longitude column
+    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String(""), display_precision)));
+    
+    //set label column
+    listcontrol->SetItem(i, 2, wxString(label.value));
+    
+    
+}
+
+
 
 //if type = l or o, the parameters specifying the route are start, alpha, l. if type = c, the parameters specifying the route are GP and omega. 
 class Route{

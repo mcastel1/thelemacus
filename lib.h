@@ -1167,15 +1167,15 @@ void Position::modify(String prefix){
     
 }
 
-void Position::add_to_wxListCtrl(long position, wxListCtrl* listcontrol){
+void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     unsigned int i;
     wxListItem item;
     
-    if(position == -1){
+    if(list_position == -1){
         i = (listcontrol->GetItemCount());
     }else{
-        i = position;
+        i = list_position;
         listcontrol->DeleteItem(i);
     }
     
@@ -3161,16 +3161,16 @@ void Route::transport(String prefix){
     
 }
 
-void Sight::add_to_wxListCtrl(long position, wxListCtrl* listcontrol){
+void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     unsigned int i;
     wxListItem item;
     Time time_UTC;
     
-    if(position == -1){
+    if(list_position == -1){
         i = (listcontrol->GetItemCount());
     }else{
-        i = position;
+        i = list_position;
         listcontrol->DeleteItem(i);
     }
     

@@ -591,8 +591,8 @@ public:
     ListFrame* parent;
     Catalog* catalog;
     Sight* sight;
-    //this long represents the position in the list (this->GetParent())->listcontrol_sights of sight. If position = -1, then sight is not in that list
-    long position;
+    //this long represents the position in the list (this->GetParent())->listcontrol_sights of sight. If list_position = -1, then sight is not in that list
+    long list_position;
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
@@ -634,6 +634,59 @@ public:
     wxDECLARE_EVENT_TABLE();
     
 };
+
+class PositionFrame: public wxFrame{
+    
+public:
+    PositionFrame(ListFrame*, Position*, long, const wxString&, const wxPoint&, const wxSize&, String);
+    
+    ListFrame* parent;
+    Catalog* catalog;
+    Position* position;
+    //this long represents the position in the list (this->GetParent())->listcontrol_Positions of position. If list_position = -1, then sight is not in that list
+    long list_position;
+    wxPanel *panel;
+    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
+    bool idling;
+    
+    //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
+    PrintErrorMessage<PositionFrame> printerrormessage;
+    
+    BodyField* body;
+    LimbField* limb;
+    CheckField<LengthField>* artificial_horizon_check;
+    CheckField<ChronoField>* stopwatch_check;
+    AngleField* H_s, *index_error;
+    LengthField* height_of_eye;
+    DateField *master_clock_date;
+    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
+    StringField *label;
+    
+    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;
+    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
+    wxStaticBoxSizer *sizer_box_measurement, *sizer_box_time;
+    
+    wxArrayString bodies, limbs;
+    wxButton* button_reduce, *button_cancel;
+    wxMenuBar *menuBar;
+    
+    void SetIdling(bool);
+    void set(void);
+    void OnOpen(wxCommandEvent& event);
+    void OnSave(wxCommandEvent& event);
+    void OnSaveAs(wxCommandEvent& event);
+    void OnClose(wxCommandEvent& event);
+    void OnPressCancel(wxCommandEvent& event);
+    void OnPressReduce(wxCommandEvent& event);
+    void TryToEnableReduce(void);
+    
+    // The Path to the file we have open
+    wxString CurrentDocPath;
+    
+    wxDECLARE_EVENT_TABLE();
+    
+};
+
 
 class ChartFrame: public wxFrame{
     
@@ -2277,7 +2330,7 @@ bool MyApp::OnInit(){
     
 }
 
-SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -2301,13 +2354,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     wxMenu *menuFile = new wxMenu;
     catalog = new Catalog(String(path_file_catalog), String(""));
     
-    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set position to a 'NULL' value (position = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set position to position_in.
+    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set list_position to list_position_in.
     if(sight_in != NULL){
         sight = sight_in;
-        position = position_in;
+        list_position = list_position_in;
     }else{
         sight = new Sight();
-        position = -1;
+        list_position = -1;
     }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -3399,11 +3452,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     sight->print(String("body entered via GUI"), String(""), cout);
     
     //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list
-    if(position==-1){
+    if(list_position==-1){
         (((this->parent)->plot)->sight_list).push_back(*sight);
     }
     
-    sight->add_to_wxListCtrl(position, ((this->parent)->listcontrol_sights));
+    sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
     
     event.Skip(true);
     

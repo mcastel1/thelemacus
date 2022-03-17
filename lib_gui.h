@@ -570,8 +570,8 @@ public:
     //    wxListBox* listbox;
     wxListCtrl* listcontrol_sights, *listcontrol_positions;
     wxPanel *panel;
-    wxButton* button_add, *button_delete;
-    wxBitmapButton *button_modify;
+    wxButton* button_add_sight, *button_delete_sight;
+    wxBitmapButton *button_modify_sight;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons;
     wxStaticBoxSizer* sizer_box_sights, *sizer_box_positions;
     
@@ -2230,8 +2230,8 @@ struct OnSelectInListBox{
 //if an item in listbox is selected, then the modify and delete buttons are enabled
 template<class T> void OnSelectInListBox::operator()(T& event){
     
-    (f->button_modify)->Enable(true);
-    (f->button_delete)->Enable(true);
+    (f->button_modify_sight)->Enable(true);
+    (f->button_delete_sight)->Enable(true);
     
     event.Skip(true);
     
@@ -2995,27 +2995,27 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //buttons
     //button to add a sight
-    button_add = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_add->Bind(wxEVT_BUTTON, &ListFrame::OnAdd, this);
+    button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAdd, this);
     
     //button to modify a sight
     wxImage::AddHandler(new wxPNGHandler);
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
     my_image.Rescale(20,20);
-    button_modify = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_modify->Bind(wxEVT_BUTTON, &ListFrame::OnModify, this);
-    button_modify->Enable(false);
+    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModify, this);
+    button_modify_sight->Enable(false);
     
     //button to delete a sight
-    button_delete = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete->Bind(wxEVT_BUTTON, &ListFrame::OnDelete, this);
-    button_delete->Enable(false);
+    button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDelete, this);
+    button_delete_sight->Enable(false);
     
     
-    sizer_buttons->Add(button_add, 0, wxALIGN_CENTER);
-    sizer_buttons->Add(button_modify, 0, wxALIGN_CENTER);
-    sizer_buttons->Add(button_delete, 0, wxALIGN_CENTER);
+    sizer_buttons->Add(button_add_sight, 0, wxALIGN_CENTER);
+    sizer_buttons->Add(button_modify_sight, 0, wxALIGN_CENTER);
+    sizer_buttons->Add(button_delete_sight, 0, wxALIGN_CENTER);
     sizer_box_sights->Add(sizer_buttons, 0, wxALIGN_LEFT | wxALL, margin_v);
     
     //
@@ -3026,8 +3026,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    }
     sizer_v->Add(sizer_box_sights, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_positions, 0,  wxALL, margin_v);
-    //    sizer_v->Add(button_modify, 0,  wxALIGN_LEFT | wxALL, 5);
-    //    sizer_v->Add(button_delete, 0, wxALIGN_LEFT | wxALL, 5);
+    //    sizer_v->Add(button_modify_sight, 0,  wxALIGN_LEFT | wxALL, 5);
+    //    sizer_v->Add(button_delete_sight, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol_sights, 0, wxALIGN_TOP);
     
     Maximize(panel);
@@ -3996,7 +3996,6 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     }
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-
     
 }
 

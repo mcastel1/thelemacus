@@ -2601,8 +2601,6 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     parent = parent_input;
     
-    //pointer to init.txt to read fixed Position data from in there
-    File file_init;
     String new_prefix;
     unsigned int i, deg, common_width;
     double min;
@@ -2615,11 +2613,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     idling = false;
     (printerrormessage.f) = this;
     
-    file_init.set_name(String(path_file_init));
-    check &= (file_init.open(String("in"), prefix));
     
     wxMenu *menuFile = new wxMenu;
-    catalog = new Catalog(String(path_file_catalog), String(""));
     
     //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set list_position to list_position_in.
     if(position_in != NULL){
@@ -2633,88 +2628,34 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
-    menuFile->Append(ID_Open, "&Open...\tCtrl-O", "This is to open a file");
-    //this adds a separator, a horizontal line in the menu
-    menuFile->AppendSeparator();
-    menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-Shift-S", "This is to save as");
-    menuFile->Append(ID_Save, "&Save...\tCtrl-S", "This is to save");
-    menuFile->Append(ID_Close, "&Close...\tCtrl-W", "This is to close the document");
+//    menuFile->Append(ID_Open, "&Open...\tCtrl-O", "This is to open a file");
+//    //this adds a separator, a horizontal line in the menu
+//    menuFile->AppendSeparator();
+//    menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-Shift-S", "This is to save as");
+//    menuFile->Append(ID_Save, "&Save...\tCtrl-S", "This is to save");
+//    menuFile->Append(ID_Close, "&Close...\tCtrl-W", "This is to close the document");
     
-    menuBar = new wxMenuBar;
-    menuBar->Append( menuFile, "&File" );
-    SetMenuBar( menuBar );
+//    menuBar = new wxMenuBar;
+//    menuBar->Append( menuFile, "&File" );
+//    SetMenuBar( menuBar );
     
     
-    sizer_grid_measurement = new wxFlexGridSizer(6, 2, 0, 0);
-    sizer_grid_time = new wxFlexGridSizer(4, 2, 0, 0);
+    sizer_grid_measurement = new wxFlexGridSizer(2, 2, 0, 0);
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
-    box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
-    box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
-    box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
-    //First off, I need to set TAI_minus_UTC, which will be used in the following. If position_in = NULL,  I read it from from file_init
-    if(position_in==NULL){
-        
-        cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
-        (position->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        
-    }
+ 
     
     
     
-    for(i=0; i<((*catalog).list).size(); i++){
-        bodies.Add((((*catalog).list)[i]).name.value.c_str());
-    }
-    wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    body = new BodyField(this, &(position->body), catalog);
+    //latitude
+    wxStaticText* text_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    phi = new AngleField(this, &(position->phi), String("NS"));
     
-    wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    limb = new LimbField(this, &(position->limb));
+    //longitude
+    wxStaticText* text_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    index_error = new AngleField(this, &(position->lambda), String("EW"));
     
-    //sextant altitude
-    wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    H_s = new AngleField(this, &(position->H_s), String("+-"));
-    
-    //index error
-    wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //If position_in = NULL, read index error from init file
-    if(position_in == NULL){
-        cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
-        (position->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
-        (position->index_error).to_deg_min(&deg, &min);
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    }
-    index_error = new AngleField(this, &(position->index_error), String("+-"));
-    index_error->set();
-    
-    //artificial horizon
-    wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    artificial_horizon_check = new CheckField<LengthField>(this, &(position->artificial_horizon), NULL, false);
-    
-    //height of eye
-    wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    height_of_eye = new LengthField(this, &(position->height_of_eye));
-    //now that height_of_eye has been allocatd, I link artificial_horizon_check to height_of_eye
-    (artificial_horizon_check->related_field) = height_of_eye;
-    
-    //master-clock date
-    //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
-    if(sight_in == NULL){
-        (sight->master_clock_date_and_hour).date.set_current(prefix);
-        (sight->master_clock_date_and_hour).chrono.set_current(prefix);
-        (sight->time).date.set_current(prefix);
-        (sight->time).chrono.set_current(prefix);
-    }
-    wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
-    master_clock_date->set();
-    
-    //master-clock chrono
-    wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     
  
     //label
@@ -2729,58 +2670,20 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, &BodyField::get<wxCommandEvent>, body);
-    button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, H_s);
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, index_error);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
-    button_reduce->Bind(wxEVT_BUTTON, &LengthField::get<wxCommandEvent>, height_of_eye);
-    button_reduce->Bind(wxEVT_BUTTON, &DateField::get<wxCommandEvent>, master_clock_date);
-    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, master_clock_chrono);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
-    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
-    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, phi);
+    button_reduce->Bind(wxEVT_BUTTON, &AngleField::get<wxCommandEvent>, lambda);
     button_reduce->Bind(wxEVT_BUTTON, &StringField::get<wxCommandEvent>, label);
     
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_reduce->Enable((position_in != NULL));
     
-    sizer_grid_measurement->Add(text_combo_body);
-    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-    //    sizer_grid_measurement->Add(combo_body);
+    sizer_grid_measurement->Add(text_phi);
+    phi->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
-    sizer_grid_measurement->Add(text_limb);
-    limb->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-    
-    sizer_grid_measurement->Add(text_H_s);
-    H_s->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-    
-    sizer_grid_measurement->Add(text_index_error);
-    index_error->InsertIn<wxBoxSizer>(box_sizer_3);
-    sizer_grid_measurement->Add(box_sizer_3);
-    
-    sizer_grid_measurement->Add(text_artificial_horizon_check);
-    artificial_horizon_check->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-    
-    sizer_grid_measurement->Add(text_height_of_eye);
-    height_of_eye->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-    
-    sizer_grid_time->Add(text_date);
-    master_clock_date->InsertIn<wxBoxSizer>(box_sizer_4);
-    box_sizer_4->Add(text_space_1);
-    master_clock_chrono->InsertIn<wxBoxSizer>(box_sizer_4);
-    sizer_grid_time->Add(box_sizer_4);
-    
-    sizer_grid_time->Add(text_stopwatch_check);
-    stopwatch_check->InsertIn<wxFlexGridSizer>(sizer_grid_time);
-    
-    sizer_grid_time->Add(text_stopwatch_reading);
-    stopwatch_reading->InsertIn<wxFlexGridSizer>(sizer_grid_time);
-    
-    sizer_grid_time->Add(text_TAI_minus_UTC);
-    TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
-    
+    sizer_grid_measurement->Add(text_lambda);
+    lambda->InsertIn<wxBoxSizer>(sizer_grid_measurement);
+        
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
@@ -2788,21 +2691,18 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
-    sizer_box_time = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
     
     sizer_box_measurement->Add(sizer_grid_measurement);
-    sizer_box_time->Add(sizer_grid_time);
-    
-    //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
-    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Master-clock UTC date and hour of sight"
-    common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight   ")).GetWidth();
-    text_combo_body->SetMinSize(wxSize(common_width,-1));
-    text_date->SetMinSize(wxSize(common_width,-1));
-    text_label->SetMinSize(wxSize(common_width,-1));
+//
+//    //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
+//    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Master-clock UTC date and hour of sight"
+//    common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight   ")).GetWidth();
+//    text_combo_body->SetMinSize(wxSize(common_width,-1));
+//    text_date->SetMinSize(wxSize(common_width,-1));
+//    text_label->SetMinSize(wxSize(common_width,-1));
     
     //add the various elements to sizer, by inserting a border of 5 in all directions
     sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, 5);
     sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, 5);
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, 5);
     
@@ -2818,7 +2718,6 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     SetSizerAndFit(sizer);
     //Maximize();
     
-    file_init.close(prefix);
     
     if(!check){
         cout << prefix.value << RED << "Cannot read position!\n" << RESET;

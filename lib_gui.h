@@ -251,7 +251,7 @@ struct DeleteSight{
     //this is equal to 'y' if the route related to the removed sight has to be removed too, and 'n' otherwise
     Answer remove_related_route;
 
-    template<class T> void operator()(T&);
+    void operator()(wxCommandEvent&);
     
 };
 
@@ -1988,9 +1988,14 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
     
 }
 
-template <class T> void DeleteSight::operator()(T& event){
+void DeleteSight::operator()(wxCommandEvent& event){
+    
+    remove_related_route.print(String("remove rel rou"), String("xxxxxxxxx "), cout);
     
     (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
+    
+    f->plot->print(true, String("--------- "), cout);
+
     
     event.Skip(true);
     
@@ -2277,7 +2282,7 @@ template<class T> void OnSelectInListControlPositions::operator()(T& event){
 
 template<class T> void PrintErrorMessage<T>::operator()(void){
     
-    MessageFrame* message_frame;
+    MessageFrame<void*>* message_frame;
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);
@@ -2286,7 +2291,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame(f, String("statement"), NULL,  title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame<void*>(f, String("statement"), NULL,  title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
             control->SetFocus();
@@ -2296,7 +2301,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
     }else{
         
-        message_frame = new MessageFrame(f, String("statement"), NULL, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame<void*>(f, String("statement"), NULL, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
@@ -2330,6 +2335,8 @@ bool MyApp::OnInit(){
     
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
     nautical_chart->Show(true);
+    
+    list_frame->plot->print(true, String("************* "), cout);
     
     
 //    Answer* answer;
@@ -2797,7 +2804,7 @@ void PositionFrame::TryToEnableReduce(void){
 
 
 
-MessageFrame::MessageFrame(wxWindow* parent, String type_in, Answer* answer_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename F> MessageFrame<F>::MessageFrame(wxWindow* parent, String type_in, Answer* answer_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxPNGHandler *handler;
@@ -2835,7 +2842,7 @@ MessageFrame::MessageFrame(wxWindow* parent, String type_in, Answer* answer_in, 
     if(type == String("question")){
         
         button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-                button_yes->Bind(wxEVT_BUTTON, &MessageFrame::OnPressYes, this);
+        button_yes->Bind(wxEVT_BUTTON, &MessageFrame::OnPressYes, this);
         
         button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
                 button_no->Bind(wxEVT_BUTTON, &MessageFrame::OnPressNo, this);
@@ -3201,15 +3208,17 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     //remove the sight from the GUI object listcontrol_sights
     listcontrol_sights->DeleteItem((delete_sight.i_sight_to_remove));
     
-   
+    
     
     //remove the sight from the non-GUI object plot
     //ask the user whether he/she wants to remove the related route as well
-    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  &(delete_sight.remove_related_route), "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
+    MessageFrame<DeleteSight*>* message_frame = new MessageFrame<DeleteSight*>(NULL, String("question"),  &(delete_sight.remove_related_route), "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
+    (message_frame->functor) = &delete_sight;
+    
     //bind the button_yes in the message_frame above to the functor () in delete_sight: as button_yes is pressed, the functor is called and 1) if the user answered Yes, both the sight and its related route are removed from plot 2. If the user answered No, only the sight is removed.
-    (message_frame->button_yes)->Bind(wxEVT_BUTTON, delete_sight);
+    //    (message_frame->button_yes)->Bind(wxEVT_BUTTON, delete_sight);
     message_frame ->Show(true);
-
+    
     event.Skip(true);
     
 }
@@ -4330,23 +4339,29 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
 }
 
 //this functor quits the MessageFrame when Ok button is pressed
-void MessageFrame::OnPressOk(wxCommandEvent& event){
+template<typename F> void MessageFrame<F>::OnPressOk(wxCommandEvent& event){
     
     Close(TRUE);
     
 }
 
 //this functor quits the MessageFrame when Ok button is pressed
-void MessageFrame::OnPressYes(wxCommandEvent& event){
+template<typename F> void MessageFrame<F>::OnPressYes(wxCommandEvent& event){
     
-    answer->set(String(""), 'y', String(""));
+    answer->set(String("answer set to "), 'y', String("//////////////// "));
+    
+//    if(typeid((*functor)).name() != "void"){
+    if(functor != NULL){        (*functor)(event);}
+//    }
+    
+    event.Skip(true);
     
     Close(TRUE);
     
 }
 
 //this functor quits the MessageFrame when Ok button is pressed
-void MessageFrame::OnPressNo(wxCommandEvent& event){
+template<typename F> void MessageFrame<F>::OnPressNo(wxCommandEvent& event){
     
     answer->set(String(""), 'n', String(""));
     

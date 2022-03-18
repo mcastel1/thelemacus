@@ -141,7 +141,7 @@ public:
 };
 
 //this is a wxFrame designed to show a message to the GUI user
-class MessageFrame: public wxFrame{
+template<typename F> class MessageFrame: public wxFrame{
     
 public:
     MessageFrame(wxWindow*, String, Answer*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
@@ -155,6 +155,7 @@ public:
     wxGridSizer* sizer_grid;
     wxButton* button_ok, *button_yes, *button_no;
     wxStaticBitmap* image;
+    F functor;
     
     void OnPressOk(wxCommandEvent&);
     void OnPressYes(wxCommandEvent&);

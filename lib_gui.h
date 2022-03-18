@@ -624,6 +624,7 @@ public:
     
     void SetIdling(bool);
     void set(void);
+    template<class T> void get(T&);
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnSaveAs(wxCommandEvent& event);
@@ -3227,6 +3228,34 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
     
 }
 
+//write into all the non-GUI objects the values of the GUI fields
+template<class T> void SightFrame::get(T& event){
+    
+    body->get(event);
+    limb->get(event);
+    artificial_horizon_check->get(event);
+    H_s->get(event);
+    index_error->get(event);
+    
+    if(!((artificial_horizon_check->checkbox)->GetValue())){
+        height_of_eye->get(event);
+    }
+    
+    master_clock_date->get(event);
+    master_clock_chrono->get(event);
+
+    stopwatch_check->get(event);
+    
+    if(((stopwatch_check->checkbox)->GetValue())){
+        stopwatch_reading->get(event);
+    }
+
+    TAI_minus_UTC->get(event);
+    label->get(event);
+    
+    event.Skip(true);
+    
+}
 
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
 void SightFrame::set(void){
@@ -3744,6 +3773,9 @@ template <class T> void ChronoField::get(T& event){
 void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
+    
+    //writes the values of the GUI fields in the non-GUI fields
+    get(event);
     
     sight->print(String("sight entered via GUI"), String(""), cout);
     

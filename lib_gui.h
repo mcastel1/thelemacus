@@ -1667,6 +1667,8 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             (p->sign)->SetBackgroundColour(*wxWHITE);
             (p->sign_ok) = true;
             
+            p->get(event);
+            
         }else{
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
@@ -2100,16 +2102,20 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
             (p->deg)->SetBackgroundColour(*wxWHITE);
             
-            if((p->min_ok)){
-                
-                double min_temp;
-                
-                ((p->min)->GetValue()).ToDouble(&min_temp);
-                
-                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
-                
-            }
+//            if((p->min_ok)){
+//
+//                double min_temp;
+//
+//                ((p->min)->GetValue()).ToDouble(&min_temp);
+//
+//                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+//
+//            }
+       
             (p->deg_ok) = true;
+            
+            p->get(event);
+            
             
         }
         
@@ -2142,17 +2148,19 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
         }else{
             (p->min)->SetBackgroundColour(*wxWHITE);
-            if((p->deg_ok)){
-                
-                double min_temp;
-                
-                ((p->min)->GetValue()).ToDouble(&min_temp);
-                
-                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
-                
-                
-            }
+//            if((p->deg_ok)){
+//
+//                double min_temp;
+//
+//                ((p->min)->GetValue()).ToDouble(&min_temp);
+//
+//                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+//
+//
+//            }
             (p->min_ok) = true;
+            
+            p->get(event);
         }
         
         f->TryToEnableReduce();

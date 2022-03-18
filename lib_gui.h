@@ -3176,7 +3176,11 @@ void ListFrame::OnDeleteSight(wxCommandEvent& event){
     long item;
     
     item = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    
+    //remove the sight from the GUI object listcontrol_sights
     listcontrol_sights->DeleteItem(item);
+    //remove the sight from the non-GUI object ploty
+    plot->remove_sight(item, String(""));
     
     event.Skip(true);
     
@@ -3188,6 +3192,8 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
     
     item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     listcontrol_positions->DeleteItem(item);
+    plot->remove_position(item, String(""));
+
     
     event.Skip(true);
     

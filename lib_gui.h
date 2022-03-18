@@ -667,6 +667,7 @@ public:
     
     void SetIdling(bool);
     void set(void);
+    template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void TryToEnableReduce(void);
@@ -2783,6 +2784,15 @@ void PositionFrame::set(void){
     
 }
 
+//set all the non-GUI objects in this->position  equal to those in the GUI fields
+template<class T> void PositionFrame::get(T &event){
+    
+    lat->get(event);
+    lon->get(event);
+    label->get(event);
+    
+}
+
 void PositionFrame::SetIdling(bool b){
     
     idling = b;
@@ -2792,6 +2802,9 @@ void PositionFrame::SetIdling(bool b){
 void PositionFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
+    
+    //writes the values of the GUI fields in the non-GUI fields
+    get(event);
     
     position->print(String("position entered via GUI"), String(""), cout);
     

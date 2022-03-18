@@ -241,13 +241,19 @@ template<class P> struct SetStringToCurrentTime{
     
 };
 
+//this struct defines the functor () used to remove a sight from the non-GUI object plot
 struct DeleteSight{
     
+    //the frame which called this struct
     ListFrame* f;
-    
+    //the id of the sight to be removed
+    long i_sight_to_remove;
+    //this is equal to 'y' if the route related to the removed sight has to be removed too, and 'n' otherwise
+    Answer remove_related_route;
+
     template<class T> void operator()(T&);
     
-}
+};
 
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
@@ -567,6 +573,7 @@ public:
     wxBitmapButton *button_modify_sight, *button_modify_position;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons_sight, *sizer_buttons_position;
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position;
+    DeleteSight delete_sight;
     
     void OnAddSight(wxCommandEvent& event);
     void OnModifySight(wxCommandEvent& event);
@@ -1981,6 +1988,14 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
     
 }
 
+template <class T> void DeleteSight::operator()(T& event){
+    
+    (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
+    
+    event.Skip(true);
+    
+}
+
 
 
 template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(T& event){
@@ -2871,6 +2886,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     (on_select_in_listcontrol_sights.f) = this;
     (on_select_in_listcontrol_positions.f) = this;
+    (delete_sight.f) = this;
 
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
@@ -3179,24 +3195,21 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
-    long item;
-    Answer remove_related_route;
-    
-    item = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    //the id of the sight to removed is the one of the sight selected in listcontrol_sights
+    (delete_sight.i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     
     //remove the sight from the GUI object listcontrol_sights
-    listcontrol_sights->DeleteItem(item);
+    listcontrol_sights->DeleteItem((delete_sight.i_sight_to_remove));
     
-    //remove the sight from the non-GUI object ploty
-    //    plot->remove_sight(item, String(""));
+   
     
-    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  &remove_related_route, "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
-    
-    (message_frame->button_yes)->Bind(wxEVT_BUTTON, DeleteSight);
-    
+    //remove the sight from the non-GUI object plot
+    //ask the user whether he/she wants to remove the related route as well
+    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  &(delete_sight.remove_related_route), "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
+    //bind the button_yes in the message_frame above to the functor () in delete_sight: as button_yes is pressed, the functor is called and 1) if the user answered Yes, both the sight and its related route are removed from plot 2. If the user answered No, only the sight is removed.
+    (message_frame->button_yes)->Bind(wxEVT_BUTTON, delete_sight);
     message_frame ->Show(true);
 
-    
     event.Skip(true);
     
 }

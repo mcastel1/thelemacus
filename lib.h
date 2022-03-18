@@ -3423,7 +3423,7 @@ public:
     void transport_route(unsigned int, String);
     void add_position(String);
     void add_route(String);
-    void remove_sight(unsigned int, String);
+    void remove_sight(unsigned int, Answer, String);
     void transport_position(unsigned int, String);
     void remove_position(unsigned int, String);
     void remove_route(unsigned int, String);
@@ -3795,7 +3795,8 @@ void Plot::menu(String prefix){
                 enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), new_prefix);
                 i--;
                 
-                remove_sight(i, new_prefix);
+                //this is obsolete becase it needs one additional argument: I commented it out
+                //                remove_sight(i, new_prefix);
                 print(true, new_prefix, cout);
                 show(false, new_prefix);
                 
@@ -4587,11 +4588,10 @@ void Plot::add_route(String prefix){
 
 
 
-void Plot::remove_sight(unsigned int i, String prefix){
+void Plot::remove_sight(unsigned int i, Answer remove_related_route, String prefix){
     
     stringstream name;
     unsigned int j;
-    Answer remove_related_route;
     Int i_related_route;
     
     i_related_route = ((sight_list[i]).related_route);
@@ -4622,9 +4622,7 @@ void Plot::remove_sight(unsigned int i, String prefix){
     
     
     if((i_related_route.value) != -1){
-        
-//        remove_related_route.enter(String("whether you want to remove the route related to this sight"), prefix);
-             
+                    
         if(remove_related_route == Answer('y', prefix)){
             
             remove_route((i_related_route.value), prefix);
@@ -4689,8 +4687,8 @@ void Plot::remove_route(unsigned int i, String prefix){
         remove_related_sight.enter(String("whether you want to remove the sight related to the route"), prefix);
         
         if(remove_related_sight == Answer('y', prefix)){
-            
-            remove_sight(i_related_sight, prefix);
+            //this is obsloete because it needs one additional argument: I commented it out
+//            remove_sight(i_related_sight, prefix);
             
         }
         

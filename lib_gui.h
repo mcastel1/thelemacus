@@ -2782,6 +2782,13 @@ void PositionFrame::SetIdling(bool b){
     
 }
 
+void PositionFrame::OnPressCancel(wxCommandEvent& event){
+    
+    Close(TRUE);
+    
+}
+
+
 void PositionFrame::OnPressAdd(wxCommandEvent& event){
     
     stringstream s;

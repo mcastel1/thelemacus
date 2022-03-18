@@ -121,6 +121,7 @@ inline double atan(double x, double y){
 }
 
 
+
 class String{
     
 public:
@@ -138,6 +139,29 @@ public:
     bool operator==(const String&), operator!=(const String&);
     
 };
+
+//this is a wxFrame designed to show a message to the GUI user
+class MessageFrame: public wxFrame{
+    
+public:
+    MessageFrame(wxWindow*, String, Answer*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    
+    //the type of the message: "statement" for messages stating something, or "question" for asking a question to the user
+    String type;
+    //the non-GUI object connected to the GUI object MessageFrame
+    Answer* answer;
+    wxPanel *panel;
+    wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
+    wxGridSizer* sizer_grid;
+    wxButton* button_ok, *button_yes, *button_no;
+    wxStaticBitmap* image;
+    
+    void OnPressOk(wxCommandEvent&);
+    void OnPressYes(wxCommandEvent&);
+    void OnPressNo(wxCommandEvent&);
+
+};
+
 
 //this function checks whether the  unsigned int in string s is formatted correctly and, if check_interval = true, it also checks whether the this unsigned int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
 bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned int min, unsigned int sup){

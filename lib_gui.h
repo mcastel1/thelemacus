@@ -542,27 +542,6 @@ template<class T> struct PrintErrorMessage{
 };
 
 
-//this is a wxFrame designed to show a message to the GUI user
-class MessageFrame: public wxFrame{
-    
-public:
-    MessageFrame(wxWindow*, String, Answer*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
-    
-    //the type of the message: "statement" for messages stating something, or "question" for asking a question to the user
-    String type;
-    //the non-GUI object connected to the GUI object MessageFrame
-    Answer* answer;
-    wxPanel *panel;
-    wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
-    wxGridSizer* sizer_grid;
-    wxButton* button_ok, *button_yes, *button_no;
-    wxStaticBitmap* image;
-    
-    void OnPressOk(wxCommandEvent&);
-    void OnPressYes(wxCommandEvent&);
-    void OnPressNo(wxCommandEvent&);
-
-};
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...
 class ListFrame: public wxFrame{
@@ -2332,10 +2311,10 @@ bool MyApp::OnInit(){
     nautical_chart->Show(true);
     
     
-    Answer* answer;
-    answer = new Answer();
-    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  answer, "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
-    message_frame ->Show(true);
+//    Answer* answer;
+//    answer = new Answer();
+//    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  answer, "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
+//    message_frame ->Show(true);
 
     
     return true;

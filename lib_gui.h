@@ -551,7 +551,7 @@ public:
     //the type of the message: "statement" for messages stating something, or "question" for asking a question to the user
     String type;
     wxPanel *panel;
-    wxBoxSizer *sizer_h, *sizer_v;
+    wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
     wxButton* button_ok, *button_yes, *button_no;
     wxStaticBitmap* image;
@@ -2309,17 +2309,6 @@ public:
 };
 
 
-//enum{
-//
-//    ID_Open =  wxID_HIGHEST + 1,
-//
-//};
-
-//wxBEGIN_EVENT_TABLE(SightFrame, wxFrame)
-//EVT_BUTTON(ID_button_cancel,   SightFrame::OnPressCancel)
-//EVT_BUTTON(ID_button_reduce,   SightFrame::OnPressReduce)
-//wxEND_EVENT_TABLE()
-
 wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
@@ -2337,9 +2326,9 @@ bool MyApp::OnInit(){
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
     nautical_chart->Show(true);
     
-//    Position geo;
-//    PositionFrame* position_frame = new PositionFrame(list_frame, &geo, -1, wxString("xxx"), wxDefaultPosition, wxDefaultSize, String(""));
-//    position_frame->Show(true);
+    
+    MessageFrame* message_frame = new MessageFrame(NULL, String("question"), "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
+    message_frame ->Show(true);
 
     
     return true;
@@ -2822,6 +2811,7 @@ MessageFrame::MessageFrame(wxWindow* parent, String type_in, const wxString& tit
   //allocate sizers
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
+    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
     
@@ -2850,13 +2840,14 @@ MessageFrame::MessageFrame(wxWindow* parent, String type_in, const wxString& tit
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
     sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
     if(type == String("statement")){
-        sizer_grid->Add(button_ok, 0, wxALIGN_CENTER);
+        sizer_buttons->Add(button_ok, 0, wxALIGN_CENTER);
     }
     if(type == String("question")){
-        sizer_grid->Add(button_yes, 0, wxALIGN_CENTER);
-        sizer_grid->Add(button_no, 0, wxALIGN_CENTER);
+        sizer_buttons->Add(button_yes, 0, wxALIGN_CENTER);
+        sizer_buttons->Add(button_no, 0, wxALIGN_CENTER);
     }
-    
+    sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
+
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
     //  Maximize(panel);

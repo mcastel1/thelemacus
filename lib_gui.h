@@ -625,18 +625,11 @@ public:
     void SetIdling(bool);
     void set(void);
     template<class T> void get(T&);
-    void OnOpen(wxCommandEvent& event);
-    void OnSave(wxCommandEvent& event);
-    void OnSaveAs(wxCommandEvent& event);
-    void OnClose(wxCommandEvent& event);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void TryToEnableReduce(void);
     
-    // The Path to the file we have open
-    wxString CurrentDocPath;
-    
-    wxDECLARE_EVENT_TABLE();
+//    wxDECLARE_EVENT_TABLE();
     
 };
 
@@ -2313,25 +2306,16 @@ public:
 };
 
 
-enum{
-    
-    ID_Open =  wxID_HIGHEST + 1,
-    ID_Save =  wxID_HIGHEST + 2,
-    ID_SaveAs =  wxID_HIGHEST + 3,
-    ID_Close =  wxID_HIGHEST + 5,
-    ID_button_reduce =  wxID_HIGHEST + 6,
-    ID_button_cancel =  wxID_HIGHEST + 7,
-    
-};
+//enum{
+//
+//    ID_Open =  wxID_HIGHEST + 1,
+//
+//};
 
-wxBEGIN_EVENT_TABLE(SightFrame, wxFrame)
-EVT_MENU(ID_Open,   SightFrame::OnOpen)
-EVT_MENU(ID_Save,   SightFrame::OnSave)
-EVT_MENU(ID_SaveAs,   SightFrame::OnSaveAs)
-EVT_MENU(ID_Close,  SightFrame::OnClose)
-EVT_BUTTON(ID_button_cancel,   SightFrame::OnPressCancel)
-EVT_BUTTON(ID_button_reduce,   SightFrame::OnPressReduce)
-wxEND_EVENT_TABLE()
+//wxBEGIN_EVENT_TABLE(SightFrame, wxFrame)
+//EVT_BUTTON(ID_button_cancel,   SightFrame::OnPressCancel)
+//EVT_BUTTON(ID_button_reduce,   SightFrame::OnPressReduce)
+//wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MyApp);
 
@@ -2380,7 +2364,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));
     
-    wxMenu *menuFile = new wxMenu;
     catalog = new Catalog(String(path_file_catalog), String(""));
     
     //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set list_position to list_position_in.
@@ -2395,16 +2378,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
-    menuFile->Append(ID_Open, "&Open...\tCtrl-O", "This is to open a file");
-    //this adds a separator, a horizontal line in the menu
-    menuFile->AppendSeparator();
-    menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-Shift-S", "This is to save as");
-    menuFile->Append(ID_Save, "&Save...\tCtrl-S", "This is to save");
-    menuFile->Append(ID_Close, "&Close...\tCtrl-W", "This is to close the document");
-    
-    menuBar = new wxMenuBar;
-    menuBar->Append( menuFile, "&File" );
-    SetMenuBar( menuBar );
+      
     
     
     sizer_grid_measurement = new wxFlexGridSizer(6, 2, 0, 0);
@@ -2516,9 +2490,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     
     //buttons
-    button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_cancel->Bind(wxEVT_BUTTON, &SightFrame::OnPressCancel, this);
+
+    button_reduce = new wxButton(panel, wxID_ANY, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
+    button_reduce->Bind(wxEVT_BUTTON, &SightFrame::OnPressReduce, this);
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
@@ -2602,9 +2579,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-    
-    CurrentDocPath = wxT("");
-    
+        
     CreateStatusBar();
     SetStatusText( "Welcome to Michele's text editor!" );
     
@@ -3291,53 +3266,9 @@ void SightFrame::SetIdling(bool b){
     
 }
 
-void SightFrame::OnClose(wxCommandEvent& event){
-    
-    CurrentDocPath = wxT("");
-    SetTitle(_("untitled"));
-    
-}
 
-void SightFrame::OnOpen(wxCommandEvent& event){
-    
-    wxFileDialog* OpenDialog = new wxFileDialog(this, _("Choose a file to open"), wxEmptyString, wxEmptyString,  _("Text files (*.txt)|*.txt|C++ Source Files (*.cpp, *.cxx)|*.cpp;*.cxx|C Source files (*.c)|*.c|C header files (*.h)|*.h"), wxFD_OPEN, wxDefaultPosition);
-    
-    
-    
-    // Creates a "open file" dialog with 4 file types
-    if(/*OpenDialog->ShowModal() is the command which prompts the appearance of the file-selection window*/OpenDialog->ShowModal() == wxID_OK) {
-        // if the user click "Open" instead of "cancel"
-        
-        CurrentDocPath = OpenDialog->GetPath();
-        
-        // Sets our current document to the file the user selected
-        //        combo_H_s_deg->LoadFile(CurrentDocPath); //Opens that file
-        // Set the Title to reflect the  file open
-        SetTitle(wxString("Edit - ") << OpenDialog->GetFilename());
-    }
-    
-    
-}
 
-void SightFrame::OnSaveAs(wxCommandEvent& event){
-    
-    
-    wxFileDialog *SaveDialog = new wxFileDialog(this, _("Save File As _?"), wxEmptyString, wxEmptyString, _("Text files (*.txt)|*.txt|C++ Source Files (*.cpp)|*.cpp| C Source files (*.c)|*.c|C header files (*.h)|*.h"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
-    
-    // Creates a "save file" dialog with 4 file types
-    if(SaveDialog->ShowModal() == wxID_OK) {
-        
-        CurrentDocPath = SaveDialog->GetPath();
-        //        combo_H_s_deg->SaveFile(CurrentDocPath);
-        
-        SetTitle(SaveDialog->GetFilename());
-        
-    }
-    
-    SaveDialog->Destroy();
-    
-    
-}
+
 
 //this function checks whether all the fields in SightFrame are ok, and if they are, it enables the button_reduce
 void SightFrame::TryToEnableReduce(void){
@@ -3357,15 +3288,7 @@ void SightFrame::TryToEnableReduce(void){
 }
 
 
-void SightFrame::OnSave(wxCommandEvent& event){
-    
-    if(CurrentDocPath == ""){
-        OnSaveAs(event);
-    }else{
-        //        combo_H_s_deg->SaveFile(CurrentDocPath);
-    }
-    
-}
+
 
 
 void SightFrame::OnPressCancel(wxCommandEvent& event){

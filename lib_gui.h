@@ -557,6 +557,9 @@ public:
     wxStaticBitmap* image;
     
     void OnPressOk(wxCommandEvent&);
+    void OnPressYes(wxCommandEvent&);
+    void OnPressNo(wxCommandEvent&);
+
 };
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...
@@ -2808,7 +2811,7 @@ MessageFrame::MessageFrame(wxWindow* parent, String type_in, const wxString& tit
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
   
-  //allocate sizers
+    //allocate sizers
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
@@ -2827,10 +2830,10 @@ MessageFrame::MessageFrame(wxWindow* parent, String type_in, const wxString& tit
     if(type == String("question")){
         
         button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-        //        button_yes->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+                button_yes->Bind(wxEVT_BUTTON, &MessageFrame::OnPressYes, this);
         
         button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-        //        button_no->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+                button_no->Bind(wxEVT_BUTTON, &MessageFrame::OnPressNo, this);
 
     }
     
@@ -4317,6 +4320,19 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
 //this functor quits the MessageFrame when Ok button is pressed
 void MessageFrame::OnPressOk(wxCommandEvent& event){
     
+    Close(TRUE);
+    
+}
+
+//this functor quits the MessageFrame when Ok button is pressed
+void MessageFrame::OnPressYes(wxCommandEvent& event){
+    
+    Close(TRUE);
+    
+}
+
+//this functor quits the MessageFrame when Ok button is pressed
+void MessageFrame::OnPressNo(wxCommandEvent& event){
     
     Close(TRUE);
     

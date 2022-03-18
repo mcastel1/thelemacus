@@ -4624,9 +4624,7 @@ void Plot::remove_sight(unsigned int i, String prefix){
     if((i_related_route.value) != -1){
         
 //        remove_related_route.enter(String("whether you want to remove the route related to this sight"), prefix);
-        MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  &remove_related_route, "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
-        message_frame ->Show(true);
-        
+             
         if(remove_related_route == Answer('y', prefix)){
             
             remove_route((i_related_route.value), prefix);

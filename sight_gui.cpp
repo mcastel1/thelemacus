@@ -62,6 +62,7 @@ class ChronoField;
 template<class P> class StringField;
 class MyApp;
 class MessageFrame;
+class ListFrame;
 class SightFrame;
 class ChartFrame;
 class PlotFrame;

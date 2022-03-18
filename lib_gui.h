@@ -241,7 +241,13 @@ template<class P> struct SetStringToCurrentTime{
     
 };
 
-
+struct DeleteSight{
+    
+    ListFrame* f;
+    
+    template<class T> void operator()(T&);
+    
+}
 
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
@@ -3174,13 +3180,22 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
     long item;
+    Answer remove_related_route;
     
     item = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     
     //remove the sight from the GUI object listcontrol_sights
     listcontrol_sights->DeleteItem(item);
+    
     //remove the sight from the non-GUI object ploty
-    plot->remove_sight(item, String(""));
+    //    plot->remove_sight(item, String(""));
+    
+    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  &remove_related_route, "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
+    
+    (message_frame->button_yes)->Bind(wxEVT_BUTTON, DeleteSight);
+    
+    message_frame ->Show(true);
+
     
     event.Skip(true);
     

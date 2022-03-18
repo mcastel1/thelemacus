@@ -564,7 +564,7 @@ public:
     
     void OnAddSight(wxCommandEvent& event);
     void OnModifySight(wxCommandEvent& event);
-    void OnDeleteSight(wxCommandEvent& event);
+    void OnPressDeleteSight(wxCommandEvent& event);
 
     void OnAddPosition(wxCommandEvent& event);
     void OnModifyPosition(wxCommandEvent& event);
@@ -3060,7 +3060,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 
     //button to delete a sight
     button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDeleteSight, this);
+    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight, this);
     button_delete_sight->Enable(false);
 
     //button to delete a position
@@ -3171,7 +3171,7 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
 
 
 
-void ListFrame::OnDeleteSight(wxCommandEvent& event){
+void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
     long item;
     

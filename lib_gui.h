@@ -663,14 +663,14 @@ public:
     wxBoxSizer *sizer, *box_sizer_2;
     wxStaticBoxSizer *sizer_box_measurement;
     
-    wxButton* button_reduce, *button_cancel;
+    wxButton* button_add, *button_cancel;
     wxMenuBar *menuBar;
     
     void SetIdling(bool);
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
-    void OnPressReduce(wxCommandEvent& event);
+    void OnPressAdd(wxCommandEvent& event);
     void TryToEnableReduce(void);
     
     // The Path to the file we have open
@@ -2669,27 +2669,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    
-//    menuFile->Append(ID_Open, "&Open...\tCtrl-O", "This is to open a file");
-//    //this adds a separator, a horizontal line in the menu
-//    menuFile->AppendSeparator();
-//    menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-Shift-S", "This is to save as");
-//    menuFile->Append(ID_Save, "&Save...\tCtrl-S", "This is to save");
-//    menuFile->Append(ID_Close, "&Close...\tCtrl-W", "This is to close the document");
-    
-//    menuBar = new wxMenuBar;
-//    menuBar->Append( menuFile, "&File" );
-//    SetMenuBar( menuBar );
-    
-    
     sizer_grid_measurement = new wxFlexGridSizer(2, 2, 0, 0);
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
-
- 
-    
-    
+   
     
     //latitude
     wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -2698,29 +2682,27 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     //longitude
     wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
-    
-    
- 
+
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     label = new StringField<PositionFrame>(this, &(position->label));
     
     
     //buttons
-    button_cancel = new wxButton(panel, ID_button_cancel, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_reduce = new wxButton(panel, ID_button_reduce, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-    button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
-    button_reduce->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
-    button_reduce->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
-    button_reduce->Bind(wxEVT_BUTTON, &PositionFrame::OnPressReduce, this);
+    button_add->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
+    button_add->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
+    button_add->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
+    button_add->Bind(wxEVT_BUTTON, &PositionFrame::OnPressAdd, this);
 
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
-    button_reduce->Enable((position_in != NULL));
+    button_add->Enable((position_in != NULL));
     
     sizer_grid_measurement->Add(text_lat, 0, wxALIGN_CENTER_VERTICAL);
     lat->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
@@ -2732,7 +2714,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
+    box_sizer_2->Add(button_add, 0, wxALIGN_BOTTOM);
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
     
@@ -2800,7 +2782,7 @@ void PositionFrame::SetIdling(bool b){
     
 }
 
-void PositionFrame::OnPressReduce(wxCommandEvent& event){
+void PositionFrame::OnPressAdd(wxCommandEvent& event){
     
     stringstream s;
     
@@ -2825,10 +2807,10 @@ void PositionFrame::OnPressReduce(wxCommandEvent& event){
 
 
 
-//this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_reduce
+//this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
 void PositionFrame::TryToEnableReduce(void){
     
-    button_reduce->Enable((lat->is_ok()) && (lon->is_ok()));
+    button_add->Enable((lat->is_ok()) && (lon->is_ok()));
     
 }
 

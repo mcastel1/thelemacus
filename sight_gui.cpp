@@ -114,7 +114,6 @@ class Body;
 - add recent items to dropdown menus
  - add instrumental error
  - add condition that an error message is prompted only if the GUI field is enabled not only to CheckLength, but also to all other Check* classes
- - make sure that aspect ratio = 1 in the plotted charts
  - add error message if phi_min, phi_max etc... exceed the min and max latitudes in the data file.
  - all quantities in pixels must be relative to screen size, not absolute pixel size.
  - re-arrange class definitions properly

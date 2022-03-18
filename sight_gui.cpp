@@ -121,6 +121,7 @@ class Body;
  - make sure that on the x and y axis the arcdegree appears at least once
  - add lambert projection and 3D sphere with no projection
  - make sure you can recover a correct chart after the print error message has been prompted because the zoom factor is too large
+ - make sure that LengthField allows to enter lengths in both meters and nm
  */
 
 

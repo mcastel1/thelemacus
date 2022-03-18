@@ -546,10 +546,12 @@ template<class T> struct PrintErrorMessage{
 class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(wxWindow*, String, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    MessageFrame(wxWindow*, String, Answer*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     //the type of the message: "statement" for messages stating something, or "question" for asking a question to the user
     String type;
+    //the non-GUI object connected to the GUI object MessageFrame
+    Answer* answer;
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
@@ -2284,7 +2286,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame(f, String("statement"), title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame(f, String("statement"), NULL,  title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
             control->SetFocus();
@@ -2294,7 +2296,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
     }else{
         
-        message_frame = new MessageFrame(f, String("statement"), title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame(f, String("statement"), NULL, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
@@ -2330,7 +2332,9 @@ bool MyApp::OnInit(){
     nautical_chart->Show(true);
     
     
-    MessageFrame* message_frame = new MessageFrame(NULL, String("question"), "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
+    Answer* answer;
+    answer = new Answer();
+    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  answer, "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
     message_frame ->Show(true);
 
     
@@ -2793,13 +2797,14 @@ void PositionFrame::TryToEnableReduce(void){
 
 
 
-MessageFrame::MessageFrame(wxWindow* parent, String type_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+MessageFrame::MessageFrame(wxWindow* parent, String type_in, Answer* answer_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
 
     type = type_in;
+    answer = answer_in;
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
@@ -4327,12 +4332,16 @@ void MessageFrame::OnPressOk(wxCommandEvent& event){
 //this functor quits the MessageFrame when Ok button is pressed
 void MessageFrame::OnPressYes(wxCommandEvent& event){
     
+    answer->set(String(""), 'y', String(""));
+    
     Close(TRUE);
     
 }
 
 //this functor quits the MessageFrame when Ok button is pressed
 void MessageFrame::OnPressNo(wxCommandEvent& event){
+    
+    answer->set(String(""), 'n', String(""));
     
     Close(TRUE);
     

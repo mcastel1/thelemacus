@@ -2015,12 +2015,12 @@ template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(
     
 }
 
-//this functor checks out the value in the StringField<P> and sets the value in the respective non-GUI object p->string equal to the content of the GUI object p->value
+//this functor does nothing, delete it in the future
 template<class P> template<class T> void CheckString<P>::operator()(T &event){
     
     P* f = (p->parent_frame);
     
-    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
+//    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
 
     f->TryToEnableReduce();
     

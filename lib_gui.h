@@ -546,12 +546,14 @@ template<class T> struct PrintErrorMessage{
 class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(wxWindow* parent, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
+    MessageFrame(wxWindow*, String, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
+    //the type of the message: "statement" for messages stating something, or "question" for asking a question to the user
+    String type;
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v;
     wxGridSizer* sizer_grid;
-    wxButton* button_ok;
+    wxButton* button_ok, *button_yes, *button_no;
     wxStaticBitmap* image;
     
     void OnPressOk(wxCommandEvent&);
@@ -2279,7 +2281,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame(f, String("statement"), title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
             control->SetFocus();
@@ -2289,7 +2291,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
     }else{
         
-        message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame(f, String("statement"), title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
@@ -2799,11 +2801,25 @@ void PositionFrame::TryToEnableReduce(void){
 
 
 
-MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+MessageFrame::MessageFrame(wxWindow* parent, String type_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
+    wxDisplay display;
+    wxPNGHandler *handler;
+    wxRect rectangle;
+
+    type = type_in;
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
+    //image
+    handler = new wxPNGHandler;
+    wxImage::AddHandler(handler);
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    rectangle = (display.GetClientArea());
+    rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
+    rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
+  
+  //allocate sizers
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
@@ -2812,28 +2828,34 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //buttons
-    button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
-    
-    
-    //image
-    wxPNGHandler *handler = new wxPNGHandler;
-    wxImage::AddHandler(handler);
-    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    wxDisplay display;
-    wxRect rectangle = (display.GetClientArea());
-    rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
-    rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
-    
-    
+    if(type == String("statement")){
+        
+        button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+        button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+        
+    }
+    if(type == String("question")){
+        
+        button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+        //        button_yes->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+        
+        button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+        //        button_no->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+
+    }
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
     sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    sizer_grid->Add(button_ok, 0, wxALIGN_CENTER);
-    
+    if(type == String("statement")){
+        sizer_grid->Add(button_ok, 0, wxALIGN_CENTER);
+    }
+    if(type == String("question")){
+        sizer_grid->Add(button_yes, 0, wxALIGN_CENTER);
+        sizer_grid->Add(button_no, 0, wxALIGN_CENTER);
+    }
     
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
@@ -2850,7 +2872,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     //SetSizerAndFit(sizer_v);
     //Maximize();
     
-    Centre();
+    CentreOnScreen();
     
     
 }

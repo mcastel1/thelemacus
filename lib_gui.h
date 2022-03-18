@@ -1667,7 +1667,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             (p->sign)->SetBackgroundColour(*wxWHITE);
             (p->sign_ok) = true;
             
-            p->get(event);
+//            p->get(event);
             
         }else{
             
@@ -1682,7 +1682,6 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
         }
         
         f->TryToEnableReduce();
-        
         
     }
     
@@ -2114,7 +2113,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
        
             (p->deg_ok) = true;
             
-            p->get(event);
+//            p->get(event);
             
             
         }
@@ -2160,7 +2159,8 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
 //            }
             (p->min_ok) = true;
             
-            p->get(event);
+//            p->get(event);
+            
         }
         
         f->TryToEnableReduce();

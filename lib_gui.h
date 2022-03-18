@@ -13,6 +13,7 @@
 #define outfile_precision 16
 //the maximum allowed value of the slider in ChartFrame
 #define value_slider_max 1000
+//#define wxDEBUG_LEVEL 0
 
 
 //this string defines the width of GUI fields hosting floating-point numbers

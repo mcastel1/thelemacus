@@ -2932,7 +2932,7 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     f_no = f_no_in;
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame<QuestionFrame<F_YES, F_NO>>(this);
+    close_frame = new CloseFrame< QuestionFrame<F_YES, F_NO> >(this);
     
     //image
     handler = new wxPNGHandler;

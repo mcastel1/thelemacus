@@ -3810,7 +3810,7 @@ void Plot::menu(String prefix){
                 enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), new_prefix);
                 i--;
                 
-                //this is obsolete becase it needs one additional argument: I commented it out
+                //this  needs one additional argument: I commented it out
                 //                remove_sight(i, new_prefix);
                 print(true, new_prefix, cout);
                 show(false, new_prefix);
@@ -4602,7 +4602,7 @@ void Plot::add_route(String prefix){
 }
 
 
-
+//removes sight #i from sight_list by updating all the connections to between sights and routes. If remove_related_route = 'y', it removes also the route related to sight i
 void Plot::remove_sight(unsigned int i, Answer remove_related_route, String prefix){
     
     stringstream name;
@@ -4636,13 +4636,9 @@ void Plot::remove_sight(unsigned int i, Answer remove_related_route, String pref
     cout << prefix.value << "Sight removed.\n";
     
     
-    if((i_related_route.value) != -1){
-                    
-        if(remove_related_route == Answer('y', prefix)){
-            
-            remove_route((i_related_route.value), prefix);
-            
-        }
+    if(((i_related_route.value) != -1) && (remove_related_route == Answer('y', prefix))){
+        
+        remove_route((i_related_route.value), prefix);
         
     }
     
@@ -4702,8 +4698,8 @@ void Plot::remove_route(unsigned int i, String prefix){
         remove_related_sight.enter(String("whether you want to remove the sight related to the route"), prefix);
         
         if(remove_related_sight == Answer('y', prefix)){
-            //this is obsloete because it needs one additional argument: I commented it out
-//            remove_sight(i_related_sight, prefix);
+            //this needs one additional argument: I commented it out
+            //            remove_sight(i_related_sight, prefix);
             
         }
         

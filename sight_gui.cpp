@@ -88,7 +88,7 @@ struct CheckSecond;
 template<class P> struct CheckString;
 template<class P> struct SetStringToCurrentTime;
 struct TabulateDays;
-template<class T> struct PrintErrorMessage;
+template<class T> class PrintErrorMessage;
 struct OnSelectInListBox;
 
 class Catalog;

@@ -559,11 +559,15 @@ public:
 
 
 //this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
-template<class T> struct PrintErrorMessage{
+template<class T> class PrintErrorMessage{
+    
+public:
     
     T* f;
     wxControl* control;
     String title, message;
+    
+    PrintErrorMessage(T*);
     
     void operator()(void);
     
@@ -619,7 +623,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    PrintErrorMessage<SightFrame> printerrormessage;
+    PrintErrorMessage<SightFrame>* printerrormessage;
     
     BodyField* body;
     LimbField* limb;
@@ -664,7 +668,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    PrintErrorMessage<PositionFrame> printerrormessage;
+    PrintErrorMessage<PositionFrame>* printerrormessage;
     
     AngleField<PositionFrame>* lat, *lon;
     StringField<PositionFrame> *label;
@@ -706,7 +710,7 @@ public:
     wxRect rectangle_display;
     TextBox* box;
     wxSlider* slider;
-    PrintErrorMessage<ChartFrame> print_error_message;
+    PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int /*this stores the value of slider*/value_slider_old;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
@@ -1389,7 +1393,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (parent->plot)->show(true, String(""));
     
     idling = false;
-    (print_error_message.f) = this;
+    print_error_message = new PrintErrorMessage<ChartFrame>(this);
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);
@@ -1522,10 +1526,10 @@ bool ChartFrame::UpdateSlider(void){
     }else{
         
         //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-        (print_error_message.control) = slider;
-        (print_error_message.title) = String("Zoom level exceeded its maximal value!");
-        (print_error_message.message) = String("Zoom level must be >= 1 and <= value_slider_max.");
-        CallAfter(print_error_message);
+        (print_error_message->control) = slider;
+        (print_error_message->title) = String("Zoom level exceeded its maximal value!");
+        (print_error_message->message) = String("Zoom level must be >= 1 and <= value_slider_max.");
+        CallAfter(*print_error_message);
         
         output = false;
         
@@ -1569,10 +1573,10 @@ template<class T>void CheckBody::operator()(T& event){
         }else{
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->name);
-            ((f->printerrormessage).title) = String("Body not found in catalog!");
-            ((f->printerrormessage).message) = String("Body must be in catalog.");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->name);
+            ((f->printerrormessage)->title) = String("Body not found in catalog!");
+            ((f->printerrormessage)->message) = String("Body must be in catalog.");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->ok) = false;
             
@@ -1613,10 +1617,10 @@ template<class T> void CheckLimb::operator()(T &event){
         }else{
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->name);
-            ((f->printerrormessage).title) = String("Limb not valid!");
-            ((f->printerrormessage).message) = String("Limb must be upper, lower or center.");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->name);
+            ((f->printerrormessage)->title) = String("Limb not valid!");
+            ((f->printerrormessage)->message) = String("Limb must be upper, lower or center.");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->ok) = false;
             
@@ -1684,10 +1688,10 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
         }else{
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->sign);
-            ((f->printerrormessage).title) = String("Sign is not valid!");
-            ((f->printerrormessage).message) = String("Sign must be +-, NS or EW.");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->sign);
+            ((f->printerrormessage)->title) = String("Sign is not valid!");
+            ((f->printerrormessage)->message) = String("Sign must be +-, NS or EW.");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->sign_ok) = false;
             
@@ -2139,10 +2143,10 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->deg);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->deg);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->deg_ok) = false;
             
@@ -2187,10 +2191,10 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->min);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->min);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->min_ok) = false;
             
@@ -2234,10 +2238,10 @@ template <class T> void CheckLength::operator()(T &event){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
                 
                 //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-                ((f->printerrormessage).control) = (p->value);
-                ((f->printerrormessage).title) = String("Entered value is not valid!");
-                ((f->printerrormessage).message) = String("Lengths must be floating-point numbers >= 0 m");
-                f->CallAfter((f->printerrormessage));
+                ((f->printerrormessage)->control) = (p->value);
+                ((f->printerrormessage)->title) = String("Entered value is not valid!");
+                ((f->printerrormessage)->message) = String("Lengths must be floating-point numbers >= 0 m");
+                f->CallAfter(*(f->printerrormessage));
                 
             }else{
                 //if the LengthField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
@@ -2406,7 +2410,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    (printerrormessage.f) = this;
+    printerrormessage = new PrintErrorMessage<SightFrame>(this);
     
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));
@@ -2675,7 +2679,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    (printerrormessage.f) = this;
+    printerrormessage = new PrintErrorMessage<PositionFrame>(this);
     
     
     //    wxMenu *menuFile = new wxMenu;
@@ -2966,6 +2970,12 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     //Maximize();
     
     CentreOnScreen();
+    
+}
+
+template<class T> PrintErrorMessage<T>::PrintErrorMessage(T* f_in){
+    
+    f = f_in;
     
 }
 
@@ -3453,10 +3463,10 @@ template<class T> void CheckYear::operator()(T&event){
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->year);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Year must be an unsigned integer");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->year);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Year must be an unsigned integer");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->year_ok) = false;
             (p->day)->Enable(false);
@@ -3494,10 +3504,10 @@ template<class T> void CheckMonth::operator()(T&event){
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->month);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Month must be an unsigned integer >= 1 and <= 12");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->month);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->month_ok) = false;
             (p->day)->Enable(false);
@@ -3562,10 +3572,10 @@ template<class T> void CheckDay::operator()(T& event){
                 //            f->CallAfter(&SightFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
                 
                 //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-                ((f->printerrormessage).control) = (p->day);
-                ((f->printerrormessage).title) = String("Entered value is not valid!");
-                ((f->printerrormessage).message) = String("Day must be an unsigned integer comprised between the days of the relative month");
-                f->CallAfter((f->printerrormessage));
+                ((f->printerrormessage)->control) = (p->day);
+                ((f->printerrormessage)->title) = String("Entered value is not valid!");
+                ((f->printerrormessage)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
+                f->CallAfter(*(f->printerrormessage));
                 
                 (p->day)->Enable(true);
                 (p->day_ok) = false;
@@ -3685,10 +3695,10 @@ template<class T> void CheckHour::operator()(T &event){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
                 
                 //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-                ((f->printerrormessage).control) = (p->hour);
-                ((f->printerrormessage).title) = String("Entered value is not valid!");
-                ((f->printerrormessage).message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-                f->CallAfter((f->printerrormessage));
+                ((f->printerrormessage)->control) = (p->hour);
+                ((f->printerrormessage)->title) = String("Entered value is not valid!");
+                ((f->printerrormessage)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+                f->CallAfter(*(f->printerrormessage));
                 
             }else{
                 //if the ChronoField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
@@ -3730,10 +3740,10 @@ template<class T> void CheckMinute::operator()(T &event){
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->minute);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->minute);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->minute_ok) = false;
             
@@ -3767,10 +3777,10 @@ template<class T> void CheckSecond::operator()(T &event){
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
             
             //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage).control) = (p->second);
-            ((f->printerrormessage).title) = String("Entered value is not valid!");
-            ((f->printerrormessage).message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
-            f->CallAfter((f->printerrormessage));
+            ((f->printerrormessage)->control) = (p->second);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
+            f->CallAfter(*(f->printerrormessage));
             
             (p->second_ok) = false;
             

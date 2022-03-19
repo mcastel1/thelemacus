@@ -126,12 +126,17 @@ template<class P> struct CheckArcMinute{
 };
 
 
-template<class P> struct CheckAngle{
+template<class P> class CheckAngle{
     
+public:
+    
+    //p is the AngleField which is parent of the CheckAngle object: the CheckAngle object checks the validity of the entries in AngleField
     AngleField<P>* p;
     CheckSign<P> check_sign;
     CheckArcDegree<P> check_arc_degree;
     CheckArcMinute<P> check_arc_minute;
+    
+    CheckAngle(AngleField<P>*);
     
     template <class T> void operator()(T&);
     
@@ -436,7 +441,7 @@ public:
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool sign_ok, deg_ok, min_ok;
-    CheckAngle<P> check;
+    CheckAngle<P>* check_angle;
     
     
     AngleField(P*, Angle*, String);
@@ -2091,7 +2096,15 @@ template<class P> template<class T> void StringField<P>::get(T &event){
     
 }
 
+template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in){
+    
+    p = p_in;
+    
+    (check_sign.p) = p;
+    (check_arc_degree.p) = p;
+    (check_arc_minute.p) = p;
 
+}
 
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
 template<class P> template <class T> void CheckAngle<P>::operator()(T& event){
@@ -4161,28 +4174,29 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     
     //initialize check and its objects
-    (check.p) = this;
-    ((check.check_sign).p) = this;
-    ((check.check_arc_degree).p) = this;
-    ((check.check_arc_minute).p) = this;
+    check_angle = new CheckAngle<P>(this);
+//    (check_angle.p) = this;
+//    ((check.check_sign).p) = this;
+//    ((check.check_arc_degree).p) = this;
+//    ((check.check_arc_minute).p) = this;
     
     //here the allocation of sign is inserted in the code in such a way that if format = "+-" the sign is allocated before deg, text_deg, min, text_min: In this way, when the user tabs through the fields in PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if(format == String("+-")){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
         AdjustWidth(sign);
-        sign->Bind(wxEVT_KILL_FOCUS, (check.check_sign));
+        sign->Bind(wxEVT_KILL_FOCUS, (check_angle->check_sign));
     }
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     AdjustWidth(deg);
-    deg->Bind(wxEVT_KILL_FOCUS, (check.check_arc_degree));
+    deg->Bind(wxEVT_KILL_FOCUS, (check_angle->check_arc_degree));
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
-    min->Bind(wxEVT_KILL_FOCUS, (check.check_arc_minute));
+    min->Bind(wxEVT_KILL_FOCUS, (check_angle->check_arc_minute));
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -4190,7 +4204,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     if((format == String("NS")) || (format == String("EW"))){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
         AdjustWidth(sign);
-        sign->Bind(wxEVT_KILL_FOCUS, (check.check_sign));
+        sign->Bind(wxEVT_KILL_FOCUS, (check_angle->check_sign));
     }
     
     if(format != String("")){sign->SetValue(wxString(""));}

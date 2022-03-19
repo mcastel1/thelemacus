@@ -64,7 +64,7 @@ public:
     CloseFrame(F*);
     
     template<class T> void operator()(T&);
-
+    
 };
 
 struct CheckBody{
@@ -267,7 +267,7 @@ public:
     long i_sight_to_remove;
     //this is equal to 'y' if the route related to the removed sight has to be removed too, and 'n' otherwise
     Answer remove_related_route;
-
+    
     void operator()(wxCommandEvent&);
     
 };
@@ -330,7 +330,7 @@ public:
     void GeoToScreen(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
-
+    
     void Render(wxDC& dc);
     
     // some useful events
@@ -595,11 +595,11 @@ public:
     void OnAddSight(wxCommandEvent& event);
     void OnModifySight(wxCommandEvent& event);
     void OnPressDeleteSight(wxCommandEvent& event);
-
+    
     void OnAddPosition(wxCommandEvent& event);
     void OnModifyPosition(wxCommandEvent& event);
     void OnDeletePosition(wxCommandEvent& event);
-
+    
 };
 
 
@@ -646,7 +646,7 @@ public:
     void OnPressReduce(wxCommandEvent& event);
     void TryToEnableReduce(void);
     
-//    wxDECLARE_EVENT_TABLE();
+    //    wxDECLARE_EVENT_TABLE();
     
 };
 
@@ -686,7 +686,7 @@ public:
     // The Path to the file we have open
     wxString CurrentDocPath;
     
-//    wxDECLARE_EVENT_TABLE();
+    //    wxDECLARE_EVENT_TABLE();
     
 };
 
@@ -716,15 +716,15 @@ public:
     bool UpdateSlider(void);
     void UpdateSliderLabel(void);
     void SetIdling(bool);
-
+    
 };
 
 class ChartPanel : public wxPanel{
-  
+    
 public:
-
+    
     ChartFrame* parent;
-
+    
     ChartPanel(ChartFrame*, const wxPoint&, const wxSize&);
     
 };
@@ -902,7 +902,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
-
+    
     //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -953,7 +953,7 @@ void DrawPanel::PaintNow(){
                               (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
                               ));
     parent->SetSizerAndFit(parent->sizer_v);
-
+    
     
 }
 
@@ -1007,7 +1007,7 @@ void DrawPanel::Render(wxDC&  dc){
                 //in this case, lamba_mercator(dummy) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                 
                 s << lambda.deg_to_string(String("EW"), display_precision);
-
+                
             }else{
                 //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree.
                 
@@ -1018,24 +1018,24 @@ void DrawPanel::Render(wxDC&  dc){
                     s << lambda.min_to_string(String("EW"), display_precision);
                 }else{
                     //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-
+                    
                     if(first_label){
                         s << lambda.to_string(String("EW"), display_precision);
                     }else{
                         s << lambda.min_to_string(String("EW"), display_precision);
                     }
                 }
-
+                
             }
         }
         wx_string = wxString(s.str().c_str());
         
         dc.DrawRotatedText(
-                    wx_string,
-                    (position_plot_area.x) + (dummy-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
-                    (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
-                    + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                    0);
+                           wx_string,
+                           (position_plot_area.x) + (dummy-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                           (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
+                           + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                           0);
         
         first_label = false;
         
@@ -1069,7 +1069,7 @@ void DrawPanel::Render(wxDC&  dc){
             }else{
                 //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                 
-//                s << phi.min_to_string(String("NS"), display_precision);
+                //                s << phi.min_to_string(String("NS"), display_precision);
                 
                 if(ceil((K*((((parent->parent)->plot)->phi_max).value)))  - floor((K*((((parent->parent)->plot)->phi_min).value))) != 1){
                     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
@@ -1077,7 +1077,7 @@ void DrawPanel::Render(wxDC&  dc){
                     s << phi.min_to_string(String("NS"), display_precision);
                 }else{
                     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-
+                    
                     if(first_label){
                         s << phi.to_string(String("NS"), display_precision);
                     }else{
@@ -1093,24 +1093,24 @@ void DrawPanel::Render(wxDC&  dc){
         wx_string = wxString(s.str().c_str());
         
         dc.DrawRotatedText(
-                    wx_string,
-                    (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
-                    ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                    (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
-                   0);
+                           wx_string,
+                           (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
+                           ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                           (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
+                           0);
         
         first_label = false;
         
     }
     
     /*
-    Position geo;
-    wxPoint screen;
-    cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
-    GetMouseGeoPosition(&geo);
-    GeoToScreen(geo, &screen);
-    dc.DrawCircle(screen.x - position_draw_panel.x, screen.y - position_draw_panel.y, 10);
-    */
+     Position geo;
+     wxPoint screen;
+     cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
+     GetMouseGeoPosition(&geo);
+     GeoToScreen(geo, &screen);
+     dc.DrawCircle(screen.x - position_draw_panel.x, screen.y - position_draw_panel.y, 10);
+     */
     
 }
 
@@ -1128,7 +1128,7 @@ void DrawPanel::Draw(void){
     parent->GetCoastLineData();
     
     Update_x_y_min_max();
-        
+    
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > (x_max-x_min)){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
@@ -1136,7 +1136,7 @@ void DrawPanel::Draw(void){
                         (((parent->rectangle_display).GetSize()).GetHeight())/((y_max-y_min)/(x_max-x_min)),
                         (((parent->rectangle_display).GetSize()).GetHeight())
                         );
-    
+        
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         height_chart = length_chart_over_length_chart_frame * (((parent->rectangle_display).GetSize()).GetHeight());
         width_chart = height_chart/((y_max-y_min)/(x_max-x_min));
@@ -1246,7 +1246,7 @@ void DrawPanel::Draw(void){
             
             //plot the xtics from lambda to the next lambda (lambda + dlambda)
             for(i=0; (((double)i)/10.0)/60.0 < delta_lambda; i++){
-            
+                
                 if(x_dummy + k*(((double)i)/10.0)/60.0 <= x_max){
                     //set custom-made minor xtics every tenths (i/10.0) of arcminute (60.0)
                     
@@ -1305,7 +1305,7 @@ void DrawPanel::Draw(void){
                 
                 //plot the ytics from phi to the next phi (phi + dphi)
                 for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
-                
+                    
                     if(phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((((parent->parent)->plot)->phi_max).value)))){
                         //set custom-made minor ytics every tenths (i/10.0) of arcminutes (60.0)
                         
@@ -1397,11 +1397,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_slider = new wxBoxSizer(wxVERTICAL);
-
-
+    
+    
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-  
+    
     
     //image
     wxPNGHandler *handler = new wxPNGHandler;
@@ -1419,8 +1419,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->y_max_0) = (draw_panel->y_max);
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
-
-  
+    
+    
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
@@ -1430,8 +1430,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     s.str("");
     s << "1:" << value_slider_old;
     text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
-  
+    
+    
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -1439,21 +1439,21 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
     draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
-
+    
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
-
+    
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-
+    
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     //    sizer_v->Fit(panel);
-
+    
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
@@ -1479,7 +1479,7 @@ void DrawPanel::Update_lambda_phi_min_max(void){
     (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
     (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
     (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
-
+    
 }
 
 //this function computes x_min, ... y_max from lambda_min ... phi_max
@@ -1489,7 +1489,7 @@ void DrawPanel::Update_x_y_min_max(void){
     x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
-
+    
 }
 
 void ChartFrame::UpdateSliderLabel(void){
@@ -1499,7 +1499,7 @@ void ChartFrame::UpdateSliderLabel(void){
     s.str("");
     s << "1:" << value_slider_old;
     text_slider->SetLabel(s.str().c_str());
-
+    
 }
 
 //this function updates the slider according to the zooming factor of the chart. If the zooming factor does not exceed the maximal allowed value, it returns true and it updates the slider, otherwise it returns false and it does not update the slider.
@@ -1516,12 +1516,12 @@ bool ChartFrame::UpdateSlider(void){
         
         slider->SetValue(value_slider_old);
         UpdateSliderLabel();
-
+        
         output = true;
         
     }else{
         
-                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+        //        set the wxControl, title and message for the functor print_error_message, and then call the functor
         (print_error_message.control) = slider;
         (print_error_message.title) = String("Zoom level exceeded its maximal value!");
         (print_error_message.message) = String("Zoom level must be >= 1 and <= value_slider_max.");
@@ -1679,7 +1679,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             (p->sign)->SetBackgroundColour(*wxWHITE);
             (p->sign_ok) = true;
             
-//            p->get(event);
+            //            p->get(event);
             
         }else{
             
@@ -1732,7 +1732,7 @@ void DrawPanel::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
     ScreenToGeo(position_screen_now, p);
-
+    
 }
 
 void DrawPanel::OnMouseMovement(wxMouseEvent &event){
@@ -1773,27 +1773,27 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     Position geo;
     ScreenToGeo(position_start_drag, &geo);
     geo.print(String("Position start drag"), String("************ "), cout);
-        
+    
     event.Skip(true);
-
+    
 }
 
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     SetCursor(*wxCROSS_CURSOR);
-
+    
     position_end_drag = wxGetMousePosition();
     
     Position geo;
     ScreenToGeo(position_now_drag, &geo);
-
+    
     geo.print(String("Position end drag"), String("************ "), cout);
-
- 
-
+    
+    
+    
     event.Skip(true);
-
+    
 }
 
 void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
@@ -1893,9 +1893,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         position_now_drag = wxGetMousePosition();
         
         Position geo;
-    //    ScreenToGeo(position_start_drag, &geo_start);
+        //    ScreenToGeo(position_start_drag, &geo_start);
         ScreenToGeo(position_now_drag, &geo);
-
+        
         
         //update x_min, ..., y_max according to the drag.
         delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
@@ -1904,21 +1904,21 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         x_max -= delta_x;
         y_min += delta_y;
         y_max += delta_y;
-      
+        
         Update_lambda_phi_min_max();
-
+        
         geo.print(String("Position now drag"), String("************ "), cout);
-
+        
         
         //re-draw the chart
         Draw();
         PaintNow();
-     
+        
         
     }
     
     event.Skip(true);
-
+    
 }
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
@@ -1937,18 +1937,18 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
     Update_lambda_phi_min_max();
-
+    
     cout << "x_min = " << x_min<< "\n";
     
     //update parent->value_slider_old
     (parent->value_slider_old) = ((parent->slider)->GetValue());
-        
+    
     Draw();
     PaintNow();
     parent->UpdateSliderLabel();
-
+    
     event.Skip(true);
-
+    
 }
 
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
@@ -1967,12 +1967,12 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
             
         }else{
             //in this case there is a sign in AngleField->this: I write the sign in c
-
+            
             wxString s;
             s = (sign->GetValue());
-
-            if(format == String("+-")){
             
+            if(format == String("+-")){
+                
                 if(s==wxString("+")){c='+';}
                 else{c='-';}
                 
@@ -2015,11 +2015,11 @@ DeleteSight::DeleteSight(Answer remove_related_route_in){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-    remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
+    //    remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
     
     (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
     
-    f->plot->print(true, String("--------- "), cout);
+    //    f->plot->print(true, String("--------- "), cout);
     
     
     event.Skip(true);
@@ -2055,11 +2055,11 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
 
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
-
+    
     event.Skip(true);
     
     frame->Close(true);
-        
+    
 }
 
 
@@ -2068,8 +2068,8 @@ template<class P> template<class T> void CheckString<P>::operator()(T &event){
     
     P* f = (p->parent_frame);
     
-//    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
-
+    //    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
+    
     f->TryToEnableReduce();
     
     event.Skip(true);
@@ -2150,19 +2150,19 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
             (p->deg)->SetBackgroundColour(*wxWHITE);
             
-//            if((p->min_ok)){
-//
-//                double min_temp;
-//
-//                ((p->min)->GetValue()).ToDouble(&min_temp);
-//
-//                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
-//
-//            }
-       
+            //            if((p->min_ok)){
+            //
+            //                double min_temp;
+            //
+            //                ((p->min)->GetValue()).ToDouble(&min_temp);
+            //
+            //                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+            //
+            //            }
+            
             (p->deg_ok) = true;
             
-//            p->get(event);
+            //            p->get(event);
             
             
         }
@@ -2196,19 +2196,19 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
         }else{
             (p->min)->SetBackgroundColour(*wxWHITE);
-//            if((p->deg_ok)){
-//
-//                double min_temp;
-//
-//                ((p->min)->GetValue()).ToDouble(&min_temp);
-//
-//                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
-//
-//
-//            }
+            //            if((p->deg_ok)){
+            //
+            //                double min_temp;
+            //
+            //                ((p->min)->GetValue()).ToDouble(&min_temp);
+            //
+            //                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+            //
+            //
+            //            }
             (p->min_ok) = true;
             
-//            p->get(event);
+            //            p->get(event);
             
         }
         
@@ -2377,14 +2377,14 @@ bool MyApp::OnInit(){
     ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
     nautical_chart->Show(true);
     
-    list_frame->plot->print(true, String("************* "), cout);
+    //    list_frame->plot->print(true, String("************* "), cout);
     
     
-//    Answer* answer;
-//    answer = new Answer();
-//    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  answer, "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
-//    message_frame ->Show(true);
-
+    //    Answer* answer;
+    //    answer = new Answer();
+    //    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  answer, "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
+    //    message_frame ->Show(true);
+    
     
     return true;
     
@@ -2425,7 +2425,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
-      
+    
     
     
     sizer_grid_measurement = new wxFlexGridSizer(6, 2, 0, 0);
@@ -2539,7 +2539,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     //buttons
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel->Bind(wxEVT_BUTTON, &SightFrame::OnPressCancel, this);
-
+    
     button_reduce = new wxButton(panel, wxID_ANY, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
     button_reduce->Bind(wxEVT_BUTTON, &SightFrame::OnPressReduce, this);
@@ -2626,7 +2626,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-        
+    
     CreateStatusBar();
     SetStatusText( "Welcome to Michele's text editor!" );
     
@@ -2678,7 +2678,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     (printerrormessage.f) = this;
     
     
-//    wxMenu *menuFile = new wxMenu;
+    //    wxMenu *menuFile = new wxMenu;
     
     //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set list_position to list_position_in.
     if(position_in != NULL){
@@ -2695,7 +2695,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
-   
+    
     
     //latitude
     wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -2704,7 +2704,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     //longitude
     wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
-
+    
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     label = new StringField<PositionFrame>(this, &(position->label));
@@ -2721,7 +2721,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_add->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
     button_add->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
     button_add->Bind(wxEVT_BUTTON, &PositionFrame::OnPressAdd, this);
-
+    
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_add->Enable((position_in != NULL));
@@ -2731,7 +2731,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     sizer_grid_measurement->Add(text_lon, 0, wxALIGN_CENTER_VERTICAL);
     lon->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-        
+    
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
@@ -2741,7 +2741,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
     
     sizer_box_measurement->Add(sizer_grid_measurement);
-
+    
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
     common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
@@ -2771,7 +2771,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
         cout << prefix.value << RED << "Cannot read position!\n" << RESET;
     }
     
-  
+    
     
     if(position_in != NULL){set();}
     
@@ -2850,7 +2850,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
-
+    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     //image
@@ -2860,20 +2860,20 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
-  
+    
     //allocate sizers
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
-        
+    
     
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
-        
+    
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
@@ -2882,7 +2882,7 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
     sizer_buttons->Add(button_ok, 0, wxALIGN_CENTER);
     sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
-
+    
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
     //  Maximize(panel);
@@ -2910,10 +2910,10 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     wxRect rectangle;
     //initialize the functor to close thie QuestionFrame when button_yes or button_no will be pressed
     CloseFrame<QuestionFrame>* close_frame;
-
+    
     f_yes = f_yes_in;
     f_no = f_no_in;
-
+    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame<QuestionFrame<F_YES, F_NO>>(this);
     
@@ -2924,24 +2924,24 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
-  
+    
     //allocate sizers
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
-        
+    
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //buttons
     button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_yes->Bind(wxEVT_BUTTON, *f_yes);
-//    button_yes->Bind(wxEVT_BUTTON, *close_frame);
+    //    button_yes->Bind(wxEVT_BUTTON, *close_frame);
     button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_no->Bind(wxEVT_BUTTON, *f_no);
     button_no->Bind(wxEVT_BUTTON, *close_frame);
-
-
+    
+    
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
@@ -2949,7 +2949,7 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     sizer_buttons->Add(button_yes, 0, wxALIGN_CENTER);
     sizer_buttons->Add(button_no, 0, wxALIGN_CENTER);
     sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
-
+    
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
     //  Maximize(panel);
@@ -2987,10 +2987,10 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //initialize delete_sight, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
     delete_sight_and_related_route = new DeleteSight(Answer('y', String("")));
     (delete_sight_and_related_route->f) = this;
-
+    
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
-
+    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -2999,7 +2999,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
     sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
-        
+    
     //
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
@@ -3111,7 +3111,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //listcontrol_positions with positions
     listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, on_select_in_listcontrol_positions);
-
+    
     n_columns_listcontrol_positions = 3;
     
     column.SetId(0);
@@ -3119,13 +3119,13 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
     listcontrol_positions->InsertColumn(0, column);
-
+    
     column.SetId(1);
     column.SetText(wxT("Longitude"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
     listcontrol_positions->InsertColumn(1, column);
-
+    
     column.SetId(2);
     column.SetText(wxT("Label"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
@@ -3137,7 +3137,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     for(i=0; i<((plot->position_list).size()); i++){
         ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
     }
-
+    
     
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
@@ -3146,12 +3146,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
         total_column_width += (listcontrol_positions->GetColumnWidth(i));
     }
-
+    
     listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
-
+    
     
     sizer_box_position->Add(listcontrol_positions, 0,  wxALL, margin_v);
-
+    
     
     
     
@@ -3161,11 +3161,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
     my_image.Rescale(20,20);
-
+    
     //button to add a sight
     button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
-
+    
     //button to add a position
     button_add_position = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
@@ -3174,22 +3174,22 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
     button_modify_sight->Enable(false);
-
+    
     //button to modify a position
     button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
     button_modify_position->Enable(false);
-
+    
     //button to delete a sight
     button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight, this);
     button_delete_sight->Enable(false);
-
+    
     //button to delete a position
     button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnDeletePosition, this);
     button_delete_position->Enable(false);
-
+    
     
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
@@ -3200,7 +3200,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_buttons_position->Add(button_modify_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_delete_position, 0, wxALIGN_CENTER);
     sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, margin_v);
-  
+    
     
     //
     
@@ -3246,8 +3246,8 @@ void ListFrame::OnModifySight(wxCommandEvent& event){
     
     long item;
     item = listcontrol_sights->GetNextItem(-1,
-                                    wxLIST_NEXT_ALL,
-                                    wxLIST_STATE_SELECTED);
+                                           wxLIST_NEXT_ALL,
+                                           wxLIST_STATE_SELECTED);
     
     if(item != -1){
         
@@ -3272,8 +3272,8 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
     
     long item;
     item = listcontrol_positions->GetNextItem(-1,
-                                    wxLIST_NEXT_ALL,
-                                    wxLIST_STATE_SELECTED);
+                                              wxLIST_NEXT_ALL,
+                                              wxLIST_STATE_SELECTED);
     
     if(item != -1){
         
@@ -3298,7 +3298,7 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     //the id of the sight to removed is the one of the sight selected in listcontrol_sights: I write it in delete_sight_and_related_route and in delete_sight
     (delete_sight_and_related_route->i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     (delete_sight->i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-
+    
     //remove the sight from the GUI object listcontrol_sights
     listcontrol_sights->DeleteItem((delete_sight->i_sight_to_remove));
     
@@ -3327,7 +3327,7 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
     item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     listcontrol_positions->DeleteItem(item);
     plot->remove_position(item, String(""));
-
+    
     
     event.Skip(true);
     
@@ -3348,13 +3348,13 @@ template<class T> void SightFrame::get(T& event){
     
     master_clock_date->get(event);
     master_clock_chrono->get(event);
-
+    
     stopwatch_check->get(event);
     
     if(((stopwatch_check->checkbox)->GetValue())){
         stopwatch_reading->get(event);
     }
-
+    
     TAI_minus_UTC->get(event);
     label->get(event);
     
@@ -3965,20 +3965,20 @@ template <class P> void AngleField<P>::set(void){
             if(format==String("NS")){sign->SetValue(wxString("N"));}
             
             angle->to_deg_min(&deg_temp, &min_temp);
-             
+            
         }else{
             
             if(format==String("+-")){sign->SetValue(wxString("-"));}
             if(format==String("EW")){sign->SetValue(wxString("E"));}
             if(format==String("NS")){sign->SetValue(wxString("S"));}
-       
+            
             (angle_temp.value) = 2.0*M_PI - (angle->value);
             angle_temp.to_deg_min(&deg_temp, &min_temp);
             
         }
-    
+        
     }
-
+    
     //all the cases above must share these lines, so I put them here
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
     min->SetValue(wxString::Format(wxT("%f"), min_temp));
@@ -4113,7 +4113,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     angle = p;
     
     format = format_in;
-
+    
     signs.Clear();
     degrees.Clear();
     if(format == String("+-")){
@@ -4148,7 +4148,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         }
     }
     
-
+    
     
     //initialize check and its objects
     (check.p) = this;
@@ -4205,7 +4205,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
             sizer_h->Add(text_deg);
             sizer_h->Add(min, 0, wxALIGN_CENTER);
             sizer_h->Add(text_min);
-
+            
         }else{
             
             //in this case I display the sign after the numerical value of the angle
@@ -4215,7 +4215,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
             sizer_h->Add(text_min);
             
             sizer_h->Add(sign, 0, wxALIGN_LEFT);
-
+            
         }
     }else{
         
@@ -4224,7 +4224,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         sizer_h->Add(text_deg);
         sizer_h->Add(min, 0, wxALIGN_CENTER);
         sizer_h->Add(text_min);
-
+        
     }
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);

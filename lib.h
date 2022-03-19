@@ -156,11 +156,11 @@ public:
 
 };
 
-//this is a wxFrame designed to ask a  yes/no question to the GUI user
+//this is a wxFrame designed to ask a  yes/no question to the GUI user. F is the type of the functor struct which will be called when the button yes is pressed. This type is variables, so it has been 'templated'
 template<typename F> class QuestionFrame: public wxFrame{
     
 public:
-    QuestionFrame(wxWindow*, Answer*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    QuestionFrame(wxWindow*, Answer*, F*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     //the non-GUI object connected to the GUI object MessageFrame
     Answer* answer;
@@ -169,7 +169,8 @@ public:
     wxGridSizer* sizer_grid;
     wxButton* button_yes, *button_no;
     wxStaticBitmap* image;
-    F functor;
+    //pointer to the struct containing the functor which will be called when the button yes is pressed
+    F* f;
     
     void OnPressYes(wxCommandEvent&);
     void OnPressNo(wxCommandEvent&);

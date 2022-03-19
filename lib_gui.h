@@ -2862,13 +2862,14 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     
 }
 
-template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* answer_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* answer_in, F* f_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
 
     answer = answer_in;
+    f = f_in;
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
@@ -2889,7 +2890,6 @@ template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* a
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //buttons
-    
     button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_yes->Bind(wxEVT_BUTTON, &QuestionFrame::OnPressYes, this);
     button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -3252,12 +3252,12 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
     //remove the sight from the non-GUI object plot
     //ask the user whether he/she wants to remove the related route as well
-    QuestionFrame<DeleteSight*>* message_frame = new QuestionFrame<DeleteSight*>(NULL, &(delete_sight.remove_related_route), "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
-    (message_frame->functor) = &delete_sight;
+    QuestionFrame<DeleteSight*>* question_frame = new QuestionFrame<DeleteSight*>(NULL, &(delete_sight.remove_related_route), "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
+//    (question_frame->functor) = &delete_sight;
     
-    //bind the button_yes in the message_frame above to the functor () in delete_sight: as button_yes is pressed, the functor is called and 1) if the user answered Yes, both the sight and its related route are removed from plot 2. If the user answered No, only the sight is removed.
-    //    (message_frame->button_yes)->Bind(wxEVT_BUTTON, delete_sight);
-    message_frame ->Show(true);
+    //bind the button_yes in the question_frame above to the functor () in delete_sight: as button_yes is pressed, the functor is called and 1) if the user answered Yes, both the sight and its related route are removed from plot 2. If the user answered No, only the sight is removed.
+    //    (question_frame->button_yes)->Bind(wxEVT_BUTTON, delete_sight);
+    question_frame ->Show(true);
     
     event.Skip(true);
     

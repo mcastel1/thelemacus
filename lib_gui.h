@@ -54,6 +54,19 @@ void AdjustWidth(wxComboBox *control){
     
 }
 
+//class which defines a functor which closes a frame with arbitrary type F
+template<class F> class CloseFrame{
+    
+public:
+    
+    //the frame to be closed
+    F* frame;
+    CloseFrame(F*);
+    
+    template<class T> void operator()(T&);
+
+};
+
 struct CheckBody{
     
     BodyField* p;
@@ -2034,6 +2047,22 @@ template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(
     
 }
 
+template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
+    
+    frame = frame_in;
+    
+}
+
+//closes a frame of type F
+template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
+
+    event.Skip(true);
+    
+    frame->Close(true);
+        
+}
+
+
 //this functor does nothing, delete it in the future
 template<class P> template<class T> void CheckString<P>::operator()(T &event){
     
@@ -2879,11 +2908,14 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
+    //initialize the functor to close thie QuestionFrame when button_yes or button_no will be pressed
+    CloseFrame<QuestionFrame>* close_frame;
 
     f_yes = f_yes_in;
     f_no = f_no_in;
 
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    close_frame = new CloseFrame<QuestionFrame<F_YES, F_NO>>(this);
     
     //image
     handler = new wxPNGHandler;
@@ -2904,9 +2936,12 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     //buttons
     button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_yes->Bind(wxEVT_BUTTON, *f_yes);
+//    button_yes->Bind(wxEVT_BUTTON, *close_frame);
     button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_no->Bind(wxEVT_BUTTON, *f_no);
-    
+    button_no->Bind(wxEVT_BUTTON, *close_frame);
+
+
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);

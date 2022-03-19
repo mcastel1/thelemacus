@@ -170,7 +170,7 @@ public:
     wxButton* button_yes, *button_no;
     wxStaticBitmap* image;
     //pointer to the struct containing the functor which will be called when the button yes is pressed
-    F* f;
+    F* f_yes;
     
     void OnPressYes(wxCommandEvent&);
     void OnPressNo(wxCommandEvent&);

@@ -2862,14 +2862,14 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     
 }
 
-template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* answer_in, F* f_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* answer_in, F* f_yes_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
 
     answer = answer_in;
-    f = f_in;
+    f_yes = f_yes_in;
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
@@ -4389,7 +4389,7 @@ template<typename F> void QuestionFrame<F>::OnPressYes(wxCommandEvent& event){
     answer->set(String("answer set to "), 'y', String("//////////////// "));
     
     //calls the functor which is supposed to be called when button_yes is pressed
-    (*f)(event);
+    (*f_yes)(event);
     
 
     event.Skip(true);

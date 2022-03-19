@@ -4175,10 +4175,6 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     //initialize check and its objects
     check_angle = new CheckAngle<P>(this);
-//    (check_angle.p) = this;
-//    ((check.check_sign).p) = this;
-//    ((check.check_arc_degree).p) = this;
-//    ((check.check_arc_minute).p) = this;
     
     //here the allocation of sign is inserted in the code in such a way that if format = "+-" the sign is allocated before deg, text_deg, min, text_min: In this way, when the user tabs through the fields in PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if(format == String("+-")){

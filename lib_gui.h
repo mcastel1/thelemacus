@@ -241,8 +241,12 @@ template<class P> struct SetStringToCurrentTime{
     
 };
 
-//this struct defines the functor () used to remove a sight from the non-GUI object plot
-struct DeleteSight{
+//this class defines the functor () used to remove a sight from the non-GUI object plot
+class DeleteSight{
+    
+public:
+    
+    DeleteSight(Answer);
     
     //the frame which called this struct
     ListFrame* f;
@@ -573,7 +577,7 @@ public:
     wxBitmapButton *button_modify_sight, *button_modify_position;
     wxSizer* sizer_h, *sizer_v, *sizer_buttons_sight, *sizer_buttons_position;
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position;
-    DeleteSight delete_sight;
+    DeleteSight *delete_sight, *delete_sight_and_related_route;
     
     void OnAddSight(wxCommandEvent& event);
     void OnModifySight(wxCommandEvent& event);
@@ -1988,14 +1992,22 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
     
 }
 
+
+//constructor of the struct, which initializes the Answer remove_related_route. If remove_related_route.value = 'y', then DeleteSight::operator() will delete both the sight and the related route. If remove_related_route.value = 'n', then it will remove the sight only.
+DeleteSight::DeleteSight(Answer remove_related_route_in){
+    
+    remove_related_route = remove_related_route_in;
+    
+}
+
 void DeleteSight::operator()(wxCommandEvent& event){
     
-   remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
+    remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
     
     (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
     
     f->plot->print(true, String("--------- "), cout);
-
+    
     
     event.Skip(true);
     
@@ -2862,15 +2874,15 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     
 }
 
-template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* answer_in, F* f_yes_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFrame(wxWindow* parent, F_YES* f_yes_in, F_NO* f_no_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
 
-    answer = answer_in;
     f_yes = f_yes_in;
-    
+    f_no = f_no_in;
+
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     //image
@@ -2891,9 +2903,9 @@ template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* a
     
     //buttons
     button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_yes->Bind(wxEVT_BUTTON, &QuestionFrame::OnPressYes, this);
+    button_yes->Bind(wxEVT_BUTTON, *f_yes);
     button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_no->Bind(wxEVT_BUTTON, &QuestionFrame::OnPressNo, this);
+    button_no->Bind(wxEVT_BUTTON, *f_no);
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
@@ -2933,7 +2945,13 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     (on_select_in_listcontrol_sights.f) = this;
     (on_select_in_listcontrol_positions.f) = this;
-    (delete_sight.f) = this;
+    
+    //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
+    delete_sight = new DeleteSight(Answer('n', String("")));
+    (delete_sight->f) = this;
+    //initialize delete_sight, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
+    delete_sight_and_related_route = new DeleteSight(Answer('y', String("")));
+    (delete_sight_and_related_route->f) = this;
 
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
@@ -3242,19 +3260,26 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
-    //the id of the sight to removed is the one of the sight selected in listcontrol_sights
-    (delete_sight.i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    
+    //the id of the sight to removed is the one of the sight selected in listcontrol_sights: I write it in delete_sight_and_related_route and in delete_sight
+    (delete_sight_and_related_route->i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    (delete_sight->i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+
     //remove the sight from the GUI object listcontrol_sights
-    listcontrol_sights->DeleteItem((delete_sight.i_sight_to_remove));
+    listcontrol_sights->DeleteItem((delete_sight->i_sight_to_remove));
     
     
     
     //remove the sight from the non-GUI object plot
     //ask the user whether he/she wants to remove the related route as well
-    QuestionFrame<DeleteSight>* question_frame = new QuestionFrame<DeleteSight>(NULL, &(delete_sight.remove_related_route), &delete_sight, "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
-    
-    question_frame ->Show(true);
+    QuestionFrame<DeleteSight, DeleteSight>* question_frame = new QuestionFrame<DeleteSight, DeleteSight>(NULL,
+                                                                                                          delete_sight_and_related_route,
+                                                                                                          delete_sight,
+                                                                                                          "",
+                                                                                                          "Do you want to remove the route related to this sight?",
+                                                                                                          wxDefaultPosition,
+                                                                                                          wxDefaultSize,
+                                                                                                          String(""));
+    question_frame->Show(true);
     
     event.Skip(true);
     
@@ -4382,30 +4407,30 @@ void MessageFrame::OnPressOk(wxCommandEvent& event){
     
 }
 
-//this is called when the yes button is pressed in QuestionFrame
-template<typename F> void QuestionFrame<F>::OnPressYes(wxCommandEvent& event){
-    
-    //set the answer variable to yes
-    answer->set(String("answer set to "), 'y', String("//////////////// "));
-    
-    //calls the functor which is supposed to be called when button_yes is pressed
-    (*f_yes)(event);
-    
-
-    event.Skip(true);
-    
-    Close(TRUE);
-    
-}
-
-//this is called when the button No is pressed in QuestionFrame
-template<typename F> void QuestionFrame<F>::OnPressNo(wxCommandEvent& event){
-    
-//    answer->set(String(""), 'n', String(""));
-    
-    Close(TRUE);
-    
-}
+////this is called when the yes button is pressed in QuestionFrame
+//template<typename F> void QuestionFrame<F>::OnPressYes(wxCommandEvent& event){
+//
+//    //set the answer variable to yes
+//    answer->set(String("answer set to "), 'y', String("//////////////// "));
+//
+//    //calls the functor which is supposed to be called when button_yes is pressed
+//    (*f_yes)(event);
+//
+//
+//    event.Skip(true);
+//
+//    Close(TRUE);
+//
+//}
+//
+////this is called when the button No is pressed in QuestionFrame
+//template<typename F> void QuestionFrame<F>::OnPressNo(wxCommandEvent& event){
+//
+////    answer->set(String(""), 'n', String(""));
+//
+//    Close(TRUE);
+//
+//}
 
 //this function enables/disable the LengthField
 void LengthField::Enable(bool is_enabled){

@@ -62,7 +62,7 @@ class ChronoField;
 template<class P> class StringField;
 class MyApp;
 class MessageFrame;
-template<class F_YES> struct QuestionFrame;
+template<class F_YES, class F_NO> class QuestionFrame;
 class ListFrame;
 class SightFrame;
 class ChartFrame;

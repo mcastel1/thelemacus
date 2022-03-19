@@ -1990,7 +1990,7 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-//    remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
+   remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
     
     (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
     
@@ -3254,8 +3254,6 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     //ask the user whether he/she wants to remove the related route as well
     QuestionFrame<DeleteSight>* question_frame = new QuestionFrame<DeleteSight>(NULL, &(delete_sight.remove_related_route), &delete_sight, "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
     
-    //bind the button_yes in the question_frame above to the functor () in delete_sight: as button_yes is pressed, the functor is called and 1) if the user answered Yes, both the sight and its related route are removed from plot 2. If the user answered No, only the sight is removed.
-    (question_frame->button_yes)->Bind(wxEVT_BUTTON, delete_sight);
     question_frame ->Show(true);
     
     event.Skip(true);
@@ -4387,12 +4385,13 @@ void MessageFrame::OnPressOk(wxCommandEvent& event){
 //this is called when the yes button is pressed in QuestionFrame
 template<typename F> void QuestionFrame<F>::OnPressYes(wxCommandEvent& event){
     
-//    answer->set(String("answer set to "), 'y', String("//////////////// "));
-//
-////    if(typeid((*functor)).name() != "void"){
-//    if(functor != NULL){        (*functor)(event);}
-////    }
-//
+    //set the answer variable to yes
+    answer->set(String("answer set to "), 'y', String("//////////////// "));
+    
+    //calls the functor which is supposed to be called when button_yes is pressed
+    (*f)(event);
+    
+
     event.Skip(true);
     
     Close(TRUE);

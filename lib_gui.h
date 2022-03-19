@@ -2282,7 +2282,7 @@ template<class T> void OnSelectInListControlPositions::operator()(T& event){
 
 template<class T> void PrintErrorMessage<T>::operator()(void){
     
-    MessageFrame<void*>* message_frame;
+    MessageFrame* message_frame;
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);
@@ -2291,7 +2291,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame<void*>(f, String("statement"), NULL,  title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
             control->SetFocus();
@@ -2301,7 +2301,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
     }else{
         
-        message_frame = new MessageFrame<void*>(f, String("statement"), NULL, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
@@ -2804,15 +2804,12 @@ void PositionFrame::TryToEnableReduce(void){
 
 
 
-template<typename F> MessageFrame<F>::MessageFrame(wxWindow* parent, String type_in, Answer* answer_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
 
-    type = type_in;
-    answer = answer_in;
-    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     //image
@@ -2828,39 +2825,21 @@ template<typename F> MessageFrame<F>::MessageFrame(wxWindow* parent, String type
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
-    
+        
     
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //buttons
-    if(type == String("statement")){
+    button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
         
-        button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-        button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
-        
-    }
-    if(type == String("question")){
-        
-        button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-        button_yes->Bind(wxEVT_BUTTON, &MessageFrame::OnPressYes, this);
-        
-        button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-                button_no->Bind(wxEVT_BUTTON, &MessageFrame::OnPressNo, this);
-
-    }
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
     sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    if(type == String("statement")){
-        sizer_buttons->Add(button_ok, 0, wxALIGN_CENTER);
-    }
-    if(type == String("question")){
-        sizer_buttons->Add(button_yes, 0, wxALIGN_CENTER);
-        sizer_buttons->Add(button_no, 0, wxALIGN_CENTER);
-    }
+    sizer_buttons->Add(button_ok, 0, wxALIGN_CENTER);
     sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
 
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
@@ -2882,6 +2861,67 @@ template<typename F> MessageFrame<F>::MessageFrame(wxWindow* parent, String type
     
     
 }
+
+template<typename F> QuestionFrame<F>::QuestionFrame(wxWindow* parent, Answer* answer_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+    
+    wxDisplay display;
+    wxPNGHandler *handler;
+    wxRect rectangle;
+
+    answer = answer_in;
+    
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    
+    //image
+    handler = new wxPNGHandler;
+    wxImage::AddHandler(handler);
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    rectangle = (display.GetClientArea());
+    rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
+    rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
+  
+    //allocate sizers
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
+    sizer_grid = new wxGridSizer(3, 1, 0, 0);
+        
+    wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    //buttons
+    
+    button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_yes->Bind(wxEVT_BUTTON, &QuestionFrame::OnPressYes, this);
+    button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_no->Bind(wxEVT_BUTTON, &QuestionFrame::OnPressNo, this);
+    
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    
+    sizer_grid->Add(text, 0, wxALIGN_CENTER);
+    sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
+    sizer_buttons->Add(button_yes, 0, wxALIGN_CENTER);
+    sizer_buttons->Add(button_no, 0, wxALIGN_CENTER);
+    sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
+
+    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
+    sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
+    //  Maximize(panel);
+    
+    sizer_v->Fit(panel);
+    panel->SetSizer(sizer_v);
+    
+    //    SetSize(wxSize(100,100));
+    
+    //    CreateStatusBar();
+    //    SetStatusText( "Welcome to Michele's text editor!" );
+    
+    //SetSizerAndFit(sizer_v);
+    //Maximize();
+    
+    CentreOnScreen();
+    
+}
+
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
@@ -3212,7 +3252,7 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
     //remove the sight from the non-GUI object plot
     //ask the user whether he/she wants to remove the related route as well
-    MessageFrame<DeleteSight*>* message_frame = new MessageFrame<DeleteSight*>(NULL, String("question"),  &(delete_sight.remove_related_route), "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
+    QuestionFrame<DeleteSight*>* message_frame = new QuestionFrame<DeleteSight*>(NULL, &(delete_sight.remove_related_route), "", "Do you want to remove the route related to this sight?", wxDefaultPosition, wxDefaultSize, String(""));
     (message_frame->functor) = &delete_sight;
     
     //bind the button_yes in the message_frame above to the functor () in delete_sight: as button_yes is pressed, the functor is called and 1) if the user answered Yes, both the sight and its related route are removed from plot 2. If the user answered No, only the sight is removed.
@@ -4339,31 +4379,31 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
 }
 
 //this functor quits the MessageFrame when Ok button is pressed
-template<typename F> void MessageFrame<F>::OnPressOk(wxCommandEvent& event){
+void MessageFrame::OnPressOk(wxCommandEvent& event){
     
     Close(TRUE);
     
 }
 
-//this functor quits the MessageFrame when Ok button is pressed
-template<typename F> void MessageFrame<F>::OnPressYes(wxCommandEvent& event){
+//this is called when the yes button is pressed in QuestionFrame
+template<typename F> void QuestionFrame<F>::OnPressYes(wxCommandEvent& event){
     
-    answer->set(String("answer set to "), 'y', String("//////////////// "));
-    
-//    if(typeid((*functor)).name() != "void"){
-    if(functor != NULL){        (*functor)(event);}
-//    }
-    
+//    answer->set(String("answer set to "), 'y', String("//////////////// "));
+//
+////    if(typeid((*functor)).name() != "void"){
+//    if(functor != NULL){        (*functor)(event);}
+////    }
+//
     event.Skip(true);
     
     Close(TRUE);
     
 }
 
-//this functor quits the MessageFrame when Ok button is pressed
-template<typename F> void MessageFrame<F>::OnPressNo(wxCommandEvent& event){
+//this is called when the button No is pressed in QuestionFrame
+template<typename F> void QuestionFrame<F>::OnPressNo(wxCommandEvent& event){
     
-    answer->set(String(""), 'n', String(""));
+//    answer->set(String(""), 'n', String(""));
     
     Close(TRUE);
     

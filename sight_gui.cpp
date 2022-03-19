@@ -61,7 +61,7 @@ class DateField;
 class ChronoField;
 template<class P> class StringField;
 class MyApp;
-template<typename F> class MessageFrame;
+class MessageFrame;
 class ListFrame;
 class SightFrame;
 class ChartFrame;

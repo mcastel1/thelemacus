@@ -141,23 +141,36 @@ public:
 };
 
 //this is a wxFrame designed to show a message to the GUI user
-template<typename F> class MessageFrame: public wxFrame{
+class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(wxWindow*, String, Answer*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    MessageFrame(wxWindow*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
-    //the type of the message: "statement" for messages stating something, or "question" for asking a question to the user
-    String type;
+    wxPanel *panel;
+    wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
+    wxGridSizer* sizer_grid;
+    wxButton* button_ok;
+    wxStaticBitmap* image;
+    
+    void OnPressOk(wxCommandEvent&);
+
+};
+
+//this is a wxFrame designed to ask a  yes/no question to the GUI user
+template<typename F> class QuestionFrame: public wxFrame{
+    
+public:
+    QuestionFrame(wxWindow*, Answer*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    
     //the non-GUI object connected to the GUI object MessageFrame
     Answer* answer;
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
-    wxButton* button_ok, *button_yes, *button_no;
+    wxButton* button_yes, *button_no;
     wxStaticBitmap* image;
     F functor;
     
-    void OnPressOk(wxCommandEvent&);
     void OnPressYes(wxCommandEvent&);
     void OnPressNo(wxCommandEvent&);
 

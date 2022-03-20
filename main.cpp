@@ -107,8 +107,8 @@ class Atmosphere;
 class Answer;
 class Body;
 
+#include "main.h"
 #include "lib.h"
-#include "lib_gui.h"
 
 /*
  notes: set parents to constructors of all frames that you defined

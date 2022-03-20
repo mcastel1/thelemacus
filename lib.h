@@ -147,6 +147,38 @@ vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_
 //these are the color codes in kml file format for a few populat colors (red, etc...);
 string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
+
+//maximal and minimal latitude of the points in file define path_file_coastlines
+#define max_lat (83.6664731)
+#define min_lat (-78.7290778)
+#define floor_min_lat (floor(min_lat))
+#define floor_max_lat (floor(max_lat))
+//latitude span
+#define span_lat ((floor_max_lat-floor_min_lat+1)
+//the ratio between the width (height) of the plot area and the width (height) of the chart.
+#define length_plot_area_over_length_chart 0.8
+#define length_chart_over_length_chart_frame 0.8
+//this is the ratio between (the length of the borders drawn around the widgets) and (the length of the frame in which the widgets are located)
+#define length_border_over_length_frame 0.01
+#define outfile_precision 16
+//the maximum allowed value of the slider in ChartFrame
+#define value_slider_max 1000
+//#define wxDEBUG_LEVEL 0
+
+
+//this string defines the width of GUI fields hosting floating-point numbers
+#define sample_width_floating_point_field "0.000000000"
+#define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
+#define path_file_app_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png"
+#define path_file_chart "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart.png"
+#define path_file_pencil_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"
+#define path_file_coastlines "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"
+#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
+#define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
+#define path_file_selected_coastline_data "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_selected.txt"
+
+
+
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 
@@ -888,4 +920,315 @@ public:
 
 
 
+//class which defines a functor which closes a frame with arbitrary type F
+template<class F> class CloseFrame{
+    
+public:
+    
+    //the frame to be closed
+    F* frame;
+    CloseFrame(F*);
+    
+    template<class T> void operator()(T&);
+    
+};
+
+struct CheckBody{
+    
+    BodyField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+struct CheckLimb{
+    
+    LimbField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+    
+};
+
+
+template<class T> struct CheckCheck{
+    
+    CheckField<T>* p;
+    
+    //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
+    template<class R> void operator()(R&);
+    
+};
+
+
+
+template<class P> struct CheckSign{
+    
+    AngleField<P>* p;
+    
+    template <class T> void operator()(T&);
+    
+    
+};
+
+template<class P> struct CheckArcDegree{
+    
+    AngleField<P>* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+template<class P> struct CheckArcMinute{
+    
+    AngleField<P>* p;
+    
+    template <class T> void operator()(T&);
+    
+    
+};
+
+
+template<class P> class CheckAngle{
+    
+public:
+    
+    //p is the AngleField which is parent of the CheckAngle object: the CheckAngle object checks the validity of the entries in AngleField
+    AngleField<P>* p;
+    CheckSign<P> check_sign;
+    CheckArcDegree<P> check_arc_degree;
+    CheckArcMinute<P> check_arc_minute;
+    
+    CheckAngle(AngleField<P>*);
+    
+    template <class T> void operator()(T&);
+    
+};
+
+struct TabulateDays{
+    
+    DateField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+
+class CheckYear{
+    
+public:
+    
+    DateField* p;
+    TabulateDays tabulate_days;
+    
+    CheckYear(DateField*);
+    template<class T> void operator()(T&);
+    
+    
+};
+
+class CheckMonth{
+    
+public:
+
+    
+    DateField* p;
+    TabulateDays tabulate_days;
+    
+    CheckMonth(DateField*);
+    template<class T> void operator()(T&);
+    
+    
+};
+
+class CheckDay{
+    
+public:
+
+    DateField* p;
+    
+    CheckDay(DateField*);
+    template<class T> void operator()(T&);
+    
+    
+};
+
+
+class CheckDate{
+    
+public:
+    
+    //the parent DateField
+    DateField* p;
+    CheckYear *check_year;
+    CheckMonth *check_month;
+    CheckDay *check_day;
+    
+    //constructor, which sets the parent
+    CheckDate(DateField*);
+    
+    template <class T> void operator()(T&);
+    
+};
+
+
+struct CheckLength{
+    
+    LengthField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+template<class P> struct CheckString{
+    
+    StringField<P>* p;
+    
+    template<class T> void operator()(T&);
+    
+};
+
+struct CheckHour{
+    
+    ChronoField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+struct CheckMinute{
+    
+    ChronoField* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+struct CheckSecond{
+    
+    ChronoField* p;
+    
+    template<class T> void operator()(T&);
+    
+};
+
+
+struct CheckChrono{
+    
+    ChronoField* p;
+    CheckHour check_hour;
+    CheckMinute check_minute;
+    CheckSecond check_second;
+    
+    template<class T> void operator()(T&);
+    
+};
+
+
+template<class P> struct SetStringToCurrentTime{
+    
+    StringField<P>* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+//this class defines the functor () used to remove a sight from the non-GUI object plot
+class DeleteSight{
+    
+public:
+    
+    DeleteSight(Answer);
+    
+    //the frame which called this struct
+    ListFrame* f;
+    //the id of the sight to be removed
+    long i_sight_to_remove;
+    //this is equal to 'y' if the route related to the removed sight has to be removed too, and 'n' otherwise
+    Answer remove_related_route;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
+
+//this is a GUI field contaning a binary checkbox, which is either checked or unchecked
+template<class T> class CheckField{
+    
+public:
+    
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    Answer* answer;
+    //related_field is a GUI field (such as ChronoField, etc) related to this CheckField, such that: if direct_reverse = true->  when the checkbox in this CheckFIeld is checked (unchecked), related_field is active (inactive). If direct_reverse = false ->  when the checkbox in this CheckFIeld is unchecked (checked), related_field is active (inactive).
+    T* related_field;
+    bool direct_reverse;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxCheckBox with the name of the bodies
+    wxCheckBox* checkbox;
+    CheckCheck<T> check;
+    
+    CheckField(SightFrame*, Answer*, T*, bool);
+    
+    template<class R> void InsertIn(R*);
+    template<class S> void get(S&);
+    void set(void);
+    
+    
+};
+
+
+
+class DrawPanel : public wxPanel{
+    
+public:
+    DrawPanel(ChartPanel*);
+    ChartFrame* parent;
+    XYChart* c;
+    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
+    wxSize size_plot_area;
+    wxSlider* slider;
+    /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
+    double x_min, x_max, y_min, y_max,
+    /*these are the values of x_min .. y_max when the plot is first drawn*/
+    x_min_0, x_max_0, y_min_0, y_max_0,
+    /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the tics on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the tics on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi;
+    wxStaticText*text_position_start, *text_position_end;
+    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging;
+    //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
+    Position p_start, p_end;
+    wxSizer* sizer_h, *sizer_v;
+    //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
+    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
+    
+    void Draw(void);
+    void PaintEvent(wxPaintEvent & evt);
+    void PaintNow();
+    void ScreenToGeo(wxPoint, Position*);
+    void GeoToScreen(Position, wxPoint*);
+    void Update_lambda_phi_min_max(void);
+    void Update_x_y_min_max(void);
+    
+    void Render(wxDC& dc);
+    
+    // some useful events
+    void GetMouseGeoPosition(Position*);
+    void OnMouseMovement(wxMouseEvent&);
+    void OnMouseLeftDown(wxMouseEvent&);
+    void OnMouseLeftUp(wxMouseEvent&);
+    void OnMouseRightDown(wxMouseEvent&);
+    void OnMouseDrag(wxMouseEvent&);
+    void OnScroll(wxScrollEvent&);
+    
+    DECLARE_EVENT_TABLE()
+};
 

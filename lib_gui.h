@@ -2298,9 +2298,15 @@ template <class T> void LengthField::get(T &event){
 
 
 
-struct OnSelectInListControlSights{
+class OnSelectInListControlSights{
     
+public:
+    
+    //the parent frame
     ListFrame* f;
+    
+    //the constructor, setting the parent frame
+    OnSelectInListControlSights(ListFrame*);
     
     template<class T> void operator()(T&);
     
@@ -2315,6 +2321,12 @@ struct OnSelectInListControlPositions{
     
     
 };
+
+OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
 
 
 //if an item in listcontrol_sights is selected, then the modify_sight and delete_sight buttons are enabled
@@ -2996,12 +3008,12 @@ template<class T> PrintErrorMessage<T>::PrintErrorMessage(T* f_in){
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions/*, margin_h = 10*/, margin_v = 5;
-    OnSelectInListControlSights on_select_in_listcontrol_sights;
+    OnSelectInListControlSights* on_select_in_listcontrol_sights;
     OnSelectInListControlPositions on_select_in_listcontrol_positions;
     wxListItem column, item;
     
     
-    (on_select_in_listcontrol_sights.f) = this;
+    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     (on_select_in_listcontrol_positions.f) = this;
     
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
@@ -3035,7 +3047,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //listcontrol_sights with sights
     listcontrol_sights = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
-    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, on_select_in_listcontrol_sights);
+    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     
     
     n_columns_listcontrol_sights = 11;

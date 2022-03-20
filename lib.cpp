@@ -7387,8 +7387,9 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
 
 
 //constructor of the struct, which initializes the Answer remove_related_route. If remove_related_route.value = 'y', then DeleteSight::operator() will delete both the sight and the related route. If remove_related_route.value = 'n', then it will remove the sight only.
-DeleteSight::DeleteSight(Answer remove_related_route_in){
+DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
+    f = f_in;
     remove_related_route = remove_related_route_in;
     
 }
@@ -8335,11 +8336,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
-    delete_sight = new DeleteSight(Answer('n', String("")));
-    (delete_sight->f) = this;
+    delete_sight = new DeleteSight(this, Answer('n', String("")));
+//    (delete_sight->f) = this;
     //initialize delete_sight, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
-    delete_sight_and_related_route = new DeleteSight(Answer('y', String("")));
-    (delete_sight_and_related_route->f) = this;
+    delete_sight_and_related_route = new DeleteSight(this, Answer('y', String("")));
+//    (delete_sight_and_related_route->f) = this;
     
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));

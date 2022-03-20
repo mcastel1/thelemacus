@@ -1146,7 +1146,7 @@ class DeleteSight{
     
 public:
     
-    DeleteSight(Answer);
+    DeleteSight(ListFrame*, Answer);
     
     //the frame which called this struct
     ListFrame* f;

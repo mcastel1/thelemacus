@@ -1093,28 +1093,37 @@ template<class P> struct CheckString{
     
 };
 
-struct CheckHour{
+class CheckHour{
+    
+public:
     
     ChronoField* p;
     
+    CheckHour(ChronoField*);
     template<class T> void operator()(T&);
     
     
 };
 
-struct CheckMinute{
+class CheckMinute{
+
+public:
     
     ChronoField* p;
     
+    CheckMinute(ChronoField*);
     template<class T> void operator()(T&);
     
     
 };
 
-struct CheckSecond{
+class CheckSecond{
+    
+public:
     
     ChronoField* p;
     
+    CheckSecond(ChronoField*);
     template<class T> void operator()(T&);
     
 };
@@ -1126,9 +1135,9 @@ public:
     
     //the parent field of the CheckChrono object
     ChronoField* p;
-    CheckHour check_hour;
-    CheckMinute check_minute;
-    CheckSecond check_second;
+    CheckHour *check_hour;
+    CheckMinute *check_minute;
+    CheckSecond *check_second;
     
     CheckChrono(ChronoField*);
     template<class T> void operator()(T&);

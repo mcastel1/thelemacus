@@ -6089,3 +6089,1573 @@ void AdjustWidth(wxComboBox *control){
     control->SetMinSize(wxSize(max_width + additional, -1));
     
 }
+
+ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxSize& size) : wxPanel(parent_in, wxID_ANY, position, size, wxTAB_TRAVERSAL, wxT("")){
+    
+    parent = parent_in;
+    
+}
+
+
+//this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
+void ChartFrame::GetCoastLineData(void){
+    
+    File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
+    string data, line;
+    stringstream ins;
+    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
+    //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
+    vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
+    unsigned int l, n = 0, every = 0, n_points_grid = 0;
+    char* buffer = NULL;
+    size_t pos_beg, pos_end;
+    bool check;
+    
+    //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
+    ((parent->plot)->phi_min).normalize_pm_pi();
+    ((parent->plot)->phi_max).normalize_pm_pi();
+    
+    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
+    lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
+    phi_min_int = floor(K*(((parent->plot)->phi_min).value));
+    phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
+    
+    //transform the values lambda_min_int, lambda_max_int in a format appropriate for GetCoastLineData
+    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
+        j_min = lambda_max_int - 360;
+        j_max = lambda_min_int;
+    }else{
+        j_min = lambda_max_int;
+        j_max = lambda_min_int;
+    }
+    
+    i_min = phi_min_int - floor_min_lat;
+    i_max = phi_max_int - floor_min_lat;
+    
+    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
+    
+    
+    n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
+    
+    file_n_line.set_name(String(path_file_n_line));
+    file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
+    outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
+    
+    
+    //read file n_line and store it into vector n_line
+    file_n_line.open(String("in"), String(""));
+    i=0;
+    while(!(file_n_line.value.eof())){
+        
+        line.clear();
+        ins.clear();
+        
+        getline(file_n_line.value, line);
+        ins << line;
+        ins >> (n_line[i++]);
+        
+        //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+        
+    }
+    file_n_line.close(String(""));
+    
+    
+    
+    //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
+    file_coastline_data_blocked.open(String("in"), String(""));
+    //open a new file selected coastline data and write into it the new data
+    outfile_selected_coastline_data.remove(String(""));
+    outfile_selected_coastline_data.open(String("out"), String(""));
+    
+    check = true;
+    for(i=i_min; i<=i_max; i++){
+        
+        for(j=j_min; j<=j_max; j++){
+            
+            j_normalized = (j % 360);
+            
+            // read data as a block:
+            file_coastline_data_blocked.value.seekg(n_line[360*i+j_normalized], file_coastline_data_blocked.value.beg);
+            
+            l = n_line[360*i+j_normalized + 1] - n_line[360*i+j_normalized] - 1;
+            if(buffer != NULL){delete [] buffer;}
+            buffer = new char [l];
+            
+            file_coastline_data_blocked.value.read(buffer, l);
+            string data(buffer, l);
+            
+            if(!(file_coastline_data_blocked.value)){
+                
+                check = false;
+                
+            }
+            
+            //count how many datapoints are in data
+            n = count(data.begin(), data.end(), ',');
+            
+            every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+            if(every == 0){every = 1;}
+            
+            l=0;
+            pos_beg = 0;
+            pos_end = data.find(" ", pos_beg);
+            while(pos_end != (string::npos)){
+                
+                //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                if((l % every) == 0){
+                    
+                    line.clear();
+                    line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                    
+                    replace(line.begin(), line.end(), ' ', '\n');
+                    replace(line.begin(), line.end(), ',', ' ');
+                    
+                    (outfile_selected_coastline_data.value) << line;
+                    
+                }
+                
+                pos_beg = pos_end+1;
+                pos_end = data.find(" ", pos_beg);
+                
+                l++;
+                
+            };
+            
+            
+            data.clear();
+            
+        }
+        
+    }
+    
+    if(check){
+        
+        cout << "All characters read successfully\n";
+        
+    }else{
+        
+        cout << RED << "Error: only " << file_coastline_data_blocked.value.gcount() << " characters could be read\n" << RESET;
+        
+    }
+    
+    
+    outfile_selected_coastline_data.close(String(""));
+    file_coastline_data_blocked.close(String(""));
+    
+    
+}
+
+
+void ChartFrame::SetIdling(bool b){
+    
+    idling = b;
+    
+}
+
+DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
+    
+    //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
+    selection_rectangle = false;
+    mouse_dragging = false;
+    
+    parent = (parent_in->parent);
+    
+    SetCursor(*wxCROSS_CURSOR);
+    tic_length_over_width_plot_area = 0.01;
+    
+    
+    //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    
+    //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
+    text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_position_end = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    //    sizer_h->Add(text_phi);
+    //    sizer_h->Add(text_lambda);
+    //
+    //    SetSizer(sizer_h);
+    
+    
+    
+}
+
+
+void DrawPanel::PaintEvent(wxPaintEvent & evt)
+{
+    wxPaintDC dc(this);
+    Render(dc);
+}
+
+/*
+ * Alternatively, you can use a clientDC to paint on the panel
+ * at any time. Using this generally does not free you from
+ * catching paint events, since it is possible that e.g. the window
+ * manager throws away your drawing when the window comes to the
+ * background, and expects you will redraw it when the window comes
+ * back (by sending a paint event).
+ *
+ * In most cases, this will not be needed at all; simply handling
+ * paint events and calling Refresh() when a refresh is needed
+ * will do the job.
+ */
+void DrawPanel::PaintNow(){
+    
+    wxClientDC dc(this);
+    Render(dc);
+    
+    //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
+    this->SetMinSize(wxSize(c->getWidth(), c->getHeight()));
+    //        (parent->panel)->SetMinSize(wxSize(
+    //                                 (c->getWidth()) + (((parent->slider)->GetSize()).GetWidth()),
+    //                                 (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
+    //                                 ));
+    parent->SetMinSize(wxSize(
+                              (c->getWidth()) + ((parent->slider)->GetSize().GetWidth()),
+                              (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
+                              ));
+    parent->SetSizerAndFit(parent->sizer_v);
+    
+    
+}
+
+//remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
+void DrawPanel::Render(wxDC&  dc){
+    
+    Angle lambda, phi;
+    double dummy;
+    stringstream s;
+    wxString wx_string;
+    //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
+    bool first_label;
+    
+    wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
+    //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
+    dc.SetBrush(brush);
+    
+    //    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
+    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+    dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
+    if(selection_rectangle){
+        dc.DrawRectangle(
+                         position_start_selection.x - (position_draw_panel.x),
+                         position_start_selection.y - (position_draw_panel.y),
+                         (position_screen_now.x)-(position_start_selection.x),
+                         (position_screen_now.y)-(position_start_selection.y)
+                         );
+        
+    }
+    
+    //draw labels on the x axis
+    //set the initial value of dummy
+    if(x_min > x_mercator((floor((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda)){
+        dummy = x_mercator((ceil((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda);
+    }else{
+        dummy = x_mercator((floor((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda);
+    }
+    //starts the loop which draws the labels
+    for(first_label = true; dummy <= x_max; dummy+=k*delta_lambda){
+        
+        s.str("");
+        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
+        
+        if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
+            //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
+            s << lambda.deg_to_string(String("EW"), display_precision);
+        }else{
+            //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
+            
+            if(fabs(lambda_mercator(dummy) - ((double)round(lambda_mercator(dummy)))) < delta_lambda/2.0){
+                //in this case, lamba_mercator(dummy) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                
+                s << lambda.deg_to_string(String("EW"), display_precision);
+                
+            }else{
+                //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree.
+                
+                
+                if(ceil((K*((((parent->parent)->plot)->lambda_max).value)))  - floor((K*((((parent->parent)->plot)->lambda_min).value))) != 1){
+                    //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    
+                    s << lambda.min_to_string(String("EW"), display_precision);
+                }else{
+                    //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    
+                    if(first_label){
+                        s << lambda.to_string(String("EW"), display_precision);
+                    }else{
+                        s << lambda.min_to_string(String("EW"), display_precision);
+                    }
+                }
+                
+            }
+        }
+        wx_string = wxString(s.str().c_str());
+        
+        dc.DrawRotatedText(
+                           wx_string,
+                           (position_plot_area.x) + (dummy-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                           (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
+                           + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                           0);
+        
+        first_label = false;
+        
+    }
+    
+    //draw labels on the y axis
+    //set first value of dummy
+    if(y_min > floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi){
+        dummy = ceil((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
+    }else{
+        dummy = floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
+    }
+    //starts for loop which draws the ylabels
+    for(first_label = true; dummy<(K*(((((parent->parent)->plot)->phi_max).value))); dummy+= delta_phi){
+        
+        s.str("");
+        phi.set(String(""), k*dummy, String(""));
+        phi.normalize_pm_pi();
+        
+        if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
+            //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+            s << phi.deg_to_string(String("NS"), display_precision);
+        }else{
+            
+            //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
+            if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
+                //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                
+                s << phi.deg_to_string(String("NS"), display_precision);
+                
+            }else{
+                //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                
+                //                s << phi.min_to_string(String("NS"), display_precision);
+                
+                if(ceil((K*((((parent->parent)->plot)->phi_max).value)))  - floor((K*((((parent->parent)->plot)->phi_min).value))) != 1){
+                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    
+                    s << phi.min_to_string(String("NS"), display_precision);
+                }else{
+                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    
+                    if(first_label){
+                        s << phi.to_string(String("NS"), display_precision);
+                    }else{
+                        s << phi.min_to_string(String("NS"), display_precision);
+                    }
+                }
+                
+                
+            }
+            
+        }
+        
+        wx_string = wxString(s.str().c_str());
+        
+        dc.DrawRotatedText(
+                           wx_string,
+                           (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
+                           ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                           (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
+                           0);
+        
+        first_label = false;
+        
+    }
+    
+    /*
+     Position geo;
+     wxPoint screen;
+     cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
+     GetMouseGeoPosition(&geo);
+     GeoToScreen(geo, &screen);
+     dc.DrawCircle(screen.x - position_draw_panel.x, screen.y - position_draw_panel.y, 10);
+     */
+    
+}
+
+
+void DrawPanel::Draw(void){
+    
+    File world;
+    stringstream line_ins;
+    string line;
+    double *x, *y, lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
+    int i;
+    unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
+    
+    //fetch the data on the region that I am about to plot from the data files.
+    parent->GetCoastLineData();
+    
+    Update_x_y_min_max();
+    
+    /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
+    if((y_max-y_min) > (x_max-x_min)){
+        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+        parent->SetSize(
+                        (((parent->rectangle_display).GetSize()).GetHeight())/((y_max-y_min)/(x_max-x_min)),
+                        (((parent->rectangle_display).GetSize()).GetHeight())
+                        );
+        
+        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
+        height_chart = length_chart_over_length_chart_frame * (((parent->rectangle_display).GetSize()).GetHeight());
+        width_chart = height_chart/((y_max-y_min)/(x_max-x_min));
+    }else{
+        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+        parent->SetSize(
+                        (((parent->rectangle_display).GetSize()).GetHeight()),
+                        (((parent->rectangle_display).GetSize()).GetHeight()) * ((y_max-y_min)/(x_max-x_min))
+                        );
+        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
+        width_chart = length_chart_over_length_chart_frame * (((parent->rectangle_display).GetSize()).GetHeight());
+        height_chart = width_chart*((y_max-y_min)/(x_max-x_min));
+    }
+    width_plot_area = width_chart*length_plot_area_over_length_chart;
+    height_plot_area = height_chart*length_plot_area_over_length_chart;
+    tic_length = tic_length_over_width_plot_area*width_plot_area;
+    
+    
+    // Create a XYChart object with the appropriate size
+    c = new XYChart(width_chart, height_chart);
+    //create the plot area of c with the appropriate size
+    c->setPlotArea(width_chart*0.1, height_chart*0.1,
+                   width_plot_area,
+                   height_plot_area,
+                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    
+    //stores into position_plot_area the screen position of the top-left edge of the plot area.
+    position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
+    //stores in to size_plot_area the size of the plot area
+    size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
+    
+    
+    //
+    world.set_name(String(path_file_selected_coastline_data));
+    world.count_lines(String(""));
+    
+    x = new double [(world.number_of_lines)];
+    y = new double [(world.number_of_lines)];
+    
+    world.open(String("in"), String(""));
+    
+    line.clear();
+    getline(world.value, line);
+    
+    cout << "Number of lines = " << world.number_of_lines << "\n";
+    
+    for(number_of_points=0, i=0; i<(world.number_of_lines); i++){
+        
+        line.clear();
+        line_ins.clear();
+        getline(world.value, line);
+        line_ins << line;
+        line_ins >> phi >> lambda;
+        
+        x_dummy = x_mercator(lambda);
+        y_dummy = y_mercator(phi);
+        
+        if((x_min <= x_dummy) && (x_dummy <= x_max) && (y_min <= y_dummy) && (y_dummy <= y_max)){
+            
+            x[number_of_points] = x_dummy;
+            y[number_of_points] = y_dummy;
+            number_of_points++;
+            
+        }
+        
+        //        cout << " ******* " << x[i] << " " << y[i] << "\n";
+        
+    }
+    
+    world.close(String(""));
+    
+    
+    
+    //set parallels
+    lambda_span = K*(x_max-x_min);
+    
+    //set delta_lambda
+    if(lambda_span > 1.0){gamma_lambda = 1.0;}
+    else{gamma_lambda = 60.0;}
+    
+    delta_lambda=1.0/gamma_lambda;
+    while(((((parent->parent)->plot)->n_intervals_tics).value)*delta_lambda<lambda_span){
+        if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
+        else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
+    }
+    if(delta_lambda > 1.0/gamma_lambda){
+        if(delta_lambda == 5.0/gamma_lambda){delta_lambda = delta_lambda - 4.0/gamma_lambda;}
+        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
+    }
+    cout <<  "... delta_lambda = " << delta_lambda << "\n";
+    
+    lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
+    for(x_dummy = x_mercator(lambda); x_dummy <= x_max; x_dummy+=k*delta_lambda){
+        
+        if((x_dummy >= x_min) && (x_dummy <= x_max)){
+            
+            c->addLine(
+                       (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
+                       (position_plot_area.y),
+                       (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
+                       (position_plot_area.y) + height_plot_area,
+                       0x808080, 1);
+            
+        }
+        
+        if(gamma_lambda == 60.0){
+            
+            //plot the xtics from lambda to the next lambda (lambda + dlambda)
+            for(i=0; (((double)i)/10.0)/60.0 < delta_lambda; i++){
+                
+                if(x_dummy + k*(((double)i)/10.0)/60.0 <= x_max){
+                    //set custom-made minor xtics every tenths (i/10.0) of arcminute (60.0)
+                    
+                    c->addLine(
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
+                               (position_plot_area.y) + height_plot_area,
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
+                               (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
+                               0x0000ff, 1);
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    //
+    
+    //set meridians
+    phi_span = K*(((((parent->parent)->plot)->phi_max).value) - ((((parent->parent)->plot)->phi_min).value));
+    
+    //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+    if(phi_span > 1.0){gamma_phi = 1.0;}
+    else{gamma_phi = 60.0;}
+    
+    delta_phi=1.0/gamma_phi;
+    while(((((parent->parent)->plot)->n_intervals_tics).value)*delta_phi<phi_span){
+        //print delta_phi;
+        if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
+        else{delta_phi = delta_phi + 5.0/gamma_phi;}
+    }
+    if(delta_phi > 1.0/gamma_phi){
+        if(delta_phi == 5.0/gamma_phi){delta_phi = delta_phi - 4.0/gamma_phi;}
+        else{delta_phi = delta_phi - 5.0/gamma_phi;}
+    }
+    cout << "... delta_phi = "  << delta_phi << "\n";
+    
+    
+    
+    
+    for(phi = ((int)((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi))*delta_phi; phi<(K*(((((parent->parent)->plot)->phi_max).value))); phi+= delta_phi){
+        
+        y_dummy = y_mercator(phi);
+        
+        if((y_dummy >= y_min) && (y_dummy <= y_max)){
+            
+            c->addLine(
+                       (position_plot_area.x),
+                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
+                       (position_plot_area.x) + width_plot_area,
+                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
+                       0x808080, 1);
+            
+            if(gamma_phi == 60.0){
+                
+                //plot the ytics from phi to the next phi (phi + dphi)
+                for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
+                    
+                    if(phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((((parent->parent)->plot)->phi_max).value)))){
+                        //set custom-made minor ytics every tenths (i/10.0) of arcminutes (60.0)
+                        
+                        c->addLine(
+                                   (position_plot_area.x),
+                                   (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
+                                   (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
+                                   (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
+                                   0x0000ff, 1);
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    //
+    
+    
+    // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
+    // Italic font. Set the background and border color to Transparent.
+    //    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
+    
+    // Add a title to the x axis using 12pt Arial Bold Italic font
+    //    (c->xAxis())->setTitle("lambda", "Arial", 12);
+    //set the interval of the x axis, and disables the xtics with the last NoValue argument
+    (c->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
+    
+    //    delta_lambda = 15.0;
+    //    (c->xAxis())->addLabel(0.0, "*");
+    //    for(x_dummy=delta_lambda*k; x_dummy<x_max; x_dummy+=delta_lambda*k){
+    //        (c->xAxis())->addLabel(x_dummy, "*");
+    //    }
+    //    for(x_dummy=-delta_lambda*k; x_dummy>x_min; x_dummy-=delta_lambda*k){
+    //        (c->xAxis())->addLabel(x_dummy, "*");
+    //    }
+    //
+    // Add a title to the y axis using 12pt Arial Bold Italic font
+    //    (c->yAxis())->setTitle("phi", "Arial", 12);
+    (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
+    
+    //    delta_phi = 30.0;
+    //    (c->yAxis())->addLabel(0.0, "/");
+    //    for(phi = delta_phi; y_mercator(phi)<y_max; phi+=delta_phi){
+    //        (c->yAxis())->addLabel(y_mercator(phi), "/");
+    //    }
+    //    for(phi = -delta_phi; y_mercator(phi)>y_min; phi-=delta_phi){
+    //        (c->yAxis())->addLabel(y_mercator(phi), "/");
+    //    }
+    
+    // Set the axes line width to 3 pixels
+    c->xAxis()->setWidth(2);
+    c->yAxis()->setWidth(2);
+    
+    // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
+    c->addScatterLayer(DoubleArray(x, number_of_points), DoubleArray(y, number_of_points), "", Chart::CircleSymbol, 1, 000000);
+    
+    c->makeChart(path_file_chart);
+    
+    //free up resources
+    delete [] x;
+    delete [] y;
+    
+}
+
+
+ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+    
+    stringstream s;
+    String new_prefix;
+    
+    parent = parent_input;
+    
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    (parent->plot)->show(true, String(""));
+    
+    idling = false;
+    print_error_message = new PrintErrorMessage<ChartFrame>(this);
+    
+    panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
+    draw_panel = new DrawPanel(panel);
+    
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_slider = new wxBoxSizer(wxVERTICAL);
+    
+    
+    //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
+    text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    
+    //image
+    wxPNGHandler *handler = new wxPNGHandler;
+    wxImage::AddHandler(handler);
+    
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    rectangle_display = (display.GetClientArea());
+    
+    draw_panel->Draw();
+    
+    //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
+    (draw_panel->x_min_0) = (draw_panel->x_min);
+    (draw_panel->x_max_0) = (draw_panel->x_max);
+    (draw_panel->y_min_0) = (draw_panel->y_min);
+    (draw_panel->y_max_0) = (draw_panel->y_max);
+    (draw_panel->width_chart_0) = (draw_panel->width_chart);
+    (draw_panel->height_chart_0) = (draw_panel->height_chart);
+    
+    
+    //initialize the variable neededed for slider
+    value_slider_old = 1;
+    //allocate the slider
+    slider = new wxSlider(panel, wxID_ANY, 1, value_slider_old, value_slider_max, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    
+    //text field showing the current value of the zoom slider
+    s.str("");
+    s << "1:" << value_slider_old;
+    text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    
+    
+    //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
+    draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
+    draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
+    draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
+    draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
+    
+    slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
+    
+    draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
+    
+    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    //    sizer_v->Fit(panel);
+    
+    Maximize(panel);
+    SetSizerAndFit(sizer_v);
+    
+    
+    
+    
+    //    panel->SetSizer(sizer_v);
+    //    sizer_v->Fit(this);
+    
+    //    SetSize((draw_panel->c)->getWidth() + ((draw_panel->c)->getWidth())*0.01, (draw_panel->c)->getHeight() + ((draw_panel->c)->getWidth())*0.01);
+    
+    //    SetAutoLayout(true);
+    
+    //    Fit();
+    Centre();
+    
+}
+
+//this function computes lambda_min, ... phi_max from x_min ... y_max
+void DrawPanel::Update_lambda_phi_min_max(void){
+    
+    (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
+    (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
+    (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
+    (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
+    
+}
+
+//this function computes x_min, ... y_max from lambda_min ... phi_max
+void DrawPanel::Update_x_y_min_max(void){
+    
+    x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
+    x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
+    y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
+    y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
+    
+}
+
+void ChartFrame::UpdateSliderLabel(void){
+    
+    stringstream s;
+    
+    s.str("");
+    s << "1:" << value_slider_old;
+    text_slider->SetLabel(s.str().c_str());
+    
+}
+
+//this function updates the slider according to the zooming factor of the chart. If the zooming factor does not exceed the maximal allowed value, it returns true and it updates the slider, otherwise it returns false and it does not update the slider.
+bool ChartFrame::UpdateSlider(void){
+    
+    bool output;
+    
+    //compute the zooming factor of the chart and write it into value_slider_old
+    value_slider_old = ((unsigned int)((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/((draw_panel->x_max)-(draw_panel->x_min)));
+    
+    cout << "***************** Slider value = " << value_slider_old << "\n";
+    
+    if(value_slider_old <= value_slider_max){
+        
+        slider->SetValue(value_slider_old);
+        UpdateSliderLabel();
+        
+        output = true;
+        
+    }else{
+        
+        //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+        (print_error_message->control) = slider;
+        (print_error_message->title) = String("Zoom level exceeded its maximal value!");
+        (print_error_message->message) = String("Zoom level must be >= 1 and <= value_slider_max.");
+        CallAfter(*print_error_message);
+        
+        output = false;
+        
+    }
+    
+    return output;
+    
+}
+
+template<class T>void CheckBody::operator()(T& event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        unsigned int i;
+        bool check;
+        
+        //I check whether the name in the GUI field body matches one of the body names in catalog
+        for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
+            if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
+                check = true;
+            }
+        }
+        i--;
+        
+        if(check){
+            
+            //            (*(p->body)) = ((p->catalog)->list)[i];
+            
+            if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
+                ((f->limb)->name)->Enable(true);
+            }else{
+                ((f->limb)->name)->Enable(false);
+            }
+            
+            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->ok) = true;
+            
+        }else{
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage)->control) = (p->name);
+            ((f->printerrormessage)->title) = String("Body not found in catalog!");
+            ((f->printerrormessage)->message) = String("Body must be in catalog.");
+            f->CallAfter(*(f->printerrormessage));
+            
+            (p->ok) = false;
+            
+        }
+        
+        f->TryToEnableReduce();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+template<class T> void CheckLimb::operator()(T &event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        
+        bool check;
+        String s;
+        
+        
+        s = String(((p->name)->GetValue().ToStdString()));
+        //I check whether the name in the GUI field body matches one of the valid limb names
+        check = (s == String("upper")) || (s == String("lower")) || (s == String("center"));
+        
+        if(check){
+            
+            
+            
+            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->ok) = true;
+            
+        }else{
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage)->control) = (p->name);
+            ((f->printerrormessage)->title) = String("Limb not valid!");
+            ((f->printerrormessage)->message) = String("Limb must be upper, lower or center.");
+            f->CallAfter(*(f->printerrormessage));
+            
+            (p->ok) = false;
+            
+        }
+        
+        f->TryToEnableReduce();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+//writes the value contained in the GUI field into the non-GUI field
+template<class T> void LimbField::get(T &event){
+    
+    if(ok){
+        
+        //I set the char in (limb->value) to the first letter in the string contained in the GUI field
+        (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+//checks the value of the sign in the GUI field
+template<class P> template <class T> void CheckSign<P>::operator()(T &event){
+    
+    P* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is in idling mode
+    if(!(f->idling)){
+        
+        unsigned int i;
+        bool check;
+        
+        //I check whether the name in the GUI field sign matches one of the sign values in the list signs
+        if((p->format) == String("")){
+            //if the AngleField p has no sign, the check is ok
+            
+            check=true;
+            
+        }else{
+            //if the AngleField p has a sign, I check it
+            
+            for(check = false, i=0; (i<((p->signs).GetCount())) && (!check); i++){
+                if(((p->sign)->GetValue()) == (p->signs)[i]){
+                    check = true;
+                }
+            }
+            
+        }
+        
+        if(check){
+            
+            (p->sign)->SetBackgroundColour(*wxWHITE);
+            (p->sign_ok) = true;
+            
+            //            p->get(event);
+            
+        }else{
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage)->control) = (p->sign);
+            ((f->printerrormessage)->title) = String("Sign is not valid!");
+            ((f->printerrormessage)->message) = String("Sign must be +-, NS or EW.");
+            f->CallAfter(*(f->printerrormessage));
+            
+            (p->sign_ok) = false;
+            
+        }
+        
+        f->TryToEnableReduce();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+//converts the point p on the screen (which is supposed to lie in the plot area), to the relative geographic position q
+void DrawPanel::ScreenToGeo(wxPoint p, Position *q){
+    
+    //updates the position of the draw pane this
+    position_draw_panel = (this->GetScreenPosition());
+    
+    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
+    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
+    
+    
+}
+
+//this function converts the geographic position p into the screen position p
+void DrawPanel::GeoToScreen(Position q, wxPoint *p){
+    
+    //updates the position of the draw pane this
+    position_draw_panel = (this->GetScreenPosition());
+    
+    (p->x) = (position_draw_panel.x) + (position_plot_area.x) + (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
+    (p->y) = (position_draw_panel.y) + (position_plot_area.y) + (height_plot_area) - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
+    
+    //    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
+    
+    
+}
+
+//This function obtains the geographical Position p of the mouse hovering on the map of the world
+void DrawPanel::GetMouseGeoPosition(Position* p){
+    
+    position_screen_now = wxGetMousePosition();
+    ScreenToGeo(position_screen_now, p);
+    
+}
+
+void DrawPanel::OnMouseMovement(wxMouseEvent &event){
+    
+    Position p;
+    stringstream s;
+    
+    //    cout << "\nMouse moved";
+    
+    GetMouseGeoPosition(&p);
+    
+    //update the instantaneous position of the mouse on the chart
+    s.str("");
+    s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
+    (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
+    
+    //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
+    if(selection_rectangle){
+        s.str("");
+        s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
+        text_position_end->SetLabel(wxString(s.str().c_str()));
+        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
+        PaintNow();
+    }
+    
+    
+    
+    //
+    event.Skip(true);
+    
+}
+
+//if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
+void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
+    
+    position_start_drag = wxGetMousePosition();
+    
+    Position geo;
+    ScreenToGeo(position_start_drag, &geo);
+    geo.print(String("Position start drag"), String("************ "), cout);
+    
+    event.Skip(true);
+    
+}
+
+//if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
+void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
+    
+    SetCursor(*wxCROSS_CURSOR);
+    
+    position_end_drag = wxGetMousePosition();
+    
+    Position geo;
+    ScreenToGeo(position_now_drag, &geo);
+    
+    geo.print(String("Position end drag"), String("************ "), cout);
+    
+    
+    
+    event.Skip(true);
+    
+}
+
+void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
+    
+    //changes the 'sign' of selection rectangle
+    selection_rectangle = (!selection_rectangle);
+    
+    if(selection_rectangle){
+        
+        stringstream s;
+        
+        cout << "You started drawing\n";
+        //        ((parent->plot)->lambda_min) = (p.lambda);
+        //        ((parent->plot)->phi_min) = (p.phi);
+        //
+        
+        GetMouseGeoPosition(&p_start);
+        position_start_selection = position_screen_now;
+        
+        s.clear();
+        s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
+        text_position_start->SetLabel(wxString(s.str().c_str()));
+        text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
+        
+        
+        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
+        
+        
+    }else{
+        
+        cout << "You ended drawing\n";
+        
+        //        ((parent->plot)->lambda_max) = (p.lambda);
+        //        ((parent->plot)->phi_max) = (p.phi);
+        GetMouseGeoPosition(&p_end);
+        position_end_selection = position_screen_now;
+        
+        cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
+        
+        
+        
+        //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
+        delete c;
+        //I convert all the angles to the format between -pi and pi, so I can sort them numerically
+        (p_start.phi).normalize_pm_pi();
+        (p_start.lambda).normalize_pm_pi();
+        (p_end.phi).normalize_pm_pi();
+        (p_end.lambda).normalize_pm_pi();
+        //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
+        if((p_start.lambda)>(p_end.lambda)){
+            (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
+            (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
+        }else{
+            (((parent->parent)->plot)->lambda_min) = (p_end.lambda);
+            (((parent->parent)->plot)->lambda_max) = (p_start.lambda);
+        }
+        if((p_start.phi)>(p_end.phi)){
+            (((parent->parent)->plot)->phi_max) = (p_start.phi);
+            (((parent->parent)->plot)->phi_min) = (p_end.phi);
+        }else{
+            (((parent->parent)->plot)->phi_min) = (p_start.phi);
+            (((parent->parent)->plot)->phi_max) = (p_end.phi);
+        }
+        //I normalize lambda_min, ..., phi_max for future use.
+        (((parent->parent)->plot)->lambda_min).normalize();
+        (((parent->parent)->plot)->lambda_max).normalize();
+        (((parent->parent)->plot)->phi_min).normalize();
+        (((parent->parent)->plot)->phi_max).normalize();
+        
+        
+        //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selection triangle, which is now useless
+        text_position_start->SetLabel(wxString(""));
+        text_position_end->SetLabel(wxString(""));
+        
+        Draw();
+        
+        PaintNow();
+        
+        parent->UpdateSlider();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+void DrawPanel::OnMouseDrag(wxMouseEvent &event){
+    
+    if(wxGetMouseState().LeftIsDown()){
+        
+        mouse_dragging = true;
+        
+        SetCursor(wxCURSOR_HAND);
+        
+        double delta_x, delta_y;
+        
+        position_now_drag = wxGetMousePosition();
+        
+        Position geo;
+        //    ScreenToGeo(position_start_drag, &geo_start);
+        ScreenToGeo(position_now_drag, &geo);
+        
+        
+        //update x_min, ..., y_max according to the drag.
+        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
+        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+        x_min -= delta_x;
+        x_max -= delta_x;
+        y_min += delta_y;
+        y_max += delta_y;
+        
+        Update_lambda_phi_min_max();
+        
+        geo.print(String("Position now drag"), String("************ "), cout);
+        
+        
+        //re-draw the chart
+        Draw();
+        PaintNow();
+        
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+void DrawPanel::OnScroll(wxScrollEvent &event){
+    
+    cout << "Slider = " << (parent->slider)->GetValue() << "\n";
+    
+    //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
+    x_min_old = x_min;
+    x_max_old = x_max;
+    y_min_old = y_min;
+    y_max_old = y_max;
+    
+    //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
+    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    Update_lambda_phi_min_max();
+    
+    cout << "x_min = " << x_min<< "\n";
+    
+    //update parent->value_slider_old
+    (parent->value_slider_old) = ((parent->slider)->GetValue());
+    
+    Draw();
+    PaintNow();
+    parent->UpdateSliderLabel();
+    
+    event.Skip(true);
+    
+}
+
+//writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
+template<class P> template <class T> void AngleField<P>::get(T &event){
+    
+    
+    if(sign_ok && deg_ok && min_ok){
+        
+        double min_temp;
+        char c;
+        
+        if(format == String("")){
+            //in this case there is no sign in AngleField->this:
+            
+            c='+';
+            
+        }else{
+            //in this case there is a sign in AngleField->this: I write the sign in c
+            
+            wxString s;
+            s = (sign->GetValue());
+            
+            if(format == String("+-")){
+                
+                if(s==wxString("+")){c='+';}
+                else{c='-';}
+                
+            }
+            
+            if(format == String("EW")){
+                
+                if(s==wxString("W")){c='+';}
+                else{c='-';}
+                
+            }
+            
+            if(format == String("NS")){
+                
+                if(s==wxString("N")){c='+';}
+                else{c='-';}
+                
+            }
+            
+        }
+        
+        
+        (min->GetValue()).ToDouble(&min_temp);
+        
+        angle->from_sign_deg_min(c, wxAtoi(deg->GetValue()), min_temp);
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+//constructor of the struct, which initializes the Answer remove_related_route. If remove_related_route.value = 'y', then DeleteSight::operator() will delete both the sight and the related route. If remove_related_route.value = 'n', then it will remove the sight only.
+DeleteSight::DeleteSight(Answer remove_related_route_in){
+    
+    remove_related_route = remove_related_route_in;
+    
+}
+
+void DeleteSight::operator()(wxCommandEvent& event){
+    
+    //    remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
+    
+    (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
+    
+        f->plot->print(true, String("--------- "), cout);
+    
+    
+    event.Skip(true);
+    
+}
+
+
+
+template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(T& event){
+    
+    //if the label is empty, I replace it with the local time and date
+    if(((p->value)->GetValue()).IsEmpty()){
+        
+        Time time_temp;
+        
+        time_temp.set_current(String(""));
+        //I write in the non-GUI object (p->string)
+        (*(p->string)) = String(time_temp.to_string(display_precision));
+        
+        p->set();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
+    
+    frame = frame_in;
+    
+}
+
+//closes a frame of type F
+template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
+    
+    event.Skip(true);
+    
+    frame->Close(true);
+    
+}
+
+
+//this functor does nothing, delete it in the future
+template<class P> template<class T> void CheckString<P>::operator()(T &event){
+    
+    P* f = (p->parent_frame);
+    
+    //    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
+    
+    f->TryToEnableReduce();
+    
+    event.Skip(true);
+    
+}
+
+
+//I write in the non-GUI object string the value entered in the GUI object value
+template<class P> template<class T> void StringField<P>::get(T &event){
+    
+    //here I don't check whether the StringField is ok, because any value in the string field is ok
+    (*string) = String((value->GetValue().ToStdString()));
+    
+    event.Skip(true);
+    
+}
+
+template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in){
+    
+    p = p_in;
+    
+    (check_sign.p) = p;
+    (check_arc_degree.p) = p;
+    (check_arc_minute.p) = p;
+
+}
+
+//this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
+template<class P> template <class T> void CheckAngle<P>::operator()(T& event){
+    
+    check_sign(event);
+    check_arc_degree(event);
+    check_arc_minute(event);
+    
+    event.Skip(true);
+    
+}
+
+CheckDate::CheckDate(DateField* p_in){
+    
+    p = p_in;
+    
+    check_year = new CheckYear(p);
+    check_month = new CheckMonth(p);
+    check_day = new CheckDay(p);
+
+
+    
+}
+
+//this functor checks the whole date field by calling the check on its year, month and day parts
+template <class T> void CheckDate::operator()(T& event){
+    
+    check_year(event);
+    check_month(event);
+    check_day(event);
+    
+    event.Skip(true);
+    
+}
+
+//this functor writes the values written inthe whole GUI date field (year, month and day) in the respective non-GUI object date->D, date->M, date->D
+template <class T> void DateField::get(T& event){
+    
+    if(year_ok && (year->IsEnabled()) && month_ok && (month->IsEnabled()) && day_ok && (month->IsEnabled())){
+        
+        (date->Y) = (unsigned int)wxAtoi(year->GetValue());
+        (date->M) = (unsigned int)wxAtoi(month->GetValue());
+        (date->D) = (unsigned int)wxAtoi(day->GetValue());
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event){
+    
+    P* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage)->control) = (p->deg);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
+            f->CallAfter(*(f->printerrormessage));
+            
+            (p->deg_ok) = false;
+            
+        }else{
+            
+            (p->deg)->SetBackgroundColour(*wxWHITE);
+            
+            //            if((p->min_ok)){
+            //
+            //                double min_temp;
+            //
+            //                ((p->min)->GetValue()).ToDouble(&min_temp);
+            //
+            //                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+            //
+            //            }
+            
+            (p->deg_ok) = true;
+            
+            //            p->get(event);
+            
+            
+        }
+        
+        f->TryToEnableReduce();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event){
+    
+    P* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+            
+            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+            
+            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+            ((f->printerrormessage)->control) = (p->min);
+            ((f->printerrormessage)->title) = String("Entered value is not valid!");
+            ((f->printerrormessage)->message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
+            f->CallAfter(*(f->printerrormessage));
+            
+            (p->min_ok) = false;
+            
+        }else{
+            (p->min)->SetBackgroundColour(*wxWHITE);
+            //            if((p->deg_ok)){
+            //
+            //                double min_temp;
+            //
+            //                ((p->min)->GetValue()).ToDouble(&min_temp);
+            //
+            //                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
+            //
+            //
+            //            }
+            (p->min_ok) = true;
+            
+            //            p->get(event);
+            
+        }
+        
+        f->TryToEnableReduce();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+//checks the value in the GUI field in LengthField
+template <class T> void CheckLength::operator()(T &event){
+    
+    SightFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX) && ((p->value)->IsEnabled())){
+            
+            if(!(p->just_enabled)){
+                //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
+                
+                //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
+                ((f->printerrormessage)->control) = (p->value);
+                ((f->printerrormessage)->title) = String("Entered value is not valid!");
+                ((f->printerrormessage)->message) = String("Lengths must be floating-point numbers >= 0 m");
+                f->CallAfter(*(f->printerrormessage));
+                
+            }else{
+                //if the LengthField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
+                
+                (p->just_enabled) = false;
+                
+            }
+            
+            (p->ok) = false;
+            
+        }else{
+            
+            (p->value)->SetBackgroundColour(*wxWHITE);
+            (p->ok) = true;
+            
+        }
+        
+        f->TryToEnableReduce();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+//writes the value of the GUI field in LengthField into the non-GUI field length
+template <class T> void LengthField::get(T &event){
+    
+    if(ok){
+        
+        double length_temp;
+        
+        value->GetValue().ToDouble(&length_temp);
+        length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
+        
+    }
+    
+    event.Skip(true);
+    
+}

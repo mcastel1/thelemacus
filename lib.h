@@ -1232,3 +1232,370 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
+class BodyField{
+    
+public:
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    wxArrayString bodies;
+    //this points to a Body object, which contains the date written in the GUI field of this
+    Body* body;
+    Catalog* catalog;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+    CheckBody check;
+    
+    bool ok;
+    
+    BodyField(SightFrame*, Body*, Catalog*);
+    void set(void);
+    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+    
+};
+
+
+class LimbField{
+    
+public:
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    wxArrayString limbs;
+    //this points to a Limn object, which contains the data written in the GUI field of this
+    Limb* limb;
+    wxBoxSizer *sizer_h, *sizer_v;
+    bool ok;
+    CheckLimb check;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+    
+    LimbField(SightFrame*, Limb*);
+    void set(void);
+    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+    
+};
+
+
+
+//class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
+template<class P> class AngleField{
+    
+public:
+    //the parent frame to which this object is attached
+    P* parent_frame;
+    wxArrayString signs, degrees;
+    //the format of the AngleField: String("") for angles  between 0 and 2*pi, String("+-") for angles with a sign between 0 and pi, String("NS") for latitudes between -pi/2 and pi/2, and String("EW") for longitudes between -pi and pi
+    String format;
+    //degrees and minutes boxes
+    wxComboBox*sign, * deg;
+    wxTextCtrl *min;
+    //texts
+    wxStaticText* text_deg, *text_min;
+    wxBoxSizer *sizer_h, *sizer_v;
+    Angle* angle;
+    //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
+    bool sign_ok, deg_ok, min_ok;
+    CheckAngle<P>* check_angle;
+    
+    
+    AngleField(P*, Angle*, String);
+    void set(void);
+    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+//class for graphical object: a field to enter a length, composed of a box
+class LengthField{
+    
+public:
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    //degrees and minutes boxes
+    wxTextCtrl *value;
+    //texts
+    wxStaticText* text;
+    wxBoxSizer *sizer_h, *sizer_v;
+    Length* length;
+    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
+    bool ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
+    CheckLength check;
+    
+    LengthField(SightFrame*, Length*);
+    void set(void);
+    template<class T> void get(T&);
+    void Enable(bool);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+//class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted
+template<class P> class StringField{
+    
+public:
+    //the parent where this StringField object will be inserted
+    P* parent_frame;
+    //label box
+    wxTextCtrl *value;
+    wxBoxSizer *sizer_h, *sizer_v;
+    //non-GUI object related to this
+    String* string;
+    CheckString<P> check;
+    SetStringToCurrentTime<P> set_string_to_current_time;
+    
+    StringField(P*, String*);
+    void set(void);
+    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    
+};
+
+
+
+class DateField{
+    
+public:
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    wxArrayString days, months;
+    //year, month and day boxes
+    wxTextCtrl *year;
+    wxComboBox *month, *day;
+    //texts
+    wxStaticText* text_hyphen_1, *text_hyphen_2;
+    wxBoxSizer *sizer_h, *sizer_v;
+    //this points to a Date object, which contains the date written in the GUI fields of this
+    Date* date;
+    //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
+    bool year_ok, month_ok, day_ok;
+    CheckDate *check;
+    
+    DateField(SightFrame*, Date*);
+    void set(void);
+    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+
+class ChronoField{
+    
+public:
+    //the parent frame to which this object is attached
+    SightFrame* parent_frame;
+    wxArrayString hours, minutes;
+    //hour and minute  boxes
+    wxComboBox *hour, *minute;
+    //second text control
+    wxTextCtrl *second;
+    //texts
+    wxStaticText* text_colon_1, *text_colon_2;
+    wxBoxSizer *sizer_h, *sizer_v;
+    //this points to a Date object, which contains the date written in the GUI fields of this
+    Chrono* chrono;
+    //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
+    bool hour_ok, minute_ok, second_ok, /*this variable = true if this has been just enabled, and false otherwise*/just_enabled;
+    CheckChrono check;
+    
+    ChronoField(SightFrame*, Chrono*);
+    void set(Chrono);
+    void Enable(bool);
+    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+};
+
+
+
+
+
+
+
+
+
+//this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
+template<class T> class PrintErrorMessage{
+    
+public:
+    
+    T* f;
+    wxControl* control;
+    String title, message;
+    
+    PrintErrorMessage(T*);
+    
+    void operator()(void);
+    
+    
+};
+
+
+
+//this is a wxFrame designed to contain the list of sights, routes, etc...
+class ListFrame: public wxFrame{
+    
+public:
+    //this frame has no parent, because it is supposed to be the main frame of the appplication
+    ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
+    
+    //this is a pointer to the non-GUI object Plot which is related to the GUI object this
+    Plot* plot;
+    //this is a pointer to a Catalog object which will be used by plot
+    Catalog *catalog;
+    //    wxListBox* listbox;
+    wxListCtrl* listcontrol_sights, *listcontrol_positions;
+    wxPanel *panel;
+    wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position;
+    wxBitmapButton *button_modify_sight, *button_modify_position;
+    wxSizer* sizer_h, *sizer_v, *sizer_buttons_sight, *sizer_buttons_position;
+    wxStaticBoxSizer* sizer_box_sight, *sizer_box_position;
+    DeleteSight *delete_sight, *delete_sight_and_related_route;
+    
+    void OnAddSight(wxCommandEvent& event);
+    void OnModifySight(wxCommandEvent& event);
+    void OnPressDeleteSight(wxCommandEvent& event);
+    
+    void OnAddPosition(wxCommandEvent& event);
+    void OnModifyPosition(wxCommandEvent& event);
+    void OnDeletePosition(wxCommandEvent& event);
+    
+};
+
+
+
+class SightFrame: public wxFrame{
+    
+public:
+    SightFrame(ListFrame*, Sight*, long, const wxString&, const wxPoint&, const wxSize&, String);
+    
+    ListFrame* parent;
+    Catalog* catalog;
+    Sight* sight;
+    //this long represents the position in the list (this->GetParent())->listcontrol_sights of sight. If list_position = -1, then sight is not in that list
+    long list_position;
+    wxPanel *panel;
+    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
+    bool idling;
+    
+    //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
+    PrintErrorMessage<SightFrame>* printerrormessage;
+    
+    BodyField* body;
+    LimbField* limb;
+    CheckField<LengthField>* artificial_horizon_check;
+    CheckField<ChronoField>* stopwatch_check;
+    AngleField<SightFrame>* H_s, *index_error;
+    LengthField* height_of_eye;
+    DateField *master_clock_date;
+    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
+    StringField<SightFrame> *label;
+    
+    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;
+    wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
+    wxStaticBoxSizer *sizer_box_measurement, *sizer_box_time;
+    
+    wxArrayString bodies, limbs;
+    wxButton* button_reduce, *button_cancel;
+    wxMenuBar *menuBar;
+    
+    void SetIdling(bool);
+    void set(void);
+    template<class T> void get(T&);
+    void OnPressCancel(wxCommandEvent& event);
+    void OnPressReduce(wxCommandEvent& event);
+    void TryToEnableReduce(void);
+    
+    //    wxDECLARE_EVENT_TABLE();
+    
+};
+
+class PositionFrame: public wxFrame{
+    
+public:
+    PositionFrame(ListFrame*, Position*, long, const wxString&, const wxPoint&, const wxSize&, String);
+    
+    ListFrame* parent;
+    Position* position;
+    //this long represents the position in the list (this->GetParent())->listcontrol_positions of position. If list_position = -1, then sight is not in that list
+    long list_position;
+    wxPanel *panel;
+    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
+    bool idling;
+    
+    //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
+    PrintErrorMessage<PositionFrame>* printerrormessage;
+    
+    AngleField<PositionFrame>* lat, *lon;
+    StringField<PositionFrame> *label;
+    
+    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
+    wxBoxSizer *sizer, *box_sizer_2;
+    wxStaticBoxSizer *sizer_box_measurement;
+    
+    wxButton* button_add, *button_cancel;
+    wxMenuBar *menuBar;
+    
+    void SetIdling(bool);
+    void set(void);
+    template<class T> void get(T&);
+    void OnPressCancel(wxCommandEvent& event);
+    void OnPressAdd(wxCommandEvent& event);
+    void TryToEnableReduce(void);
+    
+    // The Path to the file we have open
+    wxString CurrentDocPath;
+    
+    //    wxDECLARE_EVENT_TABLE();
+    
+};
+
+
+class ChartFrame: public wxFrame{
+    
+public:
+    ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
+    
+    ListFrame* parent;
+    DrawPanel *draw_panel;
+    ChartPanel* panel;
+    wxStaticText *text_position_now, *text_slider;
+    wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
+    wxStaticBitmap* image;
+    wxDisplay display;
+    wxRect rectangle_display;
+    TextBox* box;
+    wxSlider* slider;
+    PrintErrorMessage<ChartFrame>* print_error_message;
+    //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
+    unsigned int /*this stores the value of slider*/value_slider_old;
+    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
+    bool idling;
+    
+    void GetCoastLineData(void);
+    bool UpdateSlider(void);
+    void UpdateSliderLabel(void);
+    void SetIdling(bool);
+    
+};
+
+class ChartPanel : public wxPanel{
+    
+public:
+    
+    ChartFrame* parent;
+    
+    ChartPanel(ChartFrame*, const wxPoint&, const wxSize&);
+    
+};

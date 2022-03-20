@@ -2429,35 +2429,6 @@ public:
 };
 
 
-wxIMPLEMENT_APP(MyApp);
-
-bool MyApp::OnInit(){
-    
-    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    wxDisplay display;
-    wxRect rectangle = (display.GetClientArea());
-    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
-    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
-    
-    
-    ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
-    list_frame->Show(true);
-    
-    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
-    nautical_chart->Show(true);
-    
-    //    list_frame->plot->print(true, String("************* "), cout);
-    
-    
-    //    Answer* answer;
-    //    answer = new Answer();
-    //    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  answer, "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
-    //    message_frame ->Show(true);
-    
-    
-    return true;
-    
-}
 
 SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     

@@ -1599,3 +1599,47 @@ public:
     ChartPanel(ChartFrame*, const wxPoint&, const wxSize&);
     
 };
+
+
+class OnSelectInListControlSights{
+    
+public:
+    
+    //the parent frame
+    ListFrame* f;
+    
+    //the constructor, setting the parent frame
+    OnSelectInListControlSights(ListFrame*);
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+class OnSelectInListControlPositions{
+    
+public:
+    
+    //parent frame
+    ListFrame* f;
+    
+    //constructor, which sets the parent frame
+    OnSelectInListControlPositions(ListFrame*);
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+

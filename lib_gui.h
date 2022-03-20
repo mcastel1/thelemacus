@@ -32,107 +32,11 @@ END_EVENT_TABLE()
 
 
 
-class OnSelectInListControlSights{
-    
-public:
-    
-    //the parent frame
-    ListFrame* f;
-    
-    //the constructor, setting the parent frame
-    OnSelectInListControlSights(ListFrame*);
-    
-    template<class T> void operator()(T&);
-    
-    
-};
-
-class OnSelectInListControlPositions{
-    
-public:
-    
-    //parent frame
-    ListFrame* f;
-    
-    //constructor, which sets the parent frame
-    OnSelectInListControlPositions(ListFrame*);
-    
-    template<class T> void operator()(T&);
-    
-    
-};
-
-OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
-    
-    f = f_in;
-    
-}
-
-OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
-    
-    f = f_in;
-    
-}
-
-
-//if an item in listcontrol_sights is selected, then the modify_sight and delete_sight buttons are enabled
-template<class T> void OnSelectInListControlSights::operator()(T& event){
-    
-    (f->button_modify_sight)->Enable(true);
-    (f->button_delete_sight)->Enable(true);
-    
-    event.Skip(true);
-    
-}
-
-//if an item in listcontrol_positions is selected, then the modify_position and delete_position buttons are enabled
-template<class T> void OnSelectInListControlPositions::operator()(T& event){
-    
-    (f->button_modify_position)->Enable(true);
-    (f->button_delete_position)->Enable(true);
-    
-    event.Skip(true);
-    
-}
-
-
-template<class T> void PrintErrorMessage<T>::operator()(void){
-    
-    MessageFrame* message_frame;
-    
-    //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-    f->SetIdling(true);
-    
-    if(control != NULL){
-        
-        if(((control->GetBackgroundColour()) != *wxRED)){
-            
-            message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
-            message_frame ->Show(true);
-            
-            control->SetFocus();
-            control->SetBackgroundColour(*wxRED);
-            
-        }
-        
-    }else{
-        
-        message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
-        message_frame ->Show(true);
-        
-    }
-    
-    //The temporary dialog window may have been closed, thus I set f->idling to false
-    f->SetIdling(false);
-    
-    
-    
-}
-
-class MyApp: public wxApp{
-public:
-    virtual bool OnInit();
-};
+//
+//class MyApp: public wxApp{
+//public:
+//    virtual bool OnInit();
+//};
 
 
 

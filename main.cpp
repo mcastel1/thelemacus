@@ -5,7 +5,7 @@
 
 
 #include "main.h"
-#include "lib.h"
+#include "lib.cpp"
 
 /*
  notes: set parents to constructors of all frames that you defined

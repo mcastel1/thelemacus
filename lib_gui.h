@@ -2044,7 +2044,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
     (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
     
-    //    f->plot->print(true, String("--------- "), cout);
+        f->plot->print(true, String("--------- "), cout);
     
     
     event.Skip(true);
@@ -3005,7 +3005,7 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     //buttons
     button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_yes->Bind(wxEVT_BUTTON, *f_yes);
-    //    button_yes->Bind(wxEVT_BUTTON, *close_frame);
+    button_yes->Bind(wxEVT_BUTTON, *close_frame);
     button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_no->Bind(wxEVT_BUTTON, *f_no);
     button_no->Bind(wxEVT_BUTTON, *close_frame);

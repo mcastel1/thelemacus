@@ -8,7 +8,7 @@
 //
 //
 //#ifndef WX_PRECOMP
-//#include "wx/wx.h"
+#include "wx/wx.h"
 //#endif
 
 //#include "chartdir.h"
@@ -45,7 +45,7 @@
 
 
 
-using namespace std;
+//using namespace std;
 
 //class BodyField;
 //class LimbField;

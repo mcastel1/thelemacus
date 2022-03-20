@@ -78,7 +78,7 @@ template<class P> struct CheckSign;
 template<class P> struct CheckArcDegree;
 template<class P> struct CheckArcMinute;
 struct CheckLength;
-struct CheckDate;
+class CheckDate;
 struct CheckYear;
 struct CheckMonth;
 struct CheckDay;

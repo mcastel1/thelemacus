@@ -182,12 +182,18 @@ struct CheckDay{
 };
 
 
-struct CheckDate{
+class CheckDate{
     
+public:
+    
+    //the parent DateField
     DateField* p;
     CheckYear check_year;
     CheckMonth check_month;
     CheckDay check_day;
+    
+    //constructor, which sets the parent
+    CheckDate(DateField*);
     
     template <class T> void operator()(T&);
     
@@ -516,7 +522,7 @@ public:
     Date* date;
     //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
     bool year_ok, month_ok, day_ok;
-    CheckDate check;
+    CheckDate *check;
     
     DateField(SightFrame*, Date*);
     void set(void);
@@ -2114,6 +2120,12 @@ template<class P> template <class T> void CheckAngle<P>::operator()(T& event){
     check_arc_minute(event);
     
     event.Skip(true);
+    
+}
+
+CheckDate::CheckDate(DateField* p_in){
+    
+    p = p_in;
     
 }
 
@@ -4363,12 +4375,13 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     
     //initialize check and its objects
-    (check.p) = this;
-    ((check.check_year).p) = this;
-    (((check.check_year).tabulate_days).p) = this;
-    ((check.check_month).p) = this;
-    (((check.check_month).tabulate_days).p) = this;
-    ((check.check_day).p) = this;
+    check = new CheckDate(this);
+//    (check.p) = this;
+    ((check->check_year).p) = this;
+    (((check->check_year).tabulate_days).p) = this;
+    ((check->check_month).p) = this;
+    (((check->check_month).tabulate_days).p) = this;
+    ((check->check_day).p) = this;
     
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"), i+1));
@@ -4376,14 +4389,14 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
-    year->Bind(wxEVT_KILL_FOCUS, (check.check_year));
+    year->Bind(wxEVT_KILL_FOCUS, (check->check_year));
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     //    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
     AdjustWidth(month);
-    month->Bind(wxEVT_KILL_FOCUS, (check.check_month));
+    month->Bind(wxEVT_KILL_FOCUS, (check->check_month));
     
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -4396,7 +4409,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     day->Set(days);
     AdjustWidth(day);
     days.Clear();
-    day->Bind(wxEVT_KILL_FOCUS, (check.check_day));
+    day->Bind(wxEVT_KILL_FOCUS, (check->check_day));
     
     
     year->SetValue(wxString(""));

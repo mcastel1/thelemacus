@@ -152,30 +152,40 @@ struct TabulateDays{
 };
 
 
-struct CheckYear{
+class CheckYear{
+    
+public:
     
     DateField* p;
     TabulateDays tabulate_days;
     
+    CheckYear(DateField*);
     template<class T> void operator()(T&);
     
     
 };
 
-struct CheckMonth{
+class CheckMonth{
+    
+public:
+
     
     DateField* p;
     TabulateDays tabulate_days;
     
+    CheckMonth(DateField*);
     template<class T> void operator()(T&);
     
     
 };
 
-struct CheckDay{
+class CheckDay{
     
+public:
+
     DateField* p;
     
+    CheckDay(DateField*);
     template<class T> void operator()(T&);
     
     
@@ -188,9 +198,9 @@ public:
     
     //the parent DateField
     DateField* p;
-    CheckYear check_year;
-    CheckMonth check_month;
-    CheckDay check_day;
+    CheckYear *check_year;
+    CheckMonth *check_month;
+    CheckDay *check_day;
     
     //constructor, which sets the parent
     CheckDate(DateField*);
@@ -2127,6 +2137,12 @@ CheckDate::CheckDate(DateField* p_in){
     
     p = p_in;
     
+    check_year = new CheckYear(p);
+    check_month = new CheckMonth(p);
+    check_day = new CheckDay(p);
+
+
+    
 }
 
 //this functor checks the whole date field by calling the check on its year, month and day parts
@@ -3498,6 +3514,26 @@ void SightFrame::OnPressCancel(wxCommandEvent& event){
 }
 
 
+CheckYear::CheckYear(DateField* p_in){
+    
+    p = p_in;
+    (tabulate_days.p) = p;
+
+}
+
+CheckMonth::CheckMonth(DateField* p_in){
+    
+    p = p_in;
+    (tabulate_days.p) = p;
+
+    
+}
+
+CheckDay::CheckDay(DateField* p_in){
+    
+    p = p_in;
+    
+}
 
 
 template<class T> void CheckYear::operator()(T&event){
@@ -4376,12 +4412,12 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     //initialize check and its objects
     check = new CheckDate(this);
-//    (check.p) = this;
-    ((check->check_year).p) = this;
-    (((check->check_year).tabulate_days).p) = this;
-    ((check->check_month).p) = this;
-    (((check->check_month).tabulate_days).p) = this;
-    ((check->check_day).p) = this;
+    //    (check.p) = this;
+    //    ((check->check_year)->p) = this;
+    //    (((check->check_year)->tabulate_days).p) = this;
+    //    ((check->check_month)->p) = this;
+    //    (((check->check_month)->tabulate_days).p) = this;
+    //    ((check->check_day)->p) = this;
     
     for(months.Clear(), months.Add(wxT("")), i=0; i<12; i++){
         months.Add(wxString::Format(wxT("%i"), i+1));
@@ -4389,14 +4425,14 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
-    year->Bind(wxEVT_KILL_FOCUS, (check->check_year));
+    year->Bind(wxEVT_KILL_FOCUS, *(check->check_year));
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     //    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
     AdjustWidth(month);
-    month->Bind(wxEVT_KILL_FOCUS, (check->check_month));
+    month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
     
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -4409,7 +4445,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     day->Set(days);
     AdjustWidth(day);
     days.Clear();
-    day->Bind(wxEVT_KILL_FOCUS, (check->check_day));
+    day->Bind(wxEVT_KILL_FOCUS, *(check->check_day));
     
     
     year->SetValue(wxString(""));

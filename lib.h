@@ -1120,13 +1120,17 @@ struct CheckSecond{
 };
 
 
-struct CheckChrono{
+class CheckChrono{
     
+public:
+    
+    //the parent field of the CheckChrono object
     ChronoField* p;
     CheckHour check_hour;
     CheckMinute check_minute;
     CheckSecond check_second;
     
+    CheckChrono(ChronoField*);
     template<class T> void operator()(T&);
     
 };
@@ -1406,7 +1410,7 @@ public:
     Chrono* chrono;
     //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
     bool hour_ok, minute_ok, second_ok, /*this variable = true if this has been just enabled, and false otherwise*/just_enabled;
-    CheckChrono check;
+    CheckChrono* check;
     
     ChronoField(SightFrame*, Chrono*);
     void set(Chrono);

@@ -9166,6 +9166,15 @@ template<class T> void CheckSecond::operator()(T &event){
 }
 
 
+CheckChrono::CheckChrono(ChronoField* p_in){
+    
+    p = p_in;
+    ((check_hour).p) = p;
+    ((check_minute).p) = p;
+    ((check_second).p) = p;
+    
+}
+
 //this function writes into sight.stopwatch the value written into the respective GUI box
 template <class T> void CheckChrono::operator()(T& event){
     
@@ -9755,10 +9764,8 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     parent_frame = frame;
     chrono = p;
     
-    (check.p) = this;
-    ((check.check_hour).p) = this;
-    ((check.check_minute).p) = this;
-    ((check.check_second).p) = this;
+    check = new CheckChrono(this);
+//    (check.p) = this;
     
     for(hours.Clear(), hours.Add(wxT("")), i=0; i<24; i++){
         hours.Add(wxString::Format(wxT("%i"), i+1));
@@ -9770,20 +9777,20 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
-    hour->Bind(wxEVT_KILL_FOCUS, (check.check_hour));
+    hour->Bind(wxEVT_KILL_FOCUS, (check->check_hour));
     
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
-    minute->Bind(wxEVT_KILL_FOCUS, (check.check_minute));
+    minute->Bind(wxEVT_KILL_FOCUS, (check->check_minute));
     
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
-    second->Bind(wxEVT_KILL_FOCUS, (check.check_second));
+    second->Bind(wxEVT_KILL_FOCUS, (check->check_second));
     
     
     hour->SetValue(wxString(""));

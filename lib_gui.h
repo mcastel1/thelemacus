@@ -2313,9 +2313,15 @@ public:
     
 };
 
-struct OnSelectInListControlPositions{
+class OnSelectInListControlPositions{
     
+public:
+    
+    //parent frame
     ListFrame* f;
+    
+    //constructor, which sets the parent frame
+    OnSelectInListControlPositions(ListFrame*);
     
     template<class T> void operator()(T&);
     
@@ -2323,6 +2329,12 @@ struct OnSelectInListControlPositions{
 };
 
 OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
     
     f = f_in;
     
@@ -3009,12 +3021,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions/*, margin_h = 10*/, margin_v = 5;
     OnSelectInListControlSights* on_select_in_listcontrol_sights;
-    OnSelectInListControlPositions on_select_in_listcontrol_positions;
+    OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     wxListItem column, item;
     
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
-    (on_select_in_listcontrol_positions.f) = this;
+    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(Answer('n', String("")));
@@ -3145,7 +3157,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //listcontrol_positions with positions
     listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
-    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, on_select_in_listcontrol_positions);
+    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     
     n_columns_listcontrol_positions = 3;
     

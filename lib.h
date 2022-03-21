@@ -1601,7 +1601,7 @@ public:
     LengthField *l;
     StringField<RouteFrame> *label;
     
-    wxFlexGridSizer *sizer_grid_data, *sizer_grid_label, *sizer_grid_start, *sizer_grid_GP;
+    wxFlexGridSizer *sizer_grid_alpha, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;
     wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
     

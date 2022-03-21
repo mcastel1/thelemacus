@@ -8139,10 +8139,15 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    sizer_grid_data = new wxFlexGridSizer(7, 2, 0, 0);
+    sizer_grid_alpha = new wxFlexGridSizer(1, 2, 0, 0);
+    sizer_grid_l = new wxFlexGridSizer(1, 2, 0, 0);
     sizer_grid_start = new wxFlexGridSizer(2, 2, 0, 0);
     sizer_grid_GP = new wxFlexGridSizer(2, 2, 0, 0);
+    sizer_grid_omega = new wxFlexGridSizer(1, 2, 0, 0);
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
+    sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
+    sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
+    sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer = new wxBoxSizer(wxHORIZONTAL);
     
@@ -8195,52 +8200,40 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
     button_add->Enable((route_in != NULL));
     
-    sizer_grid_data->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
-    alpha->InsertIn<wxFlexGridSizer>(sizer_grid_data);
- 
-//    sizer_grid_data->Add(text_start_phi, 0, wxALIGN_CENTER_VERTICAL);
-//    start_phi->InsertIn<wxFlexGridSizer>(sizer_grid_data);
-//
-//    sizer_grid_data->Add(text_start_lambda, 0, wxALIGN_CENTER_VERTICAL);
-//    start_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_data);
+    sizer_grid_alpha->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
+    alpha->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
     
-//    sizer_grid_data->Add(text_GP_phi, 0, wxALIGN_CENTER_VERTICAL);
-//    GP_phi->InsertIn<wxFlexGridSizer>(sizer_grid_data);
-//
-//    sizer_grid_data->Add(text_GP_lambda, 0, wxALIGN_CENTER_VERTICAL);
-//    GP_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_data);
-    
-    sizer_grid_data->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
-    omega->InsertIn<wxFlexGridSizer>(sizer_grid_data);
-    
-    sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
-    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
-    
-    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer->Add(button_add, 0, wxALIGN_BOTTOM);
-    
-    sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
-    sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
-    sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
-
+    sizer_grid_omega->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
+    omega->InsertIn<wxFlexGridSizer>(sizer_grid_omega);
     
     sizer_grid_start->Add(text_start_phi);
     start_phi->InsertIn<wxFlexGridSizer>(sizer_grid_start);
+    
     sizer_grid_start->Add(text_start_lambda);
     start_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_start);
 
     sizer_box_start->Add(sizer_grid_start);
 
-    
     sizer_grid_GP->Add(text_GP_phi);
     GP_phi->InsertIn<wxFlexGridSizer>(sizer_grid_GP);
+    
     sizer_grid_GP->Add(text_GP_lambda);
     GP_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_GP);
 
     sizer_box_GP->Add(sizer_grid_GP);
-    
+        
+    sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
+    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
+
+    sizer_box_data->Add(sizer_grid_alpha);
+    sizer_box_data->Add(sizer_grid_l);
     sizer_box_data->Add(sizer_box_start);
     sizer_box_data->Add(sizer_box_GP);
+    sizer_box_data->Add(sizer_grid_omega);
+
+    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM);
+    box_sizer->Add(button_add, 0, wxALIGN_BOTTOM);
+  
 
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically

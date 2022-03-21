@@ -51,7 +51,7 @@ class BodyField;
 class LimbField;
 template<class T> class CheckField;
 template<class P> class AngleField;
-class LengthField;
+template<class P> class LengthField;
 class DateField;
 class ChronoField;
 class RouteTypeField;
@@ -1084,9 +1084,9 @@ public:
 };
 
 
-struct CheckLength{
+template<class P> struct CheckLength{
     
-    LengthField* p;
+    LengthField<P>* p;
     
     template<class T> void operator()(T&);
     
@@ -1350,12 +1350,12 @@ public:
     
 };
 
-//class for graphical object: a field to enter a length, composed of a box
-class LengthField{
+//class for graphical object: a field to enter a length, composed of a box. P is the type of the parent which hosts the LengthField object
+template<class P> class LengthField{
     
 public:
     //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    P* parent_frame;
     //degrees and minutes boxes
     wxTextCtrl *value;
     //texts
@@ -1364,9 +1364,9 @@ public:
     Length* length;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-    CheckLength check;
+    CheckLength<P> check;
     
-    LengthField(SightFrame*, Length*);
+    LengthField(P*, Length*);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);
@@ -1560,10 +1560,10 @@ public:
     
     BodyField* body;
     LimbField* limb;
-    CheckField<LengthField>* artificial_horizon_check;
+    CheckField< LengthField<SightFrame> >* artificial_horizon_check;
     CheckField<ChronoField>* stopwatch_check;
     AngleField<SightFrame>* H_s, *index_error;
-    LengthField* height_of_eye;
+    LengthField<SightFrame>* height_of_eye;
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField<SightFrame> *label;
@@ -1642,7 +1642,7 @@ public:
     
     RouteTypeField *type;
     AngleField<RouteFrame> *alpha, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
-    LengthField *l;
+    LengthField<RouteFrame> *l;
     StringField<RouteFrame> *label;
     
     wxFlexGridSizer *sizer_grid_type, *sizer_grid_alpha, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;

@@ -7598,9 +7598,9 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
 }
 
 //checks the value in the GUI field in LengthField
-template <class T> void CheckLength::operator()(T &event){
+template<class P> template <class T> void CheckLength<P>::operator()(T &event){
     
-    SightFrame* f = (p->parent_frame);
+    P* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -7641,7 +7641,7 @@ template <class T> void CheckLength::operator()(T &event){
 }
 
 //writes the value of the GUI field in LengthField into the non-GUI field length
-template <class T> void LengthField::get(T &event){
+template<class P> template <class T> void LengthField<P>::get(T &event){
     
     if(ok){
         
@@ -7809,11 +7809,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    artificial_horizon_check = new CheckField<LengthField>(this, &(sight->artificial_horizon), NULL, false);
+    artificial_horizon_check = new CheckField< LengthField<SightFrame> >(this, &(sight->artificial_horizon), NULL, false);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    height_of_eye = new LengthField(this, &(sight->height_of_eye));
+    height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye));
     //now that height_of_eye has been allocatd, I link artificial_horizon_check to height_of_eye
     (artificial_horizon_check->related_field) = height_of_eye;
     
@@ -7884,8 +7884,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<LengthField>::get<wxCommandEvent>, artificial_horizon_check);
-    button_reduce->Bind(wxEVT_BUTTON, &LengthField::get<wxCommandEvent>, height_of_eye);
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField< LengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
+    button_reduce->Bind(wxEVT_BUTTON, &LengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, &DateField::get<wxCommandEvent>, master_clock_date);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, master_clock_chrono);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
@@ -9789,7 +9789,7 @@ template <class P> void AngleField<P>::set(void){
 
 
 //sets the value in the GUI object value equal to the value in the non-GUI  object length
-void LengthField::set(void){
+template<class P> void LengthField<P>::set(void){
     
     value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
     
@@ -10027,7 +10027,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
 }
 
 //constructor of a LengthField object, based on the parent frame frame
-LengthField::LengthField(SightFrame* frame, Length* p){
+template<class P> LengthField<P>::LengthField(P* frame, Length* p){
     
     parent_frame = frame;
     length = p;
@@ -10093,7 +10093,7 @@ template<class P> bool AngleField<P>::is_ok(void){
     
 }
 
-bool LengthField::is_ok(void){
+template<class P> bool LengthField<P>::is_ok(void){
     
     return(ok);
     
@@ -10306,7 +10306,7 @@ template<class P> void AngleField<P>::Enable(bool is_enabled){
 }
 
 //this function enables/disable the LengthField
-void LengthField::Enable(bool is_enabled){
+template<class P> void LengthField<P>::Enable(bool is_enabled){
     
     value->Enable(is_enabled);
     
@@ -10364,7 +10364,7 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host){
     
 }
 
-template<class T> void LengthField::InsertIn(T* host){
+template<class P> template<class T> void LengthField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     

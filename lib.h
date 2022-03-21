@@ -1601,9 +1601,9 @@ public:
     LengthField *l;
     StringField<RouteFrame> *label;
     
-    wxFlexGridSizer *sizer_grid_data, *sizer_grid_label;
+    wxFlexGridSizer *sizer_grid_data, *sizer_grid_label, *sizer_grid_start, *sizer_grid_GP;
     wxBoxSizer *sizer, *box_sizer;
-    wxStaticBoxSizer *sizer_box_data;
+    wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
     
     wxButton* button_add, *button_cancel;
     wxMenuBar *menuBar;

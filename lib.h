@@ -1342,6 +1342,7 @@ public:
     
     
     AngleField(P*, Angle*, String);
+    void Enable(bool);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
@@ -1530,10 +1531,10 @@ public:
     bool ok;
     
     RouteTypeField(RouteFrame*, String*);
-    void set(void);
-    template<class T> void get(T&);
+//    void set(void);
+//    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
-    bool is_ok(void);
+//    bool is_ok(void);
     
     
 };
@@ -1639,7 +1640,7 @@ public:
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
     PrintErrorMessage<RouteFrame>* print_error_message;
     
-    wxComboBox *type;
+    RouteTypeField *type;
     AngleField<RouteFrame> *alpha, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
     LengthField *l;
     StringField<RouteFrame> *label;

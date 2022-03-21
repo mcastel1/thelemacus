@@ -8206,8 +8206,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     button_add->Enable((route_in != NULL));
  
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
-    sizer_grid_type->Add(type);
- 
+    type->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
+
     sizer_grid_alpha->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
     alpha->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
     
@@ -10288,6 +10288,17 @@ void MessageFrame::OnPressOk(wxCommandEvent& event){
 //
 //}
 
+//this function enables/disable all the fields in AngleField
+template<class P> void AngleField<P>::Enable(bool is_enabled){
+    
+    if(format != String("")){
+        sign->Enable(is_enabled);
+    }
+    deg->Enable(is_enabled);
+    min->Enable(is_enabled);
+
+}
+
 //this function enables/disable the LengthField
 void LengthField::Enable(bool is_enabled){
     
@@ -10371,6 +10382,13 @@ template<class T> void ChronoField::InsertIn(T* host){
     host->Add(sizer_v);
     
 }
+
+template<class T> void RouteTypeField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}
+
 
 OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
     

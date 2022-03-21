@@ -1614,7 +1614,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressAdd(wxCommandEvent& event);
-    void TryToEnableAdd(void);
+    void TryToEnableReduce(void);
     
     //    wxDECLARE_EVENT_TABLE();
     

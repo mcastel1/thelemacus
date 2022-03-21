@@ -8091,9 +8091,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-    
-    CurrentDocPath = wxT("");
-    
+        
     CreateStatusBar();
     SetStatusText( "Welcome to Michele's text editor!" );
     
@@ -8113,6 +8111,122 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     
 }
+
+RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+    
+    parent = parent_input;
+    
+    String new_prefix;
+    unsigned int common_width;
+    
+    bool check = true;
+    
+    
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    idling = false;
+    print_error_message = new PrintErrorMessage<RouteFrame>(this);
+    
+    //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
+    if(route_in != NULL){
+        route = route_in;
+        list_position = list_position_in;
+    }else{
+        route = new Route();
+        list_position = -1;
+    }
+    
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    
+    sizer_grid_measurement = new wxFlexGridSizer(2, 2, 0, 0);
+    sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
+    sizer = new wxBoxSizer(wxVERTICAL);
+    box_sizer = new wxBoxSizer(wxHORIZONTAL);
+    
+    
+    //latitude
+    wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    lat = new AngleField<RouteFrame>(this, &(route->phi), String("NS"));
+    
+    //longitude
+    wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    lon = new AngleField<RouteFrame>(this, &(route->lambda), String("EW"));
+    
+    //label
+    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    label = new StringField<RouteFrame>(this, &(route->label));
+    
+    
+    //buttons
+    button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
+    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+    
+    //If I press reduce, I want all the fields in this RouteFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
+    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, lat);
+    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, lon);
+    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
+    button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
+    
+    
+    //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
+    button_add->Enable((route_in != NULL));
+    
+    sizer_grid_measurement->Add(text_lat, 0, wxALIGN_CENTER_VERTICAL);
+    lat->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    
+    sizer_grid_measurement->Add(text_lon, 0, wxALIGN_CENTER_VERTICAL);
+    lon->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    
+    sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
+    label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
+    
+    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM);
+    box_sizer->Add(button_add, 0, wxALIGN_BOTTOM);
+    
+    sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
+    
+    sizer_box_measurement->Add(sizer_grid_measurement);
+    
+    //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
+    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
+    common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
+    text_lat->SetMinSize(wxSize(common_width,-1));
+    text_lon->SetMinSize(wxSize(common_width,-1));
+    text_label->SetMinSize(wxSize(common_width,-1));
+    
+    //add the various elements to sizer, by inserting a border of 5 in all directions
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, 5);
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, 5);
+    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, 5);
+    
+    
+    //panel->SetSizer(sizer);
+    Maximize(panel);
+        
+    CreateStatusBar();
+    SetStatusText( "Welcome to Michele's text editor!" );
+    
+    SetSizerAndFit(sizer);
+    //Maximize();
+    
+    
+    if(!check){
+        cout << prefix.value << RED << "Cannot read route!\n" << RESET;
+    }
+    
+    
+    
+    if(route_in != NULL){set();}
+    
+    Centre();
+    
+    
+}
+
+
 
 //set all the GUI fields in this equal to those in the non-GUI object this->position
 void PositionFrame::set(void){

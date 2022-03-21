@@ -1595,7 +1595,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
-    PrintErrorMessage<PositionFrame>* printerrormessage;
+    PrintErrorMessage<RouteFrame>* print_error_message;
     
     AngleField<PositionFrame> *alpha, *omega;
     PositionField *start, *GP;
@@ -1603,7 +1603,7 @@ public:
     StringField<PositionFrame> *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
-    wxBoxSizer *sizer, *box_sizer_2;
+    wxBoxSizer *sizer, *box_sizer;
     wxStaticBoxSizer *sizer_box_measurement;
     
     wxButton* button_add, *button_cancel;

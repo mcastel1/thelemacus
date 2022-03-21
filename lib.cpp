@@ -6518,12 +6518,8 @@ void DrawPanel::Render(wxDC&  dc){
 
 void DrawPanel::Draw(void){
     
-//    File world;
-//    stringstream line_ins;
-//    string line;
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i;
-//    unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
@@ -6567,45 +6563,6 @@ void DrawPanel::Draw(void){
     position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
     //stores in to size_plot_area the size of the plot area
     size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
-    
-    
-    //
-//    world.set_name(String(path_file_selected_coastline_data));
-//    world.count_lines(String(""));
-    
-     
-//    world.open(String("in"), String(""));
-    
-//    line.clear();
-//    getline(world.value, line);
-    
-//    cout << "Number of lines = " << world.number_of_lines << "\n";
-    
-//    for(number_of_points=0, i=0; i<(world.number_of_lines); i++){
-        
-//        line.clear();
-//        line_ins.clear();
-//        getline(world.value, line);
-//        line_ins << line;
-//        line_ins >> phi >> lambda;
-//
-//        x_dummy = x_mercator(lambda);
-//        y_dummy = y_mercator(phi);
-//
-//        if((x_min <= x_dummy) && (x_dummy <= x_max) && (y_min <= y_dummy) && (y_dummy <= y_max)){
-//
-//            x[number_of_points] = x_dummy;
-//            y[number_of_points] = y_dummy;
-//            number_of_points++;
-//
-//        }
-        
-        //        cout << " ******* " << x[i] << " " << y[i] << "\n";
-        
-//    }
-    
-//    world.close(String(""));
-    
     
     
     //set parallels
@@ -6736,28 +6693,8 @@ void DrawPanel::Draw(void){
     //set the interval of the x axis, and disables the xtics with the last NoValue argument
     (c->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
     
-    //    delta_lambda = 15.0;
-    //    (c->xAxis())->addLabel(0.0, "*");
-    //    for(x_dummy=delta_lambda*k; x_dummy<x_max; x_dummy+=delta_lambda*k){
-    //        (c->xAxis())->addLabel(x_dummy, "*");
-    //    }
-    //    for(x_dummy=-delta_lambda*k; x_dummy>x_min; x_dummy-=delta_lambda*k){
-    //        (c->xAxis())->addLabel(x_dummy, "*");
-    //    }
-    //
-    // Add a title to the y axis using 12pt Arial Bold Italic font
-    //    (c->yAxis())->setTitle("phi", "Arial", 12);
     (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
-    
-    //    delta_phi = 30.0;
-    //    (c->yAxis())->addLabel(0.0, "/");
-    //    for(phi = delta_phi; y_mercator(phi)<y_max; phi+=delta_phi){
-    //        (c->yAxis())->addLabel(y_mercator(phi), "/");
-    //    }
-    //    for(phi = -delta_phi; y_mercator(phi)>y_min; phi-=delta_phi){
-    //        (c->yAxis())->addLabel(y_mercator(phi), "/");
-    //    }
-    
+        
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);

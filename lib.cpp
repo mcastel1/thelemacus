@@ -8283,7 +8283,42 @@ void PositionFrame::OnPressAdd(wxCommandEvent& event){
 }
 
 
+void RouteFrame::OnPressAdd(wxCommandEvent& event){
+    
+    
+    event.Skip(true);
+    
+    Close(TRUE);
+    
+}
 
+void RouteFrame::OnPressCancel(wxCommandEvent& event){
+    
+    
+    event.Skip(true);
+    
+    Close(TRUE);
+    
+}
+
+void RouteFrame::TryToEnableReduce(void){
+    
+    
+    
+}
+
+void RouteFrame::set(void){
+    
+    
+    
+}
+
+
+void RouteFrame::SetIdling(bool b){
+    
+    idling = b;
+    
+}
 
 //this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
 void PositionFrame::TryToEnableReduce(void){

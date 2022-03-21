@@ -1598,7 +1598,7 @@ public:
     PrintErrorMessage<RouteFrame>* print_error_message;
     
     AngleField<RouteFrame> *alpha, *omega;
-    PositionField *start, *GP;
+//    PositionField *start, *GP;
     LengthField *l;
     StringField<RouteFrame> *label;
     

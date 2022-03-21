@@ -8137,8 +8137,16 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
         list_position = -1;
     }
     
+    types.Clear();
+    //tabulate types of Routes
+    types.Add(wxString("loxodrome"));
+    types.Add(wxString("orthodrome"));
+    types.Add(wxString("circle of equal altitude"));
+
+    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
+    sizer_grid_type = new wxFlexGridSizer(1, 2, 0, 0);
     sizer_grid_alpha = new wxFlexGridSizer(1, 2, 0, 0);
     sizer_grid_l = new wxFlexGridSizer(1, 2, 0, 0);
     sizer_grid_start = new wxFlexGridSizer(2, 2, 0, 0);
@@ -8151,6 +8159,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer = new wxBoxSizer(wxHORIZONTAL);
     
+    
+    //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
+    wxStaticText* text_type = new wxStaticText(panel, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    type = new wxComboBox(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+    type->SetValue("");
     
     //alpha
     wxStaticText* text_alpha = new wxStaticText(panel, wxID_ANY, wxT("Alpha"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -8172,12 +8185,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     wxStaticText* text_GP_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     GP_lambda = new AngleField<RouteFrame>(this, &((route->GP).lambda), String(""));
 
-    
-    
     //omega
     wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
- 
     
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -8199,7 +8209,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
     button_add->Enable((route_in != NULL));
-    
+ 
+    sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
+    sizer_grid_type->Add(type);
+ 
     sizer_grid_alpha->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
     alpha->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
     
@@ -8225,6 +8238,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
 
+    sizer_box_data->Add(sizer_grid_type);
     sizer_box_data->Add(sizer_grid_alpha);
     sizer_box_data->Add(sizer_grid_l);
     sizer_box_data->Add(sizer_box_start);

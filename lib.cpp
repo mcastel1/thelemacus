@@ -6918,11 +6918,11 @@ template<class T>void CheckBody::operator()(T& event){
             
         }else{
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->name);
-            ((f->printerrormessage)->title) = String("Body not found in catalog!");
-            ((f->printerrormessage)->message) = String("Body must be in catalog.");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->name);
+            ((f->print_error_message)->title) = String("Body not found in catalog!");
+            ((f->print_error_message)->message) = String("Body must be in catalog.");
+            f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
             
@@ -6962,11 +6962,11 @@ template<class T> void CheckLimb::operator()(T &event){
             
         }else{
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->name);
-            ((f->printerrormessage)->title) = String("Limb not valid!");
-            ((f->printerrormessage)->message) = String("Limb must be upper, lower or center.");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->name);
+            ((f->print_error_message)->title) = String("Limb not valid!");
+            ((f->print_error_message)->message) = String("Limb must be upper, lower or center.");
+            f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
             
@@ -7033,11 +7033,11 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }else{
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->sign);
-            ((f->printerrormessage)->title) = String("Sign is not valid!");
-            ((f->printerrormessage)->message) = String("Sign must be +-, NS or EW.");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->sign);
+            ((f->print_error_message)->title) = String("Sign is not valid!");
+            ((f->print_error_message)->message) = String("Sign must be +-, NS or EW.");
+            f->CallAfter(*(f->print_error_message));
             
             (p->sign_ok) = false;
             
@@ -7515,11 +7515,11 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->deg);
-            ((f->printerrormessage)->title) = String("Entered value is not valid!");
-            ((f->printerrormessage)->message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->deg);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
+            f->CallAfter(*(f->print_error_message));
             
             (p->deg_ok) = false;
             
@@ -7563,11 +7563,11 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->min);
-            ((f->printerrormessage)->title) = String("Entered value is not valid!");
-            ((f->printerrormessage)->message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->min);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
+            f->CallAfter(*(f->print_error_message));
             
             (p->min_ok) = false;
             
@@ -7610,11 +7610,11 @@ template <class T> void CheckLength::operator()(T &event){
             if(!(p->just_enabled)){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
                 
-                //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-                ((f->printerrormessage)->control) = (p->value);
-                ((f->printerrormessage)->title) = String("Entered value is not valid!");
-                ((f->printerrormessage)->message) = String("Lengths must be floating-point numbers >= 0 m");
-                f->CallAfter(*(f->printerrormessage));
+                //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+                ((f->print_error_message)->control) = (p->value);
+                ((f->print_error_message)->title) = String("Entered value is not valid!");
+                ((f->print_error_message)->message) = String("Lengths must be floating-point numbers >= 0 m");
+                f->CallAfter(*(f->print_error_message));
                 
             }else{
                 //if the LengthField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
@@ -7740,7 +7740,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    printerrormessage = new PrintErrorMessage<SightFrame>(this);
+    print_error_message = new PrintErrorMessage<SightFrame>(this);
     
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));
@@ -8009,7 +8009,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    printerrormessage = new PrintErrorMessage<PositionFrame>(this);
+    print_error_message = new PrintErrorMessage<PositionFrame>(this);
     
     
     //    wxMenu *menuFile = new wxMenu;
@@ -8145,13 +8145,14 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     box_sizer = new wxBoxSizer(wxHORIZONTAL);
     
     
-    //latitude
-    wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    lat = new AngleField<RouteFrame>(this, &(route->phi), String("NS"));
-    
-    //longitude
-    wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    lon = new AngleField<RouteFrame>(this, &(route->lambda), String("EW"));
+    //alpha
+    wxStaticText* text_alpha = new wxStaticText(panel, wxID_ANY, wxT("Alpha"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    alpha = new AngleField<RouteFrame>(this, &(route->alpha), String(""));
+ 
+    //omega
+    wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
+ 
     
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -8165,8 +8166,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this RouteFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, lat);
-    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, lon);
+    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
+    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
     button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
     button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
     
@@ -8174,11 +8175,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
     button_add->Enable((route_in != NULL));
     
-    sizer_grid_measurement->Add(text_lat, 0, wxALIGN_CENTER_VERTICAL);
-    lat->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    sizer_grid_measurement->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
+    alpha->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
-    sizer_grid_measurement->Add(text_lon, 0, wxALIGN_CENTER_VERTICAL);
-    lon->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    sizer_grid_measurement->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
+    omega->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
@@ -8193,8 +8194,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
     common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
-    text_lat->SetMinSize(wxSize(common_width,-1));
-    text_lon->SetMinSize(wxSize(common_width,-1));
+    text_alpha->SetMinSize(wxSize(common_width,-1));
+    text_omega->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
     //add the various elements to sizer, by inserting a border of 5 in all directions
@@ -8615,7 +8616,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     
-    n_columns_listcontrol_routes = 3;
+    n_columns_listcontrol_routes = 6;
     
     column.SetId(0);
     column.SetText(wxT("Type"));
@@ -8630,22 +8631,28 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes->InsertColumn(1, column);
     
     column.SetId(2);
-    column.SetText(wxT("Length"));
+    column.SetText(wxT("Alpha"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(2, column);
     
     column.SetId(3);
-    column.SetText(wxT("GroundPosition"));
+    column.SetText(wxT("Length"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(3, column);
-
+    
     column.SetId(4);
-    column.SetText(wxT("Omega"));
+    column.SetText(wxT("GroundPosition"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(4, column);
+
+    column.SetId(5);
+    column.SetText(wxT("Omega"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(5, column);
 
 
 
@@ -9044,11 +9051,11 @@ template<class T> void CheckYear::operator()(T&event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->year);
-            ((f->printerrormessage)->title) = String("Entered value is not valid!");
-            ((f->printerrormessage)->message) = String("Year must be an unsigned integer");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->year);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Year must be an unsigned integer");
+            f->CallAfter(*(f->print_error_message));
             
             (p->year_ok) = false;
             (p->day)->Enable(false);
@@ -9085,11 +9092,11 @@ template<class T> void CheckMonth::operator()(T&event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->month);
-            ((f->printerrormessage)->title) = String("Entered value is not valid!");
-            ((f->printerrormessage)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->month);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
+            f->CallAfter(*(f->print_error_message));
             
             (p->month_ok) = false;
             (p->day)->Enable(false);
@@ -9153,11 +9160,11 @@ template<class T> void CheckDay::operator()(T& event){
                 
                 //            f->CallAfter(&SightFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
                 
-                //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-                ((f->printerrormessage)->control) = (p->day);
-                ((f->printerrormessage)->title) = String("Entered value is not valid!");
-                ((f->printerrormessage)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
-                f->CallAfter(*(f->printerrormessage));
+                //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+                ((f->print_error_message)->control) = (p->day);
+                ((f->print_error_message)->title) = String("Entered value is not valid!");
+                ((f->print_error_message)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
+                f->CallAfter(*(f->print_error_message));
                 
                 (p->day)->Enable(true);
                 (p->day_ok) = false;
@@ -9281,11 +9288,11 @@ template<class T> void CheckHour::operator()(T &event){
             if(!(p->just_enabled)){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
                 
-                //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-                ((f->printerrormessage)->control) = (p->hour);
-                ((f->printerrormessage)->title) = String("Entered value is not valid!");
-                ((f->printerrormessage)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-                f->CallAfter(*(f->printerrormessage));
+                //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+                ((f->print_error_message)->control) = (p->hour);
+                ((f->print_error_message)->title) = String("Entered value is not valid!");
+                ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+                f->CallAfter(*(f->print_error_message));
                 
             }else{
                 //if the ChronoField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
@@ -9331,11 +9338,11 @@ template<class T> void CheckMinute::operator()(T &event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->minute);
-            ((f->printerrormessage)->title) = String("Entered value is not valid!");
-            ((f->printerrormessage)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->minute);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
+            f->CallAfter(*(f->print_error_message));
             
             (p->minute_ok) = false;
             
@@ -9372,11 +9379,11 @@ template<class T> void CheckSecond::operator()(T &event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
             
-            //set the wxControl, title and message for the functor printerrormessage, and then call the functor with CallAfter
-            ((f->printerrormessage)->control) = (p->second);
-            ((f->printerrormessage)->title) = String("Entered value is not valid!");
-            ((f->printerrormessage)->message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
-            f->CallAfter(*(f->printerrormessage));
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->second);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
+            f->CallAfter(*(f->print_error_message));
             
             (p->second_ok) = false;
             

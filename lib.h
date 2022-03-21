@@ -1513,7 +1513,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    PrintErrorMessage<SightFrame>* printerrormessage;
+    PrintErrorMessage<SightFrame>* print_error_message;
     
     BodyField* body;
     LimbField* limb;
@@ -1558,7 +1558,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
-   PrintErrorMessage<PositionFrame>* printerrormessage;
+   PrintErrorMessage<PositionFrame>* print_error_message;
     
     AngleField<PositionFrame>* lat, *lon;
     StringField<PositionFrame> *label;
@@ -1597,10 +1597,10 @@ public:
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
     PrintErrorMessage<RouteFrame>* print_error_message;
     
-    AngleField<PositionFrame> *alpha, *omega;
+    AngleField<RouteFrame> *alpha, *omega;
     PositionField *start, *GP;
     LengthField *l;
-    StringField<PositionFrame> *label;
+    StringField<RouteFrame> *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;

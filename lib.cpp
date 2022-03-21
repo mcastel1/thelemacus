@@ -6100,7 +6100,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
 void ChartFrame::GetCoastLineData(void){
     
-    File file_n_line, file_coastline_data_blocked, outfile_selected_coastline_data;
+    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
     string data, line;
     stringstream ins;
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
@@ -6110,6 +6110,7 @@ void ChartFrame::GetCoastLineData(void){
     char* buffer = NULL;
     size_t pos_beg, pos_end;
     bool check;
+    double lambda_temp, phi_temp;
     
     //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     ((parent->plot)->phi_min).normalize_pm_pi();
@@ -6139,7 +6140,7 @@ void ChartFrame::GetCoastLineData(void){
     
     file_n_line.set_name(String(path_file_n_line));
     file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
-    outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
+//    outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
     
     
     //read file n_line and store it into vector n_line
@@ -6164,8 +6165,11 @@ void ChartFrame::GetCoastLineData(void){
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     //open a new file selected coastline data and write into it the new data
-    outfile_selected_coastline_data.remove(String(""));
-    outfile_selected_coastline_data.open(String("out"), String(""));
+//    outfile_selected_coastline_data.remove(String(""));
+//    outfile_selected_coastline_data.open(String("out"), String(""));
+    
+    x.clear();
+    y.clear();
     
     check = true;
     for(i=i_min; i<=i_max; i++){
@@ -6210,7 +6214,13 @@ void ChartFrame::GetCoastLineData(void){
                     replace(line.begin(), line.end(), ' ', '\n');
                     replace(line.begin(), line.end(), ',', ' ');
                     
-                    (outfile_selected_coastline_data.value) << line;
+//                    (outfile_selected_coastline_data.value) << line;
+                    ins.clear();
+                    ins << line;
+                    ins >> phi_temp >> lambda_temp;
+                    
+                    x.push_back(x_mercator(lambda_temp));
+                    y.push_back(y_mercator(phi_temp));
                     
                 }
                 
@@ -6239,7 +6249,7 @@ void ChartFrame::GetCoastLineData(void){
     }
     
     
-    outfile_selected_coastline_data.close(String(""));
+//    outfile_selected_coastline_data.close(String(""));
     file_coastline_data_blocked.close(String(""));
     
     
@@ -6497,12 +6507,12 @@ void DrawPanel::Render(wxDC&  dc){
 
 void DrawPanel::Draw(void){
     
-    File world;
-    stringstream line_ins;
-    string line;
-    double *x, *y, lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
+//    File world;
+//    stringstream line_ins;
+//    string line;
+    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i;
-    unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
+//    unsigned int /*this is the number of geographical points on the map which will fall in the plot rectangle (x_min , x_max) x (y_min, y_max)*/number_of_points;
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
@@ -6550,43 +6560,41 @@ void DrawPanel::Draw(void){
     
     
     //
-    world.set_name(String(path_file_selected_coastline_data));
-    world.count_lines(String(""));
+//    world.set_name(String(path_file_selected_coastline_data));
+//    world.count_lines(String(""));
     
-    x = new double [(world.number_of_lines)];
-    y = new double [(world.number_of_lines)];
+     
+//    world.open(String("in"), String(""));
     
-    world.open(String("in"), String(""));
+//    line.clear();
+//    getline(world.value, line);
     
-    line.clear();
-    getline(world.value, line);
+//    cout << "Number of lines = " << world.number_of_lines << "\n";
     
-    cout << "Number of lines = " << world.number_of_lines << "\n";
-    
-    for(number_of_points=0, i=0; i<(world.number_of_lines); i++){
+//    for(number_of_points=0, i=0; i<(world.number_of_lines); i++){
         
-        line.clear();
-        line_ins.clear();
-        getline(world.value, line);
-        line_ins << line;
-        line_ins >> phi >> lambda;
-        
-        x_dummy = x_mercator(lambda);
-        y_dummy = y_mercator(phi);
-        
-        if((x_min <= x_dummy) && (x_dummy <= x_max) && (y_min <= y_dummy) && (y_dummy <= y_max)){
-            
-            x[number_of_points] = x_dummy;
-            y[number_of_points] = y_dummy;
-            number_of_points++;
-            
-        }
+//        line.clear();
+//        line_ins.clear();
+//        getline(world.value, line);
+//        line_ins << line;
+//        line_ins >> phi >> lambda;
+//
+//        x_dummy = x_mercator(lambda);
+//        y_dummy = y_mercator(phi);
+//
+//        if((x_min <= x_dummy) && (x_dummy <= x_max) && (y_min <= y_dummy) && (y_dummy <= y_max)){
+//
+//            x[number_of_points] = x_dummy;
+//            y[number_of_points] = y_dummy;
+//            number_of_points++;
+//
+//        }
         
         //        cout << " ******* " << x[i] << " " << y[i] << "\n";
         
-    }
+//    }
     
-    world.close(String(""));
+//    world.close(String(""));
     
     
     
@@ -6745,13 +6753,13 @@ void DrawPanel::Draw(void){
     c->yAxis()->setWidth(2);
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    c->addScatterLayer(DoubleArray(x, number_of_points), DoubleArray(y, number_of_points), "", Chart::CircleSymbol, 1, 000000);
+    c->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
     
     c->makeChart(path_file_chart);
     
     //free up resources
-    delete [] x;
-    delete [] y;
+    (parent->x).clear();
+    (parent->y).clear();
     
 }
 

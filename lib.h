@@ -1597,6 +1597,7 @@ public:
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int /*this stores the value of slider*/value_slider_old;
+    vector<double> x, y;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     

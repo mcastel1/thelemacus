@@ -1474,10 +1474,10 @@ public:
     //    wxListBox* listbox;
     wxListCtrl* listcontrol_sights, *listcontrol_positions, *listcontrol_routes;
     wxPanel *panel;
-    wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position;
-    wxBitmapButton *button_modify_sight, *button_modify_position;
-    wxSizer* sizer_h, *sizer_v, *sizer_buttons_sight, *sizer_buttons_position;
-    wxStaticBoxSizer* sizer_box_sight, *sizer_box_position;
+    wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position, *button_add_route, *button_delete_route;
+    wxBitmapButton *button_modify_sight, *button_modify_position, *button_modify_route;
+    wxSizer* sizer_h, *sizer_v, *sizer_buttons_sight, *sizer_buttons_position, *sizer_buttons_route;
+    wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     
     void OnAddSight(wxCommandEvent& event);

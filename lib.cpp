@@ -3000,8 +3000,9 @@ void Plot::menu(String prefix){
     switch(i){
             
         case 1:{
-            
-            add_sight(new_prefix);
+  
+            //I commented this out because the way to enteer the sight has changed with the GUI
+//            add_sight(new_prefix);
             print(true, new_prefix, cout);
             show(false, new_prefix);
             menu(prefix);
@@ -3783,15 +3784,21 @@ bool Plot::modify_sight(unsigned int i, String prefix){
 
 
 
-bool Plot::add_sight(String prefix){
+bool Plot::add_sight(Sight* sight_in, String prefix){
     
-    //create a new sight and new route in the respective lists
-    sight_list.resize(sight_list.size()+1);
-    route_list.resize(route_list.size()+1);
-    
+
     bool check = true;
+
+    //create a new route in the respective list
+    route_list.resize(route_list.size()+1);
+
+    //push back sight_in into sight_list
+    sight_list.push_back(*sight_in);
+
     
-    (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
+    
+    //I commented this out because now the sight is enetered through the GUI
+    //    (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
     check &= ((sight_list[sight_list.size()-1]).reduce(&(route_list[route_list.size()-1]), prefix));
     
     //I link the sight to the route, and the route to the sight
@@ -5245,6 +5252,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
             }
             
             if(gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;};
+            
             if(gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
             if(gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)N) != GSL_SUCCESS){check &= false;}
             
@@ -8664,13 +8672,27 @@ template<class T> void SightFrame::get(T& event){
     master_clock_date->get(event);
     master_clock_chrono->get(event);
     
+    //while setting the non-GUI fields equal to the values in the GUI fields, I set the value of sight->time: I firs set time to master_clock_date_and_hour ...
+    (sight->time) = (sight->master_clock_date_and_hour);
+    
     stopwatch_check->get(event);
+    
+    //.. then I add to it sight->stopwatch, if any ....
+    if((sight->use_stopwatch) == Answer('y', String(""))){
+        (sight->time)+=(sight->stopwatch);
+    }
+    
     
     if(((stopwatch_check->checkbox)->GetValue())){
         stopwatch_reading->get(event);
     }
     
     TAI_minus_UTC->get(event);
+    
+    //... then I add to it TAI_minus_UTC, to convert it from the UTC to the TAI scale.
+    (sight->time)+=(sight->TAI_minus_UTC);
+
+    
     label->get(event);
     
     event.Skip(true);
@@ -9193,10 +9215,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list
     if(list_position==-1){
-        (((this->parent)->plot)->sight_list).push_back(*sight);
+        ((this->parent)->plot)->add_sight(sight, String(""));
     }
     
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
+    
     
     event.Skip(true);
     

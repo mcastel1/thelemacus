@@ -8206,7 +8206,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     button_add->Enable((route_in != NULL));
  
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
-    type->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
+    type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
 
     sizer_grid_alpha->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
     alpha->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);

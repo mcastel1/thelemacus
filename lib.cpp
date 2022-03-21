@@ -8137,11 +8137,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
         list_position = -1;
     }
     
-    types.Clear();
-    //tabulate types of Routes
-    types.Add(wxString("loxodrome"));
-    types.Add(wxString("orthodrome"));
-    types.Add(wxString("circle of equal altitude"));
+ 
 
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -8162,8 +8158,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
     wxStaticText* text_type = new wxStaticText(panel, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    type = new wxComboBox(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
-    type->SetValue("");
+    type = new RouteTypeField(this, &(route->type));
     
     //alpha
     wxStaticText* text_alpha = new wxStaticText(panel, wxID_ANY, wxT("Alpha"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -9520,6 +9515,73 @@ template <class T> void CheckChrono::operator()(T& event){
     
 }
 
+CheckRouteType::CheckRouteType(RouteTypeField* p_in){
+    
+    p = p_in;
+    
+    
+}
+
+//this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, alpha and start fields in RouteFrame. If it is equal to circle of equal altitude, it enables only the GP and omege fields.
+template<class T>void CheckRouteType::operator()(T& event){
+    
+    RouteFrame* f = (p->parent_frame);
+    bool enable;
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        unsigned int i;
+        bool check;
+        
+        //I check whether the name in the GUI field body matches one of the body names in catalog
+        for(check = false, i=0; (i<((p->types).size())) && (!check); i++){
+            if(((p->name)->GetValue()) == ((p->types)[i])){
+                check = true;
+            }
+        }
+        i--;
+        
+        if(check){
+            
+            
+            enable = ((((p->types)[i]) == wxString("loxodrome")) || (((p->types)[i]) == wxString("orthodrome")));
+            
+
+            (f->alpha)->Enable(enable);
+            (f->start_phi)->Enable(enable);
+            (f->start_lambda)->Enable(enable);
+            (f->l)->Enable(enable);
+
+            (f->GP_phi)->Enable(!enable);
+            (f->GP_lambda)->Enable(!enable);
+            (f->omega)->Enable(!enable);
+
+
+            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->ok) = true;
+            
+        }else{
+            
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->name);
+            ((f->print_error_message)->title) = String("Route type not found in list!");
+            ((f->print_error_message)->message) = String("Route type must be loxodrome, orthodrome, or circle of equal altitude.");
+            f->CallAfter(*(f->print_error_message));
+            
+            (p->ok) = false;
+            
+        }
+        
+        f->TryToEnableReduce();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
 //this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second
 template <class T> void ChronoField::get(T& event){
     
@@ -10160,6 +10222,39 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     sizer_h->Add(second, 0, wxALIGN_CENTER);
     
 }
+
+//constructor of a RouteTypeField object, based on the parent frame frame
+RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
+    
+    parent_frame = frame;
+    //I link the internal pointers p and c to the respective non-GUI object string
+    type = s;
+    
+    types.Clear();
+    //tabulate types of Routes
+    types.Add(wxString("loxodrome"));
+    types.Add(wxString("orthodrome"));
+    types.Add(wxString("circle of equal altitude"));
+
+    check = new CheckRouteType(this);
+    
+    name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+    AdjustWidth(name);
+    name->Bind(wxEVT_KILL_FOCUS, *check);
+    
+    name->SetValue("");
+    ok = false;
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
+    
+}
+
+
+
 
 //this functor quits the MessageFrame when Ok button is pressed
 void MessageFrame::OnPressOk(wxCommandEvent& event){

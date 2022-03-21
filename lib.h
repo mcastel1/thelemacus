@@ -54,6 +54,7 @@ template<class P> class AngleField;
 class LengthField;
 class DateField;
 class ChronoField;
+class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
 class MessageFrame;
@@ -63,6 +64,7 @@ class SightFrame;
 class ChartFrame;
 class PlotFrame;
 class ChartPanel;
+class RouteFrame;
 
 //class CheckBody;
 //struct CheckLimb;
@@ -947,6 +949,7 @@ public:
     
 };
 
+
 struct CheckLimb{
     
     LimbField* p;
@@ -1146,6 +1149,20 @@ public:
     
     CheckChrono(ChronoField*);
     template<class T> void operator()(T&);
+    
+};
+
+//this checks if a Route type is valid
+class CheckRouteType{
+    
+public:
+    
+    //the RouteType  field containing the Route type
+    RouteTypeField* p;
+    
+    CheckRouteType(RouteTypeField*);
+    template<class T> void operator()(T&);
+    
     
 };
 
@@ -1496,6 +1513,31 @@ public:
     
 };
 
+class RouteTypeField{
+    
+public:
+    //the parent frame to which this object is attached
+    RouteFrame* parent_frame;
+    wxArrayString types;
+    //this points to a String object, which contains the Route type written in the GUI object this
+    String* type;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+    CheckRouteType* check;
+    
+    bool ok;
+    
+    RouteTypeField(RouteFrame*, String*);
+    void set(void);
+    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+    
+};
+
 
 
 class SightFrame: public wxFrame{
@@ -1602,7 +1644,6 @@ public:
     LengthField *l;
     StringField<RouteFrame> *label;
     
-    wxArrayString types;
     wxFlexGridSizer *sizer_grid_type, *sizer_grid_alpha, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;
     wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;

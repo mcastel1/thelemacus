@@ -8164,6 +8164,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     wxStaticText* text_alpha = new wxStaticText(panel, wxID_ANY, wxT("Alpha"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     alpha = new AngleField<RouteFrame>(this, &(route->alpha), String(""));
 
+    //l
+    wxStaticText* text_l = new wxStaticText(panel, wxID_ANY, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    l = new LengthField<RouteFrame>(this, &(route->l));
+
+    
     //start
     //start_phi
     wxStaticText* text_start_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -8193,14 +8198,14 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+//    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this RouteFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
-    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
-    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
-    button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
-    
+//    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
+//    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
+//    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
+//    button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
+  
     
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
     button_add->Enable((route_in != NULL));
@@ -8210,13 +8215,15 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
 
     sizer_grid_alpha->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
     alpha->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
-    
+  
+    sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
+    l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
+
     sizer_grid_omega->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
     omega->InsertIn<wxFlexGridSizer>(sizer_grid_omega);
     
     sizer_grid_start->Add(text_start_phi);
     start_phi->InsertIn<wxFlexGridSizer>(sizer_grid_start);
-    
     sizer_grid_start->Add(text_start_lambda);
     start_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_start);
 
@@ -8224,7 +8231,6 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
 
     sizer_grid_GP->Add(text_GP_phi);
     GP_phi->InsertIn<wxFlexGridSizer>(sizer_grid_GP);
-    
     sizer_grid_GP->Add(text_GP_lambda);
     GP_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_GP);
 

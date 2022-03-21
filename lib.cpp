@@ -6110,7 +6110,11 @@ void ChartFrame::GetCoastLineData(void){
     char* buffer = NULL;
     size_t pos_beg, pos_end;
     bool check;
-    double lambda_temp, phi_temp;
+    double lambda_temp, phi_temp, x_temp, y_temp;
+    
+    //set x_min, ..., y_max for the following
+    draw_panel->Update_x_y_min_max();
+
     
     //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     ((parent->plot)->phi_min).normalize_pm_pi();
@@ -6219,8 +6223,15 @@ void ChartFrame::GetCoastLineData(void){
                     ins << line;
                     ins >> phi_temp >> lambda_temp;
                     
-                    x.push_back(x_mercator(lambda_temp));
-                    y.push_back(y_mercator(phi_temp));
+                    x_temp = x_mercator(lambda_temp);
+                    y_temp = y_mercator(phi_temp);
+                    
+                    if(((draw_panel->x_min) <= x_temp) && (x_temp <= (draw_panel->x_max)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
+                        
+                        x.push_back(x_mercator(lambda_temp));
+                        y.push_back(y_mercator(phi_temp));
+                        
+                    }
                     
                 }
                 
@@ -6517,7 +6528,6 @@ void DrawPanel::Draw(void){
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
     
-    Update_x_y_min_max();
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > (x_max-x_min)){

@@ -1557,8 +1557,8 @@ public:
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     
-    //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    PrintErrorMessage<PositionFrame>* printerrormessage;
+    //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
+   PrintErrorMessage<PositionFrame>* printerrormessage;
     
     AngleField<PositionFrame>* lat, *lon;
     StringField<PositionFrame> *label;
@@ -1577,12 +1577,49 @@ public:
     void OnPressAdd(wxCommandEvent& event);
     void TryToEnableReduce(void);
     
-    // The Path to the file we have open
-    wxString CurrentDocPath;
+    //    wxDECLARE_EVENT_TABLE();
+    
+};
+
+class RouteFrame: public wxFrame{
+    
+public:
+    RouteFrame(ListFrame*, Route*, long, const wxString&, const wxPoint&, const wxSize&, String);
+    
+    ListFrame* parent;
+    Route* route;
+    //this long represents the position in the list (this->GetParent())->listcontrol_routes of route. If list_position = -1, then route is not in that list
+    long list_position;
+    wxPanel *panel;
+    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
+    bool idling;
+    
+    //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
+    PrintErrorMessage<PositionFrame>* printerrormessage;
+    
+    AngleField<PositionFrame> *alpha, *omega;
+    PositionField *start, *GP;
+    LengthField *l;
+    StringField<PositionFrame> *label;
+    
+    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
+    wxBoxSizer *sizer, *box_sizer_2;
+    wxStaticBoxSizer *sizer_box_measurement;
+    
+    wxButton* button_add, *button_cancel;
+    wxMenuBar *menuBar;
+    
+    void SetIdling(bool);
+    void set(void);
+    template<class T> void get(T&);
+    void OnPressCancel(wxCommandEvent& event);
+    void OnPressAdd(wxCommandEvent& event);
+    void TryToEnableAdd(void);
     
     //    wxDECLARE_EVENT_TABLE();
     
 };
+
 
 
 class ChartFrame: public wxFrame{

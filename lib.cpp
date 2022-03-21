@@ -6848,7 +6848,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    SetAutoLayout(true);
     
     //    Fit();
-    Centre();
+    CentreOnScreen();
     
 }
 

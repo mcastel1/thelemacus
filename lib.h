@@ -720,6 +720,7 @@ public:
     static double lambda_minus_pi(double, void*);
     bool t_crossing(Route, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
+    void add_to_wxListCtrl(long, wxListCtrl*);
     
 };
 
@@ -1487,6 +1488,11 @@ public:
     void OnAddPosition(wxCommandEvent& event);
     void OnModifyPosition(wxCommandEvent& event);
     void OnDeletePosition(wxCommandEvent& event);
+
+    void OnAddRoute(wxCommandEvent& event);
+    void OnModifyRoute(wxCommandEvent& event);
+    void OnDeleteRoute(wxCommandEvent& event);
+
     
 };
 
@@ -1649,15 +1655,19 @@ public:
     
 };
 
-OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
+class OnSelectInListControlRoutes{
     
-    f = f_in;
+public:
     
-}
+    //parent frame
+    ListFrame* f;
+    
+    //constructor, which sets the parent frame
+    OnSelectInListControlRoutes(ListFrame*);
+    
+    template<class T> void operator()(T&);
+    
+    
+};
 
-OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
-    
-    f = f_in;
-    
-}
 

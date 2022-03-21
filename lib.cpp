@@ -684,6 +684,13 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
 }
 
+
+void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
+    
+
+    
+}
+
 //Given the route (*this), this function returns the point on the Route which is closest to Position q, and writes this position and the corresponding value of t in p and tau, respectively.
 bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix){
     
@@ -7671,6 +7678,16 @@ template<class T> void OnSelectInListControlPositions::operator()(T& event){
     
 }
 
+//if an item in listcontrol_routes is selected, then the modify_route and delete_route buttons are enabled
+template<class T> void OnSelectInListControlRoutes::operator()(T& event){
+    
+    (f->button_modify_route)->Enable(true);
+    (f->button_delete_route)->Enable(true);
+    
+    event.Skip(true);
+    
+}
+
 
 template<class T> void PrintErrorMessage<T>::operator()(void){
     
@@ -8298,7 +8315,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes/*, margin_h = 10*/, margin_v = 5;
     OnSelectInListControlSights* on_select_in_listcontrol_sights;
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
-    OnSelectInListControlPositions* on_select_in_listcontrol_routes;
+    OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     wxListItem column, item;
     
     
@@ -8641,6 +8658,14 @@ void ListFrame::OnAddPosition(wxCommandEvent& event){
     
 }
 
+void ListFrame::OnAddRoute(wxCommandEvent& event){
+    
+//    RouteFrame *route_frame = new RouteFrame(this, NULL, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
+//    route_frame->Show(true);
+//
+//    event.Skip(true);
+
+}
 
 void ListFrame::OnModifySight(wxCommandEvent& event){
     
@@ -8691,6 +8716,13 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
     
 }
 
+void ListFrame::OnModifyRoute(wxCommandEvent& event){
+    
+   
+    event.Skip(true);
+    
+}
+
 
 
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
@@ -8728,6 +8760,14 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
     listcontrol_positions->DeleteItem(item);
     plot->remove_position(item, String(""));
     
+    
+    event.Skip(true);
+    
+}
+
+void ListFrame::OnDeleteRoute(wxCommandEvent& event){
+    
+      
     
     event.Skip(true);
     
@@ -10015,5 +10055,23 @@ template<class P> template<class T> void StringField<P>::InsertIn(T* host){
 template<class T> void ChronoField::InsertIn(T* host){
     
     host->Add(sizer_v);
+    
+}
+
+OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
+    
+    f = f_in;
     
 }

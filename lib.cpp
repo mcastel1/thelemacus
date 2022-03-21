@@ -8139,7 +8139,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
-    sizer_grid_measurement = new wxFlexGridSizer(2, 2, 0, 0);
+    sizer_grid_data = new wxFlexGridSizer(7, 2, 0, 0);
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -8148,7 +8148,25 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //alpha
     wxStaticText* text_alpha = new wxStaticText(panel, wxID_ANY, wxT("Alpha"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     alpha = new AngleField<RouteFrame>(this, &(route->alpha), String(""));
- 
+
+    //start
+    //start_phi
+    wxStaticText* text_start_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    start_phi = new AngleField<RouteFrame>(this, &((route->start).phi), String(""));
+    //start_lambda
+    wxStaticText* text_start_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    start_phi = new AngleField<RouteFrame>(this, &((route->start).lambda), String(""));
+
+    //GP (ground position)
+    //GP_phi
+    wxStaticText* text_GP_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    GP_phi = new AngleField<RouteFrame>(this, &((route->GP).phi), String(""));
+    //GP_lambda
+    wxStaticText* text_GP_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    GP_phi = new AngleField<RouteFrame>(this, &((route->GP).lambda), String(""));
+
+    
+    
     //omega
     wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
@@ -8175,11 +8193,23 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
     button_add->Enable((route_in != NULL));
     
-    sizer_grid_measurement->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
-    alpha->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    sizer_grid_data->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
+    alpha->InsertIn<wxFlexGridSizer>(sizer_grid_data);
+ 
+    sizer_grid_data->Add(text_start_phi, 0, wxALIGN_CENTER_VERTICAL);
+    start_phi->InsertIn<wxFlexGridSizer>(sizer_grid_data);
+ 
+    sizer_grid_data->Add(text_start_lambda, 0, wxALIGN_CENTER_VERTICAL);
+    start_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_data);
     
-    sizer_grid_measurement->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
-    omega->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    sizer_grid_data->Add(text_GP_phi, 0, wxALIGN_CENTER_VERTICAL);
+    GP_phi->InsertIn<wxFlexGridSizer>(sizer_grid_data);
+ 
+    sizer_grid_data->Add(text_GP_lambda, 0, wxALIGN_CENTER_VERTICAL);
+    GP_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_data);
+    
+    sizer_grid_data->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
+    omega->InsertIn<wxFlexGridSizer>(sizer_grid_data);
     
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
@@ -8187,9 +8217,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer->Add(button_add, 0, wxALIGN_BOTTOM);
     
-    sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
+    sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
     
-    sizer_box_measurement->Add(sizer_grid_measurement);
+    sizer_box_data->Add(sizer_grid_data);
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
@@ -8199,7 +8229,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     text_label->SetMinSize(wxSize(common_width,-1));
     
     //add the various elements to sizer, by inserting a border of 5 in all directions
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, 5);
+    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, 5);
     sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, 5);
     sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, 5);
     

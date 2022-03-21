@@ -1597,14 +1597,13 @@ public:
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
     PrintErrorMessage<RouteFrame>* print_error_message;
     
-    AngleField<RouteFrame> *alpha, *omega;
-//    PositionField *start, *GP;
+    AngleField<RouteFrame> *alpha, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
     LengthField *l;
     StringField<RouteFrame> *label;
     
-    wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_label;
+    wxFlexGridSizer *sizer_grid_data, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;
-    wxStaticBoxSizer *sizer_box_measurement;
+    wxStaticBoxSizer *sizer_box_data;
     
     wxButton* button_add, *button_cancel;
     wxMenuBar *menuBar;

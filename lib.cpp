@@ -3002,7 +3002,7 @@ void Plot::menu(String prefix){
         case 1:{
   
             //I commented this out because the way to enteer the sight has changed with the GUI
-//            add_sight(new_prefix);
+//            add_sight_and_reduce(new_prefix);
             print(true, new_prefix, cout);
             show(false, new_prefix);
             menu(prefix);
@@ -3784,7 +3784,7 @@ bool Plot::modify_sight(unsigned int i, String prefix){
 
 
 
-bool Plot::add_sight(Sight* sight_in, String prefix){
+bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
     
 
     bool check = true;
@@ -9213,12 +9213,24 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     sight->print(String("sight entered via GUI"), String(""), cout);
     
-    //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list
+   
     if(list_position==-1){
-        ((this->parent)->plot)->add_sight(sight, String(""));
+        //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list and reduce it
+        
+        ((this->parent)->plot)->add_sight_and_reduce(sight, String(""));
+        
+    }else{
+        //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
+        
+        sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
+        
     }
     
+    
+    
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
+    
+    parent->plot->print(true, String(""), cout);
     
     
     event.Skip(true);

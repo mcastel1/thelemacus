@@ -897,7 +897,7 @@ public:
     
     Plot(Catalog*, String);
     //~Plot();
-    bool add_sight(Sight*, String);
+    bool add_sight_and_reduce(Sight*, String);
     bool modify_sight(unsigned int, String);
     void transport_route(unsigned int, String);
     void add_position(String);

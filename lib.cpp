@@ -8850,10 +8850,10 @@ void ListFrame::OnAddPosition(wxCommandEvent& event){
 
 void ListFrame::OnAddRoute(wxCommandEvent& event){
     
-//    RouteFrame *route_frame = new RouteFrame(this, NULL, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
-//    route_frame->Show(true);
-//
-//    event.Skip(true);
+    RouteFrame *route_frame = new RouteFrame(this, NULL, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
+    route_frame->Show(true);
+
+    event.Skip(true);
 
 }
 

@@ -64,7 +64,7 @@ class ChartFrame;
 class PlotFrame;
 class ChartPanel;
 
-//struct CheckBody;
+//class CheckBody;
 //struct CheckLimb;
 //template<class T> struct CheckCheck;
 //struct CheckChrono;
@@ -933,10 +933,14 @@ public:
     
 };
 
-struct CheckBody{
+//this checks if an element of the Body class is valid
+class CheckBody{
+    
+public:
     
     BodyField* p;
     
+    CheckBody(BodyField*);
     template<class T> void operator()(T&);
     
     
@@ -1258,7 +1262,7 @@ public:
     
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
-    CheckBody check;
+    CheckBody* check;
     
     bool ok;
     

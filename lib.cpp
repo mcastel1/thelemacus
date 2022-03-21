@@ -7428,6 +7428,12 @@ template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(
     
 }
 
+CheckBody::CheckBody(BodyField* p_in){
+    
+    p = p_in;
+    
+}
+
 template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
     
     frame = frame_in;
@@ -9257,13 +9263,13 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
         bodies.Add(((catalog->list)[i]).name.value.c_str());
     }
     
-    (check.p) = this;
+    check = new CheckBody(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, check);
+    name->Bind(wxEVT_KILL_FOCUS, *check);
     
     name->SetValue("");
     ok = false;

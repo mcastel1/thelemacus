@@ -1472,7 +1472,7 @@ public:
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
     //    wxListBox* listbox;
-    wxListCtrl* listcontrol_sights, *listcontrol_positions;
+    wxListCtrl* listcontrol_sights, *listcontrol_positions, *listcontrol_routes;
     wxPanel *panel;
     wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position;
     wxBitmapButton *button_modify_sight, *button_modify_position;

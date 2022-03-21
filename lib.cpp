@@ -8295,15 +8295,17 @@ template<class T> PrintErrorMessage<T>::PrintErrorMessage(T* f_in){
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions/*, margin_h = 10*/, margin_v = 5;
+    unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes/*, margin_h = 10*/, margin_v = 5;
     OnSelectInListControlSights* on_select_in_listcontrol_sights;
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
+    OnSelectInListControlPositions* on_select_in_listcontrol_routes;
     wxListItem column, item;
     
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
-    
+    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
+
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
 //    (delete_sight->f) = this;
@@ -8322,7 +8324,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
     sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
-    
+    sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
+
     //
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
@@ -8409,9 +8412,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //write the sights into plot->sight_list into listcontrol_sights
     for(i=0; i<((plot->sight_list).size()); i++){
-        
         ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol_sights);
-        
     }
     
     //    set the column width to the width of its longest item
@@ -8454,13 +8455,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
     listcontrol_positions->InsertColumn(2, column);
-    
-    
-    //write the sights into plot->sight_list into listcontrol_sights
+
+
+    //write the positions into plot->position_list into listcontrol_sights
     for(i=0; i<((plot->position_list).size()); i++){
         ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
     }
-    
     
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
@@ -8472,11 +8472,66 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
     
-    
     sizer_box_position->Add(listcontrol_positions, 0,  wxALL, margin_v);
     
     
     
+    //listcontrol routes with routes
+    listcontrol_routes = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
+    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+    
+    n_columns_listcontrol_routes = 3;
+    
+    column.SetId(0);
+    column.SetText(wxT("Type"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(0, column);
+    
+    column.SetId(1);
+    column.SetText(wxT("Start"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(1, column);
+    
+    column.SetId(2);
+    column.SetText(wxT("Length"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(2, column);
+    
+    column.SetId(3);
+    column.SetText(wxT("GroundPosition"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(3, column);
+
+    column.SetId(4);
+    column.SetText(wxT("Omega"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(4, column);
+
+
+
+    //write the routes into plot->route_list into listcontrol_sights
+    for(i=0; i<((plot->route_list).size()); i++){
+        ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
+    }
+    
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
+        listcontrol_routes->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+    }
+    for(total_column_width=0, i=0; i<(listcontrol_routes->GetColumnCount()); i++){
+        total_column_width += (listcontrol_routes->GetColumnWidth(i));
+    }
+    
+    listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
+    
+    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin_v);
+    //listcontrol routes with routes
+
     
     //buttons
     //image for buttons
@@ -8493,6 +8548,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_add_position = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
     
+    //button to add a route
+    button_add_route = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
+ 
+    
     //button to modify a sight
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
@@ -8502,6 +8562,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
     button_modify_position->Enable(false);
+  
+    //button to modify a route
+    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute, this);
+    button_modify_route->Enable(false);
+
     
     //button to delete a sight
     button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
@@ -8512,7 +8578,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnDeletePosition, this);
     button_delete_position->Enable(false);
-    
+ 
+    //button to delete a route
+    button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnDeleteRoute, this);
+    button_delete_route->Enable(false);
+
     
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
@@ -8524,6 +8595,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_buttons_position->Add(button_delete_position, 0, wxALIGN_CENTER);
     sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, margin_v);
     
+    sizer_buttons_route->Add(button_add_route, 0, wxALIGN_CENTER);
+    sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
+    sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
+    sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, margin_v);
+ 
     
     //
     
@@ -8533,6 +8609,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    }
     sizer_v->Add(sizer_box_sight, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_position, 0,  wxALL, margin_v);
+    sizer_v->Add(sizer_box_route, 0,  wxALL, margin_v);
     //    sizer_v->Add(button_modify_sight, 0,  wxALIGN_LEFT | wxALL, 5);
     //    sizer_v->Add(button_delete_sight, 0, wxALIGN_LEFT | wxALL, 5);
     //    sizer_h->Add(listcontrol_sights, 0, wxALIGN_TOP);

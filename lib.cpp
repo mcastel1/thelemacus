@@ -8196,6 +8196,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     //buttons
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_cancel->Bind(wxEVT_BUTTON, &RouteFrame::OnPressCancel, this);
+
     button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
 //    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);

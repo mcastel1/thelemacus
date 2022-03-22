@@ -8208,6 +8208,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
     if(route_in == NULL){
+        
         alpha->Enable(false);
         l->Enable(false);
         start_phi->Enable(false);
@@ -8215,6 +8216,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
         GP_phi->Enable(false);
         GP_lambda->Enable(false);
         omega->Enable(false);
+        
     }
 
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
@@ -8364,9 +8366,7 @@ void RouteFrame::OnPressAdd(wxCommandEvent& event){
 
 void RouteFrame::OnPressCancel(wxCommandEvent& event){
     
-    
-    event.Skip(true);
-    
+        
     Close(TRUE);
     
 }

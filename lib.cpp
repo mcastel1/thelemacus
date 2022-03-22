@@ -10117,10 +10117,25 @@ template<class P> StringField<P>::StringField(P* parent_in, String* p){
 
 
 
-
+//checks whether the contents of the GUI fiels in AngleField are valid
 template<class P> bool AngleField<P>::is_ok(void){
     
-    return(sign_ok && deg_ok && min_ok);
+    bool output;
+    
+    if(format == String("")){
+        //if the angle is in format "", the sign field is not used, so there is no need to check whether it is ok
+        
+        output = (deg_ok && min_ok);
+        
+    }else{
+        //if the angle is in format "NS", "EW" or "+-" the sign field is  used, so I check that it is ok
+        
+        output = (sign_ok && deg_ok && min_ok);
+
+        
+    }
+    
+    return(output);
     
 }
 

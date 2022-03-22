@@ -9120,8 +9120,12 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
 
 void ListFrame::OnDeleteRoute(wxCommandEvent& event){
     
-      
+    long item;
     
+    item = listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    listcontrol_routes->DeleteItem(item);
+    plot->remove_route(item, String(""));
+   
     event.Skip(true);
     
 }

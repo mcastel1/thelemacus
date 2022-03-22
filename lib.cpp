@@ -6187,6 +6187,7 @@ void ChartFrame::GetCoastLineData(void){
 //    outfile_selected_coastline_data.remove(String(""));
 //    outfile_selected_coastline_data.open(String("out"), String(""));
     
+    //start - part of the code which takes a long time to run
     x.clear();
     y.clear();
     
@@ -6263,6 +6264,8 @@ void ChartFrame::GetCoastLineData(void){
         }
         
     }
+    //end - part of the code which takes a long time to run
+
     
     if(check){
         

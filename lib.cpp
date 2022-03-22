@@ -6928,7 +6928,7 @@ template<class T>void CheckBody::operator()(T& event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -6972,7 +6972,7 @@ template<class T> void CheckLimb::operator()(T &event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -7043,7 +7043,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -7427,7 +7427,7 @@ template<class P> template<class T> void CheckString<P>::operator()(T &event){
     
     //    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
     
-    f->TryToEnableReduce();
+    f->TryToEnableOk();
     
     event.Skip(true);
     
@@ -7544,7 +7544,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -7589,7 +7589,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -7632,7 +7632,7 @@ template<class P> template <class T> void CheckLength<P>::operator()(T &event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -8371,9 +8371,18 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
     
 }
 
-void RouteFrame::TryToEnableReduce(void){
+void RouteFrame::TryToEnableOk(void){
     
-    
+    button_add->Enable((type->is_ok()) &&
+                       
+                       ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) ||
+                        ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
+                       &&
+                       ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) ||
+                        ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
+                       
+                       );
+
     
 }
 
@@ -8390,8 +8399,9 @@ void RouteFrame::SetIdling(bool b){
     
 }
 
+
 //this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
-void PositionFrame::TryToEnableReduce(void){
+void PositionFrame::TryToEnableOk(void){
     
     button_add->Enable((lat->is_ok()) && (lon->is_ok()));
     
@@ -9105,7 +9115,7 @@ void SightFrame::SetIdling(bool b){
 
 
 //this function checks whether all the fields in SightFrame are ok, and if they are, it enables the button_reduce
-void SightFrame::TryToEnableReduce(void){
+void SightFrame::TryToEnableOk(void){
     
     
     button_reduce->Enable(
@@ -9187,7 +9197,7 @@ template<class T> void CheckYear::operator()(T&event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -9229,7 +9239,7 @@ template<class T> void CheckMonth::operator()(T&event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -9292,7 +9302,7 @@ template<class T> void CheckDay::operator()(T& event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -9363,7 +9373,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
         (p->related_field)->Enable(false);
     }
     
-    (p->parent_frame)->TryToEnableReduce();
+    (p->parent_frame)->TryToEnableOk();
     
     event.Skip(true);
     
@@ -9427,7 +9437,7 @@ template<class T> void CheckHour::operator()(T &event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -9467,7 +9477,7 @@ template<class T> void CheckMinute::operator()(T &event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -9510,7 +9520,7 @@ template<class T> void CheckSecond::operator()(T &event){
         }
         
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -9598,7 +9608,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             
         }
         
-        f->TryToEnableReduce();
+        f->TryToEnableOk();
         
     }
     
@@ -10358,6 +10368,11 @@ bool DateField::is_ok(void){
     
 }
 
+bool RouteTypeField::is_ok(void){
+    
+    return(ok);
+    
+}
 template<class T> void BodyField::InsertIn(T* host){
     
     host->Add(sizer_v);

@@ -1534,7 +1534,7 @@ public:
 //    void set(void);
 //    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
-//    bool is_ok(void);
+    bool is_ok(void);
     
     
 };
@@ -1581,7 +1581,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
-    void TryToEnableReduce(void);
+    void TryToEnableOk(void);
     
     //    wxDECLARE_EVENT_TABLE();
     
@@ -1618,7 +1618,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressAdd(wxCommandEvent& event);
-    void TryToEnableReduce(void);
+    void TryToEnableOk(void);
     
     //    wxDECLARE_EVENT_TABLE();
     
@@ -1657,7 +1657,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressAdd(wxCommandEvent& event);
-    void TryToEnableReduce(void);
+    void TryToEnableOk(void);
     
     //    wxDECLARE_EVENT_TABLE();
     

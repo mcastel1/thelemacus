@@ -714,7 +714,7 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     if(type == String("c")){
         //in this case the type of this is 'circle of equal altitde'
         
-        listcontrol->SetItem(i, j++, wxString((start.phi).to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(start.to_string(display_precision)));
         //add the longitude later
         listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision)));
         listcontrol->SetItem(i, j++, wxString(l.to_string(String(""), display_precision)));
@@ -722,9 +722,8 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     }else{
         //in this case the type of this is 'loxodrome' or 'orthodrome'
         
-        listcontrol->SetItem(i, j++, wxString((GP.phi).to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(GP.to_string(display_precision)));
         listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), display_precision)));
-
         
     }
 

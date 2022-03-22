@@ -39,12 +39,13 @@
             aperture angle = 77° 23.7477'
             label = moon 2021-11-22 20:10:15 TAI, MP Saturn
         Route #2:
-            type = c
-            ground position:
+            type = l
+            start position:
                 latitude = 6° 20.1005'
                 longitude = 65° 18.4353'
                 label = Rohaldsgfdhf Dahl
-            aperture angle = 27° 13.7477'
+            starting heading = 27° 13.7477'
+            length = 123.345 nm
             label = Forno
 	Positions in the plot:
 		Position #1:

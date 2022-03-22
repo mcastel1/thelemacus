@@ -711,18 +711,25 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString(type.value));
     
     if(type == String("c")){
-        //in this case the type of this is 'circle of equal altitde'
+        //in this case the type of this is 'circle of equal altitde': the first three fields are thus empty, and I fill in only the last two fields
         
-        listcontrol->SetItem(i, j++, wxString(start.to_string(display_precision)));
-        //add the longitude later
-        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision)));
-        listcontrol->SetItem(i, j++, wxString(l.to_string(String(""), display_precision)));
-        
-    }else{
-        //in this case the type of this is 'loxodrome' or 'orthodrome'
+        listcontrol->SetItem(i, j++, wxString(""));
+        listcontrol->SetItem(i, j++, wxString(""));
+        listcontrol->SetItem(i, j++, wxString(""));
         
         listcontrol->SetItem(i, j++, wxString(GP.to_string(display_precision)));
         listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), display_precision)));
+        
+    }else{
+        //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
+
+        listcontrol->SetItem(i, j++, wxString(start.to_string(display_precision)));
+        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(l.to_string(String("nm"), display_precision)));
+        
+        listcontrol->SetItem(i, j++, wxString(""));
+        listcontrol->SetItem(i, j++, wxString(""));
+
         
     }
 

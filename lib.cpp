@@ -497,8 +497,7 @@ void String::enter(String name, String prefix){
 
 void String::print(String name, String prefix, ostream& ostr){
     
-    //If I am printing to cout, I print only if the content of the string is not empty, to avoid filling up the command line with useless stuff. If I am printing somewhere else, I print even if the content of the String is empty
-    if(((*this) != String("")) || (&ostr != &cout)){ostr << prefix.value << name.value << " = " << value << "\n";}
+    if(((*this) != String(""))){ostr << prefix.value << name.value << " = " << value << "\n";}
     
 }
 

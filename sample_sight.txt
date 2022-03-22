@@ -30,6 +30,22 @@
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = MP Saturn
 	Routes in the plot:
+         Route #1:
+            type = c
+            ground position:
+                latitude = 26° 20.1005'
+                longitude = 265° 18.4353'
+                label = Rohal Dahl
+            aperture angle = 77° 23.7477'
+            label = moon 2021-11-22 20:10:15 TAI, MP Saturn
+        Route #2:
+            type = c
+            ground position:
+                latitude = 6° 20.1005'
+                longitude = 65° 18.4353'
+                label = Rohaldsgfdhf Dahl
+            aperture angle = 27° 13.7477'
+            label = Forno
 	Positions in the plot:
 		Position #1:
 			latitude = 48° 51.179385474737415506751858629286'

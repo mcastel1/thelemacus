@@ -8583,72 +8583,73 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     n_columns_listcontrol_sights = 11;
+    i=0;
     
-    column.SetId(0);
+    column.SetId(i);
     column.SetText(wxT("Body"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(0, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(1);
+    column.SetId(i);
     column.SetText(wxT("Limb"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(1, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(2);
+    column.SetId(i);
     column.SetText(wxT("Artificial horizon"));
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    listcontrol_sights->InsertColumn(2, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(3);
+    column.SetId(i);
     column.SetText(wxT("Sextant altitude"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(3, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(4);
+    column.SetId(i);
     column.SetText(wxT("Index error"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(4, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(5);
+    column.SetId(i);
     column.SetText(wxT("Height of eye"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(5, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(6);
+    column.SetId(i);
     column.SetText(wxT("Master-clock date and hour (UTC)"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(6, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(7);
+    column.SetId(i);
     column.SetText(wxT("Stopwatch"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(7, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(8);
+    column.SetId(i);
     column.SetText(wxT("Stopwatch reading"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(8, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(9);
+    column.SetId(i);
     column.SetText(wxT("TAI - UTC"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(9, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
-    column.SetId(10);
+    column.SetId(i);
     column.SetText(wxT("Label"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(10, column);
+    listcontrol_sights->InsertColumn(i++, column);
     
     
     //write the sights into plot->sight_list into listcontrol_sights
@@ -8678,24 +8679,25 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     
     n_columns_listcontrol_positions = 3;
+    i=0;
     
-    column.SetId(0);
+    column.SetId(i);
     column.SetText(wxT("Latitude"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-    listcontrol_positions->InsertColumn(0, column);
+    listcontrol_positions->InsertColumn(i++, column);
     
-    column.SetId(1);
+    column.SetId(i);
     column.SetText(wxT("Longitude"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-    listcontrol_positions->InsertColumn(1, column);
+    listcontrol_positions->InsertColumn(i++, column);
     
-    column.SetId(2);
+    column.SetId(i);
     column.SetText(wxT("Label"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-    listcontrol_positions->InsertColumn(2, column);
+    listcontrol_positions->InsertColumn(i++, column);
 
 
     //write the positions into plot->position_list into listcontrol_sights
@@ -8722,42 +8724,49 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     
     n_columns_listcontrol_routes = 6;
+    i=0;
     
-    column.SetId(0);
+    column.SetId(i);
     column.SetText(wxT("Type"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(0, column);
+    listcontrol_routes->InsertColumn(i++, column);
     
-    column.SetId(1);
+    column.SetId(i);
     column.SetText(wxT("Start"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(1, column);
+    listcontrol_routes->InsertColumn(i++, column);
     
-    column.SetId(2);
+    column.SetId(i);
     column.SetText(wxT("Alpha"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(2, column);
+    listcontrol_routes->InsertColumn(i++, column);
     
-    column.SetId(3);
+    column.SetId(i);
     column.SetText(wxT("Length"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(3, column);
+    listcontrol_routes->InsertColumn(i++, column);
     
-    column.SetId(4);
+    column.SetId(i);
     column.SetText(wxT("GroundPosition"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(4, column);
+    listcontrol_routes->InsertColumn(i++, column);
 
-    column.SetId(5);
+    column.SetId(i);
     column.SetText(wxT("Omega"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(5, column);
+    listcontrol_routes->InsertColumn(i++, column);
+
+    column.SetId(i);
+    column.SetText(wxT("Label"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(i++, column);
 
 
 

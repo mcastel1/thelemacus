@@ -8374,15 +8374,17 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
 void RouteFrame::TryToEnableOk(void){
     
     button_add->Enable((type->is_ok()) &&
-                       
-                       ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) ||
+                       (
+                       ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
                         ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
-                       &&
-                       ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) ||
+                       ||
+                       ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
                         ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
-                       
+                       )
                        );
-
+    
+ 
+    
     
 }
 

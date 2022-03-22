@@ -8398,8 +8398,28 @@ void RouteFrame::TryToEnableOk(void){
     
 }
 
+//sets the values in all the GUI fields equal to the values in the respective non-GUI fields
 void RouteFrame::set(void){
     
+    type->set();
+    
+    
+    if(((type->name)->GetValue()) == wxString("circle of equal altitude")){
+        
+        GP_phi->set();
+        GP_lambda->set();
+        omega->set();
+        
+    }else{
+        
+        alpha->set();
+        start_phi->set();
+        start_lambda->set();
+        l->set();
+
+    }
+    
+    label->set();
     
     
 }
@@ -9871,6 +9891,15 @@ void ChronoField::set(Chrono chrono_in){
     minute_ok = true;
     second_ok = true;
     
+}
+
+//sets the value in the GUI object equal to the value in the non-GUI  object string
+void RouteTypeField::set(void){
+    
+    name->SetValue(wxString(type->value));
+    
+    ok = true;
+   
 }
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string

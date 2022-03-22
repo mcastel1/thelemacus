@@ -1453,6 +1453,30 @@ public:
     
 };
 
+class RouteTypeField{
+    
+public:
+    //the parent frame to which this object is attached
+    RouteFrame* parent_frame;
+    wxArrayString types;
+    //this points to a non-GUI String object, which contains the Route type written in the GUI object this
+    String* type;
+    wxBoxSizer *sizer_h, *sizer_v;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+    CheckRouteType* check;
+    
+    bool ok;
+    
+    RouteTypeField(RouteFrame*, String*);
+    void set(void);
+//    template<class T> void get(T&);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    
+    
+};
 
 
 
@@ -1514,30 +1538,6 @@ public:
     
 };
 
-class RouteTypeField{
-    
-public:
-    //the parent frame to which this object is attached
-    RouteFrame* parent_frame;
-    wxArrayString types;
-    //this points to a String object, which contains the Route type written in the GUI object this
-    String* type;
-    wxBoxSizer *sizer_h, *sizer_v;
-    
-    //this is the wxComboBox with the name of the bodies
-    wxComboBox* name;
-    CheckRouteType* check;
-    
-    bool ok;
-    
-    RouteTypeField(RouteFrame*, String*);
-//    void set(void);
-//    template<class T> void get(T&);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
-    
-    
-};
 
 
 

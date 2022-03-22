@@ -1194,6 +1194,24 @@ public:
     
 };
 
+//this class defines the functor () used to remove a route from the non-GUI object plot
+class DeleteRoute{
+    
+public:
+    
+    DeleteRoute(ListFrame*, Answer);
+    
+    //the frame which called this struct
+    ListFrame* f;
+    //the id of the route to be removed
+    long i_route_to_remove;
+    //this is equal to 'y' if the sight related to the removed route has to be removed too, and 'n' otherwise
+    Answer remove_related_sight;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
 template<class T> class CheckField{
@@ -1522,6 +1540,7 @@ public:
     wxSizer* sizer_h, *sizer_v, *sizer_buttons_sight, *sizer_buttons_position, *sizer_buttons_route;
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
     DeleteSight *delete_sight, *delete_sight_and_related_route;
+    DeleteRoute *delete_route, *delete_route_and_related_sight;
     
     void OnAddSight(wxCommandEvent& event);
     void OnModifySight(wxCommandEvent& event);

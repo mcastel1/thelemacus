@@ -8329,6 +8329,9 @@ void PositionFrame::SetIdling(bool b){
 
 void PositionFrame::OnPressCancel(wxCommandEvent& event){
     
+    //I am about to close the frame,  thus I set f->idling to true
+    SetIdling(true);
+    
     Close(TRUE);
     
 }
@@ -8368,7 +8371,9 @@ void RouteFrame::OnPressAdd(wxCommandEvent& event){
 
 void RouteFrame::OnPressCancel(wxCommandEvent& event){
     
-        
+    //I am about to close the frame,  thus I set f->idling to true
+    SetIdling(true);
+    
     Close(TRUE);
     
 }
@@ -9141,6 +9146,9 @@ void SightFrame::TryToEnableOk(void){
 
 void SightFrame::OnPressCancel(wxCommandEvent& event){
     
+    //I am about to close the frame,  thus I set f->idling to true
+    SetIdling(true);
+ 
     
     Close(TRUE);
 }

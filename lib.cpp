@@ -3271,8 +3271,9 @@ void Plot::menu(String prefix){
                 
                 enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);
                 i--;
-                
-                remove_route(i, new_prefix);
+  
+                //I commented this out because now remove_route has an additional argument
+//                remove_route(i, new_prefix);
                 print(true, new_prefix, cout);
                 show(false, new_prefix);
                 
@@ -3314,7 +3315,8 @@ void Plot::menu(String prefix){
                 
                 //in this loop I don't increment i because route_list.size() decreases at each iteration
                 for(i=0; i<route_list.size(); ){
-                    remove_route(i, new_prefix);
+                    //I commented this out because now remove_route takes one additional argument
+//                    remove_route(i, new_prefix);
                 }
                 
                 print(true, new_prefix, cout);
@@ -3934,7 +3936,7 @@ void Plot::remove_sight(unsigned int i, Answer remove_related_route, String pref
     
     if(((i_related_route.value) != -1) && (remove_related_route == Answer('y', prefix))){
         
-        remove_route((i_related_route.value), prefix);
+        remove_route((i_related_route.value), Answer('n', prefix), prefix);
         
     }
     
@@ -3955,12 +3957,12 @@ void Plot::remove_position(unsigned int i, String prefix){
     
 }
 
-void Plot::remove_route(unsigned int i, String prefix){
+//remvoves route #i
+void Plot::remove_route(unsigned int i, Answer remove_related_sight, String prefix){
     
     unsigned int j;
     int i_related_sight;
     stringstream name;
-    Answer remove_related_sight;
     
     i_related_sight = ((route_list[i]).related_sight);
     
@@ -7428,6 +7430,25 @@ void DeleteSight::operator()(wxCommandEvent& event){
     event.Skip(true);
     
 }
+
+//constructor of the struct, which initializes the Answer remove_related_sight. If remove_related_sight.value = 'y', then DeleteRoute::operator() will delete both the route and the related sight. If remove_related_sight.value = 'n', then it will remove the route only.
+DeleteRoute::DeleteRoute(ListFrame* f_in, Answer remove_related_sight_in){
+    
+    f = f_in;
+    remove_related_sight = remove_related_sight_in;
+    
+}
+
+void DeleteRoute::operator()(wxCommandEvent& event){
+        
+    (f->plot)->remove_route(i_route_to_remove, remove_related_sight, String(""));
+    
+    f->plot->print(true, String("--------- "), cout);
+    
+    event.Skip(true);
+    
+}
+
 
 
 

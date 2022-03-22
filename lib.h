@@ -908,7 +908,7 @@ public:
     void remove_sight(unsigned int, Answer, String);
     void transport_position(unsigned int, String);
     void remove_position(unsigned int, String);
-    void remove_route(unsigned int, String);
+    void remove_route(unsigned int, Answer, String);
     bool read_from_file(File&, String);
     void print(bool, String, ostream&);
     void print_to_kml(String);

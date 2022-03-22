@@ -656,6 +656,7 @@ void Position::modify(String prefix){
     
 }
 
+//creates an element in listcontrol and writes into this element the values of all the fields containes in this
 void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     unsigned int i;
@@ -8403,7 +8404,6 @@ void RouteFrame::set(void){
     
     type->set();
     
-    
     if(((type->name)->GetValue()) == wxString("circle of equal altitude")){
         
         GP_phi->set();
@@ -8424,6 +8424,30 @@ void RouteFrame::set(void){
     
 }
 
+//sets the values in all the non-GUI fields equal to the values in the respective GUI fields
+template<class T> void RouteFrame::get(T& event){
+
+    type->get(event);
+    
+    if(((type->name)->GetValue()) == wxString("circle of equal altitude")){
+        
+        GP_phi->get(event);
+        GP_lambda->get(event);
+        omega->get(event);
+        
+    }else{
+        
+        alpha->get(event);
+        start_phi->get(event);
+        start_lambda->get(event);
+        l->get(event);
+
+    }
+    
+    label->get(event);
+    
+    
+}
 
 void RouteFrame::SetIdling(bool b){
     
@@ -8812,7 +8836,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 
 
 
-    //write the routes into plot->route_list into listcontrol_sights
+    //write the routes into plot->route_list into listcontrol_routes
     for(i=0; i<((plot->route_list).size()); i++){
         ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
     }
@@ -9664,6 +9688,21 @@ template <class T> void ChronoField::get(T& event){
         ((chrono)->m) = ((unsigned int)wxAtoi(minute->GetValue()));
         ((second)->GetValue()).ToDouble(&s_temp);
         ((chrono)->s) = s_temp;
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
+//writes to the non-GUI field angle the values written in the GUI field name
+template <class T> void RouteTypeField::get(T &event){
+    
+    
+    if(ok){
+        
+        type->set(String(""), String((name->GetValue()).ToStdString()), String(""));
         
     }
     

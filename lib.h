@@ -1471,7 +1471,7 @@ public:
     
     RouteTypeField(RouteFrame*, String*);
     void set(void);
-//    template<class T> void get(T&);
+    template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     

@@ -688,7 +688,53 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
 
 void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
+    unsigned int i, j;
+    wxListItem item;
+    
+    if(list_position == -1){
+        //in this case, I add a new element at the end of listcontrol
+        
+        i = (listcontrol->GetItemCount());
+    }else{
+        //in this case, I delete the i-th elment in listcontrol and replace it
+        
+        i = list_position;
+        listcontrol->DeleteItem(i);
+    }
+    
+    item.SetId(i);
+    item.SetText(wxT(""));
+    
+    listcontrol->InsertItem(item);
+    
+    j=0;
+    //set type column
+    listcontrol->SetItem(i, j++, wxString(type.to_string(String(""), display_precision)));
+    
+    if(type == String("c")){
+        //in this case the type of this is 'circle of equal altitde'
+        
+        listcontrol->SetItem(i, j++, wxString(start_phi.to_string(String(""), display_precision)));
+        //add the longitude later
+        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(l.to_string(String(""), display_precision)));
+        
+    }else{
+        //in this case the type of this is 'loxodrome' or 'orthodrome'
+        
+        listcontrol->SetItem(i, j++, wxString(GP_phi.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(label.to_string(String(""), display_precision)));
 
+        
+    }
+    
+    
+    //set longitude column
+    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String(""), display_precision)));
+    
+    //set label column
+    listcontrol->SetItem(i, 2, wxString(label.value));
     
 }
 

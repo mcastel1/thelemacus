@@ -709,12 +709,12 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     j=0;
     //set type column
-    listcontrol->SetItem(i, j++, wxString(type.to_string(String(""), display_precision)));
+    listcontrol->SetItem(i, j++, wxString(type.value));
     
     if(type == String("c")){
         //in this case the type of this is 'circle of equal altitde'
         
-        listcontrol->SetItem(i, j++, wxString(start_phi.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString((start.phi).to_string(String(""), display_precision)));
         //add the longitude later
         listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision)));
         listcontrol->SetItem(i, j++, wxString(l.to_string(String(""), display_precision)));
@@ -722,19 +722,14 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     }else{
         //in this case the type of this is 'loxodrome' or 'orthodrome'
         
-        listcontrol->SetItem(i, j++, wxString(GP_phi.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString((GP.phi).to_string(String(""), display_precision)));
         listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), display_precision)));
-        listcontrol->SetItem(i, j++, wxString(label.to_string(String(""), display_precision)));
 
         
     }
-    
-    
-    //set longitude column
-    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String(""), display_precision)));
-    
-    //set label column
-    listcontrol->SetItem(i, 2, wxString(label.value));
+
+    listcontrol->SetItem(i, j++, wxString(label.value));
+
     
 }
 
@@ -1060,6 +1055,8 @@ String String::prepend(String s){
     return output;
     
 }
+
+
 
 
 bool Chrono::operator==(const Chrono& chrono){

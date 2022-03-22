@@ -8172,18 +8172,18 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //start
     //start_phi
     wxStaticText* text_start_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    start_phi = new AngleField<RouteFrame>(this, &((route->start).phi), String(""));
+    start_phi = new AngleField<RouteFrame>(this, &((route->start).phi), String("NS"));
     //start_lambda
     wxStaticText* text_start_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    start_lambda = new AngleField<RouteFrame>(this, &((route->start).lambda), String(""));
+    start_lambda = new AngleField<RouteFrame>(this, &((route->start).lambda), String("EW"));
 
     //GP (ground position)
     //GP_phi
     wxStaticText* text_GP_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    GP_phi = new AngleField<RouteFrame>(this, &((route->GP).phi), String(""));
+    GP_phi = new AngleField<RouteFrame>(this, &((route->GP).phi), String("NS"));
     //GP_lambda
     wxStaticText* text_GP_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    GP_lambda = new AngleField<RouteFrame>(this, &((route->GP).lambda), String(""));
+    GP_lambda = new AngleField<RouteFrame>(this, &((route->GP).lambda), String("EW"));
 
     //omega
     wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

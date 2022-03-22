@@ -8211,7 +8211,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
         alpha->Enable(false);
         l->Enable(false);
         start_phi->Enable(false);
-        start_phi->Enable(false);
+        start_lambda->Enable(false);
         GP_phi->Enable(false);
         GP_lambda->Enable(false);
         omega->Enable(false);

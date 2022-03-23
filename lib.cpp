@@ -7396,8 +7396,10 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
 template<class P> template <class T> void AngleField<P>::get(T &event){
     
     
-    if(sign_ok && deg_ok && min_ok){
+    
+    if(/*If the format is different from "", then I require to check the sign of this*/((format == String("")) || sign_ok) && deg_ok && min_ok){
         
+
         double min_temp;
         char c;
         
@@ -7457,7 +7459,6 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-    unsigned int i;
     int i_related_route;
     
     i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;

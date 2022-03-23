@@ -8329,7 +8329,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
     //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
     //    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
-    //    button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
+    button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
     if(route_in == NULL){
@@ -8486,10 +8486,31 @@ void PositionFrame::OnPressAdd(wxCommandEvent& event){
 void RouteFrame::OnPressAdd(wxCommandEvent& event){
     
     
+    stringstream s;
+    
+    //writes the values of the GUI fields in the non-GUI fields
+    get(event);
+    
+    route->print(String("route entered via GUI"), String(""), cout);
+    
+    
+    if(list_position==-1){
+        //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
+        
+        ((this->parent)->plot)->add_route(route, String(""));
+        
+    }
+    
+    parent->UpdateRelatedSightsAndRoutes();
+    
+    route->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
+    
+    parent->plot->print(true, String(""), cout);
+    
+    
     event.Skip(true);
     
     Close(TRUE);
-    
 }
 
 void RouteFrame::OnPressCancel(wxCommandEvent& event){
@@ -9961,7 +9982,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
     }
     
-    
+    parent->UpdateRelatedSightsAndRoutes();
     
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
     

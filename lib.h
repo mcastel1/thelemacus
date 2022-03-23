@@ -1543,6 +1543,8 @@ public:
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes;
     
+    void UpdateRelatedSightsAndRoutes(void);
+    
     void OnAddSight(wxCommandEvent& event);
     void OnModifySight(wxCommandEvent& event);
     void OnPressDeleteSight(wxCommandEvent& event);

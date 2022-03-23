@@ -7441,42 +7441,23 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-    unsigned int i, j;
+    unsigned int i;
     int i_related_route;
     
     i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
 
      
     //remove the route related to the sight which I am about to remove from the GUI object listcontrol_routes
-    if(i_related_route != -1){
+    if((i_related_route != -1) && (remove_related_route == Answer('y', String("")))){
         
-        if(remove_related_route == Answer('y', String(""))){
             (f->listcontrol_routes)->DeleteItem(i_related_route);
-        }else{
-            
-            //remove_related_route == 'n', I do not delete the related route from f->listocntrol_routes, but I set the 'related sight' field of the related route in f->listcontrol_routes to empty, because the route is no longer related to a sight
-            (f->listcontrol_routes)->SetItem(i_related_route, (f->n_columns_listcontrol_routes)-1, wxString(""));
-
-        }
-    }
-    
-    //given that the list of sights has changed because one sight has been removed, I update the #s of the sights related to the routes in f->listcontrol_routes
-    for(i=0; i<((f->listcontrol_routes)->GetItemCount()); i++){
         
-        j = wxAtoi((f->listcontrol_routes)->GetItemText(i, (f->n_columns_listcontrol_routes)-1));
-        if(j>i_sight_to_remove){
-            (f->listcontrol_routes)->SetItem(
-                                             i,
-                                             (f->n_columns_listcontrol_routes)-1,
-                                             wxString::Format(wxT("%i"), j-1)
-                                             );
-        }
-                
     }
-    
     
     //I remove the sight and the related route from both the non-GUI object plot
     (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
+    
+    f->UpdateRelatedSightsAndRoutes();
     
     f->plot->print(true, String("--------- "), cout);
     
@@ -7495,62 +7476,22 @@ DeleteRoute::DeleteRoute(ListFrame* f_in, Answer remove_related_sight_in){
 
 void DeleteRoute::operator()(wxCommandEvent& event){
     
-    unsigned int i, j;
+    unsigned int i;
     int i_related_sight;
     
     i_related_sight = ((((f->plot)->route_list)[i_route_to_remove]).related_sight).value;
-
-     
-    
+  
    //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
-   if(i_related_sight != -1){
-       
-       if(remove_related_sight == Answer('y', String(""))){
-           
-           (f->listcontrol_sights)->DeleteItem(i_related_sight);
-           
-           //given that the list of sight has changed because one sight has been removed, I update the #s of the sight related to the routes in f->listcontrol_routes
-           for(i=0; i<((f->listcontrol_routes)->GetItemCount()); i++){
-               
-               j = wxAtoi((f->listcontrol_routes)->GetItemText(i, (f->n_columns_listcontrol_routes)-1));
-               if(j>i_related_sight){
-                   
-                   (f->listcontrol_routes)->SetItem(
-                                                    i,
-                                                    (f->n_columns_listcontrol_routes)-1,
-                                                    wxString::Format(wxT("%i"), j-1)
-                                                    );
-               }
-                       
-           }
-           
-       }else{
-           
-           //remove_related_sight == 'n', I do not delete the related sight from f->listocntrol_sights, but I set the 'related route' field of the related route in f->listcontrol_sights to empty, because the sight is no longer related to a route
-           
-           (f->listcontrol_sights)->SetItem(i_related_sight, (f->n_columns_listcontrol_sights)-1, wxString(""));
- 
-       }
+   if((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))){
+             
+       (f->listcontrol_sights)->DeleteItem(i_related_sight);
+
    }
-    
-    
-    //given that the list of routes has changed because one route has been removed, I update the #s of the routes related to the sights in f->listcontrol_sights
-    for(i=0; i<((f->listcontrol_sights)->GetItemCount()); i++){
-        
-        j = wxAtoi((f->listcontrol_sights)->GetItemText(i, (f->n_columns_listcontrol_sights)-1));
-        if(j>i_route_to_remove){
-            
-            (f->listcontrol_sights)->SetItem(
-                                             i,
-                                             (f->n_columns_listcontrol_sights)-1,
-                                             wxString::Format(wxT("%i"), j-1)
-                                             );
-        }
-                
-    }
    
     //I remove the route and the related sight from both the non-GUI object plot
     (f->plot)->remove_route(i_route_to_remove, remove_related_sight, String(""));
+    
+    f->UpdateRelatedSightsAndRoutes();
     
     f->plot->print(true, String("--------- "), cout);
     
@@ -9136,6 +9077,55 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
     //    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
     //
+}
+
+//writes the ids of the related sights and route in the GUI fields in ListFrame -> this, by reading them from the non-GUI object Plot
+void ListFrame::UpdateRelatedSightsAndRoutes(void){
+    
+    unsigned int i;
+    
+    for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
+        
+        if(((((plot->sight_list)[i]).related_route).value) == -1){
+            
+            listcontrol_sights->SetItem(i, n_columns_listcontrol_sights-1, wxString(""));
+            
+        }else{
+            
+            listcontrol_sights->SetItem(
+                                        i,
+                                        n_columns_listcontrol_sights-1,
+                                        wxString::Format(wxT("%i"),
+                                                         ((((plot->sight_list)[i]).related_route).value) + 1
+                                                         )
+                                        );
+            
+        }
+                
+    }
+    
+    for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
+                
+        if(((((plot->route_list)[i]).related_sight).value) == -1){
+            
+
+            listcontrol_routes->SetItem(i, n_columns_listcontrol_routes-1, wxString(""));
+            
+        }else{
+            
+            listcontrol_routes->SetItem(
+                                        i,
+                                        n_columns_listcontrol_routes-1,
+                                        wxString::Format(wxT("%i"),
+                                                         ((((plot->route_list)[i]).related_sight).value)+1
+                                                         )
+                                        );
+            
+        }
+                
+    }
+    
+    
 }
 
 void ListFrame::OnAddSight(wxCommandEvent& event){

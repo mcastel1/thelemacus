@@ -684,6 +684,13 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
 }
 
+//constructs a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet
+Route::Route(void){
+    
+    related_sight.set(String(""), -1, String(""));
+    
+    
+}
 
 void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     

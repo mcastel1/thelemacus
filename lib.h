@@ -713,6 +713,7 @@ public:
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;
     
+    Route(void);
     void enter(String, String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);

@@ -1381,11 +1381,13 @@ public:
     wxStaticText* text;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
+    //the units of measure of the length in this GUI field
+    String unit;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckLength<P> check;
     
-    LengthField(P*, Length*);
+    LengthField(P*, Length*, String);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);

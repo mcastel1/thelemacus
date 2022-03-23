@@ -7787,8 +7787,17 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
         double length_temp;
         
         value->GetValue().ToDouble(&length_temp);
-        length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
         
+        if(unit == String("nm")){
+            
+            length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+
+        }else{
+
+            length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
+
+        }
+
     }
     
     event.Skip(true);
@@ -7952,7 +7961,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye));
+    height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye), String("m"));
     //now that height_of_eye has been allocatd, I link artificial_horizon_check to height_of_eye
     (artificial_horizon_check->related_field) = height_of_eye;
     
@@ -8305,7 +8314,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     //l
     wxStaticText* text_l = new wxStaticText(panel, wxID_ANY, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    l = new LengthField<RouteFrame>(this, &(route->l));
+    l = new LengthField<RouteFrame>(this, &(route->l), String("nm"));
     
     
     //start
@@ -10159,7 +10168,16 @@ template <class P> void AngleField<P>::set(void){
 //sets the value in the GUI object value equal to the value in the non-GUI  object length
 template<class P> void LengthField<P>::set(void){
     
-    value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
+    if(unit == String("nm")){
+        
+        value->SetValue(wxString::Format(wxT("%f"), (length->value)));
+        
+    }else{
+     
+        value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
+    
+    }
+    
     
     ok = true;
     
@@ -10404,24 +10422,23 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
 }
 
 //constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(P* frame, Length* p){
+template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_in){
     
     parent_frame = frame;
     length = p;
+    unit = unit_in;
     
     //    ((parent_frame->check_height_of_eye).p) = this;
     
     //initialize check
     (check.p) = this;
     
-    
-    
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, check);
     
-    text = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("m"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text = new wxStaticText((parent_frame->panel), wxID_ANY, wxString(unit.value), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));

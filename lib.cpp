@@ -1520,6 +1520,11 @@ void Route::compute_end(String prefix){
     
 }
 
+void Route::draw(void){
+    
+    
+}
+
 bool Body::operator==(const Body& body){
     
     return (name == (body.name));
@@ -4124,33 +4129,33 @@ void Plot::show(bool zoom_out, String prefix){
     //    s = gsl_root_fsolver_alloc(T);
     
     
-    //replace line with number of intervals for tics in plot_dummy.plt
+    //read number of intervals for tics from file_init
     cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
-    plot_command.str("");
-    command.str("");
+    //    plot_command.str("");
+    //    command.str("");
     n_intervals_tics.read_from_file(String("number of intervals for tics"), file_init, true, new_prefix);
-    command << "LANG=C sed 's/#number of intervals for tics/n_intervals_tics = " << n_intervals_tics.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
-    system(command.str().c_str());
+    //    command << "LANG=C sed 's/#number of intervals for tics/n_intervals_tics = " << n_intervals_tics.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
+    //    system(command.str().c_str());
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
-    //replace line with number of points for routes in plot_dummy.plt
+    //read number of points for routes from file_init
     cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
-    plot_command.str("");
-    command.str("");
+    //    plot_command.str("");
+    //    command.str("");
     n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
-    command << "LANG=C sed 's/#number of points for routes/n_points_routes = " << n_points_routes.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    system(command.str().c_str());
+    //    command << "LANG=C sed 's/#number of points for routes/n_points_routes = " << n_points_routes.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+    //    system(command.str().c_str());
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
-    //replace line with n_points_plot_coastline in plot_dummy.plt
+    //read n_points_plot_coastline from file_init
     cout << prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
-    plot_command.str("");
-    command.str("");
+//    plot_command.str("");
+//    command.str("");
     n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
-    command << "LANG=C sed 's/#n_points_coastline/n_points_coastline = " << n_points_plot_coastline.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    system(command.str().c_str());
+//    command << "LANG=C sed 's/#n_points_coastline/n_points_coastline = " << n_points_plot_coastline.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
+//    system(command.str().c_str());
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
@@ -4165,10 +4170,7 @@ void Plot::show(bool zoom_out, String prefix){
     
     
     
-    //replace line with min_latitude in plot_dummy.plt
-    //
-    
-    
+    //read lambda_min, ...., phi_max from file_init
     cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
     lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
     lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);

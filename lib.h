@@ -712,6 +712,8 @@ public:
     Speed sog;
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;
+    //a list of points containing the geo coordinates of points on the Route this
+    Position* points;
     
     Route(void);
     void enter(String, String);
@@ -724,6 +726,7 @@ public:
     bool t_crossing(Route, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
+    void draw(void);
     
 };
 

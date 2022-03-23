@@ -714,9 +714,17 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     listcontrol->InsertItem(item);
     
     j=0;
-    //set type column
-    listcontrol->SetItem(i, j++, wxString(type.value));
-    
+    //set type column: I write the extended type names, not the short ones 'l', 'o' and 'c'
+    if(type == String("l")){
+        listcontrol->SetItem(i, j++, wxString("loxodrome"));
+    }
+    if(type == String("o")){
+        listcontrol->SetItem(i, j++, wxString("orthodrome"));
+    }
+    if(type == String("c")){
+        listcontrol->SetItem(i, j++, wxString("circle of equal altitude"));
+    }
+        
     if(type == String("c")){
         //in this case the type of this is 'circle of equal altitde': the first three fields are thus empty, and I fill in only the last two fields
         

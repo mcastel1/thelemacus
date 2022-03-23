@@ -1520,10 +1520,6 @@ void Route::compute_end(String prefix){
     
 }
 
-void Route::draw(void){
-    
-    
-}
 
 bool Body::operator==(const Body& body){
     
@@ -6658,6 +6654,8 @@ void DrawPanel::Draw(void){
     height_plot_area = height_chart*length_plot_area_over_length_chart;
     tic_length = tic_length_over_width_plot_area*width_plot_area;
     
+    //draw coastlines
+    
     
     // Create a XYChart object with the appropriate size
     c = new XYChart(width_chart, height_chart);
@@ -6811,6 +6809,13 @@ void DrawPanel::Draw(void){
     c->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
     
     c->makeChart(path_file_chart);
+    
+    
+    
+    
+    //draw routes
+    
+    
     
     //free up resources
     (parent->x).clear();

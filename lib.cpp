@@ -8701,11 +8701,14 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
-//    (delete_sight->f) = this;
-    //initialize delete_sight, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
+    //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
     delete_sight_and_related_route = new DeleteSight(this, Answer('y', String("")));
-//    (delete_sight_and_related_route->f) = this;
-    
+
+    //initialize delete_route, which defines the functor to delete the route but not its related sight (it is called when the user answers 'n' to QuestionFrame)
+    delete_route = new DeleteRoute(this, Answer('n', String("")));
+    //initialize delete_route_and_related_sight, which defines the functor to delete the route and its related sight (it is called when the user answers 'y' to QuestionFrame)
+    delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
+
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
     

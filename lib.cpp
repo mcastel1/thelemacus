@@ -9976,8 +9976,22 @@ template <class T> void RouteTypeField::get(T &event){
     
     if(ok){
         
-        type->set(String(""), String((name->GetValue()).ToStdString()), String(""));
+        if(String((name->GetValue()).ToStdString()) == String("loxodrome")){
+            
+            type->set(String(""), String("l"), String(""));
+
+        }
+        if(String((name->GetValue()).ToStdString()) == String("orthodrome")){
+            type->set(String(""), String("o"), String(""));
+
         
+        }
+        if(String((name->GetValue()).ToStdString()) == String("circle of equal altitude")){
+            
+            type->set(String(""), String("c"), String(""));
+
+        }
+          
     }
     
     event.Skip(true);
@@ -10219,7 +10233,7 @@ void ChronoField::set(Chrono chrono_in){
 void RouteTypeField::set(void){
     
     name->SetValue(wxString(type->value));
-    
+   
     ok = true;
     
 }

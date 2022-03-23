@@ -7441,11 +7441,31 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-    //    remove_related_route.print(String("Answer on remove rel rou"), String("xxxxxxxxx "), cout);
+    int i_related_route;
     
+    i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
+
+     
+    //remove the route related to the sight which I am about to remove from the GUI object listcontrol_routes
+    if(i_related_route != -1){
+        
+        if(remove_related_route == Answer('y', String(""))){
+            (f->listcontrol_routes)->DeleteItem(i_related_route);
+        }else{
+            
+            //remove_related_route == 'n', I do not delete the related route from f->listocntrol_routes, but I set the 'related sight' field of the related route in f->listcontrol_routes to empty, because the route is no longer related to a sight
+            
+            (f->listcontrol_routes)->SetItem(i_related_route, (f->n_columns_listcontrol_routes)-1, wxString(""));
+
+            
+            
+        }
+    }
+    
+    //I remove the sight and the related route from both the non-GUI object plot
     (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
     
-        f->plot->print(true, String("--------- "), cout);
+    f->plot->print(true, String("--------- "), cout);
     
     
     event.Skip(true);
@@ -7461,7 +7481,18 @@ DeleteRoute::DeleteRoute(ListFrame* f_in, Answer remove_related_sight_in){
 }
 
 void DeleteRoute::operator()(wxCommandEvent& event){
-        
+    
+    int i_related_sight;
+    
+    i_related_sight = ((((f->plot)->route_list)[i_route_to_remove]).related_sight).value;
+
+     
+    //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
+    if((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))){
+        (f->listcontrol_sights)->DeleteItem(i_related_sight);
+    }
+    
+    //I remove the route and the related sight from both the non-GUI object plot
     (f->plot)->remove_route(i_route_to_remove, remove_related_sight, String(""));
     
     f->plot->print(true, String("--------- "), cout);
@@ -8688,13 +8719,16 @@ template<class T> PrintErrorMessage<T>::PrintErrorMessage(T* f_in){
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width, n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes/*, margin_h = 10*/, margin_v = 5;
+    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = 5;
     OnSelectInListControlSights* on_select_in_listcontrol_sights;
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     wxListItem column, item;
     
-    
+    n_columns_listcontrol_sights = 12;
+    n_columns_listcontrol_positions = 3;
+    n_columns_listcontrol_routes = 8;
+
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
@@ -8741,7 +8775,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     
     
-    n_columns_listcontrol_sights = 12;
     i=0;
     
     column.SetId(i);
@@ -8844,7 +8877,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     
-    n_columns_listcontrol_positions = 3;
     i=0;
     
     column.SetId(i);
@@ -8889,7 +8921,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     
-    n_columns_listcontrol_routes = 7;
     i=0;
     
     column.SetId(i);

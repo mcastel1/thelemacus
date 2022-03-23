@@ -37,7 +37,7 @@
                 longitude = 265° 18.4353'
                 label = Rohal Dahl
             aperture angle = 77° 23.7477'
-            label = moon 2021-11-22 20:10:15 TAI, MP Saturn
+            label = Green functions
         Route #2:
             type = l
             start position:

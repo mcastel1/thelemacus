@@ -3957,14 +3957,14 @@ void Plot::remove_position(unsigned int i, String prefix){
     
 }
 
-//remvoves route #i
+//removes route #i from route_list by updating all the connections to between sights and routes. If remove_related_sight = 'y', it removes also the sight related to route i
 void Plot::remove_route(unsigned int i, Answer remove_related_sight, String prefix){
     
     unsigned int j;
-    int i_related_sight;
+    Int i_related_sight;
     stringstream name;
     
-    i_related_sight = ((route_list[i]).related_sight);
+    (i_related_sight.value) = ((route_list[i]).related_sight);
     
     name.str("");
     name << "Route to be removed: #" << i+1;
@@ -3991,15 +3991,11 @@ void Plot::remove_route(unsigned int i, Answer remove_related_sight, String pref
     cout << prefix.value << "Route removed.\n";
     
     
-    if(i_related_sight != -1){
+    if(((i_related_sight.value) != -1) && (remove_related_sight == Answer('y', prefix))){
         
-        remove_related_sight.enter(String("whether you want to remove the sight related to the route"), prefix);
-        
-        if(remove_related_sight == Answer('y', prefix)){
-            //this needs one additional argument: I commented it out
-            //            remove_sight(i_related_sight, prefix);
+        remove_sight(i_related_sight.value, Answer('n', prefix), prefix);
             
-        }
+    
         
     }
     

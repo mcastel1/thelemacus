@@ -711,7 +711,7 @@ public:
     Length l;
     Speed sog;
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
-    int related_sight;
+    Int related_sight;
     
     void enter(String, String);
     void print(String, String, ostream&);

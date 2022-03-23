@@ -734,7 +734,20 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     }
 
     listcontrol->SetItem(i, j++, wxString(label.value));
+    
+    
+    if((related_sight.value) == -1){
+        //if the route is not connected to a sight, I leave the column field empty
+        
+        listcontrol->SetItem(i, j++, wxString(""));
+        
+    }else{
+        //if the route is connected to a sight, I write the # of the related sight in the column field
+        
+        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_sight.value)+1));
 
+    }
+   
     
 }
 
@@ -933,7 +946,7 @@ void Route::read_from_file(File& file, String prefix){
     
     label.read_from_file(String("label"), file, false, new_prefix);
     //when a sight is read from file, it is not yet linked to any route, thus I set
-    related_sight = -1;
+    (related_sight.value) = -1;
     
 }
 
@@ -1348,7 +1361,7 @@ Route Position::transport(String prefix){
     cout << prefix.value << "Enter route:\n";
     
     // route is not related to any sight, so I set
-    (route.related_sight) = -1;
+    ((route.related_sight).value) = -1;
     
     do{
         route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
@@ -1909,9 +1922,9 @@ void Route::print(String name, String prefix, ostream& ostr){
     label.print(String("label"), new_prefix, ostr);
     
     
-    if(related_sight != -1){
+    if((related_sight.value) != -1){
         
-        cout << new_prefix.value << "Related sight # = " << related_sight+1 << "\n";
+        cout << new_prefix.value << "Related sight # = " << (related_sight.value)+1 << "\n";
         
     }
     
@@ -1959,7 +1972,7 @@ void Route::enter(String name, String prefix){
     label.enter(String("label"), new_prefix);
     
     //given that the route has just been entered, it is not yet related to any sight, thus I set
-    related_sight = -1;
+    (related_sight.value) = -1;
     
 }
 
@@ -2511,7 +2524,7 @@ void Route::transport(String prefix){
         temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(String(""), display_precision) << ", l = " << transporting_route.l.value << " nm";
         label.set(String(""), temp_label.str(), prefix);
         //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set
-        related_sight = -1;
+        (related_sight.value) = -1;
         
         print(String("transported route"), prefix, cout);
         
@@ -2525,7 +2538,7 @@ void Route::transport(String prefix){
 
 void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
-    unsigned int i;
+    unsigned int i, j;
     wxListItem item;
     Time time_UTC;
     
@@ -2541,55 +2554,67 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     listcontrol->InsertItem(item);
     
+    j=0;
     //set body column
-    listcontrol->SetItem(i, 0, wxString(body.name.value));
+    listcontrol->SetItem(i, j++, wxString(body.name.value));
     
     //set limb column
     if((body.name == String("sun")) || (body.name == String("moon"))){
         
-        if(wxString(limb.value) == 'u'){listcontrol->SetItem(i, 1, wxString("upper"));}
-        if(wxString(limb.value) == 'l'){listcontrol->SetItem(i, 1, wxString("lower"));}
-        if(wxString(limb.value) == 'c'){listcontrol->SetItem(i, 1, wxString("center"));}
+        if(wxString(limb.value) == 'u'){listcontrol->SetItem(i, j++, wxString("upper"));}
+        if(wxString(limb.value) == 'l'){listcontrol->SetItem(i, j++, wxString("lower"));}
+        if(wxString(limb.value) == 'c'){listcontrol->SetItem(i, j++, wxString("center"));}
         
     }else{
-        listcontrol->SetItem(i, 1, wxString(""));
+        listcontrol->SetItem(i, j++, wxString(""));
     }
     
     //set artificial horizon column
-    listcontrol->SetItem(i, 2, wxString(artificial_horizon.value));
-    
+    listcontrol->SetItem(i, j++, wxString(artificial_horizon.value));
     
     //set sextant altitude column
-    listcontrol->SetItem(i, 3, wxString((H_s).to_string(String(""), display_precision)));
+    listcontrol->SetItem(i, j++, wxString((H_s).to_string(String(""), display_precision)));
     
     //set index error
-    listcontrol->SetItem(i, 4, wxString((index_error).to_string(String(""), display_precision)));
+    listcontrol->SetItem(i, j++, wxString((index_error).to_string(String(""), display_precision)));
     
     //set height of eye column
-    if(artificial_horizon.value == 'n'){listcontrol->SetItem(i, 5, wxString(height_of_eye.to_string(String("m"), display_precision)));}
-    else{listcontrol->SetItem(i, 5, wxString(""));}
+    if(artificial_horizon.value == 'n'){listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), display_precision)));}
+    else{listcontrol->SetItem(i, j++, wxString(""));}
     
     //set column of master-clock date and hour of sight
     //I add to master_clock_date_and_hour the value stopwatch (if any): I write the result in time_UTC and I write in the GUI object  time_UTC
     time_UTC = master_clock_date_and_hour;
     //    if((use_stopwatch.value)=='y'){time_UTC += stopwatch;}
-    listcontrol->SetItem(i, 6, wxString(time_UTC.to_string(display_precision)));
+    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string(display_precision)));
     
     //set use of stopwatch
-    listcontrol->SetItem(i, 7, wxString((use_stopwatch.value)));
+    listcontrol->SetItem(i, j++, wxString((use_stopwatch.value)));
     
     //set stopwatch reading
     if((use_stopwatch.value) == 'y'){
-        listcontrol->SetItem(i, 8, wxString((stopwatch).to_string(display_precision)));
+        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string(display_precision)));
     }else{
-        listcontrol->SetItem(i, 8, wxString(""));
+        listcontrol->SetItem(i, j++, wxString(""));
     }
     
     //set TAI-UTC
-    listcontrol->SetItem(i, 9, wxString((TAI_minus_UTC).to_string(display_precision)));
+    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string(display_precision)));
     
     //set label
-    listcontrol->SetItem(i, 10, wxString((label).value));
+    listcontrol->SetItem(i, j++, wxString((label).value));
+    
+    if((related_route.value) == -1){
+        //if the sight is not connected to a route, I leave the column field empty
+        
+        listcontrol->SetItem(i, j++, wxString(""));
+        
+    }else{
+        //if the sight is connected to a route, I write the # of the related route in the column field
+        
+        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_route.value)+1));
+
+    }
     
     
 }
@@ -2918,7 +2943,7 @@ bool Plot::read_from_file(File& file, String prefix){
                     cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
                     
                     //I link the sight to the route, and the route to the sight
-                    route_list[route_list.size()-1].related_sight = sight_list.size()-1;
+                    ((route_list[route_list.size()-1].related_sight).value) = sight_list.size()-1;
                     (sight_list[sight_list.size()-1].related_route.value) = route_list.size()-1;
                     
                 }
@@ -3370,7 +3395,7 @@ void Plot::menu(String prefix){
                 route.alpha = Z;
                 route.l.value = 100.0;
                 route.label = String("LOP");
-                route.related_sight = -1;
+                ((route.related_sight).value) = -1;
                 
                 route_list.push_back(route);
                 //
@@ -3709,7 +3734,7 @@ void Plot::compute_crossings(String prefix){
     (error_circle.GP) = center;
     (error_circle.omega.value) = (r.value)/Re;
     (error_circle.label) = String("error on astronomical position");
-    (error_circle.related_sight) = -1;
+    ((error_circle.related_sight).value) = -1;
     
     center.print(String("astronomical position"), prefix, cout);
     r.print(String("error on astronomical position"), String("nm"), prefix, cout);
@@ -3794,7 +3819,7 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
     for(i=0, j=0; i<route_list.size(); i++){
         
         //if print_all_routes = false, I only print routes which are not linked to a sight. This is to avoid doubles: If I print also Routes which are related to a Sight, then when the file to which I am saving will be read again, the code will reduce them and create double Routes identical to the ones already present in the file.
-        if((((route_list[i]).related_sight) == -1) || print_all_routes){
+        if(((((route_list[i]).related_sight).value) == -1) || print_all_routes){
             
             name.str("");
             name << "Route #" << j+1;
@@ -3861,7 +3886,7 @@ bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
     
     //I link the sight to the route, and the route to the sight
     ((sight_list[sight_list.size()-1]).related_route.value) = route_list.size()-1;
-    (route_list[route_list.size()-1]).related_sight = sight_list.size()-1;
+    (((route_list[route_list.size()-1]).related_sight).value) = sight_list.size()-1;
     
     
     if(check){
@@ -3919,12 +3944,12 @@ void Plot::remove_sight(unsigned int i, Answer remove_related_route, String pref
     //update the linking indexed of routes in accordance with the deletion of the sight
     for(j=0; j<route_list.size(); j++){
         
-        if(((route_list[j]).related_sight != -1) && ((route_list[j]).related_sight >= ((int)i))){
+        if(((((route_list[j]).related_sight).value) != -1) && ((((route_list[j]).related_sight).value) >= ((int)i))){
             
-            if((route_list[j]).related_sight == ((int)i)){
-                (route_list[j]).related_sight = -1;
+            if((((route_list[j]).related_sight).value) == ((int)i)){
+                (((route_list[j]).related_sight).value) = -1;
             }else{
-                ((route_list[j]).related_sight)--;
+                (((route_list[j]).related_sight).value)--;
             }
             
         }
@@ -3964,7 +3989,7 @@ void Plot::remove_route(unsigned int i, Answer remove_related_sight, String pref
     Int i_related_sight;
     stringstream name;
     
-    (i_related_sight.value) = ((route_list[i]).related_sight);
+    (i_related_sight.value) = (((route_list[i]).related_sight).value);
     
     name.str("");
     name << "Route to be removed: #" << i+1;
@@ -8713,7 +8738,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     
     
-    n_columns_listcontrol_sights = 11;
+    n_columns_listcontrol_sights = 12;
     i=0;
     
     column.SetId(i);
@@ -8781,6 +8806,13 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
     listcontrol_sights->InsertColumn(i++, column);
+    
+    column.SetId(i);
+    column.SetText(wxT("Related route"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
+    listcontrol_sights->InsertColumn(i++, column);
+
     
     
     //write the sights into plot->sight_list into listcontrol_sights
@@ -8854,7 +8886,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     
-    n_columns_listcontrol_routes = 6;
+    n_columns_listcontrol_routes = 7;
     i=0;
     
     column.SetId(i);
@@ -8898,7 +8930,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(i++, column);
-
+    
+    column.SetId(i);
+    column.SetText(wxT("Related sight"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(i++, column);
 
 
     //write the routes into plot->route_list into listcontrol_routes

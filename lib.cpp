@@ -9255,31 +9255,39 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
-//    long item;
-//
-//    item = listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-//    listcontrol_routes->DeleteItem(item);
-//    plot->remove_route(item, String(""));
-//
+    int i_route_to_remove = (listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
     
     //the id of the route to removed is the one of the route selected in listcontrol_routes: I write it in delete_route_and_related_route and in delete_route
-    (delete_route_and_related_sight->i_route_to_remove) = listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    (delete_route->i_route_to_remove) = listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    (delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;
+    (delete_route->i_route_to_remove) = i_route_to_remove;
     
     //remove the route from the GUI object listcontrol_routes
     listcontrol_routes->DeleteItem((delete_route->i_route_to_remove));
  
-    //remove the route from the non-GUI object plot
-    //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
-    QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
-                                                                                                          delete_route_and_related_sight,
-                                                                                                          delete_route,
-                                                                                                          "",
-                                                                                                          "Do you want to remove the sight related to this route?",
-                                                                                                          wxDefaultPosition,
-                                                                                                          wxDefaultSize,
-                                                                                                          String(""));
-    question_frame->Show(true);
+    
+    if( ((((plot->route_list)[i_route_to_remove]).related_sight).value) != -1){
+        //if the route which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
+        
+        //remove the route from the non-GUI object plot
+        //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
+        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
+                                                                                                              delete_route_and_related_sight,
+                                                                                                              delete_route,
+                                                                                                              "",
+                                                                                                              "Do you want to remove the sight related to this route?",
+                                                                                                              wxDefaultPosition,
+                                                                                                              wxDefaultSize,
+                                                                                                              String(""));
+     
+        question_frame->Show(true);
+       
+    }else{
+        //if not, I simply delete teh route
+        
+        (*delete_route)(event);
+        
+    }
+    
     
     
     event.Skip(true);

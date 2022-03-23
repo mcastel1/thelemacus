@@ -9157,7 +9157,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
  
     //remove the route from the non-GUI object plot
     //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
-    QuestionFrame<DeleteSight, DeleteSight>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
+    QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
                                                                                                           delete_route_and_related_sight,
                                                                                                           delete_route,
                                                                                                           "",

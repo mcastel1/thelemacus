@@ -3220,7 +3220,8 @@ void Plot::menu(String prefix){
             
         case 8:{
             
-            add_route(new_prefix);
+//            I commented this out because now add_route takes an additional argument
+//            add_route(new_prefix);
             print(true, new_prefix, cout);
             show(false, new_prefix);
             menu(prefix);
@@ -3912,13 +3913,13 @@ void Plot::add_position(String prefix){
     
 }
 
-void Plot::add_route(String prefix){
+//adds to Plot-> this the Route written in *route_in
+void Plot::add_route(Route* route_in, String prefix){
     
-    Route route;
     
-    route.enter(String("new route"), prefix);
+//    route.enter(String("new route"), prefix);
     
-    route_list.push_back(route);
+    route_list.push_back(*route_in);
     cout << prefix.value << "Route added as position #" << route_list.size() << ".\n";
     
     

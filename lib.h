@@ -904,7 +904,7 @@ public:
     bool modify_sight(unsigned int, String);
     void transport_route(unsigned int, String);
     void add_position(String);
-    void add_route(String);
+    void add_route(Route*, String);
     void remove_sight(unsigned int, Answer, String);
     void transport_position(unsigned int, String);
     void remove_position(unsigned int, String);

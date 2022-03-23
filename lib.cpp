@@ -722,17 +722,17 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         
     }else{
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
-
+        
         listcontrol->SetItem(i, j++, wxString(start.to_string(display_precision)));
         listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision)));
         listcontrol->SetItem(i, j++, wxString(l.to_string(String("nm"), display_precision)));
         
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
-
+        
         
     }
-
+    
     listcontrol->SetItem(i, j++, wxString(label.value));
     
     
@@ -745,9 +745,9 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         //if the route is connected to a sight, I write the # of the related sight in the column field
         
         listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_sight.value)+1));
-
+        
     }
-   
+    
     
 }
 
@@ -2613,7 +2613,7 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         //if the sight is connected to a route, I write the # of the related route in the column field
         
         listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_route.value)+1));
-
+        
     }
     
     
@@ -3081,9 +3081,9 @@ void Plot::menu(String prefix){
     switch(i){
             
         case 1:{
-  
+            
             //I commented this out because the way to enteer the sight has changed with the GUI
-//            add_sight_and_reduce(new_prefix);
+            //            add_sight_and_reduce(new_prefix);
             print(true, new_prefix, cout);
             show(false, new_prefix);
             menu(prefix);
@@ -3296,9 +3296,9 @@ void Plot::menu(String prefix){
                 
                 enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);
                 i--;
-  
+                
                 //I commented this out because now remove_route has an additional argument
-//                remove_route(i, new_prefix);
+                //                remove_route(i, new_prefix);
                 print(true, new_prefix, cout);
                 show(false, new_prefix);
                 
@@ -3341,7 +3341,7 @@ void Plot::menu(String prefix){
                 //in this loop I don't increment i because route_list.size() decreases at each iteration
                 for(i=0; i<route_list.size(); ){
                     //I commented this out because now remove_route takes one additional argument
-//                    remove_route(i, new_prefix);
+                    //                    remove_route(i, new_prefix);
                 }
                 
                 print(true, new_prefix, cout);
@@ -3869,15 +3869,15 @@ bool Plot::modify_sight(unsigned int i, String prefix){
 
 bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
     
-
+    
     bool check = true;
-
+    
     //create a new route in the respective list
     route_list.resize(route_list.size()+1);
-
+    
     //push back sight_in into sight_list
     sight_list.push_back(*sight_in);
-
+    
     
     
     //I commented this out because now the sight is enetered through the GUI
@@ -4019,8 +4019,8 @@ void Plot::remove_route(unsigned int i, Answer remove_related_sight, String pref
     if(((i_related_sight.value) != -1) && (remove_related_sight == Answer('y', prefix))){
         
         remove_sight(i_related_sight.value, Answer('n', prefix), prefix);
-            
-    
+        
+        
         
     }
     
@@ -5749,7 +5749,7 @@ string Angle::min_to_string(String mode, unsigned int precision){
     }
     
     output << (fabs(K*value) - floor(fabs(K*value)))*60.0 << "'";
-
+    
     return (output.str().c_str());
     
 }
@@ -6201,7 +6201,7 @@ void ChartFrame::GetCoastLineData(void){
     
     //set x_min, ..., y_max for the following
     draw_panel->Update_x_y_min_max();
-
+    
     
     //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     ((parent->plot)->phi_min).normalize_pm_pi();
@@ -6231,7 +6231,7 @@ void ChartFrame::GetCoastLineData(void){
     
     file_n_line.set_name(String(path_file_n_line));
     file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
-//    outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
+    //    outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
     
     
     //read file n_line and store it into vector n_line
@@ -6256,8 +6256,8 @@ void ChartFrame::GetCoastLineData(void){
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     //open a new file selected coastline data and write into it the new data
-//    outfile_selected_coastline_data.remove(String(""));
-//    outfile_selected_coastline_data.open(String("out"), String(""));
+    //    outfile_selected_coastline_data.remove(String(""));
+    //    outfile_selected_coastline_data.open(String("out"), String(""));
     
     //start - part of the code which takes a long time to run
     x.clear();
@@ -6306,7 +6306,7 @@ void ChartFrame::GetCoastLineData(void){
                     replace(line.begin(), line.end(), ' ', '\n');
                     replace(line.begin(), line.end(), ',', ' ');
                     
-//                    (outfile_selected_coastline_data.value) << line;
+                    //                    (outfile_selected_coastline_data.value) << line;
                     ins.clear();
                     ins << line;
                     ins >> phi_temp >> lambda_temp;
@@ -6337,7 +6337,7 @@ void ChartFrame::GetCoastLineData(void){
         
     }
     //end - part of the code which takes a long time to run
-
+    
     
     if(check){
         
@@ -6350,7 +6350,7 @@ void ChartFrame::GetCoastLineData(void){
     }
     
     
-//    outfile_selected_coastline_data.close(String(""));
+    //    outfile_selected_coastline_data.close(String(""));
     file_coastline_data_blocked.close(String(""));
     
     
@@ -6784,7 +6784,7 @@ void DrawPanel::Draw(void){
     (c->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
     
     (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
-        
+    
     // Set the axes line width to 3 pixels
     c->xAxis()->setWidth(2);
     c->yAxis()->setWidth(2);
@@ -7445,12 +7445,12 @@ void DeleteSight::operator()(wxCommandEvent& event){
     int i_related_route;
     
     i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
-
-     
+    
+    
     //remove the route related to the sight which I am about to remove from the GUI object listcontrol_routes
     if((i_related_route != -1) && (remove_related_route == Answer('y', String("")))){
         
-            (f->listcontrol_routes)->DeleteItem(i_related_route);
+        (f->listcontrol_routes)->DeleteItem(i_related_route);
         
     }
     
@@ -7480,14 +7480,14 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     int i_related_sight;
     
     i_related_sight = ((((f->plot)->route_list)[i_route_to_remove]).related_sight).value;
-  
-   //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
-   if((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))){
-             
-       (f->listcontrol_sights)->DeleteItem(i_related_sight);
-
-   }
-   
+    
+    //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
+    if((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))){
+        
+        (f->listcontrol_sights)->DeleteItem(i_related_sight);
+        
+    }
+    
     //I remove the route and the related sight from both the non-GUI object plot
     (f->plot)->remove_route(i_route_to_remove, remove_related_sight, String(""));
     
@@ -7574,7 +7574,7 @@ template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in){
     (check_sign.p) = p;
     (check_arc_degree.p) = p;
     (check_arc_minute.p) = p;
-
+    
 }
 
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
@@ -7595,8 +7595,8 @@ CheckDate::CheckDate(DateField* p_in){
     check_year = new CheckYear(p);
     check_month = new CheckMonth(p);
     check_day = new CheckDay(p);
-
-
+    
+    
     
 }
 
@@ -8214,7 +8214,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-        
+    
     CreateStatusBar();
     SetStatusText( "Welcome to Michele's text editor!" );
     
@@ -8260,8 +8260,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
         list_position = -1;
     }
     
- 
-
+    
+    
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
@@ -8286,11 +8286,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //alpha
     wxStaticText* text_alpha = new wxStaticText(panel, wxID_ANY, wxT("Alpha"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     alpha = new AngleField<RouteFrame>(this, &(route->alpha), String(""));
-
+    
     //l
     wxStaticText* text_l = new wxStaticText(panel, wxID_ANY, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     l = new LengthField<RouteFrame>(this, &(route->l));
-
+    
     
     //start
     //start_phi
@@ -8299,7 +8299,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //start_lambda
     wxStaticText* text_start_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     start_lambda = new AngleField<RouteFrame>(this, &((route->start).lambda), String("EW"));
-
+    
     //GP (ground position)
     //GP_phi
     wxStaticText* text_GP_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -8307,7 +8307,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //GP_lambda
     wxStaticText* text_GP_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     GP_lambda = new AngleField<RouteFrame>(this, &((route->GP).lambda), String("EW"));
-
+    
     //omega
     wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
@@ -8320,15 +8320,15 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //buttons
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel->Bind(wxEVT_BUTTON, &RouteFrame::OnPressCancel, this);
-
+    
     button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-//    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+    //    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
     //If I press reduce, I want all the fields in this RouteFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-//    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
-//    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
-//    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
+    //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
+    //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
+    //    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
     //    button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
@@ -8343,19 +8343,19 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
         omega->Enable(false);
         
     }
-
+    
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
     button_add->Enable((route_in != NULL));
- 
+    
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
     type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
-
+    
     sizer_grid_alpha->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
     alpha->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
-  
+    
     sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
     l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
-
+    
     sizer_grid_omega->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
     omega->InsertIn<wxFlexGridSizer>(sizer_grid_omega);
     
@@ -8363,30 +8363,30 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     start_phi->InsertIn<wxFlexGridSizer>(sizer_grid_start);
     sizer_grid_start->Add(text_start_lambda);
     start_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_start);
-
+    
     sizer_box_start->Add(sizer_grid_start);
-
+    
     sizer_grid_GP->Add(text_GP_phi);
     GP_phi->InsertIn<wxFlexGridSizer>(sizer_grid_GP);
     sizer_grid_GP->Add(text_GP_lambda);
     GP_lambda->InsertIn<wxFlexGridSizer>(sizer_grid_GP);
-
+    
     sizer_box_GP->Add(sizer_grid_GP);
-        
+    
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
-
+    
     sizer_box_data->Add(sizer_grid_type);
     sizer_box_data->Add(sizer_grid_alpha);
     sizer_box_data->Add(sizer_grid_l);
     sizer_box_data->Add(sizer_box_start);
     sizer_box_data->Add(sizer_box_GP);
     sizer_box_data->Add(sizer_grid_omega);
-
+    
     box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM);
     box_sizer->Add(button_add, 0, wxALIGN_BOTTOM);
-  
-
+    
+    
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
@@ -8403,7 +8403,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-        
+    
     CreateStatusBar();
     SetStatusText( "Welcome to Michele's text editor!" );
     
@@ -8505,15 +8505,15 @@ void RouteFrame::TryToEnableOk(void){
     
     button_add->Enable((type->is_ok()) &&
                        (
-                       ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
-                        ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
-                       ||
-                       ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
-                        ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
-                       )
+                        ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
+                         ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
+                        ||
+                        ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
+                         ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
+                        )
                        );
     
- 
+    
     
     
 }
@@ -8535,7 +8535,7 @@ void RouteFrame::set(void){
         start_phi->set();
         start_lambda->set();
         l->set();
-
+        
     }
     
     label->set();
@@ -8545,7 +8545,7 @@ void RouteFrame::set(void){
 
 //sets the values in all the non-GUI fields equal to the values in the respective GUI fields
 template<class T> void RouteFrame::get(T& event){
-
+    
     type->get(event);
     
     if(((type->name)->GetValue()) == wxString("circle of equal altitude")){
@@ -8560,7 +8560,7 @@ template<class T> void RouteFrame::get(T& event){
         start_phi->get(event);
         start_lambda->get(event);
         l->get(event);
-
+        
     }
     
     label->get(event);
@@ -8726,21 +8726,21 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     n_columns_listcontrol_sights = 12;
     n_columns_listcontrol_positions = 3;
     n_columns_listcontrol_routes = 8;
-
+    
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
-
+    
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
     //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
     delete_sight_and_related_route = new DeleteSight(this, Answer('y', String("")));
-
+    
     //initialize delete_route, which defines the functor to delete the route but not its related sight (it is called when the user answers 'n' to QuestionFrame)
     delete_route = new DeleteRoute(this, Answer('n', String("")));
     //initialize delete_route_and_related_sight, which defines the functor to delete the route and its related sight (it is called when the user answers 'y' to QuestionFrame)
     delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
-
+    
     catalog = new Catalog(String(path_file_catalog), String(""));
     plot = new Plot(catalog, String(""));
     
@@ -8757,7 +8757,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
-
+    
     //
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
@@ -8846,7 +8846,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
     listcontrol_sights->InsertColumn(i++, column);
-
+    
     
     
     //write the sights into plot->sight_list into listcontrol_sights
@@ -8894,8 +8894,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
     listcontrol_positions->InsertColumn(i++, column);
-
-
+    
+    
     //write the positions into plot->position_list into listcontrol_sights
     for(i=0; i<((plot->position_list).size()); i++){
         ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
@@ -8950,13 +8950,13 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(i++, column);
-
+    
     column.SetId(i);
     column.SetText(wxT("Omega"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(i++, column);
-
+    
     column.SetId(i);
     column.SetText(wxT("Label"));
     column.SetAlign(wxLIST_FORMAT_LEFT);
@@ -8968,8 +8968,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(i++, column);
-
-
+    
+    
     //write the routes into plot->route_list into listcontrol_routes
     for(i=0; i<((plot->route_list).size()); i++){
         ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
@@ -8987,7 +8987,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin_v);
     //listcontrol routes with routes
-
+    
     
     //buttons
     //image for buttons
@@ -9007,7 +9007,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //button to add a route
     button_add_route = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
- 
+    
     
     //button to modify a sight
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
@@ -9018,12 +9018,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
     button_modify_position->Enable(false);
-  
+    
     //button to modify a route
     button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute, this);
     button_modify_route->Enable(false);
-
+    
     
     //button to delete a sight
     button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
@@ -9034,12 +9034,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnDeletePosition, this);
     button_delete_position->Enable(false);
- 
+    
     //button to delete a route
     button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
     button_delete_route->Enable(false);
-
+    
     
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
@@ -9055,7 +9055,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
     sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, margin_v);
- 
+    
     
     //
     
@@ -9101,14 +9101,14 @@ void ListFrame::UpdateRelatedSightsAndRoutes(void){
                                         );
             
         }
-                
+        
     }
     
     for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
-                
+        
         if(((((plot->route_list)[i]).related_sight).value) == -1){
             
-
+            
             listcontrol_routes->SetItem(i, n_columns_listcontrol_routes-1, wxString(""));
             
         }else{
@@ -9122,7 +9122,7 @@ void ListFrame::UpdateRelatedSightsAndRoutes(void){
                                         );
             
         }
-                
+        
     }
     
     
@@ -9150,9 +9150,9 @@ void ListFrame::OnAddRoute(wxCommandEvent& event){
     
     RouteFrame *route_frame = new RouteFrame(this, NULL, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
     route_frame->Show(true);
-
+    
     event.Skip(true);
-
+    
 }
 
 void ListFrame::OnModifySight(wxCommandEvent& event){
@@ -9206,7 +9206,7 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
 
 void ListFrame::OnModifyRoute(wxCommandEvent& event){
     
-   
+    
     event.Skip(true);
     
 }
@@ -9215,26 +9215,38 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
+    int i_sight_to_remove = (listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+    
     //the id of the sight to removed is the one of the sight selected in listcontrol_sights: I write it in delete_sight_and_related_route and in delete_sight
-    (delete_sight_and_related_route->i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    (delete_sight->i_sight_to_remove) = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    (delete_sight_and_related_route->i_sight_to_remove) = i_sight_to_remove;
+    (delete_sight->i_sight_to_remove) = i_sight_to_remove;
     
     //remove the sight from the GUI object listcontrol_sights
     listcontrol_sights->DeleteItem((delete_sight->i_sight_to_remove));
     
-    
-    
-    //remove the sight from the non-GUI object plot
-    //ask the user whether he/she wants to remove the related route as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_route. If no, it calls the functor delete_sight.
-    QuestionFrame<DeleteSight, DeleteSight>* question_frame = new QuestionFrame<DeleteSight, DeleteSight>(NULL,
-                                                                                                          delete_sight_and_related_route,
-                                                                                                          delete_sight,
-                                                                                                          "",
-                                                                                                          "Do you want to remove the route related to this sight?",
-                                                                                                          wxDefaultPosition,
-                                                                                                          wxDefaultSize,
-                                                                                                          String(""));
-    question_frame->Show(true);
+    if( ((((plot->sight_list)[i_sight_to_remove]).related_route).value) != -1){
+        //if the sight which I am about to remove is related to a route, I ask the user whether he wants to remove the related route too by showing  question_frame
+        
+        
+        //remove the sight from the non-GUI object plot
+        //ask the user whether he/she wants to remove the related route as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_route. If no, it calls the functor delete_sight.
+        QuestionFrame<DeleteSight, DeleteSight>* question_frame = new QuestionFrame<DeleteSight, DeleteSight>(NULL,
+                                                                                                              delete_sight_and_related_route,
+                                                                                                              delete_sight,
+                                                                                                              "",
+                                                                                                              "Do you want to remove the route related to this sight?",
+                                                                                                              wxDefaultPosition,
+                                                                                                              wxDefaultSize,
+                                                                                                              String(""));
+        question_frame->Show(true);
+        
+    }else{
+        
+        //if not, I simply delete teh sight
+        
+        (*delete_sight)(event);
+        
+    }
     
     event.Skip(true);
     
@@ -9263,7 +9275,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
     //remove the route from the GUI object listcontrol_routes
     listcontrol_routes->DeleteItem((delete_route->i_route_to_remove));
- 
+    
     
     if( ((((plot->route_list)[i_route_to_remove]).related_sight).value) != -1){
         //if the route which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
@@ -9278,9 +9290,9 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
                                                                                                               wxDefaultPosition,
                                                                                                               wxDefaultSize,
                                                                                                               String(""));
-     
+        
         question_frame->Show(true);
-       
+        
     }else{
         //if not, I simply delete teh route
         
@@ -9329,7 +9341,7 @@ template<class T> void SightFrame::get(T& event){
     
     //... then I add to it TAI_minus_UTC, to convert it from the UTC to the TAI scale.
     (sight->time)+=(sight->TAI_minus_UTC);
-
+    
     
     label->get(event);
     
@@ -9411,7 +9423,7 @@ void SightFrame::OnPressCancel(wxCommandEvent& event){
     
     //I am about to close the frame,  thus I set f->idling to true
     SetIdling(true);
- 
+    
     
     Close(TRUE);
 }
@@ -9421,14 +9433,14 @@ CheckYear::CheckYear(DateField* p_in){
     
     p = p_in;
     (tabulate_days.p) = p;
-
+    
 }
 
 CheckMonth::CheckMonth(DateField* p_in){
     
     p = p_in;
     (tabulate_days.p) = p;
-
+    
     
 }
 
@@ -9857,17 +9869,17 @@ template<class T>void CheckRouteType::operator()(T& event){
             
             enable = ((((p->types)[i]) == wxString("loxodrome")) || (((p->types)[i]) == wxString("orthodrome")));
             
-
+            
             (f->alpha)->Enable(enable);
             (f->start_phi)->Enable(enable);
             (f->start_lambda)->Enable(enable);
             (f->l)->Enable(enable);
-
+            
             (f->GP_phi)->Enable(!enable);
             (f->GP_lambda)->Enable(!enable);
             (f->omega)->Enable(!enable);
-
-
+            
+            
             (p->name)->SetBackgroundColour(*wxWHITE);
             (p->ok) = true;
             
@@ -9936,7 +9948,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     sight->print(String("sight entered via GUI"), String(""), cout);
     
-   
+    
     if(list_position==-1){
         //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list and reduce it
         
@@ -10154,7 +10166,7 @@ void RouteTypeField::set(void){
     name->SetValue(wxString(type->value));
     
     ok = true;
-   
+    
 }
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string
@@ -10428,7 +10440,7 @@ template<class P> bool AngleField<P>::is_ok(void){
         //if the angle is in format "NS", "EW" or "+-" the sign field is  used, so I check that it is ok
         
         output = (sign_ok && deg_ok && min_ok);
-
+        
         
     }
     
@@ -10523,7 +10535,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     chrono = p;
     
     check = new CheckChrono(this);
-//    (check.p) = this;
+    //    (check.p) = this;
     
     for(hours.Clear(), hours.Add(wxT("")), i=0; i<24; i++){
         hours.Add(wxString::Format(wxT("%i"), i+1));
@@ -10584,7 +10596,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     types.Add(wxString("loxodrome"));
     types.Add(wxString("orthodrome"));
     types.Add(wxString("circle of equal altitude"));
-
+    
     check = new CheckRouteType(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
@@ -10645,7 +10657,7 @@ template<class P> void AngleField<P>::Enable(bool is_enabled){
     }
     deg->Enable(is_enabled);
     min->Enable(is_enabled);
-
+    
 }
 
 //this function enables/disable the LengthField

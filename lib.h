@@ -1552,7 +1552,7 @@ public:
 
     void OnAddRoute(wxCommandEvent& event);
     void OnModifyRoute(wxCommandEvent& event);
-    void OnDeleteRoute(wxCommandEvent& event);
+    void OnPressDeleteRoute(wxCommandEvent& event);
 
     
 };

@@ -2790,7 +2790,6 @@ void Plot::print_to_kml(String prefix){
     stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
     string line;
     unsigned int i, j;
-    Int n_points_routes;
     double lambda_kml, phi_kml;
     String new_prefix;
     
@@ -6623,11 +6622,15 @@ void DrawPanel::Render(wxDC&  dc){
 void DrawPanel::Draw(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
-    int i;
+    int i, j;
+    //this is a pointer to parent->parent->plot, created only to shorten the code
+    Plot* plot;
+    wxPoint p;
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
     
+    plot = ((parent->parent)->plot);
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > (x_max-x_min)){
@@ -6814,6 +6817,43 @@ void DrawPanel::Draw(void){
     
     
     //draw routes
+    
+    
+    for(points_route_list.clear(), i=0; i<(plot->route_list).size(); i++){
+        
+        //allocates space for the tabulated points of route #i which I am about to write
+        points_route_list.resize(i+1);
+        
+        for((points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
+            
+            if((((plot->route_list)[i]).type) == String("c")){
+                
+                //I set the length of the route equal to a temporary value, which spans between 0 and 2.0*M_PI*(Re*sin(((plot->route_list[i]).omega.value))) across the for loop over j
+                (((plot->route_list)[i]).l).set(
+                                                     String(""),
+                                                     2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value)))*((double)j)/((double)((plot->n_points_routes).value-1)),
+                                                     String(""));
+                
+                //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
+                ((plot->route_list)[i]).compute_end(String(""));
+                
+                GeoToScreen(((plot->route_list)[i]).end, &p);
+                (points_route_list[i]).push_back(p);
+                
+                wxPaintDC dc(this);
+                dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data(), 0, 0);
+                
+                
+                
+            }
+            
+            
+            
+
+        }
+        
+    
+    }
     
     
     
@@ -7172,6 +7212,14 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
     //    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
     
+    
+}
+
+//this function converts the geographic position p into the  position p with respect to the origin of the plot area
+void DrawPanel::GeoToPlot(Position q, wxPoint *p){
+    
+    (p->x) = (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
+    (p->y) = height_plot_area - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
     
 }
 

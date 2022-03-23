@@ -899,7 +899,7 @@ public:
     vector<String> choices;
     vector<unsigned int> crossing_route_list;
     Angle phi_min, phi_max, lambda_min, lambda_max;
-    Int n_points_plot_coastline, n_intervals_tics;
+    Int n_points_plot_coastline, n_points_routes, n_intervals_tics;
     
     Plot(Catalog*, String);
     //~Plot();
@@ -1247,6 +1247,7 @@ public:
 class DrawPanel : public wxPanel{
     
 public:
+    
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
     XYChart* c;
@@ -1263,6 +1264,8 @@ public:
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
+    //the i-th element of point_route_list is a list of points which represent route_list[i] discretized
+    vector< vector<wxPoint> > points_route_list;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
     
@@ -1271,6 +1274,7 @@ public:
     void PaintNow();
     void ScreenToGeo(wxPoint, Position*);
     void GeoToScreen(Position, wxPoint*);
+    void GeoToPlot(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
     

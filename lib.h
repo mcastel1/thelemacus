@@ -1559,6 +1559,8 @@ public:
     void OnAddRoute(wxCommandEvent& event);
     void OnModifyRoute(wxCommandEvent& event);
     void OnPressDeleteRoute(wxCommandEvent& event);
+    
+    void DrawRoutes(void);
 
     
 };

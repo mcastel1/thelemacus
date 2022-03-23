@@ -6426,8 +6426,8 @@ EVT_PAINT(DrawPanel::PaintEvent)
 END_EVENT_TABLE()
 
 
-void DrawPanel::PaintEvent(wxPaintEvent & evt)
-{
+void DrawPanel::PaintEvent(wxPaintEvent & evt){
+    
     wxPaintDC dc(this);
     Render(dc);
 }
@@ -9348,6 +9348,14 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
     
     event.Skip(true);
+    
+}
+
+
+//draw the routes stored in this->plot->list_routes
+void ListFrame::DrawRoutes(void){
+    
+    
     
 }
 

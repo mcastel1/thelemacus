@@ -7395,9 +7395,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
 template<class P> template <class T> void AngleField<P>::get(T &event){
     
-    
-    
-    if(/*If the format is different from "", then I require to check the sign of this*/((format == String("")) || sign_ok) && deg_ok && min_ok){
+    if(is_ok()){
         
 
         double min_temp;

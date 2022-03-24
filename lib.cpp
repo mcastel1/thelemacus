@@ -6837,7 +6837,7 @@ void DrawPanel::Draw(void){
     
     for(i=0; i<(plot->route_list).size(); i++){
         
-        for(j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
+        for((points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
             
             if((((plot->route_list)[i]).type) == String("c")){
                 //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
@@ -6862,24 +6862,13 @@ void DrawPanel::Draw(void){
             
             if(GeoToPlot(((plot->route_list)[i]).end, &p)){
                 (points_route_list[i]).push_back(&p);
+         
+            
             }
-            
-            
-            //                wxPaintDC dc(this);
-            //                dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data(), 0, 0);
-            
-            
-            
-            
-            
-            
 
         }
         
-    
     }
-    
-    
     
     //free up resources
     (parent->x).clear();

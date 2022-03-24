@@ -7239,8 +7239,8 @@ bool DrawPanel::GeoToPlot(Position q, wxPoint *p){
     if(((x_temp > x_min) && (x_temp < x_max)) && ((y_temp > y_min) && (y_temp < y_max))){
     //if the point falls within the plot area, write it into p
         
-        (p->x) = (x_temp-x_min)/(x_max-x_min)*width_plot_area;
-        (p->y) = height_plot_area - ((y_temp-y_min)/(y_max-y_min)*height_plot_area);
+        (p->x) = (position_plot_area.x) + (x_temp-x_min)/(x_max-x_min)*width_plot_area;
+        (p->y) = (position_plot_area.y) + height_plot_area - ((y_temp-y_min)/(y_max-y_min)*height_plot_area);
 
         return true;
         

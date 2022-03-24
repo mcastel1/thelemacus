@@ -6388,9 +6388,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
 
     //allocates points_route_list
-    points_route_list = new wxPoint* [(plot->route_list).size()];
+    points_route_list.resize((plot->route_list).size());
     for(i=0; i<(plot->route_list).size(); i++){
-        points_route_list[i] = new wxPoint [(plot->n_points_routes).value];
+        (points_route_list[i]).clear();
     }
 
     
@@ -6490,7 +6490,7 @@ void DrawPanel::Render(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
-        dc.DrawLines((plot->n_points_routes).value, points_route_list[i], 0, 0);
+        dc.DrawLines(points_route_list.data() + i , 0, 0);
         
     }
     
@@ -6860,10 +6860,10 @@ void DrawPanel::Draw(void){
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
             ((plot->route_list)[i]).compute_end(String(""));
             
-            GeoToScreen(((plot->route_list)[i]).end, &p);
+            if(GeoToPlot(((plot->route_list)[i]).end, &p)){
+                (points_route_list[i]).push_back(&p);
+            }
             
-//            (points_route_list[i]).Insert(&p);
-            (points_route_list[i][j]) = p;
             
             //                wxPaintDC dc(this);
             //                dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data(), 0, 0);
@@ -7240,11 +7240,27 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
 }
 
 //this function converts the geographic position p into the  position p with respect to the origin of the plot area
-void DrawPanel::GeoToPlot(Position q, wxPoint *p){
+bool DrawPanel::GeoToPlot(Position q, wxPoint *p){
     
-    (p->x) = (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
-    (p->y) = height_plot_area - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
+    double x_temp, y_temp;
     
+    x_temp = x_mercator(K*((q.lambda).value));
+    y_temp = y_mercator(K*((q.phi).value));
+              
+    if(((x_temp > x_min) && (x_temp < x_max)) && ((y_temp > y_min) && (y_temp < y_max))){
+    //if the point falls within the plot area, write it into p
+        
+        (p->x) = (x_temp-x_min)/(x_max-x_min)*width_plot_area;
+        (p->y) = height_plot_area - ((y_temp-y_min)/(y_max-y_min)*height_plot_area);
+
+        return true;
+        
+    }else{
+        
+        return false;
+    }
+    
+      
 }
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world

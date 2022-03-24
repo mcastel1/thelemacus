@@ -8847,12 +8847,15 @@ template<class T> PrintErrorMessage<T>::PrintErrorMessage(T* f_in){
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = 5;
+    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = 5, red, green, blue;
     OnSelectInListControlSights* on_select_in_listcontrol_sights;
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     wxListItem column, item;
     String s;
+    //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
+    size_t pos_end;
+
     
     plot = new Plot(catalog, String(""));
 
@@ -8874,6 +8877,50 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     color_list.resize(count((s.value).begin(), (s.value).end(), '('));
+ 
+    
+    for(i=0; i<color_list.size(); i++){
+        
+//        //find the positions of (, ) and , to single ot the integers defining the color
+//        pos_open = (s.value).find("(");
+//        pos_comma_1 = (s.value).find(",");
+//        pos_comma_2 = (s.value).find(",");
+//        pos_close = (s.value).find(")");
+//
+//        //extract these integers, create a wxColor and append it to color_list
+//
+        
+//        int b=                  stod((s.value).substr(pos_comma_1, pos_comma_2 - pos_comma_1).c_str());
+//        int c=                    stod((s.value).substr(pos_comma_2, pos_close - pos_comma_2).c_str());
+        
+        //get rid of everything that comes before and at '(' at the beginnign of s
+        pos_end = (s.value).find("(");
+        s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+        //look for the first ','
+        
+        pos_end = (s.value).find(",");
+        
+        //read red
+        red = stoi(((s.value).substr(0, pos_end)).c_str());
+        
+        //get rid of the first ','
+        s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+        
+        pos_end = (s.value).find(",");
+        
+        green = stoi((s.value).substr(0, pos_end).c_str());
+        
+        //get rid of the second ','
+        s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+
+        pos_end = (s.value).find(")");
+        
+        blue = stoi((s.value).substr(0, pos_end+1).c_str());
+        
+      
+  
+        
+    }
 
 
     

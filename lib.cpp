@@ -3562,7 +3562,6 @@ Plot::Plot(Catalog* cata, String prefix){
 
     new_prefix = prefix.append(String("\t"));
     
-    file_init.open(String("in"), prefix);
 
     catalog = cata;
     job_id = -1;
@@ -3597,6 +3596,8 @@ Plot::Plot(Catalog* cata, String prefix){
     
     
     //read paramters from init file
+    
+    file_init.open(String("in"), prefix);
     
     //read number of intervals for tics from file_init
     cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;

@@ -6378,17 +6378,25 @@ void ChartFrame::SetIdling(bool b){
 
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
+    unsigned int i;
+    
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;
     
     parent = (parent_in->parent);
+    plot = ((parent->parent)->plot);
     
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
-    
-    //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+
+    //allocates points_route_list
+    points_route_list = new wxPoint* [(plot->route_list).size()];
+    for(i=0; i<(plot->route_list).size(); i++){
+        points_route_list[i] = new wxPoint [(plot->n_points_routes).value];
+    }
+
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -6470,6 +6478,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
+    unsigned int i;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -6477,7 +6486,18 @@ void DrawPanel::Render(wxDC&  dc){
     
     //    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
     dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+    
+    //draw coastlines
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
+    
+    
+    //draw routes
+    for(i=0; i<(plot->route_list).size(); i++){
+        
+        dc.DrawLines((plot->n_points_routes).value, points_route_list[i], 0, 0);
+        
+    }
+    
     if(selection_rectangle){
         dc.DrawRectangle(
                          position_start_selection.x - (position_draw_panel.x),
@@ -6490,10 +6510,10 @@ void DrawPanel::Render(wxDC&  dc){
     
     //draw labels on the x axis
     //set the initial value of dummy
-    if(x_min > x_mercator((floor((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda)){
-        dummy = x_mercator((ceil((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda);
+    if(x_min > x_mercator((floor((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda)){
+        dummy = x_mercator((ceil((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda);
     }else{
-        dummy = x_mercator((floor((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda);
+        dummy = x_mercator((floor((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda);
     }
     //starts the loop which draws the labels
     for(first_label = true; dummy <= x_max; dummy+=k*delta_lambda){
@@ -6516,7 +6536,7 @@ void DrawPanel::Render(wxDC&  dc){
                 //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree.
                 
                 
-                if(ceil((K*((((parent->parent)->plot)->lambda_max).value)))  - floor((K*((((parent->parent)->plot)->lambda_min).value))) != 1){
+                if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
                     //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
                     s << lambda.min_to_string(String("EW"), display_precision);
@@ -6547,13 +6567,13 @@ void DrawPanel::Render(wxDC&  dc){
     
     //draw labels on the y axis
     //set first value of dummy
-    if(y_min > floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi){
-        dummy = ceil((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
+    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
+        dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
     }else{
-        dummy = floor((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi)*delta_phi;
+        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
     }
     //starts for loop which draws the ylabels
-    for(first_label = true; dummy<(K*(((((parent->parent)->plot)->phi_max).value))); dummy+= delta_phi){
+    for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
         
         s.str("");
         phi.set(String(""), k*dummy, String(""));
@@ -6575,7 +6595,7 @@ void DrawPanel::Render(wxDC&  dc){
                 
                 //                s << phi.min_to_string(String("NS"), display_precision);
                 
-                if(ceil((K*((((parent->parent)->plot)->phi_max).value)))  - floor((K*((((parent->parent)->plot)->phi_min).value))) != 1){
+                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
                     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
                     s << phi.min_to_string(String("NS"), display_precision);
@@ -6623,14 +6643,14 @@ void DrawPanel::Draw(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i, j;
+    //the total length of each Route
+    Length l_tot;
     //this is a pointer to parent->parent->plot, created only to shorten the code
-    Plot* plot;
     wxPoint p;
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
     
-    plot = ((parent->parent)->plot);
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > (x_max-x_min)){
@@ -6682,7 +6702,7 @@ void DrawPanel::Draw(void){
     else{gamma_lambda = 60.0;}
     
     delta_lambda=1.0/gamma_lambda;
-    while(((((parent->parent)->plot)->n_intervals_tics).value)*delta_lambda<lambda_span){
+    while(((plot->n_intervals_tics).value)*delta_lambda<lambda_span){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
@@ -6692,7 +6712,7 @@ void DrawPanel::Draw(void){
     }
     cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
-    lambda = ((int)((K*(((((parent->parent)->plot)->lambda_min).value)))/delta_lambda))*delta_lambda;
+    lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda;
     for(x_dummy = x_mercator(lambda); x_dummy <= x_max; x_dummy+=k*delta_lambda){
         
         if((x_dummy >= x_min) && (x_dummy <= x_max)){
@@ -6731,14 +6751,14 @@ void DrawPanel::Draw(void){
     //
     
     //set meridians
-    phi_span = K*(((((parent->parent)->plot)->phi_max).value) - ((((parent->parent)->plot)->phi_min).value));
+    phi_span = K*(((plot->phi_max).value) - ((plot->phi_min).value));
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > 1.0){gamma_phi = 1.0;}
     else{gamma_phi = 60.0;}
     
     delta_phi=1.0/gamma_phi;
-    while(((((parent->parent)->plot)->n_intervals_tics).value)*delta_phi<phi_span){
+    while(((plot->n_intervals_tics).value)*delta_phi<phi_span){
         //print delta_phi;
         if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
@@ -6752,7 +6772,7 @@ void DrawPanel::Draw(void){
     
     
     
-    for(phi = ((int)((K*(((((parent->parent)->plot)->phi_min).value)))/delta_phi))*delta_phi; phi<(K*(((((parent->parent)->plot)->phi_max).value))); phi+= delta_phi){
+    for(phi = ((int)((K*(((plot->phi_min).value)))/delta_phi))*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
         y_dummy = y_mercator(phi);
         
@@ -6770,7 +6790,7 @@ void DrawPanel::Draw(void){
                 //plot the ytics from phi to the next phi (phi + dphi)
                 for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
                     
-                    if(phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((((parent->parent)->plot)->phi_max).value)))){
+                    if(phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((plot->phi_max).value)))){
                         //set custom-made minor ytics every tenths (i/10.0) of arcminutes (60.0)
                         
                         c->addLine(
@@ -6819,33 +6839,41 @@ void DrawPanel::Draw(void){
     //draw routes
     
     
-    for(points_route_list.clear(), i=0; i<(plot->route_list).size(); i++){
+    for(i=0; i<(plot->route_list).size(); i++){
         
-        //allocates space for the tabulated points of route #i which I am about to write
-        points_route_list.resize(i+1);
-        
-        for((points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
+        for(j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
             
             if((((plot->route_list)[i]).type) == String("c")){
+                //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
                 
-                //I set the length of the route equal to a temporary value, which spans between 0 and 2.0*M_PI*(Re*sin(((plot->route_list[i]).omega.value))) across the for loop over j
-                (((plot->route_list)[i]).l).set(
-                                                     String(""),
-                                                     2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value)))*((double)j)/((double)((plot->n_points_routes).value-1)),
-                                                     String(""));
+                l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
                 
-                //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-                ((plot->route_list)[i]).compute_end(String(""));
+            }else{
+                //otherwise, the total length is simply written in the l object
                 
-                GeoToScreen(((plot->route_list)[i]).end, &p);
-                (points_route_list[i]).push_back(p);
-                
-                wxPaintDC dc(this);
-                dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data(), 0, 0);
-                
-                
+                l_tot = (((plot->route_list)[i]).l);
                 
             }
+            
+            //across the for loop over j, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
+            (((plot->route_list)[i]).l).set(
+                                            String(""),
+                                            (l_tot.value)*((double)j)/((double)((plot->n_points_routes).value-1)),
+                                            String(""));
+            
+            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
+            ((plot->route_list)[i]).compute_end(String(""));
+            
+            GeoToScreen(((plot->route_list)[i]).end, &p);
+            
+//            (points_route_list[i]).Insert(&p);
+            (points_route_list[i][j]) = p;
+            
+            //                wxPaintDC dc(this);
+            //                dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data(), 0, 0);
+            
+            
+            
             
             
             

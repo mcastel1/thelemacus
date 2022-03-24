@@ -3557,7 +3557,13 @@ void Plot::menu(String prefix){
 }
 
 Plot::Plot(Catalog* cata, String prefix){
+        
+    String new_prefix;
+
+    new_prefix = prefix.append(String("\t"));
     
+    file_init.open(String("in"), prefix);
+
     catalog = cata;
     job_id = -1;
     
@@ -3588,6 +3594,37 @@ Plot::Plot(Catalog* cata, String prefix){
     choices.push_back(String("Save to file"));
     choices.push_back(String("Read from file"));
     choices.push_back(String("Exit"));
+    
+    
+    //read paramters from init file
+    
+    //read number of intervals for tics from file_init
+    cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
+    n_intervals_tics.read_from_file(String("number of intervals for tics"), file_init, true, new_prefix);
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    
+    //read number of points for routes from file_init
+    cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
+    n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    
+    
+    //read n_points_plot_coastline from file_init
+    cout << prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
+    n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+  
+    
+    //read lambda_min, ...., phi_max from file_init
+    cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
+    lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
+    lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);
+    phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix);
+    phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    
+    file_init.close(prefix);
+
     
 }
 
@@ -4111,47 +4148,15 @@ void Plot::show(bool zoom_out, String prefix){
     //    gsl_function F;
     //    const gsl_root_fsolver_type *T;
     //    gsl_root_fsolver *s;
-    Int /*width_plot_window, height_plot_window,*/ n_points_routes;
-    String new_prefix;
     
     //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
     
-    file_init.open(String("in"), prefix);
     
     
     //    T = gsl_root_fsolver_brent;
     //    s = gsl_root_fsolver_alloc(T);
     
     
-    //read number of intervals for tics from file_init
-    cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
-    //    plot_command.str("");
-    //    command.str("");
-    n_intervals_tics.read_from_file(String("number of intervals for tics"), file_init, true, new_prefix);
-    //    command << "LANG=C sed 's/#number of intervals for tics/n_intervals_tics = " << n_intervals_tics.value << ";/g' plot_dummy.plt >> plot_temp.plt \n";
-    //    system(command.str().c_str());
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    
-    
-    //read number of points for routes from file_init
-    cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
-    //    plot_command.str("");
-    //    command.str("");
-    n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
-    //    command << "LANG=C sed 's/#number of points for routes/n_points_routes = " << n_points_routes.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    //    system(command.str().c_str());
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    
-    
-    //read n_points_plot_coastline from file_init
-    cout << prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
-//    plot_command.str("");
-//    command.str("");
-    n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
-//    command << "LANG=C sed 's/#n_points_coastline/n_points_coastline = " << n_points_plot_coastline.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-//    system(command.str().c_str());
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
     //    //replace line with window size in plot_dummy.plt
@@ -4163,15 +4168,6 @@ void Plot::show(bool zoom_out, String prefix){
     //    system(command.str().c_str());
     //    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
-    
-    
-    //read lambda_min, ...., phi_max from file_init
-    cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
-    lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
-    lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);
-    phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix);
-    phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
     
@@ -4547,7 +4543,6 @@ void Plot::show(bool zoom_out, String prefix){
     
     //    file_id.close(prefix);
     //    file_id.remove(prefix);
-    file_init.close(prefix);
     //    gsl_root_fsolver_free(s);
     
     //    cout << prefix.value << "Job id = "<< job_id << "\n";
@@ -8851,6 +8846,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     wxListItem column, item;
     
+    plot = new Plot(catalog, String(""));
+
+    
     n_columns_listcontrol_sights = 12;
     n_columns_listcontrol_positions = 3;
     n_columns_listcontrol_routes = 8;
@@ -8870,7 +8868,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
     
     catalog = new Catalog(String(path_file_catalog), String(""));
-    plot = new Plot(catalog, String(""));
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     

@@ -1265,7 +1265,7 @@ public:
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list of points which represent the route_list[i] discretized
-    vector< wxPointList > points_route_list;
+    vector< vector<wxPoint> > points_route_list;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
     Plot* plot;

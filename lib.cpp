@@ -6490,7 +6490,7 @@ void DrawPanel::Render(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
-        dc.DrawLines(points_route_list.data() + i , 0, 0);
+        dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
         
     }
     
@@ -6861,7 +6861,7 @@ void DrawPanel::Draw(void){
             ((plot->route_list)[i]).compute_end(String(""));
             
             if(GeoToPlot(((plot->route_list)[i]).end, &p)){
-                (points_route_list[i]).push_back(&p);
+                (points_route_list[i]).push_back(p);
          
             
             }

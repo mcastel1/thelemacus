@@ -8918,7 +8918,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         blue = stoi((s.value).substr(0, pos_end+1).c_str());
         
       
-  
+        color_list.push_back(wxColor(red, green, blue));
         
     }
 

@@ -6490,6 +6490,7 @@ void DrawPanel::Render(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
+        dc.SetPen(wxPen(wxColor(0,175,175), 1 ) ); // 1-pixels-thick outline
         dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
         
     }
@@ -8851,6 +8852,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     wxListItem column, item;
+    String s;
     
     plot = new Plot(catalog, String(""));
 
@@ -8858,6 +8860,23 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     n_columns_listcontrol_sights = 12;
     n_columns_listcontrol_positions = 3;
     n_columns_listcontrol_routes = 8;
+    
+    file_init.set_name(String(path_file_init));
+
+    
+    
+    //read color list from file_init
+    file_init.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading color list from file " << file_init.name.value << " ...\n" << RESET;
+    s.read_from_file(String("color list"), file_init, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    file_init.close(prefix);
+    
+    //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
+    color_list.resize(count((s.value).begin(), (s.value).end(), '('));
+
+
+    
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);

@@ -38,4 +38,5 @@ number of points coastline = 100000
 number of points for routes = 1000
 number of intervals for tics = 6
 use of stopwatch = n
+color list = (255,175,175) (255,34,75) (15,75,25)
 

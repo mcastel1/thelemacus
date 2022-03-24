@@ -8914,10 +8914,10 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
 
         pos_end = (s.value).find(")");
-        
+        //get rid of '('
         blue = stoi((s.value).substr(0, pos_end+1).c_str());
         
-      
+      //write the color that I just read in color_list
         color_list[i] = wxColor(red, green, blue);
         
     }

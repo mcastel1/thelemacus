@@ -6474,15 +6474,13 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    unsigned int i;
+    unsigned int i, j;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetBrush(brush);
     
-    //    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
-    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
-    
+     
     //draw coastlines
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
     
@@ -6490,10 +6488,20 @@ void DrawPanel::Render(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
-        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], 1 ) ); // 1-pixels-thick outline
+        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], 5 ) ); // 5-pixels-thick outline
+        
+        //draw the roues as lines
         dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
+        //draw the routes as points
+        //        for(j=0; j<(points_route_list[i]).size(); j++){
+        //            dc.DrawPoint(points_route_list[i][j]);
+        //        }
         
     }
+    
+    //    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
+    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+  
     
     if(selection_rectangle){
         dc.DrawRectangle(

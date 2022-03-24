@@ -6474,7 +6474,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    unsigned int i, j;
+    unsigned int i;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);

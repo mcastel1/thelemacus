@@ -6490,7 +6490,7 @@ void DrawPanel::Render(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
-        dc.SetPen(wxPen(wxColor(0,175,175), 1 ) ); // 1-pixels-thick outline
+        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], 1 ) ); // 1-pixels-thick outline
         dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
         
     }

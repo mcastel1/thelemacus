@@ -9638,7 +9638,7 @@ void SightFrame::TryToEnableOk(void){
     
     button_reduce->Enable(
                           (body->is_ok()) &&
-                          (( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) ) || (limb->is_ok())) &&
+                          ((!( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) )) || (limb->is_ok())) &&
                           (H_s->is_ok()) &&
                           (index_error->is_ok()) &&
                           ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok())) &&

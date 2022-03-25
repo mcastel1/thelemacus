@@ -6846,24 +6846,27 @@ void DrawPanel::Draw(void){
     
     for(i=0; i<(plot->route_list).size(); i++){
         
+ 
+        if((((plot->route_list)[i]).type) == String("c")){
+            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
+            
+            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
+            
+        }else{
+            //otherwise, the total length is simply written in the l object
+            
+            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
+            
+        }
+        
         for((points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
             
-            if((((plot->route_list)[i]).type) == String("c")){
-                //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
-                
-                l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
-                
-            }else{
-                //otherwise, the total length is simply written in the l object
-                
-                l_tot = (((plot->route_list)[i]).l);
-                
-            }
+ 
             
             //across the for loop over j, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
             (((plot->route_list)[i]).l).set(
                                             String(""),
-                                            (l_tot.value)*((double)j)/((double)((plot->n_points_routes).value-1)),
+                                            (l_tot.value)*((double)j)/((double)(((plot->n_points_routes).value)-1)),
                                             String(""));
             
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above

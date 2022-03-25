@@ -9589,7 +9589,20 @@ void SightFrame::set(void){
     Time time_UTC;
     
     body->set();
-    limb->set();
+    
+    if(((body->name)->GetValue() == wxString("sun") || (body->name)->GetValue() == wxString("moon"))){
+        //if  body is sun or moon, then I write the value in the non-GUI field Limb into the GUI LimbField
+        
+        limb->set();
+        
+    }else{
+        //if  body is not sun or moon, then I set the limb GUI field to empty and disable it
+        
+        (limb->name)->SetValue("");
+        limb->Enable(false);
+    }
+    
+    
     artificial_horizon_check->set();
     H_s->set();
     index_error->set();
@@ -10305,6 +10318,13 @@ void LimbField::set(void){
     
     ok = true;
     
+}
+
+//this function enables/disable the LimbField
+void LimbField::Enable(bool is_enabled){
+    
+    name->Enable(is_enabled);
+       
 }
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer

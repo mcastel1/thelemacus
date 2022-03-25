@@ -1326,6 +1326,9 @@ class LimbField{
 public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
+    
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
     wxArrayString limbs;
     //this points to a Limn object, which contains the data written in the GUI field of this
     Limb* limb;
@@ -1333,11 +1336,10 @@ public:
     bool ok;
     CheckLimb check;
     
-    //this is the wxComboBox with the name of the bodies
-    wxComboBox* name;
-    
+     
     LimbField(SightFrame*, Limb*);
     void set(void);
+    void Enable(bool);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);

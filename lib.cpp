@@ -10452,8 +10452,17 @@ void ChronoField::set(Chrono chrono_in){
 //sets the value in the GUI object equal to the value in the non-GUI  object string
 void RouteTypeField::set(void){
     
-    name->SetValue(wxString(type->value));
-   
+    if((*type) == String("l")){
+        name->SetValue(wxString("loxodrome"));
+    }
+    if((*type) == String("o")){
+        name->SetValue(wxString("orthodrome"));
+    }
+    if((*type) == String("c")){
+        name->SetValue(wxString("circle of equal altitude"));
+    }
+ 
+
     ok = true;
     
 }

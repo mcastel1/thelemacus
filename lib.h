@@ -5,9 +5,6 @@
 #include "wx/display.h"
 #include "wx/listctrl.h"
 #include "wx/slider.h"
-#include <wx/imaglist.h>
-
-
 
 
 #ifndef WX_PRECOMP
@@ -1548,7 +1545,6 @@ public:
     Catalog *catalog;
     //    wxListBox* listbox;
     wxListCtrl* listcontrol_sights, *listcontrol_positions, *listcontrol_routes;
-    wxImageList* image_list_listcontrol_routes;
     wxPanel *panel;
     wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position, *button_add_route, *button_delete_route;
     wxBitmapButton *button_modify_sight, *button_modify_position, *button_modify_route;

@@ -8289,10 +8289,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //buttons
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_cancel->Bind(wxEVT_BUTTON, &PositionFrame::OnPressCancel, this);
+    
     button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
     button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
-    
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_add->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
     button_add->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
@@ -8665,17 +8666,28 @@ void RouteFrame::set(void){
     type->set();
     
     if(((type->name)->GetValue()) == wxString("circle of equal altitude")){
+        //I disable the GUI fields which do not define a circle of equal altitude and set the others
+        
+        alpha->Enable(false);
+        start_phi->Enable(false);
+        start_lambda->Enable(false);
+        l->Enable(false);
         
         GP_phi->set();
         GP_lambda->set();
         omega->set();
         
     }else{
+        //I disable the GUI fields which do not define a loxodrome or orthodrome and set the others
         
         alpha->set();
         start_phi->set();
         start_lambda->set();
         l->set();
+        
+        GP_phi->Enable(false);
+        GP_lambda->Enable(false);
+        omega->Enable(false);
         
     }
     

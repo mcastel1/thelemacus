@@ -763,6 +763,10 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         
     }
     
+    //the color frame is set to empty
+    listcontrol->SetItem(i, j, wxString(""));
+    listcontrol->SetItemColumnImage(i, j, 0);
+    
     
 }
 
@@ -8873,11 +8877,10 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     n_columns_listcontrol_sights = 12;
     n_columns_listcontrol_positions = 3;
-    n_columns_listcontrol_routes = 8;
+    n_columns_listcontrol_routes = 9;
     
     file_init.set_name(String(path_file_init));
 
-    
     
     //read color list from file_init
     file_init.open(String("in"), prefix);
@@ -8888,6 +8891,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     color_list.resize(count((s.value).begin(), (s.value).end(), '('));
+    
+    
  
     
     for(i=0; i<color_list.size(); i++){
@@ -9176,7 +9181,13 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     column.SetAlign(wxLIST_FORMAT_LEFT);
     column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
     listcontrol_routes->InsertColumn(i++, column);
-    
+ 
+    column.SetId(i);
+    column.SetText(wxT("Color"));
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+    listcontrol_routes->InsertColumn(i++, column);
+
     
     //write the routes into plot->route_list into listcontrol_routes
     for(i=0; i<((plot->route_list).size()); i++){
@@ -9192,6 +9203,24 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     }
     
     listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
+    
+    
+    //
+    image_list_listcontrol_routes = new wxImageList(100, 100, true, 1);
+    wxPaintDC dc(this);
+    
+    dc.DrawRectangle(
+                     0,
+                     0,
+                     100,
+                     100
+                     );
+    
+    image_list_listcontrol_routes->Draw(0, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, false);
+
+    
+    listcontrol_routes->SetImageList(image_list_listcontrol_routes, wxIMAGE_LIST_NORMAL);
+   //
     
     sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin_v);
     //listcontrol routes with routes

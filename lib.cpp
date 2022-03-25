@@ -9415,6 +9415,24 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
 void ListFrame::OnModifyRoute(wxCommandEvent& event){
     
     
+    long item;
+    item = listcontrol_routes->GetNextItem(-1,
+                                              wxLIST_NEXT_ALL,
+                                              wxLIST_STATE_SELECTED);
+    
+    if(item != -1){
+        
+        stringstream s;
+        
+        s.str("");
+        s << "Route #" << item;
+        
+        RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        route_frame->Show(true);
+        
+    }
+    
+    
     event.Skip(true);
     
 }

@@ -1574,6 +1574,8 @@ public:
     void OnModifyRoute(wxCommandEvent& event);
     void OnPressDeleteRoute(wxCommandEvent& event);
     
+    void OnHover(wxMouseEvent&);
+    
     void DrawRoutes(void);
 
     

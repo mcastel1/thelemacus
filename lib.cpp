@@ -9195,6 +9195,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
     }
     
+    //
+    listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnHover), this);
+
+    //
+    
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
         listcontrol_routes->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
@@ -9551,6 +9556,48 @@ void ListFrame::DrawRoutes(void){
     
     
 }
+
+//signals when the mouse hovers over a given element of listcontrol_routes
+void ListFrame::OnHover(wxMouseEvent& event){
+    
+    unsigned int i;
+    wxRect rectangle;
+    wxPoint p, q;
+    
+    
+    Time time_temp;
+    String string;
+    
+    time_temp.set_current(String(""));
+    //I write in the non-GUI object (p->string)
+    string = String(time_temp.to_string(display_precision));
+
+    
+    p = wxGetMousePosition();
+    
+    cout << "\nMouse is in at " << string.value;
+    
+    if((listcontrol_routes->GetViewRect()).Contains(p)){
+        
+        listcontrol_routes->GetItemRect(0, rectangle, wxLIST_RECT_BOUNDS);
+        if(rectangle.Contains(p)){cout << "*********** ";}
+        
+//        for(i=0; i<listcontrol_routes->GetItemCount(); i++){
+//
+//            listcontrol_routes->GetItemRect(i, &rectangle, wxLIST_RECT_BOUNDS);
+//
+//
+//        }
+        
+        
+        
+    }
+        
+
+    event.Skip(true);
+
+}
+
 
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){

@@ -6392,9 +6392,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     for(i=0; i<(plot->route_list).size(); i++){
         (points_route_list[i]).clear();
     }
-    //alocates thickness_route
-    thickness_route.resize((plot->route_list).size());
-
 
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -6498,7 +6495,7 @@ void DrawPanel::Render(wxDC&  dc){
         //draw the routes as points
         for(j=0; j<(points_route_list[i]).size(); j++){
             //            dc.DrawPoint(points_route_list[i][j]);
-            dc.DrawCircle(points_route_list[i][j], thickness_route[i]);
+            dc.DrawCircle(points_route_list[i][j], default_thickness/2.0);
         }
         
     }
@@ -6863,7 +6860,7 @@ void DrawPanel::Draw(void){
             
         }
         
-        for(thickness_route[i] = default_thickness_route, (points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
+        for((points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
             
  
             

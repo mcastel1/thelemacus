@@ -9560,9 +9560,9 @@ void ListFrame::DrawRoutes(void){
 //signals when the mouse hovers over a given element of listcontrol_routes
 void ListFrame::OnHover(wxMouseEvent& event){
     
-    unsigned int i;
-    wxRect rectangle;
-    wxPoint p, q;
+//    unsigned int i;
+    wxRect view_rectangle;
+    wxPoint p, /*top-left point of the rectangle denoting the first item in listcontrol_routes*/origin;
     
     
     Time time_temp;
@@ -9576,22 +9576,28 @@ void ListFrame::OnHover(wxMouseEvent& event){
     p = wxGetMousePosition();
     
     cout << "\nMouse is in at " << string.value;
+    view_rectangle = (listcontrol_routes->GetViewRect());
     
-    if((listcontrol_routes->GetViewRect()).Contains(p)){
-        
-        listcontrol_routes->GetItemRect(0, rectangle, wxLIST_RECT_BOUNDS);
-        if(rectangle.Contains(p)){cout << "*********** ";}
-        
-//        for(i=0; i<listcontrol_routes->GetItemCount(); i++){
-//
-//            listcontrol_routes->GetItemRect(i, &rectangle, wxLIST_RECT_BOUNDS);
-//
-//
-//        }
-        
-        
-        
-    }
+    cout << "\nview rectangle = " << view_rectangle.GetWidth() << " " <<  view_rectangle.GetHeight();
+    cout << "\nsize = " << listcontrol_routes->GetSize().GetWidth() << " " << listcontrol_routes->GetSize().GetHeight();
+
+    origin = wxPoint(((listcontrol_routes->GetSize().GetWidth()) - (view_rectangle.GetWidth()))/2,
+                     (listcontrol_routes->GetSize().GetHeight()) - (view_rectangle.GetHeight())
+                     );
+    
+    cout << "\norigin = " << origin.x << " " << origin.y;
+ 
+    
+    //        for(i=0; i<listcontrol_routes->GetItemCount(); i++){
+    //
+    //            listcontrol_routes->GetItemRect(i, &rectangle, wxLIST_RECT_BOUNDS);
+    //
+    //
+    //        }
+    
+    
+    
+    
         
 
     event.Skip(true);

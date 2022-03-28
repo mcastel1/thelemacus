@@ -6469,7 +6469,7 @@ void DrawPanel::PaintNow(){
 void DrawPanel::Render(wxDC&  dc){
     
     Angle lambda, phi;
-    double dummy;
+    double dummy, thickness;
     stringstream s;
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
@@ -6488,18 +6488,21 @@ void DrawPanel::Render(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
-        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], 1 ) ); // n-pixels-thick outline
-        
+        if(i == ((parent->parent)->highlighted_route)){
+            thickness = max((int)(large_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }else{
+            thickness = max((int)(standard_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }
+
+        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
+
         //draw the roues as lines
         //       dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
         //draw the routes as points
         for(j=0; j<(points_route_list[i]).size(); j++){
             //            dc.DrawPoint(points_route_list[i][j]);
-            if(i == ((parent->parent)->highlighted_route)){
-                dc.DrawCircle(points_route_list[i][j], large_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth());
-            }else{
-                dc.DrawCircle(points_route_list[i][j], standard_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth());
-            }
+            dc.DrawCircle(points_route_list[i][j], thickness);
+            
         }
         
     }

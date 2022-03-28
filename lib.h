@@ -1547,6 +1547,8 @@ public:
     
     //this is a pointer to the non-GUI object Plot which is related to the GUI object this
     Plot* plot;
+    //point to the child frame of this
+    ChartFrame* chart_frame;
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
     //    wxListBox* listbox;

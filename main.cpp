@@ -39,8 +39,8 @@ bool MyApp::OnInit(){
     ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
-    ChartFrame* nautical_chart = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
-    nautical_chart->Show(true);
+    (list_frame->chart_frame) = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
+    (list_frame->chart_frame)->Show(true);
     
     //    list_frame->plot->print(true, String("************* "), cout);
     

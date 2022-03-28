@@ -135,6 +135,8 @@ class Body;
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
+//the default thickness with which routes are drawn
+#define default_thickness_route 0.5
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
@@ -1266,6 +1268,8 @@ public:
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list of points which represent the route_list[i] discretized
     vector< vector<wxPoint> > points_route_list;
+    //thickness_route[i] ~ thickness of the line with which route #i is drawn
+    vector<double> thickness_route;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
     Plot* plot;

@@ -6392,6 +6392,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     for(i=0; i<(plot->route_list).size(); i++){
         (points_route_list[i]).clear();
     }
+    //alocates thickness_route
+    thickness_route.resize((plot->route_list).size());
+
 
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -6480,7 +6483,7 @@ void DrawPanel::Render(wxDC&  dc){
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetBrush(brush);
     
-     
+    
     //draw coastlines
     dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
     
@@ -6488,13 +6491,14 @@ void DrawPanel::Render(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
-        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], 5 ) ); // 5-pixels-thick outline
+        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], 1 ) ); // n-pixels-thick outline
         
         //draw the roues as lines
-//        dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
+        //       dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
         //draw the routes as points
         for(j=0; j<(points_route_list[i]).size(); j++){
-            dc.DrawPoint(points_route_list[i][j]);
+            //            dc.DrawPoint(points_route_list[i][j]);
+            dc.DrawCircle(points_route_list[i][j], thickness_route[i]);
         }
         
     }
@@ -6859,7 +6863,7 @@ void DrawPanel::Draw(void){
             
         }
         
-        for((points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
+        for(thickness_route[i] = default_thickness_route, (points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
             
  
             

@@ -136,7 +136,9 @@ class Body;
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 //the default thickness of the line with which routes are drawn
-#define default_thickness 1.0
+#define standard_thickness 1.0
+//the thickness with which highlighted routes are drawn
+#define large_thickness 2.0
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
@@ -1556,7 +1558,7 @@ public:
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
-    unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes;
+    unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes, /*the # of the route which is highlighted because the mouse is hovering over it in listcontrol_routes*/highlighted_route;
     vector<wxColour> color_list;
     //this referrs to the init file
     File file_init;

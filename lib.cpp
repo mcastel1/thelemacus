@@ -6495,7 +6495,11 @@ void DrawPanel::Render(wxDC&  dc){
         //draw the routes as points
         for(j=0; j<(points_route_list[i]).size(); j++){
             //            dc.DrawPoint(points_route_list[i][j]);
-            dc.DrawCircle(points_route_list[i][j], default_thickness/2.0);
+            if(j == ((parent->parent)->highlighted_route)){
+                dc.DrawCircle(points_route_list[i][j], large_thickness/2.0);
+            }else{
+                dc.DrawCircle(points_route_list[i][j], standard_thickness/2.0);
+            }
         }
         
     }
@@ -9563,14 +9567,13 @@ void ListFrame::OnHover(wxMouseEvent& event){
     
     wxPoint p;
     int hit_test_flag;
-    long i;
     
     p = (listcontrol_routes->ScreenToClient(wxGetMousePosition()));
     hit_test_flag = wxLIST_HITTEST_ONITEM;
     
-    i = (listcontrol_routes->HitTest(p, hit_test_flag));
+    highlighted_route = (listcontrol_routes->HitTest(p, hit_test_flag));
     
-    cout << "\nMouse is on item # " << i;
+    cout << "\nMouse is on item # " << highlighted_route;
     
 
     event.Skip(true);

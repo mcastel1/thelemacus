@@ -7232,6 +7232,19 @@ void DrawPanel::ScreenToGeo(wxPoint p, Position *q){
     
 }
 
+//converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection (x,y) of the relative geographic position
+void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
+    
+    //updates the position of the draw pane this
+    position_draw_panel = (this->GetScreenPosition());
+    
+    (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min);
+    (*y) = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min);
+    
+    
+}
+
+
 //this function converts the geographic position p into the screen position p
 void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
@@ -7407,7 +7420,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         (((parent->parent)->plot)->phi_max).normalize();
         
         
-        //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selection triangle, which is now useless
+        //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));
         
@@ -7439,23 +7452,27 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         //    ScreenToGeo(position_start_drag, &geo_start);
         ScreenToGeo(position_now_drag, &geo);
         
-        
-        //update x_min, ..., y_max according to the drag.
-        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
-        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-        x_min -= delta_x;
-        x_max -= delta_x;
-        y_min += delta_y;
-        y_max += delta_y;
-        
-        Update_lambda_phi_min_max();
-        
-        geo.print(String("Position now drag"), String("************ "), cout);
-        
-        
-        //re-draw the chart
-        Draw();
-        PaintNow();
+        if(((position_now_drag.y) > y_mercator(min_lat)) && ((position_now_drag.y) < y_mercator(max_lat))){
+            
+            
+            //update x_min, ..., y_max according to the drag.
+            delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
+            delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+            x_min -= delta_x;
+            x_max -= delta_x;
+            y_min += delta_y;
+            y_max += delta_y;
+            
+            Update_lambda_phi_min_max();
+            
+            geo.print(String("Position now drag"), String("************ "), cout);
+            
+            
+            //re-draw the chart
+            Draw();
+            PaintNow();
+            
+        }
         
         
     }

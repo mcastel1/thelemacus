@@ -1279,6 +1279,7 @@ public:
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
     void ScreenToGeo(wxPoint, Position*);
+    void ScreenToMercator(wxPoint, double*, double*);
     void GeoToScreen(Position, wxPoint*);
     bool GeoToPlot(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);

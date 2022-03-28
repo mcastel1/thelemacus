@@ -7448,16 +7448,18 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         
         position_now_drag = wxGetMousePosition();
         
-        Position geo;
+//        Position geo;
         //    ScreenToGeo(position_start_drag, &geo_start);
-        ScreenToGeo(position_now_drag, &geo);
+//        ScreenToGeo(position_now_drag, &geo);
         
-        if(((position_now_drag.y) > y_mercator(min_lat)) && ((position_now_drag.y) < y_mercator(max_lat))){
+        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
+        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+ 
+        if((y_max+delta_y < y_mercator(max_lat)) && (y_min+delta_y > y_mercator(min_lat))){
+            //fix
             
             
             //update x_min, ..., y_max according to the drag.
-            delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
-            delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
             x_min -= delta_x;
             x_max -= delta_x;
             y_min += delta_y;
@@ -7465,12 +7467,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             
             Update_lambda_phi_min_max();
             
-            geo.print(String("Position now drag"), String("************ "), cout);
+//            geo.print(String("Position now drag"), String("************ "), cout);
             
             
             //re-draw the chart
             Draw();
             PaintNow();
+            
+        }else{
+            
             
         }
         

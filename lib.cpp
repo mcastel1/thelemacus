@@ -6496,9 +6496,9 @@ void DrawPanel::Render(wxDC&  dc){
         for(j=0; j<(points_route_list[i]).size(); j++){
             //            dc.DrawPoint(points_route_list[i][j]);
             if(i == ((parent->parent)->highlighted_route)){
-                dc.DrawCircle(points_route_list[i][j], large_thickness/2.0);
+                dc.DrawCircle(points_route_list[i][j], large_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth());
             }else{
-                dc.DrawCircle(points_route_list[i][j], standard_thickness/2.0);
+                dc.DrawCircle(points_route_list[i][j], standard_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth());
             }
         }
         
@@ -6666,21 +6666,21 @@ void DrawPanel::Draw(void){
     if((y_max-y_min) > (x_max-x_min)){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        (((parent->rectangle_display).GetSize()).GetHeight())/((y_max-y_min)/(x_max-x_min)),
-                        (((parent->rectangle_display).GetSize()).GetHeight())
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/(x_max-x_min)),
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
                         );
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        height_chart = length_chart_over_length_chart_frame * (((parent->rectangle_display).GetSize()).GetHeight());
+        height_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
         width_chart = height_chart/((y_max-y_min)/(x_max-x_min));
     }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        (((parent->rectangle_display).GetSize()).GetHeight()),
-                        (((parent->rectangle_display).GetSize()).GetHeight()) * ((y_max-y_min)/(x_max-x_min))
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()),
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/(x_max-x_min))
                         );
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        width_chart = length_chart_over_length_chart_frame * (((parent->rectangle_display).GetSize()).GetHeight());
+        width_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
         height_chart = width_chart*((y_max-y_min)/(x_max-x_min));
     }
     width_plot_area = width_chart*length_plot_area_over_length_chart;
@@ -6925,9 +6925,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
     
-    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    rectangle_display = (display.GetClientArea());
-    
+      
     draw_panel->Draw();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
@@ -8886,6 +8884,10 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 
     
     plot = new Plot(catalog, String(""));
+    
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    rectangle_display = (display.GetClientArea());
+
 
     
     n_columns_listcontrol_sights = 12;
@@ -9566,10 +9568,14 @@ void ListFrame::DrawRoutes(void){
 void ListFrame::OnHover(wxMouseEvent& event){
     
     wxPoint p;
+    wxRect r;
     int hit_test_flag;
     
     p = (listcontrol_routes->ScreenToClient(wxGetMousePosition()));
     hit_test_flag = wxLIST_HITTEST_ONITEM;
+    
+    listcontrol_routes->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
+    (p.y) -= r.y;
     
     highlighted_route = (listcontrol_routes->HitTest(p, hit_test_flag));
     

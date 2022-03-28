@@ -136,9 +136,9 @@ class Body;
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 //the default thickness of the line with which routes are drawn
-#define standard_thickness 1.0
+#define standard_thickness_over_length_screen (2e-3)
 //the thickness with which highlighted routes are drawn
-#define large_thickness 2.0
+#define large_thickness_over_length_screen (2.0*standard_thickness_over_length_screen)
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
@@ -1562,6 +1562,9 @@ public:
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes, /*the # of the route which is highlighted because the mouse is hovering over it in listcontrol_routes*/highlighted_route;
     vector<wxColour> color_list;
+    //the rectangle used to measure the size of the display
+    wxDisplay display;
+    wxRect rectangle_display;
     //this referrs to the init file
     File file_init;
 
@@ -1725,8 +1728,6 @@ public:
     wxStaticText *text_position_now, *text_slider;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxStaticBitmap* image;
-    wxDisplay display;
-    wxRect rectangle_display;
     TextBox* box;
     wxSlider* slider;
     PrintErrorMessage<ChartFrame>* print_error_message;

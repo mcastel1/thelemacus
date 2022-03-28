@@ -9560,48 +9560,20 @@ void ListFrame::DrawRoutes(void){
 //signals when the mouse hovers over a given element of listcontrol_routes
 void ListFrame::OnHover(wxMouseEvent& event){
     
-//    unsigned int i;
-    wxRect view_rectangle;
-    wxPoint p, /*top-left point of the rectangle denoting the first item in listcontrol_routes*/origin;
+    wxPoint p;
+    int hit_test_flag;
+    long i;
     
+    p = (listcontrol_routes->ScreenToClient(wxGetMousePosition()));
+    hit_test_flag = wxLIST_HITTEST_ONITEM;
     
-    Time time_temp;
-    String string;
+    i = (listcontrol_routes->HitTest(p, hit_test_flag));
     
-    time_temp.set_current(String(""));
-    //I write in the non-GUI object (p->string)
-    string = String(time_temp.to_string(display_precision));
-
+    cout << "\nMouse is on item # " << i;
     
-    p = wxGetMousePosition();
-    
-    cout << "\nMouse is in at " << string.value;
-    view_rectangle = (listcontrol_routes->GetViewRect());
-    
-    cout << "\nview rectangle = " << view_rectangle.GetWidth() << " " <<  view_rectangle.GetHeight();
-    cout << "\nsize = " << listcontrol_routes->GetSize().GetWidth() << " " << listcontrol_routes->GetSize().GetHeight();
-
-    origin = wxPoint(((listcontrol_routes->GetSize().GetWidth()) - (view_rectangle.GetWidth()))/2,
-                     (listcontrol_routes->GetSize().GetHeight()) - (view_rectangle.GetHeight())
-                     );
-    
-    cout << "\norigin = " << origin.x << " " << origin.y;
- 
-    
-    //        for(i=0; i<listcontrol_routes->GetItemCount(); i++){
-    //
-    //            listcontrol_routes->GetItemRect(i, &rectangle, wxLIST_RECT_BOUNDS);
-    //
-    //
-    //        }
-    
-    
-    
-    
-        
 
     event.Skip(true);
-
+    
 }
 
 

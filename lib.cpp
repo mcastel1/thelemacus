@@ -6975,7 +6975,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, log(1), log(value_slider_old), log(value_slider_max), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, round(log(1.0)), round(log((double)value_slider_old)), round(log((double)value_slider_max)), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -7071,7 +7071,7 @@ bool ChartFrame::UpdateSlider(void){
     
     if(value_slider_old <= value_slider_max){
         
-        slider->SetValue(value_slider_old);
+        slider->SetValue(round(log((double)value_slider_old)));
         UpdateSliderLabel();
         
         output = true;
@@ -7569,7 +7569,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     
-    cout << "Slider = " << (parent->slider)->GetValue() << "\n";
+    double r;
+    
+    r = exp( -((parent->slider)->GetValue()) + round(log((double)(parent->value_slider_old))));
+    
+//    cout << "Slider = " << value_slider_from_scroll << "\n";
     
     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
     x_min_old = x_min;
@@ -7578,16 +7582,16 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_max_old = y_max;
     
     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
-    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
-    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
-    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * ((double)(parent->value_slider_old))/((double)((parent->slider)->GetValue())) );
+    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
+    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
+    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
+    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
     Update_lambda_phi_min_max();
     
     cout << "x_min = " << x_min<< "\n";
     
     //update parent->value_slider_old
-    (parent->value_slider_old) = ((parent->slider)->GetValue());
+    (parent->value_slider_old) = exp(((parent->slider)->GetValue()));
     
     Draw();
     PaintNow();

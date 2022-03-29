@@ -3,6 +3,8 @@
  g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -I/Applications/ChartDirector/include -L/Applications/ChartDirector/lib  -Wall -Wno-c++11-extensions -lchartdir -rpath /Applications/ChartDirector/lib -O3
  */
 
+//uncomment this to test the code at higher speed
+//#define wxDEBUG_LEVEL 0
 
 #include "main.h"
 #include "lib.cpp"

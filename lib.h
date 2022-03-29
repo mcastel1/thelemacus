@@ -170,7 +170,6 @@ string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#
 #define length_border_over_length_frame 0.01
 #define outfile_precision 16
 //the maximum allowed value of the slider in ChartFrame
-#define value_slider_max 1000
 //#define wxDEBUG_LEVEL 0
 
 
@@ -1754,6 +1753,7 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;
+    File file_init;
     wxStaticText *text_position_now, *text_slider;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxStaticBitmap* image;
@@ -1765,6 +1765,7 @@ public:
     vector<double> x, y;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
+    Int value_slider_max;
     
     void GetCoastLineData(void);
     void UpdateSlider(void);

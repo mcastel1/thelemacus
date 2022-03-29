@@ -6935,11 +6935,22 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     String new_prefix;
     
     parent = parent_input;
-    
+
+    file_init.set_name(String(path_file_init));
+
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
+    
     (parent->plot)->show(true, String(""));
+
+
+    //read value_slider_max from file_init
+    file_init.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading maximal zoom factor from file " << file_init.name.value << " ...\n" << RESET;
+    value_slider_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    file_init.close(prefix);
     
     idling = false;
     print_error_message = new PrintErrorMessage<ChartFrame>(this);
@@ -6975,7 +6986,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, round(log(1.0)), round(log((double)value_slider_old)), round(log((double)value_slider_max)), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, round(log(1.0)), round(log((double)value_slider_old)), round(log((double)(value_slider_max.value))), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -7069,7 +7080,7 @@ bool ChartFrame::ZoomFactor(double delta_x, double* f){
     //if f != NULL, then I write the zoom factor into f
     if(f){(*f) = x;}
     
-    return(((unsigned int)x) < value_slider_max);
+    return(((unsigned int)x) < (value_slider_max.value));
     
 }
 
@@ -7400,20 +7411,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
 
     if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
         //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
-
-//        String prefix;
-//        prefix = String("");
-
-//        //read lambda_min, ...., phi_max from file_init
-//        (plot->file_init).open(String("in"), prefix);
-//        cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << (plot->file_init).name.value << " ...\n" << RESET;
-//        (plot->lambda_min).read_from_file(String("minimal longitude"), (plot->file_init), true, String(""));
-//        (plot->lambda_max).read_from_file(String("maximal longitude"), (plot->file_init), true, String(""));
-//        (plot->phi_min).read_from_file(String("minimal latitude"), (plot->file_init), true, String(""));
-//        (plot->phi_max).read_from_file(String("maximal latitude"), (plot->file_init), true, String(""));
-//        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-//        (plot->file_init).close(prefix);
-//        Update_x_y_min_max();
         
         x_min = x_min_start_drag;
         x_max = x_max_start_drag;
@@ -7441,6 +7438,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
 }
 
 void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
+    
+    stringstream s;
     
     //changes the 'sign' of selection rectangle
     selection_rectangle = (!selection_rectangle);
@@ -7513,10 +7512,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         }else{
             //if the zoom factor is not valid, then I print an error message
             
+            s.str("");
+            s << "Zoom level must be >= 1 and <= " << ((parent->value_slider_max).value) << ".";
+            
             //set the title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Zoom level exceeded its maximal value!");
-            (print_error_message->message) = String("Zoom level must be >= 1 and <= value_slider_max.");
+            (print_error_message->message) = String(s.str().c_str());
             (*print_error_message)();
             
         }

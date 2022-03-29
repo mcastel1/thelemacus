@@ -6527,7 +6527,7 @@ void DrawPanel::Render(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
         GeoToPlot((plot->position_list)[i], &p);
-        dc.DrawCircle(p, thickness);
+        dc.DrawCircle(p, 4.0*thickness);
         
         
     }
@@ -9666,19 +9666,7 @@ void ListFrame::DrawRoutes(void){
 //signals when the mouse hovers over a given element of listcontrol_routes
 void ListFrame::OnMouseOnListControlRoutes(wxMouseEvent& event){
     
-    wxPoint p;
-    wxRect r;
-    int hit_test_flag;
-    
-    p = (listcontrol_routes->ScreenToClient(wxGetMousePosition()));
-    hit_test_flag = wxLIST_HITTEST_ONITEM;
-    
-    listcontrol_routes->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
-    (p.y) -= r.y;
-    
-    highlighted_route = (listcontrol_routes->HitTest(p, hit_test_flag));
-    
-    //    cout << "\nMouse is on item # " << highlighted_route;
+    MousePositionOnListControl(listcontrol_routes, &highlighted_route);
     
     (chart_frame->draw_panel)->PaintNow();
     
@@ -9686,23 +9674,10 @@ void ListFrame::OnMouseOnListControlRoutes(wxMouseEvent& event){
     
 }
 
-
 //signals when the mouse hovers over a given element of listcontrol_positions
 void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
-    wxPoint p;
-    wxRect r;
-    int hit_test_flag;
-    
-    p = (listcontrol_positions->ScreenToClient(wxGetMousePosition()));
-    hit_test_flag = wxLIST_HITTEST_ONITEM;
-    
-    listcontrol_positions->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
-    (p.y) -= r.y;
-    
-    highlighted_position = (listcontrol_positions->HitTest(p, hit_test_flag));
-    
-    cout << "\nMouse is on item # " << highlighted_position;
+    MousePositionOnListControl(listcontrol_positions, &highlighted_position);
     
     (chart_frame->draw_panel)->PaintNow();
     

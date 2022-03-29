@@ -265,7 +265,25 @@ inline double atan(double x, double y){
     
 }
 
-
+//given a wxListCtrl* list_control, it finds on what element of it the mouse is currently on
+void MousePositionOnListControl(wxListCtrl* list_control, int* i){
+    
+    wxPoint p;
+    wxRect r;
+    int hit_test_flag;
+    
+    hit_test_flag = wxLIST_HITTEST_ONITEM;
+    
+    p = (list_control->ScreenToClient(wxGetMousePosition()));
+    
+    list_control->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
+    (p.y) -= r.y;
+    
+    (*i) = (list_control->HitTest(p, hit_test_flag));
+    
+    cout << "\nMouse is on item # " << (*i);
+    
+}
 
 class String{
     
@@ -1568,7 +1586,8 @@ public:
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
-    unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes, /*the # of the route/position which is highlighted because the mouse is hovering over it in listcontrol_routes/positions*/highlighted_route, highlighted_position;
+    unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes;
+    int /*the # of the route/position which is highlighted because the mouse is hovering over it in listcontrol_routes/positions*/highlighted_route, highlighted_position;
     vector<wxColour> color_list;
     //the rectangle used to measure the size of the display
     wxDisplay display;

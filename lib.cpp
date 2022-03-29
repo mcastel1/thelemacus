@@ -6472,6 +6472,7 @@ void DrawPanel::PaintNow(){
 void DrawPanel::Render(wxDC&  dc){
     
     Angle lambda, phi;
+    wxPoint p;
     double dummy, thickness;
     stringstream s;
     wxString wx_string;
@@ -6509,8 +6510,25 @@ void DrawPanel::Render(wxDC&  dc){
         }
         
     }
+
+    //draw positions
+    for(i=0; i<(plot->position_list).size(); i++){
+        
+        if(i == ((parent->parent)->highlighted_position)){
+            thickness = max((int)(large_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }else{
+            thickness = max((int)(standard_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }
+        
+        dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
+        
+        GeoToPlot((plot->position_list)[i], &p);
+        dc.DrawCircle(p, thickness);
+        
+        
+    }
     
-    //    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
+    //   reset the pen to its default parameters
     dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
     

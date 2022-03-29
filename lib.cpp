@@ -6511,6 +6511,10 @@ void DrawPanel::Render(wxDC&  dc){
         
     }
 
+    //   reset the pen to its default parameters
+    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+   
+    
     //draw positions
     for(i=0; i<(plot->position_list).size(); i++){
         
@@ -6523,7 +6527,7 @@ void DrawPanel::Render(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
         GeoToPlot((plot->position_list)[i], &p);
-        dc.DrawCircle(p, thickness);
+        dc.DrawCircle(p, 10*thickness);
         
         
     }
@@ -9196,6 +9200,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //listcontrol_positions with positions
     listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
+    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
+
     
     i=0;
     
@@ -9240,6 +9246,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //listcontrol routes with routes
     listcontrol_routes = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+    listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlRoutes), this);
     
     i=0;
     
@@ -9297,10 +9304,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
     }
     
-    //
-    listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnHoverOnListControlRoutes), this);
     
-    //
     
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
@@ -9660,7 +9664,7 @@ void ListFrame::DrawRoutes(void){
 }
 
 //signals when the mouse hovers over a given element of listcontrol_routes
-void ListFrame::OnHoverOnListControlRoutes(wxMouseEvent& event){
+void ListFrame::OnMouseOnListControlRoutes(wxMouseEvent& event){
     
     wxPoint p;
     wxRect r;
@@ -9684,7 +9688,7 @@ void ListFrame::OnHoverOnListControlRoutes(wxMouseEvent& event){
 
 
 //signals when the mouse hovers over a given element of listcontrol_positions
-void ListFrame::OnHoverOnListControlPositions(wxMouseEvent& event){
+void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
     wxPoint p;
     wxRect r;
@@ -9698,7 +9702,7 @@ void ListFrame::OnHoverOnListControlPositions(wxMouseEvent& event){
     
     highlighted_position = (listcontrol_positions->HitTest(p, hit_test_flag));
     
-       cout << "\nMouse is on item # " << highlighted_route;
+    cout << "\nMouse is on item # " << highlighted_position;
     
     (chart_frame->draw_panel)->PaintNow();
     

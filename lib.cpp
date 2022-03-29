@@ -7350,12 +7350,9 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-    
-
 
     if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
-
-
+        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset everything: I reload lambda_min, ..., phi_max from file, recalculate x_min, ..., y_max accordingly, and redraw the chart
 
         String prefix;
         prefix = String("");
@@ -7363,19 +7360,12 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         //read lambda_min, ...., phi_max from file_init
         (plot->file_init).open(String("in"), prefix);
         cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << (plot->file_init).name.value << " ...\n" << RESET;
-
         (plot->lambda_min).read_from_file(String("minimal longitude"), (plot->file_init), true, String(""));
-
         (plot->lambda_max).read_from_file(String("maximal longitude"), (plot->file_init), true, String(""));
-
         (plot->phi_min).read_from_file(String("minimal latitude"), (plot->file_init), true, String(""));
-
         (plot->phi_max).read_from_file(String("maximal latitude"), (plot->file_init), true, String(""));
-
         cout << prefix.value << YELLOW << "... done.\n" << RESET;
         (plot->file_init).close(prefix);
-
-
 
         Update_x_y_min_max();
 
@@ -7384,8 +7374,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         PaintNow();
 
     }
-
-
     
     event.Skip(true);
     
@@ -7495,8 +7483,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
         
         if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
-            //fix
-            
+            //if the drag operation does not bring the chart out of the min and max latitude contained in the data files, I update x_min, ..., y_max and update the chart
             
             //update x_min, ..., y_max according to the drag.
             x_min -= delta_x;
@@ -7514,36 +7501,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             
             PaintNow();
             
-        }else{
-            
-//            String prefix;
-//            prefix = String("");
-//            
-//            //read lambda_min, ...., phi_max from file_init
-//            cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << (plot->file_init).name.value << " ...\n" << RESET;
-//            (plot->file_init).close(prefix);
-//            (plot->file_init).open(String("in"), prefix);
-//            
-//            (plot->lambda_min).read_from_file(String("minimal longitude"), (plot->file_init), true, String(""));
-//            
-//            (plot->lambda_max).read_from_file(String("maximal longitude"), (plot->file_init), true, String(""));
-//            
-//            (plot->phi_min).read_from_file(String("minimal latitude"), (plot->file_init), true, String(""));
-//            
-//            (plot->phi_max).read_from_file(String("maximal latitude"), (plot->file_init), true, String(""));
-//            
-//            (plot->file_init).close(prefix);
-//            cout << prefix.value << YELLOW << "... done.\n" << RESET;
-//            
-//            Update_x_y_min_max();
-//            
-//            //re-draw the chart
-//            Draw();
-//            
-//            PaintNow();
-            
         }
-        
         
     }
     

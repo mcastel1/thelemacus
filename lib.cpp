@@ -7062,9 +7062,14 @@ void ChartFrame::UpdateSliderLabel(void){
 //computes the zoom factor of the chart based on the currenct value of delta_x = x_max - x_min and writes it as a double into *f. It returns true if the zooming factor is smaller than value_slider_max, and false otherwise
 bool ChartFrame::ZoomFactor(double delta_x, double* f){
     
-    (*f) = ((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
+    double x;
     
-    return(((unsigned int)(*f)) < value_slider_max);
+    x = ((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
+    
+    //if f != NULL, then I write the zoom factor into f
+    if(f){(*f) = x;}
+    
+    return(((unsigned int)x) < value_slider_max);
     
 }
 
@@ -7077,8 +7082,6 @@ bool ChartFrame::UpdateSlider(void){
     //compute the zooming factor of the chart and write it into value_slider_old
     ZoomFactor(((draw_panel->x_max)-(draw_panel->x_min)), &f);
     value_slider_old = ((unsigned int)f);
-    
-    cout << "***************** Slider value = " << value_slider_old << "\n";
     
     if(value_slider_old <= value_slider_max){
         
@@ -7287,8 +7290,13 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min);
-    (*y) = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min);
+    if(x){
+        (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min);
+        
+    }
+    if(y){
+        (*y) = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min);
+    }
     
     
 }
@@ -7464,9 +7472,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         GetMouseGeoPosition(&p_start);
         position_start_selection = position_screen_now;
-    
-        ScreenToMercator(position_start_selection, &x_start_selection, &y_start_selection);
-
+        ScreenToMercator(position_start_selection, &x_start_selection, NULL);
         
         s.clear();
         s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
@@ -7486,51 +7492,54 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&p_end);
         position_end_selection = position_screen_now;
         
-        ScreenToMercator(position_end_selection, &x_end_selection, &y_end_selection);
+        ScreenToMercator(position_end_selection, &x_end_selection, NULL);
         
-        
-        cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
-        
-        
-        
-        //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
-        delete c;
-        //I convert all the angles to the format between -pi and pi, so I can sort them numerically
-        (p_start.phi).normalize_pm_pi();
-        (p_start.lambda).normalize_pm_pi();
-        (p_end.phi).normalize_pm_pi();
-        (p_end.lambda).normalize_pm_pi();
-        //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
-        if((p_start.lambda)>(p_end.lambda)){
-            (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
-            (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
-        }else{
-            (((parent->parent)->plot)->lambda_min) = (p_end.lambda);
-            (((parent->parent)->plot)->lambda_max) = (p_start.lambda);
+        if((parent->ZoomFactor(fabs(x_end_selection-x_start_selection), NULL))){
+            //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
+            
+            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
+            
+            
+            //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
+            delete c;
+            //I convert all the angles to the format between -pi and pi, so I can sort them numerically
+            (p_start.phi).normalize_pm_pi();
+            (p_start.lambda).normalize_pm_pi();
+            (p_end.phi).normalize_pm_pi();
+            (p_end.lambda).normalize_pm_pi();
+            //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
+            if((p_start.lambda)>(p_end.lambda)){
+                (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
+                (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
+            }else{
+                (((parent->parent)->plot)->lambda_min) = (p_end.lambda);
+                (((parent->parent)->plot)->lambda_max) = (p_start.lambda);
+            }
+            if((p_start.phi)>(p_end.phi)){
+                (((parent->parent)->plot)->phi_max) = (p_start.phi);
+                (((parent->parent)->plot)->phi_min) = (p_end.phi);
+            }else{
+                (((parent->parent)->plot)->phi_min) = (p_start.phi);
+                (((parent->parent)->plot)->phi_max) = (p_end.phi);
+            }
+            //I normalize lambda_min, ..., phi_max for future use.
+            (((parent->parent)->plot)->lambda_min).normalize();
+            (((parent->parent)->plot)->lambda_max).normalize();
+            (((parent->parent)->plot)->phi_min).normalize();
+            (((parent->parent)->plot)->phi_max).normalize();
+            
+              parent->UpdateSlider();
+            
         }
-        if((p_start.phi)>(p_end.phi)){
-            (((parent->parent)->plot)->phi_max) = (p_start.phi);
-            (((parent->parent)->plot)->phi_min) = (p_end.phi);
-        }else{
-            (((parent->parent)->plot)->phi_min) = (p_start.phi);
-            (((parent->parent)->plot)->phi_max) = (p_end.phi);
-        }
-        //I normalize lambda_min, ..., phi_max for future use.
-        (((parent->parent)->plot)->lambda_min).normalize();
-        (((parent->parent)->plot)->lambda_max).normalize();
-        (((parent->parent)->plot)->phi_min).normalize();
-        (((parent->parent)->plot)->phi_max).normalize();
         
+        Draw();
+        PaintNow();
         
-        //once I draw a new, zoomed map, I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
+        //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));
         
-        Draw();
         
-        PaintNow();
-        
-        parent->UpdateSlider();
         
     }
     

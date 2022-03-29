@@ -1767,6 +1767,7 @@ public:
     
     void GetCoastLineData(void);
     bool UpdateSlider(void);
+    bool ZoomFactor(double, double*);
     void UpdateSliderLabel(void);
     void SetIdling(bool);
     

@@ -7059,13 +7059,24 @@ void ChartFrame::UpdateSliderLabel(void){
     
 }
 
+//computes the zoom factor of the chart based on the currenct value of delta_x = x_max - x_min and writes it as a double into *f. It returns true if the zooming factor is smaller than value_slider_max, and false otherwise
+bool ChartFrame::ZoomFactor(double delta_x, double* f){
+    
+    (*f) = ((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
+    
+    return(((unsigned int)(*f)) < value_slider_max);
+    
+}
+
 //this function updates the slider according to the zooming factor of the chart. If the zooming factor does not exceed the maximal allowed value, it returns true and it updates the slider, otherwise it returns false and it does not update the slider.
 bool ChartFrame::UpdateSlider(void){
     
     bool output;
+    double f;
     
     //compute the zooming factor of the chart and write it into value_slider_old
-    value_slider_old = ((unsigned int)((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/((draw_panel->x_max)-(draw_panel->x_min)));
+    ZoomFactor(((draw_panel->x_max)-(draw_panel->x_min)), &f);
+    value_slider_old = ((unsigned int)f);
     
     cout << "***************** Slider value = " << value_slider_old << "\n";
     
@@ -7453,6 +7464,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         GetMouseGeoPosition(&p_start);
         position_start_selection = position_screen_now;
+    
+        ScreenToMercator(position_start_selection, &x_start_selection, &y_start_selection);
+
         
         s.clear();
         s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
@@ -7471,6 +7485,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         //        ((parent->plot)->phi_max) = (p.phi);
         GetMouseGeoPosition(&p_end);
         position_end_selection = position_screen_now;
+        
+        ScreenToMercator(position_end_selection, &x_end_selection, &y_end_selection);
+        
         
         cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
         

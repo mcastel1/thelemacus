@@ -1248,6 +1248,22 @@ public:
     
 };
 
+//this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
+template<class T> class PrintErrorMessage{
+    
+public:
+    
+    T* f;
+    wxControl* control;
+    String title, message;
+    
+    PrintErrorMessage(T*);
+    
+    void operator()(void);
+    
+    
+};
+
 
 
 class DrawPanel : public wxPanel{
@@ -1256,6 +1272,7 @@ public:
     
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
+    PrintErrorMessage<DrawPanel>* print_error_message;
     XYChart* c;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, position_screen_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
@@ -1274,8 +1291,11 @@ public:
     vector< vector<wxPoint> > points_route_list;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
+    bool idling;
     Plot* plot;
 
+
+    void SetIdling(bool);
     
     void Draw(void);
     void PaintEvent(wxPaintEvent & evt);
@@ -1523,21 +1543,6 @@ public:
 
 
 
-//this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
-template<class T> class PrintErrorMessage{
-    
-public:
-    
-    T* f;
-    wxControl* control;
-    String title, message;
-    
-    PrintErrorMessage(T*);
-    
-    void operator()(void);
-    
-    
-};
 
 
 

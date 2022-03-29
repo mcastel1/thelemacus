@@ -6394,6 +6394,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     }
     
     
+    print_error_message = new PrintErrorMessage<DrawPanel>(this);
+    
+    
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     text_position_end = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -6991,6 +6994,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
 }
 
+void DrawPanel::SetIdling(bool b){
+    
+    idling = b;
+    
+}
+
 //this function computes lambda_min, ... phi_max from x_min ... y_max
 void DrawPanel::Update_lambda_phi_min_max(void){
     
@@ -7358,7 +7367,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
 
     if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
-        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly. 
+        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
 
 //        String prefix;
 //        prefix = String("");
@@ -7384,6 +7393,14 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         //re-draw the chart
         Draw();
         PaintNow();
+        
+        
+        //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+        (print_error_message->control) = NULL;
+        (print_error_message->title) = String("Chart outside  boundaries!");
+        (print_error_message->message) = String("The chart must lie within the boundaries.");
+        (*print_error_message)();
+        
 
     }
     

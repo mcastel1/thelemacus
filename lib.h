@@ -265,7 +265,7 @@ inline double atan(double x, double y){
     
 }
 
-//given a wxListCtrl* list_control, it finds on what element of it the mouse is currently on
+//given a wxListCtrl* list_control, it finds on what element of it the mouse is currently on and writes the id of this element in i
 void MousePositionOnListControl(wxListCtrl* list_control, int* i){
     
     wxPoint p;
@@ -281,7 +281,7 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
     
     (*i) = (list_control->HitTest(p, hit_test_flag));
     
-    cout << "\nMouse is on item # " << (*i);
+    //    cout << "\nMouse is on item # " << (*i);
     
 }
 

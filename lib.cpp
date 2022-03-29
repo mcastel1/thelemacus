@@ -6527,7 +6527,7 @@ void DrawPanel::Render(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
         GeoToPlot((plot->position_list)[i], &p);
-        dc.DrawCircle(p, 10*thickness);
+        dc.DrawCircle(p, thickness);
         
         
     }

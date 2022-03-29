@@ -75,14 +75,14 @@
             label = Forno
             Positions in the plot:
 		Position #1:
-			latitude = 248° 51.179385474737415506751858629286'
+			latitude = 48° 51.179385474737415506751858629286'
 			longitude = 57° 35.178159790311838150955736637115'
 			label = Centre Sportif Maryse Hilsz (MH) sopra e sotto non si sa come
 		Position #2:
-			latitude = 48° 51.327167000000031293893698602915'
+			latitude = 318° 51.327167000000031293893698602915'
 			longitude = 33° 35.565500000000156433088704943657'
 			label = Baby Gym Campo (BGC)
 		Position #3:
-			latitude = 308° 1.36509166999999860081516089849174'
-			longitude = 97° 35.41566699999748379923403263092'
+			latitude = 08° 1.36509166999999860081516089849174'
+			longitude = 207° 35.41566699999748379923403263092'
 			label = My Place (MP)

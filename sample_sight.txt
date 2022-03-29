@@ -47,24 +47,7 @@
             hour of TAI - UTC at time of master-clock synchronization with UTC = 00:01:37
             label = Let us insert a star sight too!
             Routes in the plot:
-         Route #1:
-            type = c
-            ground position:
-                latitude = 26° 20.1005'
-                longitude = 265° 18.4353'
-                label = Rohal Dahl
-            aperture angle = 77° 23.7477'
-            label = Green functions
-        Route #2:
-            type = l
-            start position:
-                latitude = 6° 20.1005'
-                longitude = 65° 18.4353'
-                label = Rohaldsgfdhf Dahl
-            starting heading = 27° 13.7477'
-            length = 13223.345 nm
-            label = Forno
-        Route #3:
+        Route #1:
             type = o
             start position:
                 latitude = 6° 20.1005'

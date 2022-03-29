@@ -9051,7 +9051,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         
     }
     
-    
+    //no positions nor routes are highlighted when ListFrame is constructed
+    highlighted_route = -1;
+    highlighted_position = -1;
     
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);

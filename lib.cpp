@@ -724,7 +724,7 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     if(type == String("c")){
         listcontrol->SetItem(i, j++, wxString("circle of equal altitude"));
     }
-        
+    
     if(type == String("c")){
         //in this case the type of this is 'circle of equal altitde': the first three fields are thus empty, and I fill in only the last two fields
         
@@ -3235,8 +3235,8 @@ void Plot::menu(String prefix){
             
         case 8:{
             
-//            I commented this out because now add_route takes an additional argument
-//            add_route(new_prefix);
+            //            I commented this out because now add_route takes an additional argument
+            //            add_route(new_prefix);
             print(true, new_prefix, cout);
             show(false, new_prefix);
             menu(prefix);
@@ -3557,12 +3557,12 @@ void Plot::menu(String prefix){
 }
 
 Plot::Plot(Catalog* cata, String prefix){
-        
+    
     String new_prefix;
-
+    
     new_prefix = prefix.append(String("\t"));
     
-
+    
     catalog = cata;
     job_id = -1;
     
@@ -3614,7 +3614,7 @@ Plot::Plot(Catalog* cata, String prefix){
     cout << prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
     n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-  
+    
     
     //read lambda_min, ...., phi_max from file_init
     cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
@@ -3625,7 +3625,7 @@ Plot::Plot(Catalog* cata, String prefix){
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     file_init.close(prefix);
-
+    
     
 }
 
@@ -3970,7 +3970,7 @@ void Plot::add_position(String prefix){
 void Plot::add_route(Route* route_in, String prefix){
     
     
-//    route.enter(String("new route"), prefix);
+    //    route.enter(String("new route"), prefix);
     
     route_list.push_back(*route_in);
     cout << prefix.value << "Route added as position #" << route_list.size() << ".\n";
@@ -6386,13 +6386,13 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
-
+    
     //allocates points_route_list
     points_route_list.resize((plot->route_list).size());
     for(i=0; i<(plot->route_list).size(); i++){
         (points_route_list[i]).clear();
     }
-
+    
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -6493,9 +6493,9 @@ void DrawPanel::Render(wxDC&  dc){
         }else{
             thickness = max((int)(standard_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }
-
+        
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
-
+        
         //draw the roues as lines
         //       dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
         //draw the routes as points
@@ -6509,7 +6509,7 @@ void DrawPanel::Render(wxDC&  dc){
     
     //    dc.SetBrush(*wxTRANSPARENT_BRUSH); //no filling
     dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
-  
+    
     
     if(selection_rectangle){
         dc.DrawRectangle(
@@ -6854,7 +6854,7 @@ void DrawPanel::Draw(void){
     
     for(i=0; i<(plot->route_list).size(); i++){
         
- 
+        
         if((((plot->route_list)[i]).type) == String("c")){
             //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
             
@@ -6869,7 +6869,7 @@ void DrawPanel::Draw(void){
         
         for((points_route_list[i]).clear(), j=0; j<(unsigned int)((plot->n_points_routes).value); j++){
             
- 
+            
             
             //across the for loop over j, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
             (((plot->route_list)[i]).l).set(
@@ -6882,10 +6882,10 @@ void DrawPanel::Draw(void){
             
             if(GeoToPlot(((plot->route_list)[i]).end, &p)){
                 (points_route_list[i]).push_back(p);
-         
-            
+                
+                
             }
-
+            
         }
         
     }
@@ -6928,7 +6928,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     wxPNGHandler *handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
     
-      
+    
     draw_panel->Draw();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
@@ -7266,13 +7266,13 @@ bool DrawPanel::GeoToPlot(Position q, wxPoint *p){
     
     x_temp = x_mercator(K*((q.lambda).value));
     y_temp = y_mercator(K*((q.phi).value));
-              
+    
     if(((x_temp > x_min) && (x_temp < x_max)) && ((y_temp > y_min) && (y_temp < y_max))){
-    //if the point falls within the plot area, write it into p
+        //if the point falls within the plot area, write it into p
         
         (p->x) = (position_plot_area.x) + (x_temp-x_min)/(x_max-x_min)*width_plot_area;
         (p->y) = (position_plot_area.y) + height_plot_area - ((y_temp-y_min)/(y_max-y_min)*height_plot_area);
-
+        
         return true;
         
     }else{
@@ -7280,7 +7280,7 @@ bool DrawPanel::GeoToPlot(Position q, wxPoint *p){
         return false;
     }
     
-      
+    
 }
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
@@ -7346,7 +7346,47 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     geo.print(String("Position end drag"), String("************ "), cout);
     
+    double delta_x, delta_y;
     
+    delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
+    delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+    
+//
+//
+//    if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
+//
+//
+//
+//        String prefix;
+//        prefix = String("");
+//
+//        //read lambda_min, ...., phi_max from file_init
+//        (plot->file_init).close(prefix);
+//        (plot->file_init).open(String("in"), prefix);
+//        cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << (plot->file_init).name.value << " ...\n" << RESET;
+//
+//        (plot->lambda_min).read_from_file(String("minimal longitude"), (plot->file_init), true, String(""));
+//
+//        (plot->lambda_max).read_from_file(String("maximal longitude"), (plot->file_init), true, String(""));
+//
+//        (plot->phi_min).read_from_file(String("minimal latitude"), (plot->file_init), true, String(""));
+//
+//        (plot->phi_max).read_from_file(String("maximal latitude"), (plot->file_init), true, String(""));
+//
+//        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+//        (plot->file_init).close(prefix);
+//
+//
+//
+//        Update_x_y_min_max();
+//
+//        //re-draw the chart
+//        Draw();
+//        PaintNow();
+//
+//    }
+//
+//
     
     event.Skip(true);
     
@@ -7448,14 +7488,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         
         position_now_drag = wxGetMousePosition();
         
-//        Position geo;
+        //        Position geo;
         //    ScreenToGeo(position_start_drag, &geo_start);
-//        ScreenToGeo(position_now_drag, &geo);
+        //        ScreenToGeo(position_now_drag, &geo);
         
         delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
- 
-        if((y_max+delta_y < y_mercator(max_lat)) && (y_min+delta_y > y_mercator(min_lat))){
+        
+        if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
             //fix
             
             
@@ -7467,15 +7507,41 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             
             Update_lambda_phi_min_max();
             
-//            geo.print(String("Position now drag"), String("************ "), cout);
+            //            geo.print(String("Position now drag"), String("************ "), cout);
             
             
             //re-draw the chart
             Draw();
+            
             PaintNow();
             
         }else{
             
+            String prefix;
+            prefix = String("");
+            
+            //read lambda_min, ...., phi_max from file_init
+            cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << (plot->file_init).name.value << " ...\n" << RESET;
+            (plot->file_init).close(prefix);
+            (plot->file_init).open(String("in"), prefix);
+            
+            (plot->lambda_min).read_from_file(String("minimal longitude"), (plot->file_init), true, String(""));
+            
+            (plot->lambda_max).read_from_file(String("maximal longitude"), (plot->file_init), true, String(""));
+            
+            (plot->phi_min).read_from_file(String("minimal latitude"), (plot->file_init), true, String(""));
+            
+            (plot->phi_max).read_from_file(String("maximal latitude"), (plot->file_init), true, String(""));
+            
+            (plot->file_init).close(prefix);
+            cout << prefix.value << YELLOW << "... done.\n" << RESET;
+            
+            Update_x_y_min_max();
+            
+            //re-draw the chart
+            Draw();
+            
+            PaintNow();
             
         }
         
@@ -7521,7 +7587,7 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
     
     if(is_ok()){
         
-
+        
         double min_temp;
         char c;
         
@@ -7914,13 +7980,13 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
         if(unit == String("nm")){
             
             length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
-
+            
         }else{
-
+            
             length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
-
+            
         }
-
+        
     }
     
     event.Skip(true);
@@ -8906,21 +8972,21 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     String s;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
-
+    
     
     plot = new Plot(catalog, String(""));
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
-
-
+    
+    
     
     n_columns_listcontrol_sights = 12;
     n_columns_listcontrol_positions = 3;
     n_columns_listcontrol_routes = 8;
     
     file_init.set_name(String(path_file_init));
-
+    
     
     
     //read color list from file_init
@@ -8932,21 +8998,21 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     color_list.resize(count((s.value).begin(), (s.value).end(), '('));
- 
+    
     
     for(i=0; i<color_list.size(); i++){
         
-//        //find the positions of (, ) and , to single ot the integers defining the color
-//        pos_open = (s.value).find("(");
-//        pos_comma_1 = (s.value).find(",");
-//        pos_comma_2 = (s.value).find(",");
-//        pos_close = (s.value).find(")");
-//
-//        //extract these integers, create a wxColor and append it to color_list
-//
+        //        //find the positions of (, ) and , to single ot the integers defining the color
+        //        pos_open = (s.value).find("(");
+        //        pos_comma_1 = (s.value).find(",");
+        //        pos_comma_2 = (s.value).find(",");
+        //        pos_close = (s.value).find(")");
+        //
+        //        //extract these integers, create a wxColor and append it to color_list
+        //
         
-//        int b=                  stod((s.value).substr(pos_comma_1, pos_comma_2 - pos_comma_1).c_str());
-//        int c=                    stod((s.value).substr(pos_comma_2, pos_close - pos_comma_2).c_str());
+        //        int b=                  stod((s.value).substr(pos_comma_1, pos_comma_2 - pos_comma_1).c_str());
+        //        int c=                    stod((s.value).substr(pos_comma_2, pos_close - pos_comma_2).c_str());
         
         //get rid of everything that comes before and at '(' at the beginnign of s
         pos_end = (s.value).find("(");
@@ -8967,17 +9033,17 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         
         //get rid of the second ','
         s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
-
+        
         pos_end = (s.value).find(")");
         //get rid of '('
         blue = stoi((s.value).substr(0, pos_end+1).c_str());
         
-      //write the color that I just read in color_list
+        //write the color that I just read in color_list
         color_list[i] = wxColor(red, green, blue);
         
     }
-
-
+    
+    
     
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
@@ -9229,7 +9295,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnHover), this);
-
+    
     //
     
     //    set the column width to the width of its longest item
@@ -9466,8 +9532,8 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
     
     long item;
     item = listcontrol_routes->GetNextItem(-1,
-                                              wxLIST_NEXT_ALL,
-                                              wxLIST_STATE_SELECTED);
+                                           wxLIST_NEXT_ALL,
+                                           wxLIST_STATE_SELECTED);
     
     if(item != -1){
         
@@ -9608,7 +9674,7 @@ void ListFrame::OnHover(wxMouseEvent& event){
     
     (chart_frame->draw_panel)->PaintNow();
     
-
+    
     event.Skip(true);
     
 }
@@ -10254,19 +10320,19 @@ template <class T> void RouteTypeField::get(T &event){
         if(String((name->GetValue()).ToStdString()) == String("loxodrome")){
             
             type->set(String(""), String("l"), String(""));
-
+            
         }
         if(String((name->GetValue()).ToStdString()) == String("orthodrome")){
             type->set(String(""), String("o"), String(""));
-
-        
+            
+            
         }
         if(String((name->GetValue()).ToStdString()) == String("circle of equal altitude")){
             
             type->set(String(""), String("c"), String(""));
-
+            
         }
-          
+        
     }
     
     event.Skip(true);
@@ -10398,7 +10464,7 @@ void LimbField::set(void){
 void LimbField::Enable(bool is_enabled){
     
     name->Enable(is_enabled);
-       
+    
 }
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer
@@ -10469,9 +10535,9 @@ template<class P> void LengthField<P>::set(void){
         value->SetValue(wxString::Format(wxT("%f"), (length->value)));
         
     }else{
-     
+        
         value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
-    
+        
     }
     
     
@@ -10523,8 +10589,8 @@ void RouteTypeField::set(void){
     if((*type) == String("c")){
         name->SetValue(wxString("circle of equal altitude"));
     }
- 
-
+    
+    
     ok = true;
     
 }

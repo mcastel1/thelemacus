@@ -159,6 +159,8 @@ string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#
 #define min_lat (-78.7290778)
 #define floor_min_lat (floor(min_lat))
 #define floor_max_lat (floor(max_lat))
+#define floor_max_lat (floor(max_lat))
+#define ceil_min_lat (ceil(min_lat))
 //latitude span
 #define span_lat ((floor_max_lat-floor_min_lat+1)
 //the ratio between the width (height) of the plot area and the width (height) of the chart.

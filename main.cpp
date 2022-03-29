@@ -26,6 +26,7 @@
  - fix issue that related sight is not properly deleted when a route is deleted
  - when mouse hovers over listcontrol of sights, highlight the related route, if any
  -     Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
+ - compute authomatically n_interval_tics by calculating the width of the window and of each label on the axes
 
  
  */

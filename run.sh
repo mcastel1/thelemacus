@@ -3,4 +3,4 @@ clear; clear;
 #./kill_gnuplot.sh
 #valgrind ./sight.o
 
-./sight_gui.o
+./main.o

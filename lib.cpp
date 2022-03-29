@@ -6975,7 +6975,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, 1, value_slider_old, value_slider_max, wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, log(1), log(value_slider_old), log(value_slider_max), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");

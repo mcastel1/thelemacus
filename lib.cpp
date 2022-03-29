@@ -7073,8 +7073,8 @@ bool ChartFrame::ZoomFactor(double delta_x, double* f){
     
 }
 
-//this function updates the slider according to the zooming factor of the chart. If the zooming factor does not exceed the maximal allowed value, it returns true and it updates the slider, otherwise it returns false and it does not update the slider.
-bool ChartFrame::UpdateSlider(void){
+//this function updates the slider according to the zooming factor of the chart.
+void ChartFrame::UpdateSlider(void){
     
     bool output;
     double f;
@@ -7083,28 +7083,12 @@ bool ChartFrame::UpdateSlider(void){
     ZoomFactor(((draw_panel->x_max)-(draw_panel->x_min)), &f);
     value_slider_old = ((unsigned int)f);
     
-    if(value_slider_old <= value_slider_max){
-        
-        slider->SetValue(round(log((double)value_slider_old)));
-        UpdateSliderLabel();
-        
-        output = true;
-        
-    }else{
-        
-        //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-        (print_error_message->control) = slider;
-        (print_error_message->title) = String("Zoom level exceeded its maximal value!");
-        (print_error_message->message) = String("Zoom level must be >= 1 and <= value_slider_max.");
-        CallAfter(*print_error_message);
-        
-        output = false;
-        
-    }
     
-    return output;
-    
+    slider->SetValue(round(log((double)value_slider_old)));
+    UpdateSliderLabel();
+
 }
+
 
 template<class T>void CheckBody::operator()(T& event){
     
@@ -7472,6 +7456,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         GetMouseGeoPosition(&p_start);
         position_start_selection = position_screen_now;
+        //stores the x at the beginning of the selection process, to compute the zoom factor later
         ScreenToMercator(position_start_selection, &x_start_selection, NULL);
         
         s.clear();
@@ -7479,26 +7464,21 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         text_position_start->SetLabel(wxString(s.str().c_str()));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
-        
         cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
-        
         
     }else{
         
         cout << "You ended drawing\n";
         
-        //        ((parent->plot)->lambda_max) = (p.lambda);
-        //        ((parent->plot)->phi_max) = (p.phi);
         GetMouseGeoPosition(&p_end);
         position_end_selection = position_screen_now;
-        
+        //stores the x at the end of the selection process, to compute the zoom factor later
         ScreenToMercator(position_end_selection, &x_end_selection, NULL);
         
         if((parent->ZoomFactor(fabs(x_end_selection-x_start_selection), NULL))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
             cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
-            
             
             //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
             delete c;
@@ -7530,6 +7510,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             
               parent->UpdateSlider();
             
+        }else{
+            //if the zoom factor is not valid, then I print an error message
+            
+            //set the title and message for the functor print_error_message, and then call the functor
+            (print_error_message->control) = NULL;
+            (print_error_message->title) = String("Zoom level exceeded its maximal value!");
+            (print_error_message->message) = String("Zoom level must be >= 1 and <= value_slider_max.");
+            (*print_error_message)();
+            
         }
         
         Draw();
@@ -7538,8 +7527,6 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));
-        
-        
         
     }
     

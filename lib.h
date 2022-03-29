@@ -1767,7 +1767,7 @@ public:
     bool idling;
     
     void GetCoastLineData(void);
-    bool UpdateSlider(void);
+    void UpdateSlider(void);
     bool ZoomFactor(double, double*);
     void UpdateSliderLabel(void);
     void SetIdling(bool);

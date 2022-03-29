@@ -7326,6 +7326,12 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     
     position_start_drag = wxGetMousePosition();
     
+    //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
+    x_min_start_drag = x_min;
+    x_max_start_drag = x_max;
+    y_min_start_drag = y_min;
+    y_max_start_drag = y_max;
+
     Position geo;
     ScreenToGeo(position_start_drag, &geo);
     geo.print(String("Position start drag"), String("************ "), cout);
@@ -7352,22 +7358,28 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
 
     if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
-        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset everything: I reload lambda_min, ..., phi_max from file, recalculate x_min, ..., y_max accordingly, and redraw the chart
+        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly. 
 
-        String prefix;
-        prefix = String("");
+//        String prefix;
+//        prefix = String("");
 
-        //read lambda_min, ...., phi_max from file_init
-        (plot->file_init).open(String("in"), prefix);
-        cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << (plot->file_init).name.value << " ...\n" << RESET;
-        (plot->lambda_min).read_from_file(String("minimal longitude"), (plot->file_init), true, String(""));
-        (plot->lambda_max).read_from_file(String("maximal longitude"), (plot->file_init), true, String(""));
-        (plot->phi_min).read_from_file(String("minimal latitude"), (plot->file_init), true, String(""));
-        (plot->phi_max).read_from_file(String("maximal latitude"), (plot->file_init), true, String(""));
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        (plot->file_init).close(prefix);
-
-        Update_x_y_min_max();
+//        //read lambda_min, ...., phi_max from file_init
+//        (plot->file_init).open(String("in"), prefix);
+//        cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << (plot->file_init).name.value << " ...\n" << RESET;
+//        (plot->lambda_min).read_from_file(String("minimal longitude"), (plot->file_init), true, String(""));
+//        (plot->lambda_max).read_from_file(String("maximal longitude"), (plot->file_init), true, String(""));
+//        (plot->phi_min).read_from_file(String("minimal latitude"), (plot->file_init), true, String(""));
+//        (plot->phi_max).read_from_file(String("maximal latitude"), (plot->file_init), true, String(""));
+//        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+//        (plot->file_init).close(prefix);
+//        Update_x_y_min_max();
+        
+        x_min = x_min_start_drag;
+        x_max = x_max_start_drag;
+        y_min = y_min_start_drag;
+        y_max = y_max_start_drag;
+        
+        Update_lambda_phi_min_max();
 
         //re-draw the chart
         Draw();

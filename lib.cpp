@@ -9656,7 +9656,7 @@ void ListFrame::OnHover(wxMouseEvent& event){
     
     highlighted_route = (listcontrol_routes->HitTest(p, hit_test_flag));
     
-    cout << "\nMouse is on item # " << highlighted_route;
+    //    cout << "\nMouse is on item # " << highlighted_route;
     
     (chart_frame->draw_panel)->PaintNow();
     

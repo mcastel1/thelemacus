@@ -22,6 +22,7 @@
  - change the initialization of structs (such as     (check.p) = this;) by transforming the structs into classes, creating their constructor, transforming check into a pointer and replacing     (check.p) = this; with check = new Check(this); do this for all objects
  - set log scale on slider
  - fix issue that related sight is not properly deleted when a route is deleted
+ - when mouse hovers over listcontrol of sights, highlight the related route, if any
  */
 
 

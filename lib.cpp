@@ -9298,7 +9298,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     }
     
     //
-    listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnHover), this);
+    listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnHoverOnListControlRoutes), this);
     
     //
     
@@ -9660,7 +9660,7 @@ void ListFrame::DrawRoutes(void){
 }
 
 //signals when the mouse hovers over a given element of listcontrol_routes
-void ListFrame::OnHover(wxMouseEvent& event){
+void ListFrame::OnHoverOnListControlRoutes(wxMouseEvent& event){
     
     wxPoint p;
     wxRect r;
@@ -9678,6 +9678,29 @@ void ListFrame::OnHover(wxMouseEvent& event){
     
     (chart_frame->draw_panel)->PaintNow();
     
+    event.Skip(true);
+    
+}
+
+
+//signals when the mouse hovers over a given element of listcontrol_positions
+void ListFrame::OnHoverOnListControlPositions(wxMouseEvent& event){
+    
+    wxPoint p;
+    wxRect r;
+    int hit_test_flag;
+    
+    p = (listcontrol_positions->ScreenToClient(wxGetMousePosition()));
+    hit_test_flag = wxLIST_HITTEST_ONITEM;
+    
+    listcontrol_positions->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
+    (p.y) -= r.y;
+    
+    highlighted_position = (listcontrol_positions->HitTest(p, hit_test_flag));
+    
+       cout << "\nMouse is on item # " << highlighted_route;
+    
+    (chart_frame->draw_panel)->PaintNow();
     
     event.Skip(true);
     

@@ -1568,7 +1568,7 @@ public:
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
-    unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes, /*the # of the route which is highlighted because the mouse is hovering over it in listcontrol_routes*/highlighted_route;
+    unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes, /*the # of the route/position which is highlighted because the mouse is hovering over it in listcontrol_routes/positions*/highlighted_route, highlighted_position;
     vector<wxColour> color_list;
     //the rectangle used to measure the size of the display
     wxDisplay display;
@@ -1591,7 +1591,8 @@ public:
     void OnModifyRoute(wxCommandEvent& event);
     void OnPressDeleteRoute(wxCommandEvent& event);
     
-    void OnHover(wxMouseEvent&);
+    void OnHoverOnListControlRoutes(wxMouseEvent&);
+    void OnHoverOnListControlPositions(wxMouseEvent&);
     
     void DrawRoutes(void);
 

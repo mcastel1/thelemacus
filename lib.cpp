@@ -7087,7 +7087,6 @@ bool ChartFrame::ZoomFactor(double delta_x, double* f){
 //this function updates the slider according to the zooming factor of the chart.
 void ChartFrame::UpdateSlider(void){
     
-    bool output;
     double f;
     
     //compute the zooming factor of the chart and write it into value_slider_old

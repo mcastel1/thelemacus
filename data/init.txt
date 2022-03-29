@@ -34,7 +34,7 @@ height of terminal window = 110
 #width of terminal window = 110
 #height of terminal window = 110
 #values for black screen
-number of points coastline = 100000
+number of points coastline = 1000000
 number of points for routes = 1000
 number of intervals for tics = 6
 use of stopwatch = n

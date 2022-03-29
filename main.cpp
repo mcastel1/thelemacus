@@ -23,6 +23,7 @@
  - set log scale on slider
  - fix issue that related sight is not properly deleted when a route is deleted
  - when mouse hovers over listcontrol of sights, highlight the related route, if any
+ - find out why the code is slow
  */
 
 

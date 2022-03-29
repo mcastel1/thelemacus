@@ -6526,8 +6526,12 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
-        GeoToPlot((plot->position_list)[i], &p);
-        dc.DrawCircle(p, 4.0*thickness);
+        
+        if(GeoToPlot((plot->position_list)[i], &p)){
+            //if the point returned from GeoToPlot falls within the plot area, then I plot it
+            
+            dc.DrawCircle(p, 4.0*thickness);
+        }
         
         
     }
@@ -7689,7 +7693,6 @@ DeleteRoute::DeleteRoute(ListFrame* f_in, Answer remove_related_sight_in){
 
 void DeleteRoute::operator()(wxCommandEvent& event){
     
-    unsigned int i;
     int i_related_sight;
     
     i_related_sight = ((((f->plot)->route_list)[i_route_to_remove]).related_sight).value;

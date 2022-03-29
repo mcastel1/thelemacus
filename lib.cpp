@@ -6923,6 +6923,9 @@ void DrawPanel::Draw(void){
     (parent->x).clear();
     (parent->y).clear();
     
+    //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen 
+    parent->CenterOnScreen();
+    
 }
 
 

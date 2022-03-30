@@ -6369,50 +6369,21 @@ void ChartFrame::GetCoastLineData(void){
 
 void ChartFrame::GetAllCoastLineData(void){
     
-    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
+    File file_n_line, file_coastline_data_blocked;
     string data, line;
     stringstream ins;
-    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
+    int i, j;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
     vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
-    unsigned int l, n = 0, n_points_grid = 0;
+    unsigned int l, n = 0;
     char* buffer = NULL;
     size_t pos_beg, pos_end;
     bool check;
-    double lambda_temp, phi_temp, x_temp, y_temp;
+    double lambda_temp, phi_temp;
     vector< vector<float> > data_x, data_y;
-    unsigned long long int n_data;
     
-    //set x_min, ..., y_max for the following
-    draw_panel->Update_x_y_min_max();
-    
-    
-    //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
-    ((parent->plot)->phi_min).normalize_pm_pi();
-    ((parent->plot)->phi_max).normalize_pm_pi();
-    
-    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
-    lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
-    phi_min_int = floor(K*(((parent->plot)->phi_min).value));
-    phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
-    
-    //transform the values lambda_min_int, lambda_max_int in a format appropriate for GetCoastLineData
-    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
-        j_min = lambda_max_int - 360;
-        j_max = lambda_min_int;
-    }else{
-        j_min = lambda_max_int;
-        j_max = lambda_min_int;
-    }
-    
-    i_min = phi_min_int - floor_min_lat;
-    i_max = phi_max_int - floor_min_lat;
-    
-    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
-    
-    
-    n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
-    
+     
+  
     file_n_line.set_name(String(path_file_n_line));
     file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
         
@@ -6428,7 +6399,7 @@ void ChartFrame::GetAllCoastLineData(void){
         ins << line;
         ins >> (n_line[i++]);
         
-        cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+        //        cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
         
     }
     file_n_line.close(String(""));
@@ -6441,11 +6412,10 @@ void ChartFrame::GetAllCoastLineData(void){
     //start - part of the code which takes a long time to run
     
     check = true;
-    n_data = 0;
     i=0;
     while(!(file_coastline_data_blocked.value.eof())){
         
-        cout << "\nxxxxxx    i = " << i;
+        //        cout << "\nxxxxxx    i = " << i;
         
         data_x.resize(i+1);
         data_y.resize(i+1);
@@ -6491,30 +6461,12 @@ void ChartFrame::GetAllCoastLineData(void){
                 (data_x[i]).push_back(x_mercator(lambda_temp));
                 (data_y[i]).push_back(y_mercator(phi_temp));
 
-                //                X.push_back(x_mercator(lambda_temp));
-                //                y_temp = y_mercator(phi_temp);
-                
-                
-//                cout << "\ni = " << i << "j = " << j << " x_temp = " << x_temp << " y_temp = " << y_temp;
-                
-                n_data++;
-                
-//                if(((draw_panel->x_min) <= x_temp) && (x_temp <= (draw_panel->x_max)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
-//
-//                    x.push_back(x_mercator(lambda_temp));
-//                    y.push_back(y_mercator(phi_temp));
-//
-//                }
-                
-                
-                
                 pos_beg = pos_end+1;
                 pos_end = data.find(" ", pos_beg);
                 
                 l++;
                 
             };
-            
             
             data.clear();
             
@@ -6539,7 +6491,7 @@ void ChartFrame::GetAllCoastLineData(void){
 //        for(j=0; j<data_x[i].size(); j++){
 //            cout << "\t"<< data_x[i][j];
 //        }
-//        
+//
 //    }
     
 
@@ -6550,12 +6502,10 @@ void ChartFrame::GetAllCoastLineData(void){
         
     }else{
         
-        cout << RED << "Error: only " << file_coastline_data_blocked.value.gcount() << " characters could be read\n" << RESET;
+        cout << RED << "Error: not all characters could be read\n" << RESET;
         
     }
     
-    
-    //    outfile_selected_coastline_data.close(String(""));
     file_coastline_data_blocked.close(String(""));
     
     

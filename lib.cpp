@@ -6843,7 +6843,7 @@ void DrawPanel::Draw(void){
     cout << "... delta_phi = "  << delta_phi << "\n";
 
     
-    for(phi = ((int)((K*(((plot->phi_min).value)))/delta_phi))*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
+    for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
         y_dummy = y_mercator(phi);
         
@@ -6856,28 +6856,30 @@ void DrawPanel::Draw(void){
                        (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
                        0x808080, 1);
             
-            if(gamma_phi == 60.0){
+        }
+        
+        if(gamma_phi == 60.0){
+            
+            //plot the yticks from phi to the next phi (phi + dphi)
+            for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
                 
-                //plot the yticks from phi to the next phi (phi + dphi)
-                for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
+                if((phi + (((double)i)/10.0)*1.0/60.0 >= (K*(((plot->phi_min).value)))) && (phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((plot->phi_max).value))))){
+                    //set custom-made minor yticks every tenths (i/10.0) of arcminutes (60.0)
                     
-                    if(phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((plot->phi_max).value)))){
-                        //set custom-made minor yticks every tenths (i/10.0) of arcminutes (60.0)
-                        
-                        c->addLine(
-                                   (position_plot_area.x),
-                                   (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
-                                   (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
-                                   (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
-                                   0x0000ff, 1);
-                        
-                    }
+                    c->addLine(
+                               (position_plot_area.x),
+                               (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
+                               (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
+                               (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
+                               0x0000ff, 1);
                     
                 }
                 
             }
             
         }
+        
+        
         
     }
     

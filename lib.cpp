@@ -6511,10 +6511,6 @@ void DrawPanel::Render(wxDC&  dc){
         
     }
 
-    //   reset the pen to its default parameters
-    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
-   
-    
     //draw positions
     for(i=0; i<(plot->position_list).size(); i++){
         
@@ -9689,7 +9685,23 @@ void ListFrame::DrawRoutes(void){
     
 }
 
-//signals when the mouse hovers over a given element of listcontrol_routes
+//when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
+void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
+    
+    int i;
+    
+    MousePositionOnListControl(listcontrol_sights, &i);
+    
+    highlighted_route = ((((plot->sight_list)[i]).related_route).value);
+    
+    (chart_frame->draw_panel)->PaintNow();
+    
+    event.Skip(true);
+    
+}
+
+
+//when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route
 void ListFrame::OnMouseOnListControlRoutes(wxMouseEvent& event){
     
     MousePositionOnListControl(listcontrol_routes, &highlighted_route);
@@ -9700,7 +9712,7 @@ void ListFrame::OnMouseOnListControlRoutes(wxMouseEvent& event){
     
 }
 
-//signals when the mouse hovers over a given element of listcontrol_positions
+//when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
 void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
     MousePositionOnListControl(listcontrol_positions, &highlighted_position);

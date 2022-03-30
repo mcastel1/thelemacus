@@ -1610,6 +1610,7 @@ public:
     void OnModifyRoute(wxCommandEvent& event);
     void OnPressDeleteRoute(wxCommandEvent& event);
     
+    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseOnListControlRoutes(wxMouseEvent&);
     void OnMouseOnListControlPositions(wxMouseEvent&);
     

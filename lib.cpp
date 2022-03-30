@@ -6380,7 +6380,7 @@ void ChartFrame::GetAllCoastLineData(void){
     size_t pos_beg, pos_end;
     bool check;
     double lambda_temp, phi_temp, x_temp, y_temp;
-    vector< vector<float> > data_x;
+    vector< vector<float> > data_x, data_y;
     unsigned long long int n_data;
     
     //set x_min, ..., y_max for the following
@@ -6448,6 +6448,7 @@ void ChartFrame::GetAllCoastLineData(void){
         cout << "\nxxxxxx    i = " << i;
         
         data_x.resize(i+1);
+        data_y.resize(i+1);
 
         for(j=0; j<360; j++){
             
@@ -6487,8 +6488,9 @@ void ChartFrame::GetAllCoastLineData(void){
                 ins << line;
                 ins >> phi_temp >> lambda_temp;
                 
-                (data_x[i]).push_back(lambda_temp);
-                
+                (data_x[i]).push_back(x_mercator(lambda_temp));
+                (data_y[i]).push_back(y_mercator(phi_temp));
+
                 //                X.push_back(x_mercator(lambda_temp));
                 //                y_temp = y_mercator(phi_temp);
                 
@@ -6532,13 +6534,13 @@ void ChartFrame::GetAllCoastLineData(void){
 //        
 //    }
     
-    for(i=data_x.size()-10; i<data_x.size(); i++){
-        cout << "\ni = " << i << "\n";
-        for(j=0; j<data_x[i].size(); j++){
-            cout << "\t"<< data_x[i][j];
-        }
-        
-    }
+//    for(i=data_x.size()-10; i<data_x.size(); i++){
+//        cout << "\ni = " << i << "\n";
+//        for(j=0; j<data_x[i].size(); j++){
+//            cout << "\t"<< data_x[i][j];
+//        }
+//        
+//    }
     
 
     

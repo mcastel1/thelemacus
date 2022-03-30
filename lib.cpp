@@ -6212,15 +6212,15 @@ void ChartFrame::GetCoastLineData(void){
     ((parent->plot)->phi_min).normalize_pm_pi();
     ((parent->plot)->phi_max).normalize_pm_pi();
     
-    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
+    lambda_min_int = floor(K*(((parent->plot)->lambda_min).value));
     lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
     phi_min_int = floor(K*(((parent->plot)->phi_min).value));
     phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
     
-    //transform the values lambda_min_int, lambda_max_int in a format appropriate for GetCoastLineData
+    //transform the values lambda_min_int, lambda_max_int in a format appropriate for data_x and data_y
     if((lambda_min_int < 180) && (lambda_max_int >= 180)){
-        j_min = lambda_max_int - 360;
-        j_max = lambda_min_int;
+        j_min = lambda_max_int;
+        j_max = 360 + lambda_min_int;
     }else{
         j_min = lambda_max_int;
         j_max = lambda_min_int;
@@ -6238,19 +6238,27 @@ void ChartFrame::GetCoastLineData(void){
     y.clear();
     for(i=i_min; i<=i_max; i++){
         
+        cout << "\n i = " << i;
+        
         for(j=j_min; j<=j_max; j++){
             
             
+//            cout << "\n j = " << j;
+
+            
             //count how many datapoints are in data_x[i] and in data_y[i]
-            n = (data_x[i]).size();
+            n = (data_x[i - floor_min_lat][j % 360]).size();
             
             every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
             if(every == 0){every = 1;}
             
-            for(l=0; l<(data_x[i][j]).size(); l++){
+            for(l=0; l<(data_x[i - floor_min_lat][j % 360]).size(); l++){
                 
-                x_temp = data_x[i][j][l];
-                y_temp = data_y[i][j][l];
+//                cout << "\n l = " << l;
+
+                
+                x_temp = data_x[i - floor_min_lat][j % 360][l];
+                y_temp = data_y[i - floor_min_lat][j % 360][l];
                 
                 //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){

@@ -27,6 +27,7 @@
  - compute authomatically n_interval_tics by calculating the width of the window and of each label on the axes
 - set up a proper output to a log file
  - turn gamma_lambda into an unsigned int
+ - add a dropdown menu with the units of measure in LengthField
  */
 
 

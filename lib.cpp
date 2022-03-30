@@ -8586,7 +8586,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     
     parent = parent_input;
     
-    String new_prefix;
+    String new_prefix, label_button_ok;
     unsigned int common_width;
     
     bool check = true;
@@ -8668,7 +8668,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel->Bind(wxEVT_BUTTON, &RouteFrame::OnPressCancel, this);
     
-    button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    //if I am adding a brand new route, I name button_ok 'Add'. Otherwise I name it "Modify"
+    if(route_in == NULL){
+        label_button_ok.set(String(""), String("Add"), String(""));
+    }else{
+        label_button_ok.set(String(""), String("Modify"), String(""));
+    }
+    button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value , wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
     //    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     
@@ -8676,7 +8682,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
     //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
     //    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
-    button_add->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
+    button_ok->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
     if(route_in == NULL){
@@ -8692,7 +8698,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     }
     
     //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
-    button_add->Enable((route_in != NULL));
+    button_ok->Enable((route_in != NULL));
     
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
     type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
@@ -8731,7 +8737,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     sizer_box_data->Add(sizer_grid_omega);
     
     box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer->Add(button_add, 0, wxALIGN_BOTTOM);
+    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM);
     
     
     
@@ -8880,7 +8886,7 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
 
 void RouteFrame::TryToEnableOk(void){
     
-    button_add->Enable((type->is_ok()) &&
+    button_ok->Enable((type->is_ok()) &&
                        (
                         ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
                          ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))

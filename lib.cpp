@@ -6548,11 +6548,9 @@ void DrawPanel::Render(wxDC&  dc){
     
     //draw labels on the x axis
     //set the initial value of dummy
-    if(x_min > x_mercator((floor((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda)){
-        dummy = x_mercator((ceil((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda);
-    }else{
-        dummy = x_mercator((floor((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda);
-    }
+    dummy = x_mercator((floor((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda);
+   
+        
     //starts the loop which draws the labels
     for(first_label = true; dummy <= x_max; dummy+=k*delta_lambda){
         
@@ -6605,11 +6603,11 @@ void DrawPanel::Render(wxDC&  dc){
     
     //draw labels on the y axis
     //set first value of dummy
-    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
-        dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-    }else{
-        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-    }
+//    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
+    dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+//    }else{
+//        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+//    }
     //starts for loop which draws the ylabels
     for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
         
@@ -6723,7 +6721,7 @@ void DrawPanel::Draw(void){
     // Create a XYChart object with the appropriate size
     c = new XYChart(width_chart, height_chart);
     //create the plot area of c with the appropriate size
-    c->setPlotArea(width_chart*0.1, height_chart*0.1,
+    c->setPlotArea(width_chart*0.15, height_chart*0.1,
                    width_plot_area,
                    height_plot_area,
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);

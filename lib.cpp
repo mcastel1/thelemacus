@@ -7015,7 +7015,7 @@ void DrawPanel::Draw(void){
     (parent->y).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen 
-    parent->CenterOnScreen();
+    //    parent->CenterOnScreen();
     
 }
 
@@ -8814,6 +8814,10 @@ void PositionFrame::OnPressAdd(wxCommandEvent& event){
     
     position->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_positions));
     
+    //I call PaintNow() because the positions have changed, so I need to re-draw the chart
+    ((parent->chart_frame)->draw_panel)->Draw();
+    ((parent->chart_frame)->draw_panel)->PaintNow();
+    
     event.Skip(true);
     
     Close(TRUE);
@@ -8843,8 +8847,12 @@ void RouteFrame::OnPressAdd(wxCommandEvent& event){
     
     route->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
     
-    parent->plot->print(true, String(""), cout);
+    //    parent->plot->print(true, String(""), cout);
     
+    //I call PaintNow() because the positions have changed, so I need to re-draw the chart
+    ((parent->chart_frame)->draw_panel)->Draw();
+    ((parent->chart_frame)->draw_panel)->PaintNow();
+ 
     
     event.Skip(true);
     
@@ -10503,7 +10511,10 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     parent->plot->print(true, String(""), cout);
     
-    
+    //I call PaintNow() because the positions have changed, so I need to re-draw the chart
+    ((parent->chart_frame)->draw_panel)->Draw();
+    ((parent->chart_frame)->draw_panel)->PaintNow();
+   
     event.Skip(true);
     
     Close(TRUE);

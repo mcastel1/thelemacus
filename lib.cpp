@@ -6215,7 +6215,7 @@ void ChartFrame::GetCoastLineData(void){
     lambda_min_int = floor(K*(((parent->plot)->lambda_min).value));
     lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
     phi_min_int = floor(K*(((parent->plot)->phi_min).value));
-    phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
+    phi_max_int = floor(K*(((parent->plot)->phi_max).value));
     
     //transform the values lambda_min_int, lambda_max_int in a format appropriate for data_x and data_y
     if((lambda_min_int < 180) && (lambda_max_int >= 180)){
@@ -6226,8 +6226,8 @@ void ChartFrame::GetCoastLineData(void){
         j_max = lambda_min_int;
     }
     
-    i_min = phi_min_int - floor_min_lat;
-    i_max = phi_max_int - floor_min_lat;
+    i_min = phi_min_int;
+    i_max = phi_max_int;
     
     cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
     
@@ -6236,15 +6236,18 @@ void ChartFrame::GetCoastLineData(void){
     
     x.clear();
     y.clear();
-    for(i=i_min; i<=i_max; i++){
+    for(i=i_min; i<i_max; i++){
         
         cout << "\n i = " << i;
         
-        for(j=j_min; j<=j_max; j++){
+        for(j=j_min; j<j_max; j++){
             
             
-//            cout << "\n j = " << j;
+//            floor(phi_max)-1 - floor_min_lat
 
+            
+            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+            flush(cout);
             
             //count how many datapoints are in data_x[i] and in data_y[i]
             n = (data_x[i - floor_min_lat][j % 360]).size();
@@ -6328,7 +6331,6 @@ void ChartFrame::GetAllCoastLineData(void){
     i=0;
     while(!(file_coastline_data_blocked.value.eof())){
         
-        //        cout << "\nxxxxxx    i = " << i;
         
         data_x.resize(i+1);
         data_y.resize(i+1);
@@ -6387,6 +6389,9 @@ void ChartFrame::GetAllCoastLineData(void){
         i++;
         
     }
+    
+           cout << "\nxxxxxx    i at the end of loop = " << i;
+
     
 //    for(i=0; i<10; i++){
 //        cout << "\ni = " << i << "\n";

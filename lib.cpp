@@ -8682,7 +8682,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
     //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
     //    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
-    button_ok->Bind(wxEVT_BUTTON, &RouteFrame::OnPressAdd, this);
+    button_ok->Bind(wxEVT_BUTTON, &RouteFrame::OnPressOk, this);
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
     if(route_in == NULL){
@@ -8841,7 +8841,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
 }
 
 
-void RouteFrame::OnPressAdd(wxCommandEvent& event){
+void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     
     stringstream s;
@@ -8857,6 +8857,11 @@ void RouteFrame::OnPressAdd(wxCommandEvent& event){
         
         ((this->parent)->plot)->add_route(route, String(""));
         
+    }
+    
+    //if I am adding a new Route, I resize points_route_list to add a new element to it
+    if(list_position == -1){
+        ((parent->chart_frame->draw_panel)->points_route_list).resize(((parent->chart_frame->draw_panel)->points_route_list).size() + 1);
     }
     
     parent->UpdateRelatedSightsAndRoutes();

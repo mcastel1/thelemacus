@@ -1734,7 +1734,7 @@ public:
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
-    void OnPressAdd(wxCommandEvent& event);
+    void OnPressOk(wxCommandEvent& event);
     void TryToEnableOk(void);
     
     //    wxDECLARE_EVENT_TABLE();

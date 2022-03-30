@@ -6212,7 +6212,7 @@ void ChartFrame::GetCoastLineData(void){
     ((parent->plot)->phi_min).normalize_pm_pi();
     ((parent->plot)->phi_max).normalize_pm_pi();
     
-    lambda_min_int = floor(K*(((parent->plot)->lambda_min).value));
+    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
     lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
     phi_min_int = floor(K*(((parent->plot)->phi_min).value));
     phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
@@ -6242,8 +6242,6 @@ void ChartFrame::GetCoastLineData(void){
         
         for(j=j_min; j<j_max; j++){
             
-            
-//floor_max_lat - floor_min_lat
 
             
 //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;

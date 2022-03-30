@@ -3599,9 +3599,9 @@ Plot::Plot(Catalog* cata, String prefix){
     
     file_init.open(String("in"), prefix);
     
-    //read number of intervals for tics from file_init
-    cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
-    n_intervals_tics_preferred.read_from_file(String("preferred number of intervals for tics"), file_init, true, new_prefix);
+    //read number of intervals for ticks from file_init
+    cout << prefix.value << YELLOW << "Reading number of intervals for ticks from file " << file_init.name.value << " ...\n" << RESET;
+    n_intervals_ticks_preferred.read_from_file(String("preferred number of intervals for ticks"), file_init, true, new_prefix);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     //read number of points for routes from file_init
@@ -6681,9 +6681,10 @@ void DrawPanel::Draw(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i, j;
-    unsigned int n_intervals_tics;
+    unsigned int n_intervals_ticks;
     //the total length of each Route
     Length l_tot;
+    Angle dummy;
     //this is a pointer to parent->parent->plot, created only to shorten the code
     wxPoint p;
     
@@ -6733,34 +6734,30 @@ void DrawPanel::Draw(void){
     size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
     
     
-    //set parallels
+    //set meridians
     lambda_span = K*(x_max-x_min);
-    
-    //set n_interval_tics
-    
-    Angle a;
-    a.from_sign_deg_min('+', 179, 59);
+        
+    //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
+    dummy.from_sign_deg_min('+', 179, 59);
 
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
-    unsigned int n_intervals_tics_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((a.to_string(String("EW"), display_precision)))).GetWidth()))));
-    n_intervals_tics = min(
-                          (unsigned int)((plot->n_intervals_tics_preferred).value),
-                           n_intervals_tics_max
+    unsigned int n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision)))).GetWidth()))));
+    n_intervals_ticks = min(
+                          (unsigned int)((plot->n_intervals_ticks_preferred).value),
+                           n_intervals_ticks_max
                           );
     
-    if(((plot->n_intervals_tics_preferred).value) > n_intervals_tics_max){
-        cout << "xxxxxxxxx      I have to reduce the number of ticks!\n";
-    }
-    
-    
-    
+//    if(((plot->n_intervals_ticks_preferred).value) > n_intervals_ticks_max){
+//        cout << "xxxxxxxxx      I have to reduce the number of ticks!\n";
+//    }
+
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
     
     delta_lambda=1.0/gamma_lambda;
-    while(n_intervals_tics*delta_lambda<lambda_span){
+    while(n_intervals_ticks*delta_lambda<lambda_span){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
@@ -6786,11 +6783,11 @@ void DrawPanel::Draw(void){
         
         if(gamma_lambda == 60.0){
             
-            //plot the xtics from lambda to the next lambda (lambda + dlambda)
+            //plot the xticks from lambda to the next lambda (lambda + dlambda)
             for(i=0; (((double)i)/10.0)/60.0 < delta_lambda; i++){
                 
                 if(x_dummy + k*(((double)i)/10.0)/60.0 <= x_max){
-                    //set custom-made minor xtics every tenths (i/10.0) of arcminute (60.0)
+                    //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     c->addLine(
                                (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
@@ -6816,7 +6813,7 @@ void DrawPanel::Draw(void){
     else{gamma_phi = 60.0;}
     
     delta_phi=1.0/gamma_phi;
-    while(((plot->n_intervals_tics_preferred).value)*delta_phi<phi_span){
+    while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
         //print delta_phi;
         if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
@@ -6845,11 +6842,11 @@ void DrawPanel::Draw(void){
             
             if(gamma_phi == 60.0){
                 
-                //plot the ytics from phi to the next phi (phi + dphi)
+                //plot the yticks from phi to the next phi (phi + dphi)
                 for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
                     
                     if(phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((plot->phi_max).value)))){
-                        //set custom-made minor ytics every tenths (i/10.0) of arcminutes (60.0)
+                        //set custom-made minor yticks every tenths (i/10.0) of arcminutes (60.0)
                         
                         c->addLine(
                                    (position_plot_area.x),
@@ -6877,7 +6874,7 @@ void DrawPanel::Draw(void){
     
     // Add a title to the x axis using 12pt Arial Bold Italic font
     //    (c->xAxis())->setTitle("lambda", "Arial", 12);
-    //set the interval of the x axis, and disables the xtics with the last NoValue argument
+    //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (c->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
     
     (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);

@@ -36,7 +36,7 @@ height of terminal window = 110
 #values for black screen
 number of points coastline = 100000
 number of points for routes = 1000
-preferred number of intervals for tics = 6
+preferred number of intervals for ticks = 6
 use of stopwatch = n
 color list = (255,0,00) (0,255,0) (0,0,255) (255,128,0) (0,255,255) (255,192,203)
 maximal zoom factor = 5000

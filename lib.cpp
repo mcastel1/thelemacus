@@ -6681,7 +6681,7 @@ void DrawPanel::Draw(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i, j;
-    unsigned int n_intervals_ticks;
+    unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
     Length l_tot;
     Angle dummy;
@@ -6742,7 +6742,7 @@ void DrawPanel::Draw(void){
 
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
-    unsigned int n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision)))).GetWidth()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision)))).GetWidth()))));
     n_intervals_ticks = min(
                           (unsigned int)((plot->n_intervals_ticks_preferred).value),
                            n_intervals_ticks_max
@@ -6803,10 +6803,28 @@ void DrawPanel::Draw(void){
         }
         
     }
-    //
+    
+    
+    
+    
+    
+    
+    
     
     //set parallels
     phi_span = K*(((plot->phi_max).value) - ((plot->phi_min).value));
+    
+    //I create an angle which has the largest posible label when printed out in the "NS" format, so as to compute the  value of n_interval_ticks which allows the y-axis labels not to superpose
+    dummy.from_sign_deg_min('+', 89, 59);
+
+    //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
+    
+    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.y))/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision)))).GetHeight()))));
+    n_intervals_ticks = min(
+                          (unsigned int)((plot->n_intervals_ticks_preferred).value),
+                           n_intervals_ticks_max
+                          );
+    
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > 1.0){gamma_phi = 1.0;}
@@ -6818,14 +6836,12 @@ void DrawPanel::Draw(void){
         if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
     }
-    if(delta_phi > 1.0/gamma_phi){
-        if(delta_phi == 5.0/gamma_phi){delta_phi = delta_phi - 4.0/gamma_phi;}
-        else{delta_phi = delta_phi - 5.0/gamma_phi;}
-    }
+//    if(delta_phi > 1.0/gamma_phi){
+//        if(delta_phi == 5.0/gamma_phi){delta_phi = delta_phi - 4.0/gamma_phi;}
+//        else{delta_phi = delta_phi - 5.0/gamma_phi;}
+//    }
     cout << "... delta_phi = "  << delta_phi << "\n";
-    
-    
-    
+
     
     for(phi = ((int)((K*(((plot->phi_min).value)))/delta_phi))*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         

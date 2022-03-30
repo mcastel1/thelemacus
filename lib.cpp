@@ -6229,7 +6229,7 @@ void ChartFrame::GetCoastLineData(void){
     i_min = phi_min_int;
     i_max = phi_max_int;
     
-    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
+//    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
     
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
@@ -6238,7 +6238,7 @@ void ChartFrame::GetCoastLineData(void){
     y.clear();
     for(i=i_min; i<i_max; i++){
         
-        cout << "\n i = " << i;
+//        cout << "\n i = " << i;
         
         for(j=j_min; j<j_max; j++){
             
@@ -7694,9 +7694,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
     Update_lambda_phi_min_max();
-    
-    cout << "x_min = " << x_min<< "\n";
-    
+        
     //update parent->value_slider_old
     (parent->value_slider_old) = exp(((parent->slider)->GetValue()));
     

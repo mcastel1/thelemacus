@@ -6681,6 +6681,7 @@ void DrawPanel::Draw(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i, j;
+    unsigned int n_intervals_tics;
     //the total length of each Route
     Length l_tot;
     //this is a pointer to parent->parent->plot, created only to shorten the code
@@ -6737,12 +6738,30 @@ void DrawPanel::Draw(void){
     
     //set n_interval_tics
     
+    Angle a;
+    a.from_sign_deg_min('+', 179, 59);
+
+    //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
+    
+    unsigned int n_intervals_tics_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((a.to_string(String("EW"), display_precision)))).GetWidth()))));
+    n_intervals_tics = min(
+                          (unsigned int)((plot->n_intervals_tics_preferred).value),
+                           n_intervals_tics_max
+                          );
+    
+    if(((plot->n_intervals_tics_preferred).value) > n_intervals_tics_max){
+        
+        cout << "xxxxxxxxx      I have to reduce the number of ticks!\n";
+    }
+    
+    
+    
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
     
     delta_lambda=1.0/gamma_lambda;
-    while(((plot->n_intervals_tics_preferred).value)*delta_lambda<lambda_span){
+    while(n_intervals_tics*delta_lambda<lambda_span){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
@@ -6790,7 +6809,7 @@ void DrawPanel::Draw(void){
     }
     //
     
-    //set meridians
+    //set parallels
     phi_span = K*(((plot->phi_max).value) - ((plot->phi_min).value));
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes

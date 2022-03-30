@@ -6750,7 +6750,6 @@ void DrawPanel::Draw(void){
                           );
     
     if(((plot->n_intervals_tics_preferred).value) > n_intervals_tics_max){
-        
         cout << "xxxxxxxxx      I have to reduce the number of ticks!\n";
     }
     
@@ -6765,10 +6764,10 @@ void DrawPanel::Draw(void){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
-    if(delta_lambda > 1.0/gamma_lambda){
-        if(delta_lambda == 5.0/gamma_lambda){delta_lambda = delta_lambda - 4.0/gamma_lambda;}
-        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
-    }
+//    if(delta_lambda > 1.0/gamma_lambda){
+//        if(delta_lambda == 5.0/gamma_lambda){delta_lambda = delta_lambda - 4.0/gamma_lambda;}
+//        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
+//    }
     cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
     lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda;

@@ -6768,7 +6768,7 @@ void DrawPanel::Draw(void){
     cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
     lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda;
-    for(x_dummy = x_mercator(lambda); x_dummy <= x_max; x_dummy+=k*delta_lambda){
+    for(x_dummy = x_mercator(lambda) - k*delta_lambda; x_dummy <= x_max; x_dummy+=k*delta_lambda){
         
         if((x_dummy >= x_min) && (x_dummy <= x_max)){
             
@@ -6786,7 +6786,7 @@ void DrawPanel::Draw(void){
             //plot the xticks from lambda to the next lambda (lambda + dlambda)
             for(i=0; (((double)i)/10.0)/60.0 < delta_lambda; i++){
                 
-                if(x_dummy + k*(((double)i)/10.0)/60.0 <= x_max){
+                if((x_dummy + k*(((double)i)/10.0)/60.0 >= x_min) && (x_dummy + k*(((double)i)/10.0)/60.0 <= x_max)){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     c->addLine(

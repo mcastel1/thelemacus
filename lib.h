@@ -922,7 +922,7 @@ public:
     vector<String> choices;
     vector<unsigned int> crossing_route_list;
     Angle phi_min, phi_max, lambda_min, lambda_max;
-    Int n_points_plot_coastline, n_points_routes, n_intervals_tics;
+    Int n_points_plot_coastline, n_points_routes, /*the preferred numer of tics per axis in the chart plot: if there is enough space, I will put this number of ticks. If not, I will plot a nuber of ticks as cloase as possible to the preferred one*/n_intervals_tics_preferred;
     
     Plot(Catalog*, String);
     //~Plot();

@@ -3601,7 +3601,7 @@ Plot::Plot(Catalog* cata, String prefix){
     
     //read number of intervals for tics from file_init
     cout << prefix.value << YELLOW << "Reading number of intervals for tics from file " << file_init.name.value << " ...\n" << RESET;
-    n_intervals_tics.read_from_file(String("number of intervals for tics"), file_init, true, new_prefix);
+    n_intervals_tics_preferred.read_from_file(String("preferred number of intervals for tics"), file_init, true, new_prefix);
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     //read number of points for routes from file_init
@@ -6735,12 +6735,14 @@ void DrawPanel::Draw(void){
     //set parallels
     lambda_span = K*(x_max-x_min);
     
+    //set n_interval_tics
+    
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
     
     delta_lambda=1.0/gamma_lambda;
-    while(((plot->n_intervals_tics).value)*delta_lambda<lambda_span){
+    while(((plot->n_intervals_tics_preferred).value)*delta_lambda<lambda_span){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
@@ -6796,7 +6798,7 @@ void DrawPanel::Draw(void){
     else{gamma_phi = 60.0;}
     
     delta_phi=1.0/gamma_phi;
-    while(((plot->n_intervals_tics).value)*delta_phi<phi_span){
+    while(((plot->n_intervals_tics_preferred).value)*delta_phi<phi_span){
         //print delta_phi;
         if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
         else{delta_phi = delta_phi + 5.0/gamma_phi;}

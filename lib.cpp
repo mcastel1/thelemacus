@@ -6196,13 +6196,13 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
 void ChartFrame::GetCoastLineData(void){
     
+    
 //    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
 //    string data, line;
 //    stringstream ins;
-    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
+    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
-    bool check;
-    double lambda_temp, phi_temp, x_temp, y_temp;
+    double x_temp, y_temp;
     
     //set x_min, ..., y_max for the following
     draw_panel->Update_x_y_min_max();

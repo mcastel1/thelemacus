@@ -8459,8 +8459,9 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     parent = parent_input;
     
-    String new_prefix;
+    String new_prefix, /*the label which appears on button_ok*/label_button_ok;
     unsigned int common_width;
+    
     
     bool check = true;
     
@@ -8508,18 +8509,26 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel->Bind(wxEVT_BUTTON, &PositionFrame::OnPressCancel, this);
     
-    button_add = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    //if I am adding a brand new position, I name button_ok 'Add'. Otherwise I name it "Modify"
+    if(position_in == NULL){
+        label_button_ok.set(String(""), String("Add"), String(""));
+    }else{
+        label_button_ok.set(String(""), String("Modify"), String(""));
+    }
+    button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+
+
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+    button_ok->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_add->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
-    button_add->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
-    button_add->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
-    button_add->Bind(wxEVT_BUTTON, &PositionFrame::OnPressAdd, this);
+    button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
+    button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
+    button_ok->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
+    button_ok->Bind(wxEVT_BUTTON, &::PositionFrame::OnPressOk, this);
     
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
-    button_add->Enable((position_in != NULL));
+    button_ok->Enable((position_in != NULL));
     
     sizer_grid_measurement->Add(text_lat, 0, wxALIGN_CENTER_VERTICAL);
     lat->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
@@ -8531,7 +8540,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer_2->Add(button_add, 0, wxALIGN_BOTTOM);
+    box_sizer_2->Add(button_ok, 0, wxALIGN_BOTTOM);
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
     
@@ -8798,7 +8807,8 @@ void PositionFrame::OnPressCancel(wxCommandEvent& event){
 }
 
 
-void PositionFrame::OnPressAdd(wxCommandEvent& event){
+//this function is triggered when button_ok is pressed
+void PositionFrame::OnPressOk(wxCommandEvent& event){
     
     stringstream s;
     
@@ -8956,7 +8966,7 @@ void RouteFrame::SetIdling(bool b){
 //this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
 void PositionFrame::TryToEnableOk(void){
     
-    button_add->Enable((lat->is_ok()) && (lon->is_ok()));
+    button_ok->Enable((lat->is_ok()) && (lon->is_ok()));
     
 }
 

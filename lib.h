@@ -1688,14 +1688,14 @@ public:
     wxBoxSizer *sizer, *box_sizer_2;
     wxStaticBoxSizer *sizer_box_measurement;
     
-    wxButton* button_add, *button_cancel;
+    wxButton* /*button_ok denotes a button which triggers either an 'Add' command, when one is adding a new position, or a 'Modify' command, when one is modifying a position whih already exists*/button_ok, *button_cancel;
     wxMenuBar *menuBar;
     
     void SetIdling(bool);
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
-    void OnPressAdd(wxCommandEvent& event);
+    void OnPressOk(wxCommandEvent& event);
     void TryToEnableOk(void);
     
     //    wxDECLARE_EVENT_TABLE();

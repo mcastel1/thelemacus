@@ -6196,15 +6196,11 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //this function efficiently reads coastline data stored in path_file_coastline_data_blocked from latitudes p to P and longitudes l to L, and writes this data into path_file_selected_coastline_data, writing n_points points at the most
 void ChartFrame::GetCoastLineData(void){
     
-    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
-    string data, line;
-    stringstream ins;
+//    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
+//    string data, line;
+//    stringstream ins;
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, j_normalized = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
-    //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
-    vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
-    char* buffer = NULL;
-    size_t pos_beg, pos_end;
     bool check;
     double lambda_temp, phi_temp, x_temp, y_temp;
     
@@ -6238,135 +6234,47 @@ void ChartFrame::GetCoastLineData(void){
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
-    file_n_line.set_name(String(path_file_n_line));
-    file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
-    //    outfile_selected_coastline_data.set_name(String(path_file_selected_coastline_data));
-    
-    
-    //read file n_line and store it into vector n_line
-    file_n_line.open(String("in"), String(""));
-    i=0;
-    while(!(file_n_line.value.eof())){
-        
-        line.clear();
-        ins.clear();
-        
-        getline(file_n_line.value, line);
-        ins << line;
-        ins >> (n_line[i++]);
-        
-        //cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
-        
-    }
-    file_n_line.close(String(""));
-    
-    
-    
-    //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
-    file_coastline_data_blocked.open(String("in"), String(""));
-    //open a new file selected coastline data and write into it the new data
-    //    outfile_selected_coastline_data.remove(String(""));
-    //    outfile_selected_coastline_data.open(String("out"), String(""));
-    
-    //start - part of the code which takes a long time to run
     x.clear();
     y.clear();
-    
-    check = true;
     for(i=i_min; i<=i_max; i++){
         
         for(j=j_min; j<=j_max; j++){
             
-            j_normalized = (j % 360);
             
-            // read data as a block:
-            file_coastline_data_blocked.value.seekg(n_line[360*i+j_normalized], file_coastline_data_blocked.value.beg);
-            
-            l = n_line[360*i+j_normalized + 1] - n_line[360*i+j_normalized] - 1;
-            if(buffer != NULL){delete [] buffer;}
-            buffer = new char [l];
-            
-            file_coastline_data_blocked.value.read(buffer, l);
-            string data(buffer, l);
-            
-            if(!(file_coastline_data_blocked.value)){
-                
-                check = false;
-                
-            }
-            
-            //count how many datapoints are in data
-            n = count(data.begin(), data.end(), ',');
+            //count how many datapoints are in data_x[i] and in data_y[i]
+            n = (data_x[i]).size();
             
             every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
             if(every == 0){every = 1;}
             
-            l=0;
-            pos_beg = 0;
-            pos_end = data.find(" ", pos_beg);
-            while(pos_end != (string::npos)){
+            for(l=0; l<(data_x[i][j]).size(); l++){
+                
+                x_temp = data_x[i][j][l];
+                y_temp = data_y[i][j][l];
                 
                 //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
-                    
-                    line.clear();
-                    line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-                    
-                    replace(line.begin(), line.end(), ' ', '\n');
-                    replace(line.begin(), line.end(), ',', ' ');
-                    
-                    //                    (outfile_selected_coastline_data.value) << line;
-                    ins.clear();
-                    ins << line;
-                    ins >> phi_temp >> lambda_temp;
-                    
-                    x_temp = x_mercator(lambda_temp);
-                    y_temp = y_mercator(phi_temp);
-                    
+                      
                     if(((draw_panel->x_min) <= x_temp) && (x_temp <= (draw_panel->x_max)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
                         
-                        x.push_back(x_mercator(lambda_temp));
-                        y.push_back(y_mercator(phi_temp));
+                        x.push_back(x_temp);
+                        y.push_back(y_temp);
                         
                     }
                     
                 }
                 
-                pos_beg = pos_end+1;
-                pos_end = data.find(" ", pos_beg);
-                
-                l++;
-                
-            };
             
-            
-            data.clear();
+            }
             
         }
         
     }
-    //end - part of the code which takes a long time to run
-    
-    
-    if(check){
-        
-        cout << "All characters read successfully\n";
-        
-    }else{
-        
-        cout << RED << "Error: only " << file_coastline_data_blocked.value.gcount() << " characters could be read\n" << RESET;
-        
-    }
-    
-    
-    //    outfile_selected_coastline_data.close(String(""));
-    file_coastline_data_blocked.close(String(""));
-    
     
 }
 
 
-
+//this function fetches the data in path_file_coastline_data_blocked and stores them in data_x, data_y so that they can be read fastly
 void ChartFrame::GetAllCoastLineData(void){
     
     File file_n_line, file_coastline_data_blocked;
@@ -6380,10 +6288,8 @@ void ChartFrame::GetAllCoastLineData(void){
     size_t pos_beg, pos_end;
     bool check;
     double lambda_temp, phi_temp;
-    vector< vector<float> > data_x, data_y;
     
      
-  
     file_n_line.set_name(String(path_file_n_line));
     file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
         
@@ -6405,11 +6311,10 @@ void ChartFrame::GetAllCoastLineData(void){
     file_n_line.close(String(""));
     
     
-    
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     
-    //start - part of the code which takes a long time to run
+
     
     check = true;
     i=0;
@@ -6419,10 +6324,12 @@ void ChartFrame::GetAllCoastLineData(void){
         
         data_x.resize(i+1);
         data_y.resize(i+1);
+        
+        (data_x[i]).resize(360);
+        (data_y[i]).resize(360);
 
         for(j=0; j<360; j++){
-            
-            
+              
             // read data as a block:
             file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
             
@@ -6434,9 +6341,7 @@ void ChartFrame::GetAllCoastLineData(void){
             string data(buffer, l);
             
             if(!(file_coastline_data_blocked.value)){
-                
                 check = false;
-                
             }
             
             //count how many datapoints are in data
@@ -6446,7 +6351,6 @@ void ChartFrame::GetAllCoastLineData(void){
             pos_beg = 0;
             pos_end = data.find(" ", pos_beg);
             while(pos_end != (string::npos)){
-                
                 
                 line.clear();
                 line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
@@ -6458,8 +6362,8 @@ void ChartFrame::GetAllCoastLineData(void){
                 ins << line;
                 ins >> phi_temp >> lambda_temp;
                 
-                (data_x[i]).push_back(x_mercator(lambda_temp));
-                (data_y[i]).push_back(y_mercator(phi_temp));
+                (data_x[i][j]).push_back(x_mercator(lambda_temp));
+                (data_y[i][j]).push_back(y_mercator(phi_temp));
 
                 pos_beg = pos_end+1;
                 pos_end = data.find(" ", pos_beg);
@@ -6475,8 +6379,6 @@ void ChartFrame::GetAllCoastLineData(void){
         i++;
         
     }
-    //end - part of the code which takes a long time to run
-    
     
 //    for(i=0; i<10; i++){
 //        cout << "\ni = " << i << "\n";
@@ -6507,6 +6409,7 @@ void ChartFrame::GetAllCoastLineData(void){
     }
     
     file_coastline_data_blocked.close(String(""));
+    n_line.clear();
     
     
 }
@@ -6832,7 +6735,6 @@ void DrawPanel::Draw(void){
     wxPoint p;
 
     
-    parent->GetAllCoastLineData();
 
     
     //fetch the data on the region that I am about to plot from the data files.
@@ -7121,6 +7023,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     (parent->plot)->show(true, String(""));
+    
+    GetAllCoastLineData();
 
 
     //read value_slider_max from file_init

@@ -1769,6 +1769,7 @@ public:
     Int value_slider_max;
     
     void GetCoastLineData(void);
+    void GetAllCoastLineData(void);
     void UpdateSlider(void);
     bool ZoomFactor(double, double*);
     void UpdateSliderLabel(void);

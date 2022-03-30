@@ -6246,9 +6246,9 @@ void ChartFrame::GetCoastLineData(void){
 //            floor(phi_max)-1 - floor_min_lat
 
             
-            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-            flush(cout);
-            
+//            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+//            flush(cout);
+
             //count how many datapoints are in data_x[i] and in data_y[i]
             n = (data_x[i - floor_min_lat][j % 360]).size();
             

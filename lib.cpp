@@ -9119,7 +9119,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //listcontrol_sights with sights
     listcontrol_sights = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
-    
+    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
     
     i=0;
     
@@ -9209,10 +9209,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
         total_column_width += (listcontrol_sights->GetColumnWidth(i));
     }
-    //    cout << "----------------- total Column width = " << total_column_width << "\n";
-    //    cout << "listcontrol_sights width = " << (listcontrol_sights->GetSize()).GetWidth() << "\n";
-    //    //    listcontrol_sights->SetColumnWidth((listcontrol_sights->GetColumnCount())-1, ((listcontrol_sights->GetSize()).GetWidth()) - total_column_width);
-    //
     
     listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
     

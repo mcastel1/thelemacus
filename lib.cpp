@@ -6552,9 +6552,9 @@ void DrawPanel::Render(wxDC&  dc){
     for(i=0; i<(plot->route_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)(large_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(standard_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
@@ -6574,9 +6574,9 @@ void DrawPanel::Render(wxDC&  dc){
     for(i=0; i<(plot->position_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)(large_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(standard_thickness_over_length_screen/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
@@ -7049,6 +7049,16 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //read relative_displacement from file_init
     cout << prefix.value << YELLOW << "Reading relative displacement from file " << file_init.name.value << " ...\n" << RESET;
     relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+    //read standard_thickness_over_length_screen from file_init
+    cout << prefix.value << YELLOW << "Reading standard thickness over length screen from file " << file_init.name.value << " ...\n" << RESET;
+    standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), file_init, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+    //read large_thickness_over_length_screen from file_init
+    cout << prefix.value << YELLOW << "Reading large thickness over length screen from file " << file_init.name.value << " ...\n" << RESET;
+    large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), file_init, true, String(""));
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
     file_init.close(prefix);

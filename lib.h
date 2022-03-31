@@ -136,9 +136,8 @@ class Body;
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 //the default thickness of the line with which routes are drawn
-#define standard_thickness_over_length_screen (2e-3)
-//the thickness with which highlighted routes are drawn
-#define large_thickness_over_length_screen (1.5*standard_thickness_over_length_screen)
+//#define standard_thickness_over_length_screen (2e-3)
+//#define large_thickness_over_length_screen (1.5*standard_thickness_over_length_screen)
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
@@ -1781,8 +1780,9 @@ public:
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     Int value_slider_max;
-    //the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight
-    Double relative_displacement;
+   
+    Double  /*the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight*/ relative_displacement, /*the default thickness of the line with which routes are drawn*/ standard_thickness_over_length_screen, /*the thickness with which highlighted routes are drawn*/ large_thickness_over_length_screen;
+    
 
     
     void GetCoastLineData(void);

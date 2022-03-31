@@ -7605,7 +7605,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         PaintNow();
     }
     
-    //I run over all the positions, check if the mouse is hovering over one of them,
+    //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
     for(i=0; i<(plot->position_list).size(); i++){
         
         GeoToScreen((plot->position_list)[i], &q);

@@ -7583,7 +7583,9 @@ void DrawPanel::GetMouseGeoPosition(Position* p){
 void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     Position p;
+    wxPoint q;
     stringstream s;
+    unsigned int i;
     
     //    cout << "\nMouse moved";
     
@@ -7603,7 +7605,24 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         PaintNow();
     }
     
-    
+    //I run over all the positions, check if the mouse is hovering over one of them,
+    for(i=0; i<(plot->position_list).size(); i++){
+        
+        GeoToScreen((plot->position_list)[i], &q);
+        
+        if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
+           4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                        
+            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,0,0));
+            
+        }else{
+            
+            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,255,255));
+
+        }
+        
+        
+    }
     
     //
     event.Skip(true);

@@ -7040,11 +7040,17 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     GetAllCoastLineData();
 
 
-    //read value_slider_max from file_init
     file_init.open(String("in"), prefix);
+    //read value_slider_max from file_init
     cout << prefix.value << YELLOW << "Reading maximal zoom factor from file " << file_init.name.value << " ...\n" << RESET;
     value_slider_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+    //read relative_displacement from file_init
+    cout << prefix.value << YELLOW << "Reading relative displacement from file " << file_init.name.value << " ...\n" << RESET;
+    relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
     file_init.close(prefix);
     
     idling = false;
@@ -7089,10 +7095,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //navigation buttons
-    button_up = new wxButton(panel, wxID_ANY, "N", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
-    button_down = new wxButton(panel, wxID_ANY, "S", wxDefaultPosition, GetTextExtent(wxS("S")), wxBU_EXACTFIT);
-    button_left = new wxButton(panel, wxID_ANY, "E", wxDefaultPosition, GetTextExtent(wxS("E")), wxBU_EXACTFIT);
-    button_right = new wxButton(panel, wxID_ANY, "W", wxDefaultPosition, GetTextExtent(wxS("W")), wxBU_EXACTFIT);
+    button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
+    button_down = new wxButton(panel, wxID_ANY, wxT("S"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
+    button_left = new wxButton(panel, wxID_ANY, wxT("W"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
+    button_right = new wxButton(panel, wxID_ANY, wxT("E"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
@@ -7166,7 +7172,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
     
     double delta;
     
-    delta = relative_displacement * ((draw_panel->y_max)-(draw_panel->y_min));
+    delta = (relative_displacement.value) * ((draw_panel->y_max)-(draw_panel->y_min));
     
     if(((draw_panel->y_max)+delta < y_mercator(floor_max_lat)) && ((draw_panel->y_min)+delta > y_mercator(ceil_min_lat))){
         //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
@@ -7190,6 +7196,25 @@ template<class T> void ChartFrame::MoveUp(T& event){
 //moves (makes slide) down the chart
 template<class T> void ChartFrame::MoveDown(T& event){
     
+    double delta;
+    
+    delta = (relative_displacement.value) * ((draw_panel->y_max)-(draw_panel->y_min));
+    
+    if(((draw_panel->y_max)+delta < y_mercator(floor_max_lat)) && ((draw_panel->y_min)+delta > y_mercator(ceil_min_lat))){
+        //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
+        
+        //update y_min, y_max according to the drag.
+        (draw_panel->y_min) -= delta;
+        (draw_panel->y_max) -= delta;
+        
+        draw_panel->Update_lambda_phi_min_max();
+        
+        //re-draw the chart
+        draw_panel->Draw();
+        draw_panel->PaintNow();
+        
+    }
+
     
     event.Skip(true);
 
@@ -7198,6 +7223,19 @@ template<class T> void ChartFrame::MoveDown(T& event){
 //moves (makes slide) left the chart
 template<class T> void ChartFrame::MoveLeft(T& event){
     
+    double delta;
+    
+    delta = (relative_displacement.value) * ((draw_panel->x_max)-(draw_panel->x_min));
+    
+    //update x_min, x_max according to the drag.
+    (draw_panel->x_min) -= delta;
+    (draw_panel->x_max) -= delta;
+    
+    draw_panel->Update_lambda_phi_min_max();
+    
+    //re-draw the chart
+    draw_panel->Draw();
+    draw_panel->PaintNow();
     
     event.Skip(true);
 
@@ -7206,6 +7244,19 @@ template<class T> void ChartFrame::MoveLeft(T& event){
 //moves (makes slide) up the chart
 template<class T> void ChartFrame::MoveRight(T& event){
     
+    double delta;
+    
+    delta = (relative_displacement.value) * ((draw_panel->x_max)-(draw_panel->x_min));
+    
+    //update x_min, x_max according to the drag.
+    (draw_panel->x_min) += delta;
+    (draw_panel->x_max) += delta;
+    
+    draw_panel->Update_lambda_phi_min_max();
+    
+    //re-draw the chart
+    draw_panel->Draw();
+    draw_panel->PaintNow();
     
     event.Skip(true);
 

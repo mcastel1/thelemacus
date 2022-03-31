@@ -40,3 +40,4 @@ preferred number of intervals for ticks = 6
 use of stopwatch = n
 color list = (255,0,00) (0,255,0) (0,0,255) (255,128,0) (0,255,255) (255,192,203)
 maximal zoom factor = 20000
+relative displacement = 0.1

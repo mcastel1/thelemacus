@@ -7024,6 +7024,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     stringstream s;
     String new_prefix;
+    wxStaticText* dummy_text_1, *dummy_text_2, *dummy_text_3, *dummy_text_4, *dummy_text_5;
     
     parent = parent_input;
 
@@ -7054,7 +7055,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_slider = new wxBoxSizer(wxVERTICAL);
-    
+    sizer_buttons = new wxGridSizer(3, 3, 0, 0);
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -7088,9 +7089,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, "N", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
-    button_down = new wxButton(panel, wxID_ANY, "S", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
-    button_left = new wxButton(panel, wxID_ANY, "E", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
-    button_right = new wxButton(panel, wxID_ANY, "W", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
+    button_down = new wxButton(panel, wxID_ANY, "S", wxDefaultPosition, GetTextExtent(wxS("S")), wxBU_EXACTFIT);
+    button_left = new wxButton(panel, wxID_ANY, "E", wxDefaultPosition, GetTextExtent(wxS("E")), wxBU_EXACTFIT);
+    button_right = new wxButton(panel, wxID_ANY, "W", wxDefaultPosition, GetTextExtent(wxS("W")), wxBU_EXACTFIT);
+    
+    button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveN<wxCommandEvent>, this);
+    button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveS<wxCommandEvent>, this);
+    button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveE<wxCommandEvent>, this);
+    button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveW<wxCommandEvent>, this);
+
 
     
     
@@ -7115,6 +7122,23 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     //    sizer_v->Fit(panel);
     
+    
+    dummy_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    dummy_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    dummy_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    dummy_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    dummy_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
+    sizer_buttons->Add(dummy_text_1);
+    sizer_buttons->Add(button_up);
+    sizer_buttons->Add(dummy_text_2);
+    sizer_buttons->Add(button_left);
+    sizer_buttons->Add(dummy_text_3);
+    sizer_buttons->Add(button_right);
+    sizer_buttons->Add(dummy_text_4);
+    sizer_buttons->Add(button_down);
+    sizer_buttons->Add(dummy_text_5);
+
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     

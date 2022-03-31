@@ -1767,10 +1767,11 @@ public:
     File file_init;
     wxStaticText *text_position_now, *text_slider;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
+    wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
     TextBox* box;
     wxSlider* slider;
-    wxButton* button_up, button_down, button_left, button_right;
+    wxButton* button_up, *button_down, *button_left, *button_right;
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int /*this stores the old value of slider and the current value of the slider*/value_slider_old, value_slider_now;
@@ -1788,6 +1789,11 @@ public:
     void UpdateSliderLabel(void);
     void SetIdling(bool);
     
+    template<class T> void MoveN(T&);
+    template<class T> void MoveS(T&);
+    template<class T> void MoveE(T&);
+    template<class T> void MoveW(T&);
+
 };
 
 class ChartPanel : public wxPanel{

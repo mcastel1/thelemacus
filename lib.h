@@ -135,9 +135,6 @@ class Body;
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
-//the default thickness of the line with which routes are drawn
-//#define standard_thickness_over_length_screen (2e-3)
-//#define large_thickness_over_length_screen (1.5*standard_thickness_over_length_screen)
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));

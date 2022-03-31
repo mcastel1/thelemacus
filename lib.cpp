@@ -9344,32 +9344,10 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
 
-    
-//    i=0;
-//
-//    column.SetId(i);
-//    column.SetText(wxT("Latitude"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-//    listcontrol_positions->InsertColumn(i++, column);
-//
-//    column.SetId(i);
-//    column.SetText(wxT("Longitude"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-//    listcontrol_positions->InsertColumn(i++, column);
-//
-//    column.SetId(i);
-//    column.SetText(wxT("Label"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-//    listcontrol_positions->InsertColumn(i++, column);
-    
     listcontrol_positions->push_back_column(wxString("Latitude"));
     listcontrol_positions->push_back_column(wxString("Longitude"));
     listcontrol_positions->push_back_column(wxString("Label"));
 
-    
     //write the positions into plot->position_list into listcontrol_sights
     for(i=0; i<((plot->position_list).size()); i++){
         ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
@@ -9390,60 +9368,71 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //listcontrol routes with routes
-    listcontrol_routes = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
+    listcontrol_routes = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlRoutes), this);
     
-    i=0;
-    
-    column.SetId(i);
-    column.SetText(wxT("Type"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Start"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Alpha"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Length"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("GroundPosition"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Omega"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Label"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Related sight"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-    listcontrol_routes->InsertColumn(i++, column);
-    
+    listcontrol_routes->push_back_column(wxString("Type"));
+    listcontrol_routes->push_back_column(wxString("Start"));
+    listcontrol_routes->push_back_column(wxString("Alpha"));
+    listcontrol_routes->push_back_column(wxString("Length"));
+    listcontrol_routes->push_back_column(wxString("GroundPosition"));
+    listcontrol_routes->push_back_column(wxString("Omega"));
+    listcontrol_routes->push_back_column(wxString("Label"));
+    listcontrol_routes->push_back_column(wxString("Related Sight"));
+
+
+
+//    i=0;
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("Type"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("Start"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("Alpha"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("Length"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("GroundPosition"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("Omega"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("Label"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
+//    column.SetId(i);
+//    column.SetText(wxT("Related sight"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
+//    listcontrol_routes->InsertColumn(i++, column);
+//    
     
     //write the routes into plot->route_list into listcontrol_routes
     for(i=0; i<((plot->route_list).size()); i++){

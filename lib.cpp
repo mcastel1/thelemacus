@@ -7086,6 +7086,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     s << "1:" << value_slider_old;
     text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
+    //navigation buttons
+    button_up = new wxButton(panel, wxID_ANY, "N", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
+    button_down = new wxButton(panel, wxID_ANY, "S", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
+    button_left = new wxButton(panel, wxID_ANY, "E", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
+    button_right = new wxButton(panel, wxID_ANY, "W", wxDefaultPosition, GetTextExtent(wxS("N")), wxBU_EXACTFIT);
+
     
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);

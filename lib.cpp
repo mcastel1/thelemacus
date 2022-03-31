@@ -7024,7 +7024,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     stringstream s;
     String new_prefix;
-    wxStaticText* dummy_text_1, *dummy_text_2, *dummy_text_3, *dummy_text_4, *dummy_text_5;
+    //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
+    wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     
     parent = parent_input;
 
@@ -7093,10 +7094,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_left = new wxButton(panel, wxID_ANY, "E", wxDefaultPosition, GetTextExtent(wxS("E")), wxBU_EXACTFIT);
     button_right = new wxButton(panel, wxID_ANY, "W", wxDefaultPosition, GetTextExtent(wxS("W")), wxBU_EXACTFIT);
     
-    button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveN<wxCommandEvent>, this);
-    button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveS<wxCommandEvent>, this);
-    button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveE<wxCommandEvent>, this);
-    button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveW<wxCommandEvent>, this);
+    button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
+    button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
+    button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
+    button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
 
 
     
@@ -7112,9 +7113,26 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
     
+    empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    empty_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    empty_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+
+    sizer_buttons->Add(empty_text_1);
+    sizer_buttons->Add(button_up);
+    sizer_buttons->Add(empty_text_2);
+    sizer_buttons->Add(button_left);
+    sizer_buttons->Add(empty_text_3);
+    sizer_buttons->Add(button_right);
+    sizer_buttons->Add(empty_text_4);
+    sizer_buttons->Add(button_down);
+    sizer_buttons->Add(empty_text_5);
+    
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    
+    sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     
@@ -7122,22 +7140,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     //    sizer_v->Fit(panel);
     
-    
-    dummy_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    dummy_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    dummy_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    dummy_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    dummy_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
 
-    sizer_buttons->Add(dummy_text_1);
-    sizer_buttons->Add(button_up);
-    sizer_buttons->Add(dummy_text_2);
-    sizer_buttons->Add(button_left);
-    sizer_buttons->Add(dummy_text_3);
-    sizer_buttons->Add(button_right);
-    sizer_buttons->Add(dummy_text_4);
-    sizer_buttons->Add(button_down);
-    sizer_buttons->Add(dummy_text_5);
+
 
     Maximize(panel);
     SetSizerAndFit(sizer_v);
@@ -7155,6 +7159,38 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //    Fit();
     CentreOnScreen();
     
+}
+
+//moves (makes slide) up the chart
+template<class T> void ChartFrame::MoveUp(T& event){
+    
+    
+    event.Skip(true);
+
+}
+
+//moves (makes slide) down the chart
+template<class T> void ChartFrame::MoveDown(T& event){
+    
+    
+    event.Skip(true);
+
+}
+
+//moves (makes slide) left the chart
+template<class T> void ChartFrame::MoveLeft(T& event){
+    
+    
+    event.Skip(true);
+
+}
+
+//moves (makes slide) up the chart
+template<class T> void ChartFrame::MoveRight(T& event){
+    
+    
+    event.Skip(true);
+
 }
 
 void DrawPanel::SetIdling(bool b){

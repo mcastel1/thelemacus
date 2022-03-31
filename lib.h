@@ -1789,10 +1789,10 @@ public:
     void UpdateSliderLabel(void);
     void SetIdling(bool);
     
-    template<class T> void MoveN(T&);
-    template<class T> void MoveS(T&);
-    template<class T> void MoveE(T&);
-    template<class T> void MoveW(T&);
+    template<class T> void MoveUp(T&);
+    template<class T> void MoveDown(T&);
+    template<class T> void MoveLeft(T&);
+    template<class T> void MoveRight(T&);
 
 };
 

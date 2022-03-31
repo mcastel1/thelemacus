@@ -11365,3 +11365,21 @@ OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
     f = f_in;
     
 }
+
+ListControl::ListControl(wxWindow* parent_in, const wxPoint& pos, const wxSize& size) : wxListCtrl(parent_in, wxID_ANY, pos, size, wxLC_REPORT){
+    
+    
+}
+
+//this pushes back a column to ListControl
+void ListControl::push_back_column(wxString name){
+    
+    wxListItem column;
+    
+    column.SetId(GetColumnCount());
+    column.SetText(name);
+    column.SetAlign(wxLIST_FORMAT_LEFT);
+    column.SetWidth((this->GetSize()).GetWidth()/(this->GetColumnCount()));
+    InsertColumn(GetColumnCount(), column);
+    
+}

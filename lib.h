@@ -1832,4 +1832,13 @@ public:
     
 };
 
-
+//my own derived class of wxListCtrl
+class ListControl : public wxListCtrl{
+  
+public:
+    
+    ListControl(wxWindow*, const wxPoint&, const wxSize&);
+    
+    void push_back_column(wxString);
+    
+};

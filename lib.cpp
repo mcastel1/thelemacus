@@ -674,10 +674,10 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     listcontrol->InsertItem(item);
     
     //set latitude column
-    listcontrol->SetItem(i, 0, wxString(phi.to_string(String(""), display_precision)));
+    listcontrol->SetItem(i, 0, wxString(phi.to_string(String("NS"), display_precision)));
     
     //set longitude column
-    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String(""), display_precision)));
+    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String("EW"), display_precision)));
     
     //set label column
     listcontrol->SetItem(i, 2, wxString(label.value));
@@ -7613,7 +7613,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
            4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
                         
-            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,0,0));
+            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(51,153,255));
             
         }else{
             

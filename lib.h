@@ -1278,6 +1278,18 @@ public:
     
 };
 
+//my own derived class of wxListCtrl
+class ListControl : public wxListCtrl{
+  
+public:
+    
+    ListControl(wxWindow*, const wxPoint&, const wxSize&);
+    
+    void push_back_column(wxString);
+    
+};
+
+
 
 
 class DrawPanel : public wxPanel{
@@ -1575,7 +1587,8 @@ public:
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
     //    wxListBox* listbox;
-    wxListCtrl* listcontrol_sights, *listcontrol_positions, *listcontrol_routes;
+    wxListCtrl* listcontrol_sights, *listcontrol_routes;
+    ListControl* listcontrol_positions;
     wxPanel *panel;
     wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position, *button_add_route, *button_delete_route;
     wxBitmapButton *button_modify_sight, *button_modify_position, *button_modify_route;
@@ -1829,16 +1842,5 @@ public:
     
     template<class T> void operator()(T&);
     
-    
-};
-
-//my own derived class of wxListCtrl
-class ListControl : public wxListCtrl{
-  
-public:
-    
-    ListControl(wxWindow*, const wxPoint&, const wxSize&);
-    
-    void push_back_column(wxString);
     
 };

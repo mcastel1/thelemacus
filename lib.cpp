@@ -9340,31 +9340,35 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //listcontrol_positions with positions
-    listcontrol_positions = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
+    listcontrol_positions = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
 
     
-    i=0;
+//    i=0;
+//
+//    column.SetId(i);
+//    column.SetText(wxT("Latitude"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
+//    listcontrol_positions->InsertColumn(i++, column);
+//
+//    column.SetId(i);
+//    column.SetText(wxT("Longitude"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
+//    listcontrol_positions->InsertColumn(i++, column);
+//
+//    column.SetId(i);
+//    column.SetText(wxT("Label"));
+//    column.SetAlign(wxLIST_FORMAT_LEFT);
+//    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
+//    listcontrol_positions->InsertColumn(i++, column);
     
-    column.SetId(i);
-    column.SetText(wxT("Latitude"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-    listcontrol_positions->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Longitude"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-    listcontrol_positions->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Label"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_positions->GetSize()).GetWidth()/n_columns_listcontrol_positions);
-    listcontrol_positions->InsertColumn(i++, column);
-    
+    listcontrol_positions->push_back_column(wxString("Latitude"));
+    listcontrol_positions->push_back_column(wxString("Longitude"));
+    listcontrol_positions->push_back_column(wxString("Label"));
+
     
     //write the positions into plot->position_list into listcontrol_sights
     for(i=0; i<((plot->position_list).size()); i++){
@@ -11379,7 +11383,7 @@ void ListControl::push_back_column(wxString name){
     column.SetId(GetColumnCount());
     column.SetText(name);
     column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((this->GetSize()).GetWidth()/(this->GetColumnCount()));
+    column.SetWidth(((this->GetSize()).GetWidth())/((this->GetColumnCount())+1));
     InsertColumn(GetColumnCount(), column);
     
 }

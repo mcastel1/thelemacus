@@ -7164,6 +7164,24 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
 //moves (makes slide) up the chart
 template<class T> void ChartFrame::MoveUp(T& event){
     
+    double delta;
+    
+    delta = relative_displacement * ((draw_panel->y_max)-(draw_panel->y_min));
+    
+    if(((draw_panel->y_max)+delta < y_mercator(floor_max_lat)) && ((draw_panel->y_min)+delta > y_mercator(ceil_min_lat))){
+        //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
+        
+        //update y_min, y_max according to the drag.
+        (draw_panel->y_min) += delta;
+        (draw_panel->y_max) += delta;
+        
+        draw_panel->Update_lambda_phi_min_max();
+        
+        //re-draw the chart
+        draw_panel->Draw();
+        draw_panel->PaintNow();
+        
+    }
     
     event.Skip(true);
 
@@ -7705,11 +7723,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         double delta_x, delta_y;
         
         position_now_drag = wxGetMousePosition();
-        
-        //        Position geo;
-        //    ScreenToGeo(position_start_drag, &geo_start);
-        //        ScreenToGeo(position_now_drag, &geo);
-        
+         
         delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
         
@@ -7723,9 +7737,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             y_max += delta_y;
             
             Update_lambda_phi_min_max();
-            
-            //            geo.print(String("Position now drag"), String("************ "), cout);
-            
             
             //re-draw the chart
             Draw();

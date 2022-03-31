@@ -139,6 +139,8 @@ class Body;
 #define standard_thickness_over_length_screen (2e-3)
 //the thickness with which highlighted routes are drawn
 #define large_thickness_over_length_screen (1.5*standard_thickness_over_length_screen)
+//the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight
+#define relative_displacement 0.1
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));

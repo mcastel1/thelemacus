@@ -9527,9 +9527,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
 
-    listcontrol_positions->push_back_column(wxString("Latitude"));
-    listcontrol_positions->push_back_column(wxString("Longitude"));
-    listcontrol_positions->push_back_column(wxString("Label"));
+    listcontrol_positions->PushBackColumn(wxString("Latitude"));
+    listcontrol_positions->PushBackColumn(wxString("Longitude"));
+    listcontrol_positions->PushBackColumn(wxString("Label"));
 
     //write the positions into plot->position_list into listcontrol_sights
     for(i=0; i<((plot->position_list).size()); i++){
@@ -9555,14 +9555,14 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlRoutes), this);
     
-    listcontrol_routes->push_back_column(wxString("Type"));
-    listcontrol_routes->push_back_column(wxString("Start"));
-    listcontrol_routes->push_back_column(wxString("Alpha"));
-    listcontrol_routes->push_back_column(wxString("Length"));
-    listcontrol_routes->push_back_column(wxString("GroundPosition"));
-    listcontrol_routes->push_back_column(wxString("Omega"));
-    listcontrol_routes->push_back_column(wxString("Label"));
-    listcontrol_routes->push_back_column(wxString("Related Sight"));
+    listcontrol_routes->PushBackColumn(wxString("Type"));
+    listcontrol_routes->PushBackColumn(wxString("Start"));
+    listcontrol_routes->PushBackColumn(wxString("Alpha"));
+    listcontrol_routes->PushBackColumn(wxString("Length"));
+    listcontrol_routes->PushBackColumn(wxString("GroundPosition"));
+    listcontrol_routes->PushBackColumn(wxString("Omega"));
+    listcontrol_routes->PushBackColumn(wxString("Label"));
+    listcontrol_routes->PushBackColumn(wxString("Related Sight"));
     
     //write the routes into plot->route_list into listcontrol_routes
     for(i=0; i<((plot->route_list).size()); i++){
@@ -11493,7 +11493,7 @@ ListControl::ListControl(wxWindow* parent_in, const wxPoint& pos, const wxSize& 
 }
 
 //this pushes back a column to ListControl
-void ListControl::push_back_column(wxString name){
+void ListControl::PushBackColumn(wxString name){
     
     wxListItem column;
     

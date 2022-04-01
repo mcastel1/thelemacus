@@ -1281,7 +1281,7 @@ public:
     
     ListControl(wxWindow*, const wxPoint&, const wxSize&);
     
-    void push_back_column(wxString);
+    void PushBackColumn(wxString);
     
 };
 

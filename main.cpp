@@ -24,7 +24,6 @@
  - change the initialization of structs (such as     (check.p) = this;) by transforming the structs into classes, creating their constructor, transforming check into a pointer and replacing     (check.p) = this; with check = new Check(this); do this for all objects
  - fix issue that related sight is not properly deleted when a route is deleted
  -     Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
- - compute authomatically n_interval_tics by calculating the width of the window and of each label on the axes
 - set up a proper output to a log file
  - turn gamma_lambda into an unsigned int
  - add a dropdown menu with the units of measure in LengthField

@@ -1437,6 +1437,8 @@ public:
     P* parent_frame;
     //degrees and minutes boxes
     wxTextCtrl *value;
+    //units of measure of the length
+    wxComboBox* unit;
     //texts
     wxStaticText* text;
     wxBoxSizer *sizer_h, *sizer_v;

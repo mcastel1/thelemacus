@@ -8286,7 +8286,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
 //checks the unit in the GUI field in LengthField
 template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &event){
     
-    LengthFrame* f = (p->parent_frame);
+    P* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){

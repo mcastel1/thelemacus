@@ -5665,31 +5665,34 @@ void Angle::from_sign_deg_min(char sign, unsigned int deg, double min){
 string Angle::to_string(String mode, unsigned int precision){
     
     stringstream output;
+    //a temporary variable where to store this->value and modifyi it without altering this->value
+    double value_temp;
     
     output.precision(precision);
     
     normalize();
+    value_temp = value;
     
     if(mode == String("")){
         //in this case, I print out the angle in the format >=0° and <360°
-        output << floor(K*value) << "° " << (K*value - floor(K*value))*60.0 << "'";
+        output << floor(K*value_temp) << "° " << (K*value_temp - floor(K*value_temp))*60.0 << "'";
         
     }else{
         //in this case, I print out the angle in the format >=-180° and <180°
         
-        if(value>M_PI){value-=2.0*M_PI;}
-        output << floor(fabs(K*value)) << "° " <<  (fabs(K*value) - floor(fabs(K*value)))*60.0<< "'";
+        if(value_temp>M_PI){value_temp-=2.0*M_PI;}
+        output << floor(fabs(K*value_temp)) << "° " <<  (fabs(K*value_temp) - floor(fabs(K*value_temp)))*60.0<< "'";
         
         if(mode == String("NS")){
             //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
             
-            if(value>0.0){output << " N";}
+            if(value_temp>0.0){output << " N";}
             else{output << " S";}
         }
         if(mode == String("EW")){
             //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
             
-            if(value>0.0){output << " W";}
+            if(value_temp>0.0){output << " W";}
             else{output << " E";}
         }
         

@@ -8266,12 +8266,12 @@ template<class P> template <class T> void CheckLength<P>::operator()(T &event){
                 
             }
             
-            (p->ok) = false;
+            (p->value_ok) = false;
             
         }else{
             
             (p->value)->SetBackgroundColour(*wxWHITE);
-            (p->ok) = true;
+            (p->value_ok) = true;
             
         }
         
@@ -8286,7 +8286,7 @@ template<class P> template <class T> void CheckLength<P>::operator()(T &event){
 //writes the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T &event){
     
-    if(ok){
+    if(value_ok){
         
         double length_temp;
         
@@ -10630,12 +10630,10 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     check = new CheckBody(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
-    //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
-    //name->SetValue("");
+    name->SetValue("");
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
     
-    name->SetValue("");
     ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -10779,7 +10777,7 @@ template<class P> void LengthField<P>::set(void){
     }
     
     
-    ok = true;
+    value_ok = true;
     
 }
 
@@ -11055,13 +11053,13 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     value->Bind(wxEVT_KILL_FOCUS, check);
     
     box_unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
-    box_unit->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    AdjustWidth(box_unit);
     box_unit->SetValue(unit.value);
     //    box_unit->Bind(wxEVT_KILL_FOCUS, check);
     
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
-    ok = false;
+    value_ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -11123,7 +11121,7 @@ template<class P> bool AngleField<P>::is_ok(void){
 
 template<class P> bool LengthField<P>::is_ok(void){
     
-    return(ok);
+    return(value_ok && box_unit_ok);
     
 }
 

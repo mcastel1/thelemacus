@@ -9424,84 +9424,25 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //listcontrol_sights with sights
-    listcontrol_sights = new wxListCtrl(panel, wxID_ANY, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1), wxLC_REPORT);
+    listcontrol_sights = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
     
     i=0;
     
-    column.SetId(i);
-    column.SetText(wxT("Body"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Limb"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Artificial horizon"));
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Sextant altitude"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Index error"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Height of eye"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Master-clock date and hour (UTC)"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Stopwatch"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Stopwatch reading"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("TAI - UTC"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Label"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
-    column.SetId(i);
-    column.SetText(wxT("Related route"));
-    column.SetAlign(wxLIST_FORMAT_LEFT);
-    column.SetWidth((listcontrol_sights->GetSize()).GetWidth()/n_columns_listcontrol_sights);
-    listcontrol_sights->InsertColumn(i++, column);
-    
+    listcontrol_sights->PushBackColumn(wxString("Body"));
+    listcontrol_sights->PushBackColumn(wxString("Limb"));
+    listcontrol_sights->PushBackColumn(wxString("Artificial horizon"));
+    listcontrol_sights->PushBackColumn(wxString("Sextant altitude"));
+    listcontrol_sights->PushBackColumn(wxString("Index error"));
+    listcontrol_sights->PushBackColumn(wxString("Height of eye"));
+    listcontrol_sights->PushBackColumn(wxString("Master-clock date and hour (UTC)"));
+    listcontrol_sights->PushBackColumn(wxString("Stopwatch"));
+    listcontrol_sights->PushBackColumn(wxString("Stopwatch reading"));
+    listcontrol_sights->PushBackColumn(wxString("TAI - UTC"));
+    listcontrol_sights->PushBackColumn(wxString("Label"));
+    listcontrol_sights->PushBackColumn(wxString("Related route"));
+     
     
     
     //write the sights into plot->sight_list into listcontrol_sights

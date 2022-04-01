@@ -7615,16 +7615,25 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     for(i=0; i<(plot->route_list).size(); i++){
         
-        //set the beckgorund color of the Route in listcontrol_routes to white
+        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(255,255,255));
+        if((((plot->route_list)[i]).related_sight).value != -1){
+            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(255,255,255));
+        }
+        
+        
         for(j=0; j<(points_route_list[i]).size(); j++){
-            //if the mouse is hovering over one of the points of route #j, I set the background color of route j in listcontrol_routes to a color different from white, to highlight it
+            //if the mouse is hovering over one of the points of route #j, I set the background color of route j in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
             
             if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j]).y))) <
                 (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
-                            
+                       
+                //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                 ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
-                
+                if((((plot->route_list)[i]).related_sight).value != -1){
+                    ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
+                }
+
             }
             
         }

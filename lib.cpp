@@ -9563,66 +9563,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes->push_back_column(wxString("Omega"));
     listcontrol_routes->push_back_column(wxString("Label"));
     listcontrol_routes->push_back_column(wxString("Related Sight"));
-
-
-
-//    i=0;
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("Type"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("Start"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("Alpha"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("Length"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("GroundPosition"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("Omega"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("Label"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
-//    column.SetId(i);
-//    column.SetText(wxT("Related sight"));
-//    column.SetAlign(wxLIST_FORMAT_LEFT);
-//    column.SetWidth((listcontrol_routes->GetSize()).GetWidth()/n_columns_listcontrol_routes);
-//    listcontrol_routes->InsertColumn(i++, column);
-//    
     
     //write the routes into plot->route_list into listcontrol_routes
     for(i=0; i<((plot->route_list).size()); i++){
         ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
     }
-    
-    
     
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){

@@ -1473,7 +1473,7 @@ public:
     String unit;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool value_ok, box_unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-    CheckLengthValue<P> check;
+    CheckLength<P>* check;
     
     LengthField(P*, Length*, String);
     void set(void);

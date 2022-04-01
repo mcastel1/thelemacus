@@ -8296,7 +8296,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
         
         //I check whether the name in the GUI field unit matches one of the unit names in units
         for(check = false, i=0; (i<(p->units).size()) && (!check); i++){
-            if(String(((p->box_unit)->GetValue().ToStdString())) == ((((p->units))[i]).name)){
+            if(((p->box_unit)->GetValue()) == (p->units)[i]){
                 check = true;
             }
         }
@@ -8306,17 +8306,17 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
 
             
             (p->box_unit)->SetBackgroundColour(*wxWHITE);
-            (p->unit_ok) = true;
+            (p->box_unit_ok) = true;
             
         }else{
             
             //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->name);
+            ((f->print_error_message)->control) = (p->box_unit);
             ((f->print_error_message)->title) = String("Unit not found in list!");
             ((f->print_error_message)->message) = String("Unit must be in list.");
             f->CallAfter(*(f->print_error_message));
             
-            (p->unit_ok) = false;
+            (p->box_unit_ok) = false;
             
         }
         
@@ -8328,6 +8328,14 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
    
 }
 
+template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in){
+    
+    p = p_in;
+    
+    (check_length_value.p) = p;
+    (check_length_unit.p) = p;
+    
+}
 
 
 //writes the value of the GUI field in LengthField into the non-GUI field length
@@ -8339,11 +8347,12 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
         
         value->GetValue().ToDouble(&length_temp);
         
-        if(unit == String("nm")){
+        if(box_unit->GetValue() == wxString("nm")){
             
             length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
             
-        }else{
+        }
+        if(box_unit->GetValue() == wxString("m")){
             
             length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
             
@@ -11087,7 +11096,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     //    ((parent_frame->check_height_of_eye).p) = this;
     
     //initialize check
-    (check.p) = this;
+    check = new CheckLength<P>(this);
     
     //tabulate the possible units of measure
     units.Clear();
@@ -11098,18 +11107,18 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
-    value->SetValue("");
-    value->Bind(wxEVT_KILL_FOCUS, check);
+    value->Bind(wxEVT_KILL_FOCUS, check->check_length_value);
     
     box_unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
     AdjustWidth(box_unit);
-    box_unit->SetValue(unit.value);
-    //    box_unit->Bind(wxEVT_KILL_FOCUS, check);
-    box_unit_ok = false;
+    box_unit->Bind(wxEVT_KILL_FOCUS, check->check_length_unit);
     
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
     value_ok = false;
+    //I set the value of box_unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
+    box_unit->SetValue(unit.value);
+    box_unit_ok = true;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -11385,6 +11394,7 @@ template<class P> void AngleField<P>::Enable(bool is_enabled){
 template<class P> void LengthField<P>::Enable(bool is_enabled){
     
     value->Enable(is_enabled);
+    box_unit->Enable(is_enabled);
     
 }
 

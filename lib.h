@@ -74,7 +74,7 @@ class RouteFrame;
 //template<class P> struct CheckSign;
 //template<class P> struct CheckArcDegree;
 //template<class P> struct CheckArcMinute;
-//struct CheckLength;
+//struct CheckLengthValue;
 //class CheckDate;
 //class CheckYear;
 //class CheckMonth;
@@ -1103,7 +1103,7 @@ public:
 };
 
 
-template<class P> struct CheckLength{
+template<class P> struct CheckLengthValue{
     
     LengthField<P>* p;
     
@@ -1447,7 +1447,7 @@ public:
     String unit;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool value_ok, box_unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-    CheckLength<P> check;
+    CheckLengthValue<P> check;
     
     LengthField(P*, Length*, String);
     void set(void);

@@ -8241,7 +8241,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
 }
 
 //checks the value in the GUI field in LengthField
-template<class P> template <class T> void CheckLength<P>::operator()(T &event){
+template<class P> template <class T> void CheckLengthValue<P>::operator()(T &event){
     
     P* f = (p->parent_frame);
     
@@ -8286,7 +8286,7 @@ template<class P> template <class T> void CheckLength<P>::operator()(T &event){
 //writes the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T &event){
     
-    if(value_ok){
+    if(is_ok()){
         
         double length_temp;
         
@@ -10769,15 +10769,17 @@ template<class P> void LengthField<P>::set(void){
     if(unit == String("nm")){
         
         value->SetValue(wxString::Format(wxT("%f"), (length->value)));
+        box_unit->SetValue(wxString("nm"));
         
     }else{
         
         value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
+        box_unit->SetValue(wxString("m"));
         
     }
     
-    
     value_ok = true;
+    box_unit_ok = true;
     
 }
 
@@ -11056,6 +11058,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     AdjustWidth(box_unit);
     box_unit->SetValue(unit.value);
     //    box_unit->Bind(wxEVT_KILL_FOCUS, check);
+    box_unit_ok = false;
     
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));

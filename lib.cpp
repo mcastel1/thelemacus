@@ -8283,6 +8283,53 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
     
 }
 
+//checks the unit in the GUI field in LengthField
+template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &event){
+    
+    LengthFrame* f = (p->parent_frame);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        unsigned int i;
+        bool check;
+        
+        //I check whether the name in the GUI field unit matches one of the unit names in units
+        for(check = false, i=0; (i<(p->units).size()) && (!check); i++){
+            if(String(((p->box_unit)->GetValue().ToStdString())) == ((((p->units))[i]).name)){
+                check = true;
+            }
+        }
+        i--;
+        
+        if(check){
+
+            
+            (p->box_unit)->SetBackgroundColour(*wxWHITE);
+            (p->unit_ok) = true;
+            
+        }else{
+            
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->name);
+            ((f->print_error_message)->title) = String("Unit not found in list!");
+            ((f->print_error_message)->message) = String("Unit must be in list.");
+            f->CallAfter(*(f->print_error_message));
+            
+            (p->unit_ok) = false;
+            
+        }
+        
+        f->TryToEnableOk();
+        
+    }
+    
+    event.Skip(true);
+   
+}
+
+
+
 //writes the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T &event){
     

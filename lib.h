@@ -1102,7 +1102,6 @@ public:
     
 };
 
-
 template<class P> struct CheckLengthValue{
     
     LengthField<P>* p;
@@ -1111,6 +1110,33 @@ template<class P> struct CheckLengthValue{
     
     
 };
+
+template<class P> struct CheckLengthUnit{
+    
+    LengthField<P>* p;
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+template<class P> class CheckLength{
+    
+public:
+    
+    //p is the LengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in LengthField
+    LengthField<P>* p;
+    CheckLengthValue<P> check_length_value;
+    CheckLengthUnit<P> check_length_unit;
+    
+    CheckLength(LengthField<P>*);
+    
+    template <class T> void operator()(T&);
+    
+};
+
+
+
 
 template<class P> struct CheckString{
     

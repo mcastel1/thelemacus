@@ -1438,11 +1438,11 @@ public:
     //degrees and minutes boxes
     wxTextCtrl *value;
     //units of measure of the length
-    wxComboBox* unit;
-    //texts
-    wxStaticText* text;
+    wxComboBox* box_unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
+    //an array containing all possible units of measure
+    wxArrayString units;
     //the units of measure of the length in this GUI field
     String unit;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length

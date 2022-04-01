@@ -11042,12 +11042,22 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     //initialize check
     (check.p) = this;
     
+    //tabulate the possible units of measure
+    units.Clear();
+    units.Add(wxT("nm"));
+    units.Add(wxT("m"));
+  
+    
+    
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, check);
     
-    text = new wxStaticText((parent_frame->panel), wxID_ANY, wxString(unit.value), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    box_unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
+    box_unit->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    box_unit->SetValue(unit.value);
+    //    box_unit->Bind(wxEVT_KILL_FOCUS, check);
     
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
@@ -11058,7 +11068,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(value, 0, wxALIGN_CENTER);
-    sizer_h->Add(text);
+    sizer_h->Add(box_unit, 0, wxALIGN_CENTER);
     
 }
 

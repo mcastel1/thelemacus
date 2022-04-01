@@ -1737,7 +1737,7 @@ public:
     wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
     
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
-    wxMenuBar *menuBar;
+//    wxMenuBar *menuBar;
     
     void SetIdling(bool);
     void set(void);

@@ -6399,7 +6399,7 @@ void ChartFrame::GetAllCoastLineData(void){
     //        for(j=0; j<data_x[i].size(); j++){
     //            cout << "\t"<< data_x[i][j];
     //        }
-    //        
+    //
     //    }
     
     //    for(i=data_x.size()-10; i<data_x.size(); i++){
@@ -7017,7 +7017,7 @@ void DrawPanel::Draw(void){
     (parent->x).clear();
     (parent->y).clear();
     
-    //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen 
+    //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();
     
 }
@@ -7871,10 +7871,18 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     
+    int n;
     double r;
     
-    //    r = exp( ((parent->slider)->GetValue()) - round(log((double)(parent->value_slider_old))));
-    r = ((double)(parent->value_slider_old)) / ( ((double)((parent->value_slider_max).value))*exp(-((parent->slider)->GetValue()))  );
+    n = round( ((double)((parent->value_slider_max).value)) * exp( - ((double)((parent->slider)->GetValue())) ) );
+    if(n>((parent->value_slider_max).value)){
+        n = ((parent->value_slider_max).value);
+    }
+    if(n<1){
+        n = 1;
+    }
+    
+    r = ((double)(parent->value_slider_old)) / ((double)n);
     
     //    cout << "Slider = " << value_slider_from_scroll << "\n";
     
@@ -7891,7 +7899,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
     
-    if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)))){
+    if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_min > -M_PI) && (x_max < M_PI))){
         //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
         
         x_min = x_min_old;
@@ -7899,18 +7907,14 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         y_min = y_min_old;
         y_max = y_max_old;
         
-        (parent->slider)->SetValue(round(-log(((double)(parent->value_slider_old)) / ((double)((parent->value_slider_max).value)) )));
-        
         Update_lambda_phi_min_max();
         
-        //re-draw the chart
-        Draw();
-        PaintNow();
-        
+        //put the slider back to the value before the scroll
+        parent->UpdateSlider();
         
         //        set the wxControl, title and message for the functor print_error_message, and then call the functor
         (print_error_message->control) = NULL;
-        (print_error_message->title) = String("Chart outside  boundaries!");
+        (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
         (print_error_message->message) = String("The chart must lie within the boundaries.");
         (*print_error_message)();
         
@@ -7921,7 +7925,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         Update_lambda_phi_min_max();
         
         //update parent->value_slider_old
-        (parent->value_slider_old) = exp(((parent->slider)->GetValue()));
+        (parent->value_slider_old) = round ( ((double)((parent->value_slider_max).value))*exp(-((parent->slider)->GetValue())) );
         
         Draw();
         PaintNow();

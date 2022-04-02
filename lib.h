@@ -1332,7 +1332,7 @@ public:
     /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the ticks on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the ticks on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi,
     /*the values of x at the beginning/end of the selection process with a rectangle*/x_start_selection, x_end_selection;
     wxStaticText*text_position_start, *text_position_end;
-    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging;
+    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;;
     //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
@@ -1340,7 +1340,6 @@ public:
     vector< vector<wxPoint> > points_route_list;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
-    bool idling;
     Plot* plot;
 
 
@@ -1797,7 +1796,7 @@ public:
     wxButton* button_up, *button_down, *button_left, *button_right;
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
-    unsigned int /*this stores the old value of slider and the current value of the slider*/value_slider_old, value_slider_now;
+    unsigned int /*this stores the old value of slider*/value_slider_old;
     vector<double> x, y;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<float> > > data_x, data_y;

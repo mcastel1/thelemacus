@@ -6200,9 +6200,9 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 void ChartFrame::GetCoastLineData(void){
     
     
-//    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
-//    string data, line;
-//    stringstream ins;
+    //    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
+    //    string data, line;
+    //    stringstream ins;
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
     double x_temp, y_temp;
@@ -6232,7 +6232,7 @@ void ChartFrame::GetCoastLineData(void){
     i_min = phi_min_int;
     i_max = phi_max_int;
     
-//    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
+    //    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
     
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
@@ -6241,15 +6241,15 @@ void ChartFrame::GetCoastLineData(void){
     y.clear();
     for(i=i_min; i<i_max; i++){
         
-//        cout << "\n i = " << i;
+        //        cout << "\n i = " << i;
         
         for(j=j_min; j<j_max; j++){
             
-
             
-//            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-//            flush(cout);
-
+            
+            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+            //            flush(cout);
+            
             //count how many datapoints are in data_x[i] and in data_y[i]
             n = (data_x[i - floor_min_lat][j % 360]).size();
             
@@ -6258,15 +6258,15 @@ void ChartFrame::GetCoastLineData(void){
             
             for(l=0; l<(data_x[i - floor_min_lat][j % 360]).size(); l++){
                 
-//                cout << "\n l = " << l;
-
+                //                cout << "\n l = " << l;
+                
                 
                 x_temp = data_x[i - floor_min_lat][j % 360][l];
                 y_temp = data_y[i - floor_min_lat][j % 360][l];
                 
                 //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
-                      
+                    
                     if(((draw_panel->x_min) <= x_temp) && (x_temp <= (draw_panel->x_max)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
                         
                         x.push_back(x_temp);
@@ -6276,7 +6276,7 @@ void ChartFrame::GetCoastLineData(void){
                     
                 }
                 
-            
+                
             }
             
         }
@@ -6301,10 +6301,10 @@ void ChartFrame::GetAllCoastLineData(void){
     bool check;
     double lambda_temp, phi_temp;
     
-     
+    
     file_n_line.set_name(String(path_file_n_line));
     file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
-        
+    
     //read file n_line and store it into vector n_line
     file_n_line.open(String("in"), String(""));
     i=0;
@@ -6326,7 +6326,7 @@ void ChartFrame::GetAllCoastLineData(void){
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     
-
+    
     
     check = true;
     i=0;
@@ -6338,9 +6338,9 @@ void ChartFrame::GetAllCoastLineData(void){
         
         (data_x[i]).resize(360);
         (data_y[i]).resize(360);
-
+        
         for(j=0; j<360; j++){
-              
+            
             // read data as a block:
             file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
             
@@ -6357,7 +6357,7 @@ void ChartFrame::GetAllCoastLineData(void){
             
             //count how many datapoints are in data
             n = count(data.begin(), data.end(), ',');
-                        
+            
             l=0;
             pos_beg = 0;
             pos_end = data.find(" ", pos_beg);
@@ -6375,7 +6375,7 @@ void ChartFrame::GetAllCoastLineData(void){
                 
                 (data_x[i][j]).push_back(x_mercator(lambda_temp));
                 (data_y[i][j]).push_back(y_mercator(phi_temp));
-
+                
                 pos_beg = pos_end+1;
                 pos_end = data.find(" ", pos_beg);
                 
@@ -6391,26 +6391,26 @@ void ChartFrame::GetAllCoastLineData(void){
         
     }
     
-           cout << "\nxxxxxx    i at the end of loop = " << i;
-
+    cout << "\nxxxxxx    i at the end of loop = " << i;
     
-//    for(i=0; i<10; i++){
-//        cout << "\ni = " << i << "\n";
-//        for(j=0; j<data_x[i].size(); j++){
-//            cout << "\t"<< data_x[i][j];
-//        }
-//        
-//    }
     
-//    for(i=data_x.size()-10; i<data_x.size(); i++){
-//        cout << "\ni = " << i << "\n";
-//        for(j=0; j<data_x[i].size(); j++){
-//            cout << "\t"<< data_x[i][j];
-//        }
-//
-//    }
+    //    for(i=0; i<10; i++){
+    //        cout << "\ni = " << i << "\n";
+    //        for(j=0; j<data_x[i].size(); j++){
+    //            cout << "\t"<< data_x[i][j];
+    //        }
+    //        
+    //    }
     
-
+    //    for(i=data_x.size()-10; i<data_x.size(); i++){
+    //        cout << "\ni = " << i << "\n";
+    //        for(j=0; j<data_x[i].size(); j++){
+    //            cout << "\t"<< data_x[i][j];
+    //        }
+    //
+    //    }
+    
+    
     
     if(check){
         
@@ -6572,7 +6572,7 @@ void DrawPanel::Render(wxDC&  dc){
         }
         
     }
-
+    
     //draw positions
     for(i=0; i<(plot->position_list).size(); i++){
         
@@ -6611,8 +6611,8 @@ void DrawPanel::Render(wxDC&  dc){
     //draw labels on the x axis
     //set the initial value of dummy
     dummy = x_mercator((floor((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda);
-   
-        
+    
+    
     //starts the loop which draws the labels
     for(first_label = true; dummy <= x_max; dummy+=k*delta_lambda){
         
@@ -6665,11 +6665,11 @@ void DrawPanel::Render(wxDC&  dc){
     
     //draw labels on the y axis
     //set first value of dummy
-//    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
+    //    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
     dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-//    }else{
-//        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-//    }
+    //    }else{
+    //        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+    //    }
     //starts for loop which draws the ylabels
     for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
         
@@ -6747,9 +6747,9 @@ void DrawPanel::Draw(void){
     Angle dummy;
     //this is a pointer to parent->parent->plot, created only to shorten the code
     wxPoint p;
-
     
-
+    
+    
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
@@ -6799,22 +6799,22 @@ void DrawPanel::Draw(void){
     
     //set meridians
     lambda_span = K*(x_max-x_min);
-        
+    
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);
-
+    
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision)))).GetWidth()))));
     n_intervals_ticks = min(
-                          (unsigned int)((plot->n_intervals_ticks_preferred).value),
-                           n_intervals_ticks_max
-                          );
+                            (unsigned int)((plot->n_intervals_ticks_preferred).value),
+                            n_intervals_ticks_max
+                            );
     
-//    if(((plot->n_intervals_ticks_preferred).value) > n_intervals_ticks_max){
-//        cout << "xxxxxxxxx      I have to reduce the number of ticks!\n";
-//    }
-
+    //    if(((plot->n_intervals_ticks_preferred).value) > n_intervals_ticks_max){
+    //        cout << "xxxxxxxxx      I have to reduce the number of ticks!\n";
+    //    }
+    
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
@@ -6824,11 +6824,11 @@ void DrawPanel::Draw(void){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
-//    if(delta_lambda > 1.0/gamma_lambda){
-//        if(delta_lambda == 5.0/gamma_lambda){delta_lambda = delta_lambda - 4.0/gamma_lambda;}
-//        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
-//    }
-    cout <<  "... delta_lambda = " << delta_lambda << "\n";
+    //    if(delta_lambda > 1.0/gamma_lambda){
+    //        if(delta_lambda == 5.0/gamma_lambda){delta_lambda = delta_lambda - 4.0/gamma_lambda;}
+    //        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
+    //    }
+    //    cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
     lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda;
     for(x_dummy = x_mercator(lambda) - k*delta_lambda; x_dummy <= x_max; x_dummy+=k*delta_lambda){
@@ -6879,14 +6879,14 @@ void DrawPanel::Draw(void){
     
     //I create an angle which has the largest posible label when printed out in the "NS" format, so as to compute the  value of n_interval_ticks which allows the y-axis labels not to superpose
     dummy.from_sign_deg_min('+', 89, 59);
-
+    
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.y))/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision)))).GetHeight()))));
     n_intervals_ticks = min(
-                          (unsigned int)((plot->n_intervals_ticks_preferred).value),
-                           n_intervals_ticks_max
-                          );
+                            (unsigned int)((plot->n_intervals_ticks_preferred).value),
+                            n_intervals_ticks_max
+                            );
     
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
@@ -6899,12 +6899,12 @@ void DrawPanel::Draw(void){
         if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
     }
-//    if(delta_phi > 1.0/gamma_phi){
-//        if(delta_phi == 5.0/gamma_phi){delta_phi = delta_phi - 4.0/gamma_phi;}
-//        else{delta_phi = delta_phi - 5.0/gamma_phi;}
-//    }
-    cout << "... delta_phi = "  << delta_phi << "\n";
-
+    //    if(delta_phi > 1.0/gamma_phi){
+    //        if(delta_phi == 5.0/gamma_phi){delta_phi = delta_phi - 4.0/gamma_phi;}
+    //        else{delta_phi = delta_phi - 5.0/gamma_phi;}
+    //    }
+    //    cout << "... delta_phi = "  << delta_phi << "\n";
+    
     
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
@@ -7031,9 +7031,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     
     parent = parent_input;
-
+    
     file_init.set_name(String(path_file_init));
-
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
@@ -7041,29 +7041,29 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (parent->plot)->show(true, String(""));
     
     GetAllCoastLineData();
-
-
+    
+    
     file_init.open(String("in"), prefix);
     //read value_slider_max from file_init
     cout << prefix.value << YELLOW << "Reading maximal zoom factor from file " << file_init.name.value << " ...\n" << RESET;
     value_slider_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     //read relative_displacement from file_init
     cout << prefix.value << YELLOW << "Reading relative displacement from file " << file_init.name.value << " ...\n" << RESET;
     relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     //read standard_thickness_over_length_screen from file_init
     cout << prefix.value << YELLOW << "Reading standard thickness over length screen from file " << file_init.name.value << " ...\n" << RESET;
     standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), file_init, true, String(""));
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     //read large_thickness_over_length_screen from file_init
     cout << prefix.value << YELLOW << "Reading large thickness over length screen from file " << file_init.name.value << " ...\n" << RESET;
     large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), file_init, true, String(""));
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     file_init.close(prefix);
     
     idling = false;
@@ -7117,8 +7117,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
-
-
+    
+    
     
     
     //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
@@ -7137,7 +7137,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-
+    
     sizer_buttons->Add(empty_text_1);
     sizer_buttons->Add(button_up);
     sizer_buttons->Add(empty_text_2);
@@ -7151,7 +7151,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-
+    
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     
@@ -7159,9 +7159,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     //    sizer_v->Fit(panel);
     
-
-
-
+    
+    
+    
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
@@ -7203,7 +7203,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
     }
     
     event.Skip(true);
-
+    
 }
 
 //moves (makes slide) down the chart
@@ -7227,10 +7227,10 @@ template<class T> void ChartFrame::MoveDown(T& event){
         draw_panel->PaintNow();
         
     }
-
+    
     
     event.Skip(true);
-
+    
 }
 
 //moves (makes slide) left the chart
@@ -7251,7 +7251,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     draw_panel->PaintNow();
     
     event.Skip(true);
-
+    
 }
 
 //moves (makes slide) up the chart
@@ -7272,7 +7272,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
     draw_panel->PaintNow();
     
     event.Skip(true);
-
+    
 }
 
 void DrawPanel::SetIdling(bool b){
@@ -7338,7 +7338,7 @@ void ChartFrame::UpdateSlider(void){
     slider->SetValue(round(-log(((double)value_slider_old)/((double)(value_slider_max.value)))));
     
     UpdateSliderLabel();
-
+    
 }
 
 
@@ -7627,14 +7627,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             //if the mouse is hovering over one of the points of route #j, I set the background color of route j in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
             
             if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j]).y))) <
-                (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
-                       
+               (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                
                 //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                 ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
                 if((((plot->route_list)[i]).related_sight).value != -1){
                     ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
                 }
-
+                
             }
             
         }
@@ -7649,13 +7649,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         
         if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
            4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
-                        
+            
             ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(51,153,255));
             
         }else{
             
             ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,255,255));
-
+            
         }
         
     }
@@ -7675,7 +7675,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     x_max_start_drag = x_max;
     y_min_start_drag = y_min;
     y_max_start_drag = y_max;
-
+    
     Position geo;
     ScreenToGeo(position_start_drag, &geo);
     geo.print(String("Position start drag"), String("************ "), cout);
@@ -7700,7 +7700,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-
+    
     if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
         //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
         
@@ -7710,7 +7710,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         y_max = y_max_start_drag;
         
         Update_lambda_phi_min_max();
-
+        
         //re-draw the chart
         Draw();
         PaintNow();
@@ -7722,7 +7722,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         (print_error_message->message) = String("The chart must lie within the boundaries.");
         (*print_error_message)();
         
-
+        
     }
     
     event.Skip(true);
@@ -7818,7 +7818,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             
         }
         
-  
+        
         
         //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
@@ -7841,7 +7841,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         double delta_x, delta_y;
         
         position_now_drag = wxGetMousePosition();
-         
+        
         delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
         
@@ -7873,10 +7873,10 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     
     double r;
     
-//    r = exp( ((parent->slider)->GetValue()) - round(log((double)(parent->value_slider_old))));
+    //    r = exp( ((parent->slider)->GetValue()) - round(log((double)(parent->value_slider_old))));
     r = ((double)(parent->value_slider_old)) / ( ((double)((parent->value_slider_max).value))*exp(-((parent->slider)->GetValue()))  );
-
-//    cout << "Slider = " << value_slider_from_scroll << "\n";
+    
+    //    cout << "Slider = " << value_slider_from_scroll << "\n";
     
     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
     x_min_old = x_min;
@@ -7884,7 +7884,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_min_old = y_min;
     y_max_old = y_max;
     
-
+    
     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
     x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
     x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
@@ -7902,7 +7902,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         (parent->slider)->SetValue(round(-log(((double)(parent->value_slider_old)) / ((double)((parent->value_slider_max).value)) )));
         
         Update_lambda_phi_min_max();
-
+        
         //re-draw the chart
         Draw();
         PaintNow();
@@ -8338,7 +8338,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
         i--;
         
         if(check){
-
+            
             
             (p->box_unit)->SetBackgroundColour(*wxWHITE);
             (p->box_unit_ok) = true;
@@ -8360,7 +8360,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
     }
     
     event.Skip(true);
-   
+    
 }
 
 template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in){
@@ -8799,8 +8799,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
         label_button_ok.set(String(""), String("Modify"), String(""));
     }
     button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-
-
+    
+    
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
     button_ok->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
     //If I press reduce, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
@@ -9156,7 +9156,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
     ((parent->chart_frame)->draw_panel)->Draw();
     ((parent->chart_frame)->draw_panel)->PaintNow();
- 
+    
     
     event.Skip(true);
     
@@ -9175,14 +9175,14 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
 void RouteFrame::TryToEnableOk(void){
     
     button_ok->Enable((type->is_ok()) &&
-                       (
-                        ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
-                         ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
-                        ||
-                        ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
-                         ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
-                        )
-                       );
+                      (
+                       ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
+                        ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
+                       ||
+                       ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
+                        ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
+                       )
+                      );
     
     
     
@@ -9542,7 +9542,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_sights->PushBackColumn(wxString("TAI - UTC"));
     listcontrol_sights->PushBackColumn(wxString("Label"));
     listcontrol_sights->PushBackColumn(wxString("Related route"));
-     
+    
     
     
     //write the sights into plot->sight_list into listcontrol_sights
@@ -9567,11 +9567,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_positions = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
-
+    
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
     listcontrol_positions->PushBackColumn(wxString("Label"));
-
+    
     //write the positions into plot->position_list into listcontrol_sights
     for(i=0; i<((plot->position_list).size()); i++){
         ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
@@ -10697,7 +10697,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
     ((parent->chart_frame)->draw_panel)->Draw();
     ((parent->chart_frame)->draw_panel)->PaintNow();
-   
+    
     event.Skip(true);
     
     Close(TRUE);
@@ -11137,7 +11137,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     units.Clear();
     units.Add(wxT("nm"));
     units.Add(wxT("m"));
-  
+    
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);

@@ -7100,7 +7100,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, round(-log(((double)value_slider_old)/((double)(value_slider_max.value)))), 0, round(-log(1.0/((double)(value_slider_max.value)))), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, value_slider_old, 1, (value_slider_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -7335,7 +7335,7 @@ void ChartFrame::UpdateSlider(void){
     value_slider_old = ((unsigned int)f);
     
     
-    slider->SetValue(round(-log(((double)value_slider_old)/((double)(value_slider_max.value)))));
+    slider->SetValue(value_slider_old);
     
     UpdateSliderLabel();
     
@@ -7871,18 +7871,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     
-    int n;
     double r;
     
-    n = round( ((double)((parent->value_slider_max).value)) * exp( - ((double)((parent->slider)->GetValue())) ) );
-    if(n>((parent->value_slider_max).value)){
-        n = ((parent->value_slider_max).value);
-    }
-    if(n<1){
-        n = 1;
-    }
-    
-    r = ((double)(parent->value_slider_old)) / ((double)n);
+    r = ((double)(parent->value_slider_old)) / ((double)((parent->slider)->GetValue()));
     
     //    cout << "Slider = " << value_slider_from_scroll << "\n";
     
@@ -7918,6 +7909,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         (print_error_message->message) = String("The chart must lie within the boundaries.");
         (*print_error_message)();
         
+
         
     }else{
         //if the slide operation is valid, I update everything and re-draw the chart
@@ -7925,7 +7917,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         Update_lambda_phi_min_max();
         
         //update parent->value_slider_old
-        (parent->value_slider_old) = round ( ((double)((parent->value_slider_max).value))*exp(-((parent->slider)->GetValue())) );
+        (parent->value_slider_old) = ((parent->slider)->GetValue());
         
         Draw();
         PaintNow();

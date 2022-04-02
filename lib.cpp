@@ -7888,12 +7888,14 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
     
     if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)))){
-        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
         
         x_min = x_min_old;
         x_max = x_max_old;
         y_min = y_min_old;
         y_max = y_max_old;
+        
+        ((parent->slider)->SetValue(round(log((double)value_slider_old))));
         
         Update_lambda_phi_min_max();
 

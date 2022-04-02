@@ -7100,7 +7100,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, round(log(1.0)), round(log((double)value_slider_old)), round(log((double)(value_slider_max.value))), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, round(-log(((double)value_slider_old)/((double)(value_slider_max.value)))), 0, round(-log(1.0/((double)(value_slider_max.value)))), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -7335,7 +7335,8 @@ void ChartFrame::UpdateSlider(void){
     value_slider_old = ((unsigned int)f);
     
     
-    slider->SetValue(round(log((double)value_slider_old)));
+    slider->SetValue(round(-log(((double)value_slider_old)/((double)(value_slider_max.value)))));
+    
     UpdateSliderLabel();
 
 }
@@ -7798,7 +7799,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (((parent->parent)->plot)->phi_min).normalize();
             (((parent->parent)->plot)->phi_max).normalize();
             
-              parent->UpdateSlider();
+            Draw();
+            PaintNow();
+            
+            parent->UpdateSlider();
             
         }else{
             //if the zoom factor is not valid, then I print an error message
@@ -7814,8 +7818,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             
         }
         
-        Draw();
-        PaintNow();
+  
         
         //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
@@ -7870,8 +7873,9 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     
     double r;
     
-    r = exp( -((parent->slider)->GetValue()) + round(log((double)(parent->value_slider_old))));
-    
+//    r = exp( ((parent->slider)->GetValue()) - round(log((double)(parent->value_slider_old))));
+    r = ((double)(parent->value_slider_old)) / ( ((double)((parent->value_slider_max).value))*exp(-((parent->slider)->GetValue()))  );
+
 //    cout << "Slider = " << value_slider_from_scroll << "\n";
     
     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
@@ -7895,7 +7899,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         y_min = y_min_old;
         y_max = y_max_old;
         
-        ((parent->slider)->SetValue(round(log((double)value_slider_old))));
+        (parent->slider)->SetValue(round(-log(((double)(parent->value_slider_old)) / ((double)((parent->value_slider_max).value)) )));
         
         Update_lambda_phi_min_max();
 

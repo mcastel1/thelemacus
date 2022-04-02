@@ -7880,19 +7880,48 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_min_old = y_min;
     y_max_old = y_max;
     
+
     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
     x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
     x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
     y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
-    Update_lambda_phi_min_max();
-        
-    //update parent->value_slider_old
-    (parent->value_slider_old) = exp(((parent->slider)->GetValue()));
     
-    Draw();
-    PaintNow();
-    parent->UpdateSliderLabel();
+    if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)))){
+        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+        
+        x_min = x_min_old;
+        x_max = x_max_old;
+        y_min = y_min_old;
+        y_max = y_max_old;
+        
+        Update_lambda_phi_min_max();
+
+        //re-draw the chart
+        Draw();
+        PaintNow();
+        
+        
+        //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+        (print_error_message->control) = NULL;
+        (print_error_message->title) = String("Chart outside  boundaries!");
+        (print_error_message->message) = String("The chart must lie within the boundaries.");
+        (*print_error_message)();
+        
+        
+    }else{
+        //if the slide operation is valid, I update everything and re-draw the chart
+        
+        Update_lambda_phi_min_max();
+        
+        //update parent->value_slider_old
+        (parent->value_slider_old) = exp(((parent->slider)->GetValue()));
+        
+        Draw();
+        PaintNow();
+        parent->UpdateSliderLabel();
+        
+    }
     
     event.Skip(true);
     

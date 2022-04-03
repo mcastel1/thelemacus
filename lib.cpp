@@ -6267,7 +6267,7 @@ void ChartFrame::GetCoastLineData(void){
                 //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
                     
-                    if(((draw_panel->x_min) <= x_temp) && (x_temp <= (draw_panel->x_max)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
+                    if(/*take account of the periodicity around longitudes here, otherwise this condition will never be satisfied*/((draw_panel->x_min) <= x_temp) && (x_temp <= (draw_panel->x_max)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
                         
                         x.push_back(x_temp);
                         y.push_back(y_temp);
@@ -7286,6 +7286,7 @@ void DrawPanel::Update_lambda_phi_min_max(void){
     
     (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
     (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
+    
     (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
     (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
     

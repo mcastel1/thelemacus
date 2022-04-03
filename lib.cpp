@@ -6769,6 +6769,8 @@ void DrawPanel::Draw(void){
     parent->GetCoastLineData();
     
     
+    
+    //change this part for when x_max < x_min
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > (x_max-x_min)){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen

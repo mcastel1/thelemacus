@@ -27,6 +27,7 @@
 - set up a proper output to a log file
  - turn gamma_lambda into an unsigned int
  - add a dropdown menu with the units of measure in LengthField
+ - add margins in chart in such a way that ylabels are not cut
  */
 
 

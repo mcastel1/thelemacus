@@ -6753,7 +6753,7 @@ void DrawPanel::Render(wxDC&  dc){
 
 void DrawPanel::Draw(void){
     
-    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
+    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/periodic_width_chart;
     int i, j;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route

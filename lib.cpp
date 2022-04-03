@@ -6805,7 +6805,6 @@ void DrawPanel::Draw(void){
     tic_length = tic_length_over_width_plot_area*width_plot_area;
     
     //draw coastlines
-    //sign
     
     // Create a XYChart object with the appropriate size
     c = new XYChart(width_chart, height_chart);
@@ -6822,7 +6821,7 @@ void DrawPanel::Draw(void){
     
     
     //set meridians
-    lambda_span = K*(x_max-x_min);
+    lambda_span = K*width_plot_area_temp;
     
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);
@@ -6853,6 +6852,9 @@ void DrawPanel::Draw(void){
     //        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
     //    }
     //    cout <<  "... delta_lambda = " << delta_lambda << "\n";
+    //sign
+
+    
     
     lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda;
     for(x_dummy = x_mercator(lambda) - k*delta_lambda; x_dummy <= x_max; x_dummy+=k*delta_lambda){

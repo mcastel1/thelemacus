@@ -7332,6 +7332,7 @@ void DrawPanel::Update_x_y_min_max(void){
     
 }
 
+//checks if x lies in the correct interval with respect to x_min, x_max
 bool DrawPanel::check_x(double x){
     
     if(x_min <= x_max){

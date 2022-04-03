@@ -182,48 +182,6 @@ string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 
-//this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
-inline double x_mercator(double lambda){
-    
-    double lambda_temp;
-    
-    lambda_temp = lambda;
-    
-    //puts the lambda_temp value in the range [-180.0, +180.0]
-    if(lambda < -180.0){lambda_temp+=360.0;}
-    if(lambda > +180.0){lambda_temp-=360.0;}
-    
-    return(-k*lambda_temp);
-    
-}
-
-//this function returns the rectangular y value of the spherical Mercator projection from the latitude phi (expressed in degrees).
-inline double y_mercator(double phi){
-    
-    double phi_temp;
-    
-    phi_temp = phi;
-    
-    //puts the phi_temp value in the range [-180.0, +180.0]
-    if(phi > +180.0){phi_temp-=360.0;}
-    
-    return log(1./cos(phi_temp*k) + tan(phi_temp*k));
-    
-}
-
-//this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
-inline double lambda_mercator(double x){
-    
-    return (-x*K - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
-    
-}
-
-//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
-inline double phi_mercator(double y){
-    
-    return(K*atan(sinh(y)));
-    
-}
 
 
 
@@ -678,6 +636,47 @@ public:
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     
 };
+
+//this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
+inline double x_mercator(double lambda){
+    
+    //construct lambda_temp and set it to lambda, in order to report lambda in the interval [0, 2pi)
+    Angle lambda_temp;
+    
+    lambda_temp.set(String(""), lambda*k, String(""));
+    
+    //return x by taking into account the periodicity of the projection
+    return( -k*(lambda - floor(lambda/M_PI)*2.0*M_PI) );
+    
+}
+
+//this function returns the rectangular y value of the spherical Mercator projection from the latitude phi (expressed in degrees).
+inline double y_mercator(double phi){
+    
+    double phi_temp;
+    
+    phi_temp = phi;
+    
+    //puts the phi_temp value in the range [-180.0, +180.0]
+    if(phi > +180.0){phi_temp-=360.0;}
+    
+    return log(1./cos(phi_temp*k) + tan(phi_temp*k));
+    
+}
+
+//this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
+inline double lambda_mercator(double x){
+    
+    return (-x*K - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
+    
+}
+
+//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
+inline double phi_mercator(double y){
+    
+    return(K*atan(sinh(y)));
+    
+}
 
 
 

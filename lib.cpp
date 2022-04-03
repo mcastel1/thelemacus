@@ -6768,6 +6768,8 @@ void DrawPanel::Draw(void){
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
     
+    cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
+    
     
     
     //change this part for when x_max < x_min

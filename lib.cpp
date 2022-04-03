@@ -6770,7 +6770,13 @@ void DrawPanel::Draw(void){
     
     cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
     
-    
+    if(x_max >= x_min){
+        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+        periodic_width_chart = x_max-x_min;
+    }else{
+        //in this case, x_max, x_min encompass the meridian lambda = pi
+        periodic_width_chart = 2.0*M_PI - (x_min-x_max);
+    }
     
     //change this part for when x_max < x_min
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/

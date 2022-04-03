@@ -214,12 +214,7 @@ inline double y_mercator(double phi){
 //this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
 inline double lambda_mercator(double x){
     
-    double output;
-    
-    if((x<=0.0) && (x>-M_PI)){output = -x*K;}
-    else{output = -x*K+360.0;}
-    
-    return output;
+    return (-x*K - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
     
 }
 

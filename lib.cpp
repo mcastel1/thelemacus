@@ -1,5 +1,7 @@
 #include "lib.h"
 
+
+
 bool String::operator==(const String& s){
     
     return((((*this).value) == (s.value)));
@@ -6856,26 +6858,28 @@ void DrawPanel::Draw(void){
 
     
     
-    lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda;
-    for(x_dummy = x_mercator(lambda) - k*delta_lambda; x_dummy <= x_max; x_dummy+=k*delta_lambda){
+    
+    for(lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda; check_x(x_mercator(lambda)); lambda+=delta_lambda){
         
-        if((x_dummy >= x_min) && (x_dummy <= x_max)){
-            
-            c->addLine(
-                       (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
-                       (position_plot_area.y),
-                       (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
-                       (position_plot_area.y) + height_plot_area,
-                       0x808080, 1);
-            
-        }
+        x_dummy = x_mercator(lambda);
+        
+        //        if((x_dummy >= x_min) && (x_dummy <= x_max)){
+        
+        c->addLine(
+                   (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
+                   (position_plot_area.y),
+                   (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
+                   (position_plot_area.y) + height_plot_area,
+                   0x808080, 1);
+        
+        //        }
         
         if(gamma_lambda == 60.0){
             
             //plot the xticks from lambda to the next lambda (lambda + dlambda)
             for(i=0; (((double)i)/10.0)/60.0 < delta_lambda; i++){
                 
-                if((x_dummy + k*(((double)i)/10.0)/60.0 >= x_min) && (x_dummy + k*(((double)i)/10.0)/60.0 <= x_max)){
+                if(check_x(x_dummy + k*(((double)i)/10.0)/60.0)){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     c->addLine(
@@ -7326,6 +7330,21 @@ void DrawPanel::Update_x_y_min_max(void){
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
     
+}
+
+bool DrawPanel::check_x(double x){
+    
+    if(x_min <= x_max){
+        //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
+        
+        return((x_min <= x) && (x <= x_max));
+        
+    }else{
+        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
+
+        return((x_min <= x) || (x <= x_max));
+
+    }
 }
 
 void ChartFrame::UpdateSliderLabel(void){

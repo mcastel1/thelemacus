@@ -1348,6 +1348,7 @@ public:
     bool GeoToPlot(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
+    bool check_x(double);
     
     void Render(wxDC& dc);
     

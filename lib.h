@@ -1345,7 +1345,7 @@ public:
     void ScreenToGeo(wxPoint, Position*);
     void ScreenToMercator(wxPoint, double*, double*);
     void GeoToScreen(Position, wxPoint*);
-    bool GeoToPlot(Position, wxPoint*);
+    bool GeoToDrawPanel(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
     bool check_x(double);

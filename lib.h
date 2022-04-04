@@ -646,7 +646,7 @@ inline double x_mercator(double lambda){
     lambda_temp.set(String(""), lambda*k, String(""));
     
     //return x by taking into account the periodicity of the projection
-    return( -k*(lambda - floor(lambda/M_PI)*2.0*M_PI) );
+    return( -((lambda_temp.value) - floor((lambda_temp.value)/M_PI)*2.0*M_PI) );
     
 }
 

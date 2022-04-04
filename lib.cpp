@@ -7589,12 +7589,11 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (p->x) = (position_draw_panel.x) + (position_plot_area.x) + (x_mercator(K*((q.lambda).value))-x_min)/(x_max-x_min)*width_plot_area;
-    (p->y) = (position_draw_panel.y) + (position_plot_area.y) + (height_plot_area) - ((y_mercator(K*((q.phi).value))-y_min)/(y_max-y_min)*height_plot_area);
+    GeoToDrawPanel(q, p);
     
-    //    cout << "B = screen = " << (p->x) << " " << (p->y) << "\n";
-    
-    
+    (p->x) += (position_draw_panel.x);
+    (p->y) += (position_draw_panel.y);
+        
 }
 
 //this function converts the geographic position q into the  position p with respect to the origin of the draw panel

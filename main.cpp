@@ -28,6 +28,7 @@
  - turn gamma_lambda into an unsigned int
  - add a dropdown menu with the units of measure in LengthField
  - add margins in chart in such a way that ylabels are not cut
+ - revise all the functions GeoToScreen, ... to take into account that x_max may be smalller than x_min
  */
 
 

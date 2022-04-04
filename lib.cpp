@@ -6285,6 +6285,7 @@ void ChartFrame::GetCoastLineData(void){
                     
                     if(/*take account of the periodicity around longitudes here, otherwise this condition will never be satisfied*//*x_max < x_min!!!*/check_x && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
                         
+                        if(((draw_panel->x_max) < (draw_panel->x_min)) && (x_temp < (draw_panel->x_max))){x_temp += 2.0*M_PI;}
                         x.push_back(x_temp);
                         y.push_back(y_temp);
                         
@@ -6298,6 +6299,8 @@ void ChartFrame::GetCoastLineData(void){
         }
         
     }
+    
+    
     
 }
 
@@ -6861,7 +6864,9 @@ void DrawPanel::Draw(void){
         
         x_dummy = x_mercator(lambda);
         
-        //        if((x_dummy >= x_min) && (x_dummy <= x_max)){
+        
+        if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
+        
         
         c->addLine(
                    (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
@@ -6870,7 +6875,6 @@ void DrawPanel::Draw(void){
                    (position_plot_area.y) + height_plot_area,
                    0x808080, 1);
         
-        //        }
         
         if(gamma_lambda == 60.0){
             

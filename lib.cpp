@@ -6866,9 +6866,9 @@ void DrawPanel::Draw(void){
         //        if((x_dummy >= x_min) && (x_dummy <= x_max)){
         
         c->addLine(
-                   (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
+                   (position_plot_area.x) + (x_dummy-x_min)/delta_x_periodic*width_plot_area,
                    (position_plot_area.y),
-                   (position_plot_area.x) + (x_dummy-x_min)/(x_max-x_min)*width_plot_area,
+                   (position_plot_area.x) + (x_dummy-x_min)/delta_x_periodic*width_plot_area,
                    (position_plot_area.y) + height_plot_area,
                    0x808080, 1);
         
@@ -6883,9 +6883,9 @@ void DrawPanel::Draw(void){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     c->addLine(
-                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/delta_x_periodic*width_plot_area,
                                (position_plot_area.y) + height_plot_area,
-                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/(x_max-x_min)*width_plot_area,
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/delta_x_periodic*width_plot_area,
                                (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
                                0x0000ff, 1);
                     

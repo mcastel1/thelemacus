@@ -6601,8 +6601,8 @@ void DrawPanel::Render(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
         
-        if(GeoToPlot((plot->position_list)[i], &p)){
-            //if the point returned from GeoToPlot falls within the plot area, then I plot it
+        if(GeoToDrawPanel((plot->position_list)[i], &p)){
+            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
         }
@@ -7031,7 +7031,7 @@ void DrawPanel::Draw(void){
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
             ((plot->route_list)[i]).compute_end(String(""));
             
-            if(GeoToPlot(((plot->route_list)[i]).end, &p)){
+            if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
                 (points_route_list[i]).push_back(p);
                 
                 
@@ -7597,8 +7597,8 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
-//this function converts the geographic position q into the  position p with respect to the origin of the plot area
-bool DrawPanel::GeoToPlot(Position q, wxPoint *p){
+//this function converts the geographic position q into the  position p with respect to the origin of the draw panel
+bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
     
     double x_temp, y_temp;
     

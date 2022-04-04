@@ -7597,7 +7597,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
-//this function converts the geographic position p into the  position p with respect to the origin of the plot area
+//this function converts the geographic position q into the  position p with respect to the origin of the plot area
 bool DrawPanel::GeoToPlot(Position q, wxPoint *p){
     
     double x_temp, y_temp;

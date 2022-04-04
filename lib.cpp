@@ -7266,13 +7266,16 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     
     double delta;
     
-    delta = (relative_displacement.value) * ((draw_panel->x_max)-(draw_panel->x_min));
+    delta = (relative_displacement.value) * (draw_panel->x_span);
     
-    //update x_min, x_max according to the drag.
-    (draw_panel->x_min) -= delta;
-    (draw_panel->x_max) -= delta;
+    //update lambda_min, lambda_max according to the drag.
+    (((draw_panel->plot)->lambda_min).value) += delta;
+    (((draw_panel->plot)->lambda_max).value) += delta;
     
-    draw_panel->Update_lambda_phi_min_max();
+    ((draw_panel->plot)->lambda_min).normalize();
+    ((draw_panel->plot)->lambda_max).normalize();
+
+    draw_panel->Update_x_y_min_max();
     
     //re-draw the chart
     draw_panel->Draw();
@@ -7287,13 +7290,16 @@ template<class T> void ChartFrame::MoveRight(T& event){
     
     double delta;
     
-    delta = (relative_displacement.value) * ((draw_panel->x_max)-(draw_panel->x_min));
+    delta = (relative_displacement.value) * (draw_panel->x_span);
     
-    //update x_min, x_max according to the drag.
-    (draw_panel->x_min) += delta;
-    (draw_panel->x_max) += delta;
+    //update lambda_min, lambda_max according to the drag.
+    (((draw_panel->plot)->lambda_min).value) -= delta;
+    (((draw_panel->plot)->lambda_max).value) -= delta;
     
-    draw_panel->Update_lambda_phi_min_max();
+    ((draw_panel->plot)->lambda_min).normalize();
+    ((draw_panel->plot)->lambda_max).normalize();
+
+    draw_panel->Update_x_y_min_max();
     
     //re-draw the chart
     draw_panel->Draw();

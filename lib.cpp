@@ -7609,10 +7609,12 @@ bool DrawPanel::GeoToPlot(Position q, wxPoint *p){
         //if the point falls within the plot area, write it into p
         
         if(x_temp > x_min){
+            //in this case, x_temp has not been diminuished due to the  periodicity
             
             (p->x) = (position_plot_area.x) + (x_temp-x_min)/x_span*width_plot_area;
             
         }else{
+            //in this case, x_temp has  been diminuished due to the  periodicity
             
             (p->x) = (position_plot_area.x) + ((2.0*M_PI+x_temp)-x_min)/x_span*width_plot_area;
             

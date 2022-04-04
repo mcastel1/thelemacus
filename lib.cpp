@@ -7559,7 +7559,7 @@ void DrawPanel::ScreenToGeo(wxPoint p, Position *q){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min)), String(""));
+    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*x_span), String(""));
     (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
     
     

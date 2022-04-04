@@ -6859,7 +6859,7 @@ void DrawPanel::Draw(void){
     
     
     
-    for(lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda; check_x(x_mercator(lambda)); lambda+=delta_lambda){
+    for(lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda; check_x(x_mercator(lambda)); lambda-=delta_lambda){
         
         x_dummy = x_mercator(lambda);
         

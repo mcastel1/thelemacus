@@ -6755,7 +6755,7 @@ void DrawPanel::Render(wxDC&  dc){
 
 void DrawPanel::Draw(void){
     
-    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/delta_x_periodic;
+    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/x_span;
     int i, j;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
@@ -6774,33 +6774,33 @@ void DrawPanel::Draw(void){
     
     if(x_max >= x_min){
         //in this case, x_max, x_min do not encompass the meridian lambda = pi
-        delta_x_periodic = x_max-x_min;
+        x_span = x_max-x_min;
     }else{
         //in this case, x_max, x_min encompass the meridian lambda = pi
-        delta_x_periodic = 2.0*M_PI - (x_min-x_max);
+        x_span = 2.0*M_PI - (x_min-x_max);
     }
     
     //change this part for when x_max < x_min
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-    if((y_max-y_min) > delta_x_periodic){
+    if((y_max-y_min) > x_span){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/delta_x_periodic),
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/x_span),
                         (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
                         );
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         height_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
-        width_chart = height_chart/((y_max-y_min)/delta_x_periodic);
+        width_chart = height_chart/((y_max-y_min)/x_span);
     }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
                         (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()),
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/delta_x_periodic)
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span)
                         );
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         width_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
-        height_chart = width_chart*((y_max-y_min)/delta_x_periodic);
+        height_chart = width_chart*((y_max-y_min)/x_span);
     }
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
@@ -6823,7 +6823,7 @@ void DrawPanel::Draw(void){
     
     
     //set meridians
-    lambda_span = K*delta_x_periodic;
+    lambda_span = K*x_span;
     
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);
@@ -6866,9 +6866,9 @@ void DrawPanel::Draw(void){
         //        if((x_dummy >= x_min) && (x_dummy <= x_max)){
         
         c->addLine(
-                   (position_plot_area.x) + (x_dummy-x_min)/delta_x_periodic*width_plot_area,
+                   (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
                    (position_plot_area.y),
-                   (position_plot_area.x) + (x_dummy-x_min)/delta_x_periodic*width_plot_area,
+                   (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
                    (position_plot_area.y) + height_plot_area,
                    0x808080, 1);
         
@@ -6883,9 +6883,9 @@ void DrawPanel::Draw(void){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     c->addLine(
-                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/delta_x_periodic*width_plot_area,
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
                                (position_plot_area.y) + height_plot_area,
-                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/delta_x_periodic*width_plot_area,
+                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
                                (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
                                0x0000ff, 1);
                     

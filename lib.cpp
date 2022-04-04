@@ -6625,15 +6625,13 @@ void DrawPanel::Render(wxDC&  dc){
     }
     
     //draw labels on the x axis
-    //set the initial value of dummy
-    dummy = x_mercator((floor((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda);
     
     
     //starts the loop which draws the labels
-    for(first_label = true; dummy <= x_max; dummy+=k*delta_lambda){
+    for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), first_label = true; check_x(x_mercator(K*(lambda.value))); (lambda.value)-=k*delta_lambda){
         
         s.str("");
-        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
+//        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
         
         if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
             //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
@@ -6641,13 +6639,13 @@ void DrawPanel::Render(wxDC&  dc){
         }else{
             //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
             
-            if(fabs(lambda_mercator(dummy) - ((double)round(lambda_mercator(dummy)))) < delta_lambda/2.0){
-                //in this case, lamba_mercator(dummy) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+            if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < delta_lambda/2.0){
+                //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                 
                 s << lambda.deg_to_string(String("EW"), display_precision);
                 
             }else{
-                //in this case, lamba_mercator(dummy) deos not coincide with an integer mulitple of a degree.
+                //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
                 
                 
                 if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
@@ -6670,7 +6668,7 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.DrawRotatedText(
                            wx_string,
-                           (position_plot_area.x) + (dummy-x_min)/(x_max-x_min)*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                           (position_plot_area.x) + ((-(lambda.value))-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
                            (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
                            + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
                            0);
@@ -6755,7 +6753,7 @@ void DrawPanel::Render(wxDC&  dc){
 
 void DrawPanel::Draw(void){
     
-    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/x_span;
+    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i, j;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
@@ -6986,7 +6984,7 @@ void DrawPanel::Draw(void){
     // Add a title to the x axis using 12pt Arial Bold Italic font
     //    (c->xAxis())->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (c->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
+    (c->xAxis())->setLinearScale(min(x_min, x_max), max(x_min, x_max), 1.7E+308);
     
     (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     

@@ -6244,9 +6244,9 @@ void ChartFrame::GetCoastLineData(void){
     }else{
         //this is the 'non-normal' case, where x_min, x_max embrace the meridian lambda = pi.
         
-        j_min = lambda_min_int;
-        j_max = lambda_max_int + 360;
-        
+        j_min = lambda_max_int;
+        j_max = lambda_min_int;
+   
     }
         
     i_min = phi_min_int;
@@ -6302,7 +6302,10 @@ void ChartFrame::GetCoastLineData(void){
                     
                     if(/*take account of the periodicity around longitudes here, otherwise this condition will never be satisfied*//*x_max < x_min!!!*/check_x && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
                         
-                        if(((draw_panel->x_max) < (draw_panel->x_min)) && (x_temp < (draw_panel->x_max))){x_temp += 2.0*M_PI;}
+                        if(((draw_panel->x_max) < (draw_panel->x_min)) && (x_temp < (draw_panel->x_max))){
+                            x_temp += 2.0*M_PI;
+                            
+                        }
                         x.push_back(x_temp);
                         y.push_back(y_temp);
                         

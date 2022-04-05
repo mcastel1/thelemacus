@@ -6932,10 +6932,10 @@ void DrawPanel::Draw(void){
                     
                     if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
                         cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
-                        //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
+                        //in this case, the circle of equal altitude is cut through the meridian lambda = pi
                         
                         if(((plot->route_list)[i]).GP.lambda.value > M_PI){
-                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = pi, lie in the interval [0,pi]
                             
                             cout << prefix.value << "Case I:\n";
                             
@@ -6948,7 +6948,7 @@ void DrawPanel::Draw(void){
                             x_hi_m = (t_max.value);
                             
                         }else{
-                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
+                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [pi,2*pi]
                             //here I select an interval where I know that there will be t_m
                             
                             cout << prefix.value << "Case II:\n";
@@ -6966,7 +6966,6 @@ void DrawPanel::Draw(void){
                         ((plot->route_list)[i]).temp_prefix = prefix;
                         F.params = &((plot->route_list)[i]);
                         F.function = &(((plot->route_list)[i]).lambda_minus_pi);
-                        
                         
                         
                         //solve for t_p

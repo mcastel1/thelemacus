@@ -6224,14 +6224,31 @@ void ChartFrame::GetCoastLineData(void){
     phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
     
     //transform the values lambda_min_int, lambda_max_int in a format appropriate for data_x and data_y
-    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
-        j_min = lambda_max_int;
-        j_max = 360 + lambda_min_int;
+    if((draw_panel->x_min) <= (draw_panel->x_max)){
+        //this is the 'normal' case where x_min, x_max do not embrace the meridian lambda = pi
+        
+        if((lambda_min_int < 180) && (lambda_max_int >= 180)){
+            //in thi case, both x_min and x_max lie either in the interval [-pi, 0] or in [0, pi]
+            
+            j_min = lambda_max_int;
+            j_max = 360 + lambda_min_int;
+            
+        }else{
+            //in this case, x_min and x_max embrace the meridian lambda = 0 
+            
+            j_min = lambda_max_int;
+            j_max = lambda_min_int;
+            
+        }
+        
     }else{
-        j_min = lambda_max_int;
-        j_max = lambda_min_int;
+        //this is the 'non-normal' case, where x_min, x_max embrace the meridian lambda = pi.
+        
+        j_min = lambda_min_int;
+        j_max = lambda_max_int + 360;
+        
     }
-    
+        
     i_min = phi_min_int;
     i_max = phi_max_int;
     

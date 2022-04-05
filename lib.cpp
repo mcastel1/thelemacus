@@ -7013,7 +7013,7 @@ void DrawPanel::Draw(void){
     // Add a title to the x axis using 12pt Arial Bold Italic font
     //    (c->xAxis())->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (c->xAxis())->setLinearScale(min(x_min, x_max), max(x_min, x_max), 1.7E+308);
+    (c->xAxis())->setLinearScale(x_min, x_min+x_span, 1.7E+308);
     
     (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     

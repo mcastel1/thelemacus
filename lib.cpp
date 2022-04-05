@@ -6422,7 +6422,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    unsigned int i, j, l;
+    unsigned int i, j;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -6445,21 +6445,22 @@ void DrawPanel::Render(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
         //run over the connected chunks of the i-th route
-        for(j=0; j<(points_route_list[i]).size(); j++){
+        for(j=0; j<(ts_route_list[i]).size()+1; j++){
             
             //draw the roues as lines
-            //       dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
+            //sign
+            dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
             
             
-            //draw the routes as points
-            for(l=0; l<(points_route_list[i][j]).size(); l++){
-                
-                
-                //            dc.DrawPoint(points_route_list[i][j]);
-                dc.DrawCircle(points_route_list[i][j][l], thickness);
-                
-                
-            }
+            //            //draw the routes as points
+            //            for(l=0; l<(points_route_list[i][j]).size(); l++){
+            //
+            //
+            //                //            dc.DrawPoint(points_route_list[i][j]);
+            //                dc.DrawCircle(points_route_list[i][j][l], thickness);
+            //
+            //
+            //            }
             
             
         }
@@ -6636,7 +6637,7 @@ void DrawPanel::Render(wxDC&  dc){
 void DrawPanel::Draw(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span, /*x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)*/ x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
-    int i, j, l, status, iter = 0;
+    int i, l, status, iter = 0;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
     Length l_tot;
@@ -6947,8 +6948,7 @@ void DrawPanel::Draw(void){
                         cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
                         //in this case, the circle of equal altitude is cut through the meridian lambda = pi
                         
-                        //there are three chunks of the Route: I allocate space for these chunks
-                        (points_route_list[i]).resize(3);
+                        //there are three chunks of the Route: I allocate space for the related ts
                         (ts_route_list[i]).resize(2);
 
                         if(((plot->route_list)[i]).GP.lambda.value > M_PI){
@@ -7063,7 +7063,7 @@ void DrawPanel::Draw(void){
                     }else{
                         //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
                         
-                        //there is a single chunk of the Route: I allocate space for this chunk
+                        //there is a single chunk of the Route: I allocate space for the related ts
                         (points_route_list[i]).resize(1);
 
                         
@@ -7074,8 +7074,7 @@ void DrawPanel::Draw(void){
                 }else{
                     //in this case ((plot->route_list)[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that ((plot->route_list)[i]).GP.lambda.value = pi and split the gnuplot plot  in two plots so as to avoid the horizontal line
                     
-                    //there are two chunks of the Route: I allocate space for these chunks
-                    (points_route_list[i]).resize(2);
+                    //there are two chunks of the Route: I allocate space for the related ts
                     (ts_route_list[i]).resize(1);
 
                     // interval where I know that there will be t_s
@@ -7172,32 +7171,27 @@ void DrawPanel::Draw(void){
             
         }
         
-        //run over different chunks of route #i
-        for(j=0; j<(points_route_list[i]).size(); j++){
+        //compute points of j-th chunk of route #i
+        for((points_route_list[i]).clear(), l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
-            //compute points of j-th chunk of route #i
-            for((points_route_list[i][j]).clear(), l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+            //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
+            (((plot->route_list)[i]).l).set(
+                                            String(""),
+                                            (l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1)),
+                                            String(""));
+            
+            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
+            ((plot->route_list)[i]).compute_end(String(""));
+            
+            if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
+                (points_route_list[i]).push_back(p);
                 
-                
-                
-                //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
-                (((plot->route_list)[i]).l).set(
-                                                String(""),
-                                                (l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1)),
-                                                String(""));
-                
-                //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-                ((plot->route_list)[i]).compute_end(String(""));
-                
-                if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
-                    (points_route_list[i][j]).push_back(p);
-                    
-                    
-                }
                 
             }
             
         }
+        
+        
         
     }
     
@@ -7847,18 +7841,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         
         for(j=0; j<(points_route_list[i]).size(); j++){
             
-            for(l=0; l<(points_route_list[i][j]).size(); l++){
-                //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+            //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+            
+            if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j]).y))) <
+               (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
                 
-                if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                   (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
-                    
-                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                    ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
-                    if((((plot->route_list)[i]).related_sight).value != -1){
-                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
-                    }
-                    
+                //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
+                if((((plot->route_list)[i]).related_sight).value != -1){
+                    ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
                 }
                 
             }

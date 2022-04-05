@@ -6208,7 +6208,6 @@ void ChartFrame::GetCoastLineData(void){
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
     double x_temp, y_temp;
-    bool check_x;
     
     //set x_min, ..., y_max for the following
     draw_panel->Update_x_y_min_max();
@@ -6287,20 +6286,7 @@ void ChartFrame::GetCoastLineData(void){
                 //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
                     
-                    if((draw_panel->x_min) <= (draw_panel->x_max)){
-                        //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
-                        
-                        check_x = (((draw_panel->x_min) <= x_temp) && (x_temp <= (draw_panel->x_max)));
-                        
-                    }else{
-                        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
-
-                        check_x = (((draw_panel->x_min) <= x_temp) || (x_temp <= (draw_panel->x_max)));
-
-                    }
-
-                    
-                    if(/*take account of the periodicity around longitudes here, otherwise this condition will never be satisfied*//*x_max < x_min!!!*/check_x && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
+                    if((draw_panel->check_x(x_temp)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
                         
                         if(((draw_panel->x_max) < (draw_panel->x_min)) && (x_temp < (draw_panel->x_max))){
                             x_temp += 2.0*M_PI;
@@ -6796,7 +6782,7 @@ void DrawPanel::Draw(void){
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
     
-    cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
+    //    cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
     
     if(x_max >= x_min){
         //in this case, x_max, x_min do not encompass the meridian lambda = pi

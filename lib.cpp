@@ -7391,7 +7391,7 @@ void ChartFrame::UpdateSliderLabel(void){
     
 }
 
-//computes the zoom factor of the chart based on the currenct value of delta_x = x_max - x_min and writes it as a double into *f. It returns true if the zooming factor is smaller than value_slider_max, and false otherwise
+//computes the zoom factor of the chart based on the currenct value of span_x and writes it as a double into *f. It returns true if the zooming factor is smaller than value_slider_max, and false otherwise
 bool ChartFrame::ZoomFactor(double delta_x, double* f){
     
     double x;
@@ -7607,7 +7607,7 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
     position_draw_panel = (this->GetScreenPosition());
     
     if(x){
-        (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max - x_min);
+        (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*x_span;
         
     }
     if(y){
@@ -7788,7 +7788,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     double delta_x, delta_y;
     
-    delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
+    delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
     
     if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
@@ -7932,7 +7932,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         
         position_now_drag = wxGetMousePosition();
         
-        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * (x_max-x_min);
+        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
         
         if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){

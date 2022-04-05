@@ -7135,7 +7135,7 @@ void DrawPanel::Draw(void){
                     t_s.value = (x_lo_s+x_hi_s)/2.0;
                     t_s.print(String("t_*"), new_prefix, cout);
                     
-                    (ts_route_list[0]) = t_s;
+                    (ts_route_list[i][0]) = t_s;
                     
                     //
                     //                    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below

@@ -4162,31 +4162,6 @@ void Plot::show(bool zoom_out, String prefix){
     
     
     
-    //    //replace line with window size in plot_dummy.plt
-    //    cout << prefix.value << YELLOW << "Reading width and height of plot window from file " << file_init.name.value << " ...\n" << RESET;
-    //    width_plot_window.read_from_file(String("width of plot window"), file_init, true, new_prefix);
-    //    height_plot_window.read_from_file(String("height of plot window"), file_init, true, new_prefix);
-    //    command.str("");
-    //    command << "LANG=C sed 's/#window size/set terminal qt size " << width_plot_window.value << "," << height_plot_window.value << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    //    system(command.str().c_str());
-    //    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    
-    
-    
-    
-    
-    //
-    //
-    //    //in either case of the if above, I write the boundary values which I have read in plot_temp.plt
-    //    command.str("");
-    //    command << "LANG=C sed 's/#min_longitude/lambda_min = " << (K*lambda_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    //    command << "LANG=C sed 's/#max_longitude/lambda_max = " << (K*lambda_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    //    command << "LANG=C sed 's/#min_latitude/phi_min = " << (K*phi_min.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    //    command << "LANG=C sed 's/#max_latitude/phi_max = " << (K*phi_max.value) << ";/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
-    //
-    //    system(command.str().c_str());
-    //
-    
     
     //
     //

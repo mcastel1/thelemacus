@@ -6879,34 +6879,16 @@ void DrawPanel::Draw(void){
     
     //draw routes from non-GUI code - start
     
-    plot_command.str("");
-    command.str("");
-    //set the key position on the screen
-    plot_command << "set key top right\\\n";
     for(i=0; i<(route_list.size()); i++){
         
-        //I start a brand new multiline plot command only if I am looking at the first route plot
-        if(i==0){
-            plot_command << "plot ";
-        }
-        
-        //set a  plot style for "error on astronomical position curve" and another one for all other curves
-        plot_style.str("");
-        if(((route_list[i]).label) == String("error on astronomical position")){
-            plot_style << "w l dashtype " << i+1 << " linecolor rgb \"purple\"";
-        }else{
-            plot_style << "w l dashtype " << i+1 << " lt " << i+1;
-        }
-        
+
         switch(((route_list[i]).type.value)[0]){
                 
             case 'l':
                 //plot a loxodrome
             {
                 
-                //I assume that  the loxodrome is not cut through the meridian lambda = M_PI, and I make a single plot
-                plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_lox(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision) << ", heading = " << (route_list[i]).alpha.to_string(display_precision) << "\"";
-                
+                  
                 break;
             }
                 
@@ -6914,9 +6896,7 @@ void DrawPanel::Draw(void){
                 //plot an orthodrome
             {
                 
-                //I assume that the orthordrome is not cut through the meridian lambda = M_PI, and I make a single plot
-                plot_command << "[0.:" << (route_list[i]).l.value << "] \"+\" u (xe(K*lambda_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) : (ye(K*phi_ort(t, " << (route_list[i]).start.phi.value << ", " << (route_list[i]).start.lambda.value << ", " << (route_list[i]).alpha.value << ", " << Re << "))) " << plot_style.str()  << " ti \"type = " << (route_list[i]).type.value << ", start = " << (route_list[i]).start.to_string(display_precision) << ", heading = " << (route_list[i]).alpha.to_string(display_precision) << "\"";
-                
+                 
                 break;
             }
                 
@@ -6925,14 +6905,7 @@ void DrawPanel::Draw(void){
                 //plot a circle of equal altitude
             {
                 
-                //this is the title for all curves which will be plotted with a non-empty title in their legent. Curves plotted with an empty title in their legend will be plotted with 'noti' in the plot command.
-                plot_title.str("");
-                if(!((route_list[i]).label == String("error on astronomical position"))){
-                    plot_title << " ti \"" << (route_list[i]).label.value << "\"";
-                }else{
-                    plot_title << " noti";
-                }
-                
+                  
                 //if abs(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (route_list[i]).GP.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(route_list[i]).GP.lambda_{t = t_{min}} and (route_list[i]).GP.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output.
                 if(abs(-tan((route_list[i]).GP.phi.value)*tan(((route_list[i]).omega.value))) < 1.0){
                     
@@ -7141,24 +7114,8 @@ void DrawPanel::Draw(void){
             }
                 
         }
-        
-        //if there is a route or a position plot after the one that I just added, then I add a ,\ for it
-        if((i+1<route_list.size()) || ((i+1 == route_list.size()) && (position_list.size() > 0))){
-            
-            plot_command << ",\\\\";
-            
-        }
-        
-        //if I did not reach the last route plot, I add a newline. If I reached the last plot, no need to add a newline because the sed replacement commands will do it
-        if(i+1<route_list.size()){
-            
-            plot_command << "\\\n";
-            
-        }
-        
+    
     }
-    //add the line to plot.plt which contains the parametric plot of the circle of equal altitude
-    command << "LANG=C sed 's/#route_plots/" << plot_command.str().c_str() << "/g' plot_temp.plt >> plot_temp_2.plt \n" << "mv plot_temp_2.plt plot_temp.plt \n";
     //draw routes from non-GUI code - end
     
     

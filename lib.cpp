@@ -6234,7 +6234,7 @@ void ChartFrame::GetCoastLineData(void){
             j_max = 360 + lambda_min_int;
             
         }else{
-            //in this case, x_min and x_max embrace the meridian lambda = 0 
+            //in this case, x_min and x_max embrace the meridian lambda = 0
             
             j_min = lambda_max_int;
             j_max = lambda_min_int;
@@ -6571,7 +6571,7 @@ void DrawPanel::Render(wxDC&  dc){
     
     Angle lambda, phi;
     wxPoint p;
-    double dummy, thickness;
+    double dummy, thickness, x_dummy;
     stringstream s;
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
@@ -6650,6 +6650,11 @@ void DrawPanel::Render(wxDC&  dc){
     //starts the loop which draws the labels
     for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), first_label = true; check_x(x_mercator(K*(lambda.value))); (lambda.value)-=k*delta_lambda){
         
+        
+        x_dummy = x_mercator(K*(lambda.value));
+        if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
+       
+        
         s.str("");
 //        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
         
@@ -6688,7 +6693,7 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.DrawRotatedText(
                            wx_string,
-                           (position_plot_area.x) + ((-(lambda.value))-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
                            (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
                            + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
                            0);

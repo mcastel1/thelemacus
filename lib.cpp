@@ -6949,7 +6949,8 @@ void DrawPanel::Draw(void){
                         
                         //there are three chunks of the Route: I allocate space for these chunks
                         (points_route_list[i]).resize(3);
-                        
+                        (ts_route_list[i]).resize(2);
+
                         if(((plot->route_list)[i]).GP.lambda.value > M_PI){
                             //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = pi, lie in the interval [0,pi]
                             
@@ -7046,6 +7047,10 @@ void DrawPanel::Draw(void){
                         t_m.value = (x_lo_m+x_hi_m)/2.0;
                         t_m.print(String("t_-"), new_prefix, cout);
                         
+                        //write t_m, t_p in ts_route_list[i]
+                        (ts_route_list[i][0]) = t_m;
+                        (ts_route_list[i][1]) = t_p;
+
                         
                         //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
                         
@@ -7071,6 +7076,7 @@ void DrawPanel::Draw(void){
                     
                     //there are two chunks of the Route: I allocate space for these chunks
                     (points_route_list[i]).resize(2);
+                    (ts_route_list[i]).resize(1);
 
                     // interval where I know that there will be t_s
                     if((-sin((((plot->route_list)[i]).omega.value))/cos((((plot->route_list)[i]).GP.phi.value) - ((((plot->route_list)[i]).omega.value)))) > 0.0){
@@ -7128,6 +7134,8 @@ void DrawPanel::Draw(void){
                     
                     t_s.value = (x_lo_s+x_hi_s)/2.0;
                     t_s.print(String("t_*"), new_prefix, cout);
+                    
+                    (ts_route_list[0]) = t_s;
                     
                     //
                     //                    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below

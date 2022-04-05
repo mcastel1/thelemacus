@@ -6631,7 +6631,7 @@ void DrawPanel::Draw(void){
     //this is a pointer to parent->parent->plot, created only to shorten the code
     wxPoint p;
     //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi.
-    Angle t_min, t_max, t_p, t_m, t_s/*, phi_min, phi_max, lambda_min, lambda_max*/;
+    Angle t_min, t_max, t_p, t_m, t_s;
     Position p_min, p_max;
     gsl_function F;
     const gsl_root_fsolver_type *T;
@@ -7043,7 +7043,7 @@ void DrawPanel::Draw(void){
                         //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
                         
                         //                        plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
-                        //                        
+                        //
                     }
                     
                 }else{

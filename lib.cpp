@@ -6329,10 +6329,12 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     tic_length_over_width_plot_area = 0.01;
     
     
-    //allocates points_route_list
+    //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());
+    ts_route_list.resize((plot->route_list).size());
     for(i=0; i<(plot->route_list).size(); i++){
         (points_route_list[i]).clear();
+        (ts_route_list[i]).clear();
     }
     
     

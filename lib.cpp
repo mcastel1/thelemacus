@@ -6945,6 +6945,9 @@ void DrawPanel::Draw(void){
                         cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
                         //in this case, the circle of equal altitude is cut through the meridian lambda = pi
                         
+                        //there are three chunks of the Route: I allocate space for these chunks
+                        (points_route_list[i]).resize(3);
+                        
                         if(((plot->route_list)[i]).GP.lambda.value > M_PI){
                             //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = pi, lie in the interval [0,pi]
                             
@@ -7041,6 +7044,7 @@ void DrawPanel::Draw(void){
                         t_m.value = (x_lo_m+x_hi_m)/2.0;
                         t_m.print(String("t_-"), new_prefix, cout);
                         
+                        
                         //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
                         
                         //                        plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << ",\\\\\\\n";
@@ -7052,13 +7056,20 @@ void DrawPanel::Draw(void){
                     }else{
                         //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
                         
+                        //there is a single chunk of the Route: I allocate space for this chunk
+                        (points_route_list[i]).resize(1);
+
+                        
                         //                        plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
-                        //
+                        
                     }
                     
                 }else{
-                    //in this case ((plot->route_list)[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that ((plot->route_list)[i]).GP.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
+                    //in this case ((plot->route_list)[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that ((plot->route_list)[i]).GP.lambda.value = pi and split the gnuplot plot  in two plots so as to avoid the horizontal line
                     
+                    //there are two chunks of the Route: I allocate space for these chunks
+                    (points_route_list[i]).resize(2);
+
                     // interval where I know that there will be t_s
                     if((-sin((((plot->route_list)[i]).omega.value))/cos((((plot->route_list)[i]).GP.phi.value) - ((((plot->route_list)[i]).omega.value)))) > 0.0){
                         //in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t

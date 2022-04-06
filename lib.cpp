@@ -6422,7 +6422,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    unsigned int i, j, start, end;
+    unsigned int i, j, l, start, end;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -6453,14 +6453,20 @@ void DrawPanel::Render(wxDC&  dc){
                 end = ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
                 
                 //draw the roues as lines, if there are points
-                if(end-start > 0){
+//                if(end-start > 0){
+//
+////                    cout << "\nend = " << end << "\nstart = " << start << "\nend - start = " << end - start << "\nsize = " << (points_route_list[i]).size();
+////                    flush(cout);
+//
+////                    dc.DrawSpline(end - start, ((points_route_list[i]).data()) + start);
+//
+//                }
+                
+                for(l=start; l<end-1; l++){
                     
-//                    cout << "\nend = " << end << "\nstart = " << start << "\nend - start = " << end - start << "\nsize = " << (points_route_list[i]).size();
-//                    flush(cout);
-
-                    dc.DrawLines(end - start, ((points_route_list[i]).data()) + start, 0, 0);
-                    
+                    dc.DrawLine(points_route_list[i][l], points_route_list[i][l+1]);
                 }
+                
                 
             }
             
@@ -7195,13 +7201,9 @@ void DrawPanel::Draw(void){
             
             if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
                 (points_route_list[i]).push_back(p);
-                
-                
             }
             
         }
-        
-        
         
     }
     
@@ -7213,6 +7215,7 @@ void DrawPanel::Draw(void){
     //    parent->CenterOnScreen();
     
     gsl_root_fsolver_free(s);
+    
     
 }
 

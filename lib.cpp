@@ -6897,7 +6897,7 @@ void DrawPanel::Draw(void){
         
         //set the first value of ts_route_list[i] equal to 0
         (ts_route_list[i]).resize(1);
-        (ts_route_list[i][0]).set(String(""), 0.0, String(""));
+        ((ts_route_list[i][0]).value) = 0.0;
         
         
         switch((((plot->route_list)[i]).type.value)[0]){
@@ -7143,7 +7143,8 @@ void DrawPanel::Draw(void){
         
         //set the last value of ts_route_list[i] equal to 2 pi
         (ts_route_list[i]).resize((ts_route_list[i]).size()+1);
-        (ts_route_list[i][(ts_route_list[i]).size()]).set(String(""), 2.0*M_PI, String(""));
+        //note: here I am not using Angle::set to set the value of this angle, because otherwise the angle would be normalized to 0.0, while I want it to be equal to the full angle 2.0*pi
+        ((ts_route_list[i][(ts_route_list[i]).size()]).value) = 2.0*M_PI;
         
     }
     //draw routes from non-GUI code - end

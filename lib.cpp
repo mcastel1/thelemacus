@@ -6756,29 +6756,31 @@ void DrawPanel::Draw(void){
     //    }
     //    cout <<  "... delta_lambda = " << delta_lambda << "\n";
     
-    
-    
-    
-    for(lambda = ((int)((K*(((plot->lambda_min).value)))/delta_lambda))*delta_lambda; check_x(x_mercator(lambda)); lambda-=delta_lambda){
+    //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
+    lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
+    do{
         
         x_dummy = x_mercator(lambda);
         
+        if((x_max < x_min) && (x_dummy < x_max)){
+            x_dummy += 2.0*M_PI;
+        }
         
-        if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
-        
-        
-        c->addLine(
-                   (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-                   (position_plot_area.y),
-                   (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-                   (position_plot_area.y) + height_plot_area,
-                   0x808080, 1);
-        
+        if(check_x(x_dummy)){
+            
+            c->addLine(
+                       (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+                       (position_plot_area.y),
+                       (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+                       (position_plot_area.y) + height_plot_area,
+                       0x808080, 1);
+            
+        }
         
         if(gamma_lambda == 60.0){
             
             //plot the xticks from lambda to the next lambda (lambda + dlambda)
-            for(i=0; (((double)i)/10.0)/60.0 < delta_lambda; i++){
+            for(i = 60*10*delta_lambda; i>=0; i--){
                 
                 if(check_x(x_dummy + k*(((double)i)/10.0)/60.0)){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -6796,7 +6798,19 @@ void DrawPanel::Draw(void){
             
         }
         
-    }
+        lambda-=delta_lambda;
+        
+    }while(check_x(x_mercator(lambda)));
+    
+    
+
+
+    
+    
+        
+
+        
+    
     
     
     
@@ -7209,7 +7223,7 @@ void DrawPanel::Draw(void){
     (parent->y).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
-    //    parent->CenterOnScreen();
+    parent->CenterOnScreen();
     
     gsl_root_fsolver_free(s);
     

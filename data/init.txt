@@ -47,5 +47,5 @@ use of stopwatch = n
 standard thickness over length screen = 1.2e-3
 large thickness over length screen = 3e-3
 color list = (255,0,00) (0,255,0) (0,0,255) (255,128,0) (0,255,255) (255,192,203)
-maximal zoom factor = 1000
+maximal zoom factor = 10000
 relative displacement = 0.1

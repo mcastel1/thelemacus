@@ -6444,35 +6444,20 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
-        //run over the connected chunks of the i-th route
-        for(j=0; j<((ts_route_list[i]).size())-1; j++){
+        if(((((plot->route_list)[i]).type.value)[0]) == 'c'){
             
-            //draw the roues as lines
-            
-            
-            //            l = ((ts_route_list[i][j]).value)*(Re*sin((((plot->route_list)[i]).omega.value)))*((double)(((plot->n_points_routes).value)-1))/((double)(l_tot.value));
-            
-            
-            
-            
-            dc.DrawLines(
-                         floor(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))) - floor(((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))),
-                         
-                         ((points_route_list[i]).data()) + floor(((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))),
-                         
-                         0, 0);
-            
-            
-            //            //draw the routes as points
-            //            for(l=0; l<(points_route_list[i][j]).size(); l++){
-            //
-            //
-            //                //            dc.DrawPoint(points_route_list[i][j]);
-            //                dc.DrawCircle(points_route_list[i][j][l], thickness);
-            //
-            //
-            //            }
-            
+            //run over the connected chunks of the i-th route
+            for(j=0; j<((ts_route_list[i]).size())-1; j++){
+                
+                //draw the roues as lines
+                dc.DrawLines(
+                             ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))) - ((unsigned int)(((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))),
+                             
+                             ((points_route_list[i]).data()) + (unsigned int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))),
+                             
+                             0, 0);
+                
+            }
             
         }
         

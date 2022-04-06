@@ -6445,11 +6445,22 @@ void DrawPanel::Render(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
         //run over the connected chunks of the i-th route
-        for(j=0; j<(ts_route_list[i]).size()+1; j++){
+        for(j=0; j<((ts_route_list[i]).size())-1; j++){
             
             //draw the roues as lines
-            //sign
-            dc.DrawLines((points_route_list[i]).size(), (points_route_list[i]).data() , 0, 0);
+            
+            
+            //            l = ((ts_route_list[i][j]).value)*(Re*sin((((plot->route_list)[i]).omega.value)))*((double)(((plot->n_points_routes).value)-1))/((double)(l_tot.value));
+            
+            
+            
+            
+            dc.DrawLines(
+                         floor(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))) - floor(((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))),
+                         
+                         ((points_route_list[i]).data()) + floor(((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))),
+                         
+                         0, 0);
             
             
             //            //draw the routes as points
@@ -6899,6 +6910,10 @@ void DrawPanel::Draw(void){
     
     for(i=0; i<((plot->route_list).size()); i++){
         
+        //set the first value of ts_route_list[i] equal to 0
+        (ts_route_list[i]).resize(1);
+        (ts_route_list[i][0]).set(String(""), 0.0, String(""));
+        
         
         switch((((plot->route_list)[i]).type.value)[0]){
                 
@@ -6948,9 +6963,6 @@ void DrawPanel::Draw(void){
                         cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
                         //in this case, the circle of equal altitude is cut through the meridian lambda = pi
                         
-                        //there are three chunks of the Route: I allocate space for the related ts
-                        (ts_route_list[i]).resize(2);
-
                         if(((plot->route_list)[i]).GP.lambda.value > M_PI){
                             //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = pi, lie in the interval [0,pi]
                             
@@ -7048,8 +7060,8 @@ void DrawPanel::Draw(void){
                         t_m.print(String("t_-"), new_prefix, cout);
                         
                         //write t_m, t_p in ts_route_list[i]
-                        (ts_route_list[i][0]) = t_m;
-                        (ts_route_list[i][1]) = t_p;
+                        (ts_route_list[i]).push_back(t_m);
+                        (ts_route_list[i]).push_back(t_p);
 
                         
                         //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
@@ -7063,9 +7075,6 @@ void DrawPanel::Draw(void){
                     }else{
                         //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
                         
-                        //there is a single chunk of the Route: I allocate space for the related ts
-                        (points_route_list[i]).resize(1);
-
                         
                         //                        plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
                         
@@ -7074,9 +7083,7 @@ void DrawPanel::Draw(void){
                 }else{
                     //in this case ((plot->route_list)[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that ((plot->route_list)[i]).GP.lambda.value = pi and split the gnuplot plot  in two plots so as to avoid the horizontal line
                     
-                    //there are two chunks of the Route: I allocate space for the related ts
-                    (ts_route_list[i]).resize(1);
-
+        
                     // interval where I know that there will be t_s
                     if((-sin((((plot->route_list)[i]).omega.value))/cos((((plot->route_list)[i]).GP.phi.value) - ((((plot->route_list)[i]).omega.value)))) > 0.0){
                         //in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
@@ -7134,7 +7141,7 @@ void DrawPanel::Draw(void){
                     t_s.value = (x_lo_s+x_hi_s)/2.0;
                     t_s.print(String("t_*"), new_prefix, cout);
                     
-                    (ts_route_list[i][0]) = t_s;
+                    (ts_route_list[i]).push_back(t_s);
                     
                     //
                     //                    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
@@ -7148,6 +7155,10 @@ void DrawPanel::Draw(void){
             }
                 
         }
+        
+        //set the last value of ts_route_list[i] equal to 2 pi
+        (ts_route_list[i]).resize((ts_route_list[i]).size()+1);
+        (ts_route_list[i][(ts_route_list[i]).size()]).set(String(""), 2.0*M_PI, String(""));
         
     }
     //draw routes from non-GUI code - end

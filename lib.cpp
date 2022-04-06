@@ -6452,20 +6452,17 @@ void DrawPanel::Render(wxDC&  dc){
                 start = ((unsigned int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))));
                 end = ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
                 
-                //draw the roues as lines, if there are points
-//                if(end-start > 0){
-//
-////                    cout << "\nend = " << end << "\nstart = " << start << "\nend - start = " << end - start << "\nsize = " << (points_route_list[i]).size();
-////                    flush(cout);
-//
-////                    dc.DrawSpline(end - start, ((points_route_list[i]).data()) + start);
-//
-//                }
-                
-                for(l=start; l<end-1; l++){
-                    
-                    dc.DrawLine(points_route_list[i][l], points_route_list[i][l+1]);
-                }
+                //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
+                /*
+                 for(l=start; l<end-1; l++){
+                 
+                 dc.DrawLine(points_route_list[i][l], points_route_list[i][l+1]);
+                 
+                 }
+                 */
+                //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
+
+            
                 
                 
             }

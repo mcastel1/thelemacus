@@ -6422,7 +6422,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    unsigned int i, j;
+    unsigned int i, j, start, end;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -6449,13 +6449,11 @@ void DrawPanel::Render(wxDC&  dc){
             //run over the connected chunks of the i-th route
             for(j=0; j<((ts_route_list[i]).size())-1; j++){
                 
+                start = ((unsigned int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))));
+                end = ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
+                
                 //draw the roues as lines
-                dc.DrawLines(
-                             ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))) - ((unsigned int)(((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))),
-                             
-                             ((points_route_list[i]).data()) + (unsigned int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))),
-                             
-                             0, 0);
+                dc.DrawLines(end - start, ((points_route_list[i]).data()) + start, 0, 0);
                 
             }
             

@@ -6639,7 +6639,7 @@ void DrawPanel::Draw(void){
     //this is a pointer to parent->parent->plot, created only to shorten the code
     wxPoint p;
     //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi.
-    Angle t_min, t_max, t_p, t_m, t_s;
+    Angle t_min, t_max, t_p, t_m, t_s, t_temp;
     Position p_min, p_max;
     gsl_function F;
     const gsl_root_fsolver_type *T;
@@ -6894,8 +6894,8 @@ void DrawPanel::Draw(void){
     for(i=0; i<((plot->route_list).size()); i++){
         
         //set the first value of ts_route_list[i] equal to 0
-        (ts_route_list[i]).resize(1);
-        ((ts_route_list[i][0]).value) = 0.0;
+        (t_temp.value) = 0.0;
+        (ts_route_list[i]).push_back(t_temp);
         
         
         switch((((plot->route_list)[i]).type.value)[0]){
@@ -7140,10 +7140,10 @@ void DrawPanel::Draw(void){
         }
         
         //set the last value of ts_route_list[i] equal to 2 pi
-        (ts_route_list[i]).resize((ts_route_list[i]).size()+1);
         //note: here I am not using Angle::set to set the value of this angle, because otherwise the angle would be normalized to 0.0, while I want it to be equal to the full angle 2.0*pi
-        ((ts_route_list[i][(ts_route_list[i]).size()]).value) = 2.0*M_PI;
-        
+        (t_temp.value) = 2.0*M_PI;
+        (ts_route_list[i]).push_back(t_temp);
+
     }
     //draw routes from non-GUI code - end
     
@@ -7166,7 +7166,7 @@ void DrawPanel::Draw(void){
             
         }
         
-        //compute points of j-th chunk of route #i
+        //compute points of l-th chunk of route #i
         for((points_route_list[i]).clear(), l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
             //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot

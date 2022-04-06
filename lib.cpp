@@ -6457,11 +6457,15 @@ void DrawPanel::Render(wxDC&  dc){
                     
 //                    cout << "\nend = " << end << "\nstart = " << start << "\nend - start = " << end - start << "\nsize = " << (points_route_list[i]).size();
 //                    flush(cout);
-//                    
+
                     dc.DrawLines(end - start, ((points_route_list[i]).data()) + start, 0, 0);
                     
                 }
                 
+            }
+            
+            for(j=0; j<(points_route_list[i]).size(); j++){
+                    dc.DrawCircle(points_route_list[i][j], 4.0*thickness);
             }
             
         }
@@ -6900,7 +6904,8 @@ void DrawPanel::Draw(void){
     
     for(i=0; i<((plot->route_list).size()); i++){
         
-        //clear up ts_route_list, which may be filled by previous calls of DrawPanel::Draw
+        //clear up points_route_list and ts_route_list, which may be filled by previous calls of DrawPanel::Draw
+        (points_route_list[i]).clear();
         (ts_route_list[i]).clear();
         
         //set the first value of ts_route_list[i] equal to 0

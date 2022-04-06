@@ -6453,11 +6453,11 @@ void DrawPanel::Render(wxDC&  dc){
                 end = ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
                 
                 //draw the roues as lines, if there are points
-                if((end-start > 0) && ((points_route_list[i]).size() > 0)){
+                if(end-start > 0){
                     
-                    cout << "\nend = " << end << "\nstart = " << start << "\nend - start = " << end - start << "\nsize = " << (points_route_list[i]).size();
-                    flush(cout);
-                    
+//                    cout << "\nend = " << end << "\nstart = " << start << "\nend - start = " << end - start << "\nsize = " << (points_route_list[i]).size();
+//                    flush(cout);
+//                    
                     dc.DrawLines(end - start, ((points_route_list[i]).data()) + start, 0, 0);
                     
                 }

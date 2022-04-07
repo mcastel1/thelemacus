@@ -6453,8 +6453,9 @@ void DrawPanel::Render(wxDC&  dc){
             
             for(j=0; j<(points_route_list[i]).size(); j++){
                 
-                
-//                    dc.DrawCircle(points_route_list[i][j], 4.0*thickness);
+                for(l=0; l<(points_route_list[i][j]).size(); l++){
+                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
+                }
             }
 //
 //

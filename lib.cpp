@@ -6423,7 +6423,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    int i, j, l;
+    int i, j;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -6455,11 +6455,7 @@ void DrawPanel::Render(wxDC&  dc){
             if((points_route_list[i][j]).size() > 1){
                 //I need to add this consdition to make sure that the index j below lies in a valid range
                 
-                for(l=0; l<(points_route_list[i][j]).size()-1; l++){
-                    
-                    dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
-                    
-                }
+                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
                 
             }
             
@@ -7601,7 +7597,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                         ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
                     }
                     
-//                    //I do this to quit the loops over l and j
+                    //I do this to quit the loops over l and j
                     break;
                     break;
                     

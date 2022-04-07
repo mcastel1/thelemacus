@@ -6463,7 +6463,7 @@ void DrawPanel::Render(wxDC&  dc){
                     
                     for(l=0; l<(points_route_list[i][j]).size()-1; l++){
                         
-                        dc.DrawLine(points_route_list[i][j][l], points_route_list[i][j][l+1]);
+                        dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
                         
                     }
                     

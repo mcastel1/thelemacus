@@ -6663,6 +6663,8 @@ void DrawPanel::Draw(void){
     const gsl_root_fsolver_type *T;
     gsl_root_fsolver *s;
     String prefix, new_prefix;
+    bool end_connected;
+
     
     
     //append \t to prefix
@@ -7207,9 +7209,6 @@ void DrawPanel::Draw(void){
         }
         
         //compute points of l-th chunk of route #i
-        bool end_connected;
-        
-        
         for(end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
             //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot

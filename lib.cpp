@@ -6431,7 +6431,7 @@ void DrawPanel::Render(wxDC&  dc){
     
     
     //draw coastlines
-    dc.DrawBitmap(wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), 0, 0);
+    dc.DrawBitmap(*bitmap_image, 0, 0);
     
     
     //draw routes
@@ -6882,10 +6882,11 @@ void DrawPanel::Draw(void){
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
     c->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
     
-    c->makeChart(path_file_chart);
-    
-    
-    
+//    c->makeChart(path_file_chart);
+    mem_block = (c->makeChart(Chart::BMP));
+    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
+    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
+
     
     //compute the points of  routes
     //run over all routes
@@ -7008,7 +7009,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //image
-    wxPNGHandler *handler = new wxPNGHandler;
+    wxBMPHandler *handler = new wxBMPHandler;
     wxImage::AddHandler(handler);
     
     
@@ -7046,8 +7047,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    
-    //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_chart, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
     draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);

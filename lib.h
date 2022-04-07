@@ -5,6 +5,8 @@
 #include "wx/display.h"
 #include "wx/listctrl.h"
 #include "wx/slider.h"
+#include "wx/mstream.h"
+
 
 
 #ifndef WX_PRECOMP
@@ -172,7 +174,6 @@ string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#
 #define sample_width_floating_point_field "0.000000000"
 #define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
 #define path_file_app_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png"
-#define path_file_chart "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart.png"
 #define path_file_pencil_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"
 //#define path_file_coastlines "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"
 #define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
@@ -1336,6 +1337,10 @@ public:
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
     Plot* plot;
+    MemBlock mem_block;
+    wxMemoryInputStream * memory_input_stream;
+    wxBitmap* bitmap_image; 
+
 
 
     void SetIdling(bool);

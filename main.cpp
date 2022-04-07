@@ -29,6 +29,7 @@
  - add a dropdown menu with the units of measure in LengthField
  - add margins in chart in such a way that ylabels are not cut
 - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
+ - add recent items in wxComboBox
  */
 
 

@@ -1331,7 +1331,7 @@ public:
     Position p_start, p_end;
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points which represent the route_list[i] discretized
-    vector< vector<wxPoint> > points_route_list;
+    vector< vector< vector< wxPoint > > > points_route_list;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
     vector< vector<Angle> > ts_route_list;
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area

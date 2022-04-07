@@ -6316,7 +6316,7 @@ void ChartFrame::SetIdling(bool b){
 
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
-     int i, j;
+    int i, j;
     
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
@@ -6331,12 +6331,11 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());
-    ts_route_list.resize((plot->route_list).size());
     for(i=0; i<(plot->route_list).size(); i++){
         
         for(j=0; j<(points_route_list[i]).size(); j++){(points_route_list[i][j]).clear();}
         (points_route_list[i]).clear();
-        (ts_route_list[i]).clear();
+        
     }
     
     
@@ -6453,10 +6452,10 @@ void DrawPanel::Render(wxDC&  dc){
             
             for(j=0; j<(points_route_list[i]).size(); j++){
                 
-//                for(l=0; l<(points_route_list[i][j]).size(); l++){
-//                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
-//                }
-//                
+                //                for(l=0; l<(points_route_list[i][j]).size(); l++){
+                //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
+                //                }
+                //                
                 if((points_route_list[i][j]).size() > 1){
                     //I need to add this consdition to make sure that the index j below lies in a valid range
                     
@@ -6472,7 +6471,7 @@ void DrawPanel::Render(wxDC&  dc){
                 
             }
             //
-
+            
             
             
         }
@@ -6648,8 +6647,8 @@ void DrawPanel::Render(wxDC&  dc){
 
 void DrawPanel::Draw(void){
     
-    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span, /*x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)*/ x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
-    int i, j, l, status, iter = 0;
+    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
+    int i, j, l;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
     Length l_tot;
@@ -6657,27 +6656,25 @@ void DrawPanel::Draw(void){
     //this is a pointer to parent->parent->plot, created only to shorten the code
     wxPoint p;
     //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi.
-    Angle t_min, t_max, t_p, t_m, t_s, t_temp;
-    Position p_min, p_max;
-    gsl_function F;
-    const gsl_root_fsolver_type *T;
-    gsl_root_fsolver *s;
     String prefix, new_prefix;
     bool end_connected;
-
+    
     
     
     //append \t to prefix
     prefix = String("");
     new_prefix = prefix.append(String("\t"));
     
-    T = gsl_root_fsolver_brent;
-    s = gsl_root_fsolver_alloc(T);
     
+    //clear up points_route_list
     for(i=0; i<(plot->route_list).size(); i++){
         
-        for(j=0; j<(points_route_list[i]).size(); j++){(points_route_list[i][j]).clear();}
+        for(j=0; j<(points_route_list[i]).size(); j++){
+            (points_route_list[i][j]).clear();
+            
+        }
         (points_route_list[i]).clear();
+        
     }
     
     
@@ -6815,20 +6812,6 @@ void DrawPanel::Draw(void){
     }while(check_x(x_mercator(lambda)));
     
     
-
-
-    
-    
-        
-
-        
-    
-    
-    
-    
-    
-    
-    
     
     
     //set parallels
@@ -6903,18 +6886,8 @@ void DrawPanel::Draw(void){
         
     }
     
-    //
-    
-    
-    // Add a legend box at (50, 30) (top of the chart) with horizontal layout. Use 12pt Times Bold
-    // Italic font. Set the background and border color to Transparent.
-    //    c->addLegend(50, 30, false, "Times New Roman Bold Italic", 12)->setBackground(Chart::Transparent);
-    
-    // Add a title to the x axis using 12pt Arial Bold Italic font
-    //    (c->xAxis())->setTitle("lambda", "Arial", 12);
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (c->xAxis())->setLinearScale(x_min, x_min+x_span, 1.7E+308);
-    
     (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
     // Set the axes line width to 3 pixels
@@ -6929,272 +6902,9 @@ void DrawPanel::Draw(void){
     
     
     
-    //draw routes from non-GUI code - start
-    
-    for(i=0; i<((plot->route_list).size()); i++){
-        
-        (ts_route_list[i]).clear();
-        
-        //set the first value of ts_route_list[i] equal to 0
-        (t_temp.value) = 0.0;
-        (ts_route_list[i]).push_back(t_temp);
-        
-        
-        switch((((plot->route_list)[i]).type.value)[0]){
-                
-            case 'l':
-                //plot a loxodrome
-            {
-                
-                
-                break;
-            }
-                
-            case 'o':
-                //plot an orthodrome
-            {
-                
-                
-                break;
-            }
-                
-                
-            case 'c':
-                //plot a circle of equal altitude
-            {
-                
-                
-                //if abs(-tan(((plot->route_list)[i]).GP.phi.value)*tan((((plot->route_list)[i]).omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that ((plot->route_list)[i]).GP.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [((plot->route_list)[i]).GP.lambda_{t = t_{min}} and ((plot->route_list)[i]).GP.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output.
-                if(abs(-tan(((plot->route_list)[i]).GP.phi.value)*tan((((plot->route_list)[i]).omega.value))) < 1.0){
-                    
-                    //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
-                    t_max.set(String(""), acos(-tan(((plot->route_list)[i]).GP.phi.value)*tan((((plot->route_list)[i]).omega.value))), new_prefix);
-                    t_min.set(String(""), 2.0*M_PI - acos(-tan(((plot->route_list)[i]).GP.phi.value)*tan((((plot->route_list)[i]).omega.value))), new_prefix);
-                    
-                    //p_max =  circle of equal altitude computed at t_max
-                    (((plot->route_list)[i]).l.value) = Re * sin((((plot->route_list)[i]).omega.value)) * (t_max.value);
-                    ((plot->route_list)[i]).compute_end(new_prefix);
-                    p_max = (((plot->route_list)[i]).end);
-                    
-                    (((plot->route_list)[i]).l.value) = Re * sin((((plot->route_list)[i]).omega.value)) * (t_min.value);
-                    ((plot->route_list)[i]).compute_end(new_prefix);
-                    p_min = (((plot->route_list)[i]).end);
-                    //p_min =  circle of equal altitude computed at t_min
-                    
-                    /* p_max.print(String("p_max"), new_prefix, cout); */
-                    /* p_min.print(String("p_min"), new_prefix, cout); */
-                    
-                    if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
-                        cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
-                        //in this case, the circle of equal altitude is cut through the meridian lambda = pi
-                        
-                        if(((plot->route_list)[i]).GP.lambda.value > M_PI){
-                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = pi, lie in the interval [0,pi]
-                            
-                            cout << prefix.value << "Case I:\n";
-                            
-                            // interval where I know that there will be t_p
-                            x_lo_p = (t_max.value);
-                            x_hi_p = M_PI;
-                            
-                            //interval where I know that there will be t_m
-                            x_lo_m = 0.0;
-                            x_hi_m = (t_max.value);
-                            
-                        }else{
-                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [pi,2*pi]
-                            //here I select an interval where I know that there will be t_m
-                            
-                            cout << prefix.value << "Case II:\n";
-                            
-                            // interval where I know that there will be t_p
-                            x_lo_p = (t_min.value);
-                            x_hi_p = 2.0*M_PI;
-                            
-                            //interval where I know that there will be t_m
-                            x_lo_m = M_PI;
-                            x_hi_m = (t_min.value);
-                            
-                        }
-                        
-                        ((plot->route_list)[i]).temp_prefix = prefix;
-                        F.params = &((plot->route_list)[i]);
-                        F.function = &(((plot->route_list)[i]).lambda_minus_pi);
-                        
-                        
-                        //solve for t_p
-                        
-                        gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
-                        
-                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
-                        
-                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-                        
-                        iter = 0;
-                        do{
-                            
-                            iter++;
-                            status = gsl_root_fsolver_iterate(s);
-                            
-                            x = gsl_root_fsolver_root(s);
-                            x_lo_p = gsl_root_fsolver_x_lower(s);
-                            x_hi_p = gsl_root_fsolver_x_upper(s);
-                            status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
-                            if(status == GSL_SUCCESS){
-                                cout << new_prefix.value << "Converged:\n";
-                            }
-                            cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
-                        }
-                        while((status == GSL_CONTINUE) && (iter < max_iter));
-                        
-                        t_p.value = (x_lo_p+x_hi_p)/2.0;
-                        t_p.print(String("t_+"), new_prefix, cout);
-                        
-                        
-                        
-                        
-                        
-                        //solve for t_m
-                        
-                        gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
-                        
-                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
-                        
-                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-                        
-                        iter = 0;
-                        do{
-                            
-                            iter++;
-                            status = gsl_root_fsolver_iterate(s);
-                            
-                            x = gsl_root_fsolver_root(s);
-                            x_lo_m = gsl_root_fsolver_x_lower(s);
-                            x_hi_m = gsl_root_fsolver_x_upper(s);
-                            status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
-                            if(status == GSL_SUCCESS){
-                                cout << new_prefix.value << "Converged:\n";
-                            }
-                            cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
-                        }
-                        while((status == GSL_CONTINUE) && (iter < max_iter));
-                        
-                        t_m.value = (x_lo_m+x_hi_m)/2.0;
-                        t_m.print(String("t_-"), new_prefix, cout);
-                        
-                        //write t_m, t_p in ts_route_list[i]
-                        (ts_route_list[i]).push_back(t_m);
-                        (ts_route_list[i]).push_back(t_p);
-
-                        
-                        //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-                        
-                        //                        plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << ",\\\\\\\n";
-                        //                        //maybe wrong
-                        //                        plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << " noti,\\\\\\\n";
-                        //                        //maybe wrong
-                        //                        plot_command << "[" << t_p.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << " noti";
-                        
-                    }else{
-                        //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
-                        
-                        
-                        //                        plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
-                        
-                    }
-                    
-                }else{
-                    //in this case ((plot->route_list)[i]).GP.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that ((plot->route_list)[i]).GP.lambda.value = pi and split the gnuplot plot  in two plots so as to avoid the horizontal line
-                    
-        
-                    // interval where I know that there will be t_s
-                    if((-sin((((plot->route_list)[i]).omega.value))/cos((((plot->route_list)[i]).GP.phi.value) - ((((plot->route_list)[i]).omega.value)))) > 0.0){
-                        //in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
-                        if(((plot->route_list)[i]).GP.lambda.value < M_PI){
-                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-                            x_lo_s = 0.0;
-                            x_hi_s = M_PI;
-                        }else{
-                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-                            x_lo_s = M_PI;
-                            x_hi_s = 2.0*M_PI;
-                        }
-                    }else{
-                        //in this case lambda'(t = 0) < 0.0 -> lambda'(t) < 0.0  for all t
-                        if(((plot->route_list)[i]).GP.lambda.value < M_PI){
-                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-                            x_lo_s = M_PI;
-                            x_hi_s = 2.0*M_PI;
-                        }else{
-                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-                            x_lo_s = 0.0;
-                            x_hi_s = M_PI;
-                        }
-                        
-                    }
-                    
-                    ((plot->route_list)[i]).temp_prefix = prefix;
-                    F.params = &((plot->route_list)[i]);
-                    F.function = &(((plot->route_list)[i]).lambda_minus_pi);
-                    
-                    //solve for t_s
-                    
-                    gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
-                    
-                    cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-                    cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-                    
-                    iter = 0;
-                    do{
-                        
-                        iter++;
-                        status = gsl_root_fsolver_iterate(s);
-                        
-                        x = gsl_root_fsolver_root(s);
-                        x_lo_s = gsl_root_fsolver_x_lower(s);
-                        x_hi_s = gsl_root_fsolver_x_upper(s);
-                        status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
-                        if(status == GSL_SUCCESS){
-                            cout << new_prefix.value << "Converged:\n";
-                        }
-                        cout << new_prefix.value << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
-                    }
-                    while((status == GSL_CONTINUE) && (iter < max_iter));
-                    
-                    t_s.value = (x_lo_s+x_hi_s)/2.0;
-                    t_s.print(String("t_*"), new_prefix, cout);
-                    
-                    (ts_route_list[i]).push_back(t_s);
-                    
-                    //
-                    //                    //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-                    //
-                    //                    plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << " ,\\\\\\\n";
-                    //
-                    //                    plot_command << "[" << t_s.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << ((plot->route_list)[i]).GP.phi.value << ", " << ((plot->route_list)[i]).GP.lambda.value << ", " << (((plot->route_list)[i]).omega.value) << "))) " << plot_style.str()  << " noti";
-                    
-                }
-                
-            }
-                
-        }
-        
-        //set the last value of ts_route_list[i] equal to 2 pi
-        //note: here I am not using Angle::set to set the value of this angle, because otherwise the angle would be normalized to 0.0, while I want it to be equal to the full angle 2.0*pi
-        (t_temp.value) = 2.0*M_PI;
-        (ts_route_list[i]).push_back(t_temp);
-
-    }
-    //draw routes from non-GUI code - end
-    
-    
-    
     //compute the points of  routes
     //run over all routes
     for(i=0; i<(plot->route_list).size(); i++){
-        
         
         if((((plot->route_list)[i]).type) == String("c")){
             //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
@@ -7228,9 +6938,9 @@ void DrawPanel::Draw(void){
                     end_connected = false;
                     
                 }
-
+                
                 (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
-
+                
                 
                 
             }else{
@@ -7249,8 +6959,6 @@ void DrawPanel::Draw(void){
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
-    
-    gsl_root_fsolver_free(s);
     
     
 }

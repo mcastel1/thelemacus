@@ -6449,29 +6449,31 @@ void DrawPanel::Render(wxDC&  dc){
         if(((((plot->route_list)[i]).type.value)[0]) == 'c'){
             
             //run over the connected chunks of the i-th route
-       
+            
             
             for(j=0; j<(points_route_list[i]).size(); j++){
                 
                 for(l=0; l<(points_route_list[i][j]).size(); l++){
                     dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
                 }
+                //
+                
+                if((points_route_list[i][j]).size() > 1){
+                    //I need to add this consdition to make sure that the index j below lies in a valid range
+                    
+                    for(l=0; l<(points_route_list[i][j]).size()-1; l++){
+                        
+                        dc.DrawLine(points_route_list[i][j][l], points_route_list[i][j][l+1]);
+                        
+                    }
+                    
+                }
+                
+                
+                
             }
-//
-//
-//
-//            if((points_route_list[i]).size() > 1){
-//                //I need to add this consdition to make sure that the index j below lies in a valid range
-//
-//                for(j=0; j<(points_route_list[i]).size()-1; j++){
-//
-//                    dc.DrawLine(points_route_list[i][j], points_route_list[i][j+1]);
-//
-//                }
-//
-//            }
-            
-            
+            //
+
             
             
         }

@@ -6271,7 +6271,7 @@ void ChartFrame::GetAllCoastLineData(void){
         
     }
     
-    cout << "\nxxxxxx    i at the end of loop = " << i;
+    //    cout << "\nxxxxxx    i at the end of loop = " << i;
     
     
     //    for(i=0; i<10; i++){
@@ -6445,34 +6445,23 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
-        if(((((plot->route_list)[i]).type.value)[0]) == 'c'){
+        //run over the connected chunks of the i-th route
+        for(j=0; j<(points_route_list[i]).size(); j++){
             
-            //run over the connected chunks of the i-th route
-            
-            
-            for(j=0; j<(points_route_list[i]).size(); j++){
+            //                for(l=0; l<(points_route_list[i][j]).size(); l++){
+            //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
+            //                }
+            //
+            if((points_route_list[i][j]).size() > 1){
+                //I need to add this consdition to make sure that the index j below lies in a valid range
                 
-                //                for(l=0; l<(points_route_list[i][j]).size(); l++){
-                //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
-                //                }
-                //                
-                if((points_route_list[i][j]).size() > 1){
-                    //I need to add this consdition to make sure that the index j below lies in a valid range
+                for(l=0; l<(points_route_list[i][j]).size()-1; l++){
                     
-                    for(l=0; l<(points_route_list[i][j]).size()-1; l++){
-                        
-                        dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
-                        
-                    }
+                    dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
                     
                 }
                 
-                
-                
             }
-            //
-            
-            
             
         }
         
@@ -7563,7 +7552,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     Position p;
     wxPoint q;
     stringstream s;
-    unsigned int i;
+    unsigned int i, j , l;
     
     //    cout << "\nMouse moved";
     
@@ -7596,24 +7585,32 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(255,255,255));
         }
         
-        /*
-         for(j=0; j<(points_route_list[i]).size(); j++){
-         
-         //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
-         
-         if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j]).y))) <
-         (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
-         
-         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
-         if((((plot->route_list)[i]).related_sight).value != -1){
-         ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
-         }
-         
-         }
-         
-         }
-         */
+        
+        for(j=0; j<(points_route_list[i]).size(); j++){
+            
+            for(l=0; l<(points_route_list[i][j]).size(); l++){
+                
+                //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+                
+                if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
+                   (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                    
+                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                    ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
+                    if((((plot->route_list)[i]).related_sight).value != -1){
+                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
+                    }
+                    
+//                    //I do this to quit the loops over l and j
+                    break;
+                    break;
+                    
+                }
+                
+            }
+            
+        }
+        
         
     }
     

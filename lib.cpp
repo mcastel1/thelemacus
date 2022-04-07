@@ -6422,7 +6422,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    unsigned int i, j, l, start, end;
+    int i, j, l, start, end;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -6449,20 +6449,24 @@ void DrawPanel::Render(wxDC&  dc){
             //run over the connected chunks of the i-th route
             for(j=0; j<((ts_route_list[i]).size())-1; j++){
                 
-                start = ((unsigned int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))));
-                end = ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
+                start = ((int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))));
+                end = ((int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
                 
                 //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
                 /*
-                 for(l=start; l<end-1; l++){
-                 
-                 dc.DrawLine(points_route_list[i][l], points_route_list[i][l+1]);
-                 
-                 }
-                 */
+                if(end - start > 1){
+                    
+                    for(l=start; l<end-1; l++){
+                        
+                        dc.DrawLine(points_route_list[i][l], points_route_list[i][l+1]);
+                        
+                    }
+                    
+                }
+                */
                 //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
-
-            
+                
+                
                 
                 
             }
@@ -6470,6 +6474,22 @@ void DrawPanel::Render(wxDC&  dc){
             for(j=0; j<(points_route_list[i]).size(); j++){
                     dc.DrawCircle(points_route_list[i][j], 4.0*thickness);
             }
+            
+            
+            
+            if((points_route_list[i]).size() > 1){
+                //I need to add this consdition to make sure that the index j below lies in a valid range
+                
+                for(j=0; j<(points_route_list[i]).size()-1; j++){
+                    
+                    dc.DrawLine(points_route_list[i][j], points_route_list[i][j+1]);
+                    
+                }
+                
+            }
+            
+            
+            
             
         }
         

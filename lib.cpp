@@ -6449,33 +6449,13 @@ void DrawPanel::Render(wxDC&  dc){
         if(((((plot->route_list)[i]).type.value)[0]) == 'c'){
             
             //run over the connected chunks of the i-th route
-            for(j=0; j<((ts_route_list[i]).size())-1; j++){
-                
-                start = ((int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))));
-                end = ((int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
-                
-                //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
-                /*
-                if(end - start > 1){
-                    
-                    for(l=start; l<end-1; l++){
-                        
-                        dc.DrawLine(points_route_list[i][l], points_route_list[i][l+1]);
-                        
-                    }
-                    
-                }
-                */
-                //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
-                
-                
-                
-                
-            }
+       
             
-//            for(j=0; j<(points_route_list[i]).size(); j++){
+            for(j=0; j<(points_route_list[i]).size(); j++){
+                
+                
 //                    dc.DrawCircle(points_route_list[i][j], 4.0*thickness);
-//            }
+            }
 //
 //
 //

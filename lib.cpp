@@ -7209,7 +7209,7 @@ void DrawPanel::Draw(void){
         }
         
         //compute points of l-th chunk of route #i
-        for(end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
             //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
             (((plot->route_list)[i]).l).set(

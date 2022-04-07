@@ -7596,9 +7596,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                    (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                    ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
+                    ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
                     if((((plot->route_list)[i]).related_sight).value != -1){
-                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
+                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
                     }
                     
 //                    //I do this to quit the loops over l and j
@@ -7623,7 +7623,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
            4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
             
-            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(51,153,255));
+            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
             
         }else{
             
@@ -9406,18 +9406,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     for(i=0; i<color_list.size(); i++){
         
-        //        //find the positions of (, ) and , to single ot the integers defining the color
-        //        pos_open = (s.value).find("(");
-        //        pos_comma_1 = (s.value).find(",");
-        //        pos_comma_2 = (s.value).find(",");
-        //        pos_close = (s.value).find(")");
-        //
-        //        //extract these integers, create a wxColor and append it to color_list
-        //
-        
-        //        int b=                  stod((s.value).substr(pos_comma_1, pos_comma_2 - pos_comma_1).c_str());
-        //        int c=                    stod((s.value).substr(pos_comma_2, pos_close - pos_comma_2).c_str());
-        
         //get rid of everything that comes before and at '(' at the beginnign of s
         pos_end = (s.value).find("(");
         s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
@@ -9446,6 +9434,53 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         color_list[i] = wxColor(red, green, blue);
         
     }
+    
+    
+    
+    
+    
+    
+    //read color selected item
+    file_init.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading color selected item from file " << file_init.name.value << " ...\n" << RESET;
+    s.read_from_file(String("color selected item"), file_init, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    file_init.close(prefix);
+    
+    //get rid of everything that comes before and at '(' at the beginnign of s
+    pos_end = (s.value).find("(");
+    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+    //look for the first ','
+    
+    pos_end = (s.value).find(",");
+    
+    //read red
+    red = stoi(((s.value).substr(0, pos_end)).c_str());
+    
+    //get rid of the first ','
+    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+    
+    pos_end = (s.value).find(",");
+    
+    green = stoi((s.value).substr(0, pos_end).c_str());
+    
+    //get rid of the second ','
+    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+    
+    pos_end = (s.value).find(")");
+    //get rid of '('
+    blue = stoi((s.value).substr(0, pos_end+1).c_str());
+    
+    //write the color that I just read in color_list
+    color_selected_item = wxColor(red, green, blue);
+    
+    
+    
+    
+    
+    
+    
+    
     
     //no positions nor routes are highlighted when ListFrame is constructed
     highlighted_route = -1;

@@ -1617,6 +1617,8 @@ public:
     unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes;
     int /*the # of the route/position which is highlighted because the mouse is hovering over it in listcontrol_routes/positions*/highlighted_route, highlighted_position;
     vector<wxColour> color_list;
+    //the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area
+    wxColour color_selected_item;
     //the rectangle used to measure the size of the display
     wxDisplay display;
     wxRect rectangle_display;

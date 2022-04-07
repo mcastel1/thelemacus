@@ -6316,7 +6316,7 @@ void ChartFrame::SetIdling(bool b){
 
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
-    unsigned int i;
+     int i, j;
     
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
@@ -6333,6 +6333,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     points_route_list.resize((plot->route_list).size());
     ts_route_list.resize((plot->route_list).size());
     for(i=0; i<(plot->route_list).size(); i++){
+        
+        for(j=0; j<(points_route_list[i]).size(); j++){(points_route_list[i][j]).clear();}
         (points_route_list[i]).clear();
         (ts_route_list[i]).clear();
     }
@@ -6422,7 +6424,7 @@ void DrawPanel::Render(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    unsigned int i, j, start, end;
+    int i, j, l;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -6447,29 +6449,31 @@ void DrawPanel::Render(wxDC&  dc){
         if(((((plot->route_list)[i]).type.value)[0]) == 'c'){
             
             //run over the connected chunks of the i-th route
-            for(j=0; j<((ts_route_list[i]).size())-1; j++){
-                
-                start = ((unsigned int)((((ts_route_list[i][j]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1)))));
-                end = ((unsigned int)(((ts_route_list[i][j+1]).value)/(2.0*M_PI)*((double)(((plot->n_points_routes).value)-1))));
-                
-                //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
-                /*
-                 for(l=start; l<end-1; l++){
-                 
-                 dc.DrawLine(points_route_list[i][l], points_route_list[i][l+1]);
-                 
-                 }
-                 */
-                //for the time being, this does not work (it yields odd lines that stick no matter what the zoom)
-
             
-                
-                
-            }
             
             for(j=0; j<(points_route_list[i]).size(); j++){
-                    dc.DrawCircle(points_route_list[i][j], 4.0*thickness);
+                
+//                for(l=0; l<(points_route_list[i][j]).size(); l++){
+//                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
+//                }
+//                
+                if((points_route_list[i][j]).size() > 1){
+                    //I need to add this consdition to make sure that the index j below lies in a valid range
+                    
+                    for(l=0; l<(points_route_list[i][j]).size()-1; l++){
+                        
+                        dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
+                        
+                    }
+                    
+                }
+                
+                
+                
             }
+            //
+
+            
             
         }
         
@@ -6645,7 +6649,7 @@ void DrawPanel::Render(wxDC&  dc){
 void DrawPanel::Draw(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span, /*x_hi(lo)_p(m) are the higher and lower bound of the interval where I will look for t_p(m)*/ x, x_lo_p, x_lo_m, x_hi_p, x_hi_m, x_lo_s, x_hi_s;
-    int i, l, status, iter = 0;
+    int i, j, l, status, iter = 0;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
     Length l_tot;
@@ -6667,6 +6671,12 @@ void DrawPanel::Draw(void){
     
     T = gsl_root_fsolver_brent;
     s = gsl_root_fsolver_alloc(T);
+    
+    for(i=0; i<(plot->route_list).size(); i++){
+        
+        for(j=0; j<(points_route_list[i]).size(); j++){(points_route_list[i][j]).clear();}
+        (points_route_list[i]).clear();
+    }
     
     
     //fetch the data on the region that I am about to plot from the data files.
@@ -6921,8 +6931,6 @@ void DrawPanel::Draw(void){
     
     for(i=0; i<((plot->route_list).size()); i++){
         
-        //clear up points_route_list and ts_route_list, which may be filled by previous calls of DrawPanel::Draw
-        (points_route_list[i]).clear();
         (ts_route_list[i]).clear();
         
         //set the first value of ts_route_list[i] equal to 0
@@ -7199,7 +7207,10 @@ void DrawPanel::Draw(void){
         }
         
         //compute points of l-th chunk of route #i
-        for((points_route_list[i]).clear(), l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+        bool end_connected;
+        
+        
+        for(end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
             //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
             (((plot->route_list)[i]).l).set(
@@ -7211,7 +7222,22 @@ void DrawPanel::Draw(void){
             ((plot->route_list)[i]).compute_end(String(""));
             
             if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
-                (points_route_list[i]).push_back(p);
+                
+                if(end_connected){
+                    
+                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
+                    end_connected = false;
+                    
+                }
+
+                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
+
+                
+                
+            }else{
+                
+                end_connected = true;
+                
             }
             
         }
@@ -7830,7 +7856,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     Position p;
     wxPoint q;
     stringstream s;
-    unsigned int i, j, l;
+    unsigned int i;
     
     //    cout << "\nMouse moved";
     
@@ -7863,22 +7889,24 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(255,255,255));
         }
         
-        for(j=0; j<(points_route_list[i]).size(); j++){
-            
-            //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
-            
-            if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j]).y))) <
-               (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
-                
-                //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
-                if((((plot->route_list)[i]).related_sight).value != -1){
-                    ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
-                }
-                
-            }
-            
-        }
+        /*
+         for(j=0; j<(points_route_list[i]).size(); j++){
+         
+         //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+         
+         if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j]).y))) <
+         (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+         
+         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(51,153,255));
+         if((((plot->route_list)[i]).related_sight).value != -1){
+         ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(51,153,255));
+         }
+         
+         }
+         
+         }
+         */
         
     }
     

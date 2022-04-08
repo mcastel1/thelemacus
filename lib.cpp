@@ -10704,7 +10704,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
 //constructor of a BodyField object, based on the parent frame frame
 BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
-    unsigned int i;
+    unsigned int i, j;
     parent_frame = frame;
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
@@ -10712,11 +10712,14 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     wxArrayString bodies_temp;
     String prefix, s;
     size_t pos_end;
+    bool is_present;
     
     prefix = String("");
     
     for(bodies_temp.Clear(), i=0; i<(catalog->list).size(); i++){
         bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
+        wxString temp = bodies_temp[i];
+
     }
     
     //read the recently selected items from file_recent
@@ -10736,13 +10739,60 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
         
     }
     
-    //I first set bodies equal to bodies_temp, and the move ot the first places in bodies recent the elements written in recent_list
-    for(bodies.Clear(), bodies = bodies_temp, i=0; i<recent_list.size(); i++){
-        bodies[i] = bodies_temp[recent_list[i]];
-        bodies[recent_list[i]] = bodies_temp[i];
-    }
- 
+    
+    
+    
+    bodies.Clear();
 
+    cout << "Before: Bodies_temp = ";
+    for(i=0; i<bodies_temp.GetCount(); i++){
+        cout << (bodies_temp[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+    
+    cout << "Before: Bodies = ";
+    for(i=0; i<bodies.GetCount(); i++){
+        cout << (bodies[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+    
+    //I first add to bodies the recently selected celestial bodies written in recent_list
+    for(i=0; i<recent_list.size(); i++){
+        
+        bodies.Add(bodies_temp[recent_list[i]]);
+        
+    }
+    
+    //then, I fill bodies with the remaining bodies
+    for(i=0; i<bodies_temp.GetCount(); i++){
+        
+        for(is_present = false, j=0; (j<bodies.GetCount()) && (!is_present); j++){
+            
+            if(bodies[j] == bodies_temp[i]){
+                is_present = true;
+            }
+            
+        }
+        
+        if(!is_present){
+            bodies.Add(bodies_temp[i]);
+        }
+        
+    }
+    
+    
+    cout << "After: Bodies_temp = ";
+    for(i=0; i<bodies_temp.GetCount(); i++){
+        cout << (bodies_temp[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+    
+    cout << "After: Bodies = ";
+    for(i=0; i<bodies.GetCount(); i++){
+        cout << (bodies[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+    
 
     
   
@@ -10760,6 +10810,8 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
+    
+    bodies_temp.Clear();
     
 }
 

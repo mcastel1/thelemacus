@@ -1376,7 +1376,7 @@ class BodyField{
 public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
-    wxArrayString bodies;
+    wxArrayString /*the list of bodies in the dropdown menu*/bodies, /*this is equal to bodies, except that on top of the list are the recently selected bodies*/bodies_with_recent;
     //this points to a Body object, which contains the date written in the GUI field of this
     Body* body;
     Catalog* catalog;

@@ -147,6 +147,7 @@ vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_
 
 #define path_file_utc_date_and_time "utc.txt"
 #define path_file_init "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/init.txt"
+#define path_file_recent "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/recent.txt"
 #define path_file_catalog "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/catalog.txt"
 //these are the color codes in kml file format for a few populat colors (red, etc...);
 string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
@@ -1384,6 +1385,7 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckBody* check;
+    File file_recent;
     
     bool ok;
     

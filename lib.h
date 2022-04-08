@@ -1376,7 +1376,7 @@ class BodyField{
 public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
-    wxArrayString /*the list of bodies in the dropdown menu*/bodies, /*this is equal to bodies, except that on top of the list are the recently selected bodies*/bodies_with_recent;
+    wxArrayString  /*this is equal to a standard list of the available bodies, except that on top of the list are the recently selected bodies*/bodies;
     //this points to a Body object, which contains the date written in the GUI field of this
     Body* body;
     Catalog* catalog;
@@ -1691,7 +1691,6 @@ public:
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
     wxStaticBoxSizer *sizer_box_measurement, *sizer_box_time;
     
-    wxArrayString bodies, limbs;
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     

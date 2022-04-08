@@ -8488,9 +8488,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     
     
-    for(i=0; i<((*catalog).list).size(); i++){
-        bodies.Add((((*catalog).list)[i]).name.value.c_str());
-    }
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     body = new BodyField(this, &(sight->body), catalog);
     
@@ -10712,14 +10709,17 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;
+    wxArrayString bodies_temp;
     String prefix, s;
     size_t pos_end;
     
     prefix = String("");
-
+    
+    for(bodies_temp.Clear(), i=0; i<(catalog->list).size(); i++){
+        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
+    }
     
     //read the recently selected items from file_recent
-    //
     file_recent.set_name(String(path_file_recent));
     file_recent.open(String("in"), prefix);
     cout << prefix.value << YELLOW << "Reading recent items of body field from file " << file_recent.name.value << " ...\n" << RESET;
@@ -10735,14 +10735,17 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
         (s.value) = ((s.value).substr(pos_end+1, string::npos));
         
     }
-
-    //
     
-    
-    for(bodies.Clear(), i=0; i<(catalog->list).size(); i++){
-        bodies.Add(((catalog->list)[i]).name.value.c_str());
+    //I first set bodies equal to bodies_temp, and the move ot the first places in bodies recent the elements written in recent_list
+    for(bodies.Clear(), bodies = bodies_temp, i=0; i<recent_list.size(); i++){
+        bodies[i] = bodies_temp[recent_list[i]];
+        bodies[recent_list[i]] = bodies_temp[i];
     }
+ 
+
+
     
+  
     check = new CheckBody(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);

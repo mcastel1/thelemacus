@@ -1386,6 +1386,7 @@ public:
     wxComboBox* name;
     CheckBody* check;
     File file_recent;
+    vector<int> recent_list;
     
     bool ok;
     

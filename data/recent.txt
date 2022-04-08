@@ -1,3 +1,4 @@
 #comment lines, such as this one, will be ignored
-#this file contains the recent items in each field. For example a line 'body = 0 4 3' means that the last three recent items in BodyField are #0, #4 and #3 in the list bodies. 
-body = 0 3 2
+#a space is needed after each integer number in this file
+#this file contains the recent items in each field. For example a line 'body = 0 4 3 ' means that the last three recent items in BodyField are #0, #4 and #3 in the list bodies.
+body = 0 3 2 

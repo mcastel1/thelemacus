@@ -10712,19 +10712,32 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;
-    String prefix, s;
+    String prefix, string;
+    size_t pos_start, pos_end;
+
     
     prefix = String("");
     
 
     
     //read the recently selected items from file_recent
+    //
     file_recent.set_name(String(path_file_recent));
     file_recent.open(String("in"), prefix);
     cout << prefix.value << YELLOW << "Reading recent items of body field from file " << file_recent.name.value << " ...\n" << RESET;
-    s.read_from_file(String("body"), file_recent, true, String(""));
+    string.read_from_file(String("body"), file_recent, true, String(""));
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     file_recent.close(prefix);
+    
+    recent_list.resize(count((string.value).begin(), (string.value).end(), ' '));
+    for(pos_start=0, i=0; i<recent_list.size(); i++){
+        
+        pos_end = (string.value).find(" ", pos_start);
+        recent_list[i] = stoi((string.value).substr(pos_start, pos_end-pos_start).c_str(), NULL, 10);
+        pos_end = pos_start;
+    }
+
+    //
     
     
     for(bodies.Clear(), i=0; i<(catalog->list).size(); i++){

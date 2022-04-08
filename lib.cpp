@@ -10713,11 +10713,9 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     body = p;
     catalog = c;
     String prefix, s;
-    size_t pos_start, pos_end;
-
+    size_t pos_end;
     
     prefix = String("");
-    
 
     
     //read the recently selected items from file_recent
@@ -10733,12 +10731,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     for(i=0; i<recent_list.size(); i++){
         
         pos_end = (s.value).find(" ", 0);
-        
-        string substring = (s.value).substr(0, pos_end);
-        
-        
-        recent_list[i] = stoi(substring, NULL, 10);
-        
+        recent_list[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
         (s.value) = ((s.value).substr(pos_end+1, string::npos));
         
     }

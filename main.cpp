@@ -43,8 +43,10 @@ bool MyApp::OnInit(){
     //
     String s("ciao, come stai oggi?");
     File file_recent;
+    
     file_recent.set_name(String(path_file_recent));
     file_recent.open(String("in"), String(""));
+    
     s.write_to_file(String("domanda"), file_recent, String(""));
     file_recent.close(String(""));
     

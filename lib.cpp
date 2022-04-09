@@ -395,7 +395,8 @@ void String::write_to_file(String name, File& file, String prefix){
         line.clear();
         getline(file.value, line);
         
-        if(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#')){
+        if(((line.find(name.value)) == (string::npos)) /*I ignore comment lines which start with '#'*/ || (line[0] == '#')){
+            
             //in this case 'name' has not been found in the line under consideration, or the line under consideration is a comment
             
             //I copy and paste the line that I read from file to temp

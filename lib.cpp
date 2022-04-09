@@ -337,7 +337,7 @@ String::String(string s){
 }
 
 
-
+//reads from file the content after 'name = ' and returns it as output
 void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     
     string line;

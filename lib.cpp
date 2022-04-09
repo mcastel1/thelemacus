@@ -376,11 +376,36 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
 }
 
 //writes to file the content of string after 'name = '
-void String::write_to_file(String name, File& file, bool search_entire_file, String prefix){
+void String::write_to_file(String name, File& file, String prefix){
+    
+    unsigned int i;
+    string line;
+
     
     
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
     
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+        if(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#')){
+            //in this case 'name' has not been found in the line under consideration, or the line under consideration is a comment
+ 
+            
+        }else{
+            //in this case 'name' has been found in the line under consideration
+
+            
+        }
+        
+    }while(!(file.value).eof());
     
+   
+
 }
 
 Answer::Answer(void){

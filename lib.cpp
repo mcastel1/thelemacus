@@ -337,7 +337,7 @@ String::String(string s){
 }
 
 
-//reads from file the content after 'name = ' and returns it as output
+//reads from file the content after 'name = ' and writes it into this
 void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     
     string line;
@@ -371,6 +371,14 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
     value = line.substr(pos+3, line.size() - (pos+3)).c_str();
     
     print(name, prefix, cout);
+    
+    
+}
+
+//writes to file the content of string after 'name = '
+void String::write_to_file(String name, File& file, bool search_entire_file, String prefix){
+    
+    
     
     
 }

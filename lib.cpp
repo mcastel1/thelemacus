@@ -378,10 +378,12 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
 //writes to file the content of string after 'name = '
 void String::write_to_file(String name, File& file, String prefix){
     
-    unsigned int i;
+    File temp;
     string line;
+    stringstream s;
 
-    
+    temp.set_name(String(path_file_temp));
+    temp.open(String("out"), prefix);
     
     //rewind the file pointer
     file.value.clear();                 // clear fail and eof bits
@@ -394,15 +396,26 @@ void String::write_to_file(String name, File& file, String prefix){
         
         if(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#')){
             //in this case 'name' has not been found in the line under consideration, or the line under consideration is a comment
+            
+            //I copy and paste the line that I read from file to temp
+            (temp.value) << line;
  
             
         }else{
             //in this case 'name' has been found in the line under consideration
 
+            //I write into s 'name = [new content of the string that I want to write on file]'
+            s.str("");
+            s << (name.value) << " = " << value << "\n";
+            
+            //I write s to file temp
+            (temp.value) << (s.str().c_str());
             
         }
         
     }while(!(file.value).eof());
+    
+    temp.close(prefix);
     
    
 

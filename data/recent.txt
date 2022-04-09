@@ -1,6 +1,1 @@
-body = 0 4 3 
-limb = 1 0
-risposta = si.
-
-
-
+body = 10 4 3 

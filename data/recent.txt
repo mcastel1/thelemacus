@@ -1,3 +1,5 @@
 body = 0 4 3 
 limb = 1 0
-domanda = boh?
+risposta = si.
+
+

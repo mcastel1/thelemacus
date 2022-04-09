@@ -419,6 +419,15 @@ void String::write_to_file(String name, File& file, String prefix){
     
     temp.close(prefix);
     
+    //move file_temp to file, so as to obtain the desired result
+    s.str("");
+    s << "mv " << ((temp.name).value) << " " << ((file.name).value);
+    
+    
+    system(s.str().c_str());
+
+    
+    
    
 
 }

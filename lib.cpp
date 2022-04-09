@@ -400,7 +400,7 @@ void String::write_to_file(String name, File& file, String prefix){
             //in this case 'name' has not been found in the line under consideration, or the line under consideration is a comment
             
             //I copy and paste the line that I read from file to temp
-            (temp.value) << line;
+            (temp.value) << line << "\n";
  
             
         }else{
@@ -408,10 +408,10 @@ void String::write_to_file(String name, File& file, String prefix){
 
             //I write into s 'name = [new content of the string that I want to write on file]'
             s.str("");
-            s << (name.value) << " = " << value << "\n";
+            s << (name.value) << " = " << value;
             
             //I write s to file temp
-            (temp.value) << (s.str());
+            (temp.value) << (s.str()) << "\n";
             
         }
         

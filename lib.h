@@ -1392,6 +1392,7 @@ public:
     
     BodyField(SightFrame*, Body*, Catalog*);
     void read_recent_items(void);
+    void write_recent_items(void);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);

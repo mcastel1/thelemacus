@@ -10708,6 +10708,10 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;
+
+    //sets the name of file_recent for future use
+    file_recent.set_name(String(path_file_recent));
+
     
     read_recent_items();
     
@@ -11460,7 +11464,6 @@ void BodyField::read_recent_items(void){
     }
     
     //read the recently selected items from file_recent
-    file_recent.set_name(String(path_file_recent));
     file_recent.open(String("in"), prefix);
     cout << prefix.value << YELLOW << "Reading recent items of body field from file " << file_recent.name.value << " ...\n" << RESET;
     s.read_from_file(String("body"), file_recent, true, String(""));
@@ -11532,6 +11535,23 @@ void BodyField::read_recent_items(void){
   
     bodies_temp.Clear();
 
+    
+    
+}
+
+void BodyField::write_recent_items(void){
+    
+    String prefix;
+    
+    
+    prefix = String("");
+
+    
+    file_recent.open(String("out"), prefix);
+    cout << prefix.value << YELLOW << "Writing recent items of body field to file " << file_recent.name.value << " ...\n" << RESET;
+//    s.read_from_file(String("body"), file_recent, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    file_recent.close(prefix);
     
     
 }

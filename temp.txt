@@ -1,0 +1,2 @@
+domanda = ciao, come stai oggi?
+body = 0 4 3 

@@ -411,7 +411,7 @@ void String::write_to_file(String name, File& file, String prefix){
             s << (name.value) << " = " << value << "\n";
             
             //I write s to file temp
-            (temp.value) << (s.str().c_str());
+            (temp.value) << (s.str());
             
         }
         

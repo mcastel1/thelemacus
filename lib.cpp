@@ -7358,8 +7358,8 @@ template<class T>void CheckBody::operator()(T& event){
         bool check;
         
         //I check whether the name in the GUI field body matches one of the body names in catalog
-        for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
-            if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
+        for(check = false, i=0; (i<((p->bodies).GetCount())) && (!check); i++){
+            if(((p->name)->GetValue()) == (((p->bodies)[i]))){
                 check = true;
             }
         }
@@ -7367,9 +7367,9 @@ template<class T>void CheckBody::operator()(T& event){
         
         if(check){
             
-            //            (*(p->body)) = ((p->catalog)->list)[i];
+            //            (*(p->body)) = (p->bodies)[i];
             
-            if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
+            if(((p->bodies)[i] == wxString("sun")) || ((p->bodies)[i] == wxString("moon"))){
                 ((f->limb)->name)->Enable(true);
             }else{
                 ((f->limb)->name)->Enable(false);
@@ -7378,12 +7378,15 @@ template<class T>void CheckBody::operator()(T& event){
             (p->name)->SetBackgroundColour(*wxWHITE);
             (p->ok) = true;
             
+            //here I should update recent_file
+            
+            
         }else{
             
             //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
             ((f->print_error_message)->control) = (p->name);
-            ((f->print_error_message)->title) = String("Body not found in catalog!");
-            ((f->print_error_message)->message) = String("Body must be in catalog.");
+            ((f->print_error_message)->title) = String("Body not found in the list!");
+            ((f->print_error_message)->message) = String("Body must be in the list.");
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -11527,11 +11530,11 @@ void BodyField::read_recent_items(void){
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     file_recent.close(prefix);
     
-    recent_list.resize(count((s.value).begin(), (s.value).end(), ' '));
-    for(i=0; i<recent_list.size(); i++){
+    recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
+    for(i=0; i<recent_items.size(); i++){
         
         pos_end = (s.value).find(" ", 0);
-        recent_list[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
+        recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
         (s.value) = ((s.value).substr(pos_end+1, string::npos));
         
     }
@@ -11553,10 +11556,10 @@ void BodyField::read_recent_items(void){
     }
     cout << "\n";
     
-    //I first add to bodies the recently selected celestial bodies written in recent_list
-    for(i=0; i<recent_list.size(); i++){
+    //I first add to bodies the recently selected celestial bodies written in recent_items
+    for(i=0; i<recent_items.size(); i++){
         
-        bodies.Add(bodies_temp[recent_list[i]]);
+        bodies.Add(bodies_temp[recent_items[i]]);
         
     }
     

@@ -10704,96 +10704,12 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
 //constructor of a BodyField object, based on the parent frame frame
 BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
-    unsigned int i, j;
     parent_frame = frame;
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;
-    wxArrayString bodies_temp;
-    String prefix, s;
-    size_t pos_end;
-    bool is_present;
     
-    prefix = String("");
-    
-    for(bodies_temp.Clear(), i=0; i<(catalog->list).size(); i++){
-        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
-        wxString temp = bodies_temp[i];
-
-    }
-    
-    //read the recently selected items from file_recent
-    file_recent.set_name(String(path_file_recent));
-    file_recent.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading recent items of body field from file " << file_recent.name.value << " ...\n" << RESET;
-    s.read_from_file(String("body"), file_recent, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    file_recent.close(prefix);
-    
-    recent_list.resize(count((s.value).begin(), (s.value).end(), ' '));
-    for(i=0; i<recent_list.size(); i++){
-        
-        pos_end = (s.value).find(" ", 0);
-        recent_list[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
-        (s.value) = ((s.value).substr(pos_end+1, string::npos));
-        
-    }
-    
-    
-    
-    
-    bodies.Clear();
-
-    cout << "Before: Bodies_temp = ";
-    for(i=0; i<bodies_temp.GetCount(); i++){
-        cout << (bodies_temp[i]).ToStdString() << " ";
-    }
-    cout << "\n";
-    
-    cout << "Before: Bodies = ";
-    for(i=0; i<bodies.GetCount(); i++){
-        cout << (bodies[i]).ToStdString() << " ";
-    }
-    cout << "\n";
-    
-    //I first add to bodies the recently selected celestial bodies written in recent_list
-    for(i=0; i<recent_list.size(); i++){
-        
-        bodies.Add(bodies_temp[recent_list[i]]);
-        
-    }
-    
-    //then, I fill bodies with the remaining bodies
-    for(i=0; i<bodies_temp.GetCount(); i++){
-        
-        for(is_present = false, j=0; (j<bodies.GetCount()) && (!is_present); j++){
-            
-            if(bodies[j] == bodies_temp[i]){
-                is_present = true;
-            }
-            
-        }
-        
-        if(!is_present){
-            bodies.Add(bodies_temp[i]);
-        }
-        
-    }
-    
-    
-    cout << "After: Bodies_temp = ";
-    for(i=0; i<bodies_temp.GetCount(); i++){
-        cout << (bodies_temp[i]).ToStdString() << " ";
-    }
-    cout << "\n";
-    
-    cout << "After: Bodies = ";
-    for(i=0; i<bodies.GetCount(); i++){
-        cout << (bodies[i]).ToStdString() << " ";
-    }
-    cout << "\n";
-    
-
+    read_recent_items();
     
   
     check = new CheckBody(this);
@@ -10811,7 +10727,6 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
     
-    bodies_temp.Clear();
     
 }
 
@@ -11524,6 +11439,100 @@ bool RouteTypeField::is_ok(void){
 template<class T> void BodyField::InsertIn(T* host){
     
     host->Add(sizer_v);
+    
+}
+
+//reads the recently selected items in the dropdown menu of BodyField and updates the dropdown menu in such a way that the recent items appear on top of it
+void BodyField::read_recent_items(void){
+    
+    unsigned int i, j;
+    wxArrayString bodies_temp;
+    String prefix, s;
+    size_t pos_end;
+    bool is_present;
+    
+    prefix = String("");
+
+    for(bodies_temp.Clear(), i=0; i<(catalog->list).size(); i++){
+        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
+        wxString temp = bodies_temp[i];
+
+    }
+    
+    //read the recently selected items from file_recent
+    file_recent.set_name(String(path_file_recent));
+    file_recent.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading recent items of body field from file " << file_recent.name.value << " ...\n" << RESET;
+    s.read_from_file(String("body"), file_recent, true, String(""));
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    file_recent.close(prefix);
+    
+    recent_list.resize(count((s.value).begin(), (s.value).end(), ' '));
+    for(i=0; i<recent_list.size(); i++){
+        
+        pos_end = (s.value).find(" ", 0);
+        recent_list[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
+        (s.value) = ((s.value).substr(pos_end+1, string::npos));
+        
+    }
+    
+    
+    
+    
+    bodies.Clear();
+
+    cout << "Before: Bodies_temp = ";
+    for(i=0; i<bodies_temp.GetCount(); i++){
+        cout << (bodies_temp[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+    
+    cout << "Before: Bodies = ";
+    for(i=0; i<bodies.GetCount(); i++){
+        cout << (bodies[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+    
+    //I first add to bodies the recently selected celestial bodies written in recent_list
+    for(i=0; i<recent_list.size(); i++){
+        
+        bodies.Add(bodies_temp[recent_list[i]]);
+        
+    }
+    
+    //then, I fill bodies with the remaining bodies
+    for(i=0; i<bodies_temp.GetCount(); i++){
+        
+        for(is_present = false, j=0; (j<bodies.GetCount()) && (!is_present); j++){
+            
+            if(bodies[j] == bodies_temp[i]){
+                is_present = true;
+            }
+            
+        }
+        
+        if(!is_present){
+            bodies.Add(bodies_temp[i]);
+        }
+        
+    }
+    
+    
+    cout << "After: Bodies_temp = ";
+    for(i=0; i<bodies_temp.GetCount(); i++){
+        cout << (bodies_temp[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+    
+    cout << "After: Bodies = ";
+    for(i=0; i<bodies.GetCount(); i++){
+        cout << (bodies[i]).ToStdString() << " ";
+    }
+    cout << "\n";
+  
+    bodies_temp.Clear();
+
+    
     
 }
 

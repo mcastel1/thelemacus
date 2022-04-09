@@ -31,7 +31,7 @@
  - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
  - add recent items in wxComboBox
  - fix 'Error: not all characters could be read'
- - create your own color class and a function to elegantly read colors from file. 
+ - create your own color class and a function to elegantly read colors from file.
  */
 
 
@@ -39,6 +39,17 @@
 wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
+    
+    //
+    String s("ciao, come stai oggi?");
+    File file_recent;
+    file_recent.set_name(String(path_file_recent));
+    file_recent.open(String("in"), String(""));
+    s.write_to_file(String("domanda"), file_recent, String(""));
+    file_recent.close(String(""));
+    
+    
+    //
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;

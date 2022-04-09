@@ -383,6 +383,7 @@ void String::write_to_file(String name, File& file, String prefix){
     stringstream s;
 
     temp.set_name(String(path_file_temp));
+    temp.remove(String(""));
     temp.open(String("out"), prefix);
     
     //rewind the file pointer

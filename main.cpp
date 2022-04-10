@@ -32,6 +32,7 @@
  - add recent items in wxComboBox
  - fix 'Error: not all characters could be read'
  - create your own color class and a function to elegantly read colors from file.
+ - fix ussue that read_recent_items in BodyField does not update immediatly the list in the wxCombobox name, but it updates it only once the SightFrame is closed and opened again
  */
 
 

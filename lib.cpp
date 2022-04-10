@@ -10774,6 +10774,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
 
     
     read_recent_items();
+    
     write_recent_items();
   
     check = new CheckBody(this);
@@ -11613,9 +11614,11 @@ void BodyField::write_recent_items(void){
     }
     s = String(temp.str().c_str());
 
-    file_recent.open(String("out"), prefix);
+    file_recent.open(String("in"), prefix);
+    
     cout << prefix.value << YELLOW << "Writing recent items of body field to file " << file_recent.name.value << " ...\n" << RESET;
     s.write_to_file(String("body"), file_recent, String(""));
+    
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     file_recent.close(prefix);
     

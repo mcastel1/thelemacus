@@ -40,7 +40,7 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
-    //
+    /*
     String s("si.");
     File file_recent;
     
@@ -49,9 +49,7 @@ bool MyApp::OnInit(){
     
     s.write_to_file(String("risposta"), file_recent, String(""));
     file_recent.close(String(""));
-    
-    
-    //
+    */
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;

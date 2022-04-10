@@ -11572,17 +11572,17 @@ void BodyField::read_recent_items(void){
     
     bodies.Clear();
 
-    cout << "Before: Bodies_temp = ";
-    for(i=0; i<bodies_temp.GetCount(); i++){
-        cout << (bodies_temp[i]).ToStdString() << " ";
-    }
-    cout << "\n";
-    
-    cout << "Before: Bodies = ";
-    for(i=0; i<bodies.GetCount(); i++){
-        cout << (bodies[i]).ToStdString() << " ";
-    }
-    cout << "\n";
+//    cout << "Before: Bodies_temp = ";
+//    for(i=0; i<bodies_temp.GetCount(); i++){
+//        cout << (bodies_temp[i]).ToStdString() << " ";
+//    }
+//    cout << "\n";
+//
+//    cout << "Before: Bodies = ";
+//    for(i=0; i<bodies.GetCount(); i++){
+//        cout << (bodies[i]).ToStdString() << " ";
+//    }
+//    cout << "\n";
     
     //I first add to bodies the recently selected celestial bodies written in recent_items
     for(i=0; i<recent_items.size(); i++){
@@ -11608,18 +11608,18 @@ void BodyField::read_recent_items(void){
         
     }
     
-    
-    cout << "After: Bodies_temp = ";
-    for(i=0; i<bodies_temp.GetCount(); i++){
-        cout << (bodies_temp[i]).ToStdString() << " ";
-    }
-    cout << "\n";
-    
-    cout << "After: Bodies = ";
-    for(i=0; i<bodies.GetCount(); i++){
-        cout << (bodies[i]).ToStdString() << " ";
-    }
-    cout << "\n";
+//    
+//    cout << "After: Bodies_temp = ";
+//    for(i=0; i<bodies_temp.GetCount(); i++){
+//        cout << (bodies_temp[i]).ToStdString() << " ";
+//    }
+//    cout << "\n";
+//    
+//    cout << "After: Bodies = ";
+//    for(i=0; i<bodies.GetCount(); i++){
+//        cout << (bodies[i]).ToStdString() << " ";
+//    }
+//    cout << "\n";
   
     bodies_temp.Clear();
 

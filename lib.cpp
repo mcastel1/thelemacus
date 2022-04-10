@@ -7358,8 +7358,8 @@ template<class T>void CheckBody::operator()(T& event){
         bool check;
         
         //I check whether the name in the GUI field body matches one of the body names in catalog
-        for(check = false, i=0; (i<((p->bodies).GetCount())) && (!check); i++){
-            if(((p->name)->GetValue()) == (((p->bodies)[i]))){
+        for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
+            if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
                 check = true;
             }
         }
@@ -7367,9 +7367,9 @@ template<class T>void CheckBody::operator()(T& event){
         
         if(check){
             
-            //            (*(p->body)) = (p->bodies)[i];
+            //            (*(p->body)) = ((p->catalog)->list)[i];
             
-            if(((p->bodies)[i] == wxString("sun")) || ((p->bodies)[i] == wxString("moon"))){
+            if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
                 ((f->limb)->name)->Enable(true);
             }else{
                 ((f->limb)->name)->Enable(false);
@@ -7378,15 +7378,14 @@ template<class T>void CheckBody::operator()(T& event){
             (p->name)->SetBackgroundColour(*wxWHITE);
             (p->ok) = true;
             
-            //here I should update recent_file
-            
+            //here you should insert the part where you write the recently selected item into file_recent
             
         }else{
             
             //set the wxControl, title and message for the functor print_error_message, and then call the functor with CallAfter
             ((f->print_error_message)->control) = (p->name);
-            ((f->print_error_message)->title) = String("Body not found in the list!");
-            ((f->print_error_message)->message) = String("Body must be in the list.");
+            ((f->print_error_message)->title) = String("Body not found in catalog!");
+            ((f->print_error_message)->message) = String("Body must be in catalog.");
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -10775,7 +10774,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     read_recent_items();
     
-    write_recent_items();
+//    write_recent_items();
   
     check = new CheckBody(this);
     

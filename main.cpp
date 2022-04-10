@@ -29,10 +29,9 @@
  - add a dropdown menu with the units of measure in LengthField
  - add margins in chart in such a way that ylabels are not cut
  - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
- - add recent items in wxComboBox
  - fix 'Error: not all characters could be read'
  - create your own color class and a function to elegantly read colors from file.
- - fix ussue that read_recent_items in BodyField does not update immediatly the list in the wxCombobox name, but it updates it only once the SightFrame is closed and opened again
+- add separator between recent items and non-recent items in BodyField->name
  */
 
 

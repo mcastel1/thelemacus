@@ -7379,6 +7379,14 @@ template<class T>void CheckBody::operator()(T& event){
             (p->ok) = true;
             
             //here you should insert the part where you write the recently selected item into file_recent
+            if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
+                //in this case, the selected item is not in the recent list
+                
+                (p->recent_items)[(p->recent_items).size()-1] = i;
+                
+                rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
+                
+            }
             
         }else{
             

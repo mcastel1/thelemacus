@@ -7380,7 +7380,7 @@ template<class T>void CheckBody::operator()(T& event){
             
             //here you should insert the part where you write the recently selected item into file_recent
             if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
-                //in this case, the selected item is not in the recent list
+                //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
                 
                 unsigned int j;
                 stringstream ins;
@@ -7391,12 +7391,10 @@ template<class T>void CheckBody::operator()(T& event){
                 (p->recent_items)[(p->recent_items).size()-1] = i;
                 rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
                 
-                
                 for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
                     ins << (p->recent_items)[j] << " ";
                 }
                 s = String(ins.str());
-                
                 
                 (p->file_recent).open(String("in"), prefix);
                 cout << prefix.value << YELLOW << "Writing recent items of body field to file " << (p->file_recent).name.value << " ...\n" << RESET;
@@ -7404,7 +7402,8 @@ template<class T>void CheckBody::operator()(T& event){
                 cout << prefix.value << YELLOW << "... done.\n" << RESET;
                 (p->file_recent).close(prefix);
                 
-                
+                //I update p->bodies according to the content of file_recent
+                p->read_recent_items();
                 
             }
             
@@ -11608,13 +11607,13 @@ void BodyField::read_recent_items(void){
         
     }
     
-//    
+//
 //    cout << "After: Bodies_temp = ";
 //    for(i=0; i<bodies_temp.GetCount(); i++){
 //        cout << (bodies_temp[i]).ToStdString() << " ";
 //    }
 //    cout << "\n";
-//    
+//
 //    cout << "After: Bodies = ";
 //    for(i=0; i<bodies.GetCount(); i++){
 //        cout << (bodies[i]).ToStdString() << " ";

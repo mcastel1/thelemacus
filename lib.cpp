@@ -10799,7 +10799,6 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     file_recent.set_name(String(path_file_recent));
 
     
-    read_recent_items();
     
 //    write_recent_items();
   
@@ -10807,6 +10806,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     name->SetValue("");
+    read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
     
@@ -11533,7 +11533,7 @@ template<class T> void BodyField::InsertIn(T* host){
     
 }
 
-//reads the recently selected items in the dropdown menu of BodyField and updates the dropdown menu in such a way that the recent items appear on top of it
+//reads from file_recent the recently selected items in the dropdown menu of BodyField and updates the dropdown menu in such a way that the recent items appear on top of it
 void BodyField::read_recent_items(void){
     
     unsigned int i, j;
@@ -11606,6 +11606,9 @@ void BodyField::read_recent_items(void){
         }
         
     }
+    
+    name->Set(bodies);
+
     
 //
 //    cout << "After: Bodies_temp = ";

@@ -7772,6 +7772,9 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     SetCursor(*wxCROSS_CURSOR);
     
+    //if the mouse left button was previously down because of a dragging event, then the dragging event is now over, and I set mouse_dragging = false;
+    if(mouse_dragging){mouse_dragging = false;}
+    
     position_end_drag = wxGetMousePosition();
     
     Position geo;
@@ -7785,27 +7788,34 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
     
     
-    if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
-        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+    if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
+        //in this case, I am dragging the chart (not a route or position)
         
-        x_min = x_min_start_drag;
-        x_max = x_max_start_drag;
-        y_min = y_min_start_drag;
-        y_max = y_max_start_drag;
-        
-        Update_lambda_phi_min_max();
-        
-        //re-draw the chart
-        Draw();
-        PaintNow();
-        
-        
-        //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-        (print_error_message->control) = NULL;
-        (print_error_message->title) = String("Chart outside  boundaries!");
-        (print_error_message->message) = String("The chart must lie within the boundaries.");
-        (*print_error_message)();
-        
+        if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
+            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+            
+            
+            
+            x_min = x_min_start_drag;
+            x_max = x_max_start_drag;
+            y_min = y_min_start_drag;
+            y_max = y_max_start_drag;
+            
+            Update_lambda_phi_min_max();
+            
+            //re-draw the chart
+            Draw();
+            PaintNow();
+            
+            
+            //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+            (print_error_message->control) = NULL;
+            (print_error_message->title) = String("Chart outside  boundaries!");
+            (print_error_message->message) = String("The chart must lie within the boundaries.");
+            (*print_error_message)();
+            
+            
+        }
         
     }
     
@@ -7963,14 +7973,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     wxPoint q;
                     
-                    //convert the geographic Position to move into coordinates with respect to the DrawPanel
-                    GeoToDrawPanel((plot->position_list)[((parent->parent)->highlighted_position)], &q);
-                    
-                    //move the coordinates with respect to the DrawPanel according to the mouse drag
-                    q += position_now_drag - position_start_drag;
+                    //                    //convert the geographic Position to move into coordinates with respect to the DrawPanel
+                    //                    GeoToDrawPanel((plot->position_list)[((parent->parent)->highlighted_position)], &q);
+                    //
+                    //                    //move the coordinates with respect to the DrawPanel according to the mouse drag
+                    //                    (q.x) += (position_now_drag.x) - (position_start_drag.x);
+                    //                    (q.y) += (position_now_drag.y) - (position_start_drag.y);
                     
                     //convert the coordinates with respect to the DrawPanel back to geographic Positio
-                    DrawPanelToGeo(q, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                    ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                     
                     
                     PaintNow();

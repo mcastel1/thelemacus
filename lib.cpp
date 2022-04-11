@@ -7939,7 +7939,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 
                 if(((parent->parent)->highlighted_position) != -1){
                     
-                    (plot->position_list)[((parent->parent)->highlighted_position)];
+                    wxPoint q;
+                    
+                    //convert the geographic Position to move into coordinates with respect to the DrawPanel
+                    GeoToDrawPanel((plot->position_list)[((parent->parent)->highlighted_position)], &q);
+                    
+                    //move the coordinates with respect to the DrawPanel according to the mouse drag
+                    q += position_now_drag - position_start_drag;
+                    
+                    //convert the coordinates with respect to the DrawPanel back to geographic Positio
+                    DrawPanelToGeo(q, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                    
+                 
+                    PaintNow();
                       
                       
                 }

@@ -7554,6 +7554,17 @@ void DrawPanel::ScreenToGeo(wxPoint p, Position *q){
     
 }
 
+
+//converts the point p on the drawpanel, to the relative geographic position q
+void DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
+    
+    
+    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-(position_plot_area.x))/((double)(size_plot_area.x)))*x_span), String(""));
+    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
+    
+    
+}
+
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection (x,y) of the relative geographic position
 void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
     

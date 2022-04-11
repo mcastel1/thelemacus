@@ -7658,7 +7658,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
     position_draw_panel_now = position_screen_now - position_draw_panel;
     
-    for(i=0; i<(plot->route_list).size(); i++){
+    for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
         
         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(255,255,255));
@@ -7675,6 +7675,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
                 if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
                    (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                    
+                    //sets the highlighted route to i, so as to use highlighted_route in other functions
+                    ((parent->parent)->highlighted_route) = i;
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                     ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
@@ -7697,12 +7700,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     
     //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
-    for(i=0; i<(plot->position_list).size(); i++){
+    for(((parent->parent)->highlighted_position) = -1, i=0; i<(plot->position_list).size(); i++){
         
         GeoToScreen((plot->position_list)[i], &q);
         
         if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
            4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+            
+            //sets the highlighted position to i, so as to use highlighted_position in other functions
+            ((parent->parent)->highlighted_position) = i;
+
             
             ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
             

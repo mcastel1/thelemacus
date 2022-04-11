@@ -7953,50 +7953,48 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
         
-        if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
+        
+        if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)) && ((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
+            //in this case, the mouse is not over a route nor a position when dragging: I move the whole chart
             //if the drag operation does not bring the chart out of the min and max latitude contained in the data files, I update x_min, ..., y_max and update the chart
             
-            if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
-                //in this case, the mouse is not over a route nor a position when dragging: I move the whole chart
+            
+            
+            //update x_min, ..., y_max according to the drag.
+            x_min -= delta_x;
+            x_max -= delta_x;
+            y_min += delta_y;
+            y_max += delta_y;
+            
+            Update_lambda_phi_min_max();
+            
+            //re-draw the chart
+            Draw();
+            
+            PaintNow();
+            
+        }else{
+            //in this case, the mouse is over a route or a position while dragging: I move the position / route only
+            
+            
+            if(((parent->parent)->highlighted_route) != -1){
+                //in this case, the mouse is over a route
                 
                 
+            }
+            
+            if(((parent->parent)->highlighted_position) != -1){
+                //in this case, the mouse is over a position
                 
-                //update x_min, ..., y_max according to the drag.
-                x_min -= delta_x;
-                x_max -= delta_x;
-                y_min += delta_y;
-                y_max += delta_y;
                 
-                Update_lambda_phi_min_max();
+                //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
+                ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                 
-                //re-draw the chart
-                Draw();
+                //update the coordinates of the Position under consideration in listcontrol_positions
+                ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                 
+                //given that the position under consideration has changed, I re-pain the chart
                 PaintNow();
-                
-            }else{
-                //in this case, the mouse is over a route or a position while dragging: I move the position / route only
-                
-                
-                if(((parent->parent)->highlighted_route) != -1){
-                    
-                    
-                }
-                
-                if(((parent->parent)->highlighted_position) != -1){
-                                
-                    
-                    //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                    ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                    
-                    //update the coordinates of the Position under consideration in listcontrol_positions
-                    ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
-                    
-                    //given that the position under consideration has changed, I re-pain the chart
-                    PaintNow();
-                    
-                    
-                }
                 
             }
             

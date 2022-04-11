@@ -381,7 +381,7 @@ void String::write_to_file(String name, File& file, String prefix){
     File temp;
     string line;
     stringstream s;
-
+    
     temp.set_name(String(path_file_temp));
     temp.remove(String(""));
     temp.open(String("out"), prefix);
@@ -401,11 +401,11 @@ void String::write_to_file(String name, File& file, String prefix){
             
             //I copy and paste the line that I read from file to temp
             (temp.value) << line << "\n";
- 
+            
             
         }else{
             //in this case 'name' has been found in the line under consideration
-
+            
             //I write into s 'name = [new content of the string that I want to write on file]'
             s.str("");
             s << (name.value) << " = " << value;
@@ -425,11 +425,11 @@ void String::write_to_file(String name, File& file, String prefix){
     
     
     system(s.str().c_str());
-
     
     
-   
-
+    
+    
+    
 }
 
 Answer::Answer(void){
@@ -6939,11 +6939,11 @@ void DrawPanel::Draw(void){
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
     c->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
     
-//    c->makeChart(path_file_chart);
+    //    c->makeChart(path_file_chart);
     mem_block = (c->makeChart(Chart::BMP));
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
-
+    
     
     //compute the points of  routes
     //run over all routes
@@ -7664,82 +7664,86 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         PaintNow();
     }
     
-    
-    //I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
-    //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
-    position_draw_panel_now = position_screen_now - position_draw_panel;
-    
-    for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
-        
-        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(255,255,255));
-        if((((plot->route_list)[i]).related_sight).value != -1){
-            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(255,255,255));
-        }
+    if(!mouse_dragging){
         
         
-        for(j=0; j<(points_route_list[i]).size(); j++){
+        //I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
+        //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
+        position_draw_panel_now = position_screen_now - position_draw_panel;
+        
+        for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
-            for(l=0; l<(points_route_list[i][j]).size(); l++){
+            //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(255,255,255));
+            if((((plot->route_list)[i]).related_sight).value != -1){
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(255,255,255));
+            }
+            
+            
+            for(j=0; j<(points_route_list[i]).size(); j++){
                 
-                //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
-                
-                if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                   (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                for(l=0; l<(points_route_list[i][j]).size(); l++){
                     
-                    //sets the highlighted route to i, so as to use highlighted_route in other functions
-                    ((parent->parent)->highlighted_route) = i;
+                    //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
                     
-                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                    ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
-                    if((((plot->route_list)[i]).related_sight).value != -1){
-                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
+                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
+                       (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                        
+                        //sets the highlighted route to i, so as to use highlighted_route in other functions
+                        ((parent->parent)->highlighted_route) = i;
+                        
+                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
+                        if((((plot->route_list)[i]).related_sight).value != -1){
+                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
+                        }
+                        
+                        // quit the loops over l and j
+                        break;
+                        break;
+                        
                     }
-                    
-                    // quit the loops over l and j
-                    break;
-                    break;
                     
                 }
                 
             }
             
-        }
-        
-        
-    }
-    
-    cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
-    
-    
-    //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
-    for(((parent->parent)->highlighted_position) = -1, i=0; i<(plot->position_list).size(); i++){
-        
-        GeoToScreen((plot->position_list)[i], &q);
-        
-        if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
-           4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
-            
-            //sets the highlighted position to i, so as to use highlighted_position in other functions
-            ((parent->parent)->highlighted_position) = i;
-
-            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
-            
-                  
-        }else{
-            
-            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,255,255));
             
         }
         
+        cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
+        
+        
+        //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
+        for(((parent->parent)->highlighted_position) = -1, i=0; i<(plot->position_list).size(); i++){
+            
+            GeoToScreen((plot->position_list)[i], &q);
+            
+            if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
+               4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                
+                //sets the highlighted position to i, so as to use highlighted_position in other functions
+                ((parent->parent)->highlighted_position) = i;
+                
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
+                
+                
+            }else{
+                
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,255,255));
+                
+            }
+            
+        }
+        
+        //Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
+        PaintNow();
+        
+        
+        cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
+        
     }
     
-    //Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
-    PaintNow();
-
-    
-    cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
-
     
     
     event.Skip(true);
@@ -7970,12 +7974,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //convert the coordinates with respect to the DrawPanel back to geographic Positio
                     DrawPanelToGeo(q, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                     
-                 
+                    
                     PaintNow();
-                      
-                      
+                    
+                    
                 }
-
+                
             }
             
         }
@@ -10857,14 +10861,14 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;
-
+    
     //sets the name of file_recent for future use
     file_recent.set_name(String(path_file_recent));
-
     
     
-//    write_recent_items();
-  
+    
+    //    write_recent_items();
+    
     check = new CheckBody(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
@@ -11606,11 +11610,11 @@ void BodyField::read_recent_items(void){
     bool is_present;
     
     prefix = String("");
-
+    
     for(bodies_temp.Clear(), i=0; i<(catalog->list).size(); i++){
         bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
         wxString temp = bodies_temp[i];
-
+        
     }
     
     //read the recently selected items from file_recent
@@ -11633,18 +11637,18 @@ void BodyField::read_recent_items(void){
     
     
     bodies.Clear();
-
-//    cout << "Before: Bodies_temp = ";
-//    for(i=0; i<bodies_temp.GetCount(); i++){
-//        cout << (bodies_temp[i]).ToStdString() << " ";
-//    }
-//    cout << "\n";
-//
-//    cout << "Before: Bodies = ";
-//    for(i=0; i<bodies.GetCount(); i++){
-//        cout << (bodies[i]).ToStdString() << " ";
-//    }
-//    cout << "\n";
+    
+    //    cout << "Before: Bodies_temp = ";
+    //    for(i=0; i<bodies_temp.GetCount(); i++){
+    //        cout << (bodies_temp[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
+    //
+    //    cout << "Before: Bodies = ";
+    //    for(i=0; i<bodies.GetCount(); i++){
+    //        cout << (bodies[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
     
     //I first add to bodies the recently selected celestial bodies written in recent_items
     for(i=0; i<recent_items.size(); i++){
@@ -11671,23 +11675,23 @@ void BodyField::read_recent_items(void){
     }
     
     name->Set(bodies);
-
     
-//
-//    cout << "After: Bodies_temp = ";
-//    for(i=0; i<bodies_temp.GetCount(); i++){
-//        cout << (bodies_temp[i]).ToStdString() << " ";
-//    }
-//    cout << "\n";
-//
-//    cout << "After: Bodies = ";
-//    for(i=0; i<bodies.GetCount(); i++){
-//        cout << (bodies[i]).ToStdString() << " ";
-//    }
-//    cout << "\n";
-  
+    
+    //
+    //    cout << "After: Bodies_temp = ";
+    //    for(i=0; i<bodies_temp.GetCount(); i++){
+    //        cout << (bodies_temp[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
+    //
+    //    cout << "After: Bodies = ";
+    //    for(i=0; i<bodies.GetCount(); i++){
+    //        cout << (bodies[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
+    
     bodies_temp.Clear();
-
+    
     
     
 }
@@ -11699,13 +11703,13 @@ void BodyField::write_recent_items(void){
     unsigned int i;
     
     prefix = String("");
-
+    
     
     for(temp.str(""), i=0; i<recent_items.size(); i++){
         temp << recent_items[i] << " ";
     }
     s = String(temp.str().c_str());
-
+    
     file_recent.open(String("in"), prefix);
     
     cout << prefix.value << YELLOW << "Writing recent items of body field to file " << file_recent.name.value << " ...\n" << RESET;

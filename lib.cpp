@@ -7910,7 +7910,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
             //if the drag operation does not bring the chart out of the min and max latitude contained in the data files, I update x_min, ..., y_max and update the chart
             
-            if((highlighted_route == -1) && (highlighted_poisition == -1)){
+            if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
                 //in this case, the mouse is not over a route nor a position when dragging: I move the whole chart
                 
                 

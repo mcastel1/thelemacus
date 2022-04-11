@@ -7762,6 +7762,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
     
+    
     if(!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
         //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
         
@@ -7909,18 +7910,29 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
             //if the drag operation does not bring the chart out of the min and max latitude contained in the data files, I update x_min, ..., y_max and update the chart
             
-            //update x_min, ..., y_max according to the drag.
-            x_min -= delta_x;
-            x_max -= delta_x;
-            y_min += delta_y;
-            y_max += delta_y;
-            
-            Update_lambda_phi_min_max();
-            
-            //re-draw the chart
-            Draw();
-            
-            PaintNow();
+            if((highlighted_route == -1) && (highlighted_poisition == -1)){
+                //in this case, the mouse is not over a route nor a position when dragging: I move the whole chart
+                
+                
+                
+                //update x_min, ..., y_max according to the drag.
+                x_min -= delta_x;
+                x_max -= delta_x;
+                y_min += delta_y;
+                y_max += delta_y;
+                
+                Update_lambda_phi_min_max();
+                
+                //re-draw the chart
+                Draw();
+                
+                PaintNow();
+                
+            }else{
+                //in this case, the mouse is over a route or a position while dragging: I move the position / route only
+                
+                
+            }
             
         }
         

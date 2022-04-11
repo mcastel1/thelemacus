@@ -7696,7 +7696,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                         ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
                     }
                     
-                    //I do this to quit the loops over l and j
+                    // quit the loops over l and j
                     break;
                     break;
                     
@@ -7708,6 +7708,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         
         
     }
+    
+    cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
     
     
     //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
@@ -7721,9 +7723,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             //sets the highlighted position to i, so as to use highlighted_position in other functions
             ((parent->parent)->highlighted_position) = i;
 
-            
             ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
             
+                  
         }else{
             
             ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,255,255));
@@ -7731,6 +7733,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         }
         
     }
+    
+    //Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
+    PaintNow();
+
+    
+    cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
+
     
     
     event.Skip(true);

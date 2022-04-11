@@ -7801,14 +7801,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
     delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
     
-    
-    if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
-        //in this case, I am dragging the chart (not a route or position)
+    if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
+        //in this case,  the drag operation ends out of the min and max latitude contained in the data files
         
-        if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
-            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
-            
-            
+        if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
+            //in this case, I am dragging the chart (not a route or position): I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
             
             x_min = x_min_start_drag;
             x_max = x_max_start_drag;
@@ -7821,15 +7818,42 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             Draw();
             PaintNow();
             
-            
             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;
-            (print_error_message->title) = String("Chart outside  boundaries!");
+            (print_error_message->title) = String("Chart outside boundaries!");
             (print_error_message->message) = String("The chart must lie within the boundaries.");
-            (*print_error_message)();
             
+            
+        }else{
+            //in this case, I am dragging a route or position
+            
+            if(((parent->parent)->highlighted_route) != -1){
+                //in this case, I am dragging a route
+                
+            }
+               
+            if((((parent->parent)->highlighted_position) != -1)){
+                //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
+                
+                //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
+                ScreenToGeo(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                
+                //update the coordinates of the Position under consideration in listcontrol_positions
+                ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                
+                //given that the position under consideration has changed, I re-pain the chart
+                PaintNow();
+                
+                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("Position outside boundaries!");
+                (print_error_message->message) = String("The position must lie within the boundaries.");
+                
+            }
             
         }
+        
+        (*print_error_message)();
         
     }
     
@@ -7945,56 +7969,63 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         mouse_dragging = true;
         
         SetCursor(wxCURSOR_HAND);
-        
-        double delta_x, delta_y;
-        
+    
         position_now_drag = wxGetMousePosition();
+    
         
-        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
-        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-        
-        
-        if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)) && ((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat)))){
-            //in this case, the mouse is not over a route nor a position when dragging: I move the whole chart
-            //if the drag operation does not bring the chart out of the min and max latitude contained in the data files, I update x_min, ..., y_max and update the chart
+        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.x)) ) &&
+           
+           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )){
+            //in this case, the drag does not end out of the plot area
             
-            
-            
-            //update x_min, ..., y_max according to the drag.
-            x_min -= delta_x;
-            x_max -= delta_x;
-            y_min += delta_y;
-            y_max += delta_y;
-            
-            Update_lambda_phi_min_max();
-            
-            //re-draw the chart
-            Draw();
-            
-            PaintNow();
-            
-        }else{
-            //in this case, the mouse is over a route or a position while dragging: I move the position / route only
-            
-            
-            if(((parent->parent)->highlighted_route) != -1){
-                //in this case, the mouse is over a route
+            if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){
+                //in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
+
+                double delta_x, delta_y;
                 
+                delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
+                delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
                 
-            }
-            
-            if(((parent->parent)->highlighted_position) != -1){
-                //in this case, the mouse is over a position
+                if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
+                    //in this case, the drag operation does not end out of the min and max latitude contained in the data files
+
+                    //update x_min, ..., y_max according to the drag.
+                    x_min -= delta_x;
+                    x_max -= delta_x;
+                    y_min += delta_y;
+                    y_max += delta_y;
+                    
+                    Update_lambda_phi_min_max();
+                    
+                    //re-draw the chart
+                    Draw();
+                    PaintNow();
+                    
+                }
                 
+            }else{
+                //in this case I am moving a position / route (the mouse is over a route or a position while dragging)
                 
-                //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                if(((parent->parent)->highlighted_route) != -1){
+                    //in this case, the mouse is over a route
+                    
+                    
+                }
                 
-                //update the coordinates of the Position under consideration in listcontrol_positions
-                ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
-                
-                //given that the position under consideration has changed, I re-pain the chart
-                PaintNow();
+                if(((parent->parent)->highlighted_position) != -1){
+                    //in this case, the mouse is over a position
+                    
+                    
+                    //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
+                    ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                    
+                    //update the coordinates of the Position under consideration in listcontrol_positions
+                    ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                    
+                    //given that the position under consideration has changed, I re-pain the chart
+                    PaintNow();
+                    
+                }
                 
             }
             
@@ -8607,7 +8638,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     //pointer to init.txt to read fixed sight data from in there
     File file_init;
     String new_prefix;
-    unsigned int i, deg, common_width;
+    unsigned int deg, common_width;
     double min;
     bool check = true;
     

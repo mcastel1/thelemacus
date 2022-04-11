@@ -743,6 +743,20 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
 }
 
+//updates all the values in the GUI fields of item #i of listcontrol with the relative values of the non-GUI Position this
+void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
+    
+    //update latitude column
+    listcontrol->SetItem(i, 0, wxString(phi.to_string(String("NS"), display_precision)));
+    
+    //update longitude column
+    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String("EW"), display_precision)));
+    
+    //update label column
+    listcontrol->SetItem(i, 2, wxString(label.value));
+    
+}
+
 //constructs a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet
 Route::Route(void){
     
@@ -7709,7 +7723,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             
         }
         
-        cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
+//        cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
         
         
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
@@ -7738,7 +7752,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         PaintNow();
         
         
-        cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
+//        cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
         
     }
     
@@ -7970,20 +7984,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 }
                 
                 if(((parent->parent)->highlighted_position) != -1){
+                                
                     
-                    wxPoint q;
-                    
-                    //                    //convert the geographic Position to move into coordinates with respect to the DrawPanel
-                    //                    GeoToDrawPanel((plot->position_list)[((parent->parent)->highlighted_position)], &q);
-                    //
-                    //                    //move the coordinates with respect to the DrawPanel according to the mouse drag
-                    //                    (q.x) += (position_now_drag.x) - (position_start_drag.x);
-                    //                    (q.y) += (position_now_drag.y) - (position_start_drag.y);
-                    
-                    //convert the coordinates with respect to the DrawPanel back to geographic Positio
+                    //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                     ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                     
+                    //update the coordinates of the Position under consideration in listcontrol_positions
+                    ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                     
+                    //given that the position under consideration has changed, I re-pain the chart
                     PaintNow();
                     
                     

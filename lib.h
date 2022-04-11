@@ -699,6 +699,7 @@ public:
     void enter(String, String);
     void modify(String);
     void add_to_wxListCtrl(long, wxListCtrl*);
+    void update_wxListCtrl(long, wxListCtrl*);
     void print(String, String, ostream&);
     void read_from_file(File&, String);
     //this function transports the position and returns the Route with which it has been transported

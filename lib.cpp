@@ -7791,21 +7791,18 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     position_end_drag = wxGetMousePosition();
     
-    Position geo;
-    ScreenToGeo(position_now_drag, &geo);
+    //in this case, the drag ends out of the plot area
     
-    geo.print(String("Position end drag"), String("************ "), cout);
-    
-    double delta_x, delta_y;
-    
-    delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
-    delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-    
-    if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
-        //in this case,  the drag operation ends out of the min and max latitude contained in the data files
+    if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
+        //in this case, I am dragging the chart (not a route or position)
         
-        if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
-            //in this case, I am dragging the chart (not a route or position): I reset x_min, ..., y_max to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+        double delta_x, delta_y;
+        
+        delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
+        delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+        
+        if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
+            //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset x_min , .... , y_max to their original values
             
             x_min = x_min_start_drag;
             x_max = x_max_start_drag;
@@ -7818,20 +7815,27 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             Draw();
             PaintNow();
             
-            //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+            //set the wxControl, title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Chart outside boundaries!");
             (print_error_message->message) = String("The chart must lie within the boundaries.");
+            (*print_error_message)();
+
             
-            
-        }else{
-            //in this case, I am dragging a route or position
+        }
+        
+    }else{
+        //in this case, I am dragging a route or position
+        
+        if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.x)) ) &&
+            ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )))){
+            //in this case, drag_end_position lies out the plot area
             
             if(((parent->parent)->highlighted_route) != -1){
                 //in this case, I am dragging a route
                 
             }
-               
+            
             if((((parent->parent)->highlighted_position) != -1)){
                 //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
                 
@@ -7846,14 +7850,14 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 
                 //        set the wxControl, title and message for the functor print_error_message, and then call the functor
                 (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Position outside boundaries!");
-                (print_error_message->message) = String("The position must lie within the boundaries.");
+                (print_error_message->title) = String("Position outside plot area!");
+                (print_error_message->message) = String("The position must lie within the plot area.");
+                (*print_error_message)();
+
                 
             }
             
         }
-        
-        (*print_error_message)();
         
     }
     

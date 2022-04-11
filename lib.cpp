@@ -7932,6 +7932,18 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 //in this case, the mouse is over a route or a position while dragging: I move the position / route only
                 
                 
+                if(((parent->parent)->highlighted_route) != -1){
+                    
+                    
+                }
+                
+                if(((parent->parent)->highlighted_position) != -1){
+                    
+                    (plot->position_list)[((parent->parent)->highlighted_position)];
+                      
+                      
+                }
+
             }
             
         }

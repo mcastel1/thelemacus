@@ -6725,27 +6725,13 @@ void DrawPanel::Render(wxDC&  dc){
     
 }
 
-
-void DrawPanel::Draw(void){
+//this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
+void DrawPanel::TabulateRoutes(void){
     
-    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
-    int i, j, l;
-    unsigned int n_intervals_ticks, n_intervals_ticks_max;
-    //the total length of each Route
+    unsigned int i, j, l;
     Length l_tot;
-    Angle dummy;
-    //this is a pointer to parent->parent->plot, created only to shorten the code
     wxPoint p;
-    //t_p(m) are the larger (smaller) value of t where the circle of equal altitude crosses the meridian lambda = pi.
-    String prefix, new_prefix;
     bool end_connected;
-    
-    
-    
-    //append \t to prefix
-    prefix = String("");
-    new_prefix = prefix.append(String("\t"));
-    
     
     //clear up points_route_list
     for(i=0; i<(plot->route_list).size(); i++){
@@ -6758,6 +6744,78 @@ void DrawPanel::Draw(void){
         
     }
     
+
+    //compute the points of  routes
+    //run over all routes
+    for(i=0; i<(plot->route_list).size(); i++){
+        
+        if((((plot->route_list)[i]).type) == String("c")){
+            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
+            
+            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
+            
+        }else{
+            //otherwise, the total length is simply written in the l object
+            
+            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
+            
+        }
+        
+        //compute points of l-th chunk of route #i
+        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+            
+            //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
+            (((plot->route_list)[i]).l).set(
+                                            String(""),
+                                            (l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1)),
+                                            String(""));
+            
+            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
+            ((plot->route_list)[i]).compute_end(String(""));
+            
+            if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
+                
+                if(end_connected){
+                    
+                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
+                    end_connected = false;
+                    
+                }
+                
+                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
+                
+                
+                
+            }else{
+                
+                end_connected = true;
+                
+            }
+            
+        }
+        
+    }
+      
+}
+
+void DrawPanel::Draw(void){
+    
+    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
+    int i;
+    unsigned int n_intervals_ticks, n_intervals_ticks_max;
+    //the total length of each Route
+    Angle dummy;
+    //this is a pointer to parent->parent->plot, created only to shorten the code
+     String prefix, new_prefix;
+    
+    
+    
+    //append \t to prefix
+    prefix = String("");
+    new_prefix = prefix.append(String("\t"));
+    
+    
+ 
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
@@ -6840,11 +6898,7 @@ void DrawPanel::Draw(void){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
-    //    if(delta_lambda > 1.0/gamma_lambda){
-    //        if(delta_lambda == 5.0/gamma_lambda){delta_lambda = delta_lambda - 4.0/gamma_lambda;}
-    //        else{delta_lambda = delta_lambda - 5.0/gamma_lambda;}
-    //    }
-    //    cout <<  "... delta_lambda = " << delta_lambda << "\n";
+
     
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
@@ -6920,11 +6974,7 @@ void DrawPanel::Draw(void){
         if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
     }
-    //    if(delta_phi > 1.0/gamma_phi){
-    //        if(delta_phi == 5.0/gamma_phi){delta_phi = delta_phi - 4.0/gamma_phi;}
-    //        else{delta_phi = delta_phi - 5.0/gamma_phi;}
-    //    }
-    //    cout << "... delta_phi = "  << delta_phi << "\n";
+  
     
     
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
@@ -6983,57 +7033,7 @@ void DrawPanel::Draw(void){
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
-    
-    //compute the points of  routes
-    //run over all routes
-    for(i=0; i<(plot->route_list).size(); i++){
-        
-        if((((plot->route_list)[i]).type) == String("c")){
-            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
-            
-            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
-            
-        }else{
-            //otherwise, the total length is simply written in the l object
-            
-            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
-            
-        }
-        
-        //compute points of l-th chunk of route #i
-        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
-            
-            //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
-            (((plot->route_list)[i]).l).set(
-                                            String(""),
-                                            (l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1)),
-                                            String(""));
-            
-            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-            ((plot->route_list)[i]).compute_end(String(""));
-            
-            if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
-                
-                if(end_connected){
-                    
-                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
-                    end_connected = false;
-                    
-                }
-                
-                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
-                
-                
-                
-            }else{
-                
-                end_connected = true;
-                
-            }
-            
-        }
-        
-    }
+    TabulateRoutes();
     
     //free up resources
     (parent->x).clear();

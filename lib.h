@@ -1349,6 +1349,7 @@ public:
     void SetIdling(bool);
     
     void Draw(void);
+    void TabulateRoutes(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
     void ScreenToGeo(wxPoint, Position*);

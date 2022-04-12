@@ -732,15 +732,8 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     listcontrol->InsertItem(item);
     
-    //set latitude column
-    listcontrol->SetItem(i, 0, wxString(phi.to_string(String("NS"), display_precision)));
-    
-    //set longitude column
-    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String("EW"), display_precision)));
-    
-    //set label column
-    listcontrol->SetItem(i, 2, wxString(label.value));
-    
+    update_wxListCtrl(i, listcontrol);
+
 }
 
 //updates all the values in the GUI fields of item #i of listcontrol with the relative values of the non-GUI Position this

@@ -6516,6 +6516,18 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
+        if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
+            //in this case, Route #i is either a loxodrome or an orthordrome, and thus it has a starting point
+            
+            GeoToDrawPanel((((plot->route_list)[i]).start), &p);
+
+            dc.DrawCircle(p, 4.0*thickness);
+
+        }
+        
+      
+        
+
         //run over the connected chunks of the i-th route
         for(j=0; j<(points_route_list[i]).size(); j++){
             

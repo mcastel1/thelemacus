@@ -33,6 +33,7 @@
  - create your own color class and a function to elegantly read colors from file.
 - add separator between recent items and non-recent items in BodyField->name
  - replaces multiple ifs with switch cases
+ - use Position::update_listcontrol into add_to_wxlistcontrol to shorten the code
  */
 
 

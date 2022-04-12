@@ -765,9 +765,10 @@ Route::Route(void){
     
 }
 
+//I add the Route this to the wxListCtrl listcontrol
 void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
-    unsigned int i, j;
+    unsigned int i;
     wxListItem item;
     
     if(list_position == -1){
@@ -785,6 +786,15 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     item.SetText(wxT(""));
     
     listcontrol->InsertItem(item);
+    
+    update_wxListCtrl(i, listcontrol);
+        
+}
+
+void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
+    
+    unsigned int j;
+ 
     
     j=0;
     //set type column: I write the extended type names, not the short ones 'l', 'o' and 'c'
@@ -838,6 +848,8 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
     
 }
+
+
 
 //Given the route (*this), this function returns the point on the Route which is closest to Position q, and writes this position and the corresponding value of t in p and tau, respectively.
 bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix){
@@ -8027,6 +8039,17 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, the mouse is over a route
                     
                     
+                    //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the starting Position of the Route under consideration: in this way, the whole Route under consideration is dragged along with the mouse
+                    ScreenToGeo(position_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                    
+                    //update the data of the Route under consideration in listcontrol_routes
+                    ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
+        
+                    
+                    //given that the Route under consideration has changed, I re-paint the chart
+                    PaintNow();
+                    
+                    
                 }
                 
                 if(((parent->parent)->highlighted_position) != -1){
@@ -8036,10 +8059,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                     ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                     
-                    //update the coordinates of the Position under consideration in listcontrol_positions
+                    //update the data of the Position under consideration in listcontrol_positions
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                     
-                    //given that the position under consideration has changed, I re-pain the chart
+                    //given that the Position under consideration has changed, I re-paint the chart
                     PaintNow();
                     
                 }

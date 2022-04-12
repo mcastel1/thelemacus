@@ -698,8 +698,6 @@ public:
     Position();
     void enter(String, String);
     void modify(String);
-    void add_to_wxListCtrl(long, wxListCtrl*);
-    void update_wxListCtrl(long, wxListCtrl*);
     void print(String, String, ostream&);
     void read_from_file(File&, String);
     //this function transports the position and returns the Route with which it has been transported
@@ -707,7 +705,8 @@ public:
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool operator==(const Position&);
-    
+    void add_to_wxListCtrl(long, wxListCtrl*);
+    void update_wxListCtrl(long, wxListCtrl*);
     
 };
 
@@ -741,7 +740,8 @@ public:
     bool t_crossing(Route, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
-    
+    void update_wxListCtrl(long, wxListCtrl*);
+
 };
 
 

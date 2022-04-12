@@ -7857,7 +7857,17 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             //in this case, drag_end_position lies out the plot area
             
             if(((parent->parent)->highlighted_route) != -1){
-                //in this case, I am dragging a route
+                //in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
+                
+                (((plot->route_list)[((parent->parent)->highlighted_route)]).start) = route_start_start_drag;
+                TabulateRoutes();
+                PaintNow();
+                
+                //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("Route start position outside plot area!");
+                (print_error_message->message) = String("Route start position must lie within the plot area.");
+                (*print_error_message)();
                 
             }
             

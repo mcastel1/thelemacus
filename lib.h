@@ -1331,9 +1331,8 @@ public:
     /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the ticks on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the ticks on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi,
     /*the values of x at the beginning/end of the selection process with a rectangle*/x_start_selection, x_end_selection;
     wxStaticText*text_position_start, *text_position_end;
-    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;;
-    //these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart
-    Position p_start, p_end, route_start_start_drag;
+    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;
+    Position /*these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_end, /*I store in this position the starting point of a Route that I want to drag, at the beginning of the dragging process*/route_start_start_drag;
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points which represent the route_list[i] discretized
     vector< vector< vector< wxPoint > > > points_route_list;

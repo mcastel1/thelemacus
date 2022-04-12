@@ -6516,6 +6516,7 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
+        //draw starting point of route
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
             //in this case, Route #i is either a loxodrome or an orthordrome, and thus it has a starting point
             

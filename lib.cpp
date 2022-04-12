@@ -8055,7 +8055,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //update the data of the Route under consideration in listcontrol_routes
                     ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
-        
+         
                     
                     //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the chart
                     TabulateRoutes();

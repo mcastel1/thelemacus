@@ -7995,6 +7995,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
     if(wxGetMouseState().LeftIsDown()){
         
+        if(!mouse_dragging){
+            //in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_start_start_drag
+            
+            if(((parent->parent)->highlighted_route) != -1){
+                route_start_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).start);
+            }
+            
+        }
+        
         mouse_dragging = true;
         
         SetCursor(wxCURSOR_HAND);
@@ -8003,7 +8012,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
         
         if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.x)) ) &&
-           
            ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )){
             //in this case, the drag does not end out of the plot area
             
@@ -8038,9 +8046,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if(((parent->parent)->highlighted_route) != -1){
                     //in this case, the mouse is over a route
                     
+                    wxPoint p;
                     
-                    //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the starting Position of the Route under consideration: in this way, the whole Route under consideration is dragged along with the mouse
-                    ScreenToGeo(position_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                    //convert the coordinates of route_start_start_drag into DrawPanel coordinates, shift it according to the mouse drag, and  assign the resulting point to the starting Position of the Route under consideration: in this way, the whole Route under consideration is dragged along with the mouse
+                    
+                    GeoToDrawPanel(route_start_start_drag, &p);
+                    DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
                     
                     //update the data of the Route under consideration in listcontrol_routes
                     ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);

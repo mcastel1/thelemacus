@@ -2634,6 +2634,8 @@ void Route::transport(String prefix){
 void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     unsigned int j;
+    Time time_UTC;
+
     
     j=0;
     //set body column
@@ -2703,9 +2705,8 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 
 void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
-    unsigned int i, j;
+    unsigned int i;
     wxListItem item;
-    Time time_UTC;
     
     if(list_position == -1){
         i = (listcontrol->GetItemCount());

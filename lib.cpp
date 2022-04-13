@@ -6516,17 +6516,19 @@ void DrawPanel::Render(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[i % (((parent->parent)->color_list).size())], thickness) );
         
-        //draw starting point of route
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
-            //in this case, Route #i is either a loxodrome or an orthordrome, and thus it has a starting point
-            
-            GeoToDrawPanel((((plot->route_list)[i]).start), &p);
+            //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
 
+            GeoToDrawPanel((((plot->route_list)[i]).start), &p);
+            dc.DrawCircle(p, 4.0*thickness);
+
+        }else{
+            //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
+
+            GeoToDrawPanel((((plot->route_list)[i]).GP), &p);
             dc.DrawCircle(p, 4.0*thickness);
 
         }
-        
-      
         
 
         //run over the connected chunks of the i-th route
@@ -7847,7 +7849,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             if(((parent->parent)->highlighted_route) != -1){
                 //in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
                 
-                (((plot->route_list)[((parent->parent)->highlighted_route)]).start) = route_start_start_drag;
+                (((plot->route_list)[((parent->parent)->highlighted_route)]).start) = route_position_start_drag;
                 TabulateRoutes();
                 PaintNow();
                 
@@ -7994,10 +7996,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     if(wxGetMouseState().LeftIsDown()){
         
         if(!mouse_dragging){
-            //in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_start_start_drag
+            //in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
             
             if(((parent->parent)->highlighted_route) != -1){
-                route_start_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).start);
+                route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).start);
             }
             
         }
@@ -8046,9 +8048,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     wxPoint p;
                     
-                    //convert the coordinates of route_start_start_drag into DrawPanel coordinates, shift it according to the mouse drag, and  assign the resulting point to the starting Position of the Route under consideration: in this way, the whole Route under consideration is dragged along with the mouse
+                    //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift it according to the mouse drag, and  assign the resulting point to the starting Position of the Route under consideration: in this way, the whole Route under consideration is dragged along with the mouse
                     
-                    GeoToDrawPanel(route_start_start_drag, &p);
+                    GeoToDrawPanel(route_position_start_drag, &p);
                     DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
                     
                     //update the data of the Route under consideration in listcontrol_routes

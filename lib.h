@@ -1345,7 +1345,7 @@ public:
     wxMemoryInputStream * memory_input_stream;
     wxBitmap* bitmap_image; 
 
-
+ 
 
     void SetIdling(bool);
     

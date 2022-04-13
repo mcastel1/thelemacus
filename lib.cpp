@@ -740,10 +740,10 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
 void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     //update latitude column
-    listcontrol->SetItem(i, 0, wxString(phi.to_string(String("NS"), display_precision)));
+    listcontrol->SetItem(i, 0, wxString(phi.to_string(String("NS"), display_precision, true)));
     
     //update longitude column
-    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String("EW"), display_precision)));
+    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String("EW"), display_precision, true)));
     
     //update label column
     listcontrol->SetItem(i, 2, wxString(label.value));
@@ -809,13 +809,13 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
         listcontrol->SetItem(i, j++, wxString(""));
         
         listcontrol->SetItem(i, j++, wxString(GP.to_string(display_precision)));
-        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), display_precision, true)));
         
     }else{
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
         
         listcontrol->SetItem(i, j++, wxString(start.to_string(display_precision)));
-        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision, false)));
         listcontrol->SetItem(i, j++, wxString(l.to_string(String("nm"), display_precision)));
         
         listcontrol->SetItem(i, j++, wxString(""));
@@ -1265,7 +1265,7 @@ string Position::to_string(unsigned int precision){
     
     stringstream output;
     
-    output << phi.to_string(String("NS"), precision) << " " << lambda.to_string(String("EW"), precision);
+    output << phi.to_string(String("NS"), precision, true) << " " << lambda.to_string(String("EW"), precision, true);
     
     return (output.str().c_str());
     
@@ -1487,7 +1487,7 @@ Route Position::transport(String prefix){
     
     route.compute_end(new_prefix);
     
-    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(String(""), display_precision) << ", l = " << (route.l).value << " nm";
+    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(String(""), display_precision, false) << ", l = " << (route.l).value << " nm";
     (route.end.label).set(String(""), temp_label.str(), prefix);
     
     (*this) = route.end;
@@ -2615,7 +2615,7 @@ void Route::transport(String prefix){
         
         
         //append 'translated to ...' to the label of sight, and make this the new label of sight
-        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(String(""), display_precision) << ", l = " << transporting_route.l.value << " nm";
+        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(String(""), display_precision, false) << ", l = " << transporting_route.l.value << " nm";
         label.set(String(""), temp_label.str(), prefix);
         //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set
         (related_sight.value) = -1;
@@ -2667,10 +2667,10 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString(artificial_horizon.value));
     
     //set sextant altitude column
-    listcontrol->SetItem(i, j++, wxString((H_s).to_string(String(""), display_precision)));
+    listcontrol->SetItem(i, j++, wxString((H_s).to_string(String(""), display_precision, true)));
     
     //set index error
-    listcontrol->SetItem(i, j++, wxString((index_error).to_string(String(""), display_precision)));
+    listcontrol->SetItem(i, j++, wxString((index_error).to_string(String(""), display_precision, true)));
     
     //set height of eye column
     if(artificial_horizon.value == 'n'){listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), display_precision)));}
@@ -6654,7 +6654,7 @@ void DrawPanel::Render(wxDC&  dc){
                     //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                     
                     if(first_label){
-                        s << lambda.to_string(String("EW"), display_precision);
+                        s << lambda.to_string(String("EW"), display_precision, true);
                     }else{
                         s << lambda.min_to_string(String("EW"), display_precision);
                     }
@@ -6713,7 +6713,7 @@ void DrawPanel::Render(wxDC&  dc){
                     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                     
                     if(first_label){
-                        s << phi.to_string(String("NS"), display_precision);
+                        s << phi.to_string(String("NS"), display_precision, false);
                     }else{
                         s << phi.min_to_string(String("NS"), display_precision);
                     }
@@ -6902,7 +6902,7 @@ void DrawPanel::Draw(void){
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
-    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision)))).GetWidth()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision, false)))).GetWidth()))));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
@@ -6980,7 +6980,7 @@ void DrawPanel::Draw(void){
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
-    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.y))/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision)))).GetHeight()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.y))/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision, false)))).GetHeight()))));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
@@ -7714,13 +7714,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //update the instantaneous position of the mouse on the chart
     s.str("");
-    s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
+    s << (p.phi).to_string(String("NS"), display_precision, true) << " " << (p.lambda).to_string(String("EW"), display_precision, true);
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
     
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
         s.str("");
-        s << (p.phi).to_string(String("NS"), display_precision) << " " << (p.lambda).to_string(String("EW"), display_precision);
+        s << (p.phi).to_string(String("NS"), display_precision, true) << " " << (p.lambda).to_string(String("EW"), display_precision, true);
         text_position_end->SetLabel(wxString(s.str().c_str()));
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         PaintNow();
@@ -7945,11 +7945,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         ScreenToMercator(position_start_selection, &x_start_selection, NULL);
         
         s.clear();
-        s << (p_start.phi).to_string(String("NS"), display_precision) << " " << (p_start.lambda).to_string(String("EW"), display_precision);
+        s << (p_start.phi).to_string(String("NS"), display_precision, true) << " " << (p_start.lambda).to_string(String("EW"), display_precision, true);
         text_position_start->SetLabel(wxString(s.str().c_str()));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
-        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision) << " , " << (p_start.phi).to_string(String("NS"), display_precision) << " }\n";
+        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_start.phi).to_string(String("NS"), display_precision, false) << " }\n";
         
     }else{
         
@@ -7963,7 +7963,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         if((parent->ZoomFactor(fabs(x_end_selection-x_start_selection), NULL))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
-            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision) << " , " << (p_end.phi).to_string(String("NS"), display_precision) << " }\n";
+            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
             
             //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
             delete c;

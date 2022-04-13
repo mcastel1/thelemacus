@@ -2630,23 +2630,10 @@ void Route::transport(String prefix){
     
 }
 
-void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
+
+void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
-    unsigned int i, j;
-    wxListItem item;
-    Time time_UTC;
-    
-    if(list_position == -1){
-        i = (listcontrol->GetItemCount());
-    }else{
-        i = list_position;
-        listcontrol->DeleteItem(i);
-    }
-    
-    item.SetId(i);
-    item.SetText(wxT(""));
-    
-    listcontrol->InsertItem(item);
+    unsigned int j;
     
     j=0;
     //set body column
@@ -2710,6 +2697,29 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         
     }
     
+    
+}
+
+
+void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
+    
+    unsigned int i, j;
+    wxListItem item;
+    Time time_UTC;
+    
+    if(list_position == -1){
+        i = (listcontrol->GetItemCount());
+    }else{
+        i = list_position;
+        listcontrol->DeleteItem(i);
+    }
+    
+    item.SetId(i);
+    item.SetText(wxT(""));
+    
+    listcontrol->InsertItem(item);
+    
+    update_wxListCtrl(i, listcontrol);
     
 }
 
@@ -8013,6 +8023,31 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                     
                     route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).GP);
+                    
+                    if(((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1){
+                        //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
+                        
+                        int i_sight, i_route;
+                        
+                        i_route = ((parent->parent)->highlighted_route);
+                        i_sight = ((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value);
+                        
+                        //disconnect route and sight
+                        (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
+                        (((plot->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
+                        
+                        //update the related wxListCtrls in ListFrame
+                        ((plot->sight_list)[i_sight]).update_wxListCtrl(i_sight, parent->parent->listcontrol_sights);
+                        ((plot->route_list)[i_route]).update_wxListCtrl(i_route, parent->parent->listcontrol_routes);
+
+                        //print an info message
+                        ((parent->print_error_message)->control) = NULL;
+                        ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
+                        ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
+                        parent->CallAfter(*(parent->print_error_message));
+                        
+                    }
+                    
 
                 }else{
                     

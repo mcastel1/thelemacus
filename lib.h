@@ -887,7 +887,8 @@ public:
     bool check_data_time_interval(String);
     
     void add_to_wxListCtrl(long, wxListCtrl*);
-    
+    void update_wxListCtrl(long, wxListCtrl*);
+
 };
 
 class Catalog{

@@ -632,7 +632,8 @@ public:
     void to_deg_min(unsigned int*, double*);
     void from_sign_deg_min(char, unsigned int, double);
     void read_from_file(String, File&, bool, String);
-    string to_string(String, unsigned int);
+    void to_deg_min_string(stringstream, stringstream);
+    string to_string(String, unsigned int, bool);
     string deg_to_string(String, unsigned int);
     string min_to_string(String, unsigned int);
 

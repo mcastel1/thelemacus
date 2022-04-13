@@ -5594,10 +5594,13 @@ void Angle::from_sign_deg_min(char sign, unsigned int deg, double min){
     
 }
 
-
-string Angle::to_string(String mode, unsigned int precision){
+//this function converts an Angle to a string. If add_spaces = true, then instead of "9° 2.3'" I output "  9°  2.3'", i.e., I fill the spaces with blank spaces, so all angles will have the same format when converted to strings
+string Angle::to_string(String mode, unsigned int precision, bool add_spaces){
     
     stringstream output;
+    stringstream deg, min;
+    int i;
+    double x;
     //a temporary variable where to store this->value and modifyi it without altering this->value
     double value_temp;
     
@@ -5606,16 +5609,43 @@ string Angle::to_string(String mode, unsigned int precision){
     normalize();
     value_temp = value;
     
-    if(mode == String("")){
-        //in this case, I print out the angle in the format >=0° and <360°
-        output << floor(K*value_temp) << "° " << (K*value_temp - floor(K*value_temp))*60.0 << "'";
-        
-    }else{
+    
+    if((mode != String("")) && (value_temp > M_PI)){
+        value_temp-=2.0*M_PI;
+        value_temp = fabs(value_temp);
+    }
+    
+    //write the arcdegree part of the Angle into deg
+    deg.str("");
+    i = floor(K*value_temp);
+    if(add_spaces){
+        if(i < 10){
+            deg << "  ";
+        }else{
+            if(i<100){
+                deg << " ";
+            }
+        }
+    }
+    deg << i;
+    
+    //write the arcminute part of the Angle into min
+    min.str("");
+    x = (K*value_temp - floor(K*value_temp))*60.0;
+    if(add_spaces){
+        if(x < 10.0){
+            min << " ";
+        }
+    }
+    min << x;
+    
+    
+
+    output << deg.str().c_str() << "° " << min.str().c_str() << "'";
+
+    if(mode != String("")){
         //in this case, I print out the angle in the format >=-180° and <180°
-        
-        if(value_temp>M_PI){value_temp-=2.0*M_PI;}
-        output << floor(fabs(K*value_temp)) << "° " <<  (fabs(K*value_temp) - floor(fabs(K*value_temp)))*60.0<< "'";
-        
+                
         if(mode == String("NS")){
             //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
             

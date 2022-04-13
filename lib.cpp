@@ -5651,7 +5651,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces){
         if(mode == String("NS")){
             //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
             
-            if(value>0.0){output << " N";}
+            if(value<M_PI){output << " N";}
             else{output << " S";}
         }
         if(mode == String("EW")){

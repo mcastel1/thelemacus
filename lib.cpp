@@ -5604,7 +5604,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces){
     //a temporary variable where to store this->value and modifyi it without altering this->value
     double value_temp;
     
-    output.precision(precision);
+    min.precision(precision);
     
     normalize();
     value_temp = value;
@@ -5633,6 +5633,8 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces){
     min.str("");
     x = (K*value_temp - floor(K*value_temp))*60.0;
     if(add_spaces){
+        //sets the fixed precision min, so all angles that are printed out have the same number of decimal points
+        min << fixed;
         if(x < 10.0){
             min << " ";
         }

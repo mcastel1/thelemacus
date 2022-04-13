@@ -46,6 +46,12 @@ bool MyApp::OnInit(){
     s.write_to_file(String("risposta"), file_recent, String(""));
     file_recent.close(String(""));
     */
+    /*
+    Angle a;
+    a.set(String(""), 5.5, String(""));
+    string test = a.to_string(String(""), display_precision, true);
+    */
+     
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;

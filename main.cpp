@@ -13,13 +13,14 @@
  notes: set parents to constructors of all frames that you defined
  - when you click on modify and then press reduce, the code should not insert a new item in listcontrol, but replace the old one
  - add instrumental error
+ - revise Angle::to_string in such a way that all angles take the same space when printed out to string 
  - add condition that an error message is prompted only if the GUI field is enabled not only to CheckLength, but also to all other Check* classes
  - all quantities in pixels must be relative to screen size, not absolute pixel size.
  - add lambert projection and 3D sphere with no projection
  - make sure you can recover a correct chart after the print error message has been prompted because the zoom factor is too large
  - change the initialization of structs (such as     (check.p) = this;) by transforming the structs into classes, creating their constructor, transforming check into a pointer and replacing     (check.p) = this; with check = new Check(this); do this for all objects
  - fix issue that related sight is not properly deleted when a route is deleted
- -     Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
+ - Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
  - set up a proper output to a log file
  - turn gamma_lambda into an unsigned int
  - add margins in chart in such a way that ylabels are not cut

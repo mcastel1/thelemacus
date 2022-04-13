@@ -7849,7 +7849,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             if(((parent->parent)->highlighted_route) != -1){
                 //in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
                 
-                (((plot->route_list)[((parent->parent)->highlighted_route)]).start) = route_position_start_drag;
+                if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+
+                    (((plot->route_list)[((parent->parent)->highlighted_route)]).GP) = route_position_start_drag;
+
+                }else{
+                    
+                    (((plot->route_list)[((parent->parent)->highlighted_route)]).start) = route_position_start_drag;
+
+                }
+                
                 TabulateRoutes();
                 PaintNow();
                 
@@ -7999,7 +8008,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             //in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
             
             if(((parent->parent)->highlighted_route) != -1){
-                route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).start);
+                //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
+                
+                if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                    
+                    route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).GP);
+
+                }else{
+                    
+                    route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).start);
+
+                }
+                
+                
             }
             
         }
@@ -8048,10 +8069,22 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     wxPoint p;
                     
-                    //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift it according to the mouse drag, and  assign the resulting point to the starting Position of the Route under consideration: in this way, the whole Route under consideration is dragged along with the mouse
+                    //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift it according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
                     
                     GeoToDrawPanel(route_position_start_drag, &p);
-                    DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                    
+                    
+                    if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                        
+                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
+
+
+                    }else{
+                        
+                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                        
+                    }
+                    
                     
                     //update the data of the Route under consideration in listcontrol_routes
                     ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);

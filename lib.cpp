@@ -6286,7 +6286,6 @@ void ChartFrame::GetAllCoastLineData(void){
     unsigned int l, n = 0;
     char* buffer = NULL;
     size_t pos_beg, pos_end;
-    bool check;
     double lambda_temp, phi_temp;
     
     
@@ -6313,10 +6312,8 @@ void ChartFrame::GetAllCoastLineData(void){
     
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
+        
     
-    
-    
-    check = true;
     i=0;
     while(!(file_coastline_data_blocked.value.eof())){
         
@@ -6339,9 +6336,7 @@ void ChartFrame::GetAllCoastLineData(void){
             (file_coastline_data_blocked.value).read(buffer, l);
             string data(buffer, l);
             
-            if(!(file_coastline_data_blocked.value)){
-                check = false;
-            }
+        
             
             //count how many datapoints are in data
             n = count(data.begin(), data.end(), ',');
@@ -6379,40 +6374,8 @@ void ChartFrame::GetAllCoastLineData(void){
         
     }
     
-    //    cout << "\nxxxxxx    i at the end of loop = " << i;
-    
-    
-    //    for(i=0; i<10; i++){
-    //        cout << "\ni = " << i << "\n";
-    //        for(j=0; j<data_x[i].size(); j++){
-    //            cout << "\t"<< data_x[i][j];
-    //        }
-    //
-    //    }
-    
-    //    for(i=data_x.size()-10; i<data_x.size(); i++){
-    //        cout << "\ni = " << i << "\n";
-    //        for(j=0; j<data_x[i].size(); j++){
-    //            cout << "\t"<< data_x[i][j];
-    //        }
-    //
-    //    }
-    
-    
-    
-    if(check){
-        
-        cout << "All characters read successfully\n";
-        
-    }else{
-        
-        cout << RED << "Error: not all characters could be read\n" << RESET;
-        
-    }
-    
     file_coastline_data_blocked.close(String(""));
     n_line.clear();
-    
     
 }
 

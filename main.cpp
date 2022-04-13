@@ -13,7 +13,7 @@
  notes: set parents to constructors of all frames that you defined
  - when you click on modify and then press reduce, the code should not insert a new item in listcontrol, but replace the old one
  - add instrumental error
- - revise Angle::to_string in such a way that all angles take the same space when printed out to string 
+ - revise Angle::to_string in such a way that all angles take the same space when printed out to string
  - add condition that an error message is prompted only if the GUI field is enabled not only to CheckLength, but also to all other Check* classes
  - all quantities in pixels must be relative to screen size, not absolute pixel size.
  - add lambert projection and 3D sphere with no projection
@@ -25,7 +25,6 @@
  - turn gamma_lambda into an unsigned int
  - add margins in chart in such a way that ylabels are not cut
  - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
- - fix 'Error: not all characters could be read'
  - create your own color class and a function to elegantly read colors from file.
 - add separator between recent items and non-recent items in BodyField->name
  - replaces multiple ifs with switch cases

@@ -1806,7 +1806,7 @@ public:
     wxStaticBitmap* image;
     TextBox* box;
     wxSlider* slider;
-    wxButton* button_up, *button_down, *button_left, *button_right;
+    wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int /*this stores the old value of slider*/value_slider_old;
@@ -1832,6 +1832,7 @@ public:
     template<class T> void MoveDown(T&);
     template<class T> void MoveLeft(T&);
     template<class T> void MoveRight(T&);
+    template<class T> void Reset(T&);
 
 };
 

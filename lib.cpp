@@ -7137,12 +7137,14 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_down = new wxButton(panel, wxID_ANY, wxT("S"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_left = new wxButton(panel, wxID_ANY, wxT("W"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_right = new wxButton(panel, wxID_ANY, wxT("E"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
+    button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
-    
+    button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
+
     
     
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -7174,7 +7176,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    
+    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     
@@ -7303,6 +7306,26 @@ template<class T> void ChartFrame::MoveRight(T& event){
     event.Skip(true);
     
 }
+
+//resets the chart to its starting configuration for x_min ... y_max
+template<class T> void ChartFrame::Reset(T& event){
+    
+    (draw_panel->x_min) = (draw_panel->x_min_0);
+    (draw_panel->x_max) = (draw_panel->x_max_0);
+    (draw_panel->y_min) = (draw_panel->y_min_0);
+    (draw_panel->y_max) = (draw_panel->y_max_0);
+    
+    draw_panel->Update_lambda_phi_min_max();
+        
+    draw_panel->Draw();
+    draw_panel->PaintNow();
+    UpdateSlider();
+    UpdateSliderLabel();
+    
+    event.Skip(true);
+    
+}
+
 
 void DrawPanel::SetIdling(bool b){
     

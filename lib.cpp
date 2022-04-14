@@ -8191,7 +8191,12 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         Update_lambda_phi_min_max();
         
         //put the slider back to the value before the scroll
+        
+        Draw();
+        PaintNow();
         parent->UpdateSlider();
+        parent->UpdateSliderLabel();
+
         
         //        set the wxControl, title and message for the functor print_error_message, and then call the functor
         (print_error_message->control) = NULL;

@@ -375,6 +375,46 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
     
 }
 
+
+//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
+void String::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    size_t pos;
+    File file;
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+            
+        //rewind the file pointer
+        file.value.clear();                 // clear fail and eof bits
+        file.value.seekg(0, std::ios::beg); // back to the start!
+        
+        do{
+            
+            line.clear();
+            getline(file.value, line);
+            
+        }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+        
+        
+   
+    
+    pos = line.find(" = ");
+    
+    //read the string after ' = ' until the end of line string and store it into value
+    value = line.substr(pos+3, line.size() - (pos+3)).c_str();
+    
+    print(name, prefix, cout);
+    
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    file.close(prefix);
+
+    
+}
+
+
 //writes to file the content of string after 'name = '
 void String::write_to_file(String name, File& file, String prefix){
     

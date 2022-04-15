@@ -9778,11 +9778,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //read color list from file_init
-    file_init.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading color list from file " << file_init.name.value << " ...\n" << RESET;
-    s.read_from_file(String("color list"), file_init, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    file_init.close(prefix);
+    s.read_from_file(String("color list"), String(path_file_init), String(""));
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     color_list.resize(count((s.value).begin(), (s.value).end(), '('));
@@ -9824,12 +9820,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     
-    //read color selected item
-    file_init.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading color selected item from file " << file_init.name.value << " ...\n" << RESET;
-    s.read_from_file(String("color selected item"), file_init, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    file_init.close(prefix);
+    //read color selected item from file
+    s.read_from_file(String("color selected item"), String(path_file_init), String(""));
     
     //get rid of everything that comes before and at '(' at the beginnign of s
     pos_end = (s.value).find("(");
@@ -11857,11 +11849,7 @@ void BodyField::read_recent_items(void){
     }
     
     //read the recently selected items from file_recent
-    file_recent.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading recent items of body field from file " << file_recent.name.value << " ...\n" << RESET;
-    s.read_from_file(String("body"), file_recent, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    file_recent.close(prefix);
+    s.read_from_file(String("body"), String(path_file_recent), String(""));
     
     recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
     for(i=0; i<recent_items.size(); i++){

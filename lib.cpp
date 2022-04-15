@@ -337,7 +337,7 @@ String::String(string s){
 }
 
 
-//reads from file the content after 'name = ' and writes it into this
+//reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
 void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     
     string line;

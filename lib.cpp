@@ -7791,7 +7791,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                     //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
                     
                     if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                       (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
                         
                         //sets the highlighted route to i, so as to use highlighted_route in other functions
                         ((parent->parent)->highlighted_route) = i;

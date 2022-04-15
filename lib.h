@@ -1835,6 +1835,8 @@ public:
     template<class T> void MoveRight(T&);
     template<class T> void Reset(T&);
 
+    void ArrowDown(wxKeyEvent&);
+    
 };
 
 class ChartPanel : public wxPanel{

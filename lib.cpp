@@ -7187,7 +7187,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
 
-    
+    this->Bind(wxEVT_KEY_DOWN, &ChartFrame::ArrowDown, this);
     
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
@@ -7321,6 +7321,29 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     draw_panel->Draw();
     draw_panel->PaintNow();
     
+    event.Skip(true);
+    
+}
+
+void ChartFrame::ArrowDown(wxKeyEvent& event){
+    
+    if ( (event.GetUnicodeKey()) == WXK_NONE ){
+        
+        // It's a special key, deal with all the known ones:
+        switch ( event.GetKeyCode() ){
+                
+            case WXK_LEFT:
+                MoveLeft<wxKeyEvent>(event);
+                break;
+                
+            case WXK_RIGHT:
+                MoveRight<wxKeyEvent>(event);
+                break;
+                
+        }
+        
+    }
+        
     event.Skip(true);
     
 }

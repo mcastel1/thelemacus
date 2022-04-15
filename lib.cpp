@@ -6531,14 +6531,16 @@ void DrawPanel::Render(wxDC&  dc){
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
             //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
 
-            GeoToDrawPanel((((plot->route_list)[i]).start), &p);
-            dc.DrawCircle(p, 4.0*thickness);
+            if(GeoToDrawPanel((((plot->route_list)[i]).start), &p)){
+                dc.DrawCircle(p, 4.0*thickness);
+            }
 
         }else{
             //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
 
-            GeoToDrawPanel((((plot->route_list)[i]).GP), &p);
-            dc.DrawCircle(p, 4.0*thickness);
+            if(GeoToDrawPanel((((plot->route_list)[i]).GP), &p)){
+                dc.DrawCircle(p, 4.0*thickness);
+            }
 
         }
         

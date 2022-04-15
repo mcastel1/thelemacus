@@ -8106,6 +8106,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //update the related wxListCtrls in ListFrame
                         ((plot->sight_list)[i_sight]).update_wxListCtrl(i_sight, parent->parent->listcontrol_sights);
                         ((plot->route_list)[i_route]).update_wxListCtrl(i_route, parent->parent->listcontrol_routes);
+                        
+                        //set the background color of the related sight to white
+                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour(i_sight, wxColour(255,255,255));
+
 
                         //print an info message
                         ((parent->print_error_message)->control) = NULL;

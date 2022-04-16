@@ -6498,6 +6498,9 @@ void ChartFrame::SetIdling(bool b){
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     int i, j;
+    String prefix;
+    
+    prefix = String("");
     
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
@@ -6509,6 +6512,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
+    l.read_from_file(String("l draw 3d"), String(path_file_init), prefix);
+    d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
+
     
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());

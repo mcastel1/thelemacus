@@ -1375,6 +1375,8 @@ public:
     void OnMouseDrag(wxMouseEvent&);
     void OnScroll(wxScrollEvent&);
     
+    void ArrowDown(wxKeyEvent&);
+    
     DECLARE_EVENT_TABLE()
 };
 
@@ -1835,7 +1837,6 @@ public:
     template<class T> void MoveRight(T&);
     template<class T> void Reset(T&);
 
-    void ArrowDown(wxKeyEvent&);
     
 };
 

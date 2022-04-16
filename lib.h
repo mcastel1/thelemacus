@@ -1353,6 +1353,7 @@ public:
     void SetIdling(bool);
     
     void Draw(void);
+    void Draw3d(void);
     void TabulateRoutes(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();

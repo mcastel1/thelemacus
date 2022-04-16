@@ -347,6 +347,8 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
     string line;
     size_t pos;
     
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << (file.name).value << " ...\n" << RESET;
+    
     if(search_entire_file){
         
         //rewind the file pointer
@@ -374,8 +376,9 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
     //read the string after ' = ' until the end of line string and store it into value
     value = line.substr(pos+3, line.size() - (pos+3)).c_str();
     
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
     print(name, prefix, cout);
-    
     
 }
 

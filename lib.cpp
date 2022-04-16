@@ -393,31 +393,31 @@ void String::read_from_file(String name, String filename, String prefix){
     file.set_name(filename);
     file.open(String("in"), prefix);
     cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-            
-        //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+    
+    do{
         
-        do{
-            
-            line.clear();
-            getline(file.value, line);
-            
-        }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+        line.clear();
+        getline(file.value, line);
         
-        
-   
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+    
+    
+    
     
     pos = line.find(" = ");
     
     //read the string after ' = ' until the end of line string and store it into value
     value = line.substr(pos+3, line.size() - (pos+3)).c_str();
-    
+
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
     print(name, prefix, cout);
     
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     file.close(prefix);
-
     
 }
 
@@ -667,6 +667,45 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, Str
     print(name, prefix, cout);
     
 }
+
+//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
+void Angle::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    size_t pos1, pos2, pos3;
+    File file;
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+    
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+    
+    
+    pos1 = line.find(" = ");
+    pos2 = line.find("° ");
+    pos3 = line.find("'");
+    
+    value = k*(stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str()) + stod(line.substr(pos2+2, pos3 - (pos2+2)))/60.0);
+    
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    
+    print(name, prefix, cout);
+    
+    file.close(prefix);
+    
+}
+
 
 //evaluates whether Length (*this) is larger than r
 bool Position::operator==(const Position& p){
@@ -3747,12 +3786,10 @@ Plot::Plot(Catalog* cata, String prefix){
     n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
         
     //read lambda_min, ...., phi_max from file_init
-    cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
     lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
     lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);
     phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix);
     phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     file_init.close(prefix);
     
@@ -3785,13 +3822,7 @@ void Plot::compute_crossings(String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    cout << prefix.value << YELLOW << "Reading minimal crossing angle between circles of equal altitude from file " << file_init.name.value << " ...\n" << RESET;
-    file_init.open(String("in"), new_prefix);
-    min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), file_init, true, new_prefix);
-    file_init.close(new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    
-    
+    min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), String(path_file_init), new_prefix);
     
     cout << prefix.value << "Computing crossings between routes #:";
     for(i=0; i<crossing_route_list.size(); i++){
@@ -4564,12 +4595,8 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     }
     H_s.enter(String("sextant altitude"), new_prefix);
     //read index error from init file
-    cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
     index_error.read_from_file(String("index error"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    cout << prefix.value << YELLOW << "Reading artificial horizon from file " << file_init.name.value << " ...\n" << RESET;
     artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
         height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
@@ -4580,9 +4607,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
         master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
         time = master_clock_date_and_hour;
         
-        cout << prefix.value << YELLOW << "Reading use of stopwatch from file " << file_init.name.value << " ...\n" << RESET;
         use_stopwatch.read_from_file(String("use of stopwatch"), file_init, true, new_prefix);
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
         
         if(use_stopwatch == Answer('y', new_prefix)){
             
@@ -4592,9 +4617,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
         }
         
         //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
-        cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
-        TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+         TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
         time+=TAI_minus_UTC;
         time.print(String("TAI date and hour of sight"), new_prefix, cout);
         
@@ -7116,19 +7139,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     value_slider_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
     
     //read relative_displacement from file_init
-    cout << prefix.value << YELLOW << "Reading relative displacement from file " << file_init.name.value << " ...\n" << RESET;
     relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     //read standard_thickness_over_length_screen from file_init
-    cout << prefix.value << YELLOW << "Reading standard thickness over length screen from file " << file_init.name.value << " ...\n" << RESET;
     standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), file_init, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     //read large_thickness_over_length_screen from file_init
-    cout << prefix.value << YELLOW << "Reading large thickness over length screen from file " << file_init.name.value << " ...\n" << RESET;
     large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), file_init, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     file_init.close(prefix);
     
@@ -8910,9 +8927,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     //First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
     if(sight_in==NULL){
         
-        cout << prefix.value << YELLOW << "Reading TAI - UTC at time of master-clock synchronization with UTC from file " << file_init.name.value << " ...\n" << RESET;
         (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
         
     }
     
@@ -8933,10 +8948,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //If sight_in = NULL, read index error from init file
     if(sight_in == NULL){
-        cout << prefix.value << YELLOW << "Reading index error from file " << file_init.name.value << " ...\n" << RESET;
         (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
         (sight->index_error).to_deg_min(&deg, &min);
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
     }
     index_error = new AngleField<SightFrame>(this, &(sight->index_error), String("+-"));
     index_error->set();

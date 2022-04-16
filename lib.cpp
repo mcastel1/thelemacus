@@ -633,6 +633,8 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, Str
     string line;
     size_t pos1, pos2, pos3;
     
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << (file.name).value << " ...\n" << RESET;
+    
     if(search_entire_file){
         
         //rewind the file pointer
@@ -659,6 +661,8 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, Str
     pos3 = line.find("'");
     
     value = k*(stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str()) + stod(line.substr(pos2+2, pos3 - (pos2+2)))/60.0);
+    
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     print(name, prefix, cout);
     

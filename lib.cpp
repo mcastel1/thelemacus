@@ -216,6 +216,8 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, Strin
     string line;
     size_t pos;
     
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << (file.name).value << " ...\n" << RESET;
+    
     if(search_entire_file){
         
         //rewind the file pointer
@@ -242,6 +244,8 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, Strin
     
     //read the string after ' = ' until the end of line string and store it into value
     value = stoi(line.substr(pos+3, line.size() - (pos+3)).c_str(), NULL);
+    
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     print(name, prefix, cout);
     
@@ -2929,11 +2933,9 @@ void Plot::print_to_kml(String prefix){
     file_kml.remove(prefix);
     
     //replace line with number of points for routes in plot_dummy.plt
-    cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
     plot_command.str("");
     command.str("");
     n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     
     
@@ -3729,22 +3731,14 @@ Plot::Plot(Catalog* cata, String prefix){
     file_init.open(String("in"), prefix);
     
     //read number of intervals for ticks from file_init
-    cout << prefix.value << YELLOW << "Reading number of intervals for ticks from file " << file_init.name.value << " ...\n" << RESET;
     n_intervals_ticks_preferred.read_from_file(String("preferred number of intervals for ticks"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     //read number of points for routes from file_init
-    cout << prefix.value << YELLOW << "Reading number of points for routes from file " << file_init.name.value << " ...\n" << RESET;
     n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    
     
     //read n_points_plot_coastline from file_init
-    cout << prefix.value << YELLOW << "Reading number of points coastline from file " << file_init.name.value << " ...\n" << RESET;
     n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    
-    
+        
     //read lambda_min, ...., phi_max from file_init
     cout << prefix.value << YELLOW << "Reading minimal and maximal latitude and longitude from file " << file_init.name.value << " ...\n" << RESET;
     lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
@@ -7112,9 +7106,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     file_init.open(String("in"), prefix);
     //read value_slider_max from file_init
-    cout << prefix.value << YELLOW << "Reading maximal zoom factor from file " << file_init.name.value << " ...\n" << RESET;
     value_slider_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     //read relative_displacement from file_init
     cout << prefix.value << YELLOW << "Reading relative displacement from file " << file_init.name.value << " ...\n" << RESET;

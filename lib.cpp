@@ -7113,6 +7113,23 @@ void DrawPanel::Draw(void){
     
 }
 
+void DrawPanel::Draw3d(void){
+
+    /*
+     
+     
+     (Cos(c)*(X*Cos(a) - Y*Sin(a)) - Cos(b)*(Y*Cos(a) + X*Sin(a))*Sin(c) + Z*Sin(b)*Sin(c))*
+     (1 - (l + X*Cos(b)*Cos(c)*Sin(a) - Z*Cos(c)*Sin(b) - Y*Sin(a)*Sin(c) + Cos(a)*(Y*Cos(b)*Cos(c) + X*Sin(c)))/
+     (d + l + X*Cos(b)*Cos(c)*Sin(a) - Z*Cos(c)*Sin(b) - Y*Sin(a)*Sin(c) + Cos(a)*(Y*Cos(b)*Cos(c) + X*Sin(c))));
+     
+     (Z*Cos(b) + (Y*Cos(a) + X*Sin(a))*Sin(b))*(1 - (l + X*Cos(b)*Cos(c)*Sin(a) - Z*Cos(c)*Sin(b) - Y*Sin(a)*Sin(c) + Cos(a)*(Y*Cos(b)*Cos(c) + X*Sin(c)))/
+     (d + l + X*Cos(b)*Cos(c)*Sin(a) - Z*Cos(c)*Sin(b) - Y*Sin(a)*Sin(c) + Cos(a)*(Y*Cos(b)*Cos(c) + X*Sin(c))));
+     
+     */
+     
+    
+}
+
 
 ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     

@@ -50,3 +50,5 @@ color list = (255,0,00) (0,255,0) (0,0,255) (255,128,0) (0,255,255) (255,192,203
 color selected item = (0,0,255)
 maximal zoom factor = 10000
 relative displacement = 0.1
+l draw 3d = 2.0
+d draw 3d = 1.0

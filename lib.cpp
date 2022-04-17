@@ -7197,7 +7197,7 @@ void DrawPanel::Draw_3D(void){
 
     }
     
-    width_chart_3d = (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/2;
+    width_chart_3d = (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
     height_chart_3d = width_chart_3d;
     
     width_plot_area_3d = width_chart_3d*length_plot_area_over_length_chart;

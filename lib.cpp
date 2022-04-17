@@ -11270,6 +11270,27 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
 }
 
+//constructor of a GraphicalTypeField object, based on the parent frame frame
+GraphicalTypeField::GraphicalTypeField(ChartFrame* parent_in){
+    
+    parent = parent_in;
+    
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+    name->SetValue("");
+    AdjustWidth(name);
+    //    name->Bind(wxEVT_KILL_FOCUS, *check);
+    
+    //    ok = false;
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
+    
+    
+}
+
 
 //constructor of a BodyField object, based on the parent frame frame
 BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
@@ -11304,6 +11325,8 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     
 }
+
+
 
 
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body

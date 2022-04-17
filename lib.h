@@ -1390,6 +1390,23 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
+class GraphicalTypeField{
+    
+public:
+    ChartFrame* parent;
+    
+    wxBoxSizer *sizer_h, *sizer_v;
+    wxArrayString  /*this is equal to a standard list of the available graphical types*/types;
+
+    //this is the wxComboBox with the name of the bodies
+    wxComboBox* name;
+
+    GraphicalTypeField(ChartFrame*);
+
+
+    
+};
+
 class BodyField{
     
 public:

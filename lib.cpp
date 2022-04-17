@@ -7373,7 +7373,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-
+    graphical_type->InsertIn<wxBoxSizer>(sizer_slider);
+    
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     
@@ -12210,6 +12211,13 @@ template<class T> void RouteTypeField::InsertIn(T* host){
     host->Add(sizer_v);
     
 }
+
+template<class T> void GraphicalTypeField::InsertIn(T* host){
+    
+    host->Add(sizer_v);
+    
+}
+
 
 
 OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){

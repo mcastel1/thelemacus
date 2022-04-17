@@ -6388,6 +6388,7 @@ void ChartFrame::GetCoastLineData(void){
 void ChartFrame::GetAllCoastLineData(void){
     
     File file_n_line, file_coastline_data_blocked;
+    Position p_temp;
     string data, line;
     stringstream ins;
     int i, j;
@@ -6469,6 +6470,10 @@ void ChartFrame::GetAllCoastLineData(void){
                 (data_x[i][j]).push_back(x_mercator(lambda_temp));
                 (data_y[i][j]).push_back(y_mercator(phi_temp));
                 
+                (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
+                (p_temp.phi).set(String(""), k*phi_temp, String(""));
+                data_p.push_back(p_temp);
+
                 pos_beg = pos_end+1;
                 pos_end = data.find(" ", pos_beg);
                 
@@ -7156,6 +7161,8 @@ void DrawPanel::Draw(void){
 
 void DrawPanel::Draw3d(void){
 
+    double lambda_temp, phi_temp;
+    
     /*
      
      

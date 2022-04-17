@@ -1820,6 +1820,8 @@ public:
     vector<double> x, y;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<float> > > data_x, data_y;
+    //a vector which contains the Positions of the coastline profiles of the entire world
+    vector<Position> data_p;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     Int value_slider_max;

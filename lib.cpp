@@ -6482,7 +6482,7 @@ void ChartFrame::GetAllCoastLineData(void){
                 
                 (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                 (p_temp.phi).set(String(""), k*phi_temp, String(""));
-                data_p.push_back(p_temp);
+                data_3d.push_back(p_temp);
 
                 pos_beg = pos_end+1;
                 pos_end = data.find(" ", pos_beg);
@@ -7169,7 +7169,7 @@ void DrawPanel::Draw(void){
     
 }
 
-void DrawPanel::Draw3d(void){
+void DrawPanel::Draw_3D(void){
     
     Angle a, b, c;
     unsigned int i;
@@ -7186,16 +7186,50 @@ void DrawPanel::Draw3d(void){
     //delete this later
     
     
-    for(i=0; i<(parent->data_p).size(); i++){
+    for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<(parent->data_3d).size(); i++){
         
 
-        ((d.value)*(cos(c)*cos(a - (((parent->data_p)[i]).lambda))*cos(((((parent->data_p)[i]).phi))) + sin(c)*(-(cos(b)*cos(((((parent->data_p)[i]).phi)))*sin(a - ((((parent->data_p)[i]).lambda)))) + sin(b)*sin(((((parent->data_p)[i]).phi))))))/
-        ((d.value) + (l.value) + cos(a - ((((parent->data_p)[i]).lambda)))*cos(((((parent->data_p)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_p)[i]).phi)))*sin(a - ((((parent->data_p)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_p)[i]).phi))));
+        (parent->x_3d).push_back( ((d.value)*(cos(c)*cos(a - (((parent->data_3d)[i]).lambda))*cos(((((parent->data_3d)[i]).phi))) + sin(c)*(-(cos(b)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda)))) + sin(b)*sin(((((parent->data_3d)[i]).phi))))))/
+        ((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
  
         
-        ((d.value)*(cos(((((parent->data_p)[i]).phi)))*sin(b)*sin(a - ((((parent->data_p)[i]).lambda))) + cos(b)*sin(((((parent->data_p)[i]).phi)))))/((d.value) + (l.value) + cos(a - ((((parent->data_p)[i]).lambda)))*cos(((((parent->data_p)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_p)[i]).phi)))*sin(a - ((((parent->data_p)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_p)[i]).phi))));
+        (parent->y_3d).push_back( ((d.value)*(cos(((((parent->data_3d)[i]).phi)))*sin(b)*sin(a - ((((parent->data_3d)[i]).lambda))) + cos(b)*sin(((((parent->data_3d)[i]).phi)))))/((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
 
     }
+    
+    width_chart_3d = (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/2;
+    height_chart_3d = width_chart_3d;
+    
+    width_plot_area_3d = width_chart_3d*length_plot_area_over_length_chart;
+    height_plot_area_3d = height_chart_3d*length_plot_area_over_length_chart;
+
+    
+    chart_3d = new XYChart(width_chart_3d, height_chart_3d);
+    chart_3d->setPlotArea(width_chart_3d*0.15, height_chart_3d*0.1,
+                   width_plot_area_3d,
+                   height_plot_area_3d,
+                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+
+    
+    //set the interval of the x axis, and disables the xticks with the last NoValue argument
+    (chart_3d->xAxis())->setLinearScale(-1.0, 1.0, 1.7E+308);
+    (chart_3d->yAxis())->setLinearScale(-1.0, 1.0, 1.7E+308);
+
+    // Set the axes line width to 3 pixels
+    (chart_3d->xAxis())->setWidth(2);
+    (chart_3d->yAxis())->setWidth(2);
+    
+    chart_3d->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
+ 
+    //free up resources
+    (parent->x).clear();
+    (parent->y).clear();
+    
+    //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
+    parent->CenterOnScreen();
+ 
+  
+    
 
     /*
      

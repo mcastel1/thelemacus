@@ -1325,7 +1325,7 @@ public:
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
     PrintErrorMessage<DrawPanel>* print_error_message;
-    XYChart* c;
+    XYChart *c, *chart_3d;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
     wxSlider* slider;
@@ -1344,7 +1344,7 @@ public:
     vector< vector< vector< wxPoint > > > points_route_list;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
-    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
+    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length, height_chart_3d, width_chart_3d, width_plot_area_3d, height_plot_area_3d;
     Plot* plot;
     MemBlock mem_block;
     wxMemoryInputStream * memory_input_stream;
@@ -1355,7 +1355,7 @@ public:
     void SetIdling(bool);
     
     void Draw(void);
-    void Draw3d(void);
+    void Draw_3D(void);
     void TabulateRoutes(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
@@ -1817,11 +1817,12 @@ public:
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int /*this stores the old value of slider*/value_slider_old;
-    vector<double> x, y;
+    //in these vectors, I store the 2d coordindates of the Mercator projection and of the 3D rendering, respectively
+    vector<double> x, y, x_3d, y_3d;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<float> > > data_x, data_y;
     //a vector which contains the Positions of the coastline profiles of the entire world
-    vector<Position> data_p;
+    vector<Position> data_3d;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     Int value_slider_max;

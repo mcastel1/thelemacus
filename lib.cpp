@@ -1,6 +1,16 @@
 #include "lib.h"
 
+inline double sin(Angle x){
+    
+    return sin(x.value);
+    
+}
 
+inline double cos(Angle x){
+    
+    return cos(x.value);
+    
+}
 
 bool String::operator==(const String& s){
     
@@ -7160,9 +7170,33 @@ void DrawPanel::Draw(void){
 }
 
 void DrawPanel::Draw3d(void){
-
-    double lambda_temp, phi_temp;
     
+    Angle a, b, c;
+    unsigned int i;
+
+    //delete this later
+    gsl_rng_env_setup();
+    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
+    gsl_rng_set(myran, 0);
+
+    
+    a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+    c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    //delete this later
+    
+    
+    for(i=0; i<(parent->data_p).size(); i++){
+        
+
+        ((d.value)*(cos(c)*cos(a - (((parent->data_p)[i]).lambda))*cos(((((parent->data_p)[i]).phi))) + sin(c)*(-(cos(b)*cos(((((parent->data_p)[i]).phi)))*sin(a - ((((parent->data_p)[i]).lambda)))) + sin(b)*sin(((((parent->data_p)[i]).phi))))))/
+        ((d.value) + (l.value) + cos(a - ((((parent->data_p)[i]).lambda)))*cos(((((parent->data_p)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_p)[i]).phi)))*sin(a - ((((parent->data_p)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_p)[i]).phi))));
+ 
+        
+        ((d.value)*(cos(((((parent->data_p)[i]).phi)))*sin(b)*sin(a - ((((parent->data_p)[i]).lambda))) + cos(b)*sin(((((parent->data_p)[i]).phi)))))/((d.value) + (l.value) + cos(a - ((((parent->data_p)[i]).lambda)))*cos(((((parent->data_p)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_p)[i]).phi)))*sin(a - ((((parent->data_p)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_p)[i]).phi))));
+
+    }
+
     /*
      
      

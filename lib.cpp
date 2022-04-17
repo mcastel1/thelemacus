@@ -7928,6 +7928,26 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
     
 }
 
+void DrawPanel::SetGraphicalType(wxCommandEvent& event){
+    
+    
+    
+    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+            
+            
+    }
+     
+    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+            
+            
+    }
+   
+    
+    event.Skip(true);
+
+}
+
+
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
 void DrawPanel::GetMouseGeoPosition(Position* p){
     
@@ -8038,8 +8058,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 //        cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
         
     }
-    
-    
     
     event.Skip(true);
     

@@ -11275,19 +11275,21 @@ GraphicalTypeField::GraphicalTypeField(ChartFrame* parent_in){
     
     parent = parent_in;
     
+    types.Clear();
+    types.Add(wxT("Mercator"));
+    types.Add(wxT("3D"));
+    types.Add(wxT("Lambert"));
+    
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     name->SetValue("");
     AdjustWidth(name);
     //    name->Bind(wxEVT_KILL_FOCUS, *check);
-    
-    //    ok = false;
-    
+
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name, 0, wxALIGN_CENTER);
-    
+    sizer_h->Add(name, 0, wxALIGN_CENTER);    
     
 }
 

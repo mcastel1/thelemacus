@@ -6922,7 +6922,7 @@ void DrawPanel::TabulateRoutes(void){
       
 }
 
-void DrawPanel::Draw(void){
+void DrawPanel::Draw_Mercator(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
     int i;
@@ -7304,7 +7304,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Draw_3D();
     
     
-    draw_panel->Draw();
+    draw_panel->Draw_Mercator();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
     (draw_panel->x_min_0) = (draw_panel->x_min);
@@ -7333,6 +7333,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     graphical_type = new GraphicalTypeField(this);
+    (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::SetGraphicalType, this);
 
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
@@ -7420,7 +7421,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
         draw_panel->Update_lambda_phi_min_max();
         
         //re-draw the chart
-        draw_panel->Draw();
+        draw_panel->Draw_Mercator();
         draw_panel->PaintNow();
         
     }
@@ -7446,7 +7447,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
         draw_panel->Update_lambda_phi_min_max();
         
         //re-draw the chart
-        draw_panel->Draw();
+        draw_panel->Draw_Mercator();
         draw_panel->PaintNow();
         
     }
@@ -7473,7 +7474,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     draw_panel->Update_x_y_min_max();
     
     //re-draw the chart
-    draw_panel->Draw();
+    draw_panel->Draw_Mercator();
     draw_panel->PaintNow();
     
     event.Skip(true);
@@ -7532,7 +7533,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
     draw_panel->Update_x_y_min_max();
     
     //re-draw the chart
-    draw_panel->Draw();
+    draw_panel->Draw_Mercator();
     draw_panel->PaintNow();
     
     event.Skip(true);
@@ -7549,7 +7550,7 @@ template<class T> void ChartFrame::Reset(T& event){
     
     draw_panel->Update_lambda_phi_min_max();
         
-    draw_panel->Draw();
+    draw_panel->Draw_Mercator();
     draw_panel->PaintNow();
     UpdateSlider();
     UpdateSliderLabel();
@@ -8094,7 +8095,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             Update_lambda_phi_min_max();
             
             //re-draw the chart
-            Draw();
+            Draw_Mercator();
             PaintNow();
             
             //set the wxControl, title and message for the functor print_error_message, and then call the functor
@@ -8236,7 +8237,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (((parent->parent)->plot)->phi_min).normalize();
             (((parent->parent)->plot)->phi_max).normalize();
             
-            Draw();
+            Draw_Mercator();
             PaintNow();
             
             parent->UpdateSlider();
@@ -8352,7 +8353,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     Update_lambda_phi_min_max();
                     
                     //re-draw the chart
-                    Draw();
+                    Draw_Mercator();
                     PaintNow();
                     
                 }
@@ -8451,7 +8452,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         
         //put the slider back to the value before the scroll
         
-        Draw();
+        Draw_Mercator();
         PaintNow();
         parent->UpdateSlider();
         parent->UpdateSliderLabel();
@@ -8473,7 +8474,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         //update parent->value_slider_old
         (parent->value_slider_old) = ((parent->slider)->GetValue());
         
-        Draw();
+        Draw_Mercator();
         PaintNow();
         parent->UpdateSliderLabel();
         
@@ -9657,7 +9658,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     position->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_positions));
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    ((parent->chart_frame)->draw_panel)->Draw();
+    ((parent->chart_frame)->draw_panel)->Draw_Mercator();
     ((parent->chart_frame)->draw_panel)->PaintNow();
     
     event.Skip(true);
@@ -9697,7 +9698,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     //    parent->plot->print(true, String(""), cout);
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    ((parent->chart_frame)->draw_panel)->Draw();
+    ((parent->chart_frame)->draw_panel)->Draw_Mercator();
     ((parent->chart_frame)->draw_panel)->PaintNow();
     
     
@@ -11265,7 +11266,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     parent->plot->print(true, String(""), cout);
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    ((parent->chart_frame)->draw_panel)->Draw();
+    ((parent->chart_frame)->draw_panel)->Draw_Mercator();
     ((parent->chart_frame)->draw_panel)->PaintNow();
     
     event.Skip(true);
@@ -11282,7 +11283,7 @@ GraphicalTypeField::GraphicalTypeField(ChartFrame* parent_in){
     types.Clear();
     types.Add(wxT("Mercator"));
     types.Add(wxT("3D"));
-    types.Add(wxT("Lambert"));
+//    types.Add(wxT("Lambert"));
     
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     name->SetValue("");

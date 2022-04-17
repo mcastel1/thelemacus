@@ -1360,7 +1360,7 @@ public:
 
     void SetIdling(bool);
     
-    void Draw(void);
+    void Draw_Mercator(void);
     void Draw_3D(void);
     void TabulateRoutes(void);
     void PaintEvent(wxPaintEvent & evt);
@@ -1376,7 +1376,6 @@ public:
     
     void Render(wxDC& dc);
     
-    // some useful events
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseLeftDown(wxMouseEvent&);
@@ -1384,6 +1383,8 @@ public:
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
     void OnScroll(wxScrollEvent&);
+    void SetGraphicalType(wxCommandEvent&);
+
     
     void ArrowDown(wxKeyEvent&);
     

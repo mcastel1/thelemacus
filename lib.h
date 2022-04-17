@@ -155,8 +155,12 @@ string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
 
 //maximal and minimal latitude of the points in file define path_file_coastlines
-#define max_lat (83.6664731)
+//#define max_lat (83.6664731)
+//#define min_lat (-78.7290778)
+//for debug
+#define max_lat (-69.5)
 #define min_lat (-78.7290778)
+//for debug
 #define floor_min_lat (floor(min_lat))
 #define floor_max_lat (floor(max_lat))
 #define ceil_min_lat (ceil(min_lat))
@@ -178,9 +182,12 @@ string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#
 #define path_file_app_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png"
 #define path_file_pencil_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"
 //#define path_file_coastlines "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_toy.csv"
-#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
-#define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
-
+//#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
+//#define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
+//for debug
+#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked_toy.csv"
+#define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked_toy.txt"
+//for debug
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 

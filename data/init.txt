@@ -4,16 +4,16 @@ plot coastline every = 10
 index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 #entire world
-minimal latitude = -77° 13.9'
-maximal latitude = 82° 53.2'
-minimal longitude = 175° 12.45'
-maximal longitude = 185° 0.01'
+#minimal latitude = -77° 13.9'
+#maximal latitude = 82° 53.2'
+#minimal longitude = 175° 12.45'
+#maximal longitude = 185° 0.01'
 #entire world
 #area for debug
-#minimal latitude = 320° 13.9'
-#maximal latitude = 40° 53.2'
-#minimal longitude = 325° 12.45'
-#maximal longitude = 182° 0.01'
+minimal latitude = -77° 13.9'
+maximal latitude = -71° 53.2'
+minimal longitude = 175° 12.45'
+maximal longitude = 185° 0.01'
 #area for debug
 #north of france
 #minimal longitude = 5° 47'

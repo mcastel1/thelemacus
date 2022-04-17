@@ -7159,13 +7159,11 @@ void DrawPanel::Draw3d(void){
     /*
      
      
-     (cos(c)*(X*cos(a) - Y*sin(a)) - cos(b)*(Y*cos(a) + X*sin(a))*sin(c) + Z*sin(b)*sin(c))*
-     (1.0 - (l + X*cos(b)*cos(c)*sin(a) - Z*cos(c)*sin(b) - Y*sin(a)*sin(c) + cos(a)*(Y*cos(b)*cos(c) + X*sin(c)))/
-     (d + l + X*cos(b)*cos(c)*sin(a) - Z*cos(c)*sin(b) - Y*sin(a)*sin(c) + cos(a)*(Y*cos(b)*cos(c) + X*sin(c))));
+     (d*(cos(c)*cos(a - \[Lambda])*cos(\[Phi]) + sin(c)*(-(cos(b)*cos(\[Phi])*sin(a - \[Lambda])) + sin(b)*sin(\[Phi]))))/
+        (d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) - cos(c)*sin(b)*sin(\[Phi]))
      
-     (Z*cos(b) + (Y*cos(a) + X*sin(a))*sin(b))*(1.0 - (l + X*cos(b)*cos(c)*sin(a) - Z*cos(c)*sin(b) - Y*sin(a)*sin(c) + cos(a)*(Y*cos(b)*cos(c) + X*sin(c)))/
-     (d + l + X*cos(b)*cos(c)*sin(a) - Z*cos(c)*sin(b) - Y*sin(a)*sin(c) + cos(a)*(Y*cos(b)*cos(c) + X*sin(c))));
      
+     (d*(cos(\[Phi])*sin(b)*sin(a - \[Lambda]) + cos(b)*sin(\[Phi])))/(d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) - cos(c)*sin(b)*sin(\[Phi]))
      */
      
     

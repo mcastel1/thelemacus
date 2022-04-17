@@ -7220,6 +7220,8 @@ void DrawPanel::Draw_3D(void){
     (chart_3d->yAxis())->setWidth(2);
     
     chart_3d->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
+    
+    chart_3d->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
  
     //free up resources
     (parent->x).clear();
@@ -7298,6 +7300,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //image
     wxBMPHandler *handler = new wxBMPHandler;
     wxImage::AddHandler(handler);
+    
+    draw_panel->Draw_3D();
     
     
     draw_panel->Draw();

@@ -7219,7 +7219,7 @@ void DrawPanel::Draw_3D(void){
     (chart_3d->xAxis())->setWidth(2);
     (chart_3d->yAxis())->setWidth(2);
     
-    chart_3d->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
+    chart_3d->addScatterLayer(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()), DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), "", Chart::CircleSymbol, 1, 000000);
     
     chart_3d->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
  

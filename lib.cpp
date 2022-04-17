@@ -7332,6 +7332,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_right = new wxButton(panel, wxID_ANY, wxT("E"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
+    graphical_type = new GraphicalTypeField(this);
+
+    
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
@@ -11289,7 +11292,7 @@ GraphicalTypeField::GraphicalTypeField(ChartFrame* parent_in){
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name, 0, wxALIGN_CENTER);    
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
     
 }
 

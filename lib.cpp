@@ -7221,7 +7221,7 @@ void DrawPanel::Draw_3D(void){
                     (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
                     );
     
-    height_chart_3d = ((parent->GetSize()).GetHeight());
+    height_chart_3d = ((parent->GetSize()).GetHeight()) * 0.75;
     width_chart_3d = height_chart_3d;
     
     
@@ -7230,11 +7230,11 @@ void DrawPanel::Draw_3D(void){
     height_plot_area_3d = height_chart_3d*length_plot_area_over_length_chart;
     
     chart = new XYChart(width_chart_3d, height_chart_3d);
-    chart->setPlotArea(0,
-                   0,
-                   width_plot_area_3d,
-                   height_plot_area_3d,
-                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    chart->setPlotArea((int)(((double)width_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
+                       (int)(((double)height_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
+                       width_plot_area_3d,
+                       height_plot_area_3d,
+                       -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);

@@ -6616,7 +6616,7 @@ void DrawPanel::PaintNow(){
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render(wxDC&  dc){
+void DrawPanel::Render_Mercator(wxDC&  dc){
     
     Angle lambda, phi;
     wxPoint p;
@@ -6635,213 +6635,211 @@ void DrawPanel::Render(wxDC&  dc){
     //draw coastlines
     dc.DrawBitmap(*bitmap_image, 0, 0);
     
-    //replace this if with a more elegant solution later.
-    if(Draw == (&DrawPanel::Draw_Mercator)){
+    
+    color_id = 0;
+    
+    //draw routes
+    for(i=0; i<(plot->route_list).size(); i++){
         
-        color_id = 0;
-        
-        //draw routes
-        for(i=0; i<(plot->route_list).size(); i++){
-            
-            if(i == ((parent->parent)->highlighted_route)){
-                thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
-            }else{
-                thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
-            }
-            
-            dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
-            
-            if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
-                //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
-                
-                if(GeoToDrawPanel((((plot->route_list)[i]).start), &p)){
-                    dc.DrawCircle(p, 4.0*thickness);
-                }
-                
-            }else{
-                //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
-                
-                if(GeoToDrawPanel((((plot->route_list)[i]).GP), &p)){
-                    dc.DrawCircle(p, 4.0*thickness);
-                }
-                
-            }
-            
-            
-            //run over the connected chunks of the i-th route
-            for(j=0; j<(points_route_list[i]).size(); j++){
-                
-                //                for(l=0; l<(points_route_list[i][j]).size(); l++){
-                //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
-                //                }
-                //
-                if((points_route_list[i][j]).size() > 1){
-                    //I need to add this consdition to make sure that the index j below lies in a valid range
-                    
-                    dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
-                    
-                }
-                
-            }
-            
+        if(i == ((parent->parent)->highlighted_route)){
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }else{
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }
         
-        //draw positions
-        for(i=0; i<(plot->position_list).size(); i++){
+        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        
+        if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
+            //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
             
-            if(i == ((parent->parent)->highlighted_position)){
-                thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
-            }else{
-                thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
-            }
-            
-            dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
-            
-            
-            if(GeoToDrawPanel((plot->position_list)[i], &p)){
-                //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
-                
+            if(GeoToDrawPanel((((plot->route_list)[i]).start), &p)){
                 dc.DrawCircle(p, 4.0*thickness);
             }
             
+        }else{
+            //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
             
-        }
-        
-        //   reset the pen to its default parameters
-        dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
-        
-        
-        if(selection_rectangle){
-            dc.DrawRectangle(
-                             position_start_selection.x - (position_draw_panel.x),
-                             position_start_selection.y - (position_draw_panel.y),
-                             (position_screen_now.x)-(position_start_selection.x),
-                             (position_screen_now.y)-(position_start_selection.y)
-                             );
-            
-        }
-        
-        //draw labels on the x axis
-        
-        
-        //starts the loop which draws the labels
-        for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), first_label = true; check_x(x_mercator(K*(lambda.value))); (lambda.value)-=k*delta_lambda){
-            
-            
-            x_dummy = x_mercator(K*(lambda.value));
-            if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
-            
-            
-            s.str("");
-            //        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
-            
-            if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
-                //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
-                s << lambda.deg_to_string(String("EW"), display_precision);
-            }else{
-                //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
-                
-                if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < delta_lambda/2.0){
-                    //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                    
-                    s << lambda.deg_to_string(String("EW"), display_precision);
-                    
-                }else{
-                    //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
-                    
-                    
-                    if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
-                        //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
-                        
-                        s << lambda.min_to_string(String("EW"), display_precision);
-                    }else{
-                        //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-                        
-                        if(first_label){
-                            s << lambda.to_string(String("EW"), display_precision, true);
-                        }else{
-                            s << lambda.min_to_string(String("EW"), display_precision);
-                        }
-                    }
-                    
-                }
-            }
-            wx_string = wxString(s.str().c_str());
-            
-            dc.DrawRotatedText(
-                               wx_string,
-                               (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
-                               (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
-                               + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                               0);
-            
-            first_label = false;
-            
-        }
-        
-        //draw labels on the y axis
-        //set first value of dummy
-        //    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
-        dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-        //    }else{
-        //        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-        //    }
-        //starts for loop which draws the ylabels
-        for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
-            
-            s.str("");
-            phi.set(String(""), k*dummy, String(""));
-            phi.normalize_pm_pi();
-            
-            if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
-                //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-                s << phi.deg_to_string(String("NS"), display_precision);
-            }else{
-                
-                //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
-                if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
-                    //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                    
-                    s << phi.deg_to_string(String("NS"), display_precision);
-                    
-                }else{
-                    //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-                    
-                    //                s << phi.min_to_string(String("NS"), display_precision);
-                    
-                    if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
-                        //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
-                        
-                        s << phi.min_to_string(String("NS"), display_precision);
-                    }else{
-                        //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-                        
-                        if(first_label){
-                            s << phi.to_string(String("NS"), display_precision, false);
-                        }else{
-                            s << phi.min_to_string(String("NS"), display_precision);
-                        }
-                    }
-                    
-                    
-                }
-                
+            if(GeoToDrawPanel((((plot->route_list)[i]).GP), &p)){
+                dc.DrawCircle(p, 4.0*thickness);
             }
             
-            wx_string = wxString(s.str().c_str());
+        }
+        
+        
+        //run over the connected chunks of the i-th route
+        for(j=0; j<(points_route_list[i]).size(); j++){
             
-            dc.DrawRotatedText(
-                               wx_string,
-                               (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
-                               ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                               (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
-                               0);
-            
-            first_label = false;
+            //                for(l=0; l<(points_route_list[i][j]).size(); l++){
+            //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
+            //                }
+            //
+            if((points_route_list[i][j]).size() > 1){
+                //I need to add this consdition to make sure that the index j below lies in a valid range
+                
+                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
+                
+            }
             
         }
         
     }
+    
+    //draw positions
+    for(i=0; i<(plot->position_list).size(); i++){
+        
+        if(i == ((parent->parent)->highlighted_position)){
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }else{
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }
+        
+        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        
+        
+        if(GeoToDrawPanel((plot->position_list)[i], &p)){
+            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+            
+            dc.DrawCircle(p, 4.0*thickness);
+        }
+        
+        
+    }
+    
+    //   reset the pen to its default parameters
+    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+    
+    
+    if(selection_rectangle){
+        dc.DrawRectangle(
+                         position_start_selection.x - (position_draw_panel.x),
+                         position_start_selection.y - (position_draw_panel.y),
+                         (position_screen_now.x)-(position_start_selection.x),
+                         (position_screen_now.y)-(position_start_selection.y)
+                         );
+        
+    }
+    
+    //draw labels on the x axis
+    
+    
+    //starts the loop which draws the labels
+    for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), first_label = true; check_x(x_mercator(K*(lambda.value))); (lambda.value)-=k*delta_lambda){
+        
+        
+        x_dummy = x_mercator(K*(lambda.value));
+        if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
+        
+        
+        s.str("");
+        //        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
+        
+        if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
+            //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
+            s << lambda.deg_to_string(String("EW"), display_precision);
+        }else{
+            //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
+            
+            if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < delta_lambda/2.0){
+                //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                
+                s << lambda.deg_to_string(String("EW"), display_precision);
+                
+            }else{
+                //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
+                
+                
+                if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
+                    //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    
+                    s << lambda.min_to_string(String("EW"), display_precision);
+                }else{
+                    //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    
+                    if(first_label){
+                        s << lambda.to_string(String("EW"), display_precision, true);
+                    }else{
+                        s << lambda.min_to_string(String("EW"), display_precision);
+                    }
+                }
+                
+            }
+        }
+        wx_string = wxString(s.str().c_str());
+        
+        dc.DrawRotatedText(
+                           wx_string,
+                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                           (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
+                           + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                           0);
+        
+        first_label = false;
+        
+    }
+    
+    //draw labels on the y axis
+    //set first value of dummy
+    //    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
+    dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+    //    }else{
+    //        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+    //    }
+    //starts for loop which draws the ylabels
+    for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
+        
+        s.str("");
+        phi.set(String(""), k*dummy, String(""));
+        phi.normalize_pm_pi();
+        
+        if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
+            //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+            s << phi.deg_to_string(String("NS"), display_precision);
+        }else{
+            
+            //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
+            if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
+                //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                
+                s << phi.deg_to_string(String("NS"), display_precision);
+                
+            }else{
+                //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                
+                //                s << phi.min_to_string(String("NS"), display_precision);
+                
+                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    
+                    s << phi.min_to_string(String("NS"), display_precision);
+                }else{
+                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    
+                    if(first_label){
+                        s << phi.to_string(String("NS"), display_precision, false);
+                    }else{
+                        s << phi.min_to_string(String("NS"), display_precision);
+                    }
+                }
+                
+                
+            }
+            
+        }
+        
+        wx_string = wxString(s.str().c_str());
+        
+        dc.DrawRotatedText(
+                           wx_string,
+                           (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
+                           ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                           (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
+                           0);
+        
+        first_label = false;
+        
+    }
+    
+    
     
 }
 
@@ -7304,8 +7302,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //image
     wxBMPHandler *handler = new wxBMPHandler;
     wxImage::AddHandler(handler);
-
-
+    
+    
     //    draw_panel->Draw_3D();
     //when the ChartFrame is initialized, I choose to draw the Mercator chart
     (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
@@ -7957,7 +7955,7 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     event.Skip(true);
     
 }
- 
+
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
 void DrawPanel::GetMouseGeoPosition(Position* p){

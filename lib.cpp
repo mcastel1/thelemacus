@@ -7927,7 +7927,7 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
     
     
 }
-
+ 
 void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     
     

@@ -6609,17 +6609,13 @@ void DrawPanel::PaintNow(){
     wxClientDC dc(this);
     //    Render(dc);
     (this->*Render)(dc);
-
+    
     
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
-    this->SetMinSize(wxSize(c->getWidth(), c->getHeight()));
-    //        (parent->panel)->SetMinSize(wxSize(
-    //                                 (c->getWidth()) + (((parent->slider)->GetSize()).GetWidth()),
-    //                                 (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
-    //                                 ));
+    this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
     parent->SetMinSize(wxSize(
-                              (c->getWidth()) + ((parent->slider)->GetSize().GetWidth()),
-                              (c->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
+                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()),
+                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight())
                               ));
     parent->SetSizerAndFit(parent->sizer_v);
     
@@ -6856,7 +6852,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC&  dc){
-        
+    
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     dc.SetBrush(brush);
     
@@ -6865,7 +6861,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     
     
-     
+    
     
 }
 
@@ -7004,17 +7000,17 @@ void DrawPanel::Draw_Mercator(void){
     //draw coastlines
     
     // Create a XYChart object with the appropriate size
-    c = new XYChart(width_chart, height_chart);
+    chart = new XYChart(width_chart, height_chart);
     //create the plot area of c with the appropriate size
-    c->setPlotArea(width_chart*0.15, height_chart*0.1,
+    chart->setPlotArea(width_chart*0.15, height_chart*0.1,
                    width_plot_area,
                    height_plot_area,
                    -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint((c->getPlotArea())->getLeftX(), (c->getPlotArea())->getTopY());
+    position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
     //stores in to size_plot_area the size of the plot area
-    size_plot_area = wxSize((c->getPlotArea())->getWidth(), (c->getPlotArea())->getHeight());
+    size_plot_area = wxSize((chart->getPlotArea())->getWidth(), (chart->getPlotArea())->getHeight());
     
     
     //set meridians
@@ -7058,7 +7054,7 @@ void DrawPanel::Draw_Mercator(void){
         
         if(check_x(x_dummy)){
             
-            c->addLine(
+            chart->addLine(
                        (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
                        (position_plot_area.y),
                        (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
@@ -7075,7 +7071,7 @@ void DrawPanel::Draw_Mercator(void){
                 if(check_x(x_dummy + k*(((double)i)/10.0)/60.0)){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
-                    c->addLine(
+                    chart->addLine(
                                (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
                                (position_plot_area.y) + height_plot_area,
                                (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
@@ -7129,7 +7125,7 @@ void DrawPanel::Draw_Mercator(void){
         
         if((y_dummy >= y_min) && (y_dummy <= y_max)){
             
-            c->addLine(
+            chart->addLine(
                        (position_plot_area.x),
                        (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
                        (position_plot_area.x) + width_plot_area,
@@ -7146,7 +7142,7 @@ void DrawPanel::Draw_Mercator(void){
                 if((phi + (((double)i)/10.0)*1.0/60.0 >= (K*(((plot->phi_min).value)))) && (phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((plot->phi_max).value))))){
                     //set custom-made minor yticks every tenths (i/10.0) of arcminutes (60.0)
                     
-                    c->addLine(
+                    chart->addLine(
                                (position_plot_area.x),
                                (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
                                (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
@@ -7164,18 +7160,18 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (c->xAxis())->setLinearScale(x_min, x_min+x_span, 1.7E+308);
-    (c->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
+    (chart->xAxis())->setLinearScale(x_min, x_min+x_span, 1.7E+308);
+    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
     // Set the axes line width to 3 pixels
-    c->xAxis()->setWidth(2);
-    c->yAxis()->setWidth(2);
+    chart->xAxis()->setWidth(2);
+    chart->yAxis()->setWidth(2);
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    c->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
+    chart->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
     
-    //    c->makeChart(path_file_chart);
-    mem_block = (c->makeChart(Chart::BMP));
+    //    chart->makeChart(path_file_chart);
+    mem_block = (chart->makeChart(Chart::BMP));
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
@@ -7184,6 +7180,7 @@ void DrawPanel::Draw_Mercator(void){
     //free up resources
     (parent->x).clear();
     (parent->y).clear();
+    delete chart; 
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
@@ -7225,37 +7222,36 @@ void DrawPanel::Draw_3D(void){
                     (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
                     );
     
-     height_chart_3d = ((parent->GetSize()).GetHeight());
+    height_chart_3d = ((parent->GetSize()).GetHeight());
     width_chart_3d = height_chart_3d;
     
-
+    
     
     width_plot_area_3d = width_chart_3d*length_plot_area_over_length_chart;
     height_plot_area_3d = height_chart_3d*length_plot_area_over_length_chart;
     
-    
-    chart_3d = new XYChart(width_chart_3d, height_chart_3d);
-    chart_3d->setPlotArea(0,
-                          0,
-                          width_plot_area_3d,
-                          height_plot_area_3d,
-                          -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    chart = new XYChart(width_chart_3d, height_chart_3d);
+    chart->setPlotArea(0,
+                   0,
+                   width_plot_area_3d,
+                   height_plot_area_3d,
+                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart_3d->xAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
-    (chart_3d->yAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
+    (chart->xAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
+    (chart->yAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
     
     // Set the axes line width to 3 pixels
-    (chart_3d->xAxis())->setWidth(2);
-    (chart_3d->yAxis())->setWidth(2);
+    (chart->xAxis())->setWidth(2);
+    (chart->yAxis())->setWidth(2);
     
-    chart_3d->addScatterLayer(
-                              DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
-                              DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
-                              "", Chart::CircleSymbol, 1, 000000);
+    chart->addScatterLayer(
+                       DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
+                       DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
+                       "", Chart::CircleSymbol, 1, 000000);
     
-    //    chart_3d->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
-    mem_block = (chart_3d->makeChart(Chart::BMP));
+    //    chart->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
+    mem_block = (chart->makeChart(Chart::BMP));
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
@@ -7264,10 +7260,12 @@ void DrawPanel::Draw_3D(void){
     //free up resources
     (parent->x).clear();
     (parent->y).clear();
+    delete chart;
+
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
-
+    
     /*
      
      
@@ -7389,12 +7387,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
     
-    if((draw_panel->Draw) == (&DrawPanel::Draw_Mercator)){
-        draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
-    }
-    if((draw_panel->Draw) == (&DrawPanel::Draw_3D)){
-        draw_panel->SetMinSize(wxSize((draw_panel->chart_3d)->getWidth(),(draw_panel->chart_3d)->getHeight()));
-    }
+    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
+    
     
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -7978,7 +7972,7 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
         
         Draw = &DrawPanel::Draw_Mercator;
         Render = &DrawPanel::Render_Mercator;
-
+        
     }
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
@@ -7986,14 +7980,14 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
         
         Draw = &DrawPanel::Draw_3D;
         Render = &DrawPanel::Render_3D;
-
+        
         
     }
     
-    //change thsis: this should be called only if name->GetValue has changed. 
+    //change thsis: this should be called only if name->GetValue has changed.
     (this->*Draw)();
     PaintNow();
-
+    
     event.Skip(true);
     
 }
@@ -8279,7 +8273,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
             
             //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
-            delete c;
+            delete chart;
             //I convert all the angles to the format between -pi and pi, so I can sort them numerically
             (p_start.phi).normalize_pm_pi();
             (p_start.lambda).normalize_pm_pi();

@@ -1336,7 +1336,7 @@ public:
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
     PrintErrorMessage<DrawPanel>* print_error_message;
-    XYChart *c, *chart_3d;
+    XYChart *chart;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
     wxSlider* slider;

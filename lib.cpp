@@ -7333,7 +7333,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     graphical_type = new GraphicalTypeField(this);
-    (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::SetGraphicalType, this);
+    (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::SetGraphicalType, draw_panel);
 
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
@@ -7929,7 +7929,6 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
 }
 
 void DrawPanel::SetGraphicalType(wxCommandEvent& event){
-    
     
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){

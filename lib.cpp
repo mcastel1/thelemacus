@@ -6291,7 +6291,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 
 
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most
-void ChartFrame::GetCoastLineData(void){
+void ChartFrame::GetCoastLineData_Mercator(void){
     
     
     //    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
@@ -6960,7 +6960,7 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //fetch the data on the region that I am about to plot from the data files.
-    parent->GetCoastLineData();
+    parent->GetCoastLineData_Mercator();
     
     //    cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
     

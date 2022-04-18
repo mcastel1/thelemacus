@@ -1864,7 +1864,7 @@ public:
     
 
     
-    void GetCoastLineData(void);
+    void GetCoastLineData_Mercator(void);
     void GetAllCoastLineData(void);
     void UpdateSlider(void);
     bool ZoomFactor(double, double*);

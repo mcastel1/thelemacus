@@ -6580,7 +6580,7 @@ END_EVENT_TABLE()
 void DrawPanel::PaintEvent(wxPaintEvent & evt){
     
     wxPaintDC dc(this);
-    Render(dc);
+    (this->*Render)(dc);
 }
 
 /*
@@ -6598,7 +6598,9 @@ void DrawPanel::PaintEvent(wxPaintEvent & evt){
 void DrawPanel::PaintNow(){
     
     wxClientDC dc(this);
-    Render(dc);
+    //    Render(dc);
+    (this->*Render)(dc);
+
     
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(wxSize(c->getWidth(), c->getHeight()));
@@ -7935,23 +7937,26 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
-        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator.
+        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for Render.
         
         Draw = &DrawPanel::Draw_Mercator;
-        
+        Render = &DrawPanel::Render_Mercator;
+
     }
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
-        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D.
+        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for REnder.
         
         Draw = &DrawPanel::Draw_3D;
+        Render = &DrawPanel::Render_3D;
+
         
     }
     
-    //    (DrawPanel::*Draw)();
+    //change thsis: this should be called only if name->GetValue has changed. 
     (this->*Draw)();
-    //    (DrawPanel::*Draw)();
-    
+    PaintNow();
+
     event.Skip(true);
     
 }

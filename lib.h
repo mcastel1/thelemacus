@@ -70,7 +70,7 @@ class RouteFrame;
 class DrawPanel;
 //these two types allow me to define a pointer to a member-class function in class DrawPanel
 typedef  void (DrawPanel::*DrawPanelDrawFunction)(void);
-typedef  void (DrawPanel::*DrawPanelRenderFunction)(void);
+typedef  void (DrawPanel::*DrawPanelRenderFunction)(wxDC&);
 
 //class CheckBody;
 //struct CheckLimb;

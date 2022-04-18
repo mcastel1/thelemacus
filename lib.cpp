@@ -7304,10 +7304,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //image
     wxBMPHandler *handler = new wxBMPHandler;
     wxImage::AddHandler(handler);
-    
-    draw_panel->Draw_3D();
-    
-    
+
+
+    //    draw_panel->Draw_3D();
+    //when the ChartFrame is initialized, I choose to draw the Mercator chart
+    (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
     draw_panel->Draw_Mercator();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
@@ -11314,7 +11315,7 @@ GraphicalTypeField::GraphicalTypeField(ChartFrame* parent_in){
     //    types.Add(wxT("Lambert"));
     
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
-    name->SetValue("");
+    name->SetValue(types[0]);
     AdjustWidth(name);
     //    name->Bind(wxEVT_KILL_FOCUS, *check);
     

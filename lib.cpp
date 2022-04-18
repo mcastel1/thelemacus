@@ -7232,7 +7232,7 @@ void DrawPanel::Draw_3D(void){
     chart = new XYChart(width_chart_3d, height_chart_3d);
     chart->setPlotArea((int)(((double)width_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
                        (int)(((double)height_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
-                       width_plot_area_3d,
+                        width_plot_area_3d,
                        height_plot_area_3d,
                        Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
     

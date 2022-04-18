@@ -7239,7 +7239,7 @@ void DrawPanel::Draw_3D(void){
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
     (chart->yAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
-    
+     
     // Set the axes line width to 3 pixels
     (chart->xAxis())->setColors(Chart::Transparent);
     (chart->yAxis())->setColors(Chart::Transparent);

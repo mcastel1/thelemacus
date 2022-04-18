@@ -6845,6 +6845,22 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
 }
 
+//This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
+void DrawPanel::Render_3D(wxDC&  dc){
+        
+    wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
+    dc.SetBrush(brush);
+    
+    //draw coastlines
+    dc.DrawBitmap(*bitmap_image, 0, 0);
+    
+    
+    
+    
+    
+}
+
+
 //this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
 void DrawPanel::TabulateRoutes(void){
     
@@ -6918,6 +6934,7 @@ void DrawPanel::TabulateRoutes(void){
     
 }
 
+//draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){
     
     double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
@@ -7165,6 +7182,7 @@ void DrawPanel::Draw_Mercator(void){
     
 }
 
+//this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
     Angle a, b, c;
@@ -7201,15 +7219,11 @@ void DrawPanel::Draw_3D(void){
     
     
     chart_3d = new XYChart(width_chart_3d, height_chart_3d);
-    chart_3d->setPlotArea(width_chart_3d*0.15, height_chart_3d*0.1,
+    chart_3d->setPlotArea(0,
+                          0,
                           width_plot_area_3d,
                           height_plot_area_3d,
                           -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
-    
-    position_plot_area = wxPoint((chart_3d->getPlotArea())->getLeftX(), (chart_3d->getPlotArea())->getTopY());
-    size_plot_area = wxSize((chart_3d->getPlotArea())->getWidth(), (chart_3d->getPlotArea())->getHeight());
-    
-    
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart_3d->xAxis())->setLinearScale(-1.0, 1.0, 1.7E+308);
@@ -7219,7 +7233,10 @@ void DrawPanel::Draw_3D(void){
     (chart_3d->xAxis())->setWidth(2);
     (chart_3d->yAxis())->setWidth(2);
     
-    chart_3d->addScatterLayer(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()), DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), "", Chart::CircleSymbol, 1, 000000);
+    chart_3d->addScatterLayer(
+                              DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
+                              DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
+                              "", Chart::CircleSymbol, 1, 000000);
     
     //    chart_3d->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
     mem_block = (chart_3d->makeChart(Chart::BMP));
@@ -7234,9 +7251,7 @@ void DrawPanel::Draw_3D(void){
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
-    
-    
-    
+
     /*
      
      

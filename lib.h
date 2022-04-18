@@ -1381,8 +1381,9 @@ public:
     void Update_x_y_min_max(void);
     bool check_x(double);
     
-    void Render_Mercator(wxDC& dc);
-    
+    void Render_Mercator(wxDC&);
+    void Render_3D(wxDC&);
+
     void GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseLeftDown(wxMouseEvent&);

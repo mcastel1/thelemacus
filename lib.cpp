@@ -7957,7 +7957,7 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     event.Skip(true);
     
 }
-
+ 
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
 void DrawPanel::GetMouseGeoPosition(Position* p){

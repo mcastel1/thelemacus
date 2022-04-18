@@ -6375,7 +6375,7 @@ void ChartFrame::GetCoastLineData(void){
                 x_temp = data_x[i - floor_min_lat][j % 360][l];
                 y_temp = data_y[i - floor_min_lat][j % 360][l];
                 
-                //I write points in data to outfile_selected_coastline_data in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
                     
                     if((draw_panel->check_x(x_temp)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
@@ -7191,7 +7191,7 @@ void DrawPanel::Draw_Mercator(void){
 void DrawPanel::Draw_3D(void){
     
     Angle a, b, c;
-    unsigned int i;
+    unsigned int i, every;
     
     //delete this later
     gsl_rng_env_setup();
@@ -7205,14 +7205,20 @@ void DrawPanel::Draw_3D(void){
     //delete this later
     
     
+    every = (unsigned int)(((double)((parent->data_3d).size()))/((double)((((parent->parent)->plot)->n_points_plot_coastline).value)));
+    if(every == 0){every = 1;}
+        
     for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<(parent->data_3d).size(); i++){
         
-        
-        (parent->x_3d).push_back( ((d.value)*(cos(c)*cos(a - (((parent->data_3d)[i]).lambda))*cos(((((parent->data_3d)[i]).phi))) + sin(c)*(-(cos(b)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda)))) + sin(b)*sin(((((parent->data_3d)[i]).phi))))))/
-                                 ((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
-        
-        
-        (parent->y_3d).push_back( ((d.value)*(cos(((((parent->data_3d)[i]).phi)))*sin(b)*sin(a - ((((parent->data_3d)[i]).lambda))) + cos(b)*sin(((((parent->data_3d)[i]).phi)))))/((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
+        //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+        if((i % every) == 0){
+            
+            (parent->x_3d).push_back( ((d.value)*(cos(c)*cos(a - (((parent->data_3d)[i]).lambda))*cos(((((parent->data_3d)[i]).phi))) + sin(c)*(-(cos(b)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda)))) + sin(b)*sin(((((parent->data_3d)[i]).phi))))))/
+                                     ((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
+            
+            (parent->y_3d).push_back( ((d.value)*(cos(((((parent->data_3d)[i]).phi)))*sin(b)*sin(a - ((((parent->data_3d)[i]).lambda))) + cos(b)*sin(((((parent->data_3d)[i]).phi)))))/((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
+            
+        }
         
     }
     

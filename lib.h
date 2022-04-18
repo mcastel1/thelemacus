@@ -68,7 +68,7 @@ class PlotFrame;
 class ChartPanel;
 class RouteFrame;
 class DrawPanel;
-typedef  void (DrawPanel::*DrawPanelMemberFunction)(void);
+typedef  void (DrawPanel::*DrawPanelDrawFunction)(void);
 
 //class CheckBody;
 //struct CheckLimb;
@@ -1361,7 +1361,7 @@ public:
  
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs.
 //    void (DrawPanel::*Draw)(void);
-    DrawPanelMemberFunction Draw;
+    DrawPanelDrawFunction Draw;
     
     void SetIdling(bool);
     void Draw_Mercator(void);

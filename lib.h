@@ -67,6 +67,8 @@ class ChartFrame;
 class PlotFrame;
 class ChartPanel;
 class RouteFrame;
+class DrawPanel;
+typedef  void (DrawPanel::*DrawPanelMemberFunction)(void);
 
 //class CheckBody;
 //struct CheckLimb;
@@ -1357,9 +1359,9 @@ public:
     wxBitmap* bitmap_image; 
 
  
-    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs. 
-    void (DrawPanel::*Draw)(void);
-
+    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs.
+//    void (DrawPanel::*Draw)(void);
+    DrawPanelMemberFunction Draw;
     
     void SetIdling(bool);
     void Draw_Mercator(void);

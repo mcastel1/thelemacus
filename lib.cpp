@@ -7944,7 +7944,10 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
         Draw = &DrawPanel::Draw_3D;
             
     }
-   
+    
+//    (DrawPanel::*Draw)();
+    (this->*Draw)();
+//    (DrawPanel::*Draw)();
     
     event.Skip(true);
 

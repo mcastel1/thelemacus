@@ -7177,7 +7177,7 @@ void DrawPanel::Draw_3D(void){
     //delete this later
     gsl_rng_env_setup();
     gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
-    gsl_rng_set(myran, 0);
+    gsl_rng_set(myran, 1);
 
      
     a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));

@@ -7225,8 +7225,7 @@ void DrawPanel::Draw_3D(void){
                     (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
                     );
     
-    //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-    height_chart_3d = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
+     height_chart_3d = ((parent->GetSize()).GetHeight());
     width_chart_3d = height_chart_3d;
     
 
@@ -7390,7 +7389,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
     
-    draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
+    if((draw_panel->Draw) == (&DrawPanel::Draw_Mercator)){
+        draw_panel->SetMinSize(wxSize((draw_panel->c)->getWidth(),(draw_panel->c)->getHeight()));
+    }
+    if((draw_panel->Draw) == (&DrawPanel::Draw_3D)){
+        draw_panel->SetMinSize(wxSize((draw_panel->chart_3d)->getWidth(),(draw_panel->chart_3d)->getHeight()));
+    }
     
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

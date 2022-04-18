@@ -7220,8 +7220,16 @@ void DrawPanel::Draw_3D(void){
         
     }
     
-    width_chart_3d = (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
-    height_chart_3d = width_chart_3d;
+    parent->SetSize(
+                    (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()),
+                    (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
+                    );
+    
+    //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
+    height_chart_3d = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
+    width_chart_3d = height_chart_3d;
+    
+
     
     width_plot_area_3d = width_chart_3d*length_plot_area_over_length_chart;
     height_plot_area_3d = height_chart_3d*length_plot_area_over_length_chart;

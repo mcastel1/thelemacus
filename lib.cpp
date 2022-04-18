@@ -253,6 +253,15 @@ void Double::print(String name, String prefix, ostream& ostr){
     
 }
 
+Double Double::operator+ (const Double& x){
+    
+    Double s;
+    
+    (s.value) = value + (x.value);
+    
+    return s;
+    
+}
 
 
 
@@ -7226,8 +7235,8 @@ void DrawPanel::Draw_3D(void){
                           -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart_3d->xAxis())->setLinearScale(-1.0, 1.0, 1.7E+308);
-    (chart_3d->yAxis())->setLinearScale(-1.0, 1.0, 1.7E+308);
+    (chart_3d->xAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
+    (chart_3d->yAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
     
     // Set the axes line width to 3 pixels
     (chart_3d->xAxis())->setWidth(2);

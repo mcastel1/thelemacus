@@ -223,7 +223,7 @@ void Double::read_from_file(String name, String filename, String prefix){
     file.set_name(filename);
     file.open(String("in"), prefix);
     cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-        
+    
     //rewind the file pointer
     file.value.clear();                 // clear fail and eof bits
     file.value.seekg(0, std::ios::beg); // back to the start!
@@ -422,7 +422,7 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
     value = line.substr(pos+3, line.size() - (pos+3)).c_str();
     
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     print(name, prefix, cout);
     
 }
@@ -457,9 +457,9 @@ void String::read_from_file(String name, String filename, String prefix){
     
     //read the string after ' = ' until the end of line string and store it into value
     value = line.substr(pos+3, line.size() - (pos+3)).c_str();
-
+    
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
+    
     print(name, prefix, cout);
     
     file.close(prefix);
@@ -723,7 +723,7 @@ void Angle::read_from_file(String name, String filename, String prefix){
     file.set_name(filename);
     file.open(String("in"), prefix);
     cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-
+    
     
     //rewind the file pointer
     file.value.clear();                 // clear fail and eof bits
@@ -868,7 +868,7 @@ void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     listcontrol->InsertItem(item);
     
     update_wxListCtrl(i, listcontrol);
-
+    
 }
 
 //updates all the values in the GUI fields of item #i of listcontrol with the relative values of the non-GUI Position this
@@ -916,13 +916,13 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     listcontrol->InsertItem(item);
     
     update_wxListCtrl(i, listcontrol);
-        
+    
 }
 
 void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     unsigned int j;
- 
+    
     
     j=0;
     //set type column: I write the extended type names, not the short ones 'l', 'o' and 'c'
@@ -2770,7 +2770,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     unsigned int j;
     Time time_UTC;
-
+    
     
     j=0;
     //set body column
@@ -3829,7 +3829,7 @@ Plot::Plot(Catalog* cata, String prefix){
     
     //read n_points_plot_coastline from file_init
     n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
-        
+    
     //read lambda_min, ...., phi_max from file_init
     lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
     lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);
@@ -4662,7 +4662,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
         }
         
         //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
-         TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
+        TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
         time+=TAI_minus_UTC;
         time.print(String("TAI date and hour of sight"), new_prefix, cout);
         
@@ -5762,12 +5762,12 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces){
     min << x;
     
     
-
+    
     output << deg.str().c_str() << "° " << min.str().c_str() << "'";
-
+    
     if(mode != String("")){
         //in this case, I print out the angle in the format >=-180° and <180°
-                
+        
         if(mode == String("NS")){
             //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
             
@@ -6433,7 +6433,7 @@ void ChartFrame::GetAllCoastLineData(void){
     
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
-        
+    
     
     i=0;
     while(!(file_coastline_data_blocked.value.eof())){
@@ -6457,7 +6457,7 @@ void ChartFrame::GetAllCoastLineData(void){
             (file_coastline_data_blocked.value).read(buffer, l);
             string data(buffer, l);
             
-        
+            
             
             //count how many datapoints are in data
             n = count(data.begin(), data.end(), ',');
@@ -6483,7 +6483,7 @@ void ChartFrame::GetAllCoastLineData(void){
                 (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                 (p_temp.phi).set(String(""), k*phi_temp, String(""));
                 data_3d.push_back(p_temp);
-
+                
                 pos_beg = pos_end+1;
                 pos_end = data.find(" ", pos_beg);
                 
@@ -6529,7 +6529,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     l.read_from_file(String("l draw 3d"), String(path_file_init), prefix);
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
-
+    
     
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());
@@ -6635,217 +6635,213 @@ void DrawPanel::Render(wxDC&  dc){
     //draw coastlines
     dc.DrawBitmap(*bitmap_image, 0, 0);
     
-    color_id = 0;
-    
-    //draw routes
-    for(i=0; i<(plot->route_list).size(); i++){
+    //replace this if with a more elegant solution later.
+    if(Draw == (&DrawPanel::Draw_Mercator)){
         
-        if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
-        }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        color_id = 0;
+        
+        //draw routes
+        for(i=0; i<(plot->route_list).size(); i++){
+            
+            if(i == ((parent->parent)->highlighted_route)){
+                thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            }else{
+                thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            }
+            
+            dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+            
+            if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
+                //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
+                
+                if(GeoToDrawPanel((((plot->route_list)[i]).start), &p)){
+                    dc.DrawCircle(p, 4.0*thickness);
+                }
+                
+            }else{
+                //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
+                
+                if(GeoToDrawPanel((((plot->route_list)[i]).GP), &p)){
+                    dc.DrawCircle(p, 4.0*thickness);
+                }
+                
+            }
+            
+            
+            //run over the connected chunks of the i-th route
+            for(j=0; j<(points_route_list[i]).size(); j++){
+                
+                //                for(l=0; l<(points_route_list[i][j]).size(); l++){
+                //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
+                //                }
+                //
+                if((points_route_list[i][j]).size() > 1){
+                    //I need to add this consdition to make sure that the index j below lies in a valid range
+                    
+                    dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
+                    
+                }
+                
+            }
+            
         }
         
-        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
-        
-        if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
-            //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
-
-            if(GeoToDrawPanel((((plot->route_list)[i]).start), &p)){
+        //draw positions
+        for(i=0; i<(plot->position_list).size(); i++){
+            
+            if(i == ((parent->parent)->highlighted_position)){
+                thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            }else{
+                thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            }
+            
+            dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+            
+            
+            if(GeoToDrawPanel((plot->position_list)[i], &p)){
+                //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+                
                 dc.DrawCircle(p, 4.0*thickness);
             }
-
-        }else{
-            //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
-
-            if(GeoToDrawPanel((((plot->route_list)[i]).GP), &p)){
-                dc.DrawCircle(p, 4.0*thickness);
-            }
-
-        }
-        
-
-        //run over the connected chunks of the i-th route
-        for(j=0; j<(points_route_list[i]).size(); j++){
             
-            //                for(l=0; l<(points_route_list[i][j]).size(); l++){
-            //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
-            //                }
-            //
-            if((points_route_list[i][j]).size() > 1){
-                //I need to add this consdition to make sure that the index j below lies in a valid range
-                
-                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
-                
-            }
             
         }
         
-    }
-    
-    //draw positions
-    for(i=0; i<(plot->position_list).size(); i++){
+        //   reset the pen to its default parameters
+        dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
         
-        if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
-        }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        
+        if(selection_rectangle){
+            dc.DrawRectangle(
+                             position_start_selection.x - (position_draw_panel.x),
+                             position_start_selection.y - (position_draw_panel.y),
+                             (position_screen_now.x)-(position_start_selection.x),
+                             (position_screen_now.y)-(position_start_selection.y)
+                             );
+            
         }
         
-        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        //draw labels on the x axis
         
         
-        if(GeoToDrawPanel((plot->position_list)[i], &p)){
-            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+        //starts the loop which draws the labels
+        for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), first_label = true; check_x(x_mercator(K*(lambda.value))); (lambda.value)-=k*delta_lambda){
             
-            dc.DrawCircle(p, 4.0*thickness);
-        }
-        
-        
-    }
-    
-    //   reset the pen to its default parameters
-    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
-    
-    
-    if(selection_rectangle){
-        dc.DrawRectangle(
-                         position_start_selection.x - (position_draw_panel.x),
-                         position_start_selection.y - (position_draw_panel.y),
-                         (position_screen_now.x)-(position_start_selection.x),
-                         (position_screen_now.y)-(position_start_selection.y)
-                         );
-        
-    }
-    
-    //draw labels on the x axis
-    
-    
-    //starts the loop which draws the labels
-    for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), first_label = true; check_x(x_mercator(K*(lambda.value))); (lambda.value)-=k*delta_lambda){
-        
-        
-        x_dummy = x_mercator(K*(lambda.value));
-        if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
-        
-        
-        s.str("");
-        //        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
-        
-        if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
-            //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
-            s << lambda.deg_to_string(String("EW"), display_precision);
-        }else{
-            //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
             
-            if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < delta_lambda/2.0){
-                //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                
+            x_dummy = x_mercator(K*(lambda.value));
+            if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
+            
+            
+            s.str("");
+            //        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
+            
+            if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
+                //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
                 s << lambda.deg_to_string(String("EW"), display_precision);
-                
             }else{
-                //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
+                //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
                 
-                
-                if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
-                    //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < delta_lambda/2.0){
+                    //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                     
-                    s << lambda.min_to_string(String("EW"), display_precision);
+                    s << lambda.deg_to_string(String("EW"), display_precision);
+                    
                 }else{
-                    //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
                     
-                    if(first_label){
-                        s << lambda.to_string(String("EW"), display_precision, true);
-                    }else{
+                    
+                    if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
+                        //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                        
                         s << lambda.min_to_string(String("EW"), display_precision);
-                    }
-                }
-                
-            }
-        }
-        wx_string = wxString(s.str().c_str());
-        
-        dc.DrawRotatedText(
-                           wx_string,
-                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
-                           (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
-                           + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                           0);
-        
-        first_label = false;
-        
-    }
-    
-    //draw labels on the y axis
-    //set first value of dummy
-    //    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
-    dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-    //    }else{
-    //        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-    //    }
-    //starts for loop which draws the ylabels
-    for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
-        
-        s.str("");
-        phi.set(String(""), k*dummy, String(""));
-        phi.normalize_pm_pi();
-        
-        if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
-            //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-            s << phi.deg_to_string(String("NS"), display_precision);
-        }else{
-            
-            //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
-            if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
-                //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                
-                s << phi.deg_to_string(String("NS"), display_precision);
-                
-            }else{
-                //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-                
-                //                s << phi.min_to_string(String("NS"), display_precision);
-                
-                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
-                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
-                    
-                    s << phi.min_to_string(String("NS"), display_precision);
-                }else{
-                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-                    
-                    if(first_label){
-                        s << phi.to_string(String("NS"), display_precision, false);
                     }else{
-                        s << phi.min_to_string(String("NS"), display_precision);
+                        //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                        
+                        if(first_label){
+                            s << lambda.to_string(String("EW"), display_precision, true);
+                        }else{
+                            s << lambda.min_to_string(String("EW"), display_precision);
+                        }
                     }
+                    
                 }
-                
-                
             }
+            wx_string = wxString(s.str().c_str());
+            
+            dc.DrawRotatedText(
+                               wx_string,
+                               (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                               (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
+                               + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                               0);
+            
+            first_label = false;
             
         }
         
-        wx_string = wxString(s.str().c_str());
-        
-        dc.DrawRotatedText(
-                           wx_string,
-                           (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
-                           ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                           (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
-                           0);
-        
-        first_label = false;
+        //draw labels on the y axis
+        //set first value of dummy
+        //    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
+        dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+        //    }else{
+        //        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+        //    }
+        //starts for loop which draws the ylabels
+        for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
+            
+            s.str("");
+            phi.set(String(""), k*dummy, String(""));
+            phi.normalize_pm_pi();
+            
+            if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
+                //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+                s << phi.deg_to_string(String("NS"), display_precision);
+            }else{
+                
+                //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
+                if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
+                    //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                    
+                    s << phi.deg_to_string(String("NS"), display_precision);
+                    
+                }else{
+                    //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                    
+                    //                s << phi.min_to_string(String("NS"), display_precision);
+                    
+                    if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+                        //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                        
+                        s << phi.min_to_string(String("NS"), display_precision);
+                    }else{
+                        //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                        
+                        if(first_label){
+                            s << phi.to_string(String("NS"), display_precision, false);
+                        }else{
+                            s << phi.min_to_string(String("NS"), display_precision);
+                        }
+                    }
+                    
+                    
+                }
+                
+            }
+            
+            wx_string = wxString(s.str().c_str());
+            
+            dc.DrawRotatedText(
+                               wx_string,
+                               (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
+                               ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                               (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
+                               0);
+            
+            first_label = false;
+            
+        }
         
     }
-    
-    /*
-     Position geo;
-     wxPoint screen;
-     cout << "A position_screen_now = " << (position_screen_now.x) << " " << (position_screen_now.y) << "\n";
-     GetMouseGeoPosition(&geo);
-     GeoToScreen(geo, &screen);
-     dc.DrawCircle(screen.x - position_draw_panel.x, screen.y - position_draw_panel.y, 10);
-     */
     
 }
 
@@ -6868,7 +6864,7 @@ void DrawPanel::TabulateRoutes(void){
         
     }
     
-
+    
     //compute the points of  routes
     //run over all routes
     for(i=0; i<(plot->route_list).size(); i++){
@@ -6919,7 +6915,7 @@ void DrawPanel::TabulateRoutes(void){
         }
         
     }
-      
+    
 }
 
 void DrawPanel::Draw_Mercator(void){
@@ -6930,7 +6926,7 @@ void DrawPanel::Draw_Mercator(void){
     //the total length of each Route
     Angle dummy;
     //this is a pointer to parent->parent->plot, created only to shorten the code
-     String prefix, new_prefix;
+    String prefix, new_prefix;
     
     
     
@@ -6939,7 +6935,7 @@ void DrawPanel::Draw_Mercator(void){
     new_prefix = prefix.append(String("\t"));
     
     
- 
+    
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData();
@@ -7022,7 +7018,7 @@ void DrawPanel::Draw_Mercator(void){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
-
+    
     
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
@@ -7098,7 +7094,7 @@ void DrawPanel::Draw_Mercator(void){
         if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
     }
-  
+    
     
     
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
@@ -7173,13 +7169,13 @@ void DrawPanel::Draw_3D(void){
     
     Angle a, b, c;
     unsigned int i;
-
+    
     //delete this later
     gsl_rng_env_setup();
     gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
     gsl_rng_set(myran, 1);
-
-     
+    
+    
     a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
     b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
     c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
@@ -7188,13 +7184,13 @@ void DrawPanel::Draw_3D(void){
     
     for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<(parent->data_3d).size(); i++){
         
-
+        
         (parent->x_3d).push_back( ((d.value)*(cos(c)*cos(a - (((parent->data_3d)[i]).lambda))*cos(((((parent->data_3d)[i]).phi))) + sin(c)*(-(cos(b)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda)))) + sin(b)*sin(((((parent->data_3d)[i]).phi))))))/
-        ((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
- 
+                                 ((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
+        
         
         (parent->y_3d).push_back( ((d.value)*(cos(((((parent->data_3d)[i]).phi)))*sin(b)*sin(a - ((((parent->data_3d)[i]).lambda))) + cos(b)*sin(((((parent->data_3d)[i]).phi)))))/((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
-
+        
     }
     
     width_chart_3d = (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
@@ -7202,47 +7198,55 @@ void DrawPanel::Draw_3D(void){
     
     width_plot_area_3d = width_chart_3d*length_plot_area_over_length_chart;
     height_plot_area_3d = height_chart_3d*length_plot_area_over_length_chart;
-
+    
     
     chart_3d = new XYChart(width_chart_3d, height_chart_3d);
     chart_3d->setPlotArea(width_chart_3d*0.15, height_chart_3d*0.1,
-                   width_plot_area_3d,
-                   height_plot_area_3d,
-                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
-
+                          width_plot_area_3d,
+                          height_plot_area_3d,
+                          -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    
+    position_plot_area = wxPoint((chart_3d->getPlotArea())->getLeftX(), (chart_3d->getPlotArea())->getTopY());
+    size_plot_area = wxSize((chart_3d->getPlotArea())->getWidth(), (chart_3d->getPlotArea())->getHeight());
+    
+    
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart_3d->xAxis())->setLinearScale(-1.0, 1.0, 1.7E+308);
     (chart_3d->yAxis())->setLinearScale(-1.0, 1.0, 1.7E+308);
-
+    
     // Set the axes line width to 3 pixels
     (chart_3d->xAxis())->setWidth(2);
     (chart_3d->yAxis())->setWidth(2);
     
     chart_3d->addScatterLayer(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()), DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), "", Chart::CircleSymbol, 1, 000000);
     
-    chart_3d->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
- 
+    //    chart_3d->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
+    mem_block = (chart_3d->makeChart(Chart::BMP));
+    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
+    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
+    
+    //    TabulateRoutes();
+    
     //free up resources
     (parent->x).clear();
     (parent->y).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
- 
-  
     
-
+    
+    
     /*
      
      
      (d*(cos(c)*cos(a - \[Lambda])*cos(\[Phi]) + sin(c)*(-(cos(b)*cos(\[Phi])*sin(a - \[Lambda])) + sin(b)*sin(\[Phi]))))/
-        (d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) - cos(c)*sin(b)*sin(\[Phi]))
+     (d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) - cos(c)*sin(b)*sin(\[Phi]))
      
      
      (d*(cos(\[Phi])*sin(b)*sin(a - \[Lambda]) + cos(b)*sin(\[Phi])))/(d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) - cos(c)*sin(b)*sin(\[Phi]))
      */
-     
+    
     
 }
 
@@ -7334,14 +7338,14 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     graphical_type = new GraphicalTypeField(this);
     (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::SetGraphicalType, draw_panel);
-
+    
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
-
+    
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -7511,8 +7515,8 @@ void DrawPanel::ArrowDown(wxKeyEvent& event){
         }
         
     }
-        
-//    event.Skip(true);
+    
+    //    event.Skip(true);
     
 }
 
@@ -7549,7 +7553,7 @@ template<class T> void ChartFrame::Reset(T& event){
     (draw_panel->y_max) = (draw_panel->y_max_0);
     
     draw_panel->Update_lambda_phi_min_max();
-        
+    
     draw_panel->Draw_Mercator();
     draw_panel->PaintNow();
     UpdateSlider();
@@ -7927,30 +7931,30 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
     
     
 }
- 
+
 void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
         //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator.
-          
+        
         Draw = &DrawPanel::Draw_Mercator;
-            
+        
     }
-     
+    
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
         //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D.
-
+        
         Draw = &DrawPanel::Draw_3D;
-            
+        
     }
     
-//    (DrawPanel::*Draw)();
+    //    (DrawPanel::*Draw)();
     (this->*Draw)();
-//    (DrawPanel::*Draw)();
+    //    (DrawPanel::*Draw)();
     
     event.Skip(true);
-
+    
 }
 
 
@@ -8032,7 +8036,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             
         }
         
-//        cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
+        //        cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
         
         
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
@@ -8061,7 +8065,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         PaintNow();
         
         
-//        cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
+        //        cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
         
     }
     
@@ -8127,7 +8131,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             (print_error_message->title) = String("Chart outside boundaries!");
             (print_error_message->message) = String("The chart must lie within the boundaries.");
             (*print_error_message)();
-
+            
             
         }
         
@@ -8135,20 +8139,20 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         //in this case, I am dragging a route or position
         
         if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.x)) ) &&
-            ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )))){
+              ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )))){
             //in this case, drag_end_position lies out the plot area
             
             if(((parent->parent)->highlighted_route) != -1){
                 //in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
                 
                 if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
-
+                    
                     (((plot->route_list)[((parent->parent)->highlighted_route)]).GP) = route_position_start_drag;
-
+                    
                 }else{
                     
                     (((plot->route_list)[((parent->parent)->highlighted_route)]).start) = route_position_start_drag;
-
+                    
                 }
                 
                 TabulateRoutes();
@@ -8179,7 +8183,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->title) = String("Position outside plot area!");
                 (print_error_message->message) = String("The position must lie within the plot area.");
                 (*print_error_message)();
-
+                
                 
             }
             
@@ -8324,8 +8328,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         //set the background color of the related sight to white
                         ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour(i_sight, wxColour(255,255,255));
-
-
+                        
+                        
                         //print an info message
                         ((parent->print_error_message)->control) = NULL;
                         ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
@@ -8334,11 +8338,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                     }
                     
-
+                    
                 }else{
                     
                     route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).start);
-
+                    
                 }
                 
                 
@@ -8349,9 +8353,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         mouse_dragging = true;
         
         SetCursor(wxCURSOR_HAND);
-    
+        
         position_now_drag = wxGetMousePosition();
-    
+        
         
         if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.x)) ) &&
            ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )){
@@ -8359,7 +8363,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             
             if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){
                 //in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
-
+                
                 double delta_x, delta_y;
                 
                 delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
@@ -8367,7 +8371,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 
                 if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
                     //in this case, the drag operation does not end out of the min and max latitude contained in the data files
-
+                    
                     //update x_min, ..., y_max according to the drag.
                     x_min -= delta_x;
                     x_max -= delta_x;
@@ -8398,8 +8402,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
                         DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
-
-
+                        
+                        
                     }else{
                         
                         DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
@@ -8409,7 +8413,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //update the data of the Route under consideration in listcontrol_routes
                     ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
-         
+                    
                     
                     //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the chart
                     TabulateRoutes();
@@ -8480,7 +8484,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         PaintNow();
         parent->UpdateSlider();
         parent->UpdateSliderLabel();
-
+        
         
         //        set the wxControl, title and message for the functor print_error_message, and then call the functor
         (print_error_message->control) = NULL;
@@ -11307,13 +11311,13 @@ GraphicalTypeField::GraphicalTypeField(ChartFrame* parent_in){
     types.Clear();
     types.Add(wxT("Mercator"));
     types.Add(wxT("3D"));
-//    types.Add(wxT("Lambert"));
+    //    types.Add(wxT("Lambert"));
     
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     name->SetValue("");
     AdjustWidth(name);
     //    name->Bind(wxEVT_KILL_FOCUS, *check);
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

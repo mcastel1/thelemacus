@@ -7932,12 +7932,16 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
-            
+        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator.
+          
+        Draw = &DrawPanel::Draw_Mercator;
             
     }
      
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
-            
+        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D.
+
+        Draw = &DrawPanel::Draw_3D;
             
     }
    

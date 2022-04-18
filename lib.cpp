@@ -7331,8 +7331,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //    draw_panel->Draw_3D();
-    //when the ChartFrame is initialized, I choose to draw the Mercator chart
+    //when the ChartFrame is initialized, I choose to draw the Mercator chart: I set the two following pointers accordingly
     (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
+    (draw_panel->Render) = (&DrawPanel::Render_Mercator);
     draw_panel->Draw_Mercator();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0

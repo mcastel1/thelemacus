@@ -7241,8 +7241,8 @@ void DrawPanel::Draw_3D(void){
     (chart->yAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
     
     // Set the axes line width to 3 pixels
-    (chart->xAxis())->setWidth(2);
-    (chart->yAxis())->setWidth(2);
+    (chart->xAxis())->setColors(Chart::Transparent);
+    (chart->yAxis())->setColors(Chart::Transparent);
     
     chart->addScatterLayer(
                        DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),

@@ -1337,7 +1337,7 @@ public:
     ChartFrame* parent;
     PrintErrorMessage<DrawPanel>* print_error_message;
     XYChart *chart;
-    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
+    wxPoint position_draw_panel, position_plot_area, position_plot_area_3d, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
     wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */

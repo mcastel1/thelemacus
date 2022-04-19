@@ -7327,13 +7327,16 @@ void DrawPanel::Draw_3D(void){
     
     width_plot_area_3d = width_chart_3d*length_plot_area_over_length_chart;
     height_plot_area_3d = height_chart_3d*length_plot_area_over_length_chart;
-    
+
     chart = new XYChart(width_chart_3d, height_chart_3d);
     chart->setPlotArea((int)(((double)width_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
                        (int)(((double)height_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
                        width_plot_area_3d,
                        height_plot_area_3d,
                        Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
+    
+    position_plot_area_3d = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
+
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
@@ -8080,8 +8083,8 @@ void DrawPanel::GeoTo3DDrawPanel(Position q, wxPoint *p){
     
     GeoTo3D(q, &x_temp, &y_temp);
     
-    (p->x) = (position_plot_area.x) + (1.0+x_temp/x_max)*(width_plot_area/2);
-    (p->y) = (position_plot_area.y) + (1.0-y_temp/y_max)*(height_plot_area/2);
+    (p->x) = (position_plot_area_3d.x) + (1.0+x_temp/x_max)*(width_plot_area_3d/2);
+    (p->y) = (position_plot_area_3d.y) + (1.0-y_temp/y_max)*(height_plot_area_3d/2);
     
     
 }

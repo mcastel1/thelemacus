@@ -6305,6 +6305,12 @@ void ChartFrame::GetCoastLineData_3D(void){
     (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
     (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
     //delete this later
+    
+    //sets the values of x_min ... y_max for the 3D projection
+    (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
+    (draw_panel->x_max) = -(draw_panel->x_min);
+    (draw_panel->y_min) = (draw_panel->x_min);
+    (draw_panel->y_max) = -(draw_panel->y_min);
 
     
     every = (unsigned int)(((double)(data_3d.size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
@@ -7330,8 +7336,8 @@ void DrawPanel::Draw_3D(void){
                        Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart->xAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
-    (chart->yAxis())->setLinearScale(-(1.0 - (l.value)/((l+d).value)), 1.0 - (l.value)/((l+d).value), 1.7E+308);
+    (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
+    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
      
     // Set the axes line width to 3 pixels
     (chart->xAxis())->setColors(Chart::Transparent);
@@ -8032,7 +8038,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
-//this function converts the geographic position q into the  position p with respect to the origin of the draw panel
+//this function converts the geographic position q into the  position p with respect to the origin of the mercator draw panel
 bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
     
     double x_temp, y_temp;
@@ -8066,6 +8072,24 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
     
     
 }
+
+//this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel
+bool DrawPanel::GeoTo3DDrawPanel(Position q, wxPoint *p){
+    
+    double x_temp, y_temp;
+    
+    GeoTo3D(q, &x_temp, &y_temp);
+    
+    
+    
+    
+    (p->x) = (position_plot_area.x) + (1.0+x_temp/x_max)*(width_plot_area/2);
+    (p->y) = (position_plot_area.y) + (1.0-y_temp/y_max)*(height_plot_area/2);
+    
+    
+    
+}
+
 
 void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     

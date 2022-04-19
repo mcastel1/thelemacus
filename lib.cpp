@@ -6898,7 +6898,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC&  dc){
     
-    int i, j, color_id;
+    int i, color_id;
     double thickness;
     wxPoint p;
     
@@ -6938,19 +6938,10 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         
         
-        //run over the connected chunks of the i-th route
-        for(j=0; j<(points_route_list[i]).size(); j++){
+        if((points_route_list[i][0]).size() > 1){
+            //I need to add this consdition to make sure that the index j below lies in a valid range
             
-            //                for(l=0; l<(points_route_list[i][j]).size(); l++){
-            //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
-            //                }
-            //
-            if((points_route_list[i][j]).size() > 1){
-                //I need to add this consdition to make sure that the index j below lies in a valid range
-                
-                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
-                
-            }
+            dc.DrawSpline((points_route_list[i][0]).size(), (points_route_list[i][0]).data());
             
         }
         

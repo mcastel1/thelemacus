@@ -6892,11 +6892,88 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC&  dc){
     
+    int i, j, color_id;
+    double thickness;
+    wxPoint p;
+    
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     dc.SetBrush(brush);
     
     //draw coastlines
     dc.DrawBitmap(*bitmap_image, 0, 0);
+    
+    color_id = 0;
+    
+    //draw routes
+    for(i=0; i<(plot->route_list).size(); i++){
+        
+        if(i == ((parent->parent)->highlighted_route)){
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }else{
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }
+        
+        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        
+        if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
+            //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
+            
+            if(GeoTo3DDrawPanel((((plot->route_list)[i]).start), &p)){
+                dc.DrawCircle(p, 4.0*thickness);
+            }
+            
+        }else{
+            //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
+            
+            if(GeoTo3DDrawPanel((((plot->route_list)[i]).GP), &p)){
+                dc.DrawCircle(p, 4.0*thickness);
+            }
+            
+        }
+        
+        
+        //run over the connected chunks of the i-th route
+        for(j=0; j<(points_route_list[i]).size(); j++){
+            
+            //                for(l=0; l<(points_route_list[i][j]).size(); l++){
+            //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
+            //                }
+            //
+            if((points_route_list[i][j]).size() > 1){
+                //I need to add this consdition to make sure that the index j below lies in a valid range
+                
+                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
+                
+            }
+            
+        }
+        
+    }
+    
+    //draw positions
+    for(i=0; i<(plot->position_list).size(); i++){
+        
+        if(i == ((parent->parent)->highlighted_position)){
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }else{
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+        }
+        
+        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        
+        
+        if(GeoTo3DDrawPanel((plot->position_list)[i], &p)){
+            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+            
+            dc.DrawCircle(p, 4.0*thickness);
+        }
+        
+        
+    }
+    
+    //   reset the pen to its default parameters
+    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+  
     
     
     

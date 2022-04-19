@@ -1863,8 +1863,8 @@ public:
     Double  /*the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight*/ relative_displacement, /*the default thickness of the line with which routes are drawn*/ standard_thickness_over_length_screen, /*the thickness with which highlighted routes are drawn*/ large_thickness_over_length_screen;
     
 
-    
     void GetCoastLineData_Mercator(void);
+    void GetCoastLineData_3D(void);
     void GetAllCoastLineData(void);
     void UpdateSlider(void);
     bool ZoomFactor(double, double*);

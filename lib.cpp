@@ -6290,6 +6290,46 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 }
 
 
+
+void ChartFrame::GetCoastLineData_3D(void){
+
+    unsigned int i, every;
+    Angle a, b, c;
+
+    //delete this later
+    gsl_rng_env_setup();
+    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
+    gsl_rng_set(myran, 1);
+    
+    
+    a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+    c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    //delete this later
+
+    
+    every = (unsigned int)(((double)(data_3d.size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
+    if(every == 0){every = 1;}
+        
+    for(x_3d.clear(), y_3d.clear(), i=0; i<data_3d.size(); i++){
+        
+        //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+        if((i % every) == 0){
+            
+            x_3d.push_back( (((draw_panel->d).value)*(cos(c)*cos(a - ((data_3d[i]).lambda))*cos((((data_3d[i]).phi))) + sin(c)*(-(cos(b)*cos((((data_3d[i]).phi)))*sin(a - (((data_3d[i]).lambda)))) + sin(b)*sin((((data_3d[i]).phi))))))/
+                                     (((draw_panel->d).value) + ((draw_panel->l).value) + cos(a - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin(c) + cos(b)*cos(c)*cos((((data_3d[i]).phi)))*sin(a - (((data_3d[i]).lambda))) - cos(c)*sin(b)*sin((((data_3d[i]).phi)))) );
+            
+            y_3d.push_back( (((draw_panel->d).value)*(cos((((data_3d[i]).phi)))*sin(b)*sin(a - (((data_3d[i]).lambda))) + cos(b)*sin((((data_3d[i]).phi)))))/(((draw_panel->d).value) + ((draw_panel->l).value) + cos(a - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin(c) + cos(b)*cos(c)*cos((((data_3d[i]).phi)))*sin(a - (((data_3d[i]).lambda))) - cos(c)*sin(b)*sin((((data_3d[i]).phi)))) );
+            
+        }
+        
+    }
+    
+
+    
+}
+
+
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most
 void ChartFrame::GetCoastLineData_Mercator(void){
     
@@ -7190,37 +7230,8 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    Angle a, b, c;
-    unsigned int i, every;
     
-    //delete this later
-    gsl_rng_env_setup();
-    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
-    gsl_rng_set(myran, 1);
-    
-    
-    a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-    c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    //delete this later
-    
-    
-    every = (unsigned int)(((double)((parent->data_3d).size()))/((double)((((parent->parent)->plot)->n_points_plot_coastline).value)));
-    if(every == 0){every = 1;}
-        
-    for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<(parent->data_3d).size(); i++){
-        
-        //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-        if((i % every) == 0){
-            
-            (parent->x_3d).push_back( ((d.value)*(cos(c)*cos(a - (((parent->data_3d)[i]).lambda))*cos(((((parent->data_3d)[i]).phi))) + sin(c)*(-(cos(b)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda)))) + sin(b)*sin(((((parent->data_3d)[i]).phi))))))/
-                                     ((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
-            
-            (parent->y_3d).push_back( ((d.value)*(cos(((((parent->data_3d)[i]).phi)))*sin(b)*sin(a - ((((parent->data_3d)[i]).lambda))) + cos(b)*sin(((((parent->data_3d)[i]).phi)))))/((d.value) + (l.value) + cos(a - ((((parent->data_3d)[i]).lambda)))*cos(((((parent->data_3d)[i]).phi)))*sin(c) + cos(b)*cos(c)*cos(((((parent->data_3d)[i]).phi)))*sin(a - ((((parent->data_3d)[i]).lambda))) - cos(c)*sin(b)*sin(((((parent->data_3d)[i]).phi)))) );
-            
-        }
-        
-    }
+    parent->GetCoastLineData_3D();
     
     parent->SetSize(
                     (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()),

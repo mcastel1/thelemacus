@@ -6988,6 +6988,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
 }
 
 
+
+
+
 //this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
 void DrawPanel::TabulateRoutes_Mercator(void){
     
@@ -7060,6 +7063,63 @@ void DrawPanel::TabulateRoutes_Mercator(void){
     }
     
 }
+
+//this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
+void DrawPanel::TabulateRoutes_3D(void){
+    
+    unsigned int i, j, l;
+    Length l_tot;
+    wxPoint p;
+    
+    //clear up points_route_list
+    for(i=0; i<(plot->route_list).size(); i++){
+        
+        for(j=0; j<(points_route_list[i]).size(); j++){
+            (points_route_list[i][j]).clear();
+            
+        }
+        (points_route_list[i]).clear();
+        
+    }
+    
+    
+    //compute the points of  routes
+    //run over all routes
+    for(i=0; i<(plot->route_list).size(); i++){
+        
+        if((((plot->route_list)[i]).type) == String("c")){
+            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
+            
+            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
+            
+        }else{
+            //otherwise, the total length is simply written in the l object
+            
+            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
+            
+        }
+        
+        //compute points of route #i
+        for(/*allocate space for the only connected component of route #i*/points_route_list[i].resize(1), l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+            
+            //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
+            (((plot->route_list)[i]).l).set(
+                                            String(""),
+                                            (l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1)),
+                                            String(""));
+            
+            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
+            ((plot->route_list)[i]).compute_end(String(""));
+            
+            GeoTo3DDrawPanel(((plot->route_list)[i]).end, &p);
+            (points_route_list[i][0]).push_back(p);
+            
+        }
+        
+    }
+    
+}
+    
 
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){

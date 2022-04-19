@@ -7416,7 +7416,7 @@ void DrawPanel::Draw_3D(void){
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
-    //    TabulateRoutes();
+    TabulateRoutes_3D();
     
     //free up resources
     (parent->x).clear();

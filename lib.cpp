@@ -6292,9 +6292,9 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 
 
 void ChartFrame::GetCoastLineData_3D(void){
-
+    
     unsigned int i, every;
-
+    
     //delete this later
     gsl_rng_env_setup();
     gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
@@ -6311,11 +6311,11 @@ void ChartFrame::GetCoastLineData_3D(void){
     (draw_panel->x_max) = -(draw_panel->x_min);
     (draw_panel->y_min) = (draw_panel->x_min);
     (draw_panel->y_max) = -(draw_panel->y_min);
-
+    
     
     every = (unsigned int)(((double)(data_3d.size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}
-        
+    
     for(x_3d.clear(), y_3d.clear(), i=0; i<data_3d.size(); i++){
         
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
@@ -6325,12 +6325,12 @@ void ChartFrame::GetCoastLineData_3D(void){
             y_3d.resize(y_3d.size()+1);
             
             draw_panel->GeoTo3D(data_3d[i], &(x_3d.back()), &(y_3d.back()));
-
+            
         }
         
     }
     
-
+    
     
 }
 
@@ -6924,16 +6924,16 @@ void DrawPanel::Render_3D(wxDC&  dc){
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
             //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
             
-            if(GeoTo3DDrawPanel((((plot->route_list)[i]).start), &p)){
-                dc.DrawCircle(p, 4.0*thickness);
-            }
+            GeoTo3DDrawPanel((((plot->route_list)[i]).start), &p);
+            dc.DrawCircle(p, 4.0*thickness);
+            
             
         }else{
             //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
             
-            if(GeoTo3DDrawPanel((((plot->route_list)[i]).GP), &p)){
-                dc.DrawCircle(p, 4.0*thickness);
-            }
+            GeoTo3DDrawPanel((((plot->route_list)[i]).GP), &p);
+            dc.DrawCircle(p, 4.0*thickness);
+            
             
         }
         
@@ -6968,18 +6968,18 @@ void DrawPanel::Render_3D(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         
-        if(GeoTo3DDrawPanel((plot->position_list)[i], &p)){
-            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
-            
-            dc.DrawCircle(p, 4.0*thickness);
-        }
+        GeoTo3DDrawPanel((plot->position_list)[i], &p);
+        //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+        
+        dc.DrawCircle(p, 4.0*thickness);
+        
         
         
     }
     
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
-  
+    
     
     
     
@@ -7125,9 +7125,9 @@ void DrawPanel::Draw_Mercator(void){
     chart = new XYChart(width_chart, height_chart);
     //create the plot area of c with the appropriate size
     chart->setPlotArea(width_chart*0.15, height_chart*0.1,
-                   width_plot_area,
-                   height_plot_area,
-                   -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+                       width_plot_area,
+                       height_plot_area,
+                       -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
@@ -7177,11 +7177,11 @@ void DrawPanel::Draw_Mercator(void){
         if(check_x(x_dummy)){
             
             chart->addLine(
-                       (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-                       (position_plot_area.y),
-                       (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-                       (position_plot_area.y) + height_plot_area,
-                       0x808080, 1);
+                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+                           (position_plot_area.y),
+                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+                           (position_plot_area.y) + height_plot_area,
+                           0x808080, 1);
             
         }
         
@@ -7194,11 +7194,11 @@ void DrawPanel::Draw_Mercator(void){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     chart->addLine(
-                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
-                               (position_plot_area.y) + height_plot_area,
-                               (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
-                               (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
-                               0x0000ff, 1);
+                                   (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
+                                   (position_plot_area.y) + height_plot_area,
+                                   (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
+                                   (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
+                                   0x0000ff, 1);
                     
                 }
                 
@@ -7248,11 +7248,11 @@ void DrawPanel::Draw_Mercator(void){
         if((y_dummy >= y_min) && (y_dummy <= y_max)){
             
             chart->addLine(
-                       (position_plot_area.x),
-                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
-                       (position_plot_area.x) + width_plot_area,
-                       (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
-                       0x808080, 1);
+                           (position_plot_area.x),
+                           (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
+                           (position_plot_area.x) + width_plot_area,
+                           (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
+                           0x808080, 1);
             
         }
         
@@ -7265,11 +7265,11 @@ void DrawPanel::Draw_Mercator(void){
                     //set custom-made minor yticks every tenths (i/10.0) of arcminutes (60.0)
                     
                     chart->addLine(
-                               (position_plot_area.x),
-                               (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
-                               (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
-                               (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
-                               0x0000ff, 1);
+                                   (position_plot_area.x),
+                                   (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
+                                   (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
+                                   (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
+                                   0x0000ff, 1);
                     
                 }
                 
@@ -7331,22 +7331,22 @@ void DrawPanel::Draw_3D(void){
     chart = new XYChart(width_chart_3d, height_chart_3d);
     chart->setPlotArea((int)(((double)width_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
                        (int)(((double)height_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
-                        width_plot_area_3d,
+                       width_plot_area_3d,
                        height_plot_area_3d,
                        Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
     (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
-     
+    
     // Set the axes line width to 3 pixels
     (chart->xAxis())->setColors(Chart::Transparent);
     (chart->yAxis())->setColors(Chart::Transparent);
     
     chart->addScatterLayer(
-                       DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
-                       DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
-                       "", Chart::CircleSymbol, 1, 000000);
+                           DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
+                           DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
+                           "", Chart::CircleSymbol, 1, 000000);
     
     //    chart->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
     mem_block = (chart->makeChart(Chart::BMP));
@@ -8074,18 +8074,14 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
 }
 
 //this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel
-bool DrawPanel::GeoTo3DDrawPanel(Position q, wxPoint *p){
+void DrawPanel::GeoTo3DDrawPanel(Position q, wxPoint *p){
     
     double x_temp, y_temp;
     
     GeoTo3D(q, &x_temp, &y_temp);
     
-    
-    
-    
     (p->x) = (position_plot_area.x) + (1.0+x_temp/x_max)*(width_plot_area/2);
     (p->y) = (position_plot_area.y) + (1.0-y_temp/y_max)*(height_plot_area/2);
-    
     
     
 }

@@ -6294,6 +6294,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 void ChartFrame::GetCoastLineData_3D(void){
     
     unsigned int i, every;
+    double x_temp, y_temp;
     
     //delete this later
     gsl_rng_env_setup();
@@ -6321,11 +6322,16 @@ void ChartFrame::GetCoastLineData_3D(void){
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
         if((i % every) == 0){
             
-            x_3d.resize(x_3d.size()+1);
-            y_3d.resize(y_3d.size()+1);
+            draw_panel->GeoTo3D(data_3d[i], &x_temp, &y_temp);
             
-            draw_panel->GeoTo3D(data_3d[i], &(x_3d.back()), &(y_3d.back()));
-            
+            //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer 
+            if(y_temp < 0.0){
+                
+                x_3d.push_back(x_temp);
+                y_3d.push_back(y_temp);
+                
+            }
+                        
         }
         
     }

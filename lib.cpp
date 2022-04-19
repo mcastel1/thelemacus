@@ -6294,7 +6294,6 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 void ChartFrame::GetCoastLineData_3D(void){
 
     unsigned int i, every;
-    Angle a, b, c;
 
     //delete this later
     gsl_rng_env_setup();
@@ -6302,9 +6301,9 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_rng_set(myran, 1);
     
     
-    a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-    c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+    (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
     //delete this later
 
     
@@ -6316,10 +6315,10 @@ void ChartFrame::GetCoastLineData_3D(void){
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
         if((i % every) == 0){
             
-            x_3d.push_back( (((draw_panel->d).value)*(cos(c)*cos(a - ((data_3d[i]).lambda))*cos((((data_3d[i]).phi))) + sin(c)*(-(cos(b)*cos((((data_3d[i]).phi)))*sin(a - (((data_3d[i]).lambda)))) + sin(b)*sin((((data_3d[i]).phi))))))/
-                                     (((draw_panel->d).value) + ((draw_panel->l).value) + cos(a - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin(c) + cos(b)*cos(c)*cos((((data_3d[i]).phi)))*sin(a - (((data_3d[i]).lambda))) - cos(c)*sin(b)*sin((((data_3d[i]).phi)))) );
+            x_3d.push_back( (((draw_panel->d).value)*(cos((draw_panel->euler_c))*cos((draw_panel->euler_a) - ((data_3d[i]).lambda))*cos((((data_3d[i]).phi))) + sin((draw_panel->euler_c))*(-(cos((draw_panel->euler_b))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda)))) + sin((draw_panel->euler_b))*sin((((data_3d[i]).phi))))))/
+                                     (((draw_panel->d).value) + ((draw_panel->l).value) + cos((draw_panel->euler_a) - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_b))*cos((draw_panel->euler_c))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) - cos((draw_panel->euler_c))*sin((draw_panel->euler_b))*sin((((data_3d[i]).phi)))) );
             
-            y_3d.push_back( (((draw_panel->d).value)*(cos((((data_3d[i]).phi)))*sin(b)*sin(a - (((data_3d[i]).lambda))) + cos(b)*sin((((data_3d[i]).phi)))))/(((draw_panel->d).value) + ((draw_panel->l).value) + cos(a - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin(c) + cos(b)*cos(c)*cos((((data_3d[i]).phi)))*sin(a - (((data_3d[i]).lambda))) - cos(c)*sin(b)*sin((((data_3d[i]).phi)))) );
+            y_3d.push_back( (((draw_panel->d).value)*(cos((((data_3d[i]).phi)))*sin((draw_panel->euler_b))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) + cos((draw_panel->euler_b))*sin((((data_3d[i]).phi)))))/(((draw_panel->d).value) + ((draw_panel->l).value) + cos((draw_panel->euler_a) - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_b))*cos((draw_panel->euler_c))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) - cos((draw_panel->euler_c))*sin((draw_panel->euler_b))*sin((((data_3d[i]).phi)))) );
             
         }
         
@@ -7928,6 +7927,19 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
     
     
 }
+
+//converts the geographic Position p  to the  3D projection (x,y)
+void DrawPanel::GeoTo3D(Position p, double* x, double* y){
+    
+    (*x) = ( ((d.value)*(cos(c)*cos(a - (p.lambda))*cos(((p.phi))) + sin(c)*(-(cos(b)*cos(((p.phi)))*sin(a - ((p.lambda)))) + sin(b)*sin(((p.phi))))))/
+            ((d.value) + (l.value) + cos(a - ((p.lambda)))*cos(((p.phi)))*sin(c) + cos(b)*cos(c)*cos(((p.phi)))*sin(a - ((p.lambda))) - cos(c)*sin(b)*sin(((p.phi)))) );
+    
+    (*y) = ( ((d.value)*(cos(((p.phi)))*sin(b)*sin(a - ((p.lambda))) + cos(b)*sin(((p.phi)))))/((d.value) + (l.value) + cos(a - ((p.lambda)))*cos(((p.phi)))*sin(c) + cos(b)*cos(c)*cos(((p.phi)))*sin(a - ((p.lambda))) - cos(c)*sin(b)*sin(((p.phi)))) );
+    
+    
+    
+}
+
 
 
 //this function converts the geographic position p into the screen position p

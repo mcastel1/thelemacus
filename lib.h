@@ -1341,7 +1341,7 @@ public:
     wxSize size_plot_area;
     wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
-    double x_min, x_max, y_min, y_max, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/x_span, x_min_start_drag, x_max_start_drag, y_min_start_drag, y_max_start_drag,
+    double /*min and max values of the Mercator or 3D projections x, y*/x_min, x_max, y_min, y_max, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/x_span, x_min_start_drag, x_max_start_drag, y_min_start_drag, y_max_start_drag,
     /*these are the values of x_min .. y_max when the plot is first drawn*/
     x_min_0, x_max_0, y_min_0, y_max_0,
     /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the ticks on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the ticks on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi,

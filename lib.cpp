@@ -6906,7 +6906,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
 
 
 //this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
-void DrawPanel::TabulateRoutes(void){
+void DrawPanel::TabulateRoutes_Mercator(void){
     
     unsigned int i, j, l;
     Length l_tot;
@@ -7214,7 +7214,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
-    TabulateRoutes();
+    TabulateRoutes_Mercator();
     
     //free up resources
     (parent->x).clear();
@@ -8216,7 +8216,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     
                 }
                 
-                TabulateRoutes();
+                TabulateRoutes_Mercator();
                 PaintNow();
                 
                 //set the wxControl, title and message for the functor print_error_message, and then call the functor
@@ -8477,7 +8477,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     
                     //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the chart
-                    TabulateRoutes();
+                    TabulateRoutes_Mercator();
                     PaintNow();
                     
                     

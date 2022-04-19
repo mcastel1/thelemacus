@@ -1372,7 +1372,7 @@ public:
     void SetIdling(bool);
     void Draw_Mercator(void);
     void Draw_3D(void);
-    void TabulateRoutes(void);
+    void TabulateRoutes_Mercator(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
     void ScreenToGeo(wxPoint, Position*);

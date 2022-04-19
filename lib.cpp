@@ -6324,8 +6324,14 @@ void ChartFrame::GetCoastLineData_3D(void){
             
             draw_panel->GeoTo3D(data_3d[i], &x_temp, &y_temp);
             
-            //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer 
-            if(y_temp < 0.0){
+            //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer
+            if(
+               
+               
+               cos((draw_panel->euler_a) - ((data_3d[i]).lambda))*cos(((data_3d[i]).phi))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_c))*(cos((draw_panel->euler_b))*cos(((data_3d[i]).phi))*sin((draw_panel->euler_a) - ((data_3d[i]).lambda)) - sin((draw_panel->euler_b))*sin(((data_3d[i]).phi))) < 0.0
+               
+               
+               ){
                 
                 x_3d.push_back(x_temp);
                 y_3d.push_back(y_temp);

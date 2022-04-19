@@ -6315,11 +6315,16 @@ void ChartFrame::GetCoastLineData_3D(void){
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
         if((i % every) == 0){
             
-            x_3d.push_back( (((draw_panel->d).value)*(cos((draw_panel->euler_c))*cos((draw_panel->euler_a) - ((data_3d[i]).lambda))*cos((((data_3d[i]).phi))) + sin((draw_panel->euler_c))*(-(cos((draw_panel->euler_b))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda)))) + sin((draw_panel->euler_b))*sin((((data_3d[i]).phi))))))/
-                                     (((draw_panel->d).value) + ((draw_panel->l).value) + cos((draw_panel->euler_a) - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_b))*cos((draw_panel->euler_c))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) - cos((draw_panel->euler_c))*sin((draw_panel->euler_b))*sin((((data_3d[i]).phi)))) );
+            x_3d.resize(x_3d.size()+1);
+            y_3d.resize(y_3d.size()+1);
             
-            y_3d.push_back( (((draw_panel->d).value)*(cos((((data_3d[i]).phi)))*sin((draw_panel->euler_b))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) + cos((draw_panel->euler_b))*sin((((data_3d[i]).phi)))))/(((draw_panel->d).value) + ((draw_panel->l).value) + cos((draw_panel->euler_a) - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_b))*cos((draw_panel->euler_c))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) - cos((draw_panel->euler_c))*sin((draw_panel->euler_b))*sin((((data_3d[i]).phi)))) );
-            
+            draw_panel->GeoTo3D(data_3d[i], x_3d.data()+i, y_3d.data()+i);
+
+//            x_3d.push_back( (((draw_panel->d).value)*(cos((draw_panel->euler_c))*cos((draw_panel->euler_a) - ((data_3d[i]).lambda))*cos((((data_3d[i]).phi))) + sin((draw_panel->euler_c))*(-(cos((draw_panel->euler_b))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda)))) + sin((draw_panel->euler_b))*sin((((data_3d[i]).phi))))))/
+//                                     (((draw_panel->d).value) + ((draw_panel->l).value) + cos((draw_panel->euler_a) - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_b))*cos((draw_panel->euler_c))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) - cos((draw_panel->euler_c))*sin((draw_panel->euler_b))*sin((((data_3d[i]).phi)))) );
+//
+//            y_3d.push_back( (((draw_panel->d).value)*(cos((((data_3d[i]).phi)))*sin((draw_panel->euler_b))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) + cos((draw_panel->euler_b))*sin((((data_3d[i]).phi)))))/(((draw_panel->d).value) + ((draw_panel->l).value) + cos((draw_panel->euler_a) - (((data_3d[i]).lambda)))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_b))*cos((draw_panel->euler_c))*cos((((data_3d[i]).phi)))*sin((draw_panel->euler_a) - (((data_3d[i]).lambda))) - cos((draw_panel->euler_c))*sin((draw_panel->euler_b))*sin((((data_3d[i]).phi)))) );
+//
         }
         
     }

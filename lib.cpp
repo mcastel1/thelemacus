@@ -7428,16 +7428,7 @@ void DrawPanel::Draw_3D(void){
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
     
-    /*
-     
-     
-     (d*(cos(c)*cos(a - \[Lambda])*cos(\[Phi]) + sin(c)*(-(cos(b)*cos(\[Phi])*sin(a - \[Lambda])) + sin(b)*sin(\[Phi]))))/
-     (d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) - cos(c)*sin(b)*sin(\[Phi]))
-     
-     
-     (d*(cos(\[Phi])*sin(b)*sin(a - \[Lambda]) + cos(b)*sin(\[Phi])))/(d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) - cos(c)*sin(b)*sin(\[Phi]))
-     */
-    
+  
     
 }
 
@@ -8080,10 +8071,11 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 //converts the geographic Position p  to the  3D projection (x,y)
 void DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
-    (*x) = (d*(cos(euler_c)*cos(euler_a - \[Lambda])*cos(\[Phi]) - sin(euler_c)*(cos(euler_b)*cos(\[Phi])*sin(euler_a - \[Lambda]) + sin(euler_b)*sin(\[Phi]))))/
-    (d + l + cos(euler_a - \[Lambda])*cos(\[Phi])*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos(\[Phi])*sin(euler_a - \[Lambda]) + cos(euler_c)*sin(euler_b)*sin(\[Phi]));
+    (*x) = ((d.value)*(cos(euler_c)*cos(euler_a - (p.lambda))*cos((p.phi)) - sin(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a - (p.lambda)) + sin(euler_b)*sin((p.phi)))))/
+    ((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
     
-    (*y) = (-(d*cos(\[Phi])*sin(euler_b)*sin(euler_a - \[Lambda])) + d*cos(euler_b)*sin(\[Phi]))/(d + l + cos(euler_a - \[Lambda])*cos(\[Phi])*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos(\[Phi])*sin(euler_a - \[Lambda]) + cos(euler_c)*sin(euler_b)*sin(\[Phi]));
+    (*y) = (-((d.value)*cos((p.phi))*sin(euler_b)*sin(euler_a - (p.lambda))) + (d.value)*cos(euler_b)*sin((p.phi)))/((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
+    
     
     
     

@@ -8080,10 +8080,10 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 //converts the geographic Position p  to the  3D projection (x,y)
 void DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
-    (*x) = (d*(Cos(c)*Cos(a - \[Lambda])*Cos(\[Phi]) - Sin(c)*(Cos(b)*Cos(\[Phi])*Sin(a - \[Lambda]) + Sin(b)*Sin(\[Phi]))))/
-    (d + l + Cos(a - \[Lambda])*Cos(\[Phi])*Sin(c) + Cos(b)*Cos(c)*Cos(\[Phi])*Sin(a - \[Lambda]) + Cos(c)*Sin(b)*Sin(\[Phi]));
+    (*x) = (d*(cos(c)*cos(a - \[Lambda])*cos(\[Phi]) - sin(c)*(cos(b)*cos(\[Phi])*sin(a - \[Lambda]) + sin(b)*sin(\[Phi]))))/
+    (d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) + cos(c)*sin(b)*sin(\[Phi]));
     
-    (*y) = (-(d*Cos(\[Phi])*Sin(b)*Sin(a - \[Lambda])) + d*Cos(b)*Sin(\[Phi]))/(d + l + Cos(a - \[Lambda])*Cos(\[Phi])*Sin(c) + Cos(b)*Cos(c)*Cos(\[Phi])*Sin(a - \[Lambda]) + Cos(c)*Sin(b)*Sin(\[Phi]));
+    (*y) = (-(d*cos(\[Phi])*sin(b)*sin(a - \[Lambda])) + d*cos(b)*sin(\[Phi]))/(d + l + cos(a - \[Lambda])*cos(\[Phi])*sin(c) + cos(b)*cos(c)*cos(\[Phi])*sin(a - \[Lambda]) + cos(c)*sin(b)*sin(\[Phi]));
     
     
     

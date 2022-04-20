@@ -8080,10 +8080,10 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 //converts the geographic Position p  to the  3D projection (x,y)
 void DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
-    (*x) = ( ((d.value)*(cos((euler_c))*cos((euler_a) - (p.lambda))*cos(((p.phi))) + sin((euler_c))*(-(cos((euler_b))*cos(((p.phi)))*sin((euler_a) - ((p.lambda)))) + sin((euler_b))*sin(((p.phi))))))/
-            ((d.value) + ((l).value) + cos((euler_a) - ((p.lambda)))*cos(((p.phi)))*sin((euler_c)) + cos((euler_b))*cos((euler_c))*cos(((p.phi)))*sin((euler_a) - ((p.lambda))) - cos((euler_c))*sin((euler_b))*sin(((p.phi)))) );
+    (*x) = (d*(Cos(c)*Cos(a - \[Lambda])*Cos(\[Phi]) - Sin(c)*(Cos(b)*Cos(\[Phi])*Sin(a - \[Lambda]) + Sin(b)*Sin(\[Phi]))))/
+    (d + l + Cos(a - \[Lambda])*Cos(\[Phi])*Sin(c) + Cos(b)*Cos(c)*Cos(\[Phi])*Sin(a - \[Lambda]) + Cos(c)*Sin(b)*Sin(\[Phi]));
     
-    (*y) = ( ((d.value)*(cos(((p.phi)))*sin((euler_b))*sin((euler_a) - ((p.lambda))) + cos((euler_b))*sin(((p.phi)))))/((d.value) + ((l).value) + cos((euler_a) - ((p.lambda)))*cos(((p.phi)))*sin((euler_c)) + cos((euler_b))*cos((euler_c))*cos(((p.phi)))*sin((euler_a) - ((p.lambda))) - cos((euler_c))*sin((euler_b))*sin(((p.phi)))) );
+    (*y) = (-(d*Cos(\[Phi])*Sin(b)*Sin(a - \[Lambda])) + d*Cos(b)*Sin(\[Phi]))/(d + l + Cos(a - \[Lambda])*Cos(\[Phi])*Sin(c) + Cos(b)*Cos(c)*Cos(\[Phi])*Sin(a - \[Lambda]) + Cos(c)*Sin(b)*Sin(\[Phi]));
     
     
     

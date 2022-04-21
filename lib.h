@@ -1376,12 +1376,12 @@ public:
     void TabulateRoutes_3D(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
-    void ScreenToGeo_Mercator(wxPoint, Position*);
     void ScreenToMercator(wxPoint, double*, double*);
-    void GeoToScreen_Mercator(Position, wxPoint*);
     bool GeoTo3D(Position, double*, double*);
-    bool GeoToDrawPanel_3D(Position, wxPoint*);
+    void ScreenToGeo_Mercator(wxPoint, Position*);
+    void GeoToScreen_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
+    bool GeoToDrawPanel_3D(Position, wxPoint*);
     void DrawPanelToGeo_3D(wxPoint, Position*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);

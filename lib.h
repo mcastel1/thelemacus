@@ -1376,7 +1376,7 @@ public:
     void TabulateRoutes_3D(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
-    void ScreenToGeo(wxPoint, Position*);
+    void ScreenToGeo_Mercator(wxPoint, Position*);
     void ScreenToMercator(wxPoint, double*, double*);
     void GeoToScreen(Position, wxPoint*);
     bool GeoTo3D(Position, double*, double*);

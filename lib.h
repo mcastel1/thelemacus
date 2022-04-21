@@ -1379,8 +1379,8 @@ public:
     void ScreenToGeo(wxPoint, Position*);
     void ScreenToMercator(wxPoint, double*, double*);
     void GeoToScreen(Position, wxPoint*);
-    void GeoTo3D(Position, double*, double*);
-    void GeoTo3DDrawPanel(Position, wxPoint*);
+    bool GeoTo3D(Position, double*, double*);
+    bool GeoTo3DDrawPanel(Position, wxPoint*);
     bool GeoToDrawPanel(Position, wxPoint*);
     void DrawPanelToGeo(wxPoint, Position*);
     void Update_lambda_phi_min_max(void);

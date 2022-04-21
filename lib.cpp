@@ -6302,9 +6302,18 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_rng_set(myran, 1);
     
     
+    //
     (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
     (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
     (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    //
+    /*
+    (draw_panel->euler_a).set(String(""), 0.0, String(""));
+    (draw_panel->euler_b).set(String(""), 0.0, String(""));
+    (draw_panel->euler_c).set(String(""), 0.0, String(""));
+    */
+
+    
     //delete this later
     
     //sets the values of x_min ... y_max for the 3D projection
@@ -6322,10 +6331,7 @@ void ChartFrame::GetCoastLineData_3D(void){
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
         if((i % every) == 0){
             
-            draw_panel->GeoTo3D(data_3d[i], &x_temp, &y_temp);
-            
-            //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer (i.e. the points with y' < 0)
-            if(cos((draw_panel->euler_a) -((data_3d[i]).lambda))*cos(((data_3d[i]).phi))*sin((draw_panel->euler_c)) + cos((draw_panel->euler_c))*(cos((draw_panel->euler_b))*cos(((data_3d[i]).phi))*sin((draw_panel->euler_a) -((data_3d[i]).lambda)) + sin((draw_panel->euler_b))*sin(((data_3d[i]).phi))) < 0.0){
+            if((draw_panel->GeoTo3D(data_3d[i], &x_temp, &y_temp))){
                 
                 x_3d.push_back(x_temp);
                 y_3d.push_back(y_temp);
@@ -6930,16 +6936,17 @@ void DrawPanel::Render_3D(wxDC&  dc){
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
             //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
             
-            GeoTo3DDrawPanel((((plot->route_list)[i]).start), &p);
-            dc.DrawCircle(p, 4.0*thickness);
+            if(GeoTo3DDrawPanel((((plot->route_list)[i]).start), &p)){
+                dc.DrawCircle(p, 4.0*thickness);
+            }
             
             
         }else{
             //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
             
-            GeoTo3DDrawPanel((((plot->route_list)[i]).GP), &p);
-            dc.DrawCircle(p, 4.0*thickness);
-            
+            if(GeoTo3DDrawPanel((((plot->route_list)[i]).GP), &p)){
+                dc.DrawCircle(p, 4.0*thickness);
+            }
             
         }
         
@@ -6965,10 +6972,11 @@ void DrawPanel::Render_3D(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         
-        GeoTo3DDrawPanel((plot->position_list)[i], &p);
-        //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
-        
-        dc.DrawCircle(p, 4.0*thickness);
+        if(GeoTo3DDrawPanel((plot->position_list)[i], &p)){
+            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+            
+            dc.DrawCircle(p, 4.0*thickness);
+        }
         
         
         
@@ -7108,8 +7116,11 @@ void DrawPanel::TabulateRoutes_3D(void){
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
             ((plot->route_list)[i]).compute_end(String(""));
             
-            GeoTo3DDrawPanel(((plot->route_list)[i]).end, &p);
-            (points_route_list[i][0]).push_back(p);
+            if(GeoTo3DDrawPanel(((plot->route_list)[i]).end, &p)){
+                
+                (points_route_list[i][0]).push_back(p);
+                
+            }
             
         }
         
@@ -8063,12 +8074,24 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 }
 
 //converts the geographic Position p  to the  3D projection (x,y)
-void DrawPanel::GeoTo3D(Position p, double* x, double* y){
+bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
-    (*x) = ((d.value)*(cos(euler_c)*cos(euler_a - (p.lambda))*cos((p.phi)) - sin(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a - (p.lambda)) + sin(euler_b)*sin((p.phi)))))/
-    ((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
     
-    (*y) = (-((d.value)*cos((p.phi))*sin(euler_b)*sin(euler_a - (p.lambda))) + (d.value)*cos(euler_b)*sin((p.phi)))/((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
+    if(cos((euler_a) -(p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a -(p.lambda)) + sin(euler_b)*sin((p.phi))) < 0.0){
+        //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer (i.e. the points with y' < 0)
+        
+        (*x) = ((d.value)*(cos(euler_c)*cos(euler_a - (p.lambda))*cos((p.phi)) - sin(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a - (p.lambda)) + sin(euler_b)*sin((p.phi)))))/
+        ((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
+        
+        (*y) = (-((d.value)*cos((p.phi))*sin(euler_b)*sin(euler_a - (p.lambda))) + (d.value)*cos(euler_b)*sin((p.phi)))/((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
+        
+        return true;
+        
+    }else{
+        
+        return false;
+        
+    }
     
     
     
@@ -8126,15 +8149,22 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
 }
 
 //this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel
-void DrawPanel::GeoTo3DDrawPanel(Position q, wxPoint *p){
+bool DrawPanel::GeoTo3DDrawPanel(Position q, wxPoint *p){
     
     double x_temp, y_temp;
     
-    GeoTo3D(q, &x_temp, &y_temp);
-    
-    (p->x) = (position_plot_area_3d.x) + (1.0+x_temp/x_max)*(width_plot_area_3d/2);
-    (p->y) = (position_plot_area_3d.y) + (1.0-y_temp/y_max)*(height_plot_area_3d/2);
-    
+    if(GeoTo3D(q, &x_temp, &y_temp)){
+        
+        (p->x) = (position_plot_area_3d.x) + (1.0+x_temp/x_max)*(width_plot_area_3d/2);
+        (p->y) = (position_plot_area_3d.y) + (1.0-y_temp/y_max)*(height_plot_area_3d/2);
+        
+        return true;
+        
+    }else{
+        
+        return false;
+        
+    }
     
 }
 

@@ -1380,7 +1380,7 @@ public:
     void ScreenToMercator(wxPoint, double*, double*);
     void GeoToScreen(Position, wxPoint*);
     bool GeoTo3D(Position, double*, double*);
-    bool GeoTo3DDrawPanel(Position, wxPoint*);
+    bool GeoToDrawPanel_3D(Position, wxPoint*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
     void DrawPanelToGeo(wxPoint, Position*);
     void Update_lambda_phi_min_max(void);

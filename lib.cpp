@@ -6936,7 +6936,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
             //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
             
-            if(GeoTo3DDrawPanel((((plot->route_list)[i]).start), &p)){
+            if(GeoToDrawPanel_3D((((plot->route_list)[i]).start), &p)){
                 dc.DrawCircle(p, 4.0*thickness);
             }
             
@@ -6944,7 +6944,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }else{
             //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
             
-            if(GeoTo3DDrawPanel((((plot->route_list)[i]).GP), &p)){
+            if(GeoToDrawPanel_3D((((plot->route_list)[i]).GP), &p)){
                 dc.DrawCircle(p, 4.0*thickness);
             }
             
@@ -6972,7 +6972,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         
-        if(GeoTo3DDrawPanel((plot->position_list)[i], &p)){
+        if(GeoToDrawPanel_3D((plot->position_list)[i], &p)){
             //if the point returned from GeoToDrawPanel_Mercator falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
@@ -7116,7 +7116,7 @@ void DrawPanel::TabulateRoutes_3D(void){
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
             ((plot->route_list)[i]).compute_end(String(""));
             
-            if(GeoTo3DDrawPanel(((plot->route_list)[i]).end, &p)){
+            if(GeoToDrawPanel_3D(((plot->route_list)[i]).end, &p)){
                 
                 (points_route_list[i][0]).push_back(p);
                 
@@ -8149,7 +8149,7 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
 }
 
 //this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel
-bool DrawPanel::GeoTo3DDrawPanel(Position q, wxPoint *p){
+bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
     double x_temp, y_temp;
     

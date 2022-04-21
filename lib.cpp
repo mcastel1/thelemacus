@@ -8047,7 +8047,7 @@ void DrawPanel::ScreenToGeo(wxPoint p, Position *q){
 
 
 //converts the point p on the drawpanel, to the relative geographic position q
-void DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
+void DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
     
     
     (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-(position_plot_area.x))/((double)(size_plot_area.x)))*x_span), String(""));
@@ -8641,12 +8641,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
-                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
+                        DrawPanelToGeo_3D(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
                         
                         
                     }else{
                         
-                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                        DrawPanelToGeo_3D(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
                         
                     }
                     

@@ -1382,7 +1382,7 @@ public:
     bool GeoTo3D(Position, double*, double*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
-    void DrawPanelToGeo(wxPoint, Position*);
+    void DrawPanelToGeo_3D(wxPoint, Position*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
     bool check_x(double);

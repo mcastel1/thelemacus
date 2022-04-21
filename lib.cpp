@@ -6299,7 +6299,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     //delete this later
     gsl_rng_env_setup();
     gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
-    gsl_rng_set(myran, 1);
+    gsl_rng_set(myran, 0);
     
     
     //

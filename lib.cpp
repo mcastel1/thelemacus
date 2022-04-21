@@ -8034,7 +8034,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the relative geographic position q
-void DrawPanel::ScreenToGeo(wxPoint p, Position *q){
+void DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -8101,7 +8101,7 @@ bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
 
 
 //this function converts the geographic position p into the screen position p
-void DrawPanel::GeoToScreen(Position q, wxPoint *p){
+void DrawPanel::GeoToScreen_Mercator(Position q, wxPoint *p){
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -8202,7 +8202,7 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
 void DrawPanel::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
-    ScreenToGeo(position_screen_now, p);
+    ScreenToGeo_Mercator(position_screen_now, p);
     
 }
 
@@ -8282,7 +8282,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
         for(((parent->parent)->highlighted_position) = -1, i=0; i<(plot->position_list).size(); i++){
             
-            GeoToScreen((plot->position_list)[i], &q);
+            GeoToScreen_Mercator((plot->position_list)[i], &q);
             
             if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
                4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
@@ -8325,7 +8325,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     y_max_start_drag = y_max;
     
     Position geo;
-    ScreenToGeo(position_start_drag, &geo);
+    ScreenToGeo_Mercator(position_start_drag, &geo);
     geo.print(String("Position start drag"), String("************ "), cout);
     
     event.Skip(true);
@@ -8410,7 +8410,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
                 
                 //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                ScreenToGeo(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                ScreenToGeo_Mercator(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                 
                 //update the coordinates of the Position under consideration in listcontrol_positions
                 ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
@@ -8667,7 +8667,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     
                     //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                    ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                    ScreenToGeo_Mercator(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                     
                     //update the data of the Position under consideration in listcontrol_positions
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

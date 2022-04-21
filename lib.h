@@ -1378,7 +1378,7 @@ public:
     void PaintNow();
     void ScreenToGeo_Mercator(wxPoint, Position*);
     void ScreenToMercator(wxPoint, double*, double*);
-    void GeoToScreen(Position, wxPoint*);
+    void GeoToScreen_Mercator(Position, wxPoint*);
     bool GeoTo3D(Position, double*, double*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);

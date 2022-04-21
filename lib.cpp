@@ -6716,14 +6716,14 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
             //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
             
-            if(GeoToDrawPanel((((plot->route_list)[i]).start), &p)){
+            if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).start), &p)){
                 dc.DrawCircle(p, 4.0*thickness);
             }
             
         }else{
             //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
             
-            if(GeoToDrawPanel((((plot->route_list)[i]).GP), &p)){
+            if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).GP), &p)){
                 dc.DrawCircle(p, 4.0*thickness);
             }
             
@@ -6760,8 +6760,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         
-        if(GeoToDrawPanel((plot->position_list)[i], &p)){
-            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+        if(GeoToDrawPanel_Mercator((plot->position_list)[i], &p)){
+            //if the point returned from GeoToDrawPanel_Mercator falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
         }
@@ -6973,7 +6973,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
         
         if(GeoTo3DDrawPanel((plot->position_list)[i], &p)){
-            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+            //if the point returned from GeoToDrawPanel_Mercator falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
         }
@@ -7044,7 +7044,7 @@ void DrawPanel::TabulateRoutes_Mercator(void){
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
             ((plot->route_list)[i]).compute_end(String(""));
             
-            if(GeoToDrawPanel(((plot->route_list)[i]).end, &p)){
+            if(GeoToDrawPanel_Mercator(((plot->route_list)[i]).end, &p)){
                 
                 if(end_connected){
                     
@@ -8106,7 +8106,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    GeoToDrawPanel(q, p);
+    GeoToDrawPanel_Mercator(q, p);
     
     (p->x) += (position_draw_panel.x);
     (p->y) += (position_draw_panel.y);
@@ -8114,7 +8114,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
 }
 
 //this function converts the geographic position q into the  position p with respect to the origin of the mercator draw panel
-bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p){
+bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
     
     double x_temp, y_temp;
     
@@ -8636,7 +8636,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift it according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
                     
-                    GeoToDrawPanel(route_position_start_drag, &p);
+                    GeoToDrawPanel_Mercator(route_position_start_drag, &p);
                     
                     
                     if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){

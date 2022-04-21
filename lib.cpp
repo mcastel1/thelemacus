@@ -7494,9 +7494,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //    draw_panel->Draw_3D();
-    //when the ChartFrame is initialized, I choose to draw the Mercator chart: I set the two following pointers accordingly
+    //when the ChartFrame is initialized, I choose to draw the Mercator chart: I set the  following pointers accordingly
     (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
     (draw_panel->Render) = (&DrawPanel::Render_Mercator);
+    (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_Mercator);
     draw_panel->Draw_Mercator();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
@@ -8101,13 +8102,14 @@ bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
 
 
 //this function converts the geographic position p into the screen position p
-void DrawPanel::GeoToScreen_Mercator(Position q, wxPoint *p){
+void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    GeoToDrawPanel_Mercator(q, p);
     
+    (this->*GeoToDrawPanel)(q, p);
+
     (p->x) += (position_draw_panel.x);
     (p->y) += (position_draw_panel.y);
     
@@ -8173,19 +8175,21 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
-        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for Render.
+        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions.
         
-        Draw = &DrawPanel::Draw_Mercator;
-        Render = &DrawPanel::Render_Mercator;
+        Draw = (&DrawPanel::Draw_Mercator);
+        Render = (&DrawPanel::Render_Mercator);
+        GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
+
         
     }
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
-        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for REnder.
+        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for other functions.
         
-        Draw = &DrawPanel::Draw_3D;
-        Render = &DrawPanel::Render_3D;
-        
+        Draw = (&DrawPanel::Draw_3D);
+        Render = (&DrawPanel::Render_3D);
+        GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         
     }
     
@@ -8282,7 +8286,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
         for(((parent->parent)->highlighted_position) = -1, i=0; i<(plot->position_list).size(); i++){
             
-            GeoToScreen_Mercator((plot->position_list)[i], &q);
+            GeoToScreen((plot->position_list)[i], &q);
             
             if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
                4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){

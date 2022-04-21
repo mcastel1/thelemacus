@@ -68,9 +68,11 @@ class PlotFrame;
 class ChartPanel;
 class RouteFrame;
 class DrawPanel;
-//these two types allow me to define a pointer to a member-class function in class DrawPanel
+class Position;
+//these types allow me to define a pointer to a member-class function in class DrawPanel
 typedef  void (DrawPanel::*DrawPanelDrawFunction)(void);
 typedef  void (DrawPanel::*DrawPanelRenderFunction)(wxDC&);
+typedef  bool (DrawPanel::*DrawPanelGeoToDrawPanelFunction)(Position, wxPoint*);
 
 //class CheckBody;
 //struct CheckLimb;
@@ -1368,6 +1370,7 @@ public:
 //    void (DrawPanel::*Draw)(void);
     DrawPanelDrawFunction Draw;
     DrawPanelRenderFunction Render;
+    DrawPanelGeoToDrawPanelFunction GeoToDrawPanel;
 
     void SetIdling(bool);
     void Draw_Mercator(void);
@@ -1376,10 +1379,11 @@ public:
     void TabulateRoutes_3D(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
+    
+    void GeoToScreen(Position, wxPoint*);
     void ScreenToMercator(wxPoint, double*, double*);
     bool GeoTo3D(Position, double*, double*);
     void ScreenToGeo_Mercator(wxPoint, Position*);
-    void GeoToScreen_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
     void DrawPanelToGeo_3D(wxPoint, Position*);

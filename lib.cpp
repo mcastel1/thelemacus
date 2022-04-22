@@ -8158,8 +8158,8 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
     if(GeoTo3D(q, &x_temp, &y_temp)){
         
-        (p->x) = (position_plot_area.x) + (1.0+x_temp/x_max)*(width_plot_area/2);
-        (p->y) = (position_plot_area.y) + (1.0-y_temp/y_max)*(height_plot_area/2);
+        (p->x) = ((double)(position_plot_area.x)) + (1.0+x_temp/x_max)*(((double)width_plot_area)/2.0);
+        (p->y) = ((double)(position_plot_area.y)) + (1.0-y_temp/y_max)*(((double)height_plot_area)/2.0);
         
         return true;
         

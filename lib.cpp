@@ -7502,22 +7502,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     wxImage::AddHandler(handler);
     
     
-    //    draw_panel->Draw_3D();
-    //when the ChartFrame is initialized, I choose to draw the Mercator chart: I set the  following pointers accordingly
-    (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
-    (draw_panel->Render) = (&DrawPanel::Render_Mercator);
-    (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_Mercator);
-    (draw_panel->*(draw_panel->Draw))();
-    
-    //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
-    (draw_panel->x_min_0) = (draw_panel->x_min);
-    (draw_panel->x_max_0) = (draw_panel->x_max);
-    (draw_panel->y_min_0) = (draw_panel->y_min);
-    (draw_panel->y_max_0) = (draw_panel->y_max);
-    (draw_panel->width_chart_0) = (draw_panel->width_chart);
-    (draw_panel->height_chart_0) = (draw_panel->height_chart);
-    
-    
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
@@ -7537,7 +7521,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     graphical_type = new GraphicalTypeField(this);
     (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::SetGraphicalType, draw_panel);
-    
+   
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
@@ -7548,9 +7532,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Euler_a = new AngleField<ChartFrame>(this, &(draw_panel->euler_a), String(""));
     Euler_b = new AngleField<ChartFrame>(this, &(draw_panel->euler_b), String(""));
     Euler_c = new AngleField<ChartFrame>(this, &(draw_panel->euler_c), String(""));
-    Euler_a->set();
-    Euler_b->set();
-    Euler_c->set();
 
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
@@ -7561,15 +7542,35 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
-    
-    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
-    
-    
+        
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    
+    
+    
+    //when the ChartFrame is initialized, I choose to draw the Mercator chart: I set the  following pointers accordingly
+    (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
+    (draw_panel->Render) = (&DrawPanel::Render_Mercator);
+    (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_Mercator);
+    Euler_a->Enable(false);
+    Euler_b->Enable(false);
+    Euler_c->Enable(false);
+    (draw_panel->*(draw_panel->Draw))();
+    
+    //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
+    (draw_panel->x_min_0) = (draw_panel->x_min);
+    (draw_panel->x_max_0) = (draw_panel->x_max);
+    (draw_panel->y_min_0) = (draw_panel->y_min);
+    (draw_panel->y_max_0) = (draw_panel->y_max);
+    (draw_panel->width_chart_0) = (draw_panel->width_chart);
+    (draw_panel->height_chart_0) = (draw_panel->height_chart);
+
+    
+    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
+
     
     sizer_buttons->Add(empty_text_1);
     sizer_buttons->Add(button_up);
@@ -7596,24 +7597,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     //    sizer_v->Fit(panel);
-    
-    
-    
-    
+        
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
-    
-    
-    
-    //    panel->SetSizer(sizer_v);
-    //    sizer_v->Fit(this);
-    
-    //    SetSize((draw_panel->c)->getWidth() + ((draw_panel->c)->getWidth())*0.01, (draw_panel->c)->getHeight() + ((draw_panel->c)->getWidth())*0.01);
-    
-    //    SetAutoLayout(true);
-    
-    //    Fit();
     CentreOnScreen();
     
 }

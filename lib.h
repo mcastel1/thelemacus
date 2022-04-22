@@ -1756,7 +1756,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
-    void TryToEnableOk(void);
+    void AllOk(void);
     
     //    wxDECLARE_EVENT_TABLE();
     
@@ -1793,7 +1793,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);
-    void TryToEnableOk(void);
+    void AllOk(void);
     
     //    wxDECLARE_EVENT_TABLE();
     
@@ -1832,7 +1832,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);
-    void TryToEnableOk(void);
+    void AllOk(void);
     
     //    wxDECLARE_EVENT_TABLE();
     
@@ -1881,7 +1881,7 @@ public:
     bool ZoomFactor(double, double*);
     void UpdateSliderLabel(void);
     void SetIdling(bool);
-    void TryToEnableOk(void);
+    void AllOk(void);
     
     template<class T> void MoveUp(T&);
     template<class T> void MoveDown(T&);

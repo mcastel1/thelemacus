@@ -7548,6 +7548,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Euler_a = new AngleField<ChartFrame>(this, &(draw_panel->euler_a), String(""));
     Euler_b = new AngleField<ChartFrame>(this, &(draw_panel->euler_b), String(""));
     Euler_c = new AngleField<ChartFrame>(this, &(draw_panel->euler_c), String(""));
+    Euler_a->set();
+    Euler_b->set();
+    Euler_c->set();
 
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
@@ -8191,21 +8194,32 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
     
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
-        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions.
+        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
         
         Draw = (&DrawPanel::Draw_Mercator);
         Render = (&DrawPanel::Render_Mercator);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
+        
+        (parent->Euler_a)->Enable(false);
+        (parent->Euler_b)->Enable(false);
+        (parent->Euler_c)->Enable(false);
 
         
     }
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
-        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for other functions.
+        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
         
         Draw = (&DrawPanel::Draw_3D);
         Render = (&DrawPanel::Render_3D);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
+        
+        (parent->Euler_a)->set();
+        (parent->Euler_a)->Enable(true);
+        (parent->Euler_b)->set();
+        (parent->Euler_b)->Enable(true);
+        (parent->Euler_c)->set();
+        (parent->Euler_c)->Enable(true);
         
     }
     

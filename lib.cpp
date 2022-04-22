@@ -7456,24 +7456,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     GetAllCoastLineData();
     
-    //start - delete this later
-    gsl_rng_env_setup();
-    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
-    gsl_rng_set(myran, 0);
-    
-    
-    //
-    (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-    (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    //
-    /*
-    (draw_panel->euler_a).set(String(""), 0.0, String(""));
-    (draw_panel->euler_b).set(String(""), 0.0, String(""));
-    (draw_panel->euler_c).set(String(""), 0.0, String(""));
-    */
-    //end - delete this later 
-    
     
     file_init.open(String("in"), prefix);
     //read value_slider_max from file_init
@@ -7495,6 +7477,28 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);
+    
+    
+    
+    //start - delete this later
+    gsl_rng_env_setup();
+    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
+    gsl_rng_set(myran, 0);
+    
+    
+    //
+    (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+    (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    //
+    /*
+    (draw_panel->euler_a).set(String(""), 0.0, String(""));
+    (draw_panel->euler_b).set(String(""), 0.0, String(""));
+    (draw_panel->euler_c).set(String(""), 0.0, String(""));
+    */
+    //end - delete this later
+    
+    
     
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);

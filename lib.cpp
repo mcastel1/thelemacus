@@ -6297,24 +6297,6 @@ void ChartFrame::GetCoastLineData_3D(void){
     double x_temp, y_temp;
     
     //delete this later
-    gsl_rng_env_setup();
-    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
-    gsl_rng_set(myran, 0);
-    
-    
-    //
-    (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-    (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    //
-    /*
-    (draw_panel->euler_a).set(String(""), 0.0, String(""));
-    (draw_panel->euler_b).set(String(""), 0.0, String(""));
-    (draw_panel->euler_c).set(String(""), 0.0, String(""));
-    */
-
-    
-    //delete this later
     
     //sets the values of x_min ... y_max for the 3D projection
     (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
@@ -7473,6 +7455,24 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (parent->plot)->show(true, String(""));
     
     GetAllCoastLineData();
+    
+    //start - delete this later
+    gsl_rng_env_setup();
+    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
+    gsl_rng_set(myran, 0);
+    
+    
+    //
+    (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+    (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    //
+    /*
+    (draw_panel->euler_a).set(String(""), 0.0, String(""));
+    (draw_panel->euler_b).set(String(""), 0.0, String(""));
+    (draw_panel->euler_c).set(String(""), 0.0, String(""));
+    */
+    //end - delete this later 
     
     
     file_init.open(String("in"), prefix);

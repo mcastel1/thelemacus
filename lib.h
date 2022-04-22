@@ -1339,7 +1339,7 @@ public:
     ChartFrame* parent;
     PrintErrorMessage<DrawPanel>* print_error_message;
     XYChart *chart;
-    wxPoint position_draw_panel, position_plot_area, position_plot_area_3d, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
+    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
     wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
@@ -1359,7 +1359,7 @@ public:
     vector< vector< vector< wxPoint > > > points_route_list;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
-    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length, height_chart_3d, width_chart_3d, width_plot_area_3d, height_plot_area_3d;
+    unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tic_length;
     Plot* plot;
     MemBlock mem_block;
     wxMemoryInputStream * memory_input_stream;

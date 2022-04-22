@@ -7388,22 +7388,22 @@ void DrawPanel::Draw_3D(void){
                     (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
                     );
     
-    height_chart_3d = ((parent->GetSize()).GetHeight()) * 0.75;
-    width_chart_3d = height_chart_3d;
+    height_chart = ((parent->GetSize()).GetHeight()) * 0.75;
+    width_chart = height_chart;
     
     
     
-    width_plot_area_3d = width_chart_3d*length_plot_area_over_length_chart;
-    height_plot_area_3d = height_chart_3d*length_plot_area_over_length_chart;
+    width_plot_area = width_chart*length_plot_area_over_length_chart;
+    height_plot_area = height_chart*length_plot_area_over_length_chart;
 
-    chart = new XYChart(width_chart_3d, height_chart_3d);
-    chart->setPlotArea((int)(((double)width_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
-                       (int)(((double)height_chart_3d)*(1.0-length_plot_area_over_length_chart)/2.0),
-                       width_plot_area_3d,
-                       height_plot_area_3d,
+    chart = new XYChart(width_chart, height_chart);
+    chart->setPlotArea((int)(((double)width_chart)*(1.0-length_plot_area_over_length_chart)/2.0),
+                       (int)(((double)height_chart)*(1.0-length_plot_area_over_length_chart)/2.0),
+                       width_plot_area,
+                       height_plot_area,
                        Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
     
-    position_plot_area_3d = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
+    position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
 
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
@@ -7419,7 +7419,6 @@ void DrawPanel::Draw_3D(void){
                            DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
                            "", Chart::CircleSymbol, 1, 000000);
     
-    //    chart->makeChart("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/chart_3d.png");
     mem_block = (chart->makeChart(Chart::BMP));
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
@@ -7433,7 +7432,9 @@ void DrawPanel::Draw_3D(void){
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
     
-  
+    //updates the position of the draw pane this
+    position_draw_panel = (this->GetScreenPosition());
+
     
 }
 
@@ -8157,8 +8158,8 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
     if(GeoTo3D(q, &x_temp, &y_temp)){
         
-        (p->x) = (position_plot_area_3d.x) + (1.0+x_temp/x_max)*(width_plot_area_3d/2);
-        (p->y) = (position_plot_area_3d.y) + (1.0-y_temp/y_max)*(height_plot_area_3d/2);
+        (p->x) = (position_plot_area.x) + (1.0+x_temp/x_max)*(width_plot_area/2);
+        (p->y) = (position_plot_area.y) + (1.0-y_temp/y_max)*(height_plot_area/2);
         
         return true;
         

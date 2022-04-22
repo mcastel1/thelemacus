@@ -6563,9 +6563,11 @@ void ChartFrame::AllOk(void){
     
     if((draw_panel->Draw) == (&DrawPanel::Draw_3D)){
         
-        Euler_a->set();
-        Euler_b->set();
-        Euler_c->set();
+        wxCommandEvent dummy;
+        
+        Euler_a->get<wxCommandEvent>(dummy);
+        Euler_b->get<wxCommandEvent>(dummy);
+        Euler_c->get<wxCommandEvent>(dummy);
         
     }
 

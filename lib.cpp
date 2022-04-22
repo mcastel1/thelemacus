@@ -6576,9 +6576,17 @@ void ChartFrame::SetIdling(bool b){
     
 }
 
-//for the time being, this function does nothing. I created it only so as to get no error messages from, for example, CheckSign<P>::operator
+//I call this function when I know that all GUI fields are properly filled in ChartFrame, and thus set the non GUI Angle objects relative to the Euler angles for the rotation of the 3D earth,  and draw everything
 void ChartFrame::AllOk(void){
     
+    if((draw_panel->Draw) == (&DrawPanel::Draw_3D)){
+        
+        Euler_a->set();
+        Euler_b->set();
+        Euler_c->set();
+        
+    }
+
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     

@@ -6580,6 +6580,8 @@ void ChartFrame::SetIdling(bool b){
 void ChartFrame::TryToEnableOk(void){
     
     
+    
+    
 }
 
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
@@ -7505,7 +7507,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
     (draw_panel->Render) = (&DrawPanel::Render_Mercator);
     (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_Mercator);
-    draw_panel->Draw_Mercator();
+    (draw_panel->*(draw_panel->Draw))();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
     (draw_panel->x_min_0) = (draw_panel->x_min);
@@ -8381,7 +8383,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             Update_lambda_phi_min_max();
             
             //re-draw the chart
-            Draw_Mercator();
+            (this->*Draw)();
             PaintNow();
             
             //set the wxControl, title and message for the functor print_error_message, and then call the functor
@@ -8523,7 +8525,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (((parent->parent)->plot)->phi_min).normalize();
             (((parent->parent)->plot)->phi_max).normalize();
             
-            Draw_Mercator();
+            (this->*Draw)();
             PaintNow();
             
             parent->UpdateSlider();
@@ -8639,7 +8641,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     Update_lambda_phi_min_max();
                     
                     //re-draw the chart
-                    Draw_Mercator();
+                    (this->*Draw)();
                     PaintNow();
                     
                 }
@@ -8738,7 +8740,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         
         //put the slider back to the value before the scroll
         
-        Draw_Mercator();
+        (this->*Draw)();
         PaintNow();
         parent->UpdateSlider();
         parent->UpdateSliderLabel();
@@ -8760,7 +8762,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         //update parent->value_slider_old
         (parent->value_slider_old) = ((parent->slider)->GetValue());
         
-        Draw_Mercator();
+        (this->*Draw)();
         PaintNow();
         parent->UpdateSliderLabel();
         
@@ -9944,7 +9946,9 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     position->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_positions));
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
+    //transform this into     (((parent->chart_frame)->draw_panel)->*Draw)(); start
     ((parent->chart_frame)->draw_panel)->Draw_Mercator();
+    //transform this into     (((parent->chart_frame)->draw_panel)->*Draw)(); end
     ((parent->chart_frame)->draw_panel)->PaintNow();
     
     event.Skip(true);

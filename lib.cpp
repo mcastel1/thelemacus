@@ -6577,10 +6577,10 @@ void ChartFrame::SetIdling(bool b){
 }
 
 //for the time being, this function does nothing. I created it only so as to get no error messages from, for example, CheckSign<P>::operator
-void ChartFrame::TryToEnableOk(void){
+void ChartFrame::AllOk(void){
     
-    
-    
+    (draw_panel->*(draw_panel->Draw))();
+    draw_panel->PaintNow();
     
 }
 
@@ -7927,7 +7927,7 @@ template<class T>void CheckBody::operator()(T& event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -7971,7 +7971,7 @@ template<class T> void CheckLimb::operator()(T &event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -8042,7 +8042,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -8944,7 +8944,7 @@ template<class P> template<class T> void CheckString<P>::operator()(T &event){
     
     //    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
     
-    f->TryToEnableOk();
+    f->AllOk();
     
     event.Skip(true);
     
@@ -9061,7 +9061,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -9106,7 +9106,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -9149,7 +9149,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -9194,7 +9194,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -10004,7 +10004,7 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
     
 }
 
-void RouteFrame::TryToEnableOk(void){
+void RouteFrame::AllOk(void){
     
     button_ok->Enable((type->is_ok()) &&
                       (
@@ -10090,7 +10090,7 @@ void RouteFrame::SetIdling(bool b){
 
 
 //this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
-void PositionFrame::TryToEnableOk(void){
+void PositionFrame::AllOk(void){
     
     button_ok->Enable((lat->is_ok()) && (lon->is_ok()));
     
@@ -10971,7 +10971,7 @@ void SightFrame::SetIdling(bool b){
 
 
 //this function checks whether all the fields in SightFrame are ok, and if they are, it enables the button_reduce
-void SightFrame::TryToEnableOk(void){
+void SightFrame::AllOk(void){
     
     
     button_reduce->Enable(
@@ -11056,7 +11056,7 @@ template<class T> void CheckYear::operator()(T&event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -11098,7 +11098,7 @@ template<class T> void CheckMonth::operator()(T&event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -11161,7 +11161,7 @@ template<class T> void CheckDay::operator()(T& event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -11232,7 +11232,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
         (p->related_field)->Enable(false);
     }
     
-    (p->parent_frame)->TryToEnableOk();
+    (p->parent_frame)->AllOk();
     
     event.Skip(true);
     
@@ -11296,7 +11296,7 @@ template<class T> void CheckHour::operator()(T &event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -11336,7 +11336,7 @@ template<class T> void CheckMinute::operator()(T &event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -11379,7 +11379,7 @@ template<class T> void CheckSecond::operator()(T &event){
         }
         
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     
@@ -11467,7 +11467,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             
         }
         
-        f->TryToEnableOk();
+        f->AllOk();
         
     }
     

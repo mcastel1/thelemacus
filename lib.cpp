@@ -7419,6 +7419,9 @@ void DrawPanel::Draw_3D(void){
                            DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
                            "", Chart::CircleSymbol, 1, 000000);
     
+    //draw the circle repreentig the edge of the earth
+    (chart->getDrawArea())->circle(0, 0, x_max, y_max, 0x99ccff, Chart::Transparent);
+    
     mem_block = (chart->makeChart(Chart::BMP));
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));

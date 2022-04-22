@@ -26,6 +26,7 @@
  - create your own color class and a function to elegantly read colors from file.
 - add separator between recent items and non-recent items in BodyField->name
  - replaces multiple ifs with switch cases
+ - in the 3d projection two lengths l and d are redundant: remove one
  */
 
 

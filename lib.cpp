@@ -7632,7 +7632,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
         draw_panel->Update_lambda_phi_min_max();
         
         //re-draw the chart
-        draw_panel->Draw_Mercator();
+        (draw_panel->*(draw_panel->Draw))();
         draw_panel->PaintNow();
         
     }
@@ -7658,7 +7658,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
         draw_panel->Update_lambda_phi_min_max();
         
         //re-draw the chart
-        draw_panel->Draw_Mercator();
+        (draw_panel->*(draw_panel->Draw))();
         draw_panel->PaintNow();
         
     }
@@ -7685,7 +7685,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     draw_panel->Update_x_y_min_max();
     
     //re-draw the chart
-    draw_panel->Draw_Mercator();
+    (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
     event.Skip(true);
@@ -7744,7 +7744,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
     draw_panel->Update_x_y_min_max();
     
     //re-draw the chart
-    draw_panel->Draw_Mercator();
+    (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
     event.Skip(true);
@@ -7761,7 +7761,7 @@ template<class T> void ChartFrame::Reset(T& event){
     
     draw_panel->Update_lambda_phi_min_max();
     
-    draw_panel->Draw_Mercator();
+    (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     UpdateSlider();
     UpdateSliderLabel();
@@ -9946,9 +9946,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     position->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_positions));
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    //transform this into     (((parent->chart_frame)->draw_panel)->*Draw)(); start
-    ((parent->chart_frame)->draw_panel)->Draw_Mercator();
-    //transform this into     (((parent->chart_frame)->draw_panel)->*Draw)(); end
+    (((parent->chart_frame)->draw_panel)->*(((parent->chart_frame)->draw_panel)->Draw))();
     ((parent->chart_frame)->draw_panel)->PaintNow();
     
     event.Skip(true);
@@ -9988,7 +9986,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     //    parent->plot->print(true, String(""), cout);
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    ((parent->chart_frame)->draw_panel)->Draw_Mercator();
+    (((parent->chart_frame)->draw_panel)->*(((parent->chart_frame)->draw_panel)->Draw))();
     ((parent->chart_frame)->draw_panel)->PaintNow();
     
     
@@ -11556,7 +11554,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     parent->plot->print(true, String(""), cout);
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    ((parent->chart_frame)->draw_panel)->Draw_Mercator();
+    (((parent->chart_frame)->draw_panel)->*(((parent->chart_frame)->draw_panel)->Draw))();
     ((parent->chart_frame)->draw_panel)->PaintNow();
     
     event.Skip(true);

@@ -6576,6 +6576,12 @@ void ChartFrame::SetIdling(bool b){
     
 }
 
+//for the time being, this function does nothing. I created it only so as to get no error messages from, for example, CheckSign<P>::operator
+void ChartFrame::TryToEnableOk(void){
+    
+    
+}
+
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     int i, j;
@@ -7537,6 +7543,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
     
+    Euler_a = new AngleField<ChartFrame>(this, &(draw_panel->euler_a), String(""));
+    Euler_b = new AngleField<ChartFrame>(this, &(draw_panel->euler_b), String(""));
+    Euler_c = new AngleField<ChartFrame>(this, &(draw_panel->euler_c), String(""));
+
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -7571,7 +7581,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     graphical_type->InsertIn<wxBoxSizer>(sizer_slider);
-    
+    Euler_a->InsertIn<wxBoxSizer>(sizer_slider);
+    Euler_b->InsertIn<wxBoxSizer>(sizer_slider);
+    Euler_c->InsertIn<wxBoxSizer>(sizer_slider);
+
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     

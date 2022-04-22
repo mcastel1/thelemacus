@@ -1855,6 +1855,7 @@ public:
     TextBox* box;
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
+    AngleField<ChartFrame> *Euler_a, *Euler_b, *Euler_c;
     GraphicalTypeField* graphical_type;
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
@@ -1879,6 +1880,7 @@ public:
     bool ZoomFactor(double, double*);
     void UpdateSliderLabel(void);
     void SetIdling(bool);
+    void TryToEnableOk(void);
     
     template<class T> void MoveUp(T&);
     template<class T> void MoveDown(T&);

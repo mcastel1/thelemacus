@@ -6911,7 +6911,10 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 void DrawPanel::Render_3D(wxDC&  dc){
     
     int i, color_id;
-    double thickness;
+    double lambda, thickness;
+    //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
+    vector<wxPoint> points_dummy_route;
+    Route dummy_route;
     wxPoint p;
     
     wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
@@ -6919,6 +6922,44 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     //draw coastlines
     dc.DrawBitmap(*bitmap_image, 0, 0);
+    
+    
+    
+    //draw meridians
+    //set delta_lambda
+    delta_lambda = 30.0;
+    
+    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    (dummy_route.type).set(String(""), String("c"), String(""));
+    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
+    ((dummy_route.GP).phi).set(String(""), 0.0, String(""));
+
+    
+    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
+        
+        //I fix the longitude of the ground position of dummy_route, according to lambda
+        ((dummy_route.GP).lambda).set(String(""), k*delta_lambda+M_PI/2.0, String(""));
+
+        
+        
+        for(i=0, points_dummy_route.clear(); i<((plot->n_points_routes).value); i++){
+            
+            (dummy_route.l).set(String(""), 2.0*M_PI*Re*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
+            dummy_route.compute_end(String(""));
+            GeoToDrawPanel_3D(dummy_route.end, &p);
+    
+            points_dummy_route.push_back(p);
+            
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+    
     
     color_id = 0;
     

@@ -8150,8 +8150,8 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
     
-    if(cos((euler_a) -(p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a -(p.lambda)) + sin(euler_b)*sin((p.phi))) < 0.0){
-        //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer (i.e. the points with y' < 0)
+    if(cos((euler_a) -(p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a -(p.lambda)) + sin(euler_b)*sin((p.phi))) < - 1.0/((l+d).value)){
+        //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) )
         
         (*x) = ((d.value)*(cos(euler_c)*cos(euler_a - (p.lambda))*cos((p.phi)) - sin(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a - (p.lambda)) + sin(euler_b)*sin((p.phi)))))/
         ((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));

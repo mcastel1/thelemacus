@@ -6926,6 +6926,10 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     
     //draw meridians
+    
+    //set the pen to grey
+    dc.SetPen(wxPen(wxColor(128,128,128), 1));
+
     //set delta_lambda
     delta_lambda = 30.0;
     
@@ -6955,7 +6959,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
         }
         
-        dc.DrawSpline((points_route_dummy).size(), points_route_dummy.data());
+        dc.DrawSpline((points_dummy_route).size(), points_dummy_route.data());
         
         
     }

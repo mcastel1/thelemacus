@@ -6942,7 +6942,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
         
         //I fix the longitude of the ground position of dummy_route, according to lambda
-        ((dummy_route.GP).lambda).set(String(""), k*delta_lambda+M_PI/2.0, String(""));
+        ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
 
         
         

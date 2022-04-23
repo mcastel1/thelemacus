@@ -6570,7 +6570,7 @@ void ChartFrame::AllOk(void){
         Euler_c->get<wxCommandEvent>(dummy);
         
     }
-
+    
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
@@ -6911,7 +6911,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 void DrawPanel::Render_3D(wxDC&  dc){
     
     int i, color_id;
-    double lambda, thickness;
+    double thickness;
     //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
     vector<wxPoint> points_dummy_route;
     Route dummy_route;
@@ -6929,40 +6929,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     //set the pen to grey
     dc.SetPen(wxPen(wxColor(128,128,128), 1));
-
-    //set delta_lambda
-    delta_lambda = 30.0;
     
-    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
-    ((dummy_route.GP).phi).set(String(""), 0.0, String(""));
-
-    
-    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
-        
-        //I fix the longitude of the ground position of dummy_route, according to lambda
-        ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
-
-        
-        
-        for(i=0, points_dummy_route.clear(); i<((plot->n_points_routes).value); i++){
-            
-            (dummy_route.l).set(String(""), 2.0*M_PI*Re*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
-            dummy_route.compute_end(String(""));
-            
-            if(GeoToDrawPanel_3D(dummy_route.end, &p)){
-    
-                points_dummy_route.push_back(p);
-                
-            }
-            
-        }
-        
-        dc.DrawSpline((points_dummy_route).size(), points_dummy_route.data());
-        
-        
-    }
     
     
     
@@ -7172,11 +7139,11 @@ void DrawPanel::TabulateRoutes_3D(void){
             }
             
         }
-     
+        
     }
     
 }
-    
+
 
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){
@@ -7429,6 +7396,10 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
+    double lambda, x_temp, y_temp;
+    unsigned int i;
+    //    vector<wxPoint> points_dummy_route;
+    Route dummy_route;
     
     parent->GetCoastLineData_3D();
     
@@ -7444,7 +7415,7 @@ void DrawPanel::Draw_3D(void){
     
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
-
+    
     chart = new XYChart(width_chart, height_chart);
     chart->setPlotArea((int)(((double)width_chart)*(1.0-length_plot_area_over_length_chart)/2.0),
                        (int)(((double)height_chart)*(1.0-length_plot_area_over_length_chart)/2.0),
@@ -7453,7 +7424,7 @@ void DrawPanel::Draw_3D(void){
                        Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
     
     position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
-
+    
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
@@ -7468,8 +7439,51 @@ void DrawPanel::Draw_3D(void){
                            DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
                            "", Chart::CircleSymbol, 1, 000000);
     
+    
+    
+    
+    //draw meridians
+    //set delta_lambda
+    delta_lambda = 30.0;
+    
+    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    (dummy_route.type).set(String(""), String("c"), String(""));
+    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
+    ((dummy_route.GP).phi).set(String(""), 0.0, String(""));
+    
+    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
+        
+        //I fix the longitude of the ground position of dummy_route, according to lambda
+        ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
+        
+        for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
+            
+            (dummy_route.l).set(String(""), 2.0*M_PI*Re*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
+            dummy_route.compute_end(String(""));
+            
+            if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){
+                
+                (parent->x_3d).push_back(x_temp);
+                (parent->y_3d).push_back(y_temp);
+                
+            }
+            
+        }
+        
+    }
+    
+    
+    //    chart->addSplineLayer(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
+    //                          DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), -1, "");
+    
     //draw the circle repreentig the edge of the earth
-    (chart->getDrawArea())->circle(0.0, 0.0, x_max, y_max, 1, Chart::Transparent);
+    //    (chart->getDrawArea())->circle(0.0, 0.0, x_max, y_max, 1, Chart::Transparent);
+    
+    
+    
+    
+    
+    
     
     mem_block = (chart->makeChart(Chart::BMP));
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
@@ -7486,7 +7500,7 @@ void DrawPanel::Draw_3D(void){
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
-
+    
     
 }
 
@@ -7546,10 +7560,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
     //
     /*
-    (draw_panel->euler_a).set(String(""), 0.0, String(""));
-    (draw_panel->euler_b).set(String(""), 0.0, String(""));
-    (draw_panel->euler_c).set(String(""), 0.0, String(""));
-    */
+     (draw_panel->euler_a).set(String(""), 0.0, String(""));
+     (draw_panel->euler_b).set(String(""), 0.0, String(""));
+     (draw_panel->euler_c).set(String(""), 0.0, String(""));
+     */
     //end - delete this later
     
     
@@ -7587,7 +7601,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     graphical_type = new GraphicalTypeField(this);
     (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::SetGraphicalType, draw_panel);
-   
+    
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
@@ -7598,7 +7612,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Euler_a = new AngleField<ChartFrame>(this, &(draw_panel->euler_a), String(""));
     Euler_b = new AngleField<ChartFrame>(this, &(draw_panel->euler_b), String(""));
     Euler_c = new AngleField<ChartFrame>(this, &(draw_panel->euler_c), String(""));
-
+    
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -7608,7 +7622,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
-        
+    
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -7633,10 +7647,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->y_max_0) = (draw_panel->y_max);
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
-
+    
     
     draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
-
+    
     
     sizer_buttons->Add(empty_text_1);
     sizer_buttons->Add(button_up);
@@ -7656,14 +7670,14 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Euler_a->InsertIn<wxBoxSizer>(sizer_slider);
     Euler_b->InsertIn<wxBoxSizer>(sizer_slider);
     Euler_c->InsertIn<wxBoxSizer>(sizer_slider);
-
+    
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     //    sizer_v->Fit(panel);
-        
+    
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
@@ -8149,7 +8163,7 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 //converts the geographic Position p  to the  3D projection (x,y)
 bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
-  
+    
     if(cos((euler_a) -(p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a -(p.lambda)) + sin(euler_b)*sin((p.phi))) < - 1.0/((l+d).value)){
         //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) )
         
@@ -8181,7 +8195,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
     
     (this->*GeoToDrawPanel)(q, p);
-
+    
     (p->x) += (position_draw_panel.x);
     (p->y) += (position_draw_panel.y);
     
@@ -8256,7 +8270,7 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
         (parent->Euler_a)->Enable(false);
         (parent->Euler_b)->Enable(false);
         (parent->Euler_c)->Enable(false);
-
+        
         
     }
     

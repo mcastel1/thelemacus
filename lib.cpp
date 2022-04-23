@@ -6946,12 +6946,16 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
             (dummy_route.l).set(String(""), 2.0*M_PI*Re*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
             dummy_route.compute_end(String(""));
-            GeoToDrawPanel_3D(dummy_route.end, &p);
+            
+            if(GeoToDrawPanel_3D(dummy_route.end, &p)){
     
-            points_dummy_route.push_back(p);
+                points_dummy_route.push_back(p);
+                
+            }
             
         }
         
+        dc.DrawSpline((points_route_dummy).size(), points_route_dummy.data());
         
         
     }

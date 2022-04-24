@@ -7485,18 +7485,18 @@ void DrawPanel::Draw_3D(void){
     
     
     //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("l"), String(""));
-    ((dummy_route.start).lambda).set(String(""), 0.0, String(""));
-    (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
+    (dummy_route.type).set(String(""), String("c"), String(""));
+    ((dummy_route.GP).lambda).set(String(""), 0.0, String(""));
+    ((dummy_route.GP).phi).set(String(""), M_PI/2.0, String(""));
     
-    for(phi = -floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi < M_PI/2.0; phi+= k*delta_phi){
+    for(phi = floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi > -M_PI/2.0; phi-= k*delta_phi){
         
         //I fix the latitude of the start position of dummy_route, according to phi
-        ((dummy_route.start).phi).set(String(""), phi, String(""));
+        (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
 
         for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
             
-            (dummy_route.l).set(String(""), 2.0*M_PI*Re*cos(phi)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
+            (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin(omega.value)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
             dummy_route.compute_end(String(""));
             
             if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){

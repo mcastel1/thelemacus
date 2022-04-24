@@ -7640,7 +7640,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     graphical_type = new GraphicalTypeField(this);
-    (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::SetGraphicalType, draw_panel);
+    (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseGraphicalType, draw_panel);
     
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
@@ -8297,7 +8297,7 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 }
 
 
-void DrawPanel::SetGraphicalType(wxCommandEvent& event){
+void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
     
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
@@ -8307,6 +8307,12 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
         Render = (&DrawPanel::Render_Mercator);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         
+        //I enable the buttons up ... right because they are needed in Mercator mode
+        (parent->button_up)->Enable(true);
+        (parent->button_down)->Enable(true);
+        (parent->button_left)->Enable(true);
+        (parent->button_right)->Enable(true);
+
         (parent->Euler_a)->Enable(false);
         (parent->Euler_b)->Enable(false);
         (parent->Euler_c)->Enable(false);
@@ -8320,6 +8326,12 @@ void DrawPanel::SetGraphicalType(wxCommandEvent& event){
         Draw = (&DrawPanel::Draw_3D);
         Render = (&DrawPanel::Render_3D);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
+        
+        //I disable the buttons up down ... right because they cannot be used in 3D mode
+        (parent->button_up)->Enable(false);
+        (parent->button_down)->Enable(false);
+        (parent->button_left)->Enable(false);
+        (parent->button_right)->Enable(false);
         
         (parent->Euler_a)->set();
         (parent->Euler_a)->Enable(true);

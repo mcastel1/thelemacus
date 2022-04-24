@@ -1404,7 +1404,7 @@ public:
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
     void OnScroll(wxScrollEvent&);
-    void SetGraphicalType(wxCommandEvent&);
+    void OnChooseGraphicalType(wxCommandEvent&);
 
     
     void ArrowDown(wxKeyEvent&);

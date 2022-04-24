@@ -7551,6 +7551,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     String new_prefix;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
+    wxCommandEvent dummy_event;
+
     
     parent = parent_input;
     
@@ -7671,27 +7673,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    //when the ChartFrame is initialized, I choose to draw the Mercator chart: I set the  following pointers accordingly
-    /*
-    (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
-    (draw_panel->Render) = (&DrawPanel::Render_Mercator);
-    (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_Mercator);
-    Euler_a->Enable(false);
-    Euler_b->Enable(false);
-    Euler_c->Enable(false);
-     */
-    
-
-    //when the ChartFrame is initialized, I choose to draw the 3D chart: I set the  following pointers accordingly
-    //
-    (draw_panel->Draw) = (&DrawPanel::Draw_3D);
-    (draw_panel->Render) = (&DrawPanel::Render_3D);
-    (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_3D);
-    Euler_a->Enable(true);
-    Euler_b->Enable(true);
-    Euler_c->Enable(true);
-    //
-
+    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
+    //(graphical_type->name)->SetValue(wxString("3D"));
+    (graphical_type->name)->SetValue(wxString("3D"));
+    draw_panel->OnChooseGraphicalType(dummy_event);
     
     (draw_panel->*(draw_panel->Draw))();
     

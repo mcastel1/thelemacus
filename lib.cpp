@@ -7446,6 +7446,9 @@ void DrawPanel::Draw_3D(void){
     //set delta_lambda
     delta_lambda = 30.0;
     
+//    layer = (chart->addSplineLayer(DoubleArray(yDataPtr, yDataCount), ....));
+
+    
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
     (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
@@ -7470,12 +7473,14 @@ void DrawPanel::Draw_3D(void){
             
         }
         
+//        spline_layer->clear();
+//        delete [] spline_layer; 
+        spline_layer = (chart->addSplineLayer(DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), -1, ""));
+        spline_layer->setXData(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()));
+        
     }
     
-    
-    //    chart->addSplineLayer(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
-    //                          DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), -1, "");
-    
+  
     //draw the circle repreentig the edge of the earth
     //    (chart->getDrawArea())->circle(0.0, 0.0, x_max, y_max, 1, Chart::Transparent);
     

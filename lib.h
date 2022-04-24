@@ -1339,6 +1339,8 @@ public:
     ChartFrame* parent;
     PrintErrorMessage<DrawPanel>* print_error_message;
     XYChart *chart;
+    //a ChartDirector layer to draw splines on chart
+    SplineLayer *spline_layer;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
     wxSize size_plot_area;
     wxSlider* slider;

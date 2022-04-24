@@ -1372,6 +1372,7 @@ public:
 //    void (DrawPanel::*Draw)(void);
     //    DrawPanelDrawFunction Draw;
     void (DrawPanel::*Draw)(void);
+    void (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     DrawPanelRenderFunction Render;
     DrawPanelGeoToDrawPanelFunction GeoToDrawPanel;
 
@@ -1387,6 +1388,7 @@ public:
     void ScreenToMercator(wxPoint, double*, double*);
     bool GeoTo3D(Position, double*, double*);
     void ScreenToGeo_Mercator(wxPoint, Position*);
+    void ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
     void DrawPanelToGeo_3D(wxPoint, Position*);

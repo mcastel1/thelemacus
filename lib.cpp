@@ -7532,7 +7532,7 @@ void DrawPanel::Draw_3D(void){
     //free up resources
     (parent->x).clear();
     (parent->y).clear();
-    delete [] spline_layer;
+//    delete [] spline_layer;
 
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen

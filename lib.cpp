@@ -7672,12 +7672,27 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //when the ChartFrame is initialized, I choose to draw the Mercator chart: I set the  following pointers accordingly
+    /*
     (draw_panel->Draw) = (&DrawPanel::Draw_Mercator);
     (draw_panel->Render) = (&DrawPanel::Render_Mercator);
     (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_Mercator);
     Euler_a->Enable(false);
     Euler_b->Enable(false);
     Euler_c->Enable(false);
+     */
+    
+
+    //when the ChartFrame is initialized, I choose to draw the 3D chart: I set the  following pointers accordingly
+    //
+    (draw_panel->Draw) = (&DrawPanel::Draw_3D);
+    (draw_panel->Render) = (&DrawPanel::Render_3D);
+    (draw_panel->GeoToDrawPanel) = (&DrawPanel::GeoToDrawPanel_3D);
+    Euler_a->Enable(true);
+    Euler_b->Enable(true);
+    Euler_c->Enable(true);
+    //
+
+    
     (draw_panel->*(draw_panel->Draw))();
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0

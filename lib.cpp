@@ -7489,7 +7489,7 @@ void DrawPanel::Draw_3D(void){
     ((dummy_route.start).lambda).set(String(""), 0.0, String(""));
     (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
     
-    for(phi = 0.0; phi < M_PI/2.0; phi+= k*delta_phi){
+    for(phi = -floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi < M_PI/2.0; phi+= k*delta_phi){
         
         //I fix the latitude of the start position of dummy_route, according to phi
         ((dummy_route.start).phi).set(String(""), phi, String(""));

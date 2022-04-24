@@ -7495,7 +7495,7 @@ void DrawPanel::Draw_3D(void){
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
 
         for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
-            
+             
             (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin(dummy_route.omega)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
             dummy_route.compute_end(String(""));
             

@@ -7396,7 +7396,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda, x_temp, y_temp;
+    double lambda, phi, x_temp, y_temp;
     unsigned int i;
     //    vector<wxPoint> points_dummy_route;
     Route dummy_route;
@@ -7471,8 +7471,43 @@ void DrawPanel::Draw_3D(void){
             
         }
         
-//        spline_layer->clear();
-//        delete [] spline_layer;
+        spline_layer = (chart->addSplineLayer(DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), 0x808080, ""));
+        spline_layer->setXData(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()));
+        
+    }
+    
+    
+    
+    
+    //draw parallels
+    //set delta_phi
+    delta_phi = 30.0;
+    
+    
+    //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
+    (dummy_route.type).set(String(""), String("l"), String(""));
+    ((dummy_route.start).lambda).set(String(""), 0.0, String(""));
+    (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
+    
+    for(phi = 0.0; phi < M_PI/2.0; phi+= k*delta_phi){
+        
+        //I fix the latitude of the start position of dummy_route, according to phi
+        ((dummy_route.start).phi).set(String(""), phi, String(""));
+
+        for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
+            
+            (dummy_route.l).set(String(""), 2.0*M_PI*Re*cos(phi)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
+            dummy_route.compute_end(String(""));
+            
+            if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){
+                
+                (parent->x_3d).push_back(x_temp);
+                (parent->y_3d).push_back(y_temp);
+                
+            }
+            
+        }
+        
         spline_layer = (chart->addSplineLayer(DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), 0x808080, ""));
         spline_layer->setXData(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()));
         
@@ -7497,6 +7532,8 @@ void DrawPanel::Draw_3D(void){
     //free up resources
     (parent->x).clear();
     (parent->y).clear();
+    delete [] spline_layer;
+
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();

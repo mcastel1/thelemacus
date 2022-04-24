@@ -33,7 +33,7 @@ void Int::set(String name, int i, String prefix){
     
     value = i;
     
-    print(name, prefix, cout);
+    if(name != String("")){print(name, prefix, cout);}
     
 }
 
@@ -581,7 +581,7 @@ bool Answer::set(String name, char c, String prefix){
         
         value = c;
         
-        if(!(name == String(""))){
+        if(name != String("")){
             
             cout << prefix.value << name.value << " = " << c << "\n";
             
@@ -664,7 +664,8 @@ void String::print(String name, String prefix, ostream& ostr){
 void String::set(String name, String input_string, String prefix){
     
     value = (input_string.value);
-    if(!(name == String(""))){print(name, prefix, cout);}
+    
+    if(name != String("")){print(name, prefix, cout);}
     
 }
 
@@ -1345,7 +1346,7 @@ bool Chrono::set(String name, double x, String prefix){
         m = (unsigned int)((x - ((double)h))*60.0);
         s = (((x - ((double)h))*60.0) - ((double)m))*60.0;
         
-        print(name, prefix, cout);
+        if(name != String("")){print(name, prefix, cout);}
         
     }else{
         
@@ -5250,7 +5251,7 @@ void Length::set(String name, double x, String prefix){
     
     value = x;
     
-    print(name, String("nm"), prefix, cout);
+    if(name != String("")){print(name, String("nm"), prefix, cout);}
     check_valid(name, new_prefix);
     
 }
@@ -5543,7 +5544,7 @@ void Angle::set(String name, double x, String prefix){
     
     value = x;
     normalize();
-    if(name.value != ""){print(name, prefix, cout);}
+    if(name != String("")){print(name, prefix, cout);}
     
 }
 
@@ -7001,10 +7002,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
-    
-    
-    
-    
+
     
 }
 
@@ -7676,6 +7674,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
     //(graphical_type->name)->SetValue(wxString("3D"));
     (graphical_type->name)->SetValue(wxString("3D"));
+    
     draw_panel->OnChooseGraphicalType(dummy_event);
     
     (draw_panel->*(draw_panel->Draw))();

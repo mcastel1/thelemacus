@@ -8354,7 +8354,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
 void DrawPanel::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
-    ScreenToGeo_Mercator(position_screen_now, p);
+    ScreenToGeo(position_screen_now, p);
     
 }
 
@@ -8477,7 +8477,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     y_max_start_drag = y_max;
     
     Position geo;
-    ScreenToGeo_Mercator(position_start_drag, &geo);
+    ScreenToGeo(position_start_drag, &geo);
     geo.print(String("Position start drag"), String("************ "), cout);
     
     event.Skip(true);
@@ -8562,7 +8562,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
                 
                 //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                ScreenToGeo_Mercator(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                ScreenToGeo(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                 
                 //update the coordinates of the Position under consideration in listcontrol_positions
                 ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
@@ -8819,7 +8819,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     
                     //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                    ScreenToGeo_Mercator(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                    ScreenToGeo(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                     
                     //update the data of the Position under consideration in listcontrol_positions
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

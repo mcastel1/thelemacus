@@ -7496,7 +7496,7 @@ void DrawPanel::Draw_3D(void){
 
         for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
             
-            (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin((dummy_route.omega).value)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
+            (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin(dummy_route.omega)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
             dummy_route.compute_end(String(""));
             
             if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){

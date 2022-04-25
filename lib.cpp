@@ -7402,8 +7402,10 @@ void DrawPanel::Draw_3D(void){
     double lambda, phi, x_temp, y_temp;
     unsigned int i;
     bool end_connected;
-    //    vector<wxPoint> points_dummy_route;
+    vector< vector<wxPoint> > points_dummy_route;
     Route dummy_route;
+    wxPoint p;
+
     
     parent->GetCoastLineData_3D();
     
@@ -7487,6 +7489,8 @@ void DrawPanel::Draw_3D(void){
     //set delta_phi
     delta_phi = 30.0;
     
+
+    
     
     //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
@@ -7495,43 +7499,51 @@ void DrawPanel::Draw_3D(void){
     
     for(phi = floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi > -M_PI/2.0; phi-= k*delta_phi){
         
+        //clear up points_dummy_route
+        for(i=0; i<(points_dummy_route).size(); i++){
+            (points_dummy_route[i]).clear();
+        }
+        points_dummy_route.clear();
+        
         //I fix the latitude of the start position of dummy_route, according to phi
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
         
-        for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, (parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
+        for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<((plot->n_points_routes).value); i++){
             
             (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin(dummy_route.omega)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
             dummy_route.compute_end(String(""));
             
-            if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){
+            if(GeoToDrawPanel_3D(dummy_route.end, &p)){
                 
                 if(end_connected){
                     
-                    (parent->x_3d).clear();
-                    (parent->y_3d).clear();
-                    
+                    (points_dummy_route).resize((points_dummy_route).size() + 1);
                     end_connected = false;
                     
                 }
                 
-                (parent->x_3d).push_back(x_temp);
-                (parent->y_3d).push_back(y_temp);
-                
+                (points_dummy_route[points_dummy_route.size()-1]).push_back(p);
+
             }else{
                 
                 end_connected = true;
+                                
+            }
+            
+        }
+        
+        for(i=0; i<points_dummy_route.size(); i++){
+            
+            if(((points_dummy_route[i]).size()) > 1){
                 
-                if(((parent->x_3d).size()) > 1){
-                    
-                    spline_layer = (chart->addSplineLayer(DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), 0x808080, ""));
-                    spline_layer->setXData(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()));
-                    
-                }
+                spline_layer = (chart->addSplineLayer(DoubleArray(points_dummy_route.data(), points_dummy_route.size()), 0x808080, ""));
+                spline_layer->setXData(DoubleArray(points_dummy_route.data(), points_dummy_route.size()));
                 
             }
             
         }
-                
+        
+        
     }
     
     

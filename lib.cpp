@@ -940,49 +940,72 @@ void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel){
     unsigned int i;
 
 
-    //clear up x, y
-    x.clear();
-    y.clear();
-    
-    
-    for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
-        
-        l.set(String(""), 2.0*M_PI*Re*sin(omega)*((double)i)/((double)(n_points-1)), String(""));
-        compute_end(String(""));
-        
-        if(draw_panel->GeoTo3D(end, &x_temp, &y_temp)){
+    //picks the first (and only) character in string type.value
+    switch((type.value)[0]){
             
-            if(end_connected){
+        case 'l':
+        {
+    
+  
+            
+            break;
+        }
+    
+        case 'o':
+        {
+    
+  
+            
+            break;
+        }
+    
+        case 'c':
+        {
+    
+            for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
                 
-                x.resize(x.size() + 1);
-                y.resize(y.size() + 1);
-                end_connected = false;
+                l.set(String(""), 2.0*M_PI*Re*sin(omega)*((double)i)/((double)(n_points-1)), String(""));
+                compute_end(String(""));
+                
+                if(draw_panel->GeoTo3D(end, &x_temp, &y_temp)){
+                    
+                    if(end_connected){
+                        
+                        x.resize(x.size() + 1);
+                        y.resize(y.size() + 1);
+                        end_connected = false;
+                        
+                    }
+                    
+                    (x[x.size()-1]).push_back(x_temp);
+                    (y[y.size()-1]).push_back(y_temp);
+
+                }else{
+                    
+                    end_connected = true;
+                                    
+                }
                 
             }
             
-            (x[x.size()-1]).push_back(x_temp);
-            (y[y.size()-1]).push_back(y_temp);
-
-        }else{
+            for(i=0; i<x.size(); i++){
+                
+                if(((x[i]).size()) > 1){
+                    
+                    (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (y[i]).size()), 0x808080, ""));
+                    (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (x[i]).size()));
+                    
+                }
+                
+            }
             
-            end_connected = true;
-                            
-        }
-        
-    }
-    
-    for(i=0; i<x.size(); i++){
-        
-        if(((x[i]).size()) > 1){
-            
-            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (y[i]).size()), 0x808080, ""));
-            (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (x[i]).size()));
+            break;
             
         }
-        
+            
     }
-
-    
+            
+     
     
 }
 

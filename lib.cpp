@@ -5051,7 +5051,13 @@ void Atmosphere::set(void){
     //cout << "Atmosphere model: US 1976.\n";
     
     n_layers = 7;
-    A = 0.7933516713545163, B = 34.16*nm, P_dry_0 = 101325.0, alpha = -6.5*nm, beta = 2.8*nm, gamma = -2.8*nm, T0 = 288.15;
+    A = 0.7933516713545163;
+    B = 34.16*nm;
+    P_dry_0 = 101325.0;
+    alpha = -6.5*nm;
+    beta = 2.8*nm;
+    gamma = -2.8*nm;
+    T0 = 288.15;
     earth_radius.value = Re;
     
     h.resize(n_layers+1);

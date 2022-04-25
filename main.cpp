@@ -27,6 +27,7 @@
 - add separator between recent items and non-recent items in BodyField->name
  - replaces multiple ifs with switch cases
  - in the 3d projection two lengths l and d are redundant: remove one
+ -  I cannot find a way to invert the equations to obtain lambda and phi from x, y in the 3D projection 
  */
 
 

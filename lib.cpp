@@ -7530,7 +7530,6 @@ void DrawPanel::Draw_3D(void){
     //set delta_lambda
     delta_lambda = 30.0;
     
-    
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
     (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
@@ -7540,24 +7539,8 @@ void DrawPanel::Draw_3D(void){
         
         //I fix the longitude of the ground position of dummy_route, according to lambda
         ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
-        
-        for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
-            
-            (dummy_route.l).set(String(""), 2.0*M_PI*Re*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
-            dummy_route.compute_end(String(""));
-            
-            if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){
-                
-                (parent->x_3d).push_back(x_temp);
-                (parent->y_3d).push_back(y_temp);
-                
-            }
-            
-        }
-        
-        spline_layer = (chart->addSplineLayer(DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), 0x808080, ""));
-        spline_layer->setXData(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()));
-        
+        dummy_route.draw_3D(((plot->n_points_routes).value), this);
+     
     }
     
     
@@ -7576,7 +7559,8 @@ void DrawPanel::Draw_3D(void){
         
         //I fix the latitude of the start position of dummy_route, according to phi
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
-        dummy_route.draw_3D(((plot->n_points_routes).value), this);       
+        dummy_route.draw_3D(((plot->n_points_routes).value), this);
+        
     }
     
     

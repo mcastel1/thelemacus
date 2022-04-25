@@ -7402,7 +7402,8 @@ void DrawPanel::Draw_3D(void){
     double lambda, phi, x_temp, y_temp;
     unsigned int i;
     bool end_connected;
-    vector< vector<wxPoint> > points_dummy_route;
+    vector< vector<double> > x_dummy;
+    vector< vector<double> > y_dummy;
     Route dummy_route;
     wxPoint p;
 
@@ -7499,12 +7500,10 @@ void DrawPanel::Draw_3D(void){
     
     for(phi = floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi > -M_PI/2.0; phi-= k*delta_phi){
         
-        //clear up points_dummy_route
-        for(i=0; i<(points_dummy_route).size(); i++){
-            (points_dummy_route[i]).clear();
-        }
-        points_dummy_route.clear();
-        
+        //clear up x_dummy and y_dummy
+        x_dummy.clear();
+        y_dummy.clear();
+
         //I fix the latitude of the start position of dummy_route, according to phi
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
         
@@ -7513,16 +7512,18 @@ void DrawPanel::Draw_3D(void){
             (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin(dummy_route.omega)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
             dummy_route.compute_end(String(""));
             
-            if(GeoToDrawPanel_3D(dummy_route.end, &p)){
+            if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){
                 
                 if(end_connected){
                     
-                    (points_dummy_route).resize((points_dummy_route).size() + 1);
+                    (x_dummy).resize((x_dummy).size() + 1);
+                    (y_dummy).resize((y_dummy).size() + 1);
                     end_connected = false;
                     
                 }
                 
-                (points_dummy_route[points_dummy_route.size()-1]).push_back(p);
+                (x_dummy[x_dummy.size()-1]).push_back(x_temp);
+                (y_dummy[y_dummy.size()-1]).push_back(y_temp);
 
             }else{
                 
@@ -7532,12 +7533,12 @@ void DrawPanel::Draw_3D(void){
             
         }
         
-        for(i=0; i<points_dummy_route.size(); i++){
+        for(i=0; i<x_dummy.size(); i++){
             
-            if(((points_dummy_route[i]).size()) > 1){
+            if(((x_dummy[i]).size()) > 1){
                 
-                spline_layer = (chart->addSplineLayer(DoubleArray(points_dummy_route.data(), points_dummy_route.size()), 0x808080, ""));
-                spline_layer->setXData(DoubleArray(points_dummy_route.data(), points_dummy_route.size()));
+                spline_layer = (chart->addSplineLayer(DoubleArray((y_dummy[i]).data(), (y_dummy[i]).size()), 0x808080, ""));
+                spline_layer->setXData(DoubleArray((x_dummy[i]).data(), (x_dummy[i]).size()));
                 
             }
             

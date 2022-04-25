@@ -7402,6 +7402,7 @@ void DrawPanel::Draw_3D(void){
     double lambda, phi, x_temp, y_temp;
     unsigned int i;
     bool end_connected;
+    //x_dummy and y_dummy will be needed to store the points of the 3D projections of the Routes which I want to plot
     vector< vector<double> > x_dummy;
     vector< vector<double> > y_dummy;
     Route dummy_route;

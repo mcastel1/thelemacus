@@ -7002,7 +7002,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
-
+    
     
 }
 
@@ -7095,7 +7095,6 @@ void DrawPanel::TabulateRoutes_3D(void){
         
         for(j=0; j<(points_route_list[i]).size(); j++){
             (points_route_list[i][j]).clear();
-            
         }
         (points_route_list[i]).clear();
         
@@ -7396,6 +7395,7 @@ void DrawPanel::Draw_3D(void){
     
     double lambda, phi, x_temp, y_temp;
     unsigned int i;
+    bool end_connected;
     //    vector<wxPoint> points_dummy_route;
     Route dummy_route;
     
@@ -7491,27 +7491,44 @@ void DrawPanel::Draw_3D(void){
         
         //I fix the latitude of the start position of dummy_route, according to phi
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
-
-        for((parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
-             
+        
+        for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, (parent->x_3d).clear(), (parent->y_3d).clear(), i=0; i<((plot->n_points_routes).value); i++){
+            
             (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin(dummy_route.omega)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
             dummy_route.compute_end(String(""));
             
             if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){
                 
+                if(end_connected){
+                    
+                    (parent->x_3d).clear();
+                    (parent->y_3d).clear();
+                    
+                    end_connected = false;
+                    
+                }
+                
                 (parent->x_3d).push_back(x_temp);
                 (parent->y_3d).push_back(y_temp);
+                
+            }else{
+                
+                end_connected = true;
+                
+                if(((parent->x_3d).size()) > 1){
+                    
+                    spline_layer = (chart->addSplineLayer(DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), 0x808080, ""));
+                    spline_layer->setXData(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()));
+                    
+                }
                 
             }
             
         }
-        
-        spline_layer = (chart->addSplineLayer(DoubleArray((parent->y_3d).data(), (parent->y_3d).size()), 0x808080, ""));
-        spline_layer->setXData(DoubleArray((parent->x_3d).data(), (parent->x_3d).size()));
-        
+                
     }
     
-  
+    
     //draw the circle repreentig the edge of the earth
     //    (chart->getDrawArea())->circle(0.0, 0.0, x_max, y_max, 1, Chart::Transparent);
     
@@ -7530,8 +7547,8 @@ void DrawPanel::Draw_3D(void){
     //free up resources
     (parent->x).clear();
     (parent->y).clear();
-//    delete [] spline_layer;
-
+    //    delete [] spline_layer;
+    
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     parent->CenterOnScreen();
@@ -7550,7 +7567,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
-
+    
     
     parent = parent_input;
     
@@ -8320,13 +8337,13 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         Render = (&DrawPanel::Render_Mercator);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
-
+        
         //I enable the buttons up ... right because they are needed in Mercator mode
         (parent->button_up)->Enable(true);
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
-
+        
         (parent->Euler_a)->Enable(false);
         (parent->Euler_b)->Enable(false);
         (parent->Euler_c)->Enable(false);
@@ -8341,7 +8358,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         Render = (&DrawPanel::Render_3D);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
-
+        
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         (parent->button_up)->Enable(false);
         (parent->button_down)->Enable(false);
@@ -8370,7 +8387,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
 void DrawPanel::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
-   
+    
     (this->*ScreenToGeo)(position_screen_now, p);
     
 }
@@ -8496,7 +8513,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     Position geo;
     
     (this->*ScreenToGeo)(position_start_drag, &geo);
-
+    
     geo.print(String("Position start drag"), String("************ "), cout);
     
     event.Skip(true);
@@ -8582,7 +8599,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 
                 //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
                 (this->*ScreenToGeo)(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-
+                
                 
                 //update the coordinates of the Position under consideration in listcontrol_positions
                 ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
@@ -8840,7 +8857,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                     (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                                        
+                    
                     //update the data of the Position under consideration in listcontrol_positions
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                     

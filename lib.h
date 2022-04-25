@@ -758,6 +758,7 @@ public:
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
+    void draw_3D(unsigned int, DrawPanel*);
 
 };
 

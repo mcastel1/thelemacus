@@ -929,6 +929,63 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
 }
 
+
+//draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline
+void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel){
+    
+    vector< vector<double> > x;
+    vector< vector<double> > y;
+    double x_temp, y_temp;
+    bool end_connected;
+    unsigned int i;
+
+
+    //clear up x, y
+    x.clear();
+    y.clear();
+    
+    
+    for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
+        
+        l.set(String(""), 2.0*M_PI*Re*sin(omega)*((double)i)/((double)(n_points-1)), String(""));
+        compute_end(String(""));
+        
+        if(draw_panel->GeoTo3D(end, &x_temp, &y_temp)){
+            
+            if(end_connected){
+                
+                x.resize(x.size() + 1);
+                y.resize(y.size() + 1);
+                end_connected = false;
+                
+            }
+            
+            (x[x.size()-1]).push_back(x_temp);
+            (y[y.size()-1]).push_back(y_temp);
+
+        }else{
+            
+            end_connected = true;
+                            
+        }
+        
+    }
+    
+    for(i=0; i<x.size(); i++){
+        
+        if(((x[i]).size()) > 1){
+            
+            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (y[i]).size()), 0x808080, ""));
+            (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (x[i]).size()));
+            
+        }
+        
+    }
+
+    
+    
+}
+
 void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     unsigned int j;
@@ -7401,10 +7458,6 @@ void DrawPanel::Draw_3D(void){
     
     double lambda, phi, x_temp, y_temp;
     unsigned int i;
-    bool end_connected;
-    //x_dummy and y_dummy will be needed to store the points of the 3D projections of the Routes which I want to plot
-    vector< vector<double> > x_dummy;
-    vector< vector<double> > y_dummy;
     Route dummy_route;
     wxPoint p;
 
@@ -7490,10 +7543,7 @@ void DrawPanel::Draw_3D(void){
     //draw parallels
     //set delta_phi
     delta_phi = 30.0;
-    
-
-    
-    
+     
     //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
     ((dummy_route.GP).lambda).set(String(""), 0.0, String(""));
@@ -7501,51 +7551,9 @@ void DrawPanel::Draw_3D(void){
     
     for(phi = floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi > -M_PI/2.0; phi-= k*delta_phi){
         
-        //clear up x_dummy and y_dummy
-        x_dummy.clear();
-        y_dummy.clear();
-
         //I fix the latitude of the start position of dummy_route, according to phi
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
-        
-        for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<((plot->n_points_routes).value); i++){
-            
-            (dummy_route.l).set(String(""), 2.0*M_PI*Re*sin(dummy_route.omega)*((double)i)/((double)(((plot->n_points_routes).value)-1)), String(""));
-            dummy_route.compute_end(String(""));
-            
-            if(GeoTo3D(dummy_route.end, &x_temp, &y_temp)){
-                
-                if(end_connected){
-                    
-                    (x_dummy).resize((x_dummy).size() + 1);
-                    (y_dummy).resize((y_dummy).size() + 1);
-                    end_connected = false;
-                    
-                }
-                
-                (x_dummy[x_dummy.size()-1]).push_back(x_temp);
-                (y_dummy[y_dummy.size()-1]).push_back(y_temp);
-
-            }else{
-                
-                end_connected = true;
-                                
-            }
-            
-        }
-        
-        for(i=0; i<x_dummy.size(); i++){
-            
-            if(((x_dummy[i]).size()) > 1){
-                
-                spline_layer = (chart->addSplineLayer(DoubleArray((y_dummy[i]).data(), (y_dummy[i]).size()), 0x808080, ""));
-                spline_layer->setXData(DoubleArray((x_dummy[i]).data(), (x_dummy[i]).size()));
-                
-            }
-            
-        }
-        
-        
+        dummy_route.draw_3D(((plot->n_points_routes).value), this);       
     }
     
     

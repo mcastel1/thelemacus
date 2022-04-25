@@ -1799,7 +1799,7 @@ void Route::compute_end(String prefix){
             
         case 'c':
         {
-            
+             
             Angle t;
             //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
             //R sin omega = r, r t = l, t = l / (R sin omega)

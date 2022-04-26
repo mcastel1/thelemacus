@@ -8203,15 +8203,30 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
     
 }
 
-//converts the point p on the screen (which is supposed to lie in the plot area), to the relative geographic position q
-void DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
+//converts the point p on the screen (which is supposed to lie in the plot area): if p is in the plot area, it returns true and writes the result in q. If not, it retuns false. 
+bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span), String(""));
-    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min) )), String(""));
+    double x_temp, y_temp;
     
+    x_temp = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
+    y_temp = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min);
+    
+    if((check_x(x_temp)) && (y_min <= y_temp) && (y_temp <= (y_max))){
+        
+        
+        (q->lambda).set(String(""), k*lambda_mercator(x_temp), String(""));
+        (q->phi).set(String(""), k*phi_mercator(y_temp), String(""));
+        
+        return true;
+        
+    }else{
+        
+        return false;
+        
+    }
     
 }
 
@@ -8225,7 +8240,7 @@ void DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
 
 
 //converts the point p on the drawpanel with a 3D projection, to the relative geographic position q
-void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
+bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, xp, yp, zp;
     
@@ -8247,20 +8262,29 @@ nz = " << z;
     cout << "\nnum_2 = " << ((double)(((int)(p.y))-((int)((position_draw_panel.y)+(position_plot_area.y)+height_plot_area))));
     cout << "\nsum = " << ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area);
     cout << "\nden = " << ((double)height_plot_area);
-
-
-    xp = ((d.value)*((d.value) + (l.value))*x - sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
-    zp = ((d.value)*((d.value) + (l.value))*x*z - z*sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
-    yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
-                
-    ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) - yp*sin(euler_c)) + sin(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), sin(euler_a)*(-(xp*cos(euler_c)) + yp*sin(euler_c)) + cos(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c)))  ), String(""));
     
-    ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), String(""));
-    
-    cout << "\n rp = " << xp << " " << yp << " " << zp;
-    cout << "\n r = " << x << " " << "/" << " " << z;
-    cout << "\nsqrt xxx = " << -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
-    
+    if(gsl_pow_2(x)+gsl_pow_2(z) < gsl_pow_2(x_min)+gsl_pow_2(y_min)){
+        
+        
+        xp = ((d.value)*((d.value) + (l.value))*x - sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
+        zp = ((d.value)*((d.value) + (l.value))*x*z - z*sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+        yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
+        
+        ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) - yp*sin(euler_c)) + sin(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), sin(euler_a)*(-(xp*cos(euler_c)) + yp*sin(euler_c)) + cos(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c)))  ), String(""));
+        
+        ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), String(""));
+        
+        cout << "\n rp = " << xp << " " << yp << " " << zp;
+        cout << "\n r = " << x << " " << "/" << " " << z;
+        cout << "\nsqrt xxx = " << -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
+        
+        return true;
+        
+    }else{
+        
+        return false;
+        
+    }
     
 }
 

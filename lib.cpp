@@ -8232,12 +8232,24 @@ void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
 
 
 
-//converts the point p on the drawpanel, to the relative geographic position q
+//converts the point p on the drawpanel with a 3D projection, to the relative geographic position q
 void DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
     
+    double x, z, xp, yp, zp;
     
-    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-(position_plot_area.x))/((double)(size_plot_area.x)))*x_span), String(""));
-    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
+    
+    x = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max-x_min);
+    z = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) ;
+    
+    xp = ((d.value)*((d.value) + (l.value))*x - sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
+    zp = ((d.value)*((d.value) + (l.value))*x*z - z*sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+    yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
+                
+    ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) - yp*sin(euler_c)) + sin(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), sin(euler_a)*(-(xp*cos(euler_c)) + yp*sin(euler_c)) + cos(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c)))  ), String(""));
+    
+    ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), String(""));
+    
+
     
     
 }

@@ -758,7 +758,7 @@ public:
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
-    void draw_3D(unsigned int, DrawPanel*);
+    void draw(unsigned int, DrawPanel*);
 
 };
 
@@ -1374,6 +1374,7 @@ public:
     //    DrawPanelDrawFunction Draw;
     void (DrawPanel::*Draw)(void);
     void (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
+    bool (DrawPanel::*GeoToProjection)(Position, double*, double*);
     DrawPanelRenderFunction Render;
     DrawPanelGeoToDrawPanelFunction GeoToDrawPanel;
 
@@ -1388,6 +1389,7 @@ public:
     void GeoToScreen(Position, wxPoint*);
     void ScreenToMercator(wxPoint, double*, double*);
     bool GeoTo3D(Position, double*, double*);
+    bool GeoToMercator(Position, double*, double*);
     void ScreenToGeo_Mercator(wxPoint, Position*);
     void ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);

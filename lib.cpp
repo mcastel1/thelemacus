@@ -931,7 +931,7 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
 
 
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline
-void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel){
+void Route::draw(unsigned int n_points, DrawPanel* draw_panel){
     
     vector< vector<double> > x;
     vector< vector<double> > y;
@@ -960,7 +960,8 @@ void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel){
         l.set(String(""), 2.0*M_PI*Re*sin(omega)*((double)i)/((double)(n_points-1)), String(""));
         compute_end(String(""));
         
-        if(draw_panel->GeoTo3D(end, &x_temp, &y_temp)){
+        
+        if((draw_panel->*(draw_panel->GeoToProjection))(end, &x_temp, &y_temp)){
             
             if(end_connected){
                 
@@ -7223,6 +7224,7 @@ void DrawPanel::Draw_Mercator(void){
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
     Angle dummy;
+    Route dummy_route;
     //this is a pointer to parent->parent->plot, created only to shorten the code
     String prefix, new_prefix;
     
@@ -7319,6 +7321,12 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
+    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    (dummy_route.type).set(String(""), String("c"), String(""));
+    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
+    ((dummy_route.GP).phi).set(String(""), 0.0, String(""));
+    
+    
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
     do{
         
@@ -7330,12 +7338,17 @@ void DrawPanel::Draw_Mercator(void){
         
         if(check_x(x_dummy)){
             
-            chart->addLine(
-                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-                           (position_plot_area.y),
-                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-                           (position_plot_area.y) + height_plot_area,
-                           0x808080, 1);
+            //I fix the longitude of the ground position of dummy_route, according to lambda
+            ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
+            dummy_route.draw_3D(((plot->n_points_routes).value), this);
+
+            
+//            chart->addLine(
+//                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+//                           (position_plot_area.y),
+//                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+//                           (position_plot_area.y) + height_plot_area,
+//                           0x808080, 1);
             
         }
         
@@ -8286,6 +8299,30 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
+//this function converts the geographic position q into the coordinates x, y of its Mercator projection
+bool DrawPanel::GeoToMercator(Position q, double* x, double* y){
+    
+    double x_temp, y_temp;
+    
+    x_temp = x_mercator(K*((q.lambda).value));
+    y_temp = y_mercator(K*((q.phi).value));
+    
+    if(check_x(x_temp) && ((y_temp > y_min) && (y_temp < y_max))){
+        //if the point falls within the plot area, write it into x, y
+        
+        (*x) = x_temp;
+        (*y) = y_temp;
+        
+        return true;
+        
+    }else{
+        
+        return false;
+        
+    }
+    
+}
+
 //this function converts the geographic position q into the  position p with respect to the origin of the mercator draw panel
 bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
     
@@ -8352,7 +8389,8 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         Render = (&DrawPanel::Render_Mercator);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
-        
+        GeoToProjection = (&DrawPanel::GeoToMercator);
+
         //I enable the buttons up ... right because they are needed in Mercator mode
         (parent->button_up)->Enable(true);
         (parent->button_down)->Enable(true);
@@ -8373,6 +8411,8 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         Render = (&DrawPanel::Render_3D);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
+        GeoToProjection = (&DrawPanel::GeoTo3D);
+
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         (parent->button_up)->Enable(false);

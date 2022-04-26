@@ -8229,10 +8229,20 @@ void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, xp, yp, zp;
     
+    //updates the position of the draw pane this
+    position_draw_panel = (this->GetScreenPosition());
     
     x = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*(x_max-x_min);
     z = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min) ;
     
+    cout << "\ny_min = " << y_min;
+    cout << "\ny_max = " << y_min;
+    cout << "\np.y = " << (p.y);
+    cout << "\nposition_draw_panel.y = " << position_draw_panel.y;
+    cout << "\nposition_plot_area.y = " << position_plot_area.y;
+    cout << "\nheight_plot_area = " << height_plot_area;
+
+
     xp = ((d.value)*((d.value) + (l.value))*x - sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
     zp = ((d.value)*((d.value) + (l.value))*x*z - z*sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
     yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
@@ -8241,7 +8251,9 @@ void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), String(""));
     
-
+    cout << "\n rp = " << xp << " " << yp << " " << zp;
+    cout << "\n r = " << x << " " << "/" << " " << z;
+    cout << "\nsqrt xxx = " << -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
     
     
 }

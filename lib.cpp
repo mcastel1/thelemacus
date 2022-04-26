@@ -938,74 +938,61 @@ void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel){
     double x_temp, y_temp;
     bool end_connected;
     unsigned int i;
-
-
-    //picks the first (and only) character in string type.value
-    switch((type.value)[0]){
-            
-        case 'l':
-        {
+    Length l_tot;
     
-  
-            
-            break;
-        }
-    
-        case 'o':
-        {
-    
-  
-            
-            break;
-        }
-    
-        case 'c':
-        {
-    
-            for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
-                
-                l.set(String(""), 2.0*M_PI*Re*sin(omega)*((double)i)/((double)(n_points-1)), String(""));
-                compute_end(String(""));
-                
-                if(draw_panel->GeoTo3D(end, &x_temp, &y_temp)){
-                    
-                    if(end_connected){
-                        
-                        x.resize(x.size() + 1);
-                        y.resize(y.size() + 1);
-                        end_connected = false;
-                        
-                    }
-                    
-                    (x[x.size()-1]).push_back(x_temp);
-                    (y[y.size()-1]).push_back(y_temp);
-
-                }else{
-                    
-                    end_connected = true;
-                                    
-                }
-                
-            }
-            
-            for(i=0; i<x.size(); i++){
-                
-                if(((x[i]).size()) > 1){
-                    
-                    (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (y[i]).size()), 0x808080, ""));
-                    (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (x[i]).size()));
-                    
-                }
-                
-            }
-            
-            break;
-            
-        }
-            
+    if(type == String("c")){
+        //if the Route this is a circle of equal altitde, its total length is the length of the circle itself, which reads:
+        
+        l_tot.set(String(""), 2.0*M_PI*(Re*sin(omega)), String(""));
+        
+    }else{
+        //otherwise, the total length is simply written in the l object in this
+        
+        l_tot = l;
+        
     }
+    
+    
+    //tabulate the Route points
+    for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
+        
+        //set the temporarly length across the Route
+        l.set(String(""), 2.0*M_PI*Re*sin(omega)*((double)i)/((double)(n_points-1)), String(""));
+        compute_end(String(""));
+        
+        if(draw_panel->GeoTo3D(end, &x_temp, &y_temp)){
             
-     
+            if(end_connected){
+                
+                x.resize(x.size() + 1);
+                y.resize(y.size() + 1);
+                end_connected = false;
+                
+            }
+            
+            (x[x.size()-1]).push_back(x_temp);
+            (y[y.size()-1]).push_back(y_temp);
+            
+        }else{
+            
+            end_connected = true;
+            
+        }
+        
+    }
+    
+    //run all the connected components of the tabulated Route and draw each of them in draw_panel
+    for(i=0; i<x.size(); i++){
+        
+        if(((x[i]).size()) > 1){
+            
+            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), 0x808080, ""));
+            (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (int)(x[i]).size()));
+            
+        }
+        
+    }
+ 
     
 }
 

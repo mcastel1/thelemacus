@@ -7338,8 +7338,8 @@ void DrawPanel::Draw_Mercator(void){
         
         if(check_x(x_dummy)){
             
-            //I fix the longitude of the ground position of dummy_route, according to lambda
-            ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
+            //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
+            ((dummy_route.GP).lambda).set(String(""), k*lambda+M_PI/2.0, String(""));
             dummy_route.draw(((plot->n_points_routes).value), this);
 
             
@@ -7406,21 +7406,22 @@ void DrawPanel::Draw_Mercator(void){
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
     }
     
-    
+    //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
+    (dummy_route.type).set(String(""), String("c"), String(""));
+    ((dummy_route.GP).lambda).set(String(""), 0.0, String(""));
+    ((dummy_route.GP).phi).set(String(""), M_PI/2.0, String(""));
+
     
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
         y_dummy = y_mercator(phi);
         
         if((y_dummy >= y_min) && (y_dummy <= y_max)){
-            
-            chart->addLine(
-                           (position_plot_area.x),
-                           (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
-                           (position_plot_area.x) + width_plot_area,
-                           (position_plot_area.y) + height_plot_area - ((y_dummy-y_min)/(y_max-y_min)*height_plot_area),
-                           0x808080, 1);
-            
+                 
+            //I fix the latitude of the start position of dummy_route, according to phi, and plot the parallel of latitude
+            (dummy_route.omega).set(String(""), M_PI/2.0 - k*phi, String(""));
+            dummy_route.draw(((plot->n_points_routes).value), this);
+      
         }
         
         if(gamma_phi == 60.0){

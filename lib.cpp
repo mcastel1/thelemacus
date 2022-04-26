@@ -7479,8 +7479,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda, phi, x_temp, y_temp;
-    unsigned int i;
+    double lambda, phi;
     Route dummy_route;
     wxPoint p;
 

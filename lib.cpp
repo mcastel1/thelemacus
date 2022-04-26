@@ -8236,7 +8236,7 @@ void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     z = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min) ;
     
     cout << "\ny_min = " << y_min;
-    cout << "\ny_max = " << y_min;
+    cout << "\ny_max = " << y_max;
     cout << "\np.y = " << (p.y);
     cout << "\nposition_draw_panel.y = " << position_draw_panel.y;
     cout << "\nposition_plot_area.y = " << position_plot_area.y;

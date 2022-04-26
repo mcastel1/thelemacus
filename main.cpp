@@ -29,6 +29,7 @@
  - in the 3d projection two lengths l and d are redundant: remove one
  -  I cannot find a way to invert the equations to obtain lambda and phi from x, y in the 3D projection
  - fill the cases in Route::draw_3D for l and o
+ - reset button does not bring chart to original configuration 
  */
 
 

@@ -1395,7 +1395,7 @@ public:
     void Render_Mercator(wxDC&);
     void Render_3D(wxDC&);
 
-    void GetMouseGeoPosition(Position*);
+    bool GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseLeftDown(wxMouseEvent&);
     void OnMouseLeftUp(wxMouseEvent&);

@@ -8488,11 +8488,11 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
 
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world
-void DrawPanel::GetMouseGeoPosition(Position* p){
+bool DrawPanel::GetMouseGeoPosition(Position* p){
     
     position_screen_now = wxGetMousePosition();
     
-    (this->*ScreenToGeo)(position_screen_now, p);
+    return ((this->*ScreenToGeo)(position_screen_now, p));
     
 }
 
@@ -8505,13 +8505,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //    cout << "\nMouse moved";
     
-    GetMouseGeoPosition(&p);
-    
     //update the instantaneous position of the mouse on the chart
     s.str("");
-    s << (p.phi).to_string(String("NS"), display_precision, true) << " " << (p.lambda).to_string(String("EW"), display_precision, true);
+    if(GetMouseGeoPosition(&p)){;
+        //if the mouse has a screen position corresponding to a geographic position, I write it into s, otherwise s is left empty
+        s << (p.phi).to_string(String("NS"), display_precision, true) << " " << (p.lambda).to_string(String("EW"), display_precision, true);
+    }
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
-    
+
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
         s.str("");

@@ -8232,8 +8232,8 @@ void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    x = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*(x_max-x_min);
-    z = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min) ;
+    x = x_min + ((((double)(p.x)) - ((position_draw_panel.x)+(position_plot_area.x)) ) / ((double)width_plot_area))*(x_max-x_min);
+    z = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min) ;
     
     cout << "\
 nz = " << z;

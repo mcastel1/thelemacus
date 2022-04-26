@@ -7505,8 +7505,8 @@ void DrawPanel::Draw_3D(void){
     (chart->yAxis())->setColors(Chart::Transparent);
     
     chart->addScatterLayer(
-                           DoubleArray((parent->x_3d).data(), (parent->x_3d).size()),
-                           DoubleArray((parent->y_3d).data(), (parent->y_3d).size()),
+                           DoubleArray((parent->x_3d).data(), (int)(parent->x_3d).size()),
+                           DoubleArray((parent->y_3d).data(), (int)(parent->y_3d).size()),
                            "", Chart::CircleSymbol, 1, 000000);
     
     

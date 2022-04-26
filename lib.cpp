@@ -8235,12 +8235,17 @@ void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     x = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*(x_max-x_min);
     z = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min) ;
     
+    cout << "\nz = " << z;
     cout << "\ny_min = " << y_min;
     cout << "\ny_max = " << y_max;
     cout << "\np.y = " << (p.y);
     cout << "\nposition_draw_panel.y = " << position_draw_panel.y;
     cout << "\nposition_plot_area.y = " << position_plot_area.y;
     cout << "\nheight_plot_area = " << height_plot_area;
+    cout << "\nnum = " << ((double)(((p.y))-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)));
+    cout << "\nnum = " << ((double)(((int)(p.y))-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)));
+    cout << "\nsum = " << ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area);
+    cout << "\nden = " << ((double)height_plot_area);
 
 
     xp = ((d.value)*((d.value) + (l.value))*x - sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));

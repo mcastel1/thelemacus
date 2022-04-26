@@ -7340,7 +7340,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda
             ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
-            dummy_route.draw_3D(((plot->n_points_routes).value), this);
+            dummy_route.draw(((plot->n_points_routes).value), this);
 
             
 //            chart->addLine(
@@ -7538,7 +7538,7 @@ void DrawPanel::Draw_3D(void){
         
         //I fix the longitude of the ground position of dummy_route, according to lambda
         ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
-        dummy_route.draw_3D(((plot->n_points_routes).value), this);
+        dummy_route.draw(((plot->n_points_routes).value), this);
      
     }
 
@@ -7556,7 +7556,7 @@ void DrawPanel::Draw_3D(void){
         
         //I fix the latitude of the start position of dummy_route, according to phi
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
-        dummy_route.draw_3D(((plot->n_points_routes).value), this);
+        dummy_route.draw(((plot->n_points_routes).value), this);
         
     }
     

@@ -69,10 +69,6 @@ class ChartPanel;
 class RouteFrame;
 class DrawPanel;
 class Position;
-//these types allow me to define a pointer to a member-class function in class DrawPanel
-//typedef  void (DrawPanel::*DrawPanelDrawFunction)(void);
-typedef  void (DrawPanel::*DrawPanelRenderFunction)(wxDC&);
-typedef  bool (DrawPanel::*DrawPanelGeoToDrawPanelFunction)(Position, wxPoint*);
 
 //class CheckBody;
 //struct CheckLimb;
@@ -1369,14 +1365,12 @@ public:
     wxBitmap* bitmap_image; 
 
  
-    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs.
-//    void (DrawPanel::*Draw)(void);
-    //    DrawPanelDrawFunction Draw;
+    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
     void (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, double*, double*);
-    DrawPanelRenderFunction Render;
-    DrawPanelGeoToDrawPanelFunction GeoToDrawPanel;
+    void (DrawPanel::*Render)(wxDC&);
+    bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
 
     void SetIdling(bool);
     void Draw_Mercator(void);

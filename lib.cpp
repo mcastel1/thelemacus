@@ -7287,8 +7287,6 @@ void DrawPanel::Draw_Mercator(void){
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
-    //stores in to size_plot_area the size of the plot area
-    size_plot_area = wxSize((chart->getPlotArea())->getWidth(), (chart->getPlotArea())->getHeight());
     
     
     //set meridians
@@ -7299,7 +7297,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
-    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.x))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision, false)))).GetWidth()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)width_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision, false)))).GetWidth()))));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
@@ -7388,7 +7386,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     
-    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.y))/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision, false)))).GetHeight()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)height_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision, false)))).GetHeight()))));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
@@ -8211,8 +8209,8 @@ void DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*x_span), String(""));
-    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) )), String(""));
+    (q->lambda).set(String(""), k*lambda_mercator(x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span), String(""));
+    (q->phi).set(String(""), k*(phi_mercator(y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min) )), String(""));
     
     
 }
@@ -8232,8 +8230,8 @@ void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     double x, z, xp, yp, zp;
     
     
-    x = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*(x_max-x_min);
-    z = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min) ;
+    x = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*(x_max-x_min);
+    z = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min) ;
     
     xp = ((d.value)*((d.value) + (l.value))*x - sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
     zp = ((d.value)*((d.value) + (l.value))*x*z - z*sqrt(-(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))))))/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
@@ -8255,11 +8253,11 @@ void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
     position_draw_panel = (this->GetScreenPosition());
     
     if(x){
-        (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.x)))*x_span;
+        (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
         
     }
     if(y){
-        (*y) = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.y))))/((double)(size_plot_area.y)))*(y_max - y_min);
+        (*y) = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min);
     }
     
     
@@ -8630,8 +8628,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     }else{
         //in this case, I am dragging a route or position
         
-        if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.x)) ) &&
-              ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )))){
+        if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
+              ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )))){
             //in this case, drag_end_position lies out the plot area
             
             if(((parent->parent)->highlighted_route) != -1){
@@ -8850,8 +8848,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         position_now_drag = wxGetMousePosition();
         
         
-        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.x)) ) &&
-           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.y)) )){
+        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
+           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
             //in this case, the drag does not end out of the plot area
             
             if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){

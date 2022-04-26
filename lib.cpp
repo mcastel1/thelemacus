@@ -8205,17 +8205,13 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
 
 //converts the point p on the screen (which is supposed to lie in the plot area): if p is in the plot area, it returns true and writes the result in q. If not, it retuns false. 
 bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
-    
+        
+    double x_temp, y_temp;
+
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    double x_temp, y_temp;
-    
-    x_temp = x_min+ (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
-    y_temp = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min);
-    
-    if((check_x(x_temp)) && (y_min <= y_temp) && (y_temp <= (y_max))){
-        
+    if(ScreenToMercator(p, &x_temp, &y_temp)){
         
         (q->lambda).set(String(""), k*lambda_mercator(x_temp), String(""));
         (q->phi).set(String(""), k*phi_mercator(y_temp), String(""));
@@ -8231,9 +8227,9 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
 }
 
 //converts the point p on the screen (which is supposed to lie on the earth sphere), to the relative geographic position q
-void DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
+bool DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
     
-    ScreenToGeo_3D(p - (position_draw_panel+position_plot_area), q);
+    return ScreenToGeo_3D(p - (position_draw_panel+position_plot_area), q);
     
 }
 
@@ -8248,7 +8244,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     position_draw_panel = (this->GetScreenPosition());
     
     x = x_min + ((((double)(p.x)) - ((position_draw_panel.x)+(position_plot_area.x)) ) / ((double)width_plot_area))*(x_max-x_min);
-    z = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min) ;
+    z = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
     
     cout << "\
 nz = " << z;
@@ -8289,19 +8285,32 @@ nz = " << z;
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection (x,y) of the relative geographic position
-void DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
+bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
     
+    double x_temp, y_temp;
+
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    if(x){
-        (*x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
+    x_temp = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
+    y_temp = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
+    
+    if((check_x(x_temp)) && (y_min <= y_temp) && (y_temp <= (y_max))){
+        
+        if(x){
+            (*x) = x_temp;
+        }
+        if(y){
+            (*y) = y_temp;
+        }
+        
+        return true;
+
+    }else{
+        
+        return false;
         
     }
-    if(y){
-        (*y) = y_min - (((double)((p.y)-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)))/((double)height_plot_area))*(y_max - y_min);
-    }
-    
     
 }
 

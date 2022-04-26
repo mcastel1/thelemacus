@@ -1380,14 +1380,14 @@ public:
     void PaintNow();
     
     void GeoToScreen(Position, wxPoint*);
-    void ScreenToMercator(wxPoint, double*, double*);
+    bool ScreenToMercator(wxPoint, double*, double*);
     bool GeoTo3D(Position, double*, double*);
     bool GeoToMercator(Position, double*, double*);
     bool ScreenToGeo_Mercator(wxPoint, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
-    void DrawPanelToGeo_3D(wxPoint, Position*);
+    bool DrawPanelToGeo_3D(wxPoint, Position*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
     bool check_x(double);

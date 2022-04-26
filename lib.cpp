@@ -8392,6 +8392,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         GeoToProjection = (&DrawPanel::GeoToMercator);
 
         //I enable the buttons up ... right because they are needed in Mercator mode
+        (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
@@ -8415,6 +8416,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
 
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
+        (parent->slider)->Enable(false);
         (parent->button_up)->Enable(false);
         (parent->button_down)->Enable(false);
         (parent->button_left)->Enable(false);

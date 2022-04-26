@@ -7514,7 +7514,7 @@ void DrawPanel::Draw_3D(void){
     
     //draw meridians
     //set delta_lambda
-    delta_lambda = 30.0;
+    delta_lambda = 15.0;
     
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
@@ -7528,13 +7528,11 @@ void DrawPanel::Draw_3D(void){
         dummy_route.draw_3D(((plot->n_points_routes).value), this);
      
     }
-    
-    
-    
+
     
     //draw parallels
     //set delta_phi
-    delta_phi = 30.0;
+    delta_phi = 15.0;
      
     //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
@@ -7552,10 +7550,6 @@ void DrawPanel::Draw_3D(void){
     
     //draw the circle repreentig the edge of the earth
     //    (chart->getDrawArea())->circle(0.0, 0.0, x_max, y_max, 1, Chart::Transparent);
-    
-    
-    
-    
     
     
     

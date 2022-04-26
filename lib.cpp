@@ -8264,13 +8264,13 @@ nz = " << z;
     if(arg_sqrt >= 0.0){
         
         
-        xp = ((d.value)*((d.value) + (l.value))*x - sqrt(arg_sqrt))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
-        zp = ((d.value)*((d.value) + (l.value))*x*z - z*sqrt(arg_sqrt))/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+        xp = ((d.value)*((d.value) + (l.value))*x + sqrt(arg_sqrt))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
+        zp = ((d.value)*((d.value) + (l.value))*x*z + z*sqrt(arg_sqrt))/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
         yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
         
-        ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) - yp*sin(euler_c)) + sin(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), sin(euler_a)*(-(xp*cos(euler_c)) + yp*sin(euler_c)) + cos(euler_a)*(-(zp*sin(euler_b)) + cos(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c)))  ), String(""));
+        ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c)) - sin(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-yp*cos(euler_c) + xp*sin(euler_c))), -sin(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c)) - cos(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-yp*cos(euler_c) + xp*sin(euler_c)))  ), String(""));
         
-        ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) + xp*sin(euler_c))), String(""));
+        ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) - xp*sin(euler_c))), String(""));
         
         cout << "\n rp = " << xp << " " << yp << " " << zp;
         cout << "\n r = " << x << " " << "/" << " " << z;

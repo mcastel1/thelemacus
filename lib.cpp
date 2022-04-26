@@ -8218,22 +8218,16 @@ void DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
 }
 
 //converts the point p on the screen (which is supposed to lie on the earth sphere), to the relative geographic position q
-void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
+void DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
     
-    //updates the position of the draw pane this
-    position_draw_panel = (this->GetScreenPosition());
-    
-    
-    (q->lambda).set(String(""), 0.0, String(""));
-    (q->phi).set(String(""), 0.0, String(""));
-    
+    ScreenToGeo_3D(p - (position_draw_panel+position_plot_area), q);
     
 }
 
 
 
 //converts the point p on the drawpanel with a 3D projection, to the relative geographic position q
-void DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
+void DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, xp, yp, zp;
     

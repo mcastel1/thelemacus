@@ -6374,7 +6374,8 @@ void ChartFrame::GetCoastLineData_3D(void){
     //delete this later
     
     //sets the values of x_min ... y_max for the 3D projection
-    (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
+//    (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
+    (draw_panel->x_min) = -(((draw_panel->d).value)/sqrt(gsl_pow_2(((draw_panel->d)+(draw_panel->l)).value)-1.0));
     (draw_panel->x_max) = -(draw_panel->x_min);
     (draw_panel->y_min) = (draw_panel->x_min);
     (draw_panel->y_max) = -(draw_panel->y_min);

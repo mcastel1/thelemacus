@@ -8263,9 +8263,9 @@ nz = " << z;
     
     if(arg_sqrt >= 0.0){
         
-        
-        xp = (-sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
-        zp = (-(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+        //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. 
+        xp = (GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
+        zp = (GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
         yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
         
         ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c)) - sin(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c))), -(sin(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c))) - cos(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c)))), String(""));

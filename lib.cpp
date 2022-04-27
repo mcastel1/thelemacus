@@ -8259,17 +8259,17 @@ nz = " << z;
     cout << "\nsum = " << ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area);
     cout << "\nden = " << ((double)height_plot_area);
     
-    arg_sqrt = -(Power(x,2)*(Power(d,2)*(-1 + Power(x,2) + Power(z,2)) + 2*d*l*(Power(x,2) + Power(z,2)) + (-1 + l)*(1 + l)*(Power(x,2) + Power(z,2))));
+    arg_sqrt = -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
     
     if(arg_sqrt >= 0.0){
         
         
-        xp = (-Sqrt(argsqrt) + d*(d + l)*x)/(Power(d,2) + Power(x,2) + Power(z,2));
-        zp = (-(Sqrt(argsqrt)*z) + d*(d + l)*x*z)/(x*(Power(d,2) + Power(x,2) + Power(z,2)));
+        xp = (-sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
+        zp = (-(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
         yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
         
-        ((*q).lambda).set(String(""), -atan(Cos(a)*(xp*Cos(c) + yp*Sin(c)) - Sin(a)*(zp*Sin(b) + Cos(b)*(-(yp*Cos(c)) + xp*Sin(c))), -(Sin(a)*(xp*Cos(c) + yp*Sin(c))) - Cos(a)*(zp*Sin(b) + Cos(b)*(-(yp*Cos(c)) + xp*Sin(c))), String(""));
-        ((*q).phi).set(String(""), asin(zp*Cos(b) + Sin(b)*(yp*Cos(c) - xp*Sin(c)), String(""));
+        ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c)) - sin(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c))), -(sin(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c))) - cos(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c)))), String(""));
+        ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) - xp*sin(euler_c))), String(""));
         
         cout << "\n rp = " << xp << " " << yp << " " << zp;
         cout << "\n r = " << x << " " << "/" << " " << z;

@@ -993,7 +993,7 @@ void Route::draw(unsigned int n_points, DrawPanel* draw_panel){
         }
         
     }
- 
+    
     
 }
 
@@ -1787,7 +1787,7 @@ void Route::compute_end(String prefix){
             
         case 'c':
         {
-             
+            
             Angle t;
             //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
             //R sin omega = r, r t = l, t = l / (R sin omega)
@@ -6374,7 +6374,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     //delete this later
     
     //sets the values of x_min ... y_max for the 3D projection
-//    (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
+    //    (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
     (draw_panel->x_min) = -(((draw_panel->d).value)/sqrt(gsl_pow_2(((draw_panel->d)+(draw_panel->l)).value)-1.0));
     (draw_panel->x_max) = -(draw_panel->x_min);
     (draw_panel->y_min) = (draw_panel->x_min);
@@ -7340,14 +7340,14 @@ void DrawPanel::Draw_Mercator(void){
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.GP).lambda).set(String(""), k*lambda+M_PI/2.0, String(""));
             dummy_route.draw(((plot->n_points_routes).value), this);
-
             
-//            chart->addLine(
-//                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-//                           (position_plot_area.y),
-//                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
-//                           (position_plot_area.y) + height_plot_area,
-//                           0x808080, 1);
+            
+            //            chart->addLine(
+            //                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+            //                           (position_plot_area.y),
+            //                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+            //                           (position_plot_area.y) + height_plot_area,
+            //                           0x808080, 1);
             
         }
         
@@ -7409,18 +7409,18 @@ void DrawPanel::Draw_Mercator(void){
     (dummy_route.type).set(String(""), String("c"), String(""));
     ((dummy_route.GP).lambda).set(String(""), 0.0, String(""));
     ((dummy_route.GP).phi).set(String(""), M_PI/2.0, String(""));
-
+    
     
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
         y_dummy = y_mercator(phi);
         
         if((y_dummy >= y_min) && (y_dummy <= y_max)){
-                 
+            
             //I fix the latitude of the start position of dummy_route, according to phi, and plot the parallel of latitude
             (dummy_route.omega).set(String(""), M_PI/2.0 - k*phi, String(""));
             dummy_route.draw(((plot->n_points_routes).value), this);
-      
+            
         }
         
         if(gamma_phi == 60.0){
@@ -7482,7 +7482,7 @@ void DrawPanel::Draw_3D(void){
     double lambda, phi;
     Route dummy_route;
     wxPoint p;
-
+    
     
     parent->GetCoastLineData_3D();
     
@@ -7539,14 +7539,14 @@ void DrawPanel::Draw_3D(void){
         //I fix the longitude of the ground position of dummy_route, according to lambda
         ((dummy_route.GP).lambda).set(String(""), lambda+M_PI/2.0, String(""));
         dummy_route.draw(((plot->n_points_routes).value), this);
-     
+        
     }
-
+    
     
     //draw parallels
     //set delta_phi
     delta_phi = 15.0;
-     
+    
     //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
     ((dummy_route.GP).lambda).set(String(""), 0.0, String(""));
@@ -7640,15 +7640,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     /*
-    (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-    (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    */
+     (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+     (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+     (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+     */
     //
-     (draw_panel->euler_a).set(String(""), 0.0, String(""));
-     (draw_panel->euler_b).set(String(""), 0.0, String(""));
-     (draw_panel->euler_c).set(String(""), 0.0, String(""));
-     //
+    (draw_panel->euler_a).set(String(""), 0.0, String(""));
+    (draw_panel->euler_b).set(String(""), 0.0, String(""));
+    (draw_panel->euler_c).set(String(""), 0.0, String(""));
+    //
     //end - delete this later
     
     
@@ -8206,9 +8206,9 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
 
 //converts the point p on the screen (which is supposed to lie in the plot area): if p is in the plot area, it returns true and writes the result in q. If not, it retuns false. 
 bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
-        
+    
     double x_temp, y_temp;
-
+    
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
@@ -8247,21 +8247,20 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     x = x_min + ((((double)(p.x)) - ((position_draw_panel.x)+(position_plot_area.x)) ) / ((double)width_plot_area))*(x_max-x_min);
     z = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
     
-    cout << "\
-nz = " << z;
-    cout << "\ny_min = " << y_min;
-    cout << "\ny_max = " << y_max;
-    cout << "\np.y = " << (p.y);
-    cout << "\nposition_draw_panel.y = " << position_draw_panel.y;
-    cout << "\nposition_plot_area.y = " << position_plot_area.y;
-    cout << "\nheight_plot_area = " << height_plot_area;
-    cout << "\nnum = " << ((double)(((p.y))-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)));
-    cout << "\nnum_2 = " << ((double)(((int)(p.y))-((int)((position_draw_panel.y)+(position_plot_area.y)+height_plot_area))));
-    cout << "\nsum = " << ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area);
-    cout << "\nden = " << ((double)height_plot_area);
+    //    cout << "\nz = " << z;
+    //    cout << "\ny_min = " << y_min;
+    //    cout << "\ny_max = " << y_max;
+    //    cout << "\np.y = " << (p.y);
+    //    cout << "\nposition_draw_panel.y = " << position_draw_panel.y;
+    //    cout << "\nposition_plot_area.y = " << position_plot_area.y;
+    //    cout << "\nheight_plot_area = " << height_plot_area;
+    //    cout << "\nnum = " << ((double)(((p.y))-((position_draw_panel.y)+(position_plot_area.y)+height_plot_area)));
+    //    cout << "\nnum_2 = " << ((double)(((int)(p.y))-((int)((position_draw_panel.y)+(position_plot_area.y)+height_plot_area))));
+    //    cout << "\nsum = " << ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area);
+    //    cout << "\nden = " << ((double)height_plot_area);
     
     arg_sqrt = -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
-  
+    
     if(arg_sqrt >= 0.0){
         
         //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. 
@@ -8272,9 +8271,9 @@ nz = " << z;
         ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c)) - sin(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c))), -(sin(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c))) - cos(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c)))), String(""));
         ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) - xp*sin(euler_c))), String(""));
         
-        cout << "\n rp = " << xp << " " << yp << " " << zp;
-        cout << "\n r = " << x << " " << "/" << " " << z;
-        cout << "\nsqrt xxx = " << arg_sqrt;
+        //        cout << "\n rp = " << xp << " " << yp << " " << zp;
+        //        cout << "\n r = " << x << " " << "/" << " " << z;
+        //        cout << "\nsqrt xxx = " << arg_sqrt;
         
         return true;
         
@@ -8290,7 +8289,7 @@ nz = " << z;
 bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
     
     double x_temp, y_temp;
-
+    
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
@@ -8307,7 +8306,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
         }
         
         return true;
-
+        
     }else{
         
         return false;
@@ -8448,7 +8447,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
-
+        
         //I enable the buttons up ... right because they are needed in Mercator mode
         (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);
@@ -8471,7 +8470,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
-
+        
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         (parent->slider)->Enable(false);
@@ -8523,7 +8522,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         s << (p.phi).to_string(String("NS"), display_precision, true) << " " << (p.lambda).to_string(String("EW"), display_precision, true);
     }
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
-
+    
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
         s.str("");

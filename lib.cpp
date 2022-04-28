@@ -8263,7 +8263,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     if(arg_sqrt >= 0.0){
         
-        //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. 
+        //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for x<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger x -> I pick the solution with a positive sign in front of the square root through GSL_SIGN(x)
         xp = (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
         zp = (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
         yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));

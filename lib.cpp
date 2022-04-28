@@ -8261,7 +8261,7 @@ nz = " << z;
     cout << "\nden = " << ((double)height_plot_area);
     
     arg_sqrt = -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
-    
+  
     if(arg_sqrt >= 0.0){
         
         //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. 

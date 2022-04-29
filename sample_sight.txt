@@ -5,7 +5,7 @@
 				Name = sun
 				Radius = 375647.94816414685919880867004395 nm
 			limb = u
-			sextant altitude = 3° 2.200000000000130739863379858434'
+			sextant altitude = 78° 2.200000000000130739863379858434'
 			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:

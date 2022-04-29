@@ -1366,6 +1366,7 @@ public:
  
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
+    void (DrawPanel::*TabulateRoutes)(void);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, double*, double*);
     void (DrawPanel::*Render)(wxDC&);
@@ -1380,6 +1381,7 @@ public:
     void PaintNow();
     
     void GeoToScreen(Position, wxPoint*);
+    bool DrawPanelToGeo(wxPoint, Position*);
     bool ScreenToMercator(wxPoint, double*, double*);
     bool GeoTo3D(Position, double*, double*);
     bool GeoToMercator(Position, double*, double*);
@@ -1387,7 +1389,6 @@ public:
     bool ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
-    bool DrawPanelToGeo_3D(wxPoint, Position*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
     bool check_x(double);

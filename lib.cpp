@@ -8227,10 +8227,10 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
 }
 
-//converts the point p on the screen (which is supposed to lie on the earth sphere), to the relative geographic position q
-bool DrawPanel::DrawPanelToGeo_3D(wxPoint p, Position *q){
+//converts the point p on the screen (which is supposed to lie on the earth sphere), to the relative geographic position q. Note that this function is the same fot the Mercator and 3D projection
+bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
     
-    return ScreenToGeo_3D(p - (position_draw_panel+position_plot_area), q);
+    return (this->*ScreenToGeo)(p - (position_draw_panel+position_plot_area), q);
     
 }
 
@@ -8443,6 +8443,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
         
         Draw = (&DrawPanel::Draw_Mercator);
+        TabulateRoutes = (&DrawPanel::TabulateRoutes_Mercator);
         Render = (&DrawPanel::Render_Mercator);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
@@ -8466,6 +8467,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
         
         Draw = (&DrawPanel::Draw_3D);
+        TabulateRoutes = (&DrawPanel::TabulateRoutes_3D);
         Render = (&DrawPanel::Render_3D);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
@@ -8938,19 +8940,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     wxPoint p;
                     
-                    //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift it according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
+                    //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
                     
-                    GeoToDrawPanel_Mercator(route_position_start_drag, &p);
+                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
                     
                     
                     if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
-                        DrawPanelToGeo_3D(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
+                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
                         
                         
                     }else{
                         
-                        DrawPanelToGeo_3D(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
                         
                     }
                     
@@ -8960,7 +8962,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     
                     //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the chart
-                    TabulateRoutes_Mercator();
+                    (this->*TabulateRoutes)();
                     PaintNow();
                     
                     

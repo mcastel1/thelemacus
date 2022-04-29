@@ -8953,6 +8953,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
                     //in this case, I am using the 3d projection
                     
+                    //the rotation angle
                     Angle omega;
                     Position geo_now_drag, geo_start_drag;
                     

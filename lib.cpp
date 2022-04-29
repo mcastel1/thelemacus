@@ -7639,16 +7639,16 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     gsl_rng_set(myran, 0);
     
     
-    //
+    /*
     (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
     (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
     (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+    */
     //
-    /*
      (draw_panel->euler_a).set(String(""), 0.0, String(""));
     (draw_panel->euler_b).set(String(""), 0.0, String(""));
     (draw_panel->euler_c).set(String(""), 0.0, String(""));
-    */
+    //
     //end - delete this later
     
     

@@ -8960,14 +8960,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
                     
-                    omega.set(String(""),
-                              
-                              acos(
-                                   cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))
-                                   
-                                   )
-                              
-                              ,String(""));
+                    omega.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
+                    
+                    euler_a = omega;
+                    euler_b.set(String(""), acos(cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda))), String(""));
+                    euler_c.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
 
                 }
 

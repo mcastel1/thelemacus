@@ -8705,8 +8705,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 
                 //set the wxControl, title and message for the functor print_error_message, and then call the functor
                 (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Route start position outside plot area!");
-                (print_error_message->message) = String("Route start position must lie within the plot area.");
+                (print_error_message->title) = String("Route ground or start position outside plot area!");
+                (print_error_message->message) = String("Route start or start position must lie within the plot area.");
                 (*print_error_message)();
                 
             }

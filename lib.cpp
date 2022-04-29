@@ -8230,8 +8230,8 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
 //converts the point p on the screen (which is supposed to lie on the earth sphere), to the relative geographic position q. Note that this function is the same fot the Mercator and 3D projection
 bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
     
-    return (this->*ScreenToGeo)(p - (position_draw_panel+position_plot_area), q);
-    
+    return (this->*ScreenToGeo)(p + position_draw_panel, q);
+
 }
 
 

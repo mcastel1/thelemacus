@@ -8924,7 +8924,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     y_min += delta_y;
                     y_max += delta_y;
                     
-                    Update_lambda_phi_min_max();
+                    
+                    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                        
+                        Update_lambda_phi_min_max();
+                        
+                    }
                     
                     //re-draw the chart
                     (this->*Draw)();

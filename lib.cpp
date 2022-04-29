@@ -8652,31 +8652,40 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
         //in this case, I am dragging the chart (not a route or position)
         
-        double delta_x, delta_y;
+        if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+            
+            double delta_x, delta_y;
+            
+            delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
+            delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+            
+            if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
+                //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset x_min , .... , y_max to their original values
+                
+                x_min = x_min_start_drag;
+                x_max = x_max_start_drag;
+                y_min = y_min_start_drag;
+                y_max = y_max_start_drag;
+                
+                Update_lambda_phi_min_max();
+                
+                //re-draw the chart
+                (this->*Draw)();
+                PaintNow();
+                
+                //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("Chart outside boundaries!");
+                (print_error_message->message) = String("The chart must lie within the boundaries.");
+                (*print_error_message)();
+                
+                
+            }
+            
+        }
         
-        delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
-        delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-        
-        if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
-            //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset x_min , .... , y_max to their original values
-            
-            x_min = x_min_start_drag;
-            x_max = x_max_start_drag;
-            y_min = y_min_start_drag;
-            y_max = y_max_start_drag;
-            
-            Update_lambda_phi_min_max();
-            
-            //re-draw the chart
-            (this->*Draw)();
-            PaintNow();
-            
-            //set the wxControl, title and message for the functor print_error_message, and then call the functor
-            (print_error_message->control) = NULL;
-            (print_error_message->title) = String("Chart outside boundaries!");
-            (print_error_message->message) = String("The chart must lie within the boundaries.");
-            (*print_error_message)();
-            
+        if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+
             
         }
         
@@ -8910,32 +8919,42 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){
                 //in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
                 
-                double delta_x, delta_y;
-                
-                delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
-                delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-                
-                if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
-                    //in this case, the drag operation does not end out of the min and max latitude contained in the data files
+                if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                    //in this case, I am using the mercator projection
                     
-                    //update x_min, ..., y_max according to the drag.
-                    x_min -= delta_x;
-                    x_max -= delta_x;
-                    y_min += delta_y;
-                    y_max += delta_y;
+                    double delta_x, delta_y;
                     
+                    delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
+                    delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
                     
-                    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                    if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
+                        //in this case, the drag operation does not end out of the min and max latitude contained in the data files
                         
-                        Update_lambda_phi_min_max();
+                        //update x_min, ..., y_max according to the drag.
+                        x_min -= delta_x;
+                        x_max -= delta_x;
+                        y_min += delta_y;
+                        y_max += delta_y;
+                        
+                        if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                            
+                            Update_lambda_phi_min_max();
+                            
+                        }
+                        
+                        //re-draw the chart
+                        (this->*Draw)();
+                        PaintNow();
                         
                     }
                     
-                    //re-draw the chart
-                    (this->*Draw)();
-                    PaintNow();
+                }
+                
+                if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+                    //in this case, I am using the 3d projection
                     
                 }
+
                 
             }else{
                 //in this case I am moving a position / route (the mouse is over a route or a position while dragging)

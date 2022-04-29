@@ -8953,6 +8953,21 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
                     //in this case, I am using the 3d projection
                     
+                    Angle omega;
+                    Position geo_now_drag, geo_start_drag;
+                    
+                    (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
+                    (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
+                    
+                    omega.set(String(""),
+                              
+                              acos(
+                                   cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))
+                                   
+                                   )
+                              
+                              ,String(""));
+
                 }
 
                 

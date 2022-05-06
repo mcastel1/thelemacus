@@ -913,11 +913,16 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         //in this case, I add a new element at the end of listcontrol
         
         i = (listcontrol->GetItemCount());
+        
     }else{
         //in this case, I delete the i-th elment in listcontrol and replace it
         
         i = list_position;
-        listcontrol->DeleteItem(i);
+        if(i<(listcontrol->GetItemCount())){
+            listcontrol->DeleteItem(i);
+            
+        }
+        
     }
     
     item.SetId(i);
@@ -2934,7 +2939,9 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         i = (listcontrol->GetItemCount());
     }else{
         i = list_position;
-        listcontrol->DeleteItem(i);
+        if(i<(listcontrol->GetItemCount())){
+            listcontrol->DeleteItem(i);
+        }
     }
     
     item.SetId(i);
@@ -4219,21 +4226,18 @@ bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
     
     bool check = true;
     
+    //I link the sight to the route, and the route to the sight
     //create a new route in the respective list
     route_list.resize(route_list.size()+1);
-    
+    ((*sight_in).related_route).value = route_list.size()-1;
     //push back sight_in into sight_list
     sight_list.push_back(*sight_in);
-    
-    
+    (((route_list[route_list.size()-1]).related_sight).value) = sight_list.size()-1;
     
     //I commented this out because now the sight is enetered through the GUI
     //    (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
     check &= ((sight_list[sight_list.size()-1]).reduce(&(route_list[route_list.size()-1]), prefix));
     
-    //I link the sight to the route, and the route to the sight
-    ((sight_list[sight_list.size()-1]).related_route.value) = route_list.size()-1;
-    (((route_list[route_list.size()-1]).related_sight).value) = sight_list.size()-1;
     
     
     if(check){
@@ -4241,6 +4245,7 @@ bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
         
         cout << prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
         cout << prefix.value << "Route added as route #" << route_list.size() << ".\n";
+        
     }
     
     return check;
@@ -11933,7 +11938,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
     //add the route related to sight to the GUI object listcontrol_routes
     
-    (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
+    if(((sight->related_route).value) != -1){
+        
+        (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
+        
+    }
     
     parent->UpdateRelatedSightsAndRoutes();
     

@@ -8594,7 +8594,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         
         cout << "route liist size = " << (plot->route_list).size() << "\nlistcontrol routes size = " << ((parent->parent)->listcontrol_routes)->GetItemCount() << "\n";
         
-        
+     
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white

@@ -2933,7 +2933,7 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     if(list_position == -1){
         i = (listcontrol->GetItemCount());
     }else{
-        i = ((unsigned int)list_position);
+        i = list_position;
         listcontrol->DeleteItem(i);
     }
     

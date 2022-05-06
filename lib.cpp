@@ -6816,7 +6816,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
             if((points_route_list[i][j]).size() > 1){
                 //I need to add this consdition to make sure that the index j below lies in a valid range
                 
-                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
+                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
                 
             }
             
@@ -6986,7 +6986,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC&  dc){
     
-    int i, color_id;
+    int i, j, color_id;
     double thickness;
     //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
     vector<wxPoint> points_dummy_route;
@@ -7043,10 +7043,15 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         
         
-        if((points_route_list[i][0]).size() > 1){
-            //I need to add this consdition to make sure that the index j below lies in a valid range
+        //run over the connected chunks of the i-th route
+        for(j=0; j<(points_route_list[i]).size(); j++){
             
-            dc.DrawSpline((points_route_list[i][0]).size(), (points_route_list[i][0]).data());
+            if((points_route_list[i][j]).size() > 1){
+                //I need to add this consdition to make sure that the index j below lies in a valid range
+                
+                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
+                
+            }
             
         }
         
@@ -7169,22 +7174,31 @@ void DrawPanel::TabulateRoutes_3D(void){
     unsigned int i, j, l;
     Length l_tot;
     wxPoint p;
+    bool end_connected;
     
     //clear up points_route_list
-    for(i=0; i<(plot->route_list).size(); i++){
+    for(i=0; i<points_route_list.size(); i++){
         
         for(j=0; j<(points_route_list[i]).size(); j++){
+            
+            //            if(((points_route_list[i][j]).data()) != NULL){
             (points_route_list[i][j]).clear();
+            //            }
+            
         }
+        
         (points_route_list[i]).clear();
         
     }
+    points_route_list.clear();
     
     
     //compute the points of  routes
     //run over all routes
     for(i=0; i<(plot->route_list).size(); i++){
         
+        points_route_list.resize(points_route_list.size()+1);
+
         if((((plot->route_list)[i]).type) == String("c")){
             //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
             
@@ -7198,7 +7212,7 @@ void DrawPanel::TabulateRoutes_3D(void){
         }
         
         //compute points of route #i
-        for(/*allocate space for the only connected component of route #i*/points_route_list[i].resize(1), l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
             //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
             (((plot->route_list)[i]).l).set(
@@ -7211,7 +7225,20 @@ void DrawPanel::TabulateRoutes_3D(void){
             
             if(GeoToDrawPanel_3D(((plot->route_list)[i]).end, &p)){
                 
-                (points_route_list[i][0]).push_back(p);
+                if(end_connected){
+                    
+                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
+                    end_connected = false;
+                    
+                    
+                }
+                
+                
+                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
+
+            }else{
+                
+                end_connected = true;
                 
             }
             

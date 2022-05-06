@@ -11932,7 +11932,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //add the sight to the GUI object listconstrol_sights
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
     //add the route related to sight to the GUI object listcontrol_routes
-    (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
+    (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
     
     parent->UpdateRelatedSightsAndRoutes();
     

@@ -7094,20 +7094,27 @@ void DrawPanel::TabulateRoutes_Mercator(void){
     bool end_connected;
     
     //clear up points_route_list
-    for(i=0; i<(plot->route_list).size(); i++){
+    for(i=0; i<points_route_list.size(); i++){
         
         for(j=0; j<(points_route_list[i]).size(); j++){
+            
+            //            if(((points_route_list[i][j]).data()) != NULL){
             (points_route_list[i][j]).clear();
+            //            }
             
         }
+        
         (points_route_list[i]).clear();
         
     }
+    points_route_list.clear();
     
     
     //compute the points of  routes
     //run over all routes
     for(i=0; i<(plot->route_list).size(); i++){
+        
+        points_route_list.resize(points_route_list.size()+1);
         
         if((((plot->route_list)[i]).type) == String("c")){
             //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
@@ -7143,8 +7150,6 @@ void DrawPanel::TabulateRoutes_Mercator(void){
                 }
                 
                 (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
-                
-                
                 
             }else{
                 

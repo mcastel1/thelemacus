@@ -2862,6 +2862,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
         if(wxString(limb.value) == 'c'){listcontrol->SetItem(i, j++, wxString("center"));}
         
     }else{
+        
         listcontrol->SetItem(i, j++, wxString(""));
     }
     
@@ -2875,8 +2876,16 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString((index_error).to_string(String(""), display_precision, true)));
     
     //set height of eye column
-    if(artificial_horizon.value == 'n'){listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), display_precision)));}
-    else{listcontrol->SetItem(i, j++, wxString(""));}
+    if(artificial_horizon.value == 'n'){
+        
+        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), display_precision)));
+        
+    }
+    else{
+        
+        listcontrol->SetItem(i, j++, wxString(""));
+        
+    }
     
     //set column of master-clock date and hour of sight
     //I add to master_clock_date_and_hour the value stopwatch (if any): I write the result in time_UTC and I write in the GUI object  time_UTC
@@ -2924,7 +2933,7 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     if(list_position == -1){
         i = (listcontrol->GetItemCount());
     }else{
-        i = list_position;
+        i = ((unsigned int)list_position);
         listcontrol->DeleteItem(i);
     }
     

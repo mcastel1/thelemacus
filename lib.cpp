@@ -918,11 +918,8 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         //in this case, I delete the i-th elment in listcontrol and replace it
         
         i = list_position;
-        if(i<(listcontrol->GetItemCount())){
-            listcontrol->DeleteItem(i);
-            
-        }
-        
+        listcontrol->DeleteItem(i);
+                    
     }
     
     item.SetId(i);
@@ -2936,12 +2933,14 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     wxListItem item;
     
     if(list_position == -1){
+        
         i = (listcontrol->GetItemCount());
+        
     }else{
+        
         i = list_position;
-        if(i<(listcontrol->GetItemCount())){
-            listcontrol->DeleteItem(i);
-        }
+        listcontrol->DeleteItem(i);
+        
     }
     
     item.SetId(i);
@@ -11936,12 +11935,23 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
     //add the sight to the GUI object listconstrol_sights
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
-    //add the route related to sight to the GUI object listcontrol_routes
     
+    //add the route related to sight (if any) to the GUI object listcontrol_routes
     if(((sight->related_route).value) != -1){
         
-        (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
+        if(((sight->related_route).value) < (((this->parent)->listcontrol_routes)->GetItemCount())){
+            //in this case, in listcontrol_routes there is already an entry for the related route -> I write the related route into listcontrol_routes  in this entry
+            
+            (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
+
+        }else{
+            //in this case, in listcontrol_routes there is no entry for the related route -> I insert the related route by creating a new entry into listcontrol_routes
+
+            (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl(-1, ((this->parent)->listcontrol_routes));
+
+        }
         
+
     }
     
     parent->UpdateRelatedSightsAndRoutes();

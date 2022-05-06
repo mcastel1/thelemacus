@@ -8069,13 +8069,18 @@ template<class T>void CheckBody::operator()(T& event){
         i--;
         
         if(check){
-            
-            //            (*(p->body)) = ((p->catalog)->list)[i];
-            
+                        
             if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
+                //in this case, the selected body is a body which has a limb -> I enable the limb field
+                
                 ((f->limb)->name)->Enable(true);
+                
             }else{
+                //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
+                
                 ((f->limb)->name)->Enable(false);
+                ((f->limb)->ok) = true;
+                
             }
             
             (p->name)->SetBackgroundColour(*wxWHITE);
@@ -8149,8 +8154,6 @@ template<class T> void CheckLimb::operator()(T &event){
         
         if(check){
             
-            
-            
             (p->name)->SetBackgroundColour(*wxWHITE);
             (p->ok) = true;
             
@@ -8180,9 +8183,18 @@ template<class T> void LimbField::get(T &event){
     
     if(ok){
         
-        //I set the char in (limb->value) to the first letter in the string contained in the GUI field
-        (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
-        
+        if(name->IsEnabled()){
+            //if the limb is ok and the limb wxComboBox is enabled, I set the char in (limb->value) to the first letter in the string contained in the GUI field
+            
+            (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
+            
+            
+        }else{
+            //if the limb is ok and the limb wxComboBox is disabled, then the limb is irrelevant, and I set the char in limb->value to the null char. 
+            
+            (limb->value) = '\0';
+            
+        }
     }
     
     event.Skip(true);

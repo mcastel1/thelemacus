@@ -7758,8 +7758,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
-    //(graphical_type->name)->SetValue(wxString("3D"));
-    (graphical_type->name)->SetValue(wxString("3D"));
+    (graphical_type->name)->SetValue(wxString("Mercator"));
+    //    (graphical_type->name)->SetValue(wxString("3D"));
     
     draw_panel->OnChooseGraphicalType(dummy_event);
     
@@ -11932,6 +11932,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //add the sight to the GUI object listconstrol_sights
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
     //add the route related to sight to the GUI object listcontrol_routes
+    
     (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
     
     parent->UpdateRelatedSightsAndRoutes();

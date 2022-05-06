@@ -8592,6 +8592,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
         
+        cout << "route liist size = " << (plot->route_list).size() << "\nlistcontrol routes size = " << ((parent->parent)->listcontrol_routes)->GetItemCount() << "\n";
+        
+        
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -10982,7 +10985,6 @@ void ListFrame::UpdateRelatedSightsAndRoutes(void){
         
         if(((((plot->route_list)[i]).related_sight).value) == -1){
             
-            
             listcontrol_routes->SetItem(i, n_columns_listcontrol_routes-1, wxString(""));
             
         }else{
@@ -11926,10 +11928,13 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
         
     }
+        
+    //add the sight to the GUI object listconstrol_sights
+    sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
+    //add the route related to sight to the GUI object listcontrol_routes
+    (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
     
     parent->UpdateRelatedSightsAndRoutes();
-    
-    sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
     
     parent->plot->print(true, String(""), cout);
     

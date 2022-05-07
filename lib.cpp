@@ -8582,7 +8582,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
-        
+     
         cout << "(plot->route_list).size()= " << (plot->route_list).size() << "\n";
         cout << "listcontrol_routes size = " << ((parent->parent)->listcontrol_routes)->GetItemCount() << "\n";
         

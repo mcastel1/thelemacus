@@ -845,7 +845,7 @@ bool Position::operator!=(const Position& p){
     return (!((*this)==p));
     
 }
-
+ 
 
 Position::Position(void){
     

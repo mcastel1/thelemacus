@@ -9093,6 +9093,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //write the rotation in rotation_now
                     rotation_now = Rotation(euler_a, euler_b, euler_c);
                     
+                    cout << "Rotation now : \n";
+                    euler_a.print(String("a"), String(""), cout);
+                    euler_b.print(String("b"), String(""), cout);
+                    euler_c.print(String("c"), String(""), cout);
+                    rotation_now.print(String("rotation now"), String(""), cout);
+                    rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+                    rotation.print(String("rotation"), String(""), cout);
+
                     //compose the previous rotation with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                     rotation = rotation_now*rotation_start_drag;
                     //end - change this later

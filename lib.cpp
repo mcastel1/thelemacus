@@ -9094,6 +9094,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     rotation_now = Rotation(euler_a, euler_b, euler_c);
                     
                     cout << "Rotation now : \n";
+                    geo_start_drag.print(String("geo start drag"), String(""), cout);
+                    geo_now_drag.print(String("geo now drag"), String(""), cout);
                     euler_a.print(String("a"), String(""), cout);
                     euler_b.print(String("b"), String(""), cout);
                     euler_c.print(String("c"), String(""), cout);

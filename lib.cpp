@@ -9078,20 +9078,24 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, I am using the 3d projection
                     
                     //the rotation angle
-                    Angle omega;
+                    Angle euler_a, euler_b, euler_c;
                     Position geo_now_drag, geo_start_drag;
+                    Rotation rotation_now;
                     
                     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
                     
-                    omega.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
                     
                     //start - change this later
-                    /*
-                     euler_a = omega;
-                     euler_b.set(String(""), acos(cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda))), String(""));
-                     euler_c.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
-                     */
+                    //set the euler angles corresponding to the rotation resulting from the mouse drag
+                    euler_a.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
+                    euler_b.set(String(""), acos(cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda))), String(""));
+                    euler_c.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
+                    //write the rotation in rotation_now
+                    rotation_now = Rotation(euler_a, euler_b, euler_c);
+                    
+                    //compose the previous rotation with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                    rotation = rotation_now*rotation;
                     //end - change this later
                     
                     //re-draw the chart

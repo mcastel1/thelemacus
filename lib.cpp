@@ -721,6 +721,27 @@ Rotation Rotation::operator *(const Rotation& s){
     
 }
 
+
+void Rotation::print(String name, String prefix, ostream& ostr){
+    
+    unsigned int i, j;
+    
+    ostr << prefix.value << name.value << " : \n";
+    
+    for(i=0; i<3; i++){
+        
+        for(ostr << prefix.value, j=0; j<3; j++){
+
+            ostr << matrix[3*i+j] << "\t";
+
+        }
+
+        ostr << "\n";
+
+    }
+    
+}
+
 bool Angle::operator==(const Angle& x){
     
     return((((*this).value) == (x.value)));

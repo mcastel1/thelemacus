@@ -666,9 +666,11 @@ public:
     Rotation(Angle, Angle, Angle);
     
     Rotation operator *(const Rotation&);
-    
+    void print(String, String, ostream&);
     
 };
+
+
 
 //this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
 inline double x_mercator(double lambda){

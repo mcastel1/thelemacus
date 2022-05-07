@@ -8744,6 +8744,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     
     position_start_drag = wxGetMousePosition();
+    rotation_start_drag = rotation;
     
     //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
     x_min_start_drag = x_min;
@@ -8751,11 +8752,9 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     y_min_start_drag = y_min;
     y_max_start_drag = y_max;
     
-    Position geo;
-    
-    (this->*ScreenToGeo)(position_start_drag, &geo);
-    
-    geo.print(String("Position start drag"), String("************ "), cout);
+    //    Position geo;
+    //    (this->*ScreenToGeo)(position_start_drag, &geo);
+    //    geo.print(String("Position start drag"), String("************ "), cout);
     
     event.Skip(true);
     
@@ -9095,7 +9094,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     rotation_now = Rotation(euler_a, euler_b, euler_c);
                     
                     //compose the previous rotation with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                    rotation = rotation_now*rotation;
+                    rotation = rotation_now*rotation_start_drag;
                     //end - change this later
                     
                     //re-draw the chart

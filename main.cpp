@@ -55,7 +55,7 @@ bool MyApp::OnInit(){
     string test = a.to_string(String(""), display_precision, true);
     */
      
-    //
+    /*
     Angle a, b, c;
     a.set(String(""), 0.2, String(""));
     b.set(String(""), 2, String(""));
@@ -72,7 +72,7 @@ bool MyApp::OnInit(){
     R.print(String("R"), String("\t\t"), cout);
     S.print(String("S"), String("\t\t"), cout);
     T.print(String("composition"), String("\t\t"), cout);
-    //
+    */
  
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display

@@ -8386,12 +8386,8 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
         //r = (rotation.matrix)^T . rp
         gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
         
-        //start - uncomment and fix this later
-        //
-         ((*q).lambda).set(String(""), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(""));
-         ((*q).phi).set(String(""), asin(gsl_vector_get(r, 2)), String(""));
-         //
-        //end - uncomment and fix this later
+        ((*q).lambda).set(String(""), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(""));
+        ((*q).phi).set(String(""), asin(gsl_vector_get(r, 2)), String(""));
         
         
         //        cout << "\n rp = " << xp << " " << yp << " " << zp;

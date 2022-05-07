@@ -210,13 +210,29 @@ inline double csc(double x){
 
 inline double atan(double x, double y){
     
-    if(x > 0.0){
+    if(x != 0.0){
         
-        return atan(y/x);
+        if(x > 0.0){
+            
+            return atan(y/x);
+            
+        }else{
+            
+            return(atan(y/x)+M_PI);
+        }
         
     }else{
         
-        return(atan(y/x)+M_PI);
+        if(y > 0.0){
+            
+            return(M_PI/2.0);
+            
+        }else{
+            
+            return(3.0*M_PI/2.0);
+            
+        }
+        
     }
     
 }

@@ -7846,6 +7846,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
+    //stores the orientatio of the earth of the first time the chart is shown into rotation_0
+    (draw_panel->rotation_0) = (draw_panel->rotation);
+    
     
     draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
     
@@ -8022,17 +8025,32 @@ template<class T> void ChartFrame::MoveRight(T& event){
 //resets the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event){
     
-    (draw_panel->x_min) = (draw_panel->x_min_0);
-    (draw_panel->x_max) = (draw_panel->x_max_0);
-    (draw_panel->y_min) = (draw_panel->y_min_0);
-    (draw_panel->y_max) = (draw_panel->y_max_0);
+    if(((graphical_type->name)->GetValue()) == wxString("Mercator")){
+        //reset the chart boundaries to the initial ones
+        
+        
+        (draw_panel->x_min) = (draw_panel->x_min_0);
+        (draw_panel->x_max) = (draw_panel->x_max_0);
+        (draw_panel->y_min) = (draw_panel->y_min_0);
+        (draw_panel->y_max) = (draw_panel->y_max_0);
+        
+        draw_panel->Update_lambda_phi_min_max();
+        
+        UpdateSlider();
+        UpdateSliderLabel();
+        
+    }
     
-    draw_panel->Update_lambda_phi_min_max();
+    if(((graphical_type->name)->GetValue()) == wxString("3D")){
+        //reset the earth orientation to the initial one
+
+        (draw_panel->rotation) = (draw_panel->rotation_0);
     
+    }
+        
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-    UpdateSlider();
-    UpdateSliderLabel();
+
     
     event.Skip(true);
     

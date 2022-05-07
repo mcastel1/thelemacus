@@ -1383,7 +1383,7 @@ public:
     //the euler angles which specify the orientation of the earth for the 3d representation
     //two auxiliary vectors which will be used later
     gsl_vector *r, *rp;
-    Rotation rotation, /*the orientation of the Earth when a drag starts*/rotation_start_drag;
+    Rotation rotation, /*the orientation of the Earth when a drag starts*/rotation_start_drag, /*the rotation representing the initial orientation of the earth*/rotation_0;
     Double /*the distance between the center of the earth and the plane of the 2d projection for the 3d plots*/l, /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/d;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;

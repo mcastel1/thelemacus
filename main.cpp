@@ -69,6 +69,9 @@ bool MyApp::OnInit(){
     
     Rotation T;
     T = R*S;
+    R.print(String("R"), String("\t\t"), cout);
+    S.print(String("S"), String("\t\t"), cout);
+    T.print(String("composition"), String("\t\t"), cout);
     //
  
     

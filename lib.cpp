@@ -2866,6 +2866,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     }else{
         
         listcontrol->SetItem(i, j++, wxString(""));
+        
     }
     
     //set artificial horizon column
@@ -2933,10 +2934,14 @@ void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     wxListItem item;
     
     if(list_position == -1){
+        
         i = (listcontrol->GetItemCount());
+        
     }else{
+        
         i = list_position;
         listcontrol->DeleteItem(i);
+        
     }
     
     item.SetId(i);
@@ -11920,7 +11925,10 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
         
+
         sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
+        
+        sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
         ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(
                                                                                                (sight->related_route).value,
                                                                                                ((this->parent)->listcontrol_routes)

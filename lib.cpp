@@ -8580,6 +8580,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
         
+        cout << "(plot->route_list).size()= " << (plot->route_list).size() << "\n";
+        cout << "listcontrol_routes size = " << ((parent->parent)->listcontrol_routes)->GetItemCount() << "\n";
+        
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white

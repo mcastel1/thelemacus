@@ -8349,8 +8349,12 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 //converts the point p on the drawpanel with a 3D projection, to the relative geographic position q
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
-    double x, z, xp, yp, zp, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
+    double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
+    gsl_vector *r, *rp;
     
+    r = gsl_vector_alloc(3);
+    rp = gsl_vector_alloc(3);
+
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
@@ -8374,15 +8378,19 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     if(arg_sqrt >= 0.0){
         
         //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for x<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger x -> I pick the solution with a positive sign in front of the square root through GSL_SIGN(x)
-        xp = (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
-        zp = (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
-        yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
+        //set rp
+        gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+        gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
+        gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));
+
+        //r = (rotation.matrix)^T . rp
+        gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
         
         //start - uncomment and fix this later
-        /*
-         ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c)) - sin(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c))), -(sin(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c))) - cos(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c)))), String(""));
-         ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) - xp*sin(euler_c))), String(""));
-         */
+        //
+         ((*q).lambda).set(String(""), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(""));
+         ((*q).phi).set(String(""), asin(gsl_vector_get(r, 2)), String(""));
+         //
         //end - uncomment and fix this later
         
         

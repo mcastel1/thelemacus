@@ -62,9 +62,9 @@ bool MyApp::OnInit(){
     c.set(String(""), 4, String(""));
     Rotation R(a, b, c);
     
-    a.set(String(""), 2, String(""));
-    b.set(String(""), 5.3, String(""));
-    c.set(String(""), 2.3, String(""));
+    a.set(String(""), .232, String(""));
+    b.set(String(""), .34, String(""));
+    c.set(String(""), 2.66, String(""));
     Rotation S(a, b, c);
     
     Rotation T;

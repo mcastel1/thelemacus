@@ -674,7 +674,7 @@ void String::set(String name, String input_string, String prefix){
 Rotation::Rotation(void){
 
     //allocate and set the rotation matrix
-    matrix = new double [9];
+    matrix = gsl_matrix_alloc(3, 3);
     
 }
 
@@ -683,39 +683,28 @@ Rotation::Rotation(void){
 Rotation::Rotation(Angle a, Angle b, Angle c){
 
     //allocate and set the rotation matrix
-    matrix = new double [9];
+    matrix = gsl_matrix_alloc(3, 3);
     
-    matrix[0*3+0] = cos(a)*cos(c) - cos(b)*sin(a)*sin(c);
-    matrix[0*3+1] = -(cos(c)*sin(a)) - cos(a)*cos(b)*sin(c);
-    matrix[0*3+2] = -(sin(b)*sin(c));
+    gsl_matrix_set(matrix, 0 ,0 , cos(a)*cos(c) - cos(b)*sin(a)*sin(c));
+    gsl_matrix_set(matrix, 0 ,1 , -(cos(c)*sin(a)) - cos(a)*cos(b)*sin(c));
+    gsl_matrix_set(matrix, 0 ,2 , -(sin(b)*sin(c)));
     
-    matrix[1*3+0] = cos(b)*cos(c)*sin(a) + cos(a)*sin(c);
-    matrix[1*3+1] = cos(a)*cos(b)*cos(c) - sin(a)*sin(c);
-    matrix[1*3+2] = cos(c)*sin(b);
+    gsl_matrix_set(matrix, 1 ,0 , cos(b)*cos(c)*sin(a) + cos(a)*sin(c));
+    gsl_matrix_set(matrix, 1 ,1 , cos(a)*cos(b)*cos(c) - sin(a)*sin(c));
+    gsl_matrix_set(matrix, 1 ,2 , cos(c)*sin(b));
     
-    matrix[2*3+0] = -(sin(a)*sin(b));
-    matrix[2*3+1] = -(cos(a)*sin(b));
-    matrix[2*3+2] = cos(b);
+    gsl_matrix_set(matrix, 2 ,0 , -(sin(a)*sin(b)));
+    gsl_matrix_set(matrix, 2 ,1 , -(cos(a)*sin(b)));
+    gsl_matrix_set(matrix, 2 ,2 , cos(b));
 
 }
 
 //composition of two rotations: this yields the rotation given by this . s
 Rotation Rotation::operator *(const Rotation& s){
     
-    unsigned int i, j, l;
     Rotation t;
     
-    for(i=0; i<3; i++){
-        for(j=0; j<3; j++){
-            
-            for((t.matrix)[i*3+j] = 0.0, l=0; l<3; l++){
-                
-                (t.matrix)[i*3+j] += (this->matrix)[i*3+l] * (s.matrix)[l*3+j];
-                
-            }
-            
-        }
-    }
+    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, this->matrix, s.matrix, 0.0, t.matrix);
     
     return t;
     
@@ -729,10 +718,10 @@ void Rotation::print(String name, String prefix, ostream& ostr){
     ostr << prefix.value << name.value << " : \n";
     
     for(i=0; i<3; i++){
-        
+    
         for(ostr << prefix.value, j=0; j<3; j++){
 
-            ostr << matrix[3*i+j] << "\t";
+            ostr << gsl_matrix_get(matrix, i, j) << "\t";
 
         }
 

@@ -660,7 +660,7 @@ class Rotation{
 public:
     
     //R[3*i+j] is the element of the j-th column, i-th row of the rotation matrix of this
-    double* matrix;
+    gsl_matrix* matrix;
     
     Rotation();
     Rotation(Angle, Angle, Angle);

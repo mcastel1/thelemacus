@@ -654,6 +654,21 @@ public:
     
 };
 
+//this class denotes a rigid rotation R_z(c).R_x(-b).R_z(a) with Euler angles a, b, c
+class Rotation{
+  
+public:
+    
+    //the Euler angles of the rotation
+    Angle a, b, c;
+    //R[3*i+j] is the element of the j-th column, i-th row of the rotation matrix of this
+    double* R;
+    
+    Rotation(Angle, Angle, Angle);
+    
+    
+};
+
 //this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
 inline double x_mercator(double lambda){
     

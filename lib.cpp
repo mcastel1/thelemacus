@@ -669,6 +669,33 @@ void String::set(String name, String input_string, String prefix){
     
 }
 
+//constructor of a Rotation instance
+Rotation::Rotation(Angle a_in, Angle b_in, Angle c_in){
+
+    //allocate and set the rotation matrix
+    R = new double [9];
+
+    //set the Euler angles
+    a = a_in;
+    b = b_in;
+    c = c_in;
+    
+    
+    R[0*3+0] = Cos(a)*Cos(c) - Cos(b)*Sin(a)*Sin(c);
+    R[0*3+1] = -(Cos(c)*Sin(a)) - Cos(a)*Cos(b)*Sin(c);
+    R[0*3+2] = -(Sin(b)*Sin(c));
+    
+    R[1*3+0] = Cos(b)*Cos(c)*Sin(a) + Cos(a)*Sin(c);
+    R[1*3+1] = Cos(a)*Cos(b)*Cos(c) - Sin(a)*Sin(c);
+    R[1*3+2] = Cos(c)*Sin(b);
+    
+    R[2*3+0] = -(Sin(a)*Sin(b));
+    R[2*3+1] = -(Cos(a)*Sin(b));
+    R[2*3+2] = Cos(b);
+
+    
+}
+
 bool Angle::operator==(const Angle& x){
     
     return((((*this).value) == (x.value)));

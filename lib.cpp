@@ -9095,7 +9095,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     cout << "Rotation now : \n";
                     cout << "x = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
-                    cout << "y = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))) << "\n";
+                    cout << "y = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
                     geo_start_drag.print(String("geo start drag"), String(""), cout);
                     geo_now_drag.print(String("geo now drag"), String(""), cout);
                     euler_a.print(String("a"), String(""), cout);

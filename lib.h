@@ -659,12 +659,13 @@ class Rotation{
   
 public:
     
-    //the Euler angles of the rotation
-    Angle a, b, c;
     //R[3*i+j] is the element of the j-th column, i-th row of the rotation matrix of this
-    double* R;
+    double* matrix;
     
+    Rotation();
     Rotation(Angle, Angle, Angle);
+    
+    Rotation operator *(const Rotation&);
     
     
 };

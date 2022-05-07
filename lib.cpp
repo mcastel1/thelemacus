@@ -681,17 +681,17 @@ Rotation::Rotation(Angle a_in, Angle b_in, Angle c_in){
     c = c_in;
     
     
-    R[0*3+0] = Cos(a)*Cos(c) - Cos(b)*Sin(a)*Sin(c);
-    R[0*3+1] = -(Cos(c)*Sin(a)) - Cos(a)*Cos(b)*Sin(c);
-    R[0*3+2] = -(Sin(b)*Sin(c));
+    R[0*3+0] = cos(a)*cos(c) - cos(b)*sin(a)*sin(c);
+    R[0*3+1] = -(cos(c)*sin(a)) - cos(a)*cos(b)*sin(c);
+    R[0*3+2] = -(sin(b)*sin(c));
     
-    R[1*3+0] = Cos(b)*Cos(c)*Sin(a) + Cos(a)*Sin(c);
-    R[1*3+1] = Cos(a)*Cos(b)*Cos(c) - Sin(a)*Sin(c);
-    R[1*3+2] = Cos(c)*Sin(b);
+    R[1*3+0] = cos(b)*cos(c)*sin(a) + cos(a)*sin(c);
+    R[1*3+1] = cos(a)*cos(b)*cos(c) - sin(a)*sin(c);
+    R[1*3+2] = cos(c)*sin(b);
     
-    R[2*3+0] = -(Sin(a)*Sin(b));
-    R[2*3+1] = -(Cos(a)*Sin(b));
-    R[2*3+2] = Cos(b);
+    R[2*3+0] = -(sin(a)*sin(b));
+    R[2*3+1] = -(cos(a)*sin(b));
+    R[2*3+2] = cos(b);
 
     
 }

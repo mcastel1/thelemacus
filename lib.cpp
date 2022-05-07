@@ -913,11 +913,13 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         //in this case, I add a new element at the end of listcontrol
         
         i = (listcontrol->GetItemCount());
+        
     }else{
         //in this case, I delete the i-th elment in listcontrol and replace it
         
         i = list_position;
         listcontrol->DeleteItem(i);
+        
     }
     
     item.SetId(i);
@@ -11912,17 +11914,22 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
         ((this->parent)->plot)->add_sight_and_reduce(sight, String(""));
         
+        sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
+        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
+        
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
         
         sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
-        
+        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(
+                                                                                               (sight->related_route).value,
+                                                                                               ((this->parent)->listcontrol_routes)
+                                                                                               );
+
     }
     
     parent->UpdateRelatedSightsAndRoutes();
-    
-    sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
-    
+        
     parent->plot->print(true, String(""), cout);
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart

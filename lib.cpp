@@ -6774,7 +6774,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     //end - delete this later
     
     rotation = Rotation(euler_a, euler_b, euler_c);
-    rotation.print(String(""), String(""), cout);
+    rotation.print(String("initial rotation"), String(""), cout);
     
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());

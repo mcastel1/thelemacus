@@ -6738,6 +6738,10 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     String prefix;
     
     prefix = String("");
+
+    //allocate r and rp for future use
+    r = gsl_vector_alloc(3);
+    rp = gsl_vector_alloc(3);
     
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
@@ -8350,10 +8354,6 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
-    gsl_vector *r, *rp;
-    
-    r = gsl_vector_alloc(3);
-    rp = gsl_vector_alloc(3);
 
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -8440,12 +8440,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 
 //converts the geographic Position p  to the  3D projection (x,y)
 bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
-    
-    gsl_vector *r, *rp;
-    
-    r = gsl_vector_alloc(3);
-    rp = gsl_vector_alloc(3);
-    
+        
     //set r according equal to the 3d vector corresponding to the geographic position p
     gsl_vector_set(r, 0, cos((p.lambda))*cos((p.phi)));
     gsl_vector_set(r, 1, -(cos((p.phi))*sin((p.lambda))));
@@ -8671,10 +8666,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
-        
-        cout << "(plot->route_list).size()= " << (plot->route_list).size() << "\n";
-        cout << "listcontrol_routes size = " << ((parent->parent)->listcontrol_routes)->GetItemCount() << "\n";
-        
+                
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white

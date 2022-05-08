@@ -731,6 +731,21 @@ void Rotation::print(String name, String prefix, ostream& ostr){
     
 }
 
+
+//constructor of Angle, which does not set the value of the angle
+Angle::Angle(void){
+    
+}
+
+//constructor of Angle, which sets the value of the angle to x
+Angle::Angle(String name, double x, String prefix){
+    
+    value = x;
+    normalize();
+    if(name != String("")){print(name, prefix, cout);}
+ 
+}
+
 bool Angle::operator==(const Angle& x){
     
     return((((*this).value) == (x.value)));
@@ -9143,20 +9158,21 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         lambda_rotation_axis.set(String(""), atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
                         phi_rotation_axis.set(String(""), asin(gsl_vector_get(rp, 2)), String(""));
                         
-                        //compose the previous rotation with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation = rotation_start_drag;
+                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                        rotation =
+                        Rotation(
+                                 Angle(String(""), 0.0, String("")),
+                                 Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
+                                 Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
+                                 )
+                        * Rotation(
+                                   Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
+                                   Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
+                                   Angle(String(""), rotation_angle.value, String(""))
+                                   )
+                        * rotation_start_drag;
                         
-                        euler_a.set(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String(""));
-                        euler_b.set(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String(""));
-                        euler_c.set(String(""), rotation_angle.value, String(""));
-                        rotation_now_drag = Rotation(euler_a, euler_b, euler_c);
-                        rotation = rotation_now_drag * rotation;
                         
-                        euler_a.set(String(""), 0.0, String(""));
-                        euler_b.set(String(""), M_PI/2.0-(phi_rotation_axis.value), String(""));
-                        euler_c.set(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""));
-                        rotation_now_drag = Rotation(euler_a, euler_b, euler_c);
-                        rotation = rotation_now_drag * rotation;
                         
                         
                         cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
@@ -9168,7 +9184,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         euler_a.print(String("a"), String("\t"), cout);
                         euler_b.print(String("b"), String("\t"), cout);
                         euler_c.print(String("c"), String("\t"), cout);
-                        rotation_now_drag.print(String("rotation now"), String("\t"), cout);
                         rotation.print(String("rotation"), String("\t"), cout);
                         
                     }else{

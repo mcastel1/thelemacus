@@ -8769,6 +8769,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     
     position_start_drag = wxGetMousePosition();
+    (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     rotation_start_drag = rotation;
     
     //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
@@ -9103,10 +9104,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //the rotation angle
                     Angle euler_a, euler_b, euler_c;
-                    Position geo_now_drag, geo_start_drag;
                     Rotation rotation_now;
                     
-                    (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
                     
                     

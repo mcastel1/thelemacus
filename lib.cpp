@@ -8841,7 +8841,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             }
             
         }
-        
+      
         if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
             
             rotation_end_drag = rotation;

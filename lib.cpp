@@ -6749,7 +6749,10 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     //allocate r and rp for future use
     r = gsl_vector_alloc(3);
     rp = gsl_vector_alloc(3);
-    
+    rp_start_drag = gsl_vector_alloc(3);
+    rp_now_drag = gsl_vector_alloc(3);
+    rp_end_drag = gsl_vector_alloc(3);
+
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;
@@ -8784,6 +8787,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
 
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
+        gsl_vector_memcpy(rp_start_drag, rp);
         rotation_start_drag = rotation;
         geo_start_drag.print(String("geo start drag"), String(""), cout);
         rotation_start_drag.print(String("rotation start drag"), String(""), cout);
@@ -8844,6 +8848,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
       
         if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
             
+            gsl_vector_memcpy(rp_end_drag, rp);
             rotation_end_drag = rotation;
             geo_end_drag.print(String("position end drag"), String(""), cout);
             rotation_end_drag.print(String("rotation end drag"), String(""), cout);
@@ -9117,17 +9122,31 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //the rotation angle
                     Angle euler_a, euler_b, euler_c, rotation_angle, lambda_rotation_axis, phi_rotation_axis;
                     Rotation rotation_now;
+                    double temp;
                     
+                    //I call this to use rp
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
-                    
+                    gsl_vector_memcpy(rp_now_drag, rp);
                     
                     //start - change this later
                     //set the euler angles corresponding to the rotation resulting from the mouse drag
                     if(geo_now_drag != geo_start_drag){
                         
-                        rotation_angle.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
-                        lambda_rotation_axis.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
-                        phi_rotation_axis.set(String(""), asin((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))), String(""));
+                        //compute the dot product between rp_start_drag and rp_now_drag and store it into temp and set the rotation angle equal to acos(temp)
+                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &temp);
+                        rotation_angle.set(String("rotation angle"), acos(temp), String("\t"));
+                        
+                        //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
+                        gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
+                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2));
+                        gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
+                        gsl_vector_scale(rp, 1.0/sin(rotation_angle));
+                        
+                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
+                 
+                        
+                        lambda_rotation_axis.set(String(""), atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+                        phi_rotation_axis.set(String(""), asin(gsl_vector_get(rp, 2)), String(""));
                         
                         //compose the previous rotation with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation = rotation_start_drag;

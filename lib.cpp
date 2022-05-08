@@ -845,7 +845,7 @@ bool Position::operator!=(const Position& p){
     return (!((*this)==p));
     
 }
- 
+
 
 Position::Position(void){
     
@@ -6745,7 +6745,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     String prefix;
     
     prefix = String("");
-
+    
     //allocate r and rp for future use
     r = gsl_vector_alloc(3);
     rp = gsl_vector_alloc(3);
@@ -6768,16 +6768,16 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
     gsl_rng_set(myran, 0);
     
-    //
-    euler_a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    euler_b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-    euler_c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    //
     /*
-     euler_a.set(String(""), 0.0, String(""));
-     euler_b.set(String(""), 0.0, String(""));
-     euler_c.set(String(""), 0.0, String(""));
+     euler_a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+     euler_b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+     euler_c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
      */
+    //
+    euler_a.set(String(""), -M_PI/2.0, String(""));
+    euler_b.set(String(""), 0.0, String(""));
+    euler_c.set(String(""), 0.0, String(""));
+    //
     //end - delete this later
     
     rotation = Rotation(euler_a, euler_b, euler_c);
@@ -8050,14 +8050,14 @@ template<class T> void ChartFrame::Reset(T& event){
     
     if(((graphical_type->name)->GetValue()) == wxString("3D")){
         //reset the earth orientation to the initial one
-
-        (draw_panel->rotation) = (draw_panel->rotation_0);
-    
-    }
         
+        (draw_panel->rotation) = (draw_panel->rotation_0);
+        
+    }
+    
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
+    
     
     event.Skip(true);
     
@@ -8379,7 +8379,7 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
-
+    
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
@@ -8407,7 +8407,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
         gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
         gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
         gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));
-
+        
         //r = (rotation.matrix)^T . rp
         gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
         
@@ -8461,7 +8461,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 
 //converts the geographic Position p  to the  3D projection (x,y)
 bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
-        
+    
     //set r according equal to the 3d vector corresponding to the geographic position p
     gsl_vector_set(r, 0, cos((p.lambda))*cos((p.phi)));
     gsl_vector_set(r, 1, -(cos((p.phi))*sin((p.lambda))));
@@ -8687,7 +8687,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
-                
+        
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -9112,7 +9112,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //start - change this later
                     //set the euler angles corresponding to the rotation resulting from the mouse drag
                     if(geo_now_drag != geo_start_drag){
-
+                        
                         rotation_angle.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
                         lambda_rotation_axis.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
                         phi_rotation_axis.set(String(""), asin((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))), String(""));
@@ -9131,13 +9131,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         euler_c.set(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""));
                         rotation_now = Rotation(euler_a, euler_b, euler_c);
                         rotation = rotation_now*rotation;
-
-                                    
+                        
+                        
                         cout << "arg sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
                         cout << "arg acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
                         cout << "x = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
                         cout << "y = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
-     
+                        
                         
                         
                         
@@ -9149,9 +9149,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         rotation_now.print(String("rotation now"), String(""), cout);
                         rotation_start_drag.print(String("rotation start drag"), String(""), cout);
                         rotation.print(String("rotation"), String(""), cout);
-
+                        
                         //end - change this later
-      
+                        
                         
                     }else{
                         

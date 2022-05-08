@@ -8770,18 +8770,26 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     
     position_start_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
-    rotation_start_drag = rotation;
     
-    //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
-    x_min_start_drag = x_min;
-    x_max_start_drag = x_max;
-    y_min_start_drag = y_min;
-    y_max_start_drag = y_max;
+    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+
+        //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
+        x_min_start_drag = x_min;
+        x_max_start_drag = x_max;
+        y_min_start_drag = y_min;
+        y_max_start_drag = y_max;
+        
+    }
     
-    //    Position geo;
-    //    (this->*ScreenToGeo)(position_start_drag, &geo);
-    //    geo.print(String("Position start drag"), String("************ "), cout);
-    
+    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+
+        //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
+        rotation_start_drag = rotation;
+        geo_start_drag.print(String("geo start drag"), String(""), cout);
+        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+        
+    }
+
     event.Skip(true);
     
 }
@@ -9145,14 +9153,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         
                         
-                        geo_start_drag.print(String("geo start drag"), String(""), cout);
-                        geo_now_drag.print(String("geo now drag"), String(""), cout);
-                        euler_a.print(String("a"), String(""), cout);
-                        euler_b.print(String("b"), String(""), cout);
-                        euler_c.print(String("c"), String(""), cout);
-                        rotation_now.print(String("rotation now"), String(""), cout);
-                        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
-                        rotation.print(String("rotation"), String(""), cout);
+                        geo_now_drag.print(String("geo now drag"), String("\t"), cout);
+                        euler_a.print(String("a"), String("\t"), cout);
+                        euler_b.print(String("b"), String("\t"), cout);
+                        euler_c.print(String("c"), String("\t"), cout);
+                        rotation_now.print(String("rotation now"), String("\t"), cout);
+                        rotation.print(String("rotation"), String("\t"), cout);
                         
                         //end - change this later
                         

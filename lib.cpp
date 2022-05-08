@@ -9103,7 +9103,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, I am using the 3d projection
                     
                     //the rotation angle
-                    Angle euler_a, euler_b, euler_c;
+                    Angle euler_a, euler_b, euler_c, rotation_angle, lambda_rotation_axis, phi_rotation_axis;
                     Rotation rotation_now;
                     
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
@@ -9112,40 +9112,53 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //start - change this later
                     //set the euler angles corresponding to the rotation resulting from the mouse drag
                     if(geo_now_drag != geo_start_drag){
+
+                        rotation_angle.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
+                        lambda_rotation_axis.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
+                        phi_rotation_axis.set(String(""), asin((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))), String(""));
                         
-                        euler_a.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
-                        euler_b.set(String(""), acos((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))), String(""));
-                        euler_c.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))) - /*this -pi/2 is due to the fact that the rotation R has a rotation about the x axis, not abou tthe y axis*/M_PI/2.0, String(""));
+                        //compose the previous rotation with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                        rotation = rotation_start_drag;
                         
+                        euler_a.set(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String(""));
+                        euler_b.set(String(""), M_PI/2.0-(phi_rotation_axis.value), String(""));
+                        euler_c.set(String(""), rotation_angle.value, String(""));
+                        rotation_now = Rotation(euler_a, euler_b, euler_c);
+                        rotation = rotation_now*rotation;
                         
+                        euler_a.set(String(""), 0.0, String(""));
+                        euler_b.set(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String(""));
+                        euler_c.set(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""));
+                        rotation_now = Rotation(euler_a, euler_b, euler_c);
+                        rotation = rotation_now*rotation;
+
+                                    
                         cout << "arg sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
                         cout << "arg acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
                         cout << "x = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
                         cout << "y = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
      
                         
+                        
+                        
+                        geo_start_drag.print(String("geo start drag"), String(""), cout);
+                        geo_now_drag.print(String("geo now drag"), String(""), cout);
+                        euler_a.print(String("a"), String(""), cout);
+                        euler_b.print(String("b"), String(""), cout);
+                        euler_c.print(String("c"), String(""), cout);
+                        rotation_now.print(String("rotation now"), String(""), cout);
+                        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+                        rotation.print(String("rotation"), String(""), cout);
+
+                        //end - change this later
+      
+                        
                     }else{
                         
-                        euler_a.set(String(""), 0.0, String(""));
-                        euler_b.set(String(""), 0.0, String(""));
-                        euler_c.set(String(""), 0.0, String(""));
-
+                        rotation = rotation_start_drag;
+                        
                     }
                     
-                    //write the rotation in rotation_now
-                    rotation_now = Rotation(euler_a, euler_b, euler_c);
-                    geo_start_drag.print(String("geo start drag"), String(""), cout);
-                    geo_now_drag.print(String("geo now drag"), String(""), cout);
-                    euler_a.print(String("a"), String(""), cout);
-                    euler_b.print(String("b"), String(""), cout);
-                    euler_c.print(String("c"), String(""), cout);
-                    rotation_now.print(String("rotation now"), String(""), cout);
-                    rotation_start_drag.print(String("rotation start drag"), String(""), cout);
-                    rotation.print(String("rotation"), String(""), cout);
-
-                    //compose the previous rotation with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                    rotation = rotation_now*rotation_start_drag;
-                    //end - change this later
                     
                     //re-draw the chart
                     (this->*Draw)();

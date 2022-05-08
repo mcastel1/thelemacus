@@ -9120,16 +9120,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, I am using the 3d projection
                     
                     //the rotation angle
-                    Angle euler_a, euler_b, euler_c, rotation_angle, lambda_rotation_axis, phi_rotation_axis;
-                    Rotation rotation_now;
                     double temp;
                     
                     //I call this to use rp
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
                     gsl_vector_memcpy(rp_now_drag, rp);
                     
-                    //start - change this later
-                    //set the euler angles corresponding to the rotation resulting from the mouse drag
                     if(geo_now_drag != geo_start_drag){
                         
                         //compute the dot product between rp_start_drag and rp_now_drag and store it into temp and set the rotation angle equal to acos(temp)
@@ -9144,7 +9140,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
                  
-                        
                         lambda_rotation_axis.set(String(""), atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
                         phi_rotation_axis.set(String(""), asin(gsl_vector_get(rp, 2)), String(""));
                         
@@ -9154,14 +9149,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         euler_a.set(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String(""));
                         euler_b.set(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String(""));
                         euler_c.set(String(""), rotation_angle.value, String(""));
-                        rotation_now = Rotation(euler_a, euler_b, euler_c);
-                        rotation = rotation_now*rotation;
+                        rotation_now_drag = Rotation(euler_a, euler_b, euler_c);
+                        rotation = rotation_now_drag * rotation;
                         
                         euler_a.set(String(""), 0.0, String(""));
                         euler_b.set(String(""), M_PI/2.0-(phi_rotation_axis.value), String(""));
                         euler_c.set(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""));
-                        rotation_now = Rotation(euler_a, euler_b, euler_c);
-                        rotation = rotation_now*rotation;
+                        rotation_now_drag = Rotation(euler_a, euler_b, euler_c);
+                        rotation = rotation_now_drag * rotation;
                         
                         
                         cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
@@ -9169,18 +9164,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         cout << "\tx = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
                         cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
                         
-                         
-                        
-                        
                         geo_now_drag.print(String("geo now drag"), String("\t"), cout);
                         euler_a.print(String("a"), String("\t"), cout);
                         euler_b.print(String("b"), String("\t"), cout);
                         euler_c.print(String("c"), String("\t"), cout);
-                        rotation_now.print(String("rotation now"), String("\t"), cout);
+                        rotation_now_drag.print(String("rotation now"), String("\t"), cout);
                         rotation.print(String("rotation"), String("\t"), cout);
-                        
-                        //end - change this later
-                        
                         
                     }else{
                         

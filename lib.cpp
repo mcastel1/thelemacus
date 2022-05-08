@@ -8795,6 +8795,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     if(mouse_dragging){mouse_dragging = false;}
     
     position_end_drag = wxGetMousePosition();
+    (this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
     
     //in this case, the drag ends out of the plot area
     
@@ -8835,6 +8836,9 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         
         if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
             
+            rotation_end_drag = rotation;
+            
+            rotation_end_drag.print(String("rotation end drag"), String(""), cout);
             
         }
         

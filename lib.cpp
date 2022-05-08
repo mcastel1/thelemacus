@@ -9121,13 +9121,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         rotation = rotation_start_drag;
                         
                         euler_a.set(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String(""));
-                        euler_b.set(String(""), M_PI/2.0-(phi_rotation_axis.value), String(""));
+                        euler_b.set(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String(""));
                         euler_c.set(String(""), rotation_angle.value, String(""));
                         rotation_now = Rotation(euler_a, euler_b, euler_c);
                         rotation = rotation_now*rotation;
                         
                         euler_a.set(String(""), 0.0, String(""));
-                        euler_b.set(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String(""));
+                        euler_b.set(String(""), M_PI/2.0-(phi_rotation_axis.value), String(""));
                         euler_c.set(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""));
                         rotation_now = Rotation(euler_a, euler_b, euler_c);
                         rotation = rotation_now*rotation;

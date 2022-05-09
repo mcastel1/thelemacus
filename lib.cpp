@@ -946,18 +946,14 @@ void Position::modify(String prefix){
 //creates an element in listcontrol and writes into this element the values of all the fields containes in this
 void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
-    long i;
+    unsigned int i;
     wxListItem item;
     
     if(list_position == -1){
-        
         i = (listcontrol->GetItemCount());
-        
     }else{
-        
         i = list_position;
         listcontrol->DeleteItem(i);
-        
     }
     
     item.SetId(i);
@@ -994,7 +990,7 @@ Route::Route(void){
 //I add the Route this to the wxListCtrl listcontrol
 void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
-    long i;
+    unsigned int i;
     wxListItem item;
     
     if(list_position == -1){
@@ -3018,7 +3014,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 
 void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     
-    long i;
+    unsigned int i;
     wxListItem item;
     
     if(list_position == -1){
@@ -3362,8 +3358,8 @@ bool Plot::read_from_file(File& file, String prefix){
                     cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
                     
                     //I link the sight to the route, and the route to the sight
-                    ((route_list[route_list.size()-1].related_sight).value) = ((int)(sight_list.size()))-1;
-                    (sight_list[sight_list.size()-1].related_route.value) = ((int)(route_list.size()))-1;
+                    ((route_list[route_list.size()-1].related_sight).value) = sight_list.size()-1;
+                    (sight_list[sight_list.size()-1].related_route.value) = route_list.size()-1;
                     
                 }
                 
@@ -4317,10 +4313,10 @@ bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
     //I link the sight to the route, and the route to the sight
     //create a new route in the respective list
     route_list.resize(route_list.size()+1);
-    ((*sight_in).related_route).value = ((int)(route_list.size()))-1;
+    ((*sight_in).related_route).value = route_list.size()-1;
     //push back sight_in into sight_list
     sight_list.push_back(*sight_in);
-    (((route_list[route_list.size()-1]).related_sight).value) = ((int)(sight_list.size()))-1;
+    (((route_list[route_list.size()-1]).related_sight).value) = sight_list.size()-1;
     
     //I commented this out because now the sight is enetered through the GUI
     //    (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
@@ -6583,7 +6579,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
             //            flush(cout);
             
             //count how many datapoints are in data_x[i] and in data_y[i]
-            n = (unsigned int)((data_x[i - floor_min_lat][j % 360]).size());
+            n = (data_x[i - floor_min_lat][j % 360]).size();
             
             every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
             if(every == 0){every = 1;}
@@ -6631,9 +6627,10 @@ void ChartFrame::GetAllCoastLineData(void){
     Position p_temp;
     string data, line;
     stringstream ins;
-    int i, j, l, n = 0;
+    int i, j;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
     vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
+    unsigned int l, n = 0;
     char* buffer = NULL;
     size_t pos_beg, pos_end;
     double lambda_temp, phi_temp;
@@ -7621,7 +7618,7 @@ void DrawPanel::Draw_Mercator(void){
     chart->yAxis()->setWidth(2);
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    chart->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (int)((parent->y).size())), "", Chart::CircleSymbol, 1, 000000);
+    chart->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
     
     //    chart->makeChart(path_file_chart);
     mem_block = (chart->makeChart(Chart::BMP));
@@ -11357,9 +11354,7 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
-    long i_route_to_remove;
-    
-    i_route_to_remove = (listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+    int i_route_to_remove = (listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
     
     //the id of the route to removed is the one of the route selected in listcontrol_routes: I write it in delete_route_and_related_route and in delete_route
     (delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;

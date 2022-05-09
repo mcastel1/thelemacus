@@ -6473,16 +6473,6 @@ void ChartFrame::GetCoastLineData_3D(void){
     unsigned int i, every;
     double x_temp, y_temp;
     
-    //delete this later
-    
-    //sets the values of x_min ... y_max for the 3D projection
-    //    (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
-    (draw_panel->x_min) = -(((draw_panel->d).value)/sqrt(gsl_pow_2(((draw_panel->d).value)+1.0)-1.0));
-    (draw_panel->x_max) = -(draw_panel->x_min);
-    (draw_panel->y_min) = (draw_panel->x_min);
-    (draw_panel->y_max) = -(draw_panel->y_min);
-    
-    
     every = (unsigned int)(((double)(data_3d.size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}
     
@@ -8609,7 +8599,6 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 
 void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
     
-    
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
         //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
         
@@ -8621,16 +8610,13 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         GeoToProjection = (&DrawPanel::GeoToMercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
-        (parent->slider)->Enable(true);
+//        (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
         
-        //        (parent->Euler_a)->Enable(false);
-        //        (parent->Euler_b)->Enable(false);
-        //        (parent->Euler_c)->Enable(false);
-        
+        Update_x_y_min_max();
         
     }
     
@@ -8646,19 +8632,19 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
-        (parent->slider)->Enable(false);
+//        (parent->slider)->Enable(false);
         (parent->button_up)->Enable(false);
         (parent->button_down)->Enable(false);
         (parent->button_left)->Enable(false);
         (parent->button_right)->Enable(false);
         
-        //        (parent->Euler_a)->set();
-        //        (parent->Euler_a)->Enable(true);
-        //        (parent->Euler_b)->set();
-        //        (parent->Euler_b)->Enable(true);
-        //        (parent->Euler_c)->set();
-        //        (parent->Euler_c)->Enable(true);
+        //sets the values of x_min ... y_max for the 3D projection
+        x_min = -((d.value)/sqrt(gsl_pow_2(((d).value)+1.0)-1.0));
+        x_max = -x_min;
+        y_min = x_min;
+        y_max = -y_min;
         
+
     }
     
     //change thsis: this should be called only if name->GetValue has changed.

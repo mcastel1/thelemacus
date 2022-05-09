@@ -6477,7 +6477,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     //sets the values of x_min ... y_max for the 3D projection
     //    (draw_panel->x_min) = -(1.0 - ((draw_panel->l).value)/(((draw_panel->l)+(draw_panel->d)).value));
-    (draw_panel->x_min) = -(((draw_panel->d).value)/sqrt(gsl_pow_2(((draw_panel->d)+(draw_panel->l)).value)-1.0));
+    (draw_panel->x_min) = -(((draw_panel->d).value)/sqrt(gsl_pow_2(((draw_panel->d).value)+1.0)-1.0));
     (draw_panel->x_max) = -(draw_panel->x_min);
     (draw_panel->y_min) = (draw_panel->x_min);
     (draw_panel->y_max) = -(draw_panel->y_min);
@@ -6779,7 +6779,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     tic_length_over_width_plot_area = 0.01;
     
-    l.read_from_file(String("l draw 3d"), String(path_file_init), prefix);
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
     
     //start - delete this later
@@ -8430,14 +8429,14 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     //    cout << "\nsum = " << ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area);
     //    cout << "\nden = " << ((double)height_plot_area);
     
-    arg_sqrt = -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(l.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + (-1 + (l.value))*(1 + (l.value))*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
+    arg_sqrt = -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) ));
     
     if(arg_sqrt >= 0.0){
         
         //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for x<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger x -> I pick the solution with a positive sign in front of the square root through GSL_SIGN(x)
         //set rp
-        gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
-        gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
+        gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + 1.0)*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+        gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + 1.0)*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
         gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));
         
         //r = (rotation.matrix)^T . rp
@@ -8502,13 +8501,13 @@ bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
     //rotate r by rotation, and write the result in rp!
     gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
     
-    (*x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + (l.value) + gsl_vector_get(rp, 1));
-    (*y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + (l.value) + gsl_vector_get(rp, 1));
+    (*x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+    (*y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
 
     
     //I return true if p lies on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) ), and I return false otherwise.
     
-    return(gsl_vector_get(rp, 1) < - 1.0/((l+d).value));
+    return(gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value)));
     
 }
 

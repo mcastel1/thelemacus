@@ -1386,12 +1386,10 @@ public:
     //two auxiliary vectors which will be used later
     gsl_vector *r, *rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;
     Rotation rotation, /*the orientation of the Earth when a drag starts/ends*/rotation_start_drag, rotation_end_drag, /*the rotation representing the initial orientation of the earth*/rotation_0;
-    Double /*the distance between the center of the earth and the plane of the 2d projection for the 3d plots*/l, /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/d;
+    Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/d;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;
     Position /*these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_end, /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag;
-
-    
     Angle euler_a, euler_b, euler_c, rotation_angle, lambda_rotation_axis, phi_rotation_axis;
     
 

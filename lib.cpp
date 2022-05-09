@@ -669,6 +669,83 @@ void String::set(String name, String input_string, String prefix){
     
 }
 
+
+//constructor of a Rotation instance
+Rotation::Rotation(void){
+    
+    //allocate and set the rotation matrix
+    matrix = gsl_matrix_alloc(3, 3);
+    
+}
+
+
+//constructor of a Rotation instance which sets the rotation matrix according to three Euler angles
+Rotation::Rotation(Angle a, Angle b, Angle c){
+    
+    //allocate and set the rotation matrix
+    matrix = gsl_matrix_alloc(3, 3);
+    
+    gsl_matrix_set(matrix, 0 ,0 , cos(a)*cos(c) - cos(b)*sin(a)*sin(c));
+    gsl_matrix_set(matrix, 0 ,1 , -(cos(c)*sin(a)) - cos(a)*cos(b)*sin(c));
+    gsl_matrix_set(matrix, 0 ,2 , -(sin(b)*sin(c)));
+    
+    gsl_matrix_set(matrix, 1 ,0 , cos(b)*cos(c)*sin(a) + cos(a)*sin(c));
+    gsl_matrix_set(matrix, 1 ,1 , cos(a)*cos(b)*cos(c) - sin(a)*sin(c));
+    gsl_matrix_set(matrix, 1 ,2 , cos(c)*sin(b));
+    
+    gsl_matrix_set(matrix, 2 ,0 , -(sin(a)*sin(b)));
+    gsl_matrix_set(matrix, 2 ,1 , -(cos(a)*sin(b)));
+    gsl_matrix_set(matrix, 2 ,2 , cos(b));
+    
+}
+
+//composition of two rotations: this yields the rotation given by this . s
+Rotation Rotation::operator *(const Rotation& s){
+    
+    Rotation t;
+    
+    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, this->matrix, s.matrix, 0.0, t.matrix);
+    
+    return t;
+    
+}
+
+
+void Rotation::print(String name, String prefix, ostream& ostr){
+    
+    unsigned int i, j;
+    
+    ostr << prefix.value << name.value << " : \n";
+    
+    for(i=0; i<3; i++){
+        
+        for(ostr << prefix.value, j=0; j<3; j++){
+            
+            ostr << gsl_matrix_get(matrix, i, j) << "\t";
+            
+        }
+        
+        ostr << "\n";
+        
+    }
+    
+}
+
+
+//constructor of Angle, which does not set the value of the angle
+Angle::Angle(void){
+    
+}
+
+//constructor of Angle, which sets the value of the angle to x
+Angle::Angle(String name, double x, String prefix){
+    
+    value = x;
+    normalize();
+    if(name != String("")){print(name, prefix, cout);}
+ 
+}
+
 bool Angle::operator==(const Angle& x){
     
     return((((*this).value) == (x.value)));
@@ -762,7 +839,7 @@ void Angle::read_from_file(String name, String filename, String prefix){
 }
 
 
-//evaluates whether Length (*this) is larger than r
+//evaluates whether Position (*this) is equal to Position p
 bool Position::operator==(const Position& p){
     
     bool check;
@@ -774,6 +851,13 @@ bool Position::operator==(const Position& p){
     check &= (((*this).label) == (p.label));
     
     return check;
+    
+}
+
+//evaluates whether Position (*this) is different from Position p
+bool Position::operator!=(const Position& p){
+    
+    return (!((*this)==p));
     
 }
 
@@ -919,7 +1003,7 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         
         i = list_position;
         listcontrol->DeleteItem(i);
-                    
+
     }
     
     item.SetId(i);
@@ -2866,6 +2950,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     }else{
         
         listcontrol->SetItem(i, j++, wxString(""));
+        
     }
     
     //set artificial horizon column
@@ -4237,6 +4322,10 @@ bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
     //    (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
     check &= ((sight_list[sight_list.size()-1]).reduce(&(route_list[route_list.size()-1]), prefix));
     
+    //I link the sight to the route, and the route to the sight
+    ((sight_list[sight_list.size()-1]).related_route.value) = ((int)route_list.size())-1;
+    ((*sight_in).related_route.value) = ((int)route_list.size())-1;
+    (((route_list[route_list.size()-1]).related_sight).value) = ((int)sight_list.size())-1;
     
     
     if(check){
@@ -6650,15 +6739,15 @@ void ChartFrame::SetIdling(bool b){
 //I call this function when I know that all GUI fields are properly filled in ChartFrame, and thus set the non GUI Angle objects relative to the Euler angles for the rotation of the 3D earth,  and draw everything
 void ChartFrame::AllOk(void){
     
-    if((draw_panel->Draw) == (&DrawPanel::Draw_3D)){
-        
-        wxCommandEvent dummy;
-        
-        Euler_a->get<wxCommandEvent>(dummy);
-        Euler_b->get<wxCommandEvent>(dummy);
-        Euler_c->get<wxCommandEvent>(dummy);
-        
-    }
+    //    if((draw_panel->Draw) == (&DrawPanel::Draw_3D)){
+    //
+    //        wxCommandEvent dummy;
+    //
+    //        Euler_a->get<wxCommandEvent>(dummy);
+    //        Euler_b->get<wxCommandEvent>(dummy);
+    //        Euler_c->get<wxCommandEvent>(dummy);
+    //
+    //    }
     
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
@@ -6668,10 +6757,18 @@ void ChartFrame::AllOk(void){
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     int i, j;
+    Angle euler_a, euler_b, euler_c;
     String prefix;
     
     prefix = String("");
     
+    //allocate r and rp for future use
+    r = gsl_vector_alloc(3);
+    rp = gsl_vector_alloc(3);
+    rp_start_drag = gsl_vector_alloc(3);
+    rp_now_drag = gsl_vector_alloc(3);
+    rp_end_drag = gsl_vector_alloc(3);
+
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;
@@ -6685,6 +6782,25 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     l.read_from_file(String("l draw 3d"), String(path_file_init), prefix);
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
     
+    //start - delete this later
+    gsl_rng_env_setup();
+    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
+    gsl_rng_set(myran, 0);
+    
+    /*
+     euler_a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+     euler_b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
+     euler_c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
+     */
+    //
+    euler_a.set(String(""), -M_PI/2.0, String(""));
+    euler_b.set(String(""), 0.0, String(""));
+    euler_c.set(String(""), 0.0, String(""));
+    //
+    //end - delete this later
+    
+    rotation = Rotation(euler_a, euler_b, euler_c);
+    rotation.print(String("initial rotation"), String(""), cout);
     
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());
@@ -7211,7 +7327,7 @@ void DrawPanel::TabulateRoutes_3D(void){
     for(i=0; i<(plot->route_list).size(); i++){
         
         points_route_list.resize(points_route_list.size()+1);
-
+        
         if((((plot->route_list)[i]).type) == String("c")){
             //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
             
@@ -7248,7 +7364,7 @@ void DrawPanel::TabulateRoutes_3D(void){
                 
                 
                 (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
-
+                
             }else{
                 
                 end_connected = true;
@@ -7636,7 +7752,7 @@ void DrawPanel::Draw_3D(void){
 ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;
-    String new_prefix;
+    String new_prefix, default_projection;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
@@ -7675,27 +7791,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);
-    
-    
-    
-    //start - delete this later
-    gsl_rng_env_setup();
-    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
-    gsl_rng_set(myran, 0);
-    
-    
-    /*
-    (draw_panel->euler_a).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    (draw_panel->euler_b).set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-    (draw_panel->euler_c).set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-    */
-    //
-     (draw_panel->euler_a).set(String(""), 0.0, String(""));
-    (draw_panel->euler_b).set(String(""), 0.0, String(""));
-    (draw_panel->euler_c).set(String(""), 0.0, String(""));
-    //
-    //end - delete this later
-    
     
     
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -7739,9 +7834,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
     
-    Euler_a = new AngleField<ChartFrame>(this, &(draw_panel->euler_a), String(""));
-    Euler_b = new AngleField<ChartFrame>(this, &(draw_panel->euler_b), String(""));
-    Euler_c = new AngleField<ChartFrame>(this, &(draw_panel->euler_c), String(""));
+    //    Euler_a = new AngleField<ChartFrame>(this, &(draw_panel->euler_a), String(""));
+    //    Euler_b = new AngleField<ChartFrame>(this, &(draw_panel->euler_b), String(""));
+    //    Euler_c = new AngleField<ChartFrame>(this, &(draw_panel->euler_c), String(""));
     
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
@@ -7761,9 +7856,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
-    (graphical_type->name)->SetValue(wxString("Mercator"));
-    //    (graphical_type->name)->SetValue(wxString("3D"));
+
+    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
+    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+    (graphical_type->name)->SetValue(wxString(default_projection.value));
     
     draw_panel->OnChooseGraphicalType(dummy_event);
     
@@ -7776,6 +7872,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->y_max_0) = (draw_panel->y_max);
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
+    
+    //stores the orientatio of the earth of the first time the chart is shown into rotation_0
+    (draw_panel->rotation_0) = (draw_panel->rotation);
     
     
     draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
@@ -7796,9 +7895,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     graphical_type->InsertIn<wxBoxSizer>(sizer_slider);
-    Euler_a->InsertIn<wxBoxSizer>(sizer_slider);
-    Euler_b->InsertIn<wxBoxSizer>(sizer_slider);
-    Euler_c->InsertIn<wxBoxSizer>(sizer_slider);
+    //    Euler_a->InsertIn<wxBoxSizer>(sizer_slider);
+    //    Euler_b->InsertIn<wxBoxSizer>(sizer_slider);
+    //    Euler_c->InsertIn<wxBoxSizer>(sizer_slider);
     
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
@@ -7953,17 +8052,32 @@ template<class T> void ChartFrame::MoveRight(T& event){
 //resets the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event){
     
-    (draw_panel->x_min) = (draw_panel->x_min_0);
-    (draw_panel->x_max) = (draw_panel->x_max_0);
-    (draw_panel->y_min) = (draw_panel->y_min_0);
-    (draw_panel->y_max) = (draw_panel->y_max_0);
+    if(((graphical_type->name)->GetValue()) == wxString("Mercator")){
+        //reset the chart boundaries to the initial ones
+        
+        
+        (draw_panel->x_min) = (draw_panel->x_min_0);
+        (draw_panel->x_max) = (draw_panel->x_max_0);
+        (draw_panel->y_min) = (draw_panel->y_min_0);
+        (draw_panel->y_max) = (draw_panel->y_max_0);
+        
+        draw_panel->Update_lambda_phi_min_max();
+        
+        UpdateSlider();
+        UpdateSliderLabel();
+        
+    }
     
-    draw_panel->Update_lambda_phi_min_max();
+    if(((graphical_type->name)->GetValue()) == wxString("3D")){
+        //reset the earth orientation to the initial one
+        
+        (draw_panel->rotation) = (draw_panel->rotation_0);
+        
+    }
     
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-    UpdateSlider();
-    UpdateSliderLabel();
+    
     
     event.Skip(true);
     
@@ -8288,7 +8402,7 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
 bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
     
     return (this->*ScreenToGeo)(p + position_draw_panel, q);
-
+    
 }
 
 
@@ -8296,7 +8410,7 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 //converts the point p on the drawpanel with a 3D projection, to the relative geographic position q
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
-    double x, z, xp, yp, zp, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
+    double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -8321,12 +8435,17 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     if(arg_sqrt >= 0.0){
         
         //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for x<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger x -> I pick the solution with a positive sign in front of the square root through GSL_SIGN(x)
-        xp = (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2));
-        zp = (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
-        yp = - sqrt(1.0 - (gsl_pow_2(xp)+gsl_pow_2(zp)));
+        //set rp
+        gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + (l.value))*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+        gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + (l.value))*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
+        gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));
         
-        ((*q).lambda).set(String(""), -atan(cos(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c)) - sin(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c))), -(sin(euler_a)*(xp*cos(euler_c) + yp*sin(euler_c))) - cos(euler_a)*(zp*sin(euler_b) + cos(euler_b)*(-(yp*cos(euler_c)) + xp*sin(euler_c)))), String(""));
-        ((*q).phi).set(String(""), asin(zp*cos(euler_b) + sin(euler_b)*(yp*cos(euler_c) - xp*sin(euler_c))), String(""));
+        //r = (rotation.matrix)^T . rp
+        gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
+        
+        ((*q).lambda).set(String(""), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(""));
+        ((*q).phi).set(String(""), asin(gsl_vector_get(r, 2)), String(""));
+        
         
         //        cout << "\n rp = " << xp << " " << yp << " " << zp;
         //        cout << "\n r = " << x << " " << "/" << " " << z;
@@ -8375,14 +8494,19 @@ bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 //converts the geographic Position p  to the  3D projection (x,y)
 bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
+    //set r according equal to the 3d vector corresponding to the geographic position p
+    gsl_vector_set(r, 0, cos((p.lambda))*cos((p.phi)));
+    gsl_vector_set(r, 1, -(cos((p.phi))*sin((p.lambda))));
+    gsl_vector_set(r, 2, sin((p.phi)));
     
-    if(cos((euler_a) -(p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a -(p.lambda)) + sin(euler_b)*sin((p.phi))) < - 1.0/((l+d).value)){
+    //rotate r by rotation, and write the result in rp!
+    gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
+    
+    if(gsl_vector_get(rp, 1) < - 1.0/((l+d).value)){
         //with this condition, I plot only the points which are on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) )
         
-        (*x) = ((d.value)*(cos(euler_c)*cos(euler_a - (p.lambda))*cos((p.phi)) - sin(euler_c)*(cos(euler_b)*cos((p.phi))*sin(euler_a - (p.lambda)) + sin(euler_b)*sin((p.phi)))))/
-        ((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
-        
-        (*y) = (-((d.value)*cos((p.phi))*sin(euler_b)*sin(euler_a - (p.lambda))) + (d.value)*cos(euler_b)*sin((p.phi)))/((d.value) + (l.value) + cos(euler_a - (p.lambda))*cos((p.phi))*sin(euler_c) + cos(euler_b)*cos(euler_c)*cos((p.phi))*sin(euler_a - (p.lambda)) + cos(euler_c)*sin(euler_b)*sin((p.phi)));
+        (*x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + (l.value) + gsl_vector_get(rp, 1));
+        (*y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + (l.value) + gsl_vector_get(rp, 1));
         
         return true;
         
@@ -8423,8 +8547,13 @@ bool DrawPanel::GeoToMercator(Position q, double* x, double* y){
     
     if(check_x(x_temp) && ((y_temp > y_min) && (y_temp < y_max))){
         //if the point falls within the plot area, write it into x, y
-        
+                 
         (*x) = x_temp;
+        //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
+        if((x_max < x_min) && ((*x) < x_max)){
+            (*x) += 2.0*M_PI;
+        }
+
         (*y) = y_temp;
         
         return true;
@@ -8513,9 +8642,9 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
         
-        (parent->Euler_a)->Enable(false);
-        (parent->Euler_b)->Enable(false);
-        (parent->Euler_c)->Enable(false);
+        //        (parent->Euler_a)->Enable(false);
+        //        (parent->Euler_b)->Enable(false);
+        //        (parent->Euler_c)->Enable(false);
         
         
     }
@@ -8538,12 +8667,12 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         (parent->button_left)->Enable(false);
         (parent->button_right)->Enable(false);
         
-        (parent->Euler_a)->set();
-        (parent->Euler_a)->Enable(true);
-        (parent->Euler_b)->set();
-        (parent->Euler_b)->Enable(true);
-        (parent->Euler_c)->set();
-        (parent->Euler_c)->Enable(true);
+        //        (parent->Euler_a)->set();
+        //        (parent->Euler_a)->Enable(true);
+        //        (parent->Euler_b)->set();
+        //        (parent->Euler_b)->Enable(true);
+        //        (parent->Euler_c)->set();
+        //        (parent->Euler_c)->Enable(true);
         
     }
     
@@ -8680,19 +8809,28 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     
     position_start_drag = wxGetMousePosition();
+    (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     
-    //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
-    x_min_start_drag = x_min;
-    x_max_start_drag = x_max;
-    y_min_start_drag = y_min;
-    y_max_start_drag = y_max;
+    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+
+        //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
+        x_min_start_drag = x_min;
+        x_max_start_drag = x_max;
+        y_min_start_drag = y_min;
+        y_max_start_drag = y_max;
+        
+    }
     
-    Position geo;
-    
-    (this->*ScreenToGeo)(position_start_drag, &geo);
-    
-    geo.print(String("Position start drag"), String("************ "), cout);
-    
+    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+
+        //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
+        gsl_vector_memcpy(rp_start_drag, rp);
+        rotation_start_drag = rotation;
+        geo_start_drag.print(String("geo start drag"), String(""), cout);
+        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+        
+    }
+
     event.Skip(true);
     
 }
@@ -8706,6 +8844,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     if(mouse_dragging){mouse_dragging = false;}
     
     position_end_drag = wxGetMousePosition();
+    (this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
     
     //in this case, the drag ends out of the plot area
     
@@ -8743,9 +8882,13 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             }
             
         }
-        
+      
         if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
-
+            
+            gsl_vector_memcpy(rp_end_drag, rp);
+            rotation_end_drag = rotation;
+            geo_end_drag.print(String("position end drag"), String(""), cout);
+            rotation_end_drag.print(String("rotation end drag"), String(""), cout);
             
         }
         
@@ -9014,24 +9157,70 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, I am using the 3d projection
                     
                     //the rotation angle
-                    Angle omega;
-                    Position geo_now_drag, geo_start_drag;
+                    double temp;
                     
-                    (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
+                    //I call this to use rp
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
+                    gsl_vector_memcpy(rp_now_drag, rp);
                     
-                    omega.set(String(""), acos(cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*cos((geo_now_drag.phi)) + sin((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
+                    if(geo_now_drag != geo_start_drag){
+                        
+                        //compute the dot product between rp_start_drag and rp_now_drag and store it into temp and set the rotation angle equal to acos(temp)
+                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &temp);
+                        rotation_angle.set(String("rotation angle"), acos(temp), String("\t"));
+                        
+                        //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
+                        gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
+                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2));
+                        gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
+                        gsl_vector_scale(rp, 1.0/sin(rotation_angle));
+                        
+                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
+                 
+                        lambda_rotation_axis.set(String(""), atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+                        phi_rotation_axis.set(String(""), asin(gsl_vector_get(rp, 2)), String(""));
+                        
+                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                        rotation =
+                        Rotation(
+                                 Angle(String(""), 0.0, String("")),
+                                 Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
+                                 Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
+                                 )
+                        * Rotation(
+                                   Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
+                                   Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
+                                   Angle(String(""), rotation_angle.value, String(""))
+                                   )
+                        * rotation_start_drag;
+                        
+                        
+                        
+                        
+                        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
+                        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
+                        cout << "\tx = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
+                        cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
+                        
+                        geo_now_drag.print(String("geo now drag"), String("\t"), cout);
+                        euler_a.print(String("a"), String("\t"), cout);
+                        euler_b.print(String("b"), String("\t"), cout);
+                        euler_c.print(String("c"), String("\t"), cout);
+                        rotation.print(String("rotation"), String("\t"), cout);
+                        
+                    }else{
+                        
+                        rotation = rotation_start_drag;
+                        
+                    }
                     
-                    euler_a = omega;
-                    euler_b.set(String(""), acos(cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda))), String(""));
-                    euler_c.set(String(""), atan(cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)),cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi))), String(""));
-             
+                    
                     //re-draw the chart
                     (this->*Draw)();
                     PaintNow();
-                
+                    
                 }
-
+                
                 
             }else{
                 //in this case I am moving a position / route (the mouse is over a route or a position while dragging)
@@ -11926,10 +12115,20 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
         ((this->parent)->plot)->add_sight_and_reduce(sight, String(""));
         
+        sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
+        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
+        
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
         
+        
         sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
+        
+        sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
+        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(
+                                                                                               (sight->related_route).value,
+                                                                                               ((this->parent)->listcontrol_routes)
+                                                                                               );
         
     }
         

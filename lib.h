@@ -210,13 +210,29 @@ inline double csc(double x){
 
 inline double atan(double x, double y){
     
-    if(x > 0.0){
+    if(x != 0.0){
         
-        return atan(y/x);
+        if(x > 0.0){
+            
+            return atan(y/x);
+            
+        }else{
+            
+            return(atan(y/x)+M_PI);
+        }
         
     }else{
         
-        return(atan(y/x)+M_PI);
+        if(y > 0.0){
+            
+            return(M_PI/2.0);
+            
+        }else{
+            
+            return(3.0*M_PI/2.0);
+            
+        }
+        
     }
     
 }
@@ -649,10 +665,29 @@ public:
     string deg_to_string(String, unsigned int);
     string min_to_string(String, unsigned int);
 
+    Angle();
+    Angle(String, double, String);
     bool operator==(const Angle&), operator>(const Angle&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     
 };
+
+//this class denotes a rigid rotation R_z(c).R_x(-b).R_z(a) with Euler angles a, b, c
+class Rotation{
+  
+public:
+    
+    //R[3*i+j] is the element of the j-th column, i-th row of the rotation matrix of this
+    gsl_matrix* matrix;
+    
+    Rotation();
+    Rotation(Angle, Angle, Angle);
+    Rotation operator *(const Rotation&);
+    void print(String, String, ostream&);
+    
+};
+
+
 
 //this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
 inline double x_mercator(double lambda){
@@ -718,6 +753,7 @@ public:
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool operator==(const Position&);
+    bool operator!=(const Position&);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     
@@ -1347,11 +1383,19 @@ public:
     /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*this is the ratio between the length of the ticks on both axes, and the width of the plot area*/tic_length_over_width_plot_area, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the ticks on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi,
     /*the values of x at the beginning/end of the selection process with a rectangle*/x_start_selection, x_end_selection;
     //the euler angles which specify the orientation of the earth for the 3d representation
-    Angle euler_a, euler_b, euler_c;
+    //two auxiliary vectors which will be used later
+    gsl_vector *r, *rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;
+    Rotation rotation, /*the orientation of the Earth when a drag starts/ends*/rotation_start_drag, rotation_end_drag, /*the rotation representing the initial orientation of the earth*/rotation_0;
     Double /*the distance between the center of the earth and the plane of the 2d projection for the 3d plots*/l, /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/d;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;
-    Position /*these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_end, /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag;
+    Position /*these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_end, /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag;
+
+    
+    Angle euler_a, euler_b, euler_c, rotation_angle, lambda_rotation_axis, phi_rotation_axis;
+    
+
+    
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points which represent the route_list[i] discretized
     vector< vector< vector< wxPoint > > > points_route_list;

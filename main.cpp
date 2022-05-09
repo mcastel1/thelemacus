@@ -29,7 +29,8 @@
  - in the 3d projection two lengths l and d are redundant: remove one
  -  I cannot find a way to invert the equations to obtain lambda and phi from x, y in the 3D projection
  - fill the cases in Route::draw_3D for l and o
- - reset button does not bring chart to original configuration 
+ - reset button does not bring chart to original configuration
+ - check why body field gets empty after you entered body name and kill focus
  */
 
 
@@ -54,6 +55,25 @@ bool MyApp::OnInit(){
     string test = a.to_string(String(""), display_precision, true);
     */
      
+    /*
+    Angle a, b, c;
+    a.set(String(""), 0.2, String(""));
+    b.set(String(""), 2, String(""));
+    c.set(String(""), 4, String(""));
+    Rotation R(a, b, c);
+    
+    a.set(String(""), .232, String(""));
+    b.set(String(""), .34, String(""));
+    c.set(String(""), 2.66, String(""));
+    Rotation S(a, b, c);
+    
+    Rotation T;
+    T = R*S;
+    R.print(String("R"), String("\t\t"), cout);
+    S.print(String("S"), String("\t\t"), cout);
+    T.print(String("composition"), String("\t\t"), cout);
+    */
+ 
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;

@@ -7856,8 +7856,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
-    //(graphical_type->name)->SetValue(wxString("3D"));
-    (graphical_type->name)->SetValue(wxString("3D"));
+    (graphical_type->name)->SetValue(wxString("Mercator"));
+    //    (graphical_type->name)->SetValue(wxString("3D"));
     
     draw_panel->OnChooseGraphicalType(dummy_event);
     

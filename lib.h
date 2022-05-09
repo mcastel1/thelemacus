@@ -251,7 +251,7 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
     list_control->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
     (p.y) -= r.y;
     
-    (*i) = (list_control->HitTest(p, hit_test_flag));
+    (*i) = ((int)(list_control->HitTest(p, hit_test_flag)));
     
     //    cout << "\nMouse is on item # " << (*i);
     

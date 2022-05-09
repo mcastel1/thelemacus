@@ -9289,7 +9289,16 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
     
-    if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_min > -M_PI) && (x_max < M_PI))){
+    
+    if(x_max >= x_min){
+        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+        x_span = x_max-x_min;
+    }else{
+        //in this case, x_max, x_min encompass the meridian lambda = pi
+        x_span = 2.0*M_PI - (x_min-x_max);
+    }
+    
+    if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_span < 2.0*M_PI))){
         //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
         
         x_min = x_min_old;
@@ -9312,8 +9321,6 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
         (print_error_message->message) = String("The chart must lie within the boundaries.");
         (*print_error_message)();
-        
-        
         
     }else{
         //if the slide operation is valid, I update everything and re-draw the chart

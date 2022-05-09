@@ -7751,7 +7751,7 @@ void DrawPanel::Draw_3D(void){
 ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;
-    String new_prefix;
+    String new_prefix, default_projection;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
@@ -7855,9 +7855,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
-    (graphical_type->name)->SetValue(wxString("Mercator"));
-    //    (graphical_type->name)->SetValue(wxString("3D"));
+    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
+    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+    (graphical_type->name)->SetValue(wxString(default_projection.value));
     
     draw_panel->OnChooseGraphicalType(dummy_event);
     

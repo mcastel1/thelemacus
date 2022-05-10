@@ -9174,8 +9174,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
                  
-                        lambda_rotation_axis.set(String(""), atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
-                        phi_rotation_axis.set(String(""), asin(gsl_vector_get(rp, 2)), String(""));
+                        lambda_rotation_axis.set(String("lambda rotation axis"), /**/atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+                        phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation =
@@ -9277,8 +9277,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
                  
-                        lambda_rotation_axis.set(String(""), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
-                        phi_rotation_axis.set(String(""), asin(gsl_vector_get(rp, 2)), String(""));
+                        lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String("\t"));
+                        phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String("\t"));
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation_now_drag =

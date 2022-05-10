@@ -8840,7 +8840,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     position_end_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
     
-    //in this case, the drag ends out of the plot area
     
     if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
         //in this case, I am dragging the chart (not a route or position)
@@ -9165,7 +9164,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
                         gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
-                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2));
+                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
                         gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
                         gsl_vector_scale(rp, 1.0/sin(rotation_angle));
                         
@@ -9271,7 +9270,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
                         gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
-                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2));
+                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
                         gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
                         gsl_vector_scale(rp, 1.0/sin(rotation_angle));
                         

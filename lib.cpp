@@ -9173,9 +9173,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
-                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }";
-                 
-                        lambda_rotation_axis.set(String("lambda rotation axis"), /**/atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+                        cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
+                        cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
+                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+
+                        lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
                         phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
@@ -9277,9 +9279,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
-                        cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }";
-                        cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }";
-                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }";
+                        cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
+                        cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
+                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
 
                  
                         lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String("\t"));

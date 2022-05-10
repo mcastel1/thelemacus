@@ -699,6 +699,19 @@ Rotation::Rotation(Angle a, Angle b, Angle c){
     
 }
 
+//returns the inverse of the rotation (*this)
+Rotation Rotation::inverse(void){
+    
+    Rotation t;
+    
+    //transposes (inverts) this->matrix and copies the result into t.matrix
+    gsl_matrix_transpose_memcpy(t.matrix, matrix);
+    
+    return t;
+    
+}
+
+
 //composition of two rotations: this yields the rotation given by this . s
 Rotation Rotation::operator *(const Rotation& s){
     
@@ -9266,62 +9279,62 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
                     gsl_vector_memcpy(rp_now_drag, rp);
                     
-                    if(geo_now_drag != geo_start_drag){
-                        
-                        //compute the dot product between rp_start_drag and rp_now_drag and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
-                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &cos_rotation_angle);
-                        rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
-                        
-                        //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
-                        gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
-                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
-                        gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
-                        gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
-                        
-                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
-                        cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
-                        cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
-                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+                    //                    if(geo_now_drag != geo_start_drag){
+                    
+                    //compute the dot product between rp_start_drag and rp_now_drag and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+                    gsl_blas_ddot(rp_start_drag, rp_now_drag, &cos_rotation_angle);
+                    rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
+                    
+                    //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
+                    gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
+                    gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
+                    gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
+                    gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
+                    
+                    cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+                    cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
+                    cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
+                    cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+                    
+                    
+                    lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String("\t"));
+                    phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String("\t"));
+                    
+                    //compose rotation with the rotation resulting from the drag and then apply it to pp == &((plot->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag) 
+                    rotation_now_drag =
+                    (rotation.inverse()) *
+                    Rotation(
+                             Angle(String(""), 0.0, String("")),
+                             Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
+                             Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
+                             ) *
+                    Rotation(
+                             Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
+                             Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
+                             Angle(String(""), rotation_angle.value, String(""))
+                             ) *
+                    rotation;
+                    geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
 
-                 
-                        lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String("\t"));
-                        phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String("\t"));
-                        
-                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation_now_drag =
-                        Rotation(
-                                 Angle(String(""), 0.0, String("")),
-                                 Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
-                                 Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
-                                 )
-                        * Rotation(
-                                   Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
-                                   Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
-                                   Angle(String(""), rotation_angle.value, String(""))
-                                   )
-                        * rotation_start_drag;
-                        
-                        
-                        
-                        
-                        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
-                        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
-                        cout << "\tx = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
-                        cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
-                        
-                        geo_now_drag.print(String("geo now drag"), String("\t"), cout);
-                        rotation.print(String("rotation"), String("\t"), cout);
-                        
-                    }else{
-                        
-                        rotation_now_drag = rotation_start_drag;
-                        
-                    }
-
+                    
+                    
+                    
+                    cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
+                    cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
+                    cout << "\tx = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
+                    cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
+                    geo_now_drag.print(String("geo now drag"), String("\t"), cout);
+                    rotation.print(String("rotation"), String("\t"), cout);
+                    
+                    //                    }else{
+                    //
+                    //                        rotation_now_drag = rotation_start_drag;
+                    //
+                    //                    }
+                    
                     //apply the rotation_now_drag to geo_start_drag, and obtain the  Position rotated according to the mouse drag -> write this position in position_list
                     //                    (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                    //HERE IS THE ERROR: rotation_now_drag includes also the rotation_start_drag (the global rotation of the globe). But this rotation is already performed when the Position will be plotted with Render(). As a result, the global rotation is applied twice, which is wrong. 
-                    geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
+                    //HERE IS THE ERROR: rotation_now_drag includes also the rotation_start_drag (the global rotation of the globe). But this rotation is already performed when the Position will be plotted with Render(). As a result, the global rotation is applied twice, which is wrong.
                     
                     
                     //update the data of the Position under consideration in listcontrol_positions

@@ -683,6 +683,7 @@ public:
     Rotation();
     Rotation(Angle, Angle, Angle);
     Rotation operator *(const Rotation&);
+    Rotation inverse(void);
     void print(String, String, ostream&);
     
 };

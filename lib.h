@@ -757,7 +757,7 @@ public:
     bool operator!=(const Position&);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
-    void rotate(String, Rotation, Position*, String);
+    void rotate(String, Rotation, String);
     
 };
 

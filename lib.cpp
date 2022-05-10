@@ -9295,7 +9295,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //update the data of the Position under consideration in listcontrol_positions
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
-                    
+                     
                     //given that the Position under consideration has changed, I re-paint the chart
                     PaintNow();
                     

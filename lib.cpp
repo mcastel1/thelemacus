@@ -9173,6 +9173,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
+                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }";
                  
                         lambda_rotation_axis.set(String("lambda rotation axis"), /**/atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
                         phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
@@ -9276,6 +9277,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
+                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }";
+
                  
                         lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String("\t"));
                         phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String("\t"));

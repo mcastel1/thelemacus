@@ -1812,6 +1812,10 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
 
     //rotate u according to r and write the result in s and then in (*this)
     gsl_blas_dgemv(CblasNoTrans, 1.0, r.matrix, u, 0.0, s);
+    
+    cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
+    cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
+    
     (p->phi).set(name, asin(gsl_vector_get(s, 2)), prefix);
     (p->lambda).set(name, -atan(gsl_vector_get(s, 0), gsl_vector_get(s, 1)), prefix);
     
@@ -9166,7 +9170,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
                         gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
                         gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
-                        gsl_vector_scale(rp, 1.0/sin(rotation_angle));
+                        gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
                  
@@ -9272,11 +9276,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
                         gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
                         gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
-                        gsl_vector_scale(rp, 1.0/sin(rotation_angle));
+                        gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
                         cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
                  
-                        lambda_rotation_axis.set(String(""), atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+                        lambda_rotation_axis.set(String(""), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
                         phi_rotation_axis.set(String(""), asin(gsl_vector_get(rp, 2)), String(""));
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag

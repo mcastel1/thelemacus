@@ -9151,7 +9151,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, I am using the 3d projection
                     
                     //the rotation angle
-                    double temp;
+                    double cos_rotation_angle;
                     
                     //I call this to use rp
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
@@ -9159,9 +9159,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     if(geo_now_drag != geo_start_drag){
                         
-                        //compute the dot product between rp_start_drag and rp_now_drag and store it into temp and set the rotation angle equal to acos(temp)
-                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &temp);
-                        rotation_angle.set(String("rotation angle"), acos(temp), String("\t"));
+                        //compute the dot product between rp_start_drag and rp_now_drag and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &cos_rotation_angle);
+                        rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
                         
                         //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
                         gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
@@ -9257,7 +9257,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     
                     //the rotation angle
-                    double temp;
+                    double cos_rotation_angle;
                     
                     //I call this to use rp
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
@@ -9265,9 +9265,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     if(geo_now_drag != geo_start_drag){
                         
-                        //compute the dot product between rp_start_drag and rp_now_drag and store it into temp and set the rotation angle equal to acos(temp)
-                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &temp);
-                        rotation_angle.set(String("rotation angle"), acos(temp), String("\t"));
+                        //compute the dot product between rp_start_drag and rp_now_drag and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &cos_rotation_angle);
+                        rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
                         
                         //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
                         gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));

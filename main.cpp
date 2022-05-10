@@ -29,6 +29,8 @@
  - in the 3d projection two lengths l and d are redundant: remove one
  - fill the cases in Route::draw_3D for l and o
  - check why body field gets empty after you entered body name and kill focus
+ - replace 'lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+ phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));' with a function
  */
 
 

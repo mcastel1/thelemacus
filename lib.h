@@ -1376,7 +1376,7 @@ public:
     XYChart *chart;
     //a ChartDirector layer to draw splines on chart
     SplineLayer *spline_layer;
-    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_draw_panel_now, position_start_drag, position_end_drag, position_now_drag;
+    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_start_drag, position_end_drag, position_now_drag, position_draw_panel_now;
     wxSlider* slider;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double /*min and max values of the Mercator or 3D projections x, y*/x_min, x_max, y_min, y_max, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/x_span, x_min_start_drag, x_max_start_drag, y_min_start_drag, y_max_start_drag,
@@ -1436,6 +1436,7 @@ public:
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
     bool check_x(double);
+    Rotation rotation_start_end(wxPoint, wxPoint);
     
     void Render_Mercator(wxDC&);
     void Render_3D(wxDC&);

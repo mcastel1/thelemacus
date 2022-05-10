@@ -8156,6 +8156,74 @@ bool DrawPanel::check_x(double x){
     }
 }
 
+
+//generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection. start and end are converted into cartesian coordiantes in the x'y'z' reference frame, then the rotation axis is build as their cross product, and the relative Rotation is returned.
+Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
+    
+    //the rotation angle
+    double cos_rotation_angle;
+    Position geo_start, geo_end;
+    gsl_vector* rp_start, *rp_end;
+    Angle rotation_angle;
+    
+    rp_start = gsl_vector_alloc(3);
+    rp_end = gsl_vector_alloc(3);
+    
+    //I call ScreenToGeo to compute rp_start and rp_end only
+    ScreenToGeo_3D(start, &geo_start);
+    gsl_vector_memcpy(rp_start, rp);
+    
+    ScreenToGeo_3D(end, &geo_end);
+    gsl_vector_memcpy(rp_end, rp);
+    
+    
+    //compute the dot product between rp_start and rp_end and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+    gsl_blas_ddot(rp_start, rp_end, &cos_rotation_angle);
+    rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
+    
+    //compute the cross product  rp_start x rp_end store it into rp and normalize it
+    gsl_vector_set(rp, 0, gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 2) - gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 1));
+    gsl_vector_set(rp, 1, gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 0) - gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 2));
+    gsl_vector_set(rp, 2, gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 1) - gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 0));
+    gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
+    
+    
+    
+    cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+    cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
+    cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
+    cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+    
+    lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+    phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
+    
+    
+    cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
+    cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
+    cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
+    cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
+    
+    geo_end_drag.print(String("geo now drag"), String("\t"), cout);
+//    rotation.print(String("rotation"), String("\t"), cout);
+    
+
+    
+    gsl_vector_free(rp_start);
+    gsl_vector_free(rp_end);
+    
+    return (Rotation(
+                     Angle(String(""), 0.0, String("")),
+                     Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
+                     Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
+                     )
+            * Rotation(
+                       Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
+                       Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
+                       Angle(String(""), rotation_angle.value, String(""))
+                       ));
+    
+}
+
 void ChartFrame::UpdateSliderLabel(void){
     
     stringstream s;
@@ -8436,7 +8504,7 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 
 
 
-//converts the point p on the drawpanel with a 3D projection, to the relative geographic position q
+//converts the point p on the screen with a 3D projection, to the relative geographic position q
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
@@ -9166,58 +9234,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
                     //in this case, I am using the 3d projection
                     
-                    //the rotation angle
-                    double cos_rotation_angle;
-                    
-                    //I call this to use rp
-                    (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
-                    gsl_vector_memcpy(rp_now_drag, rp);
-                    
-                    
-                    //compute the dot product between rp_start_drag and rp_now_drag and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
-                    gsl_blas_ddot(rp_start_drag, rp_now_drag, &cos_rotation_angle);
-                    rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
-                    
-                    //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
-                    gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
-                    gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
-                    gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
-                    gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
-                    
-                    cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
-                    cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
-                    cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
-                    cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
-                    
-                    lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
-                    phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
-                    
                     //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                     rotation =
-                    Rotation(
-                             Angle(String(""), 0.0, String("")),
-                             Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
-                             Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
-                             )
-                    * Rotation(
-                               Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
-                               Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
-                               Angle(String(""), rotation_angle.value, String(""))
-                               )
-                    * rotation_start_drag;
-                    
-                    
-                    
-                    
-                    cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
-                    cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
-                    cout << "\tx = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
-                    cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
-                    
-                    geo_now_drag.print(String("geo now drag"), String("\t"), cout);
-                    rotation.print(String("rotation"), String("\t"), cout);
-                    
-                    
+                    rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                     
+                   
                     //re-draw the chart
                     (this->*Draw)();
                     PaintNow();

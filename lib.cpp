@@ -756,7 +756,7 @@ Angle::Angle(String name, double x, String prefix){
     value = x;
     normalize();
     if(name != String("")){print(name, prefix, cout);}
- 
+    
 }
 
 bool Angle::operator==(const Angle& x){
@@ -1016,7 +1016,7 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
         
         i = list_position;
         listcontrol->DeleteItem(i);
-
+        
     }
     
     item.SetId(i);
@@ -1822,7 +1822,7 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
     gsl_vector_set(u, 0, cos(lambda)*cos(phi));
     gsl_vector_set(u, 1, -(cos(phi)*sin(lambda)));
     gsl_vector_set(u, 2, sin(phi));
-
+    
     //rotate u according to r and write the result in s and then in (*this)
     gsl_blas_dgemv(CblasNoTrans, 1.0, r.matrix, u, 0.0, s);
     
@@ -6798,7 +6798,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     rp_start_drag = gsl_vector_alloc(3);
     rp_now_drag = gsl_vector_alloc(3);
     rp_end_drag = gsl_vector_alloc(3);
-
+    
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;
@@ -7885,7 +7885,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-
+    
     //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
     default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
     (graphical_type->name)->SetValue(wxString(default_projection.value));
@@ -8216,7 +8216,7 @@ template<class T>void CheckBody::operator()(T& event){
         i--;
         
         if(check){
-                        
+            
             if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
                 //in this case, the selected body is a body which has a limb -> I enable the limb field
                 
@@ -8533,7 +8533,7 @@ bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
     
     (*x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
     (*y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
-
+    
     
     //I return true if p lies on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) ), and I return false otherwise.
     
@@ -8567,13 +8567,13 @@ bool DrawPanel::GeoToMercator(Position q, double* x, double* y){
     
     if(check_x(x_temp) && ((y_temp > y_min) && (y_temp < y_max))){
         //if the point falls within the plot area, write it into x, y
-                 
+        
         (*x) = x_temp;
         //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
         if((x_max < x_min) && ((*x) < x_max)){
             (*x) += 2.0*M_PI;
         }
-
+        
         (*y) = y_temp;
         
         return true;
@@ -8650,7 +8650,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         GeoToProjection = (&DrawPanel::GeoToMercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
-//        (parent->slider)->Enable(true);
+        //        (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
@@ -8672,7 +8672,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
-//        (parent->slider)->Enable(false);
+        //        (parent->slider)->Enable(false);
         (parent->button_up)->Enable(false);
         (parent->button_down)->Enable(false);
         (parent->button_left)->Enable(false);
@@ -8684,7 +8684,7 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         y_min = x_min;
         y_max = -y_min;
         
-
+        
     }
     
     //change thsis: this should be called only if name->GetValue has changed.
@@ -8738,7 +8738,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         
         //        cout << "route liist size = " << (plot->route_list).size() << "\nlistcontrol routes size = " << ((parent->parent)->listcontrol_routes)->GetItemCount() << "\n";
         
-     
+        
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -8823,7 +8823,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
-
+        
         //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
         x_min_start_drag = x_min;
         x_max_start_drag = x_max;
@@ -8833,7 +8833,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     }
     
     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
-
+        
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
         gsl_vector_memcpy(rp_start_drag, rp);
         rotation_start_drag = rotation;
@@ -8841,7 +8841,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
         rotation_start_drag.print(String("rotation start drag"), String(""), cout);
         
     }
-
+    
     event.Skip(true);
     
 }
@@ -8892,7 +8892,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             }
             
         }
-      
+        
         if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
             
             gsl_vector_memcpy(rp_end_drag, rp);
@@ -9173,56 +9173,49 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     (this->*ScreenToGeo)(position_now_drag, &geo_now_drag);
                     gsl_vector_memcpy(rp_now_drag, rp);
                     
-                    if(geo_now_drag != geo_start_drag){
-                        
-                        //compute the dot product between rp_start_drag and rp_now_drag and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
-                        gsl_blas_ddot(rp_start_drag, rp_now_drag, &cos_rotation_angle);
-                        rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
-                        
-                        //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
-                        gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
-                        gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
-                        gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
-                        gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
-                        
-                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
-                        cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
-                        cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
-                        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
-
-                        lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
-                        phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
-                        
-                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation =
-                        Rotation(
-                                 Angle(String(""), 0.0, String("")),
-                                 Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
-                                 Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
-                                 )
-                        * Rotation(
-                                   Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
-                                   Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
-                                   Angle(String(""), rotation_angle.value, String(""))
-                                   )
-                        * rotation_start_drag;
-                        
-                        
-                        
-                        
-                        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
-                        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
-                        cout << "\tx = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
-                        cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
-                        
-                        geo_now_drag.print(String("geo now drag"), String("\t"), cout);
-                        rotation.print(String("rotation"), String("\t"), cout);
-                        
-                    }else{
-                        
-                        rotation = rotation_start_drag;
-                        
-                    }
+                    
+                    //compute the dot product between rp_start_drag and rp_now_drag and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+                    gsl_blas_ddot(rp_start_drag, rp_now_drag, &cos_rotation_angle);
+                    rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
+                    
+                    //compute the cross product  rp_start_drag x rp_now_drag, store it into rp and normalize it
+                    gsl_vector_set(rp, 0, gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 2) - gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 1));
+                    gsl_vector_set(rp, 1, gsl_vector_get(rp_start_drag, 2)*gsl_vector_get(rp_now_drag, 0) - gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 2));
+                    gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
+                    gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
+                    
+                    cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+                    cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
+                    cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
+                    cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+                    
+                    lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
+                    phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
+                    
+                    //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                    rotation =
+                    Rotation(
+                             Angle(String(""), 0.0, String("")),
+                             Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
+                             Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
+                             )
+                    * Rotation(
+                               Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
+                               Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
+                               Angle(String(""), rotation_angle.value, String(""))
+                               )
+                    * rotation_start_drag;
+                    
+                    
+                    
+                    
+                    cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
+                    cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
+                    cout << "\tx = " << cos((geo_now_drag.phi))*sin((geo_now_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_now_drag.phi)) << "\n";
+                    cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
+                    
+                    geo_now_drag.print(String("geo now drag"), String("\t"), cout);
+                    rotation.print(String("rotation"), String("\t"), cout);
                     
                     
                     //re-draw the chart
@@ -9315,9 +9308,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                              ) *
                     rotation;
                     geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
-
                     
-               
+                    
+                    
                     
                     cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value))) << "\n";
                     cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_now_drag.phi))*sin((geo_start_drag.lambda) - (geo_now_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_now_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_now_drag.lambda)),2) + gsl_pow_int(sin((geo_now_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_now_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_now_drag.phi).value)))) << "\n";
@@ -12210,7 +12203,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
                                                                                                );
         
     }
-        
+    
     //add the sight to the GUI object listconstrol_sights
     sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
     
@@ -12221,15 +12214,15 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
             //in this case, in listcontrol_routes there is already an entry for the related route -> I write the related route into listcontrol_routes  in this entry
             
             (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
-
+            
         }else{
             //in this case, in listcontrol_routes there is no entry for the related route -> I insert the related route by creating a new entry into listcontrol_routes
-
+            
             (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl(-1, ((this->parent)->listcontrol_routes));
-
+            
         }
         
-
+        
     }
     
     parent->UpdateRelatedSightsAndRoutes();

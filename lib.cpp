@@ -9252,33 +9252,32 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if(((parent->parent)->highlighted_route) != -1){
                     //in this case, the mouse is over a route
                     
-                    wxPoint p;
+                    //compose rotation with the rotation resulting from the drag and then apply it to route_position_start_drag: route_position_start_drag -> rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag. In this way, when Render() will plot the position route_position_start_drag, it will apply to route_position_start_drag the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag = (rotation due to drag).rotation.route_position_start_drag, which is the desired result (i.e. route_position_start_drag rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                    rotation_now_drag =
+                    (rotation.inverse()) *
+                    rotation_start_end(position_start_drag, position_now_drag) *
+                    rotation;
                     
-                    //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
-                    
-                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
-                    
+                    //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
                     
                     if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
-                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
-                        
+                        //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP));
+                        route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).GP), String(""));
                         
                     }else{
                         
-                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                        //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).start));
+                        route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).start), String(""));
                         
                     }
-                    
                     
                     //update the data of the Route under consideration in listcontrol_routes
                     ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
                     
-                    
                     //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the chart
                     (this->*TabulateRoutes)();
                     PaintNow();
-                    
                     
                 }
                 

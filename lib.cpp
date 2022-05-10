@@ -1813,7 +1813,7 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
     //rotate u according to r and write the result in s and then in (*this)
     gsl_blas_dgemv(CblasNoTrans, 1.0, r.matrix, u, 0.0, s);
     (p->phi).set(name, asin(gsl_vector_get(s, 2)), prefix);
-    (p->lambda).set(name, atan(gsl_vector_get(s, 0), gsl_vector_get(s, 1)), prefix);
+    (p->lambda).set(name, -atan(gsl_vector_get(s, 0), gsl_vector_get(s, 1)), prefix);
     
     gsl_vector_free(u);
     gsl_vector_free(s);

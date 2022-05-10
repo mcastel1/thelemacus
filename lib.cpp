@@ -9200,9 +9200,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
                         
                         geo_now_drag.print(String("geo now drag"), String("\t"), cout);
-                        euler_a.print(String("a"), String("\t"), cout);
-                        euler_b.print(String("b"), String("\t"), cout);
-                        euler_c.print(String("c"), String("\t"), cout);
                         rotation.print(String("rotation"), String("\t"), cout);
                         
                     }else{
@@ -9306,9 +9303,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         cout << "\ty = " << cos((geo_now_drag.lambda))*cos((geo_now_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_now_drag.phi)) << "\n";
                         
                         geo_now_drag.print(String("geo now drag"), String("\t"), cout);
-                        euler_a.print(String("a"), String("\t"), cout);
-                        euler_b.print(String("b"), String("\t"), cout);
-                        euler_c.print(String("c"), String("\t"), cout);
                         rotation.print(String("rotation"), String("\t"), cout);
                         
                     }else{

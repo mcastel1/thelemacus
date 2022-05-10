@@ -756,6 +756,7 @@ public:
     bool operator!=(const Position&);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
+    void rotate(String, Rotation, Position*, String);
     
 };
 
@@ -1385,7 +1386,7 @@ public:
     //the euler angles which specify the orientation of the earth for the 3d representation
     //two auxiliary vectors which will be used later
     gsl_vector *r, *rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;
-    Rotation rotation, /*the orientation of the Earth when a drag starts/ends*/rotation_start_drag, rotation_end_drag, /*the rotation representing the initial orientation of the earth*/rotation_0;
+    Rotation rotation, /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the initial orientation of the earth*/rotation_0;
     Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/d;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;

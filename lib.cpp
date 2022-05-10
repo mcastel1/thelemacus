@@ -9320,6 +9320,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
                     //apply the rotation_now_drag to geo_start_drag, and obtain the  Position rotated according to the mouse drag -> write this position in position_list
                     //                    (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                    //HERE IS THE ERROR: rotation_now_drag includes also the rotation_start_drag (the global rotation of the globe). But this rotation is already performed when the Position will be plotted with Render(). As a result, the global rotation is applied twice, which is wrong. 
                     geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
                     
                     

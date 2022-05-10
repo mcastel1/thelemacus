@@ -1810,8 +1810,8 @@ Route Position::transport(String prefix){
     
 }
 
-//rotates the Position (*this) according to the Rotation r
-void Position::rotate(String name, Rotation r, String prefix){
+//rotates the Position (*this) according to the Rotation s, and writes the result in *p
+void Position::rotate(String name, Rotation r, Position* p, String prefix){
     
     gsl_vector *u, *s;
     
@@ -1826,11 +1826,11 @@ void Position::rotate(String name, Rotation r, String prefix){
     //rotate u according to r and write the result in s and then in (*this)
     gsl_blas_dgemv(CblasNoTrans, 1.0, r.matrix, u, 0.0, s);
     
-//    cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
-//    cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
+    cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
+    cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
     
-    phi.set(name, asin(gsl_vector_get(s, 2)), prefix);
-    lambda.set(name, -atan(gsl_vector_get(s, 0), gsl_vector_get(s, 1)), prefix);
+    (p->phi).set(name, asin(gsl_vector_get(s, 2)), prefix);
+    (p->lambda).set(name, -atan(gsl_vector_get(s, 0), gsl_vector_get(s, 1)), prefix);
     
     gsl_vector_free(u);
     gsl_vector_free(s);
@@ -9291,7 +9291,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     (rotation.inverse()) *
                     rotation_start_end(position_start_drag, position_now_drag) *
                     rotation;
-                    ((plot->position_list)[((parent->parent)->highlighted_position)]).rotate(String(""), rotation_now_drag, String(""));
+                    geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
                     
                     //update the data of the Position under consideration in listcontrol_positions
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

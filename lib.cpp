@@ -9172,7 +9172,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
                         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
-                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
+                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
                         cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
                         cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
                         cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
@@ -9278,7 +9278,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         gsl_vector_set(rp, 2, gsl_vector_get(rp_start_drag, 0)*gsl_vector_get(rp_now_drag, 1) - gsl_vector_get(rp_start_drag, 1)*gsl_vector_get(rp_now_drag, 0));
                         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
                         
-                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp);
+                        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
                         cout << "\trp_start_drag = {" << gsl_vector_get(rp_start_drag, 0) << " , " << gsl_vector_get(rp_start_drag, 1) << " , " << gsl_vector_get(rp_start_drag, 2) << " }\n";
                         cout << "\trp_now_drag = {" << gsl_vector_get(rp_now_drag, 0) << " , " << gsl_vector_get(rp_now_drag, 1) << " , " << gsl_vector_get(rp_now_drag, 2) << " }\n";
                         cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";

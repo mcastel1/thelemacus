@@ -9312,6 +9312,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, the mouse is over a position
                     
                     if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                                                
+                        //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
+                        (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                         
                     }
                     
@@ -9324,14 +9327,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         rotation_start_end(position_start_drag, position_now_drag) *
                         rotation;
                         geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
-                        
-                        //update the data of the Position under consideration in listcontrol_positions
-                        ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
-                        
-                        //given that the Position under consideration has changed, I re-paint the chart
-                        PaintNow();
-                        
+                                 
                     }
+                    
+                    //update the data of the Position under consideration in listcontrol_positions
+                    ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                    
+                    //given that the Position under consideration has changed, I re-paint the chart
+                    PaintNow();
                     
                 }
                 

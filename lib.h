@@ -746,7 +746,7 @@ public:
     
     Position();
     void enter(String, String);
-    void set(gsl_vector*);
+    void set(String, gsl_vector*, String);
     void modify(String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);
@@ -1392,8 +1392,8 @@ public:
     Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/d;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;
-    Position /*these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_end, /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag;
-    Angle rotation_angle, lambda_rotation_axis, phi_rotation_axis;
+    Position /*these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_end, /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis;
+    Angle rotation_angle;
     
 
     

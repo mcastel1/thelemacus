@@ -1829,9 +1829,8 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
     cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
     cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
     
-    (p->phi).set(name, asin(gsl_vector_get(s, 2)), prefix);
-    (p->lambda).set(name, -atan(gsl_vector_get(s, 0), gsl_vector_get(s, 1)), prefix);
-    
+    p->set(name, s, prefix);
+  
     gsl_vector_free(u);
     gsl_vector_free(s);
     
@@ -5882,10 +5881,10 @@ void Position::enter(String name, String prefix){
 }
 
 //set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
-void Position::set(gsl_vector* r){
+void Position::set(String name, gsl_vector* r, String prefix){
     
-    lambda.set(String(""), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(""));
-    phi.set(String(""), asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(""));
+    lambda.set(String(name), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
+    phi.set(String(name), asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(prefix));
     
 }
 
@@ -8202,8 +8201,8 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
     cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
     
-    lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
-    phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));
+    rotation_axis.set(String("rotaion axis"), rp, String(""));    
+
     
     
     cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
@@ -8221,12 +8220,12 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     
     return (Rotation(
                      Angle(String(""), 0.0, String("")),
-                     Angle(String(""), M_PI/2.0-(phi_rotation_axis.value), String("")),
-                     Angle(String(""), -((lambda_rotation_axis.value) + M_PI/2.0), String(""))
+                     Angle(String(""), M_PI/2.0-(((rotation_axis).phi).value), String("")),
+                     Angle(String(""), -((((rotation_axis).lambda).value) + M_PI/2.0), String(""))
                      )
             * Rotation(
-                       Angle(String(""), (lambda_rotation_axis.value) + M_PI/2.0, String("")),
-                       Angle(String(""), -(M_PI/2.0-(phi_rotation_axis.value)), String("")),
+                       Angle(String(""), (((rotation_axis).lambda).value) + M_PI/2.0, String("")),
+                       Angle(String(""), -(M_PI/2.0-(((rotation_axis).phi).value)), String("")),
                        Angle(String(""), rotation_angle.value, String(""))
                        ));
     
@@ -8548,10 +8547,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
         //r = (rotation.matrix)^T . rp
         gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
         
-        ((*q).lambda).set(String(""), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(""));
-        ((*q).phi).set(String(""), asin(gsl_vector_get(r, 2)), String(""));
-        
-        
+        q->set(String(""), r, String(""));
         //        cout << "\n rp = " << xp << " " << yp << " " << zp;
         //        cout << "\n r = " << x << " " << "/" << " " << z;
         //        cout << "\nsqrt xxx = " << arg_sqrt;

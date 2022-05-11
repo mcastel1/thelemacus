@@ -3224,6 +3224,18 @@ void Sight::print(String name, String prefix, ostream& ostr){
     
 }
 
+//default constructor
+Projection::Projection(void){
+    
+}
+
+//custom constructor, which initialized the point with coordinates x, y
+Projection::Projection(const double x_in, const double y_in){
+    
+    x = x_in;
+    y = y_in;
+    
+}
 
 // this function plots the Routes of type String("c") in route_list in kml format
 void Plot::print_to_kml(String prefix){

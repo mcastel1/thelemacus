@@ -995,7 +995,7 @@ public:
     double x, y;
     
     Projection();
-    Projection(double, double);
+    Projection(const double, const double);
     
 };
 

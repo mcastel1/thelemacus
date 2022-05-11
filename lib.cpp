@@ -7860,8 +7860,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_right = new wxButton(panel, wxID_ANY, wxT("E"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
-    graphical_type = new GraphicalTypeField(this);
-    (graphical_type->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseGraphicalType, draw_panel);
+    projection = new ProjectionField(this);
+    (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseGraphicalType, draw_panel);
     
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
@@ -7893,9 +7893,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of graphical_type->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
+    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
     default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
-    (graphical_type->name)->SetValue(wxString(default_projection.value));
+    (projection->name)->SetValue(wxString(default_projection.value));
     
     draw_panel->OnChooseGraphicalType(dummy_event);
     
@@ -7930,7 +7930,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    graphical_type->InsertIn<wxBoxSizer>(sizer_slider);
+    projection->InsertIn<wxBoxSizer>(sizer_slider);
     //    Euler_a->InsertIn<wxBoxSizer>(sizer_slider);
     //    Euler_b->InsertIn<wxBoxSizer>(sizer_slider);
     //    Euler_c->InsertIn<wxBoxSizer>(sizer_slider);
@@ -8088,7 +8088,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
 //resets the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event){
     
-    if(((graphical_type->name)->GetValue()) == wxString("Mercator")){
+    if(((projection->name)->GetValue()) == wxString("Mercator")){
         //reset the chart boundaries to the initial ones
         
         
@@ -8104,7 +8104,7 @@ template<class T> void ChartFrame::Reset(T& event){
         
     }
     
-    if(((graphical_type->name)->GetValue()) == wxString("3D")){
+    if(((projection->name)->GetValue()) == wxString("3D")){
         //reset the earth orientation to the initial one
         
         (draw_panel->rotation) = (draw_panel->rotation_0);
@@ -8711,8 +8711,8 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 
 void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
     
-    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
-        //if in graphical_type "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
+    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+        //if in projection "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
         
         Draw = (&DrawPanel::Draw_Mercator);
         TabulateRoutes = (&DrawPanel::TabulateRoutes_Mercator);
@@ -8732,8 +8732,8 @@ void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
         
     }
     
-    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
-        //if in graphical_type "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
+    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+        //if in projection "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
         
         Draw = (&DrawPanel::Draw_3D);
         TabulateRoutes = (&DrawPanel::TabulateRoutes_3D);
@@ -8894,7 +8894,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     position_start_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     
-    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
         
         //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
         x_min_start_drag = x_min;
@@ -8904,7 +8904,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
         
     }
     
-    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
         
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
         gsl_vector_memcpy(rp_start_drag, rp);
@@ -8933,7 +8933,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
         //in this case, I am dragging the chart (not a route or position)
         
-        if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
             
             double delta_x, delta_y;
             
@@ -8965,7 +8965,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             
         }
         
-        if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+        if((((parent->projection)->name)->GetValue()) == wxString("3D")){
             
             gsl_vector_memcpy(rp_end_drag, rp);
             rotation_end_drag = rotation;
@@ -9196,7 +9196,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){
                 //in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
                 
-                if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                     //in this case, I am using the mercator projection
                     
                     double delta_x, delta_y;
@@ -9213,7 +9213,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         y_min += delta_y;
                         y_max += delta_y;
                         
-                        if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                             
                             Update_lambda_phi_min_max();
                             
@@ -9227,7 +9227,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                 }
                 
-                if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+                if((((parent->projection)->name)->GetValue()) == wxString("3D")){
                     //in this case, I am using the 3d projection
                     
                     //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
@@ -9248,7 +9248,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if(((parent->parent)->highlighted_route) != -1){
                     //in this case, the mouse is over a route
                     
-                    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                         
                         wxPoint p;
                         
@@ -9262,7 +9262,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     }
                    
                     
-                    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+                    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
                         
                         
                         //compose rotation with the rotation resulting from the drag and then apply it to route_position_start_drag: route_position_start_drag -> rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag. In this way, when Render() will plot the position route_position_start_drag, it will apply to route_position_start_drag the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag = (rotation due to drag).rotation.route_position_start_drag, which is the desired result (i.e. route_position_start_drag rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
@@ -9298,7 +9298,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if(((parent->parent)->highlighted_position) != -1){
                     //in this case, the mouse is over a position
                     
-                    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                                                 
                         //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                         (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
@@ -9306,7 +9306,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     }
                      
                     
-                    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+                    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
                         
                         //compose rotation with the rotation resulting from the drag and then apply it to pp == &((plot->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                         rotation_now_drag =
@@ -12226,8 +12226,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
 }
 
-//constructor of a GraphicalTypeField object, based on the parent frame frame
-GraphicalTypeField::GraphicalTypeField(ChartFrame* parent_in){
+//constructor of a ProjectionField object, based on the parent frame frame
+ProjectionField::ProjectionField(ChartFrame* parent_in){
     
     parent = parent_in;
     
@@ -13164,7 +13164,7 @@ template<class T> void RouteTypeField::InsertIn(T* host){
     
 }
 
-template<class T> void GraphicalTypeField::InsertIn(T* host){
+template<class T> void ProjectionField::InsertIn(T* host){
     
     host->Add(sizer_v);
     

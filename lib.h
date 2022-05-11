@@ -797,8 +797,6 @@ public:
 
 };
 
-
-
 class Date{
     
 public:
@@ -856,8 +854,6 @@ public:
     
 };
 
-
-
 class Atmosphere{
     
 public:
@@ -885,8 +881,6 @@ public:
     
     
 };
-
-
 
 class Limb{
     
@@ -1457,7 +1451,7 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-class GraphicalTypeField{
+class ProjectionField{
     
 public:
     ChartFrame* parent;
@@ -1468,7 +1462,7 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
 
-    GraphicalTypeField(ChartFrame*);
+    ProjectionField(ChartFrame*);
     template<class T> void InsertIn(T*);
     
 };
@@ -1904,7 +1898,7 @@ public:
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     AngleField<ChartFrame> *Euler_a, *Euler_b, *Euler_c;
-    GraphicalTypeField* graphical_type;
+    ProjectionField* projection;
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int /*this stores the old value of slider*/value_slider_old;

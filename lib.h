@@ -989,8 +989,11 @@ public:
 
 //this class denotes a point in a 2D projection of the sphere
 class Projection{
-  
+    
 public:
+    //the x, y coordinates of the projected point. 
+    double x, y;
+    
     
 };
 

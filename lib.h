@@ -987,7 +987,12 @@ public:
     
 };
 
-
+//this class denotes a point in a 2D projection of the sphere
+class Projection{
+  
+public:
+    
+};
 
 //class which defines a functor which closes a frame with arbitrary type F
 template<class F> class CloseFrame{

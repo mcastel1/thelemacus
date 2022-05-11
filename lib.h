@@ -1417,7 +1417,7 @@ public:
     void (DrawPanel::*Draw)(void);
     void (DrawPanel::*TabulateRoutes)(void);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
-    bool (DrawPanel::*GeoToProjection)(Position, double*, double*);
+    bool (DrawPanel::*GeoToProjection)(Position, Projection*);
     void (DrawPanel::*Render)(wxDC&);
     bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
 
@@ -1432,8 +1432,8 @@ public:
     void GeoToScreen(Position, wxPoint*);
     bool DrawPanelToGeo(wxPoint, Position*);
     bool ScreenToMercator(wxPoint, double*, double*);
-    bool GeoTo3D(Position, double*, double*);
-    bool GeoToMercator(Position, double*, double*);
+    bool GeoTo3D(Position, Projection*);
+    bool GeoToMercator(Position, Projection*);
     bool ScreenToGeo_Mercator(wxPoint, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);

@@ -1034,7 +1034,7 @@ void Route::draw(unsigned int n_points, DrawPanel* draw_panel){
     
     vector< vector<double> > x;
     vector< vector<double> > y;
-    double x_temp, y_temp;
+    Projection temp;
     bool end_connected;
     unsigned int i;
     Length l_tot;
@@ -1060,7 +1060,7 @@ void Route::draw(unsigned int n_points, DrawPanel* draw_panel){
         compute_end(String(""));
         
         
-        if((draw_panel->*(draw_panel->GeoToProjection))(end, &x_temp, &y_temp)){
+        if((draw_panel->*(draw_panel->GeoToProjection))(end, &temp)){
             
             if(end_connected){
                 
@@ -1070,8 +1070,8 @@ void Route::draw(unsigned int n_points, DrawPanel* draw_panel){
                 
             }
             
-            (x[x.size()-1]).push_back(x_temp);
-            (y[y.size()-1]).push_back(y_temp);
+            (x[x.size()-1]).push_back(temp.x);
+            (y[y.size()-1]).push_back(temp.y);
             
         }else{
             
@@ -6530,7 +6530,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 void ChartFrame::GetCoastLineData_3D(void){
     
     unsigned int i, every;
-    double x_temp, y_temp;
+    Projection temp;
     
     every = (unsigned int)(((double)(data_3d.size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}
@@ -6540,10 +6540,10 @@ void ChartFrame::GetCoastLineData_3D(void){
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
         if((i % every) == 0){
             
-            if((draw_panel->GeoTo3D(data_3d[i], &x_temp, &y_temp))){
+            if((draw_panel->GeoTo3D(data_3d[i], &temp))){
                 
-                x_3d.push_back(x_temp);
-                y_3d.push_back(y_temp);
+                x_3d.push_back(temp.x);
+                y_3d.push_back(temp.y);
                 
             }
             
@@ -8605,7 +8605,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
 }
 
 //converts the geographic Position p  to the  3D projection (x,y)
-bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
+bool DrawPanel::GeoTo3D(Position p, Projection* q){
     
     //set r according equal to the 3d vector corresponding to the geographic position p
     gsl_vector_set(r, 0, cos((p.lambda))*cos((p.phi)));
@@ -8615,8 +8615,8 @@ bool DrawPanel::GeoTo3D(Position p, double* x, double* y){
     //rotate r by rotation, and write the result in rp!
     gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
     
-    (*x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
-    (*y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+    (q->x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+    (q->y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
     
     
     //I return true if p lies on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) ), and I return false otherwise.
@@ -8642,23 +8642,23 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
 }
 
 //this function converts the geographic position q into the coordinates x, y of its Mercator projection
-bool DrawPanel::GeoToMercator(Position q, double* x, double* y){
+bool DrawPanel::GeoToMercator(Position q, Projection* p){
     
-    double x_temp, y_temp;
+    Projection temp;
     
-    x_temp = x_mercator(K*((q.lambda).value));
-    y_temp = y_mercator(K*((q.phi).value));
+    (temp.x) = x_mercator(K*((q.lambda).value));
+    (temp.y) = y_mercator(K*((q.phi).value));
     
-    if(check_x(x_temp) && ((y_temp > y_min) && (y_temp < y_max))){
+    if(check_x((temp.x)) && (((temp.y) > y_min) && ((temp.y) < y_max))){
         //if the point falls within the plot area, write it into x, y
         
-        (*x) = x_temp;
+        (*x) = (temp.x);
         //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
         if((x_max < x_min) && ((*x) < x_max)){
             (*x) += 2.0*M_PI;
         }
         
-        (*y) = y_temp;
+        (*y) = (temp.y);
         
         return true;
         
@@ -8708,13 +8708,13 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
 //this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel. It returs true if q lies on the visible side of the Earth, and false otherwise.
 bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
-    double x_temp, y_temp;
+    Projection temp;
     bool output;
     
-    output = GeoTo3D(q, &x_temp, &y_temp);
+    output = GeoTo3D(q, &temp);
     
-    (p->x) = ((double)(position_plot_area.x)) + (1.0+x_temp/x_max)*(((double)width_plot_area)/2.0);
-    (p->y) = ((double)(position_plot_area.y)) + (1.0-y_temp/y_max)*(((double)height_plot_area)/2.0);
+    (p->x) = ((double)(position_plot_area.x)) + (1.0+(temp.x)/x_max)*(((double)width_plot_area)/2.0);
+    (p->y) = ((double)(position_plot_area.y)) + (1.0-(temp.y)/y_max)*(((double)height_plot_area)/2.0);
     
     return output;
     

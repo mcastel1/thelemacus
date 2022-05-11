@@ -9311,19 +9311,27 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if(((parent->parent)->highlighted_position) != -1){
                     //in this case, the mouse is over a position
                     
+                    if((((parent->graphical_type)->name)->GetValue()) == wxString("Mercator")){
+                        
+                    }
                     
-                    //compose rotation with the rotation resulting from the drag and then apply it to pp == &((plot->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                    rotation_now_drag =
-                    (rotation.inverse()) *
-                    rotation_start_end(position_start_drag, position_now_drag) *
-                    rotation;
-                    geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
                     
-                    //update the data of the Position under consideration in listcontrol_positions
-                    ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
-                     
-                    //given that the Position under consideration has changed, I re-paint the chart
-                    PaintNow();
+                    if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
+                        
+                        //compose rotation with the rotation resulting from the drag and then apply it to pp == &((plot->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                        rotation_now_drag =
+                        (rotation.inverse()) *
+                        rotation_start_end(position_start_drag, position_now_drag) *
+                        rotation;
+                        geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
+                        
+                        //update the data of the Position under consideration in listcontrol_positions
+                        ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                        
+                        //given that the Position under consideration has changed, I re-paint the chart
+                        PaintNow();
+                        
+                    }
                     
                 }
                 

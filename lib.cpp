@@ -6960,7 +6960,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
     Angle lambda, phi;
     wxPoint p;
-    double dummy, thickness, x_dummy;
+    Projection temp;
+    double dummy, thickness;
     stringstream s;
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
@@ -7063,11 +7064,12 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
     
     //starts the loop which draws the labels
-    for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), first_label = true; check_x(x_mercator(K*(lambda.value))); (lambda.value)-=k*delta_lambda){
-        
-        
-        x_dummy = x_mercator(K*(lambda.value));
-        if((x_max < x_min) && (x_dummy < x_max)){x_dummy += 2.0*M_PI;}
+    
+    for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), (temp.y) = 0.0, (temp.x) = x_mercator(K*(lambda.value)), first_label = true; check_x(temp); (lambda.value)-=k*delta_lambda){
+                                  
+                                  
+        (temp.x) = x_mercator(K*(lambda.value));
+        if((x_max < x_min) && ((temp.x) < x_max)){(temp.x) += 2.0*M_PI;}
         
         
         s.str("");
@@ -7108,7 +7110,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
         dc.DrawRotatedText(
                            wx_string,
-                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                           (position_plot_area.x) + ((temp.x)-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
                            (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
                            + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
                            0);
@@ -7560,8 +7562,8 @@ void DrawPanel::Draw_Mercator(void){
     
     
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
-    //set a dummy value for temp.y: the only thing that matters is that this value falls within the plot area
-    (temp.y) = (y_min+y_max)/2.0;
+    //set a dummy value for temp.y
+    (temp.y) = 0.0;
     (delta_temp.y) = 0.0;
     do{
         
@@ -7603,8 +7605,9 @@ void DrawPanel::Draw_Mercator(void){
         }
         
         lambda-=delta_lambda;
+        (temp.x) = x_mercator(lambda);
         
-    }while(check_x(x_mercator(lambda)));
+    }while(check_x(temp));
     
     
     

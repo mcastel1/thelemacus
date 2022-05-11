@@ -763,13 +763,13 @@ public:
 
 
 
-//if type = l or o, the parameters specifying the route are start, alpha, l. if type = c, the parameters specifying the route are GP and omega. 
+//if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.
 class Route{
     
 public:
     String type, label, temp_prefix;
-    //starting position of the route
-    Position start, end, GP;
+    //if type = l or o -> reference_position = start position, if type = c -> reference_position = ground position
+    Position reference_position, end;
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
     Angle alpha, omega;
     //the length of the route

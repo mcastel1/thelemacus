@@ -6667,7 +6667,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
                     
-                    if((draw_panel->check_x(temp)) && ((draw_panel->y_min) <= (temp.y)) && ((temp.y) <= (draw_panel->y_max))){
+                    if((draw_panel->check(temp))){
                         
                         if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                             (temp.x) += 2.0*M_PI;
@@ -7591,7 +7591,7 @@ void DrawPanel::Draw_Mercator(void){
                 
                 (increment.x) = k*(((double)i)/10.0)/60.0;
                 
-                if(check_x(temp+increment)){
+                if(check_x((temp.x)+(increment.x))){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     chart->addLine(
@@ -8681,7 +8681,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p){
     (temp.x) = x_mercator(K*((q.lambda).value));
     (temp.y) = y_mercator(K*((q.phi).value));
     
-    if(check_x(temp) && (((temp.y) > y_min) && ((temp.y) < y_max))){
+    if(check(temp)){
         //if the point falls within the plot area, write it into x, y
         
         (p->x) = (temp.x);

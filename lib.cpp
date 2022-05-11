@@ -7453,7 +7453,7 @@ void DrawPanel::TabulateRoutes_3D(void){
 void DrawPanel::Draw_Mercator(void){
     
     double lambda, phi, phi_span, lambda_span;
-    Projection temp, increment;
+    Projection temp, delta_temp;
     int i;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
@@ -7560,6 +7560,9 @@ void DrawPanel::Draw_Mercator(void){
     
     
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
+    //set a dummy value for temp.y: the only thing that matters is that this value falls within the plot area
+    (temp.y) = (y_min+y_max)/2.0;
+    (delta_temp.y) = 0.0;
     do{
         
         (temp.x) = x_mercator(lambda);
@@ -7573,25 +7576,17 @@ void DrawPanel::Draw_Mercator(void){
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda+M_PI/2.0, String(""));
             dummy_route.draw(((plot->n_points_routes).value), this);
-            
-            
-            //            chart->addLine(
-            //                           (position_plot_area.x) + ((temp.x)-x_min)/x_span*width_plot_area,
-            //                           (position_plot_area.y),
-            //                           (position_plot_area.x) + ((temp.x)-x_min)/x_span*width_plot_area,
-            //                           (position_plot_area.y) + height_plot_area,
-            //                           0x808080, 1);
-            
+              
         }
         
         if(gamma_lambda == 60.0){
             
             //plot the xticks from lambda to the next lambda (lambda + dlambda)
-            for((increment.y) = 0.0, i = 60*10*delta_lambda; i>=0; i--){
+            for(i = 60*10*delta_lambda; i>=0; i--){
                 
-                (increment.x) = k*(((double)i)/10.0)/60.0;
+                (delta_temp.x) = k*(((double)i)/10.0)/60.0;
                 
-                if(check_x((temp.x)+(increment.x))){
+                if(check_x(temp+delta_temp)){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     chart->addLine(
@@ -7645,7 +7640,8 @@ void DrawPanel::Draw_Mercator(void){
     ((dummy_route.reference_position).lambda).set(String(""), 0.0, String(""));
     ((dummy_route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
     
-    
+    //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area
+    (temp.x) = x_min + x_span/2.0;
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
         (temp.y) = y_mercator(phi);

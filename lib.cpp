@@ -7202,18 +7202,10 @@ void DrawPanel::Render_3D(wxDC&  dc){
     dc.DrawBitmap(*bitmap_image, 0, 0);
     
     
-    
-    //draw meridians
-    
     //set the pen to grey
     dc.SetPen(wxPen(wxColor(128,128,128), 1));
     
-    
-    
-    
-    
-    
-    
+
     color_id = 0;
     
     //draw routes
@@ -7556,9 +7548,10 @@ void DrawPanel::Draw_Mercator(void){
     
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
-    ((dummy_route.reference_position).phi).set(String(""), 0.0, String(""));
+    (dummy_route.type).set(String(""), String("o"), String(""));
+    (dummy_route.l).set(String(""), k*(phi_mercator(y_max) - phi_mercator(y_min))*Re, String(""));
+    (dummy_route.alpha).set(String(""), 0.0, String(""));
+    ((dummy_route.reference_position).phi).set(String(""), k*phi_mercator(y_min), String(""));
     
     
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
@@ -7576,7 +7569,7 @@ void DrawPanel::Draw_Mercator(void){
         if(check_x(temp)){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
-            ((dummy_route.reference_position).lambda).set(String(""), k*lambda+M_PI/2.0, String(""));
+            ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
             dummy_route.draw(((plot->n_points_routes).value), this);
               
         }

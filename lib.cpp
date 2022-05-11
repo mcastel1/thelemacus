@@ -9317,7 +9317,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                         
                     }
-                    
+                     
                     
                     if((((parent->graphical_type)->name)->GetValue()) == wxString("3D")){
                         

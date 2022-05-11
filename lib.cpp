@@ -8494,15 +8494,15 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
 //converts the point p on the screen (which is supposed to lie in the plot area): if p is in the plot area, it returns true and writes the result in q. If not, it retuns false. 
 bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
-    double x_temp, y_temp;
+    Projection temp;
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    if(ScreenToMercator(p, &x_temp, &y_temp)){
+    if(ScreenToMercator(p, &temp)){
         
-        (q->lambda).set(String(""), k*lambda_mercator(x_temp), String(""));
-        (q->phi).set(String(""), k*phi_mercator(y_temp), String(""));
+        (q->lambda).set(String(""), k*lambda_mercator(temp.x), String(""));
+        (q->phi).set(String(""), k*phi_mercator(temp.y), String(""));
         
         return true;
         

@@ -8652,13 +8652,13 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p){
     if(check_x((temp.x)) && (((temp.y) > y_min) && ((temp.y) < y_max))){
         //if the point falls within the plot area, write it into x, y
         
-        (*x) = (temp.x);
+        (p->x) = (temp.x);
         //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
-        if((x_max < x_min) && ((*x) < x_max)){
-            (*x) += 2.0*M_PI;
+        if((x_max < x_min) && ((p->x) < x_max)){
+            (p->x) += 2.0*M_PI;
         }
         
-        (*y) = (temp.y);
+        (p->y) = (temp.y);
         
         return true;
         

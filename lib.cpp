@@ -6565,7 +6565,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     //    stringstream ins;
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
-    double x_temp, y_temp;
+    Projection temp;
     
     //set x_min, ..., y_max for the following
     draw_panel->Update_x_y_min_max();
@@ -6638,20 +6638,20 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //                cout << "\n l = " << l;
                 
                 
-                x_temp = data_x[i - floor_min_lat][j % 360][l];
-                y_temp = data_y[i - floor_min_lat][j % 360][l];
+                (temp.x) = data_x[i - floor_min_lat][j % 360][l];
+                (temp.y) = data_y[i - floor_min_lat][j % 360][l];
                 
                 //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
                     
-                    if((draw_panel->check_x(x_temp)) && ((draw_panel->y_min) <= y_temp) && (y_temp <= (draw_panel->y_max))){
+                    if((draw_panel->check_x(temp)) && ((draw_panel->y_min) <= (temp.y)) && ((temp.y) <= (draw_panel->y_max))){
                         
-                        if(((draw_panel->x_max) < (draw_panel->x_min)) && (x_temp < (draw_panel->x_max))){
-                            x_temp += 2.0*M_PI;
+                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
+                            (temp.x) += 2.0*M_PI;
                             
                         }
-                        x.push_back(x_temp);
-                        y.push_back(y_temp);
+                        x.push_back((temp.x));
+                        y.push_back((temp.y));
                         
                     }
                     
@@ -7429,7 +7429,8 @@ void DrawPanel::TabulateRoutes_3D(void){
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){
     
-    double lambda, phi, x_dummy, y_dummy, phi_span, lambda_span;
+    double lambda, phi, phi_span, lambda_span;
+    Projection temp;
     int i;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
@@ -7538,13 +7539,13 @@ void DrawPanel::Draw_Mercator(void){
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
     do{
         
-        x_dummy = x_mercator(lambda);
+        (temp.x) = x_mercator(lambda);
         
-        if((x_max < x_min) && (x_dummy < x_max)){
-            x_dummy += 2.0*M_PI;
+        if((x_max < x_min) && ((temp.x) < x_max)){
+            (temp.x) += 2.0*M_PI;
         }
         
-        if(check_x(x_dummy)){
+        if(check_x(temp)){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda+M_PI/2.0, String(""));
@@ -7552,9 +7553,9 @@ void DrawPanel::Draw_Mercator(void){
             
             
             //            chart->addLine(
-            //                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+            //                           (position_plot_area.x) + ((temp.x)-x_min)/x_span*width_plot_area,
             //                           (position_plot_area.y),
-            //                           (position_plot_area.x) + (x_dummy-x_min)/x_span*width_plot_area,
+            //                           (position_plot_area.x) + ((temp.x)-x_min)/x_span*width_plot_area,
             //                           (position_plot_area.y) + height_plot_area,
             //                           0x808080, 1);
             
@@ -7565,13 +7566,13 @@ void DrawPanel::Draw_Mercator(void){
             //plot the xticks from lambda to the next lambda (lambda + dlambda)
             for(i = 60*10*delta_lambda; i>=0; i--){
                 
-                if(check_x(x_dummy + k*(((double)i)/10.0)/60.0)){
+                if(check_x((temp.x) + k*(((double)i)/10.0)/60.0)){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     chart->addLine(
-                                   (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
+                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
                                    (position_plot_area.y) + height_plot_area,
-                                   (position_plot_area.x) + ((x_dummy + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
+                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
                                    (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
                                    0x0000ff, 1);
                     
@@ -7622,9 +7623,9 @@ void DrawPanel::Draw_Mercator(void){
     
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
-        y_dummy = y_mercator(phi);
+        (temp.y) = y_mercator(phi);
         
-        if((y_dummy >= y_min) && (y_dummy <= y_max)){
+        if(((temp.y) >= y_min) && ((temp.y) <= y_max)){
             
             //I fix the latitude of the start position of dummy_route, according to phi, and plot the parallel of latitude
             (dummy_route.omega).set(String(""), M_PI/2.0 - k*phi, String(""));
@@ -8160,19 +8161,20 @@ void DrawPanel::Update_x_y_min_max(void){
 }
 
 //checks if x lies in the correct interval with respect to x_min, x_max
-bool DrawPanel::check_x(double x){
+bool DrawPanel::check_x(Projection p){
     
     if(x_min <= x_max){
         //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
         
-        return((x_min <= x) && (x <= x_max));
+        return((x_min <= (p.x)) && ((p.x) <= x_max));
         
     }else{
         //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
-        return((x_min <= x) || (x <= x_max));
+        return((x_min <= (p.x)) || ((p.x) <= x_max));
         
     }
+
 }
 
 
@@ -8647,7 +8649,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p){
     (temp.x) = x_mercator(K*((q.lambda).value));
     (temp.y) = y_mercator(K*((q.phi).value));
     
-    if(check_x((temp.x)) && (((temp.y) > y_min) && ((temp.y) < y_max))){
+    if(check_x(temp) && (((temp.y) > y_min) && ((temp.y) < y_max))){
         //if the point falls within the plot area, write it into x, y
         
         (p->x) = (temp.x);

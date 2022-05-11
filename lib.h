@@ -1440,7 +1440,7 @@ public:
     bool GeoToDrawPanel_3D(Position, wxPoint*);
     void Update_lambda_phi_min_max(void);
     void Update_x_y_min_max(void);
-    bool check_x(double);
+    bool check_x(const Projection);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
     void Render_Mercator(wxDC&);

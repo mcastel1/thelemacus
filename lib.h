@@ -991,9 +991,11 @@ public:
 class Projection{
     
 public:
-    //the x, y coordinates of the projected point. 
+    //the x, y coordinates of the projected point.
     double x, y;
     
+    Projection();
+    Projection(double, double);
     
 };
 

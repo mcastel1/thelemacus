@@ -7430,7 +7430,7 @@ void DrawPanel::TabulateRoutes_3D(void){
 void DrawPanel::Draw_Mercator(void){
     
     double lambda, phi, phi_span, lambda_span;
-    Projection temp;
+    Projection temp, increment;
     int i;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
@@ -7564,9 +7564,11 @@ void DrawPanel::Draw_Mercator(void){
         if(gamma_lambda == 60.0){
             
             //plot the xticks from lambda to the next lambda (lambda + dlambda)
-            for(i = 60*10*delta_lambda; i>=0; i--){
+            for((increment.y) = 0.0, i = 60*10*delta_lambda; i>=0; i--){
                 
-                if(check_x((temp.x) + k*(((double)i)/10.0)/60.0)){
+                (increment.x) = k*(((double)i)/10.0)/60.0;
+                
+                if(check_x(temp+increment)){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     chart->addLine(

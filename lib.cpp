@@ -8575,23 +8575,21 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection (x,y) of the relative geographic position
-bool DrawPanel::ScreenToMercator(wxPoint p, double* x, double* y){
+bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     
-    double x_temp, y_temp;
+    Projection temp;
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    x_temp = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
-    y_temp = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
+    (temp.x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
+    (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
     
-    if((check_x(x_temp)) && (y_min <= y_temp) && (y_temp <= (y_max))){
+    if((check_x((temp.x))) && (y_min <= (temp.y)) && ((temp.y) <= (y_max))){
         
-        if(x){
-            (*x) = x_temp;
-        }
-        if(y){
-            (*y) = y_temp;
+        if(q){
+            (q->x) = (temp.x);
+            (q->y) = (temp.y);
         }
         
         return true;
@@ -9058,7 +9056,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&p_start);
         position_start_selection = position_screen_now;
         //stores the x at the beginning of the selection process, to compute the zoom factor later
-        ScreenToMercator(position_start_selection, &x_start_selection, NULL);
+        ScreenToMercator(position_start_selection, &start_selection);
         
         s.clear();
         s << (p_start.phi).to_string(String("NS"), display_precision, true) << " " << (p_start.lambda).to_string(String("EW"), display_precision, true);
@@ -9074,9 +9072,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&p_end);
         position_end_selection = position_screen_now;
         //stores the x at the end of the selection process, to compute the zoom factor later
-        ScreenToMercator(position_end_selection, &x_end_selection, NULL);
+        ScreenToMercator(position_end_selection, &end_selection);
         
-        if((parent->ZoomFactor(fabs(x_end_selection-x_start_selection), NULL))){
+        if((parent->ZoomFactor(fabs((end_selection.x)-(start_selection.x)), NULL))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
             cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";

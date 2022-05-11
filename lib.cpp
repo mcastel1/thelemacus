@@ -5881,6 +5881,14 @@ void Position::enter(String name, String prefix){
     
 }
 
+//set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
+void Position::set(gsl_vector* r){
+    
+    lambda.set(String(""), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(""));
+    phi.set(String(""), asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(""));
+    
+}
+
 void Position::print(String name, String prefix, ostream& ostr){
     
     String new_prefix;

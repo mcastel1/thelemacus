@@ -746,6 +746,7 @@ public:
     
     Position();
     void enter(String, String);
+    void set(gsl_vector*);
     void modify(String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);

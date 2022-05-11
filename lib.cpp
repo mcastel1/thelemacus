@@ -1056,7 +1056,7 @@ void Route::draw(unsigned int n_points, DrawPanel* draw_panel){
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
         
         //set the temporarly length across the Route
-        l.set(String(""), 2.0*M_PI*Re*sin(omega)*((double)i)/((double)(n_points-1)), String(""));
+        l.set(String(""), (l_tot.value)*((double)i)/((double)(n_points-1)), String(""));
         compute_end(String(""));
         
         
@@ -7550,6 +7550,11 @@ void DrawPanel::Draw_Mercator(void){
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("o"), String(""));
     (dummy_route.l).set(String(""), k*(phi_mercator(y_max) - phi_mercator(y_min))*Re, String(""));
+    
+    cout << "xxxx phi_mercator(y_max) = " << phi_mercator(y_max) << "\n";
+    cout << "xxxx phi_mercator(y_min) = " << phi_mercator(y_min) << "\n";
+    cout << "xxxx k*(phi_mercator(y_max) - phi_mercator(y_min))*Re = " << k*(phi_mercator(y_max) - phi_mercator(y_min))*Re << "\n";
+
     (dummy_route.alpha).set(String(""), 0.0, String(""));
     ((dummy_route.reference_position).phi).set(String(""), k*phi_mercator(y_min), String(""));
     
@@ -7570,7 +7575,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-            dummy_route.draw(((plot->n_points_routes).value), this);
+            dummy_route.draw(/*((plot->n_points_routes).value)*/ 3, this);
               
         }
         

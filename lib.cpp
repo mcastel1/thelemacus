@@ -3237,6 +3237,29 @@ Projection::Projection(const double x_in, const double y_in){
     
 }
 
+Projection Projection::operator+(const Projection& q){
+    
+    Projection p;
+    
+    (p.x) = x + (q.x);
+    (p.y) = y + (q.y);
+    
+    return p;
+    
+}
+
+Projection Projection::operator-(const Projection& q){
+    
+    Projection p;
+    
+    (p.x) = x - (q.x);
+    (p.y) = y - (q.y);
+    
+    return p;
+    
+}
+
+
 // this function plots the Routes of type String("c") in route_list in kml format
 void Plot::print_to_kml(String prefix){
     
@@ -8162,7 +8185,7 @@ void DrawPanel::Update_x_y_min_max(void){
     
 }
 
-//checks if x lies in the correct interval with respect to x_min, x_max
+//checks if x lies in the correct interval with respect to x_min, x_max in the Mercator projection
 bool DrawPanel::check_x(Projection p){
     
     if(x_min <= x_max){
@@ -8177,6 +8200,13 @@ bool DrawPanel::check_x(Projection p){
         
     }
 
+}
+
+//check whether the Projection p is valid in the Mercator projection
+bool DrawPanel::check(Projection p){
+    
+    return((check_x(p) && (y_min <= (p.y)) && ((p.y) <= y_max)));
+    
 }
 
 
@@ -8589,7 +8619,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     (temp.x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
     (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
     
-    if((check_x((temp.x))) && (y_min <= (temp.y)) && ((temp.y) <= (y_max))){
+    if(check(temp)){
         
         if(q){
             (q->x) = (temp.x);

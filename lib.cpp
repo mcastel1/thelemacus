@@ -7549,14 +7549,14 @@ void DrawPanel::Draw_Mercator(void){
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("o"), String(""));
-    (dummy_route.l).set(String(""), k*(phi_mercator(y_max) - phi_mercator(y_min))*Re, String(""));
+    (dummy_route.l).set(String(""), k*(phi_mercator(y_max) - phi_mercator(y_min))*Re*/*I slightly reduce the length of the Route in such a way that all of its points lie in the PlotArea, and the Route is displayed correctly*/(1.0-epsilon_double), String(""));
     
     cout << "xxxx phi_mercator(y_max) = " << phi_mercator(y_max) << "\n";
     cout << "xxxx phi_mercator(y_min) = " << phi_mercator(y_min) << "\n";
     cout << "xxxx k*(phi_mercator(y_max) - phi_mercator(y_min))*Re = " << k*(phi_mercator(y_max) - phi_mercator(y_min))*Re << "\n";
 
     (dummy_route.alpha).set(String(""), 0.0, String(""));
-    ((dummy_route.reference_position).phi).set(String(""), k*phi_mercator(y_min), String(""));
+    ((dummy_route.reference_position).phi).set(String(""), k*phi_mercator(y_min)*/*I slightly reduce the bottom point of the Route in such a way that all of its points lie in the plot area, and the Route is displayed correctly*/(1.0+GSL_SIGN(phi_mercator(y_min))*epsilon_double), String(""));
     
     
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;

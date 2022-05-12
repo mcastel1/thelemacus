@@ -123,6 +123,7 @@ class Body;
 //the time window in which interpolation is made has a width of N lines in NASA's webgeocalc files
 #define N 24.0
 #define epsrel (1e-12)
+#define epsilon_double (1e-15)
 #define max_iter (1e3)
 //one nautical mile in kilometers
 #define nm 1.852

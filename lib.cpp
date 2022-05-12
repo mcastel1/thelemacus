@@ -1880,8 +1880,10 @@ void Route::compute_end(String prefix){
             
             //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t));
             int sigma, tau;
-            double C;
+            double C, eta;
             Angle t;
+            
+            eta = sqrt((1.0-sin(reference_position.phi.value))/(1.0+sin(reference_position.phi.value)));
             
             //tau = +-_{notes}
             if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
@@ -1896,8 +1898,18 @@ void Route::compute_end(String prefix){
             /* cout << "tau = " << tau << "\n"; */
             /* cout << "C = " << C << "\n"; */
             
-            t.value = -tau*sqrt((1.0-C)/C)
-            * log( sqrt((1.0+sin(reference_position.phi.value))/(1.0-sin(reference_position.phi.value))) * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(reference_position.phi.value))/(1.0+sin(reference_position.phi.value)))) ) );
+            if(((alpha.value) != M_PI/2.0) && ((alpha.value) != 3.0*M_PI/2.0)){
+                //this is the general expression of t vs l for alpha != pi/2
+                
+                t.value = -tau*sqrt((1.0-C)/C)
+                * log( 1.0/eta * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(reference_position.phi.value))/(1.0+sin(reference_position.phi.value)))) ) );
+                
+            }else{
+                //this is the limit of the expression above in the case alpha -> pi/2
+                
+                t.value = (l.value)*(1.0+gsl_pow_2(eta))/(2.0*Re*eta);
+                
+            }
             
             /* t.print("t", prefix, cout); */
             

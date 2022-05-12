@@ -7637,7 +7637,7 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set dummy_route equal to a parallel of latitude phi, i.e., an orthodrome with starting angle pi/2
-    (dummy_route.type).set(String(""), String("o"), String(""));
+    (dummy_route.type).set(String(""), String("l"), String(""));
     (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
 
     //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area

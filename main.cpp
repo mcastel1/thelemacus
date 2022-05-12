@@ -32,6 +32,7 @@
  phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));' with a function
  - when I translate an orthodrome with mouse drag, its reference_position assumes nan coordinates
  - change screen region sensible to mouse hovering from circles to a stripe
+ - change Route -> alpha to Z
  */
 
 

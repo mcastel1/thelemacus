@@ -140,6 +140,8 @@ class Body;
 #define chars_unsigned_int "0123456789"
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
+#define color_white  (wxColour(255,255,255))
+
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));

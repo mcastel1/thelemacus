@@ -8259,7 +8259,7 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
     cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
     
-    rotation_axis.set(String("rotaion axis"), rp, String(""));    
+    rotation_axis.set(String("rotaion axis"), rp, String(""));
     
     
     
@@ -8470,7 +8470,7 @@ template<class T> void LimbField::get(T &event){
             
             
         }else{
-            //if the limb is ok and the limb wxComboBox is disabled, then the limb is irrelevant, and I set the char in limb->value to the null char. 
+            //if the limb is ok and the limb wxComboBox is disabled, then the limb is irrelevant, and I set the char in limb->value to the null char.
             
             (limb->value) = '\0';
             
@@ -8870,9 +8870,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxColour(255,255,255));
+            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, color_white);
             if((((plot->route_list)[i]).related_sight).value != -1){
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxColour(255,255,255));
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, color_white);
             }
             
             
@@ -8926,7 +8926,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
             }else{
                 
-                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxColour(255,255,255));
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, color_white);
                 
             }
             
@@ -9215,7 +9215,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         ((plot->route_list)[i_route]).update_wxListCtrl(i_route, parent->parent->listcontrol_routes);
                         
                         //set the background color of the related sight to white
-                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour(i_sight, wxColour(255,255,255));
+                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
                         
                         
                         //print an info message
@@ -11019,7 +11019,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //write the color that I just read in color_list
     color_selected_item = wxColor(red, green, blue);
-    
+
     
     
     
@@ -11535,7 +11535,45 @@ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
 //when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route
 void ListFrame::OnMouseOnListControlRoutes(wxMouseEvent& event){
     
+    int i, j;
+    
     MousePositionOnListControl(listcontrol_routes, &highlighted_route);
+    
+    if(highlighted_route != -1){
+        
+        j = ((((plot->route_list)[highlighted_route]).related_sight).value);
+        
+    }else{
+        
+        j=-1;
+        
+    }
+    
+    for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
+
+        
+        if(i==highlighted_route){
+            
+            //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+            listcontrol_routes->SetItemBackgroundColour(i, color_selected_item);
+            
+            if(j != -1){
+                listcontrol_sights->SetItemBackgroundColour(j, color_selected_item);
+            }
+
+        }else{
+            
+            //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+            listcontrol_routes->SetItemBackgroundColour(i, color_white);
+            
+            if(((((plot->route_list)[i]).related_sight).value) != -1){
+                listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), color_white);
+            }
+            
+        }
+        
+    }
+
     
     (chart_frame->draw_panel)->PaintNow();
     

@@ -1259,21 +1259,21 @@ bool Route::t_crossing(Route route, vector<Angle> *t, String prefix){
     check = true;
     
     t_a.value = atan((8*cos((route.reference_position.phi.value))*((cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((*this).reference_position.phi.value)) - cos(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
-                                                   abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) +
-                                                                                                                                                2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
-                                                                                                                                                2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
-                                                                                                                                                gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) +
-                                                                                                                                                gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
-                                                                                                                                                2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) +
-                                                                                                                                                gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2))))/
+                                                                   abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) +
+                                                                                                                                                                                                                2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
+                                                                                                                                                                                                                2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
+                                                                                                                                                                                                                gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) +
+                                                                                                                                                                                                                gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
+                                                                                                                                                                                                                2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) +
+                                                                                                                                                                                                                gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2))))/
                      (gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*(-6 + 2*cos(2*((*this).reference_position.phi.value)) + 2*cos(2*((*this).reference_position.lambda.value) - 2*(route.reference_position.lambda.value)) + cos(2*(((*this).reference_position.phi.value) + ((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2*(((*this).reference_position.phi.value) - ((*this).reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
                       4*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(2*((*this).reference_position.phi.value))*sin(2*(route.reference_position.phi.value))),(8*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*
-                                                                                                                                             sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)) - 8*abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position.phi.value))*csc(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*(cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((*this).reference_position.phi.value)) - cos(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*
-                                                                                                                                             sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) + 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) -
-                                                                                                                                                  gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) + 2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
-                                                                                                                                                  gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) -
-                                                                                                                                                  2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
-                                                                                                                                                  gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2)))/
+                                                                                                                                                                                                             sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)) - 8*abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position.phi.value))*csc(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*(cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((*this).reference_position.phi.value)) - cos(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*
+                                                                                                                                                                                                             sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) + 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) -
+                                                                                                                                                                                                                  gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) + 2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
+                                                                                                                                                                                                                  gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) -
+                                                                                                                                                                                                                  2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
+                                                                                                                                                                                                                  gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2)))/
                      (gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*(-6 + 2*cos(2*((*this).reference_position.phi.value)) + 2*cos(2*((*this).reference_position.lambda.value) - 2*(route.reference_position.lambda.value)) + cos(2*(((*this).reference_position.phi.value) + ((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2*(((*this).reference_position.phi.value) - ((*this).reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
                       4*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(2*((*this).reference_position.phi.value))*sin(2*(route.reference_position.phi.value))));
     
@@ -1281,24 +1281,24 @@ bool Route::t_crossing(Route route, vector<Angle> *t, String prefix){
     
     
     t_b.value = atan((-8*cos((route.reference_position.phi.value))*((-(cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((*this).reference_position.phi.value))) + cos(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
-                                                    abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) +
-                                                                                                                                                 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
-                                                                                                                                                 2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
-                                                                                                                                                 gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) +
-                                                                                                                                                 gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
-                                                                                                                                                 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) +
-                                                                                                                                                 gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2))))/
+                                                                    abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position.phi.value))*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) +
+                                                                                                                                                                                                                 2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
+                                                                                                                                                                                                                 2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
+                                                                                                                                                                                                                 gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) +
+                                                                                                                                                                                                                 gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
+                                                                                                                                                                                                                 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) +
+                                                                                                                                                                                                                 gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2))))/
                      (gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*(-6 + 2*cos(2*((*this).reference_position.phi.value)) + 2*cos(2*((*this).reference_position.lambda.value) - 2*(route.reference_position.lambda.value)) + cos(2*(((*this).reference_position.phi.value) + ((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2*(((*this).reference_position.phi.value) - ((*this).reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
                       4*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(2*((*this).reference_position.phi.value))*sin(2*(route.reference_position.phi.value))),(8*cos((route.reference_position.phi.value))*sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*
-                                                                                                                                             (cos((route.reference_position.phi.value))*(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
-                                                                                                                                              abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*gsl_sf_pow_int(csc(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*(cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((*this).reference_position.phi.value)) - cos(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*
-                                                                                                                                              sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) +
-                                                                                                                                                   2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
-                                                                                                                                                   2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
-                                                                                                                                                   gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) +
-                                                                                                                                                   gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
-                                                                                                                                                   2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) +
-                                                                                                                                                   gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2))))/
+                                                                                                                                                                                                             (cos((route.reference_position.phi.value))*(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
+                                                                                                                                                                                                              abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*gsl_sf_pow_int(csc(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*(cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((*this).reference_position.phi.value)) - cos(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*
+                                                                                                                                                                                                              sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2) +
+                                                                                                                                                                                                                   2*cos((route.omega.value))*cot(((*this).omega.value))*csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)) - gsl_sf_pow_int(cot(((*this).omega.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
+                                                                                                                                                                                                                   2*cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*csc(((*this).omega.value))*(cos((route.omega.value))*cot(((*this).omega.value)) - csc(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +
+                                                                                                                                                                                                                   gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*(-(gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)),2)*gsl_sf_pow_int(cot(((*this).omega.value)),2)) + gsl_sf_pow_int(sin((route.reference_position.phi.value)),2)) +
+                                                                                                                                                                                                                   gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos((route.reference_position.lambda.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2) - 2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) +
+                                                                                                                                                                                                                   2*gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*cos(((*this).reference_position.lambda.value))*cos((route.reference_position.lambda.value))*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*sin(((*this).reference_position.lambda.value))*sin((route.reference_position.lambda.value)) + gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(cos(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2) +
+                                                                                                                                                                                                                   gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin(((*this).reference_position.lambda.value)),2)*gsl_sf_pow_int(sin((route.reference_position.lambda.value)),2))))/
                      (gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*(-6 + 2*cos(2*((*this).reference_position.phi.value)) + 2*cos(2*((*this).reference_position.lambda.value) - 2*(route.reference_position.lambda.value)) + cos(2*(((*this).reference_position.phi.value) + ((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2*(((*this).reference_position.phi.value) - ((*this).reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
                       4*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(2*((*this).reference_position.phi.value))*sin(2*(route.reference_position.phi.value))));
     
@@ -1830,7 +1830,7 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
     cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
     
     p->set(name, s, prefix);
-  
+    
     gsl_vector_free(u);
     gsl_vector_free(s);
     
@@ -7078,8 +7078,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //starts the loop which draws the labels
     
     for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), (temp.y) = 0.0, (temp.x) = x_mercator(K*(lambda.value)), first_label = true; check_x(temp); (lambda.value)-=k*delta_lambda){
-                                  
-                                  
+        
+        
         (temp.x) = x_mercator(K*(lambda.value));
         if((x_max < x_min) && ((temp.x) < x_max)){(temp.x) += 2.0*M_PI;}
         
@@ -7217,7 +7217,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //set the pen to grey
     dc.SetPen(wxPen(wxColor(128,128,128), 1));
     
-
+    
     color_id = 0;
     
     //draw routes
@@ -7563,10 +7563,10 @@ void DrawPanel::Draw_Mercator(void){
     (dummy_route.type).set(String(""), String("o"), String(""));
     (dummy_route.l).set(String(""), k*(phi_mercator(y_max) - phi_mercator(y_min))*Re*/*I slightly reduce the length of the Route in such a way that all of its points lie in the PlotArea, and the Route is displayed correctly*/(1.0-epsilon_double), String(""));
     
-    cout << "xxxx phi_mercator(y_max) = " << phi_mercator(y_max) << "\n";
-    cout << "xxxx phi_mercator(y_min) = " << phi_mercator(y_min) << "\n";
-    cout << "xxxx k*(phi_mercator(y_max) - phi_mercator(y_min))*Re = " << k*(phi_mercator(y_max) - phi_mercator(y_min))*Re << "\n";
-
+    //    cout << "xxxx phi_mercator(y_max) = " << phi_mercator(y_max) << "\n";
+    //    cout << "xxxx phi_mercator(y_min) = " << phi_mercator(y_min) << "\n";
+    //    cout << "xxxx k*(phi_mercator(y_max) - phi_mercator(y_min))*Re = " << k*(phi_mercator(y_max) - phi_mercator(y_min))*Re << "\n";
+    
     (dummy_route.alpha).set(String(""), 0.0, String(""));
     ((dummy_route.reference_position).phi).set(String(""), k*phi_mercator(y_min)*/*I slightly reduce the bottom point of the Route in such a way that all of its points lie in the plot area, and the Route is displayed correctly*/(1.0+GSL_SIGN(phi_mercator(y_min))*epsilon_double), String(""));
     
@@ -7588,7 +7588,7 @@ void DrawPanel::Draw_Mercator(void){
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
             dummy_route.draw(/*2 points are enough to draw a line!*/ 2, this);
-              
+            
         }
         
         if(gamma_lambda == 60.0){
@@ -7651,14 +7651,14 @@ void DrawPanel::Draw_Mercator(void){
     //set dummy_route equal to a parallel of latitude phi, i.e., an orthodrome with starting angle pi/2
     (dummy_route.type).set(String(""), String("l"), String(""));
     (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
-
+    
     //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area
     (temp.x) = x_min + x_span/2.0;
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
         ((dummy_route.reference_position).lambda).set(String(""), k*lambda_mercator(x_min), String(""));
         ((dummy_route.reference_position).phi).set(String(""), k*phi, String(""));
-
+        
         
         (temp.y) = y_mercator(phi);
         
@@ -7940,7 +7940,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     empty_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
-     
+    
     
     
     //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
@@ -8211,7 +8211,7 @@ bool DrawPanel::check_x(Projection p){
         return((x_min <= (p.x)) || ((p.x) <= x_max));
         
     }
-
+    
 }
 
 //check whether the Projection p is valid in the Mercator projection
@@ -8260,7 +8260,7 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
     
     rotation_axis.set(String("rotaion axis"), rp, String(""));    
-
+    
     
     
     cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
@@ -8269,9 +8269,9 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
     
     geo_end_drag.print(String("geo now drag"), String("\t"), cout);
-//    rotation.print(String("rotation"), String("\t"), cout);
+    //    rotation.print(String("rotation"), String("\t"), cout);
     
-
+    
     
     gsl_vector_free(rp_start);
     gsl_vector_free(rp_end);
@@ -9094,7 +9094,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         stringstream s;
         
-        cout << "You started drawing\n";
+        //        cout << "You started drawing\n";
         //        ((parent->plot)->lambda_min) = (p.lambda);
         //        ((parent->plot)->phi_min) = (p.phi);
         //
@@ -9113,7 +9113,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
     }else{
         
-        cout << "You ended drawing\n";
+        //        cout << "You ended drawing\n";
         
         GetMouseGeoPosition(&p_end);
         position_end_selection = position_screen_now;
@@ -9289,8 +9289,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                     rotation =
                     rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
-                     
-                   
+                    
+                    
                     //re-draw the chart
                     (this->*Draw)();
                     PaintNow();
@@ -9314,9 +9314,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         //this command is the same for all types of Routes
                         DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));
-                   
+                        
                     }
-                   
+                    
                     
                     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
                         
@@ -9355,12 +9355,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //in this case, the mouse is over a position
                     
                     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-                                                
+                        
                         //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                         (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                         
                     }
-                     
+                    
                     
                     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
                         
@@ -9370,7 +9370,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         rotation_start_end(position_start_drag, position_now_drag) *
                         rotation;
                         geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
-                                 
+                        
                     }
                     
                     //update the data of the Position under consideration in listcontrol_positions

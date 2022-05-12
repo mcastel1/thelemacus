@@ -11562,7 +11562,7 @@ void ListFrame::OnMouseOnListControlRoutes(wxMouseEvent& event){
             }
 
         }else{
-            
+         
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
             listcontrol_routes->SetItemBackgroundColour(i, color_white);
             

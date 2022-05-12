@@ -1890,7 +1890,7 @@ void Route::compute_end(String prefix){
             if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
             else{sigma = +1;}
             
-            C = gsl_pow_2(cos(alpha.value));
+            C = gsl_pow_2(cos(alpha));
             
             /* cout << "sigma = " << sigma << "\n"; */
             /* cout << "tau = " << tau << "\n"; */

@@ -7517,7 +7517,7 @@ void DrawPanel::Draw_Mercator(void){
     position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
     
     
-    //set meridians
+    //draw meridians
     lambda_span = K*x_span;
     
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
@@ -7575,7 +7575,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-            dummy_route.draw(/*((plot->n_points_routes).value)*/ 3, this);
+            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, this);
               
         }
         
@@ -7610,7 +7610,7 @@ void DrawPanel::Draw_Mercator(void){
     
     
     
-    //set parallels
+    //draw parallels
     phi_span = K*(((plot->phi_max).value) - ((plot->phi_min).value));
     
     //I create an angle which has the largest posible label when printed out in the "NS" format, so as to compute the  value of n_interval_ticks which allows the y-axis labels not to superpose
@@ -7636,21 +7636,24 @@ void DrawPanel::Draw_Mercator(void){
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
     }
     
-    //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    ((dummy_route.reference_position).lambda).set(String(""), 0.0, String(""));
-    ((dummy_route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
-    
+    //set dummy_route equal to a parallel of latitude phi, i.e., an orthodrome with starting angle pi/2
+    (dummy_route.type).set(String(""), String("o"), String(""));
+    (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
+
     //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area
     (temp.x) = x_min + x_span/2.0;
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
+        
+        ((dummy_route.reference_position).lambda).set(String(""), k*lambda_mercator(x_min), String(""));
+        ((dummy_route.reference_position).phi).set(String(""), k*phi, String(""));
+
         
         (temp.y) = y_mercator(phi);
         
         if(((temp.y) >= y_min) && ((temp.y) <= y_max)){
             
-            //I fix the latitude of the start position of dummy_route, according to phi, and plot the parallel of latitude
-            (dummy_route.omega).set(String(""), M_PI/2.0 - k*phi, String(""));
+            //I set the length of the Route corresponding to the parallel
+            (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span, String(""));
             dummy_route.draw(((plot->n_points_routes).value), this);
             
         }

@@ -51,4 +51,4 @@ color selected item = (51,153,255)
 maximal zoom factor = 10000
 relative displacement = 0.1
 d draw 3d = 3.0
-default projection = 3D
+default projection = Mercator

@@ -11144,7 +11144,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //listcontrol routes with routes
     listcontrol_routes = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
-    //I bind ListFrame::OnMouseMovement to both listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is both on listcontrol_routes and on panel
+    //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
+    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     
@@ -11539,49 +11540,86 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;
     
-    //check whether the mouse is hovering over an element of listcontrol_routes
+    //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
     MousePositionOnListControl(listcontrol_routes, &highlighted_route);
+    MousePositionOnListControl(listcontrol_routes, &highlighted_sight);
     
-    if(highlighted_route != wxNOT_FOUND){
-        //in this case, the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
+    if((highlighted_sight == wxNOT_FOUND) && (highlighted_route == wxNOT_FOUND)){
         
-        j = ((((plot->route_list)[highlighted_route]).related_sight).value);
+        //in this case, the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
         
-        for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
-            
-            if(i==highlighted_route){
-                
-                //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                listcontrol_routes->SetItemBackgroundColour(i, color_selected_item);
-                if(j != -1){
-                    listcontrol_sights->SetItemBackgroundColour(j, color_selected_item);
-                }
- 
-            }else{
-             
-                //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                listcontrol_routes->SetItemBackgroundColour(i, color_white);
-                if(((((plot->route_list)[i]).related_sight).value) != -1){
-                    listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), color_white);
-                }
-                
-            }
-            
+        //set the beckgorund color of the Route in listcontrol_sights and listcontrol_routes and to white
+        for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
+            listcontrol_sights->SetItemBackgroundColour(i, color_white);
         }
-        
-    }else{
-        //in this case, the mouse is not hovering over an element in listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
-        
         for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
-            
-            //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
             listcontrol_routes->SetItemBackgroundColour(i, color_white);
-            if(((((plot->route_list)[i]).related_sight).value) != -1){
-                listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), color_white);
-            }
-
-
         }
+         
+    }else{
+        
+        if(highlighted_route != wxNOT_FOUND){
+            //in this case, the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
+            
+            j = ((((plot->route_list)[highlighted_route]).related_sight).value);
+            
+            for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
+                
+                if(i==highlighted_route){
+                    
+                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                    listcontrol_routes->SetItemBackgroundColour(i, color_selected_item);
+                    if(j != -1){
+                        listcontrol_sights->SetItemBackgroundColour(j, color_selected_item);
+                    }
+                    
+                }else{
+                    
+                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+                    listcontrol_routes->SetItemBackgroundColour(i, color_white);
+                    if(((((plot->route_list)[i]).related_sight).value) != -1){
+                        listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), color_white);
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+        
+        if(highlighted_sight != wxNOT_FOUND){
+            //in this case, the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
+            
+            j = ((((plot->sight_list)[highlighted_sight]).related_route).value);
+            
+            for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
+                
+                if(i==highlighted_sight){
+                    
+                    //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
+                    listcontrol_sights->SetItemBackgroundColour(i, color_selected_item);
+                    if(j != -1){
+                        listcontrol_routes->SetItemBackgroundColour(j, color_selected_item);
+                    }
+                    
+                }else{
+                    
+                    //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
+                    listcontrol_sights->SetItemBackgroundColour(i, color_white);
+                    if(((((plot->sight_list)[i]).related_route).value) != -1){
+                        listcontrol_routes->SetItemBackgroundColour(((((plot->sight_list)[i]).related_route).value), color_white);
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+        
     }
     
     (chart_frame->draw_panel)->PaintNow();

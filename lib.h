@@ -1737,7 +1737,7 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     unsigned int n_columns_listcontrol_sights, n_columns_listcontrol_positions, n_columns_listcontrol_routes;
-    int /*the # of the route/position which is highlighted because the mouse is hovering over it in listcontrol_routes/positions*/highlighted_route, highlighted_position;
+    int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
     vector<wxColour> color_list;
     //the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area
     wxColour color_selected_item;

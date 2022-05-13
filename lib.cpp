@@ -9997,7 +9997,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
 
 
 
-SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_in_listcontrol_sights_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -10020,13 +10020,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long list_posit
     
     catalog = new Catalog(String(path_file_catalog), String(""));
     
-    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set list_position to list_position_in.
+    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set list_position to position_in_listcontrol_sights_in.
     if(sight_in != NULL){
         sight = sight_in;
-        list_position = list_position_in;
+        position_in_listcontrol_sights = position_in_listcontrol_sights_in;
     }else{
         sight = new Sight();
-        list_position = -1;
+        position_in_listcontrol_sights = -1;
     }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -12310,14 +12310,14 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     sight->print(String("sight entered via GUI"), String(""), cout);
     
     
-    if(list_position==-1){
+    if(position_in_listcontrol_sights==-1){
         //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list and reduce it
         
         ((this->parent)->plot)->add_sight_and_reduce(sight, String(""));
         
         //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
-        sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
-        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
+        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
+        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
         
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
@@ -12326,7 +12326,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
         
         //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
-        sight->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_sights));
+        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
         ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(
                                                                                                (sight->related_route).value,
                                                                                                ((this->parent)->listcontrol_routes)

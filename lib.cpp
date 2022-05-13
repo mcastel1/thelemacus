@@ -10388,7 +10388,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
 }
 
-RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -10407,10 +10407,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long list_posit
     //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
     if(route_in != NULL){
         route = route_in;
-        list_position = list_position_in;
+        position_in_listcontrol_routes = position_in_listcontrol_routes_in;
     }else{
         route = new Route();
-        list_position = -1;
+        position_in_listcontrol_routes = -1;
     }
     
     
@@ -10658,7 +10658,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     route->print(String("route entered via GUI"), String(""), cout);
     
     
-    if(list_position==-1){
+    if(position_in_listcontrol_routes==-1){
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         
         ((this->parent)->plot)->add_route(route, String(""));
@@ -10666,13 +10666,13 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     }
     
     //if I am adding a new Route, I resize points_route_list to add a new element to it
-    if(list_position == -1){
+    if(position_in_listcontrol_routes == -1){
         ((parent->chart_frame->draw_panel)->points_route_list).resize(((parent->chart_frame->draw_panel)->points_route_list).size() + 1);
     }
     
     parent->UpdateRelatedSightsAndRoutes();
     
-    route->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_routes));
+    route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
     
     //    parent->plot->print(true, String(""), cout);
     

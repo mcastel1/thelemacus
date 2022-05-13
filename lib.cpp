@@ -9395,67 +9395,76 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     
     double r;
     
-    r = ((double)(parent->value_slider_old)) / ((double)((parent->slider)->GetValue()));
-    
-    //    cout << "Slider = " << value_slider_from_scroll << "\n";
-    
-    //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
-    x_min_old = x_min;
-    x_max_old = x_max;
-    y_min_old = y_min;
-    y_max_old = y_max;
-    
-    
-    //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
-    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
-    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
-    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
-    
-    
-    if(x_max >= x_min){
-        //in this case, x_max, x_min do not encompass the meridian lambda = pi
-        x_span = x_max-x_min;
-    }else{
-        //in this case, x_max, x_min encompass the meridian lambda = pi
-        x_span = 2.0*M_PI - (x_min-x_max);
+    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+
+        r = ((double)(parent->value_slider_old)) / ((double)((parent->slider)->GetValue()));
+        
+        //    cout << "Slider = " << value_slider_from_scroll << "\n";
+        
+        //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
+        x_min_old = x_min;
+        x_max_old = x_max;
+        y_min_old = y_min;
+        y_max_old = y_max;
+        
+        
+        //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
+        x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
+        x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
+        y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
+        y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
+        
+        
+        if(x_max >= x_min){
+            //in this case, x_max, x_min do not encompass the meridian lambda = pi
+            x_span = x_max-x_min;
+        }else{
+            //in this case, x_max, x_min encompass the meridian lambda = pi
+            x_span = 2.0*M_PI - (x_min-x_max);
+        }
+        
+        if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_span < 2.0*M_PI))){
+            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+            
+            x_min = x_min_old;
+            x_max = x_max_old;
+            y_min = y_min_old;
+            y_max = y_max_old;
+            
+            Update_lambda_phi_min_max();
+            
+            //put the slider back to the value before the scroll
+            
+            (this->*Draw)();
+            PaintNow();
+            parent->UpdateSlider();
+            parent->UpdateSliderLabel();
+            
+            
+            //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+            (print_error_message->control) = NULL;
+            (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
+            (print_error_message->message) = String("The chart must lie within the boundaries.");
+            (*print_error_message)();
+            
+        }else{
+            //if the slide operation is valid, I update everything and re-draw the chart
+            
+            Update_lambda_phi_min_max();
+            
+            //update parent->value_slider_old
+            (parent->value_slider_old) = ((parent->slider)->GetValue());
+            
+            (this->*Draw)();
+            PaintNow();
+            parent->UpdateSliderLabel();
+            
+        }
+        
     }
     
-    if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_span < 2.0*M_PI))){
-        //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
         
-        x_min = x_min_old;
-        x_max = x_max_old;
-        y_min = y_min_old;
-        y_max = y_max_old;
-        
-        Update_lambda_phi_min_max();
-        
-        //put the slider back to the value before the scroll
-        
-        (this->*Draw)();
-        PaintNow();
-        parent->UpdateSlider();
-        parent->UpdateSliderLabel();
-        
-        
-        //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-        (print_error_message->control) = NULL;
-        (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
-        (print_error_message->message) = String("The chart must lie within the boundaries.");
-        (*print_error_message)();
-        
-    }else{
-        //if the slide operation is valid, I update everything and re-draw the chart
-        
-        Update_lambda_phi_min_max();
-        
-        //update parent->value_slider_old
-        (parent->value_slider_old) = ((parent->slider)->GetValue());
-        
-        (this->*Draw)();
-        PaintNow();
-        parent->UpdateSliderLabel();
         
     }
     
@@ -11019,7 +11028,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //write the color that I just read in color_list
     color_selected_item = wxColor(red, green, blue);
-
+    
     
     
     
@@ -11555,7 +11564,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
             listcontrol_routes->SetItemBackgroundColour(i, color_white);
         }
-         
+        
     }else{
         
         if(highlighted_route != wxNOT_FOUND){
@@ -11587,7 +11596,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
             
         }
         
-         
+        
         
         if(highlighted_sight != wxNOT_FOUND){
             //in this case, the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes

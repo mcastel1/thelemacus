@@ -11144,6 +11144,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //listcontrol routes with routes
     listcontrol_routes = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+    //I bind ListFrame::OnMouseMovement to both listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is both on listcontrol_routes and on panel
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     
@@ -11533,7 +11534,7 @@ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
 }
 
 
-//when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route, and the same for the relaetd sight in listcontrol_sights. 
+//when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route, and the same for the relaetd sight in listcontrol_sights.
 void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;

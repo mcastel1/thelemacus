@@ -7942,7 +7942,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
     //stores the orientatio of the earth of the first time the chart is shown into rotation_0
-    (draw_panel->d_0) = (draw_panel->d);
     (draw_panel->rotation_0) = (draw_panel->rotation);
     
     
@@ -8118,28 +8117,29 @@ template<class T> void ChartFrame::MoveRight(T& event){
 //resets the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event){
     
+    //reset the chart boundaries to the initial ones
+    (draw_panel->x_min) = (draw_panel->x_min_0);
+    (draw_panel->x_max) = (draw_panel->x_max_0);
+    (draw_panel->y_min) = (draw_panel->y_min_0);
+    (draw_panel->y_max) = (draw_panel->y_max_0);
+    
     if(((projection->name)->GetValue()) == wxString("Mercator")){
-        //reset the chart boundaries to the initial ones
         
-        
-        (draw_panel->x_min) = (draw_panel->x_min_0);
-        (draw_panel->x_max) = (draw_panel->x_max_0);
-        (draw_panel->y_min) = (draw_panel->y_min_0);
-        (draw_panel->y_max) = (draw_panel->y_max_0);
-        
+        //set lambda_min ... phi_max according to x_min ... y_max
         draw_panel->Update_lambda_phi_min_max();
-        
-        UpdateSlider();
-        UpdateSliderLabel();
         
     }
     
-    if(((projection->name)->GetValue()) == wxString("3D")){
-        //reset the earth orientation to the initial one
+    if(((projection->name)->GetValue()) == wxString("3D"))
         
+        //reset the earth orientation to the initial one
         (draw_panel->rotation) = (draw_panel->rotation_0);
         
     }
+    
+    UpdateSlider();
+    UpdateSliderLabel();
+    
     
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();

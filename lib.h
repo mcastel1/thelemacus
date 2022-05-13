@@ -1924,7 +1924,7 @@ public:
     ProjectionField* projection;
     PrintErrorMessage<ChartFrame>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
-    unsigned int /*this stores the old value of slider*/value_slider_old;
+    unsigned int /*this stores the old value of slider*/zoom_factor_old;
     //in these vectors, I store the 2d coordindates of the Mercator projection and of the 3D rendering, respectively
     vector<double> x, y, x_3d, y_3d;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
@@ -1933,7 +1933,7 @@ public:
     vector<Position> data_3d;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
-    Int value_slider_max;
+    Int zoom_factor_max;
    
     Double  /*the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight*/ relative_displacement, /*the default thickness of the line with which routes are drawn*/ standard_thickness_over_length_screen, /*the thickness with which highlighted routes are drawn*/ large_thickness_over_length_screen;
     

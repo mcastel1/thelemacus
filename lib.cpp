@@ -7844,8 +7844,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     file_init.open(String("in"), prefix);
-    //read value_slider_max from file_init
-    value_slider_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
+    //read zoom_factor_max from file_init
+    zoom_factor_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
     
     //read relative_displacement from file_init
     relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
@@ -7880,13 +7880,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //initialize the variable neededed for slider
-    value_slider_old = 1;
+    zoom_factor_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, floor_exp(value_slider_old), floor_exp(value_slider_old), floor_exp(value_slider_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, floor_exp(zoom_factor_old), floor_exp(zoom_factor_old), floor_exp(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
-    s << "1:" << value_slider_old;
+    s << "1:" << zoom_factor_old;
     text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //navigation buttons
@@ -8272,12 +8272,12 @@ void ChartFrame::UpdateSliderLabel(void){
     stringstream s;
     
     s.str("");
-    s << "1:" << value_slider_old;
+    s << "1:" << zoom_factor_old;
     text_slider->SetLabel(s.str().c_str());
     
 }
 
-//computes the zoom factor of the chart based on the currenct value of span_x and writes it as a double into *f. It returns true if the zooming factor is smaller than value_slider_max, and false otherwise
+//computes the zoom factor of the chart based on the currenct value of span_x and writes it as a double into *f. It returns true if the zooming factor is smaller than zoom_factor_max, and false otherwise
 bool ChartFrame::ZoomFactor(double delta_x, double* f){
     
     double x;
@@ -8287,7 +8287,7 @@ bool ChartFrame::ZoomFactor(double delta_x, double* f){
     //if f != NULL, then I write the zoom factor into f
     if(f){(*f) = x;}
     
-    return(((unsigned int)x) < (value_slider_max.value));
+    return(((unsigned int)x) < (zoom_factor_max.value));
     
 }
 
@@ -8296,12 +8296,12 @@ void ChartFrame::UpdateSlider(void){
     
     double f;
     
-    //compute the zooming factor of the chart and write it into value_slider_old
+    //compute the zooming factor of the chart and write it into zoom_factor_old
     ZoomFactor(((draw_panel->x_max)-(draw_panel->x_min)), &f);
-    value_slider_old = ((unsigned int)f);
+    zoom_factor_old = ((unsigned int)f);
     
     
-    slider->SetValue(floor_exp(value_slider_old));
+    slider->SetValue(floor_exp(zoom_factor_old));
     
     UpdateSliderLabel();
     
@@ -9140,7 +9140,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             //if the zoom factor is not valid, then I print an error message
             
             s.str("");
-            s << "Zoom level must be >= 1 and <= " << ((parent->value_slider_max).value) << ".";
+            s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
             
             //set the title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;
@@ -9375,11 +9375,11 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     double r;
 
     cout << "Slider getvalue = " << ((double)((parent->slider)->GetValue())) << "\n";
-    cout << "value slider old = " << ((double)(parent->value_slider_old)) << "\n";
+    cout << "value slider old = " << ((double)(parent->zoom_factor_old)) << "\n";
 
-    r = floor_exp(((double)(parent->value_slider_old))) / floor_exp(((double)((parent->slider)->GetValue())));
+    r = ((double)(parent->zoom_factor_old)) / log(((double)((parent->slider)->GetValue())));
      
-     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
+     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
      x_min_old = x_min;
      x_max_old = x_max;
      y_min_old = y_min;
@@ -9429,8 +9429,8 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             
             Update_lambda_phi_min_max();
             
-            //update parent->value_slider_old
-            (parent->value_slider_old) = ((parent->slider)->GetValue());
+            //update parent->zoom_factor_old
+            (parent->zoom_factor_old) = log((double)((parent->slider)->GetValue()));
             
             (this->*Draw)();
             PaintNow();
@@ -9442,8 +9442,8 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
         
-        //update parent->value_slider_old
-        (parent->value_slider_old) = ((parent->slider)->GetValue());
+        //update parent->zoom_factor_old
+        (parent->zoom_factor_old) = log((double)((parent->slider)->GetValue()));
         
         (this->*Draw)();
         PaintNow();

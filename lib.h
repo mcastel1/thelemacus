@@ -240,6 +240,13 @@ inline double atan(double x, double y){
     
 }
 
+//the floor of the natural logarithm of x
+inline int floor_log(double x){
+    
+    return(floor(log(x)));
+    
+}
+
 //given a wxListCtrl* list_control, it finds on what element of it the mouse is currently on and writes the id of this element in i
 void MousePositionOnListControl(wxListCtrl* list_control, int* i){
     

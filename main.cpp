@@ -33,6 +33,7 @@
  - when I translate an orthodrome with mouse drag, its reference_position assumes nan coordinates
  - change screen region sensible to mouse hovering from circles to a stripe
  - change Route -> alpha to Z
+- when I clidck on Reduce to add  a sight, two identical sights are added in listcontrol_sights
  */
 
 

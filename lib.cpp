@@ -11555,7 +11555,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 if(j != -1){
                     listcontrol_sights->SetItemBackgroundColour(j, color_selected_item);
                 }
-
+ 
             }else{
              
                 //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -11569,7 +11569,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         }
         
     }else{
-        //in this case, the mouse is not hovering over an element in listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights 
+        //in this case, the mouse is not hovering over an element in listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
         
         for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
             

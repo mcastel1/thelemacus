@@ -240,10 +240,10 @@ inline double atan(double x, double y){
     
 }
 
-//the floor of the natural logarithm of x
-inline int floor_log(double x){
+//the floor of the exponential of x
+inline int floor_exp(double x){
     
-    return(floor(log(x)));
+    return(floor(exp(x)));
     
 }
 

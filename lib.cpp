@@ -7728,9 +7728,7 @@ void DrawPanel::Draw_3D(void){
     
     height_chart = ((parent->GetSize()).GetHeight()) * 0.75;
     width_chart = height_chart;
-    
-    
-    
+
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
     
@@ -9375,27 +9373,25 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     
+    //the zooming ration relative to the last scroll
     double r;
     
+    r = ((double)(parent->value_slider_old)) / ((double)((parent->slider)->GetValue()));
+    //    cout << "Slider = " << value_slider_from_scroll << "\n";
+     
+     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
+     x_min_old = x_min;
+     x_max_old = x_max;
+     y_min_old = y_min;
+     y_max_old = y_max;
+     
+     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
+     x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
+     x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
+     y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
+     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
+     
     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-
-        r = ((double)(parent->value_slider_old)) / ((double)((parent->slider)->GetValue()));
-        
-        //    cout << "Slider = " << value_slider_from_scroll << "\n";
-        
-        //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
-        x_min_old = x_min;
-        x_max_old = x_max;
-        y_min_old = y_min;
-        y_max_old = y_max;
-        
-        
-        //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-        x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
-        x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
-        y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
-        y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
-        
         
         if(x_max >= x_min){
             //in this case, x_max, x_min do not encompass the meridian lambda = pi
@@ -9447,7 +9443,13 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
         
+        //update parent->value_slider_old
+        (parent->value_slider_old) = ((parent->slider)->GetValue());
         
+        (this->*Draw)();
+        PaintNow();
+        parent->UpdateSliderLabel();
+
     }
     
     event.Skip(true);

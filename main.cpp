@@ -35,6 +35,7 @@
  - change Route -> alpha to Z
  - add column with # of sight/route to listcontrol_sights/routes
  - when you drag a Route in the Mercator projection, make sure that you can keep dragging it even if the reference_position falls outside the plot area
+ - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  */
 
 

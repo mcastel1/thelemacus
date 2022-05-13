@@ -7995,7 +7995,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
-    CentreOnScreen();
+    CenterOnScreen();
     
 }
 

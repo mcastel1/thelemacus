@@ -11542,7 +11542,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
     MousePositionOnListControl(listcontrol_routes, &highlighted_route);
-    MousePositionOnListControl(listcontrol_routes, &highlighted_sight);
+    MousePositionOnListControl(listcontrol_sights, &highlighted_sight);
     
     if((highlighted_sight == wxNOT_FOUND) && (highlighted_route == wxNOT_FOUND)){
         

@@ -7880,9 +7880,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //initialize the variable neededed for slider
-    zoom_factor_old = 1;
+    zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, floor_exp(zoom_factor_old), floor_exp(zoom_factor_old), floor_exp(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, floor_exp(zoom_factor_old - 1), floor_exp(zoom_factor_old - 1), floor_exp((zoom_factor_max.value) - 1), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -8301,7 +8301,7 @@ void ChartFrame::UpdateSlider(void){
     zoom_factor_old = ((unsigned int)f);
     
     
-    slider->SetValue(floor_exp(zoom_factor_old));
+    slider->SetValue(floor_exp(zoom_factor_old - 1));
     
     UpdateSliderLabel();
     
@@ -9377,7 +9377,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     cout << "Slider getvalue = " << ((double)((parent->slider)->GetValue())) << "\n";
     cout << "value slider old = " << ((double)(parent->zoom_factor_old)) << "\n";
 
-    r = ((double)(parent->zoom_factor_old)) / log(((double)((parent->slider)->GetValue())));
+    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)((parent->slider)->GetValue()))));
      
      //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
      x_min_old = x_min;
@@ -9430,7 +9430,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             Update_lambda_phi_min_max();
             
             //update parent->zoom_factor_old
-            (parent->zoom_factor_old) = log((double)((parent->slider)->GetValue()));
+            (parent->zoom_factor_old) = 1.0 + log((double)((parent->slider)->GetValue()));
             
             (this->*Draw)();
             PaintNow();
@@ -9443,7 +9443,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
         
         //update parent->zoom_factor_old
-        (parent->zoom_factor_old) = log((double)((parent->slider)->GetValue()));
+        (parent->zoom_factor_old) = 1.0 + log((double)((parent->slider)->GetValue()));
         
         (this->*Draw)();
         PaintNow();

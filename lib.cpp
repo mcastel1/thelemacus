@@ -7944,6 +7944,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
     //stores the orientatio of the earth of the first time the chart is shown into rotation_0
+    (draw_panel->d_0) = (draw_panel->d);
     (draw_panel->rotation_0) = (draw_panel->rotation);
     
     

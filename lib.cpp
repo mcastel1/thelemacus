@@ -10020,7 +10020,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     catalog = new Catalog(String(path_file_catalog), String(""));
     
-    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set list_position to position_in_listcontrol_sights_in.
+    //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set position_in_listcontrol_sights to a 'NULL' value (position_in_listcontrol_sights = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set position_in_listcontrol_sights to position_in_listcontrol_sights_in.
     if(sight_in != NULL){
         sight = sight_in;
         position_in_listcontrol_sights = position_in_listcontrol_sights_in;
@@ -10261,7 +10261,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
 
-PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, long list_position_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, long position_in_listcontrol_positions_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -10281,10 +10281,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //    wxMenu *menuFile = new wxMenu;
     
-    //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set list_position to list_position_in.
+    //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set list_position to position_in_listcontrol_positions_in.
     if(position_in != NULL){
         position = position_in;
-        list_position = list_position_in;
+        list_position = position_in_listcontrol_positions_in;
     }else{
         position = new Position();
         list_position = -1;

@@ -11533,7 +11533,7 @@ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
 }
 
 
-//when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route
+//when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route, and the same for the relaetd sight in listcontrol_sights. 
 void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;

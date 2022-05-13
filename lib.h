@@ -1918,6 +1918,7 @@ public:
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
     TextBox* box;
+    //the zoom factor of the slider is not equal to the numerical value (slider->GetValue()) shown on the slider: zoom_factor = floor_log(slider->GetValue())
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     ProjectionField* projection;

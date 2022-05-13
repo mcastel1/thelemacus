@@ -1827,7 +1827,7 @@ public:
     ListFrame* parent;
     Position* position;
     //this long represents the position in the list (this->GetParent())->listcontrol_positions of position. If list_position = -1, then sight is not in that list
-    long list_position;
+    long position_in_listcontrol_positions;
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;

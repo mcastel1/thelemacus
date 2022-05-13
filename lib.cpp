@@ -10281,13 +10281,13 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //    wxMenu *menuFile = new wxMenu;
     
-    //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set list_position to a 'NULL' value (list_position = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set list_position to position_in_listcontrol_positions_in.
+    //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set position_in_listcontrol_positions to a 'NULL' value (position_in_listcontrol_positions = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set position_in_listcontrol_positions to position_in_listcontrol_positions_in.
     if(position_in != NULL){
         position = position_in;
-        list_position = position_in_listcontrol_positions_in;
+        position_in_listcontrol_positions = position_in_listcontrol_positions_in;
     }else{
         position = new Position();
-        list_position = -1;
+        position_in_listcontrol_positions = -1;
     }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -10630,11 +10630,11 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     position->print(String("position entered via GUI"), String(""), cout);
     
     //if the constructor of PositionFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of position_list
-    if(list_position==-1){
+    if(position_in_listcontrol_positions==-1){
         (((this->parent)->plot)->position_list).push_back(*position);
     }
     
-    position->add_to_wxListCtrl(list_position, ((this->parent)->listcontrol_positions));
+    position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
     (((parent->chart_frame)->draw_panel)->*(((parent->chart_frame)->draw_panel)->Draw))();

@@ -11587,7 +11587,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
             
         }
         
-        
+         
         
         if(highlighted_sight != wxNOT_FOUND){
             //in this case, the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes

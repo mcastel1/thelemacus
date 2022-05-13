@@ -34,6 +34,7 @@
  - change screen region sensible to mouse hovering from circles to a stripe
  - change Route -> alpha to Z
 - when I clidck on Reduce to add  a sight, two identical sights are added in listcontrol_sights
+ - complete ListFrame::OnMouseMoveemnt so as to highlight the related route and sight when hovering over a sight
  */
 
 

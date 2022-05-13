@@ -1404,7 +1404,7 @@ public:
     Angle rotation_angle;
     Projection /*the values of x at the beginning/end of the selection process with a rectangle*/start_selection, end_selection;
     
-
+ 
     
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points which represent the route_list[i] discretized

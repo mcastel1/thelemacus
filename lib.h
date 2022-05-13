@@ -1763,7 +1763,7 @@ public:
     void OnPressDeleteRoute(wxCommandEvent& event);
     
     void OnMouseOnListControlSights(wxMouseEvent&);
-    void OnMouseOnListControlRoutes(wxMouseEvent&);
+    void OnMouseMovement(wxMouseEvent&);
     void OnMouseOnListControlPositions(wxMouseEvent&);
     
     void DrawRoutes(void);

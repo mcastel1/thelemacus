@@ -957,15 +957,15 @@ void Position::modify(String prefix){
 }
 
 //creates an element in listcontrol and writes into this element the values of all the fields containes in this
-void Position::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
+void Position::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol){
     
     unsigned int i;
     wxListItem item;
     
-    if(list_position == -1){
+    if(position_in_listcontrol == -1){
         i = (listcontrol->GetItemCount());
     }else{
-        i = list_position;
+        i = position_in_listcontrol;
         listcontrol->DeleteItem(i);
     }
     
@@ -1001,12 +1001,12 @@ Route::Route(void){
 }
 
 //I add the Route this to the wxListCtrl listcontrol
-void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
+void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol){
     
     unsigned int i;
     wxListItem item;
     
-    if(list_position == -1){
+    if(position_in_listcontrol == -1){
         //in this case, I add a new element at the end of listcontrol
         
         i = (listcontrol->GetItemCount());
@@ -1014,7 +1014,7 @@ void Route::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
     }else{
         //in this case, I delete the i-th elment in listcontrol and replace it
         
-        i = list_position;
+        i = position_in_listcontrol;
         listcontrol->DeleteItem(i);
         
     }
@@ -3063,18 +3063,18 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 }
 
 
-void Sight::add_to_wxListCtrl(long list_position, wxListCtrl* listcontrol){
+void Sight::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol){
     
     unsigned int i;
     wxListItem item;
     
-    if(list_position == -1){
+    if(position_in_listcontrol == -1){
         
         i = (listcontrol->GetItemCount());
         
     }else{
         
-        i = list_position;
+        i = position_in_listcontrol;
         listcontrol->DeleteItem(i);
         
     }

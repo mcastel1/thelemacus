@@ -6823,16 +6823,6 @@ void ChartFrame::SetIdling(bool b){
 //I call this function when I know that all GUI fields are properly filled in ChartFrame, and thus set the non GUI Angle objects relative to the Euler angles for the rotation of the 3D earth,  and draw everything
 void ChartFrame::AllOk(void){
     
-    //    if((draw_panel->Draw) == (&DrawPanel::Draw_3D)){
-    //
-    //        wxCommandEvent dummy;
-    //
-    //        Euler_a->get<wxCommandEvent>(dummy);
-    //        Euler_b->get<wxCommandEvent>(dummy);
-    //        Euler_c->get<wxCommandEvent>(dummy);
-    //
-    //    }
-    
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
@@ -6841,7 +6831,6 @@ void ChartFrame::AllOk(void){
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     int i, j;
-    Angle euler_a, euler_b, euler_c;
     String prefix;
     
     prefix = String("");
@@ -6875,14 +6864,13 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
      euler_b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
      euler_c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
      */
-    //
-    euler_a.set(String(""), -M_PI/2.0, String(""));
-    euler_b.set(String(""), 0.0, String(""));
-    euler_c.set(String(""), 0.0, String(""));
-    //
-    //end - delete this later
-    
-    rotation = Rotation(euler_a, euler_b, euler_c);
+     //end - delete this later
+
+    rotation = Rotation(
+                        Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
+                        Angle(String("Euler angle beta"), 0.0, String("")),
+                        Angle(String("Euler angle gamma"), 0.0, String(""))
+                        );
     rotation.print(String("initial rotation"), String(""), cout);
     
     //allocates points_route_list and ts_route_list
@@ -7919,11 +7907,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
-    
-    //    Euler_a = new AngleField<ChartFrame>(this, &(draw_panel->euler_a), String(""));
-    //    Euler_b = new AngleField<ChartFrame>(this, &(draw_panel->euler_b), String(""));
-    //    Euler_c = new AngleField<ChartFrame>(this, &(draw_panel->euler_c), String(""));
-    
+        
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -7981,9 +7965,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     projection->InsertIn<wxBoxSizer>(sizer_slider);
-    //    Euler_a->InsertIn<wxBoxSizer>(sizer_slider);
-    //    Euler_b->InsertIn<wxBoxSizer>(sizer_slider);
-    //    Euler_c->InsertIn<wxBoxSizer>(sizer_slider);
     
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);

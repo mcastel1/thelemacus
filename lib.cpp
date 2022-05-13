@@ -7882,7 +7882,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     value_slider_old = 1;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, value_slider_old, 1, (value_slider_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, floor_log(value_slider_old), floor_log(1), floor_log(value_slider_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -8301,7 +8301,7 @@ void ChartFrame::UpdateSlider(void){
     value_slider_old = ((unsigned int)f);
     
     
-    slider->SetValue(value_slider_old);
+    slider->SetValue(floor_log(value_slider_old));
     
     UpdateSliderLabel();
     
@@ -9374,7 +9374,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     //the zooming ration relative to the last scroll
     double r;
     
-    r = ((double)(parent->value_slider_old)) / ((double)((parent->slider)->GetValue()));
+    r = floor_log(((double)(parent->value_slider_old))) / floor_log(((double)((parent->slider)->GetValue())));
     //    cout << "Slider = " << value_slider_from_scroll << "\n";
      
      //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in value_slider_old
@@ -9415,7 +9415,6 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             PaintNow();
             parent->UpdateSlider();
             parent->UpdateSliderLabel();
-            
             
             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;

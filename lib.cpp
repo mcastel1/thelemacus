@@ -9386,7 +9386,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
     event.Skip(true);
     
-}
+} 
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     

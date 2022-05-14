@@ -8551,7 +8551,7 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 
 
 
-//converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p is a valid point which corresponds to a geographic position, and false otherwise. 
+//converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p is a valid point which corresponds to a geographic position, and false otherwise.
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
@@ -9231,10 +9231,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         position_now_drag = wxGetMousePosition();
         
         
-//        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
-//           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
-        if(ScreenToGeo(position_now_drag, NULL)){
-            //in this case, the drag does not end out of the plot area
+        //        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
+        //           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
+        
+        if((this->*ScreenToGeo)(position_now_drag, NULL)){
+            //in this case, position_drag_now is a valid position
             
             if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){
                 //in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
@@ -9370,6 +9371,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 
             }
             
+        }else{
+            //in this case, position_drag_now is not a valid position
+
+            //print an info message
+            ((parent->print_error_message)->control) = NULL;
+            ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
+            ((parent->print_error_message)->message) = String("The drag must go through valid points.");
+            parent->CallAfter(*(parent->print_error_message));
+   
         }
         
     }

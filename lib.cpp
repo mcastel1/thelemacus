@@ -8515,7 +8515,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
     
 }
 
-//converts the point p on the screen (which is supposed to lie in the plot area): if p is in the plot area, it returns true and writes the result in q. If not, it retuns false. 
+//converts the point p on the screen (which is supposed to lie in the plot area): if p is in the plot area, it returns true and, if q!=NULL, writes the result in q. If not, it retuns false.
 bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
     Projection temp;
@@ -8525,8 +8525,12 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
     if(ScreenToMercator(p, &temp)){
         
-        (q->lambda).set(String(""), k*lambda_mercator(temp.x), String(""));
-        (q->phi).set(String(""), k*phi_mercator(temp.y), String(""));
+        if(q!= NULL){
+            
+            (q->lambda).set(String(""), k*lambda_mercator(temp.x), String(""));
+            (q->phi).set(String(""), k*phi_mercator(temp.y), String(""));
+            
+        }
         
         return true;
         
@@ -8547,7 +8551,7 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 
 
 
-//converts the point p on the screen with a 3D projection, to the relative geographic position q
+//converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p is a valid point which corresponds to a geographic position, and false otherwise. 
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
@@ -8574,16 +8578,20 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     if(arg_sqrt >= 0.0){
         
-        //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for x<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger x -> I pick the solution with a positive sign in front of the square root through GSL_SIGN(x)
-        //set rp
-        gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + 1.0)*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
-        gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + 1.0)*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
-        gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));
-        
-        //r = (rotation.matrix)^T . rp
-        gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
-        
-        q->set(String(""), r, String(""));
+        if(q!=NULL){
+            
+            //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for x<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger x -> I pick the solution with a positive sign in front of the square root through GSL_SIGN(x)
+            //set rp
+            gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + 1.0)*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
+            gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + 1.0)*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
+            gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));
+            
+            //r = (rotation.matrix)^T . rp
+            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
+            
+            q->set(String(""), r, String(""));
+            
+        }
         //        cout << "\n rp = " << xp << " " << yp << " " << zp;
         //        cout << "\n r = " << x << " " << "/" << " " << z;
         //        cout << "\nsqrt xxx = " << arg_sqrt;
@@ -9223,8 +9231,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         position_now_drag = wxGetMousePosition();
         
         
-        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
-           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
+//        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
+//           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
+        if(ScreenToGeo(position_now_drag, NULL)){
             //in this case, the drag does not end out of the plot area
             
             if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){

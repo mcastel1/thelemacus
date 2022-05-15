@@ -6853,6 +6853,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     tic_length_over_width_plot_area = 0.01;
     
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
+    thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
     
     //start - delete this later
     gsl_rng_env_setup();
@@ -6864,8 +6865,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
      euler_b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
      euler_c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
      */
-     //end - delete this later
-
+    //end - delete this later
+    
     rotation = Rotation(
                         Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
                         Angle(String("Euler angle beta"), 0.0, String("")),
@@ -7728,7 +7729,7 @@ void DrawPanel::Draw_3D(void){
     
     height_chart = ((parent->GetSize()).GetHeight()) * 0.75;
     width_chart = height_chart;
-
+    
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
     
@@ -7905,7 +7906,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
-        
+    
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::ArrowDown), draw_panel);
     
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
@@ -8869,11 +8870,23 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                     //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
                     
                     /*
-                    ((points_route_list[i][j][l]).y) + (((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y)) / (((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x)) * ((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x));
-                    */
+                     ((points_route_list[i][j][l]).y) + (((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y)) / (((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x)) * ((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x));
+                     */
                     
-                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
+                    if(( ((points_route_list[i][j][l+1]).x) != ((points_route_list[i][j][l]).x) ) &&
+                       
+                       (
+                        fabs(
+                             (position_draw_panel_now.y) -
+                             (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
+                             )
+                        
+                        <= (thickness_route_selection_over_length_screen.value)*((double)(((parent->parent)->rectangle_display).GetWidth()))/2.0
+                        )
+                       ){
+                        
+                        //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
+                        //                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
                         
                         //sets the highlighted route to i, so as to use highlighted_route in other functions
                         ((parent->parent)->highlighted_route) = i;
@@ -9377,13 +9390,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             
         }else{
             //in this case, position_drag_now is not a valid position
-
+            
             //print an info message
             ((parent->print_error_message)->control) = NULL;
             ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
             ((parent->print_error_message)->message) = String("The drag must go through valid points.");
             parent->CallAfter(*(parent->print_error_message));
-   
+            
         }
         
     }
@@ -9396,24 +9409,24 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     
     //the zooming ration relative to the last scroll
     double r;
-
+    
     cout << "Slider getvalue = " << ((double)((parent->slider)->GetValue())) << "\n";
     cout << "value slider old = " << ((double)(parent->zoom_factor_old)) << "\n";
-
+    
     r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)((parent->slider)->GetValue()))));
-     
-     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
-     x_min_old = x_min;
-     x_max_old = x_max;
-     y_min_old = y_min;
-     y_max_old = y_max;
-     
-     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-     x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
-     x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
-     y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
-     y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
-     
+    
+    //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
+    x_min_old = x_min;
+    x_max_old = x_max;
+    y_min_old = y_min;
+    y_max_old = y_max;
+    
+    //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
+    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
+    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
+    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
+    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
+    
     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
         
         if(x_max >= x_min){
@@ -9471,7 +9484,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
         (this->*Draw)();
         PaintNow();
         parent->UpdateSliderLabel();
-
+        
     }
     
     event.Skip(true);

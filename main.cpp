@@ -39,6 +39,7 @@
  - try DrawPanel::OnScroll -> ChartFrame::OnScroll to avoid multiple pop-ups of error window
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - sometimes text_position_now is not shown in 3D mode
+ - build a pointer to the function set_x_y_min_max ... and construct two of such functions for each projection
  */
 
 

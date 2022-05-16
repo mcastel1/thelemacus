@@ -8877,7 +8877,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                        
                        &&
 
-                       ((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l+1]).x)))
+                       ( ((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l+1]).x))) ||
+                       
+                       ((((points_route_list[i][j][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))) )
                        
                        &&
                        

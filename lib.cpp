@@ -11679,7 +11679,7 @@ void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
 }
 
-
+ 
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){
     

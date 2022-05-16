@@ -7898,7 +7898,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     projection = new ProjectionField(this);
-    (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseGraphicalType, draw_panel);
+    (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection, draw_panel);
     
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
@@ -7926,11 +7926,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these, create a dummy_event and then call OnChooseGraphicalType(dummy_event) to set all objects according to the choice above.
+    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these, create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice above.
     default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
     (projection->name)->SetValue(wxString(default_projection.value));
     
-    draw_panel->OnChooseGraphicalType(dummy_event);
+    draw_panel->OnChooseProjection(dummy_event);
     
     (draw_panel->*(draw_panel->Draw))();
     
@@ -8752,7 +8752,7 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 }
 
 
-void DrawPanel::OnChooseGraphicalType(wxCommandEvent& event){
+void DrawPanel::OnChooseProjection(wxCommandEvent& event){
     
     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
         //if in projection "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary

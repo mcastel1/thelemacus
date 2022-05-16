@@ -8873,15 +8873,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                      ((points_route_list[i][j][l]).y) + (((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y)) / (((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x)) * ((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x));
                      */
                     
-                    if( ( ((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l+1]).x) )
+                    if(/*to recognize that the mouse is hivering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ ( ((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l+1]).x) )
                        
-                       &&
+                       &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
 
                        ( ((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l+1]).x))) ||
                        
                        ((((points_route_list[i][j][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))) )
                        
-                       &&
+                       &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
                        
                        (
                         fabs(

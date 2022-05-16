@@ -37,7 +37,8 @@
  - when you drag a Route in the Mercator projection, make sure that you can keep dragging it even if the reference_position falls outside the plot area
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - try DrawPanel::OnScroll -> ChartFrame::OnScroll to avoid multiple pop-ups of error window
- - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted 
+ - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
+ - sometimes text_position_now is not shown in 3D mode
  */
 
 

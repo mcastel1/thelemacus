@@ -6945,12 +6945,17 @@ void DrawPanel::PaintNow(){
     (this->*Render)(dc);
     
     
+    
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
     parent->SetMinSize(wxSize(
                               (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->GetSize()).GetWidth())*length_border_over_length_frame,
                               (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame
                               ));
+    
+    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame));
+
+    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
     
     
@@ -8794,7 +8799,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
-        Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);        
+        Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);

@@ -11002,15 +11002,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
     
-    
-    
-    n_columns_listcontrol_sights = 12;
-    n_columns_listcontrol_positions = 3;
-    n_columns_listcontrol_routes = 8;
-    
     file_init.set_name(String(path_file_init));
-    
-    
     
     //read color list from file_init
     s.read_from_file(String("color list"), String(path_file_init), String(""));
@@ -11344,13 +11336,13 @@ void ListFrame::UpdateRelatedSightsAndRoutes(void){
         
         if(((((plot->sight_list)[i]).related_route).value) == -1){
             
-            listcontrol_sights->SetItem(i, n_columns_listcontrol_sights-1, wxString(""));
+            listcontrol_sights->SetItem(i, (listcontrol_sights->GetColumnCount())-1, wxString(""));
             
         }else{
             
             listcontrol_sights->SetItem(
                                         i,
-                                        n_columns_listcontrol_sights-1,
+                                        (listcontrol_sights->GetColumnCount())-1,
                                         wxString::Format(wxT("%i"),
                                                          ((((plot->sight_list)[i]).related_route).value) + 1
                                                          )
@@ -11364,13 +11356,13 @@ void ListFrame::UpdateRelatedSightsAndRoutes(void){
         
         if(((((plot->route_list)[i]).related_sight).value) == -1){
             
-            listcontrol_routes->SetItem(i, n_columns_listcontrol_routes-1, wxString(""));
+            listcontrol_routes->SetItem(i, (listcontrol_routes->GetColumnCount())-1, wxString(""));
             
         }else{
             
             listcontrol_routes->SetItem(
                                         i,
-                                        n_columns_listcontrol_routes-1,
+                                        (listcontrol_routes->GetColumnCount())-1,
                                         wxString::Format(wxT("%i"),
                                                          ((((plot->route_list)[i]).related_sight).value)+1
                                                          )

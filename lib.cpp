@@ -7936,9 +7936,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (projection->name)->SetValue(wxString(default_projection.value));
     
     draw_panel->OnChooseProjection(dummy_event);
-    
-    (draw_panel->*(draw_panel->Draw))();
-    
+        
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
     (draw_panel->x_min_0) = (draw_panel->x_min);
     (draw_panel->x_max_0) = (draw_panel->x_max);
@@ -7981,8 +7979,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
+    (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
 
     CenterOnScreen();
     

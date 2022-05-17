@@ -6603,7 +6603,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     Projection temp;
     
     //set x_min, ..., y_max for the following
-    draw_panel->Update_x_y_min_max();
+    draw_panel->Set_x_y_min_max_Mercator();
     
     
     //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8047,7 +8047,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     ((draw_panel->plot)->lambda_min).normalize();
     ((draw_panel->plot)->lambda_max).normalize();
     
-    draw_panel->Update_x_y_min_max();
+    draw_panel->Set_x_y_min_max_Mercator();
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
@@ -8106,7 +8106,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
     ((draw_panel->plot)->lambda_min).normalize();
     ((draw_panel->plot)->lambda_max).normalize();
     
-    draw_panel->Update_x_y_min_max();
+    draw_panel->Set_x_y_min_max_Mercator();
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
@@ -8167,7 +8167,7 @@ void DrawPanel::Update_lambda_phi_min_max(void){
 }
 
 //this function computes x_min, ... y_max from lambda_min ... phi_max
-void DrawPanel::Update_x_y_min_max(void){
+void DrawPanel::Set_x_y_min_max_Mercator(void){
     
     x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
     x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
@@ -8771,7 +8771,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
         
-        Update_x_y_min_max();
+        Set_x_y_min_max_Mercator();
         
     }
     

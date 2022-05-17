@@ -980,15 +980,22 @@ void Position::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listc
 
 //updates all the values in the GUI fields of item #i of listcontrol with the relative values of the non-GUI Position this
 void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
+   
+    int j;
     
+    j=0;
+    
+    //update number column
+    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), i+1));
+
     //update latitude column
-    listcontrol->SetItem(i, 0, wxString(phi.to_string(String("NS"), display_precision, true)));
+    listcontrol->SetItem(i, j++, wxString(phi.to_string(String("NS"), display_precision, true)));
     
     //update longitude column
-    listcontrol->SetItem(i, 1, wxString(lambda.to_string(String("EW"), display_precision, true)));
+    listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), display_precision, true)));
     
     //update label column
-    listcontrol->SetItem(i, 2, wxString(label.value));
+    listcontrol->SetItem(i, j++, wxString(label.value));
     
 }
 
@@ -1102,6 +1109,9 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     
     j=0;
+    //set the number column
+    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), i+1));
+    
     //set type column: I write the extended type names, not the short ones 'l', 'o' and 'c'
     if(type == String("l")){
         listcontrol->SetItem(i, j++, wxString("loxodrome"));
@@ -2988,6 +2998,9 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     
     j=0;
+    //set number column
+    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), i+1));
+
     //set body column
     listcontrol->SetItem(i, j++, wxString(body.name.value));
     
@@ -11132,6 +11145,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     i=0;
     
+    listcontrol_sights->PushBackColumn(wxString("Number"));
     listcontrol_sights->PushBackColumn(wxString("Body"));
     listcontrol_sights->PushBackColumn(wxString("Limb"));
     listcontrol_sights->PushBackColumn(wxString("Artificial horizon"));
@@ -11170,6 +11184,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
     
+    listcontrol_positions->PushBackColumn(wxString("Number"));
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
     listcontrol_positions->PushBackColumn(wxString("Label"));
@@ -11201,6 +11216,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     
+    listcontrol_routes->PushBackColumn(wxString("Number"));
     listcontrol_routes->PushBackColumn(wxString("Type"));
     listcontrol_routes->PushBackColumn(wxString("Start"));
     listcontrol_routes->PushBackColumn(wxString("Alpha"));

@@ -8166,13 +8166,23 @@ void DrawPanel::Update_lambda_phi_min_max(void){
     
 }
 
-//this function computes x_min, ... y_max from lambda_min ... phi_max
+//this function computes x_min, ... y_max from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void){
     
     x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
     x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
+    
+}
+
+//this function computes x_min, ... y_max from d in the 3D projection
+void DrawPanel::Set_x_y_min_max_3D(void){
+    
+    x_min = -((d.value)/sqrt(gsl_pow_2(((d).value)+1.0)-1.0));
+    x_max = -x_min;
+    y_min = x_min;
+    y_max = -y_min;
     
 }
 
@@ -8793,11 +8803,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         (parent->button_left)->Enable(false);
         (parent->button_right)->Enable(false);
         
-        //sets the values of x_min ... y_max for the 3D projection
-        x_min = -((d.value)/sqrt(gsl_pow_2(((d).value)+1.0)-1.0));
-        x_max = -x_min;
-        y_min = x_min;
-        y_max = -y_min;
+      
         
         
     }

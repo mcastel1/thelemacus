@@ -8046,8 +8046,9 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     
     ((draw_panel->plot)->lambda_min).normalize();
     ((draw_panel->plot)->lambda_max).normalize();
-    
-    draw_panel->Set_x_y_min_max_Mercator();
+        
+    (draw_panel->*(draw_panel->Set_x_y_min_max))();
+
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
@@ -8106,8 +8107,8 @@ template<class T> void ChartFrame::MoveRight(T& event){
     ((draw_panel->plot)->lambda_min).normalize();
     ((draw_panel->plot)->lambda_max).normalize();
     
-    draw_panel->Set_x_y_min_max_Mercator();
-    
+    (draw_panel->*(draw_panel->Set_x_y_min_max))();
+
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
@@ -8773,16 +8774,15 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
-        
+        Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
+
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
-        
-        Set_x_y_min_max_Mercator();
-        
+                
     }
     
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
@@ -8794,7 +8794,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
-        
+        Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);        
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);
@@ -8803,10 +8803,10 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         (parent->button_left)->Enable(false);
         (parent->button_right)->Enable(false);
         
-      
-        
-        
     }
+    
+    (this->*(Set_x_y_min_max))();
+
     
     //change thsis: this should be called only if name->GetValue has changed.
     (this->*Draw)();

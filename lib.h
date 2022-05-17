@@ -1432,7 +1432,9 @@ public:
     bool (DrawPanel::*GeoToProjection)(Position, Projection*);
     void (DrawPanel::*Render)(wxDC&);
     bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
+    void (DrawPanel::*Set_x_y_min_max)(void);
 
+    
     void SetIdling(bool);
     void Draw_Mercator(void);
     void Draw_3D(void);

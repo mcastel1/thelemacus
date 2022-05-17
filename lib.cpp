@@ -6953,7 +6953,7 @@ void DrawPanel::PaintNow(){
                               (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame
                               ));
     
-    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame));
+//    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame));
 
     (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
@@ -7952,8 +7952,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->rotation_0) = (draw_panel->rotation);
     
     
-    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
-    
+//    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
+//
     
     sizer_buttons->Add(empty_text_1);
     sizer_buttons->Add(button_up);
@@ -7981,6 +7981,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
+    draw_panel->PaintNow();
+
+
     CenterOnScreen();
     
 }

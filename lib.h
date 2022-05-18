@@ -1749,6 +1749,10 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
+    //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
+    vector< vector< vector<float> > > data_x, data_y;
+    //a vector which contains the Positions of the coastline profiles of the entire world
+    vector<Position> data_3d;
     vector<wxColour> color_list;
     //the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area
     wxColour color_selected_item;
@@ -1758,7 +1762,7 @@ public:
     //this referrs to the init file
     File file_init;
 
-    
+    void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);
     
     void OnAddSight(wxCommandEvent& event);
@@ -1931,10 +1935,6 @@ public:
     zoom_factor_old;
     //in these vectors, I store the 2d coordindates of the Mercator projection and of the 3D rendering, respectively
     vector<double> x, y, x_3d, y_3d;
-    //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
-    vector< vector< vector<float> > > data_x, data_y;
-    //a vector which contains the Positions of the coastline profiles of the entire world
-    vector<Position> data_3d;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     //This is the actual value of the maximal zoom factor allowed
@@ -1945,7 +1945,6 @@ public:
 
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);
-    void GetAllCoastLineData(void);
     void UpdateSlider(void);
     bool ZoomFactor(double, double*);
     void UpdateSliderLabel(void);

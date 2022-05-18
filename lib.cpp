@@ -6580,15 +6580,15 @@ void ChartFrame::GetCoastLineData_3D(void){
     unsigned int i, every;
     Projection temp;
     
-    every = (unsigned int)(((double)(data_3d.size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
+    every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}
     
-    for(x_3d.clear(), y_3d.clear(), i=0; i<data_3d.size(); i++){
+    for(x_3d.clear(), y_3d.clear(), i=0; i<(parent->data_3d).size(); i++){
         
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
         if((i % every) == 0){
             
-            if((draw_panel->GeoTo3D(data_3d[i], &temp))){
+            if((draw_panel->GeoTo3D((parent->data_3d)[i], &temp))){
                 
                 x_3d.push_back(temp.x);
                 y_3d.push_back(temp.y);
@@ -6676,18 +6676,18 @@ void ChartFrame::GetCoastLineData_Mercator(void){
             //            flush(cout);
             
             //count how many datapoints are in data_x[i] and in data_y[i]
-            n = (data_x[i - floor_min_lat][j % 360]).size();
+            n = ((parent->data_x)[i - floor_min_lat][j % 360]).size();
             
             every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
             if(every == 0){every = 1;}
             
-            for(l=0; l<(data_x[i - floor_min_lat][j % 360]).size(); l++){
+            for(l=0; l<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
                 
                 //                cout << "\n l = " << l;
                 
                 
-                (temp.x) = data_x[i - floor_min_lat][j % 360][l];
-                (temp.y) = data_y[i - floor_min_lat][j % 360][l];
+                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l];
+                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l];
                 
                 //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 if((l % every) == 0){
@@ -6717,8 +6717,8 @@ void ChartFrame::GetCoastLineData_Mercator(void){
 }
 
 
-//this function fetches the data in path_file_coastline_data_blocked and stores them in data_x, data_y so that they can be read fastly
-void ChartFrame::GetAllCoastLineData(void){
+//this function fetches the data in path_file_coastline_data_blocked and stores them in data_x, data_y, data_3d so that they can be read fastly
+void ListFrame::GetAllCoastLineData(void){
     
     File file_n_line, file_coastline_data_blocked;
     Position p_temp;
@@ -7858,9 +7858,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     (parent->plot)->show(true, String(""));
-    
-    GetAllCoastLineData();
-    
     
     file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
@@ -11012,6 +11009,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     plot = new Plot(catalog, String(""));
+    
+    GetAllCoastLineData();
+
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());

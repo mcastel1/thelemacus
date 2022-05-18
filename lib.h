@@ -59,7 +59,7 @@ class ChronoField;
 class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
-class MessageFrame;
+//template<class FF_OK> class MessageFrame;
 template<class F_YES, class F_NO> class QuestionFrame;
 class ListFrame;
 class SightFrame;
@@ -287,17 +287,20 @@ public:
     
 };
 
-//this is a wxFrame designed to show a message to the GUI user
-class MessageFrame: public wxFrame{
+//this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor struct which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
+template<typename FF_OK> class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(wxWindow*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
     wxButton* button_ok;
     wxStaticBitmap* image;
+    
+    //pointer to the struct containing the functor which will be called when the button ok is pressed
+    FF_OK* f_ok;
     
     void OnPressOk(wxCommandEvent&);
 

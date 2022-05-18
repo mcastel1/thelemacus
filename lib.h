@@ -1381,6 +1381,8 @@ public:
     T* f;
     wxControl* control;
     String title, message;
+    MessageFrame< FunctionOnPressOk<T> >* message_frame;
+    
     FunctionOnPressOk<T> * function_on_press_ok;
     
     PrintErrorMessage(T*);

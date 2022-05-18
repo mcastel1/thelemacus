@@ -10102,7 +10102,6 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 
 template<class T> void PrintErrorMessage<T>::operator()(void){
     
-    MessageFrame< FunctionOnPressOk<T> >* message_frame;
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);

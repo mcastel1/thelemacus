@@ -986,7 +986,7 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     j=0;
     
     //update number column
-    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), i+1));
+    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i+1)));
 
     //update latitude column
     listcontrol->SetItem(i, j++, wxString(phi.to_string(String("NS"), display_precision, true)));
@@ -1110,7 +1110,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     j=0;
     //set the number column
-    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), i+1));
+    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i+1)));
     
     //set type column: I write the extended type names, not the short ones 'l', 'o' and 'c'
     if(type == String("l")){
@@ -2999,7 +2999,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     j=0;
     //set number column
-    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), i+1));
+    listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i+1)));
 
     //set body column
     listcontrol->SetItem(i, j++, wxString(body.name.value));

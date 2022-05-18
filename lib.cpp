@@ -10131,7 +10131,6 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
             control->SetFocus();
@@ -11091,6 +11090,14 @@ template<class T, typename FF_OK> PrintErrorMessage<T, FF_OK>::PrintErrorMessage
     
     f = f_in;
     f_ok = f_ok_in;
+    
+
+    //delete this later
+    title.set(String(""), String("titolo"), String(""));
+    message.set(String(""), String("messaggio"), String(""));
+
+    message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+
     
 }
 

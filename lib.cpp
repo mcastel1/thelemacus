@@ -10908,14 +10908,17 @@ void PositionFrame::AllOk(void){
 
 
 
-MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
     
-    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    f_ok = f_ok_in;
     
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
+
     //image
     handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
@@ -10936,7 +10939,11 @@ MessageFrame::MessageFrame(wxWindow* parent, const wxString& title, const wxStri
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
-    
+    button_ok->Bind(wxEVT_BUTTON, *close_frame);
+
+    if(!f_ok){
+    button_ok->Bind(wxEVT_BUTTON, *f_ok);
+    }
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
@@ -10971,8 +10978,6 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     wxDisplay display;
     wxPNGHandler *handler;
     wxRect rectangle;
-    //initialize the functor to close thie QuestionFrame when button_yes or button_no will be pressed
-    CloseFrame<QuestionFrame>* close_frame;
     
     f_yes = f_yes_in;
     f_no = f_no_in;
@@ -13206,16 +13211,6 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
-    
-}
-
-
-
-
-//this functor quits the MessageFrame when Ok button is pressed
-void MessageFrame::OnPressOk(wxCommandEvent& event){
-    
-    Close(TRUE);
     
 }
 

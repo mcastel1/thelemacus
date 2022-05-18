@@ -59,6 +59,7 @@ class ChronoField;
 class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
+template<class F> class CloseFrame;
 //template<class FF_OK> class MessageFrame;
 template<class F_YES, class F_NO> class QuestionFrame;
 class ListFrame;
@@ -298,6 +299,9 @@ public:
     wxGridSizer* sizer_grid;
     wxButton* button_ok;
     wxStaticBitmap* image;
+    //initialize the functor to close this MessageFrame when button_ok will be pressed
+    CloseFrame<MessageFrame>* close_frame;
+  
     
     //pointer to the struct containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;
@@ -318,13 +322,12 @@ public:
     wxGridSizer* sizer_grid;
     wxButton* button_yes, *button_no;
     wxStaticBitmap* image;
+    //initialize the functor to close thie QuestionFrame when button_yes or button_no will be pressed
+    CloseFrame<QuestionFrame>* close_frame;
     //pointer to the struct containing the functor which will be called when the button yes is pressed
     F_YES* f_yes;
     //pointer to the struct containing the functor which will be called when the button no is pressed
     F_NO* f_no;
-
-    void OnPressYes(wxCommandEvent&);
-    void OnPressNo(wxCommandEvent&);
 
 };
 

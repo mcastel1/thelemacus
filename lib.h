@@ -1374,18 +1374,19 @@ public:
 };
 
 //this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
-template<class T> class PrintErrorMessage{
+template<class T, typename FF_OK> class PrintErrorMessage{
     
 public:
     
     T* f;
     wxControl* control;
     String title, message;
-    MessageFrame< FunctionOnPressOk<T> >* message_frame;
+    FF_OK* f_ok;
+    MessageFrame<FF_OK>* message_frame;
     
-    FunctionOnPressOk<T> * function_on_press_ok;
+//    FunctionOnPressOk<T> * function_on_press_ok;
     
-    PrintErrorMessage(T*);
+    PrintErrorMessage(T*, FF_OK*);
     
     void operator()(void);
     
@@ -1412,7 +1413,7 @@ public:
     
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
-    PrintErrorMessage<DrawPanel>* print_error_message;
+    PrintErrorMessage<DrawPanel, void>* print_error_message;
     XYChart *chart;
     //a ChartDirector layer to draw splines on chart
     SplineLayer *spline_layer;
@@ -1825,7 +1826,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
-    PrintErrorMessage<SightFrame>* print_error_message;
+    PrintErrorMessage<SightFrame, void>* print_error_message;
     
     BodyField* body;
     LimbField* limb;
@@ -1869,7 +1870,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
-   PrintErrorMessage<PositionFrame>* print_error_message;
+   PrintErrorMessage<PositionFrame, void>* print_error_message;
     
     AngleField<PositionFrame>* lat, *lon;
     StringField<PositionFrame> *label;
@@ -1906,7 +1907,7 @@ public:
     bool idling;
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
-    PrintErrorMessage<RouteFrame>* print_error_message;
+    PrintErrorMessage<RouteFrame, void>* print_error_message;
     
     RouteTypeField *type;
     AngleField<RouteFrame> *alpha, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
@@ -1950,7 +1951,7 @@ public:
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     ProjectionField* projection;
-    PrintErrorMessage<ChartFrame>* print_error_message;
+    PrintErrorMessage<ChartFrame, void>* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int     //the zoom factor of the slider is not equal to the numerical value (slider->GetValue()) shown on the slider: zoom_factor = log(slider->GetValue()). This is the old zoom factor. 
     zoom_factor_old;

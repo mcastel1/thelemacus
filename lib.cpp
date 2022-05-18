@@ -10970,7 +10970,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     if(f_ok != NULL){
         button_ok->Bind(wxEVT_BUTTON, *f_ok);
     }
-    
+     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     

@@ -75,8 +75,8 @@ bool MyApp::OnInit(){
                                                       s.str(),
                                                       /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
                                                       wxPoint(
-                                                                 0 + (int)(((double)(rectangle.GetWidth()))/20.0),
-                                                                 0 + (int)(((double)(rectangle.GetHeight()))/20.0)
+                                                                 0 + i*(int)(((double)(rectangle.GetWidth()))/20.0),
+                                                                 0 + i*(int)(((double)(rectangle.GetHeight()))/20.0)
                                                                  ),
                                                       wxDefaultSize,
                                                       String("")

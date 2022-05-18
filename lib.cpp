@@ -9086,6 +9086,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Chart outside boundaries!");
                 (print_error_message->message) = String("The chart must lie within the boundaries.");
+                (print_error_message->my_special_function) = NULL;
                 (*print_error_message)();
                 
                 
@@ -9121,6 +9122,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Route ground or start position outside plot area!");
                 (print_error_message->message) = String("Route start or start position must lie within the plot area.");
+                (print_error_message->my_special_function) = NULL;
                 (*print_error_message)();
                 
             }
@@ -9142,6 +9144,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Position outside plot area!");
                 (print_error_message->message) = String("The position must lie within the plot area.");
+                (print_error_message->my_special_function) = NULL;
                 (*print_error_message)();
                 
                 
@@ -9240,6 +9243,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Zoom level exceeded its maximal value!");
             (print_error_message->message) = String(s.str().c_str());
+            (print_error_message->my_special_function) = NULL;
             (*print_error_message)();
             
         }
@@ -9294,6 +9298,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         ((parent->print_error_message)->control) = NULL;
                         ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
                         ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
+                        ((parent->print_error_message)->my_special_function) = NULL;
                         parent->CallAfter(*(parent->print_error_message));
                         
                     }
@@ -9475,6 +9480,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             ((parent->print_error_message)->control) = NULL;
             ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
             ((parent->print_error_message)->message) = String("The drag must go through valid points.");
+            ((parent->print_error_message)->my_special_function) = NULL;
             parent->CallAfter(*(parent->print_error_message));
             
         }
@@ -9538,6 +9544,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
             (print_error_message->message) = String("The chart must lie within the boundaries.");
+            (print_error_message->my_special_function) = NULL;
             (*print_error_message)();
             
         }else{
@@ -9952,7 +9959,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
                 ((f->print_error_message)->title) = String("Entered value is not valid!");
                 ((f->print_error_message)->message) = String("Lengths must be floating-point numbers >= 0 m");
                 ((f->print_error_message)->my_special_function) = NULL;
-            f->CallAfter(*(f->print_error_message));
+                f->CallAfter(*(f->print_error_message));
                 
             }else{
                 //if the LengthField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.

@@ -11602,7 +11602,12 @@ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
     
     highlighted_route = ((((plot->sight_list)[i]).related_route).value);
     
-    (chart_frame->draw_panel)->PaintNow();
+    
+    for(i=0; i<chart_frame.size(); i++){
+        
+        ((chart_frame[i])->draw_panel)->PaintNow();
+        
+    }
     
     event.Skip(true);
     
@@ -11696,7 +11701,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
     }
     
-    for(i=0; i<(parent->chart_frame).size(); i++){
+    for(i=0; i<chart_frame.size(); i++){
         
         ((chart_frame[i])->draw_panel)->PaintNow();
         
@@ -11709,9 +11714,15 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 //when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
 void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
+    unsigned int i;
+    
     MousePositionOnListControl(listcontrol_positions, &highlighted_position);
     
-    (chart_frame->draw_panel)->PaintNow();
+    for(i=0; i<chart_frame.size(); i++){
+        
+        ((chart_frame[i])->draw_panel)->PaintNow();
+        
+    }
     
     event.Skip(true);
     

@@ -33,7 +33,6 @@
  - when I translate an orthodrome with mouse drag, its reference_position assumes nan coordinates
  - change screen region sensible to mouse hovering from circles to a stripe
  - change Route -> alpha to Z
- - add column with # of sight/route to listcontrol_sights/routes
  - when you drag a Route in the Mercator projection, make sure that you can keep dragging it even if the reference_position falls outside the plot area
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - try DrawPanel::OnScroll -> ChartFrame::OnScroll to avoid multiple pop-ups of error window

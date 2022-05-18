@@ -7908,7 +7908,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.close(prefix);
     
     idling = false;
-    print_error_message = new PrintErrorMessage<ChartFrame, CloseMessageFrame<ChartFrame> >(this, NULL);
+    print_error_message = new PrintErrorMessage<ChartFrame, CloseMessageFrame<ChartFrame> >(this, close_message_frame);
+    
+    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *close_message_frame);
+
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);

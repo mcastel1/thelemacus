@@ -60,7 +60,6 @@ class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
 template<class F> class CloseFrame;
-//template<class FF_OK> class MessageFrame;
 template<class F_YES, class F_NO> class QuestionFrame;
 class ListFrame;
 class SightFrame;
@@ -306,7 +305,7 @@ public:
     //pointer to the struct containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;
     
-    void OnPressOk(wxCommandEvent&);
+    //    void OnPressOk(wxCommandEvent&);
 
 };
 
@@ -1315,6 +1314,20 @@ public:
     
 };
 
+//this class defines the functor () used to ...
+template<class P> class MySpecialFunction{
+    
+public:
+    
+    MySpecialFunction(P*);
+    
+    //the frame which called this struct
+    P* parent;
+     
+    void operator()(wxCommandEvent&);
+    
+};
+
 //this class defines the functor () used to remove a route from the non-GUI object plot
 class DeleteRoute{
     
@@ -1368,6 +1381,7 @@ public:
     T* f;
     wxControl* control;
     String title, message;
+    MySpecialFunction<T> * my_special_function;
     
     PrintErrorMessage(T*);
     

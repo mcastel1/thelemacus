@@ -9631,6 +9631,14 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
+template<class P> MySpecialFunction<P>::MySpecialFunction(P* parent_in){
+    
+    parent = parent_in;
+    
+}
+
+
+
 void DeleteSight::operator()(wxCommandEvent& event){
     
     int i_related_route;
@@ -9656,6 +9664,17 @@ void DeleteSight::operator()(wxCommandEvent& event){
     event.Skip(true);
     
 }
+
+
+
+template<class P> void MySpecialFunction<P>::operator()(wxCommandEvent& event){
+    
+//do something
+    
+    event.Skip(true);
+    
+}
+
 
 //constructor of the struct, which initializes the Answer remove_related_sight. If remove_related_sight.value = 'y', then DeleteRoute::operator() will delete both the route and the related sight. If remove_related_sight.value = 'n', then it will remove the route only.
 DeleteRoute::DeleteRoute(ListFrame* f_in, Answer remove_related_sight_in){
@@ -10069,7 +10088,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 
 template<class T> void PrintErrorMessage<T>::operator()(void){
     
-    MessageFrame* message_frame;
+    MessageFrame< MySpecialFunction<T> >* message_frame;
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);
@@ -10078,7 +10097,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame< MySpecialFunction<T> >(f, my_special_function, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
             control->SetFocus();
@@ -10088,7 +10107,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
     }else{
         
-        message_frame = new MessageFrame(f, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame< MySpecialFunction<T> >(f, my_special_function, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
@@ -10938,7 +10957,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+//    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
 
     if(!f_ok){

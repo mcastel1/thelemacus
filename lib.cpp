@@ -8433,11 +8433,11 @@ template<class T>void CheckBody::operator()(T& event){
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Body not found in catalog!");
             ((f->print_error_message)->message) = String("Body must be in catalog.");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -8476,11 +8476,11 @@ template<class T> void CheckLimb::operator()(T &event){
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Limb not valid!");
             ((f->print_error_message)->message) = String("Limb must be upper, lower or center.");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -8557,11 +8557,11 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->sign);
             ((f->print_error_message)->title) = String("Sign is not valid!");
             ((f->print_error_message)->message) = String("Sign must be +-, NS or EW.");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->sign_ok) = false;
@@ -9086,7 +9086,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Chart outside boundaries!");
                 (print_error_message->message) = String("The chart must lie within the boundaries.");
-                (print_error_message->my_special_function) = NULL;
+                (print_error_message->function_on_press_ok) = NULL;
                 (*print_error_message)();
                 
                 
@@ -9122,7 +9122,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Route ground or start position outside plot area!");
                 (print_error_message->message) = String("Route start or start position must lie within the plot area.");
-                (print_error_message->my_special_function) = NULL;
+                (print_error_message->function_on_press_ok) = NULL;
                 (*print_error_message)();
                 
             }
@@ -9144,7 +9144,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Position outside plot area!");
                 (print_error_message->message) = String("The position must lie within the plot area.");
-                (print_error_message->my_special_function) = NULL;
+                (print_error_message->function_on_press_ok) = NULL;
                 (*print_error_message)();
                 
                 
@@ -9243,7 +9243,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Zoom level exceeded its maximal value!");
             (print_error_message->message) = String(s.str().c_str());
-            (print_error_message->my_special_function) = NULL;
+            (print_error_message->function_on_press_ok) = NULL;
             (*print_error_message)();
             
         }
@@ -9298,7 +9298,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         ((parent->print_error_message)->control) = NULL;
                         ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
                         ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
-                        ((parent->print_error_message)->my_special_function) = NULL;
+                        ((parent->print_error_message)->function_on_press_ok) = NULL;
                         parent->CallAfter(*(parent->print_error_message));
                         
                     }
@@ -9480,7 +9480,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             ((parent->print_error_message)->control) = NULL;
             ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
             ((parent->print_error_message)->message) = String("The drag must go through valid points.");
-            ((parent->print_error_message)->my_special_function) = NULL;
+            ((parent->print_error_message)->function_on_press_ok) = NULL;
             parent->CallAfter(*(parent->print_error_message));
             
         }
@@ -9544,7 +9544,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
             (print_error_message->message) = String("The chart must lie within the boundaries.");
-            (print_error_message->my_special_function) = NULL;
+            (print_error_message->function_on_press_ok) = NULL;
             (*print_error_message)();
             
         }else{
@@ -9641,7 +9641,7 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
-template<class P> MySpecialFunction<P>::MySpecialFunction(P* parent_in){
+template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
     
     parent = parent_in;
     
@@ -9677,7 +9677,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 
 
-template<class P> void MySpecialFunction<P>::operator()(wxCommandEvent& event){
+template<class P> void FunctionOnPressOk<P>::operator()(wxCommandEvent& event){
     
 //do something
     
@@ -9857,11 +9857,11 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->deg);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->deg_ok) = false;
@@ -9906,11 +9906,11 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->min);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->min_ok) = false;
@@ -9954,11 +9954,11 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             if(!(p->just_enabled)){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
                 
-                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
                 ((f->print_error_message)->control) = (p->value);
                 ((f->print_error_message)->title) = String("Entered value is not valid!");
                 ((f->print_error_message)->message) = String("Lengths must be floating-point numbers >= 0 m");
-                ((f->print_error_message)->my_special_function) = NULL;
+                ((f->print_error_message)->function_on_press_ok) = NULL;
                 f->CallAfter(*(f->print_error_message));
                 
             }else{
@@ -10012,11 +10012,11 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->box_unit);
             ((f->print_error_message)->title) = String("Unit not found in list!");
             ((f->print_error_message)->message) = String("Unit must be in list.");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->box_unit_ok) = false;
@@ -10102,7 +10102,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 
 template<class T> void PrintErrorMessage<T>::operator()(void){
     
-    MessageFrame< MySpecialFunction<T> >* message_frame;
+    MessageFrame< FunctionOnPressOk<T> >* message_frame;
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     f->SetIdling(true);
@@ -10111,7 +10111,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame = new MessageFrame< MySpecialFunction<T> >(f, my_special_function, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame< FunctionOnPressOk<T> >(f, function_on_press_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
             control->SetFocus();
@@ -10121,7 +10121,7 @@ template<class T> void PrintErrorMessage<T>::operator()(void){
         
     }else{
         
-        message_frame = new MessageFrame< MySpecialFunction<T> >(f, my_special_function, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame< FunctionOnPressOk<T> >(f, function_on_press_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }
@@ -11979,11 +11979,11 @@ template<class T> void CheckYear::operator()(T&event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->year);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Year must be an unsigned integer");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->year_ok) = false;
@@ -12021,10 +12021,10 @@ template<class T> void CheckMonth::operator()(T&event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter     ((f->print_error_message)->control) = (p->month);
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter     ((f->print_error_message)->control) = (p->month);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->month_ok) = false;
@@ -12089,11 +12089,11 @@ template<class T> void CheckDay::operator()(T& event){
                 
                 //            f->CallAfter(&SightFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
                 
-                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
                 ((f->print_error_message)->control) = (p->day);
                 ((f->print_error_message)->title) = String("Entered value is not valid!");
                 ((f->print_error_message)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
-                ((f->print_error_message)->my_special_function) = NULL;
+                ((f->print_error_message)->function_on_press_ok) = NULL;
                 f->CallAfter(*(f->print_error_message));
                 
                 (p->day)->Enable(true);
@@ -12219,11 +12219,11 @@ template<class T> void CheckHour::operator()(T &event){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
                 
                 
-                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
                 ((f->print_error_message)->control) = (p->hour);
                 ((f->print_error_message)->title) = String("Entered value is not valid!");
                 ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-                ((f->print_error_message)->my_special_function) = NULL;
+                ((f->print_error_message)->function_on_press_ok) = NULL;
                 f->CallAfter(*(f->print_error_message));
                 
             }else{
@@ -12270,11 +12270,11 @@ template<class T> void CheckMinute::operator()(T &event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->minute);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->minute_ok) = false;
@@ -12312,11 +12312,11 @@ template<class T> void CheckSecond::operator()(T &event){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->second);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->second_ok) = false;
@@ -12408,11 +12408,11 @@ template<class T>void CheckRouteType::operator()(T& event){
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->my_special_function) = NULL. Finally,I call the functor with CallAfter
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->function_on_press_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Route type not found in list!");
             ((f->print_error_message)->message) = String("Route type must be loxodrome, orthodrome, or circle of equal altitude.");
-            ((f->print_error_message)->my_special_function) = NULL;
+            ((f->print_error_message)->function_on_press_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;

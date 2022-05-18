@@ -1315,11 +1315,11 @@ public:
 };
 
 //this class defines the functor () used to ...
-template<class P> class MySpecialFunction{
+template<class P> class FunctionOnPressOk{
     
 public:
     
-    MySpecialFunction(P*);
+    FunctionOnPressOk(P*);
     
     //the frame which called this struct
     P* parent;
@@ -1381,7 +1381,7 @@ public:
     T* f;
     wxControl* control;
     String title, message;
-    MySpecialFunction<T> * my_special_function;
+    FunctionOnPressOk<T> * function_on_press_ok;
     
     PrintErrorMessage(T*);
     

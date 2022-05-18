@@ -7755,7 +7755,7 @@ void DrawPanel::Draw_Mercator(void){
     (parent->y).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
-    parent->CenterOnScreen();
+    //    parent->CenterOnScreen();
     
     
 }
@@ -7861,7 +7861,7 @@ void DrawPanel::Draw_3D(void){
     
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
-    parent->CenterOnScreen();
+    //    parent->CenterOnScreen();
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -8022,7 +8022,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
 
-    CenterOnScreen();
+//    CenterOnScreen();
     
 }
 

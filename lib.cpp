@@ -9000,11 +9000,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         }
         
         //Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
-        PaintNow();
-        
-        
-        //        cout << "\n++++++++++++ Highlighted position = " << ((parent->parent)->highlighted_position);
-        
+        //given that the Route under consideration has changed, I re-tabulate the Routes and rePaint the charts
+        for(i=0; i<((parent->parent)->chart_frame).size(); i++){
+                                    
+            ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
+            
+        }
+                
     }
     
     event.Skip(true);

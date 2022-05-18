@@ -38,6 +38,7 @@
  - try DrawPanel::OnScroll -> ChartFrame::OnScroll to avoid multiple pop-ups of error window
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - add margins in ChartFrame
+ - rename ListFrame::chart_frame -> chart_frames 
  */
 
 

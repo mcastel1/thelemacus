@@ -70,11 +70,21 @@ bool MyApp::OnInit(){
         s.str("");
         s << "Chart #" << i+1;
         
-        (list_frame->chart_frame)[i] = new ChartFrame(list_frame, s.str(),  wxDefaultPosition, wxDefaultSize, String(""));
+        (list_frame->chart_frame)[i] = new ChartFrame(
+                                                      list_frame,
+                                                      s.str(),
+                                                      /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
+                                                      wxPoint(
+                                                                 0 + (int)(((double)(rectangle.GetWidth()))/20.0),
+                                                                 0 + (int)(((double)(rectangle.GetHeight()))/20.0)
+                                                                 ),
+                                                      wxDefaultSize,
+                                                      String("")
+                                                      );
         (list_frame->chart_frame)[i]->Show(true);
-
+        
     }
-     
+    
     return true;
     
 }

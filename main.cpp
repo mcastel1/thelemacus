@@ -39,6 +39,7 @@
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - add margins in ChartFrame
  - rename ListFrame::chart_frame -> chart_frames
+ - n_chart_frames should go to init file
  */
 
 

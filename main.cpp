@@ -66,7 +66,7 @@ bool MyApp::OnInit(){
     //allocate and show the chart frames
     n_chart_frames.read_from_file(String("number chart frames"), String(path_file_init), String(""));
     (list_frame->chart_frame).resize(n_chart_frames.value);
-    for(, i=0; i<(list_frame->chart_frame).size(); i++){
+    for(i=0; i<(list_frame->chart_frame).size(); i++){
         
         s.str("");
         s << "Chart #" << i+1;

@@ -1314,6 +1314,20 @@ public:
     
 };
 
+template<class P> class CloseMessageFrame{
+    
+public:
+    
+    CloseMessageFrame(P*);
+    
+    //the frame which called this struct
+    P* parent;
+
+    void operator()(wxCommandEvent&);
+    
+};
+
+
 //this class defines the functor () used to ...
 template<class P> class FunctionOnPressOk{
     
@@ -1951,7 +1965,8 @@ public:
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     ProjectionField* projection;
-    PrintErrorMessage<ChartFrame, void>* print_error_message;
+    CloseMessageFrame<ChartFrame> *close_message_frame;
+    PrintErrorMessage<ChartFrame, CloseMessageFrame<ChartFrame> >* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int     //the zoom factor of the slider is not equal to the numerical value (slider->GetValue()) shown on the slider: zoom_factor = log(slider->GetValue()). This is the old zoom factor. 
     zoom_factor_old;

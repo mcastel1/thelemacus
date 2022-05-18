@@ -7889,6 +7889,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     
+    
+    close_message_frame = new CloseMessageFrame<ChartFrame>(this);
+    
     file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
     zoom_factor_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
@@ -7905,7 +7908,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.close(prefix);
     
     idling = false;
-    print_error_message = new PrintErrorMessage<ChartFrame, void>(this, NULL);
+    print_error_message = new PrintErrorMessage<ChartFrame, CloseMessageFrame<ChartFrame> >(this, NULL);
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);
@@ -9641,6 +9644,12 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
+template<class P> CloseMessageFrame<P>::CloseMessageFrame(P* parent_in){
+    
+    parent = parent_in;
+    
+}
+
 template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
     
     parent = parent_in;
@@ -9674,6 +9683,15 @@ void DeleteSight::operator()(wxCommandEvent& event){
     event.Skip(true);
     
 }
+
+template<class P> void CloseMessageFrame<P>::operator()(wxCommandEvent& event){
+    
+    //do something
+    
+    event.Skip(true);
+    
+}
+
 
 
 
@@ -10973,10 +10991,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     
-//    if(f_ok != NULL){
-//        button_ok->Bind(wxEVT_BUTTON, *f_ok);
-//    }
-     
+
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     

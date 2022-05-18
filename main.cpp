@@ -46,41 +46,8 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
-    /*
-    String s("si.");
-    File file_recent;
-    
-    file_recent.set_name(String(path_file_recent));
-    file_recent.open(String("in"), String(""));
-    
-    s.write_to_file(String("risposta"), file_recent, String(""));
-    file_recent.close(String(""));
-    */
-    /*
-    Angle a;
-    a.set(String(""), 5.5, String(""));
-    string test = a.to_string(String(""), display_precision, true);
-    */
-     
-    /*
-    Angle a, b, c;
-    a.set(String(""), 0.2, String(""));
-    b.set(String(""), 2, String(""));
-    c.set(String(""), 4, String(""));
-    Rotation R(a, b, c);
-    
-    a.set(String(""), .232, String(""));
-    b.set(String(""), .34, String(""));
-    c.set(String(""), 2.66, String(""));
-    Rotation S(a, b, c);
-    
-    Rotation T;
-    T = R*S;
-    R.print(String("R"), String("\t\t"), cout);
-    S.print(String("S"), String("\t\t"), cout);
-    T.print(String("composition"), String("\t\t"), cout);
-    */
- 
+    unsigned int i;
+    stringstream s;
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
@@ -92,18 +59,18 @@ bool MyApp::OnInit(){
     ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
-    (list_frame->chart_frame) = new ChartFrame(list_frame, "A nautical chart",  wxDefaultPosition, wxDefaultSize, String(""));
-    (list_frame->chart_frame)->Show(true);
     
-    //    list_frame->plot->print(true, String("************* "), cout);
-    
-    
-    //    Answer* answer;
-    //    answer = new Answer();
-    //    MessageFrame* message_frame = new MessageFrame(NULL, String("question"),  answer, "a", "b", wxDefaultPosition, wxDefaultSize, String(""));
-    //    message_frame ->Show(true);
-    
-    
+    //allocate and show the chart frames
+    for((list_frame->chart_frame).resize(n_chart_frames), i=0; i<(list_frame->chart_frame).size(); i++){
+        
+        s.str("");
+        s << "Chart #" << i+1;
+        
+        (list_frame->chart_frame)[i] = new ChartFrame(list_frame, s.str(),  wxDefaultPosition, wxDefaultSize, String(""));
+        (list_frame->chart_frame)[i]->Show(true);
+
+    }
+     
     return true;
     
 }

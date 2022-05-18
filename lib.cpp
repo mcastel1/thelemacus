@@ -10687,6 +10687,7 @@ void PositionFrame::OnPressCancel(wxCommandEvent& event){
 //this function is triggered when button_ok is pressed
 void PositionFrame::OnPressOk(wxCommandEvent& event){
     
+    unsigned int i;
     stringstream s;
     
     //writes the values of the GUI fields in the non-GUI fields
@@ -10702,8 +10703,12 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    (((parent->chart_frame)->draw_panel)->*(((parent->chart_frame)->draw_panel)->Draw))();
-    ((parent->chart_frame)->draw_panel)->PaintNow();
+    for(i=0; i<(parent->chart_frame).size(); i++){
+        
+        ((((parent->chart_frame)[i])->draw_panel)->*((((parent->chart_frame)[i])->draw_panel)->Draw))();
+        (((parent->chart_frame)[i])->draw_panel)->PaintNow();
+        
+    }
     
     event.Skip(true);
     
@@ -10714,7 +10719,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
 
 void RouteFrame::OnPressOk(wxCommandEvent& event){
     
-    
+    unsigned int i;
     stringstream s;
     
     //writes the values of the GUI fields in the non-GUI fields
@@ -10732,7 +10737,12 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     //if I am adding a new Route, I resize points_route_list to add a new element to it
     if(position_in_listcontrol_routes == -1){
-        ((parent->chart_frame->draw_panel)->points_route_list).resize(((parent->chart_frame->draw_panel)->points_route_list).size() + 1);
+        
+        for(i=0; i<(parent->chart_frame).size(); i++){
+            
+            ((((parent->chart_frame)[i])->draw_panel)->points_route_list).resize(((((parent->chart_frame)[i])->draw_panel)->points_route_list).size() + 1);
+            
+        }
     }
     
     parent->UpdateRelatedSightsAndRoutes();
@@ -10741,9 +10751,13 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     //    parent->plot->print(true, String(""), cout);
     
-    //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    (((parent->chart_frame)->draw_panel)->*(((parent->chart_frame)->draw_panel)->Draw))();
-    ((parent->chart_frame)->draw_panel)->PaintNow();
+    for(i=0; i<(parent->chart_frame).size(); i++){
+        
+        //I call PaintNow() because the positions have changed, so I need to re-draw the chart
+        ((((parent->chart_frame)[i])->draw_panel)->*((((parent->chart_frame)[i])->draw_panel)->Draw))();
+        (((parent->chart_frame)[i])->draw_panel)->PaintNow();
+        
+    }
     
     
     event.Skip(true);
@@ -11682,7 +11696,11 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
     }
     
-    (chart_frame->draw_panel)->PaintNow();
+    for(i=0; i<(parent->chart_frame).size(); i++){
+        
+        ((chart_frame[i])->draw_panel)->PaintNow();
+        
+    }
     
     event.Skip(true);
     
@@ -12362,6 +12380,7 @@ template <class T> void RouteTypeField::get(T &event){
 
 void SightFrame::OnPressReduce(wxCommandEvent& event){
     
+    unsigned int i;
     stringstream s;
     
     //writes the values of the GUI fields in the non-GUI fields
@@ -12417,9 +12436,14 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     parent->plot->print(true, String(""), cout);
     
-    //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    (((parent->chart_frame)->draw_panel)->*(((parent->chart_frame)->draw_panel)->Draw))();
-    ((parent->chart_frame)->draw_panel)->PaintNow();
+    
+    for(i=0; i<(parent->chart_frame).size(); i++){
+        
+        //I call PaintNow() because the positions have changed, so I need to re-draw the chart
+        ((((parent->chart_frame)[i])->draw_panel)->*((((parent->chart_frame)[i])->draw_panel)->Draw))();
+        (((parent->chart_frame)[i])->draw_panel)->PaintNow();
+        
+    }
     
     event.Skip(true);
     

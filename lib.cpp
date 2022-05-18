@@ -9340,8 +9340,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             }else{
                 //in this case I am moving a position / route (the mouse is over a route or a position while dragging)
                 
+                unsigned int i;
+
                 if(((parent->parent)->highlighted_route) != -1){
                     //in this case, the mouse is over a route
+                    
                     
                     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                         
@@ -9384,9 +9387,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //update the data of the Route under consideration in listcontrol_routes
                     ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
                     
-                    //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the chart
-                    (this->*TabulateRoutes)();
-                    PaintNow();
+                    //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
+                    for(i=0; i<((parent->parent)->chart_frame).size(); i++){
+                                                
+                        (((((parent->parent)->chart_frame)[i])->draw_panel)->*((((parent->parent)->chart_frame)[i])->draw_panel)->TabulateRoutes)();
+                        ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
+                        
+                    }
                     
                 }
                 
@@ -9415,8 +9422,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     //update the data of the Position under consideration in listcontrol_positions
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                     
-                    //given that the Position under consideration has changed, I re-paint the chart
-                    PaintNow();
+                    //given that the Position under consideration has changed, I re-paint the charts
+                    for(i=0; i<((parent->parent)->chart_frame).size(); i++){
+                                                
+                        ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
+                        
+                    }
                     
                 }
                 

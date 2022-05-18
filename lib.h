@@ -141,8 +141,6 @@ class Body;
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 #define color_white  (wxColour(255,255,255))
-//the number of chart frames opened when the app is started
-#define n_chart_frames 2
 
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -530,6 +528,7 @@ public:
     int value;
     
     void read_from_file(String, File&, bool, String);
+    void read_from_file(String, String, String);
     void enter(String, String);
     void set(String, int, String);
     void print(String, String, ostream&);

@@ -264,7 +264,7 @@ Double Double::operator+ (const Double& x){
 }
 
 
-
+//reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_file = true, does not search the file from the beginning otherwise. Writes the result in *this
 void Int::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     
     string line;
@@ -303,6 +303,36 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, Strin
     
     print(name, prefix, cout);
     
+    
+}
+
+//reads the Int *this from file with path filename. Writes the result in *this
+void Int::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    size_t pos;
+    File file;
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+    
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+    
+    
+    pos = line.find(" = ");
+    
+    //read the string after ' = ' until the end of line string and store it into value
+    value = stoi(line.substr(pos+3, line.size() - (pos+3)).c_str(), 0);
+    
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    
+    print(name, prefix, cout);
     
 }
 

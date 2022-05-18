@@ -49,6 +49,7 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit(){
     
     unsigned int i;
+    Int n_chart_frames;
     stringstream s;
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -63,7 +64,9 @@ bool MyApp::OnInit(){
     
     
     //allocate and show the chart frames
-    for((list_frame->chart_frame).resize(n_chart_frames), i=0; i<(list_frame->chart_frame).size(); i++){
+    n_chart_frames.read_from_file(String("number chart frames"), path_file_init, String(""));
+    (list_frame->chart_frame).resize(n_chart_frames.vaule);
+    for(, i=0; i<(list_frame->chart_frame).size(); i++){
         
         s.str("");
         s << "Chart #" << i+1;

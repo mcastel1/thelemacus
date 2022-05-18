@@ -53,3 +53,5 @@ maximal zoom factor = 20
 relative displacement = 0.1
 d draw 3d = 3.0
 default projection = Mercator
+#the number of chart frames opened when the program starts
+number chart frames = 2

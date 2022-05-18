@@ -9694,7 +9694,7 @@ template<class P> void CloseMessageFrame<P>::operator()(wxCommandEvent& event){
     event.Skip(true);
     
 }
-
+ 
 
 
 

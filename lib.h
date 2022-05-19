@@ -1314,6 +1314,7 @@ public:
     
 };
 
+//this functor sets idling -> false in the parent of parent
 template<class P> class UnsetIdling{
     
 public:

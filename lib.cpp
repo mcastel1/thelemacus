@@ -9304,7 +9304,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         ((parent->print_error_message)->control) = NULL;
                         ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
                         ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
+                        
                         ((parent->print_error_message)->f_ok) = NULL;
+                        
                         parent->CallAfter(*(parent->print_error_message));
                         
                     }
@@ -10140,7 +10142,6 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
         
     }else{
         
-        message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame ->Show(true);
         
     }

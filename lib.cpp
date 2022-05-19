@@ -7890,7 +7890,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (parent->plot)->show(true, String(""));
     
     
-    my_best_function = new MyBestFunction<ChartFrame>(this);
+    Int dummy_int;
+    dummy_int.set(String("dummy Int"), 1, String(""));
+    my_best_function = new MyBestFunction<Int>(&dummy_int);
     
     file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
@@ -7908,7 +7910,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.close(prefix);
     
     idling = false;
-    print_error_message = new PrintErrorMessage<ChartFrame, MyBestFunction<ChartFrame> >(this, my_best_function);
+    print_error_message = new PrintErrorMessage<ChartFrame, MyBestFunction<Int> >(this, my_best_function);
     
     ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *my_best_function);
 

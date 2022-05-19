@@ -9690,7 +9690,7 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
     //do something
     
-    ((parent->parent)->idling) = false;
+    (parent->idling) = false;
     
     event.Skip(true);
     

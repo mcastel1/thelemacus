@@ -6926,7 +6926,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
         
     }
     
-    
+    idling = false; 
     unset_idling = new UnsetIdling<DrawPanel>(this);
     print_error_message = new PrintErrorMessage<DrawPanel, UnsetIdling<DrawPanel> >(this, unset_idling);
     
@@ -10172,7 +10172,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<SightFrame, UnsetIdling<ListFrame> >(this, parent->unset_idling);
+    unset_idling = new UnsetIdling<SightFrame>(this);
+    print_error_message = new PrintErrorMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
     
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));

@@ -6927,7 +6927,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     }
     
     
-    print_error_message = new PrintErrorMessage<DrawPanel, Michele<ListFrame> >(this, parent->parent->michele);
+    print_error_message = new PrintErrorMessage<DrawPanel, UnsetIdling<ListFrame> >(this, parent->parent->michele);
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -7905,7 +7905,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.close(prefix);
     
     idling = false;
-    print_error_message = new PrintErrorMessage<ChartFrame, Michele<ListFrame> >(this, parent->michele);
+    print_error_message = new PrintErrorMessage<ChartFrame, UnsetIdling<ListFrame> >(this, parent->michele);
     
 //    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *michele);
 
@@ -9644,7 +9644,7 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
-template<class P> Michele<P>::Michele(P* parent_in){
+template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in){
     
     parent = parent_in;
     
@@ -9684,7 +9684,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
 }
 
-template<class P> void Michele<P>::operator()(wxCommandEvent& event){
+template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
     //do something 
     
@@ -10168,7 +10168,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<SightFrame, Michele<ListFrame> >(this, parent->michele);
+    print_error_message = new PrintErrorMessage<SightFrame, UnsetIdling<ListFrame> >(this, parent->michele);
     
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));
@@ -10383,7 +10383,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     Maximize(panel);
     
     CreateStatusBar();
-    SetStatusText( "Welcome to Michele's text editor!" );
+    SetStatusText( "Welcome to UnsetIdling's text editor!" );
     
     SetSizerAndFit(sizer);
     //Maximize();
@@ -10431,7 +10431,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<PositionFrame, Michele<ListFrame> >(this, parent->michele);
+    print_error_message = new PrintErrorMessage<PositionFrame, UnsetIdling<ListFrame> >(this, parent->michele);
     
     
     //    wxMenu *menuFile = new wxMenu;
@@ -10524,7 +10524,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     Maximize(panel);
     
     CreateStatusBar();
-    SetStatusText( "Welcome to Michele's text editor!" );
+    SetStatusText( "Welcome to UnsetIdling's text editor!" );
     
     SetSizerAndFit(sizer);
     //Maximize();
@@ -10557,7 +10557,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<RouteFrame, Michele<ListFrame> >(this, parent->michele);
+    print_error_message = new PrintErrorMessage<RouteFrame, UnsetIdling<ListFrame> >(this, parent->michele);
     
     //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
     if(route_in != NULL){
@@ -10719,7 +10719,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     Maximize(panel);
     
     CreateStatusBar();
-    SetStatusText( "Welcome to Michele's text editor!" );
+    SetStatusText( "Welcome to UnsetIdling's text editor!" );
     
     SetSizerAndFit(sizer);
     //Maximize();
@@ -11011,7 +11011,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     //    SetSize(wxSize(100,100));
     
     //    CreateStatusBar();
-    //    SetStatusText( "Welcome to Michele's text editor!" );
+    //    SetStatusText( "Welcome to UnsetIdling's text editor!" );
     
     //SetSizerAndFit(sizer_v);
     //Maximize();
@@ -11076,7 +11076,7 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     //    SetSize(wxSize(100,100));
     
     //    CreateStatusBar();
-    //    SetStatusText( "Welcome to Michele's text editor!" );
+    //    SetStatusText( "Welcome to UnsetIdling's text editor!" );
     
     //SetSizerAndFit(sizer_v);
     //Maximize();
@@ -11109,7 +11109,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     GetAllCoastLineData();
     
-    michele = new Michele<ListFrame>(this);
+    michele = new UnsetIdling<ListFrame>(this);
 
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display

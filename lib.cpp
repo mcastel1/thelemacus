@@ -7890,7 +7890,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (parent->plot)->show(true, String(""));
     
     
-    close_message_frame = new CloseMessageFrame<ChartFrame>(this);
+    my_best_function = new MyBestFunction<ChartFrame>(this);
     
     file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
@@ -7908,9 +7908,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.close(prefix);
     
     idling = false;
-    print_error_message = new PrintErrorMessage<ChartFrame, CloseMessageFrame<ChartFrame> >(this, close_message_frame);
+    print_error_message = new PrintErrorMessage<ChartFrame, MyBestFunction<ChartFrame> >(this, my_best_function);
     
-    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *close_message_frame);
+    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *my_best_function);
 
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
@@ -9649,7 +9649,7 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
-template<class P> CloseMessageFrame<P>::CloseMessageFrame(P* parent_in){
+template<class P> MyBestFunction<P>::MyBestFunction(P* parent_in){
     
     parent = parent_in;
     
@@ -9689,7 +9689,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
 }
 
-template<class P> void CloseMessageFrame<P>::operator()(wxCommandEvent& event){
+template<class P> void MyBestFunction<P>::operator()(wxCommandEvent& event){
     
     //do something
     

@@ -1427,7 +1427,8 @@ public:
     
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
-    PrintErrorMessage<DrawPanel, void>* print_error_message;
+    MyBestFunction<Int>* my_best_function;
+    PrintErrorMessage<DrawPanel, MyBestFunction<Int> >* print_error_message;
     XYChart *chart;
     //a ChartDirector layer to draw splines on chart
     SplineLayer *spline_layer;

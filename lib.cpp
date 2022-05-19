@@ -6926,8 +6926,11 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
         
     }
     
-    
-    print_error_message = new PrintErrorMessage<DrawPanel, void>(this, NULL);
+    Int dummy_int;
+    dummy_int.set(String("dummy Int"), 1, String(""));
+    my_best_function = new MyBestFunction<Int>(&dummy_int);
+
+    print_error_message = new PrintErrorMessage<DrawPanel, MyBestFunction<Int> >(this, my_best_function);
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle

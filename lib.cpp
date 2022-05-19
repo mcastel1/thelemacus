@@ -10436,7 +10436,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<PositionFrame, UnsetIdling<ListFrame> >(this, parent->unset_idling);
+    unset_idling = new UnsetIdling<PositionFrame>(this);
+    print_error_message = new PrintErrorMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
     
     //    wxMenu *menuFile = new wxMenu;

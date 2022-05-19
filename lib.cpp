@@ -10148,7 +10148,7 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
     }else{
         
         message_frame->Show(true);
-        
+         
     }
     
     //The temporary dialog window may have been closed, thus I set f->idling to false

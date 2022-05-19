@@ -1928,7 +1928,8 @@ public:
     bool idling;
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
-    PrintErrorMessage<RouteFrame, UnsetIdling<ListFrame> >* print_error_message;
+    UnsetIdling<RouteFrame> * unset_idling;
+    PrintErrorMessage<RouteFrame, UnsetIdling<RouteFrame> >* print_error_message;
     
     RouteTypeField *type;
     AngleField<RouteFrame> *alpha, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;

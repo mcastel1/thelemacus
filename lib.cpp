@@ -10563,7 +10563,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<RouteFrame, UnsetIdling<ListFrame> >(this, parent->unset_idling);
+    unset_idling = new UnsetIdling<RouteFrame>(this);
+    print_error_message = new PrintErrorMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
     
     //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
     if(route_in != NULL){

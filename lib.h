@@ -1799,7 +1799,7 @@ public:
     File file_init;
     
     //this is created for testing
-    UnsetIdling<ListFrame> *michele;
+    UnsetIdling<ListFrame> *unset_idling;
 
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);

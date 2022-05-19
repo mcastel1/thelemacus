@@ -6926,11 +6926,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
         
     }
     
-    Int dummy_int;
-    dummy_int.set(String("dummy Int"), 1, String(""));
-    my_best_function = new MyBestFunction<Int>(&dummy_int);
-
-    print_error_message = new PrintErrorMessage<DrawPanel, MyBestFunction<Int> >(this, my_best_function);
+    
+    print_error_message = new PrintErrorMessage<DrawPanel, Michele<ListFrame> >(this, parent->parent->michele);
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -7892,11 +7889,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     
-    
-    Int dummy_int;
-    dummy_int.set(String("dummy Int"), 1, String(""));
-    my_best_function = new MyBestFunction<Int>(&dummy_int);
-    
     file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
     zoom_factor_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
@@ -7913,9 +7905,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.close(prefix);
     
     idling = false;
-    print_error_message = new PrintErrorMessage<ChartFrame, MyBestFunction<Int> >(this, my_best_function);
+    print_error_message = new PrintErrorMessage<ChartFrame, Michele<ListFrame> >(this, parent->michele);
     
-    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *my_best_function);
+//    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *michele);
 
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
@@ -8448,7 +8440,7 @@ template<class T>void CheckBody::operator()(T& event){
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Body not found in catalog!");
             ((f->print_error_message)->message) = String("Body must be in catalog.");
-            ((f->print_error_message)->f_ok) = NULL;
+//            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -8491,7 +8483,7 @@ template<class T> void CheckLimb::operator()(T &event){
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Limb not valid!");
             ((f->print_error_message)->message) = String("Limb must be upper, lower or center.");
-            ((f->print_error_message)->f_ok) = NULL;
+//            ((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -8572,7 +8564,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             ((f->print_error_message)->control) = (p->sign);
             ((f->print_error_message)->title) = String("Sign is not valid!");
             ((f->print_error_message)->message) = String("Sign must be +-, NS or EW.");
-            ((f->print_error_message)->f_ok) = NULL;
+//            ((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->sign_ok) = false;
@@ -9097,7 +9089,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Chart outside boundaries!");
                 (print_error_message->message) = String("The chart must lie within the boundaries.");
-                (print_error_message->f_ok) = NULL;
+//                (print_error_message->f_ok) = NULL;
                 (*print_error_message)();
                 
                 
@@ -9133,7 +9125,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Route ground or start position outside plot area!");
                 (print_error_message->message) = String("Route start or start position must lie within the plot area.");
-                (print_error_message->f_ok) = NULL;
+//                (print_error_message->f_ok) = NULL;
                 (*print_error_message)();
                 
             }
@@ -9155,7 +9147,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("Position outside plot area!");
                 (print_error_message->message) = String("The position must lie within the plot area.");
-                (print_error_message->f_ok) = NULL;
+                //(print_error_message->f_ok) = NULL;
                 (*print_error_message)();
                 
                 
@@ -9254,7 +9246,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Zoom level exceeded its maximal value!");
             (print_error_message->message) = String(s.str().c_str());
-            (print_error_message->f_ok) = NULL;
+            //(print_error_message->f_ok) = NULL;
             (*print_error_message)();
             
         }
@@ -9309,9 +9301,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         ((parent->print_error_message)->control) = NULL;
                         ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
                         ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
-                        
 //                        ((parent->print_error_message)->f_ok) = NULL;
-                        
                         parent->CallAfter(*(parent->print_error_message));
                         
                     }
@@ -9493,7 +9483,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             ((parent->print_error_message)->control) = NULL;
             ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
             ((parent->print_error_message)->message) = String("The drag must go through valid points.");
-            ((parent->print_error_message)->f_ok) = NULL;
+//            ((parent->print_error_message)->f_ok) = NULL;
             parent->CallAfter(*(parent->print_error_message));
             
         }
@@ -9557,7 +9547,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
             (print_error_message->message) = String("The chart must lie within the boundaries.");
-            (print_error_message->f_ok) = NULL;
+            //(print_error_message->f_ok) = NULL;
             (*print_error_message)();
             
         }else{
@@ -9654,7 +9644,7 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
-template<class P> MyBestFunction<P>::MyBestFunction(P* parent_in){
+template<class P> Michele<P>::Michele(P* parent_in){
     
     parent = parent_in;
     
@@ -9694,14 +9684,14 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
 }
 
-template<class P> void MyBestFunction<P>::operator()(wxCommandEvent& event){
+template<class P> void Michele<P>::operator()(wxCommandEvent& event){
     
-    //do something
+    //do something 
     
     event.Skip(true);
     
 }
- 
+
 
 
 
@@ -9889,7 +9879,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             ((f->print_error_message)->control) = (p->deg);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->deg_ok) = false;
@@ -9938,7 +9928,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             ((f->print_error_message)->control) = (p->min);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->min_ok) = false;
@@ -9986,7 +9976,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
                 ((f->print_error_message)->control) = (p->value);
                 ((f->print_error_message)->title) = String("Entered value is not valid!");
                 ((f->print_error_message)->message) = String("Lengths must be floating-point numbers >= 0 m");
-                ((f->print_error_message)->f_ok) = NULL;
+                //((f->print_error_message)->f_ok) = NULL;
                 f->CallAfter(*(f->print_error_message));
                 
             }else{
@@ -10044,7 +10034,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             ((f->print_error_message)->control) = (p->box_unit);
             ((f->print_error_message)->title) = String("Unit not found in list!");
             ((f->print_error_message)->message) = String("Unit must be in list.");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->box_unit_ok) = false;
@@ -10138,7 +10128,8 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame->Show(true);
+            message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame ->Show(true);
             
             control->SetFocus();
             control->SetBackgroundColour(*wxRED);
@@ -10147,8 +10138,9 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
         
     }else{
         
-        message_frame->Show(true);
-         
+        message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame ->Show(true);
+        
     }
     
     //The temporary dialog window may have been closed, thus I set f->idling to false
@@ -10176,7 +10168,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<SightFrame, void>(this, NULL);
+    print_error_message = new PrintErrorMessage<SightFrame, Michele<ListFrame> >(this, parent->michele);
     
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));
@@ -10439,7 +10431,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<PositionFrame, void>(this, NULL);
+    print_error_message = new PrintErrorMessage<PositionFrame, Michele<ListFrame> >(this, parent->michele);
     
     
     //    wxMenu *menuFile = new wxMenu;
@@ -10565,7 +10557,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
-    print_error_message = new PrintErrorMessage<RouteFrame, void>(this, NULL);
+    print_error_message = new PrintErrorMessage<RouteFrame, Michele<ListFrame> >(this, parent->michele);
     
     //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
     if(route_in != NULL){
@@ -10998,7 +10990,8 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
 //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
-    
+    button_ok->Bind(wxEVT_BUTTON, *f_ok);
+
 
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
@@ -11097,14 +11090,6 @@ template<class T, typename FF_OK> PrintErrorMessage<T, FF_OK>::PrintErrorMessage
     f = f_in;
     f_ok = f_ok_in;
     
-
-    //delete this later
-    title.set(String(""), String("titolo"), String(""));
-    message.set(String(""), String("messaggio"), String(""));
-
-    message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
-
-    
 }
 
 
@@ -11123,6 +11108,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     plot = new Plot(catalog, String(""));
     
     GetAllCoastLineData();
+    
+    michele = new Michele<ListFrame>(this);
 
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -12014,7 +12001,7 @@ template<class T> void CheckYear::operator()(T&event){
             ((f->print_error_message)->control) = (p->year);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Year must be an unsigned integer");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->year_ok) = false;
@@ -12055,7 +12042,7 @@ template<class T> void CheckMonth::operator()(T&event){
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter     ((f->print_error_message)->control) = (p->month);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->month_ok) = false;
@@ -12124,7 +12111,7 @@ template<class T> void CheckDay::operator()(T& event){
                 ((f->print_error_message)->control) = (p->day);
                 ((f->print_error_message)->title) = String("Entered value is not valid!");
                 ((f->print_error_message)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
-                ((f->print_error_message)->f_ok) = NULL;
+                //((f->print_error_message)->f_ok) = NULL;
                 f->CallAfter(*(f->print_error_message));
                 
                 (p->day)->Enable(true);
@@ -12254,7 +12241,7 @@ template<class T> void CheckHour::operator()(T &event){
                 ((f->print_error_message)->control) = (p->hour);
                 ((f->print_error_message)->title) = String("Entered value is not valid!");
                 ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-                ((f->print_error_message)->f_ok) = NULL;
+                //((f->print_error_message)->f_ok) = NULL;
                 f->CallAfter(*(f->print_error_message));
                 
             }else{
@@ -12305,7 +12292,7 @@ template<class T> void CheckMinute::operator()(T &event){
             ((f->print_error_message)->control) = (p->minute);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->minute_ok) = false;
@@ -12347,7 +12334,7 @@ template<class T> void CheckSecond::operator()(T &event){
             ((f->print_error_message)->control) = (p->second);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->second_ok) = false;
@@ -12443,7 +12430,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Route type not found in list!");
             ((f->print_error_message)->message) = String("Route type must be loxodrome, orthodrome, or circle of equal altitude.");
-            ((f->print_error_message)->f_ok) = NULL;
+            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;

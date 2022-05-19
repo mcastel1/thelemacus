@@ -9481,12 +9481,18 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         }else{
             //in this case, position_drag_now is not a valid position
             
-            //print an info message
-            ((parent->print_error_message)->control) = NULL;
-            ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
-            ((parent->print_error_message)->message) = String("The drag must go through valid points.");
-//            ((parent->print_error_message)->f_ok) = NULL;
-            parent->CallAfter(*(parent->print_error_message));
+            if(!idling){
+                
+                idling = true;
+                
+                //print an info message
+                ((parent->print_error_message)->control) = NULL;
+                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
+                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
+                //            ((parent->print_error_message)->f_ok) = NULL;
+                parent->CallAfter(*(parent->print_error_message));
+                
+            }
             
         }
         

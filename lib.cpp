@@ -6927,7 +6927,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     }
     
     
-    print_error_message = new PrintErrorMessage<DrawPanel, UnsetIdling<ListFrame> >(this, parent->parent->unset_idling);
+    unset_idling = new UnsetIdling<DrawPanel>(this);
+    print_error_message = new PrintErrorMessage<DrawPanel, UnsetIdling<DrawPanel> >(this, unset_idling);
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -7905,7 +7906,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.close(prefix);
     
     idling = false;
-    print_error_message = new PrintErrorMessage<ChartFrame, UnsetIdling<ListFrame> >(this, parent->unset_idling);
+    unset_idling = new UnsetIdling<ChartFrame>(this);
+    print_error_message = new PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
     
 //    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *unset_idling);
 
@@ -9686,7 +9688,9 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
-    //do something 
+    //do something
+    
+    ((parent->parent)->idling) = false;
     
     event.Skip(true);
     
@@ -11109,7 +11113,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     GetAllCoastLineData();
     
-    unset_idling = new UnsetIdling<ListFrame>(this);
 
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display

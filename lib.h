@@ -1428,7 +1428,7 @@ public:
     
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
-    PrintErrorMessage<DrawPanel, UnsetIdling<ListFrame> >* print_error_message;
+    PrintErrorMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
     XYChart *chart;
     //a ChartDirector layer to draw splines on chart
     SplineLayer *spline_layer;
@@ -1462,6 +1462,7 @@ public:
     MemBlock mem_block;
     wxMemoryInputStream * memory_input_stream;
     wxBitmap* bitmap_image; 
+    UnsetIdling<DrawPanel>* unset_idling;
 
  
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
@@ -1512,6 +1513,7 @@ public:
 
     
     void ArrowDown(wxKeyEvent&);
+    
     
     DECLARE_EVENT_TABLE()
 };
@@ -1799,9 +1801,6 @@ public:
     //this referrs to the init file
     File file_init;
     
-    //this is created for testing
-    UnsetIdling<ListFrame> *unset_idling;
-
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);
     
@@ -1969,7 +1968,7 @@ public:
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     ProjectionField* projection;
-    PrintErrorMessage<ChartFrame, UnsetIdling<ListFrame> >* print_error_message;
+    PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     //this variable is true if the user has started drawing a selection rectangle on image, by right-clicking on image and thus forming one of the corners of the rectangle, and zero otherwise.
     unsigned int     //the zoom factor of the slider is not equal to the numerical value (slider->GetValue()) shown on the slider: zoom_factor = log(slider->GetValue()). This is the old zoom factor. 
     zoom_factor_old;
@@ -1996,6 +1995,10 @@ public:
     template<class T> void MoveLeft(T&);
     template<class T> void MoveRight(T&);
     template<class T> void Reset(T&);
+    
+    //this is created for testing
+    UnsetIdling<ChartFrame> *unset_idling;
+
 
     
 };

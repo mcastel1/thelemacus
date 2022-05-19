@@ -10135,7 +10135,7 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
         
         if(((control->GetBackgroundColour()) != *wxRED)){
             
-            message_frame ->Show(true);
+            message_frame->Show(true);
             
             control->SetFocus();
             control->SetBackgroundColour(*wxRED);
@@ -10144,7 +10144,7 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
         
     }else{
         
-        message_frame ->Show(true);
+        message_frame->Show(true);
         
     }
     

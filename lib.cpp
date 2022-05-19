@@ -9305,7 +9305,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
                         ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
                         
-                        ((parent->print_error_message)->f_ok) = NULL;
+//                        ((parent->print_error_message)->f_ok) = NULL;
                         
                         parent->CallAfter(*(parent->print_error_message));
                         

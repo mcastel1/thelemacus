@@ -8442,7 +8442,6 @@ template<class T>void CheckBody::operator()(T& event){
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            (f->idling) = false;
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Body not found in catalog!");
             ((f->print_error_message)->message) = String("Body must be in catalog.");
@@ -9414,7 +9413,17 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         rotation;
                         
                         //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
-                        route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                        
+                        if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                            
+                            //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));
+                            route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                            
+                        }else{
+                            
+                            route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                            
+                        }
                         
                     }
                     

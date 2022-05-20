@@ -9261,7 +9261,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     event.Skip(true);
     
 }
-
+ 
 void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
     if(wxGetMouseState().LeftIsDown()){

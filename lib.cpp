@@ -8172,6 +8172,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
 template<class T> void ChartFrame::Reset(T& event){
     
     idling = false;
+    (draw_panel->idling) = false;
     
     (draw_panel->x_min) = (draw_panel->x_min_0);
     (draw_panel->x_max) = (draw_panel->x_max_0);

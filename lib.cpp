@@ -9695,7 +9695,7 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
 }
 
-
+ 
 
 
 template<class P> void FunctionOnPressOk<P>::operator()(wxCommandEvent& event){

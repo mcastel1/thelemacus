@@ -9413,17 +9413,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         rotation;
                         
                         //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
-                        
-                        if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
-                            
-                            //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));
-                            route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
-                            
-                        }else{
-                            
-                            route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
-                            
-                        }
+                        route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
                         
                     }
                     

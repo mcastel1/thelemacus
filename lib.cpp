@@ -1010,14 +1010,14 @@ void Position::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listc
 
 //updates all the values in the GUI fields of item #i of listcontrol with the relative values of the non-GUI Position this
 void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
-   
+    
     int j;
     
     j=0;
     
     //update number column
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i+1)));
-
+    
     //update latitude column
     listcontrol->SetItem(i, j++, wxString(phi.to_string(String("NS"), display_precision, true)));
     
@@ -3030,7 +3030,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     j=0;
     //set number column
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i+1)));
-
+    
     //set body column
     listcontrol->SetItem(i, j++, wxString(body.name.value));
     
@@ -6926,7 +6926,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
         
     }
     
-    idling = false; 
+    idling = false;
     unset_idling = new UnsetIdling<DrawPanel>(this);
     print_error_message = new PrintErrorMessage<DrawPanel, UnsetIdling<DrawPanel> >(this, unset_idling);
     
@@ -6997,9 +6997,9 @@ void DrawPanel::PaintNow(){
                               (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame
                               ));
     
-//    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame));
-
-//    (parent->panel)->Fit();
+    //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame));
+    
+    //    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
     
     
@@ -7909,8 +7909,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     unset_idling = new UnsetIdling<ChartFrame>(this);
     print_error_message = new PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
     
-//    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *unset_idling);
-
+    //    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *unset_idling);
+    
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel);
@@ -7981,7 +7981,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (projection->name)->SetValue(wxString(default_projection.value));
     
     draw_panel->OnChooseProjection(dummy_event);
-        
+    
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
     (draw_panel->x_min_0) = (draw_panel->x_min);
     (draw_panel->x_max_0) = (draw_panel->x_max);
@@ -7995,8 +7995,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->rotation_0) = (draw_panel->rotation);
     
     
-//    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
-//
+    //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
+    //
     
     sizer_buttons->Add(empty_text_1);
     sizer_buttons->Add(button_up);
@@ -8026,8 +8026,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
-//    CenterOnScreen();
+    
+    //    CenterOnScreen();
     
 }
 
@@ -8097,9 +8097,9 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     
     ((draw_panel->plot)->lambda_min).normalize();
     ((draw_panel->plot)->lambda_max).normalize();
-        
+    
     (draw_panel->*(draw_panel->Set_x_y_min_max))();
-
+    
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
@@ -8159,7 +8159,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
     ((draw_panel->plot)->lambda_max).normalize();
     
     (draw_panel->*(draw_panel->Set_x_y_min_max))();
-
+    
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
@@ -8442,7 +8442,7 @@ template<class T>void CheckBody::operator()(T& event){
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Body not found in catalog!");
             ((f->print_error_message)->message) = String("Body must be in catalog.");
-//            //((f->print_error_message)->f_ok) = NULL;
+            //            //((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -8485,7 +8485,7 @@ template<class T> void CheckLimb::operator()(T &event){
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Limb not valid!");
             ((f->print_error_message)->message) = String("Limb must be upper, lower or center.");
-//            ((f->print_error_message)->f_ok) = NULL;
+            //            ((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->ok) = false;
@@ -8566,7 +8566,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             ((f->print_error_message)->control) = (p->sign);
             ((f->print_error_message)->title) = String("Sign is not valid!");
             ((f->print_error_message)->message) = String("Sign must be +-, NS or EW.");
-//            ((f->print_error_message)->f_ok) = NULL;
+            //            ((f->print_error_message)->f_ok) = NULL;
             f->CallAfter(*(f->print_error_message));
             
             (p->sign_ok) = false;
@@ -8829,14 +8829,14 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
-
+        
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
-                
+        
     }
     
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
@@ -8860,7 +8860,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
     }
     
     (this->*(Set_x_y_min_max))();
-
+    
     
     //change thsis: this should be called only if name->GetValue has changed.
     (this->*Draw)();
@@ -8889,10 +8889,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //    cout << "\nMouse moved";
     
-//    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-//    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
-//    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
-
+    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
+    //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
+    //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
+    
     //update the instantaneous position of the mouse on the chart
     s.str("");
     if(GetMouseGeoPosition(&p)){;
@@ -8909,7 +8909,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         PaintNow();
     }
-     
+    
     if(!mouse_dragging){
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
@@ -8940,10 +8940,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                     if(/*to recognize that the mouse is hivering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ ( ((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l+1]).x) )
                        
                        &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
-
-                       ( ((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l+1]).x))) ||
                        
-                       ((((points_route_list[i][j][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))) )
+                       ( ((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l+1]).x))) ||
+                        
+                        ((((points_route_list[i][j][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))) )
                        
                        &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
                        
@@ -9010,11 +9010,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
         //given that the Route under consideration has changed, I re-tabulate the Routes and rePaint the charts
         for(i=0; i<((parent->parent)->chart_frame).size(); i++){
-                                    
+            
             ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
             
         }
-                
+        
     }
     
     event.Skip(true);
@@ -9087,12 +9087,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (this->*Draw)();
                 PaintNow();
                 
-                //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Chart outside boundaries!");
-                (print_error_message->message) = String("The chart must lie within the boundaries.");
-//                (print_error_message->f_ok) = NULL;
-                (*print_error_message)();
+                if(!idling){
+                    
+                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                    idling = true;
+                    (print_error_message->control) = NULL;
+                    (print_error_message->title) = String("Chart outside boundaries!");
+                    (print_error_message->message) = String("The chart must lie within the boundaries.");
+                    (*print_error_message)();
+                    
+                }
                 
                 
             }
@@ -9123,12 +9127,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 TabulateRoutes_Mercator();
                 PaintNow();
                 
-                //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Route ground or start position outside plot area!");
-                (print_error_message->message) = String("Route start or start position must lie within the plot area.");
-//                (print_error_message->f_ok) = NULL;
-                (*print_error_message)();
+                if(!idling){
+                    
+                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                    idling = true;
+                    (print_error_message->control) = NULL;
+                    (print_error_message->title) = String("Route ground or start position outside plot area!");
+                    (print_error_message->message) = String("Route start or start position must lie within the plot area.");
+                    (*print_error_message)();
+                    
+                }
                 
             }
             
@@ -9145,13 +9153,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 //given that the position under consideration has changed, I re-pain the chart
                 PaintNow();
                 
-                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-                (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Position outside plot area!");
-                (print_error_message->message) = String("The position must lie within the plot area.");
-                //(print_error_message->f_ok) = NULL;
-                (*print_error_message)();
-                
+                if(!idling){
+                    
+                    //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+                    idling = true;
+                    (print_error_message->control) = NULL;
+                    (print_error_message->title) = String("Position outside plot area!");
+                    (print_error_message->message) = String("The position must lie within the plot area.");
+                    (*print_error_message)();
+                    
+                }
                 
             }
             
@@ -9244,12 +9255,17 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             s.str("");
             s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
             
+            
+            if(!idling){
+                
             //set the title and message for the functor print_error_message, and then call the functor
+                idling = true;
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Zoom level exceeded its maximal value!");
             (print_error_message->message) = String(s.str().c_str());
-            //(print_error_message->f_ok) = NULL;
             (*print_error_message)();
+                
+            }
             
         }
         
@@ -9300,11 +9316,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         
                         //print an info message
-                        ((parent->print_error_message)->control) = NULL;
-                        ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
-                        ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
-//                        ((parent->print_error_message)->f_ok) = NULL;
-                        parent->CallAfter(*(parent->print_error_message));
+                        if(!idling){
+                            
+                            idling = true;
+                            ((parent->print_error_message)->control) = NULL;
+                            ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
+                            ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
+                            parent->CallAfter(*(parent->print_error_message));
+                            
+                        }
                         
                     }
                     
@@ -9386,7 +9406,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 //in this case I am moving a position / route (the mouse is over a route or a position while dragging)
                 
                 unsigned int i;
-
+                
                 if(((parent->parent)->highlighted_route) != -1){
                     //in this case, the mouse is over a route
                     
@@ -9434,7 +9454,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
                     for(i=0; i<((parent->parent)->chart_frame).size(); i++){
-                                                
+                        
                         (((((parent->parent)->chart_frame)[i])->draw_panel)->*((((parent->parent)->chart_frame)[i])->draw_panel)->TabulateRoutes)();
                         ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
                         
@@ -9469,7 +9489,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     //given that the Position under consideration has changed, I re-paint the charts
                     for(i=0; i<((parent->parent)->chart_frame).size(); i++){
-                                                
+                        
                         ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
                         
                     }
@@ -9482,7 +9502,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             //in this case, position_drag_now is not a valid position
             
             if(!idling){
-                                
+                
                 //print an info message
                 idling = true;
                 ((parent->print_error_message)->control) = NULL;
@@ -9550,12 +9570,16 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             parent->UpdateSlider();
             parent->UpdateSliderLabel();
             
-            //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-            (print_error_message->control) = NULL;
-            (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
-            (print_error_message->message) = String("The chart must lie within the boundaries.");
-            //(print_error_message->f_ok) = NULL;
-            (*print_error_message)();
+            if(!idling){
+                
+                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+                idling = true;
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
+                (print_error_message->message) = String("The chart must lie within the boundaries.");
+                (*print_error_message)();
+                
+            }
             
         }else{
             //if the slide operation is valid, I update everything and re-draw the chart
@@ -9706,7 +9730,7 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
 
 template<class P> void FunctionOnPressOk<P>::operator()(wxCommandEvent& event){
     
-//do something
+    //do something
     
     event.Skip(true);
     
@@ -10131,7 +10155,7 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
     
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-    f->SetIdling(true);
+    //    f->SetIdling(true);
     
     if(control != NULL){
         
@@ -10153,7 +10177,7 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
     }
     
     //The temporary dialog window may have been closed, thus I set f->idling to false
-    f->SetIdling(false);
+    //    f->SetIdling(false);
     
     
     
@@ -10980,7 +11004,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
-
+    
     //image
     handler = new wxPNGHandler;
     wxImage::AddHandler(handler);
@@ -11000,11 +11024,11 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-//    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
+    //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
-
-
+    
+    
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
@@ -11121,7 +11145,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     GetAllCoastLineData();
     
-
+    
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
@@ -11838,7 +11862,7 @@ void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
 }
 
- 
+
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){
     

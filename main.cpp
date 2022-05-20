@@ -38,7 +38,6 @@
  - try DrawPanel::OnScroll -> ChartFrame::OnScroll to avoid multiple pop-ups of error window
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - add margins in ChartFrame
- - rename ListFrame::chart_frame -> chart_frames
  */
 
 
@@ -65,12 +64,12 @@ bool MyApp::OnInit(){
     //allocate and show the chart frames
     n_chart_frames.read_from_file(String("number chart frames"), String(path_file_init), String(""));
     (list_frame->chart_frame).resize(n_chart_frames.value);
-    for(i=0; i<(list_frame->chart_frame).size(); i++){
+    for(i=0; i<(list_frame->chart_frames).size(); i++){
         
         s.str("");
         s << "Chart #" << i+1;
         
-        (list_frame->chart_frame)[i] = new ChartFrame(
+        (list_frame->chart_frames)[i] = new ChartFrame(
                                                       list_frame,
                                                       s.str(),
                                                       /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
@@ -81,7 +80,7 @@ bool MyApp::OnInit(){
                                                       wxDefaultSize,
                                                       String("")
                                                       );
-        (list_frame->chart_frame)[i]->Show(true);
+        (list_frame->chart_frames)[i]->Show(true);
         
     }
     

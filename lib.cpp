@@ -9009,9 +9009,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         
         //Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
         //given that the Route under consideration has changed, I re-tabulate the Routes and rePaint the charts
-        for(i=0; i<((parent->parent)->chart_frame).size(); i++){
+        for(i=0; i<((parent->parent)->chart_frames).size(); i++){
             
-            ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
+            ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
             
         }
         
@@ -9428,10 +9428,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
                     
                     //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
-                    for(i=0; i<((parent->parent)->chart_frame).size(); i++){
+                    for(i=0; i<((parent->parent)->chart_frames).size(); i++){
                         
-                        (((((parent->parent)->chart_frame)[i])->draw_panel)->*((((parent->parent)->chart_frame)[i])->draw_panel)->TabulateRoutes)();
-                        ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
+                        (((((parent->parent)->chart_frames)[i])->draw_panel)->*((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes)();
+                        ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
                         
                     }
                     
@@ -9463,9 +9463,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                     
                     //given that the Position under consideration has changed, I re-paint the charts
-                    for(i=0; i<((parent->parent)->chart_frame).size(); i++){
+                    for(i=0; i<((parent->parent)->chart_frames).size(); i++){
                         
-                        ((((parent->parent)->chart_frame)[i])->draw_panel)->PaintNow();
+                        ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
                         
                     }
                     
@@ -10794,10 +10794,10 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
     
     //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    for(i=0; i<(parent->chart_frame).size(); i++){
+    for(i=0; i<(parent->chart_frames).size(); i++){
         
-        ((((parent->chart_frame)[i])->draw_panel)->*((((parent->chart_frame)[i])->draw_panel)->Draw))();
-        (((parent->chart_frame)[i])->draw_panel)->PaintNow();
+        ((((parent->chart_frames)[i])->draw_panel)->*((((parent->chart_frames)[i])->draw_panel)->Draw))();
+        (((parent->chart_frames)[i])->draw_panel)->PaintNow();
         
     }
     
@@ -10829,9 +10829,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     //if I am adding a new Route, I resize points_route_list to add a new element to it
     if(position_in_listcontrol_routes == -1){
         
-        for(i=0; i<(parent->chart_frame).size(); i++){
+        for(i=0; i<(parent->chart_frames).size(); i++){
             
-            ((((parent->chart_frame)[i])->draw_panel)->points_route_list).resize(((((parent->chart_frame)[i])->draw_panel)->points_route_list).size() + 1);
+            ((((parent->chart_frames)[i])->draw_panel)->points_route_list).resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list).size() + 1);
             
         }
     }
@@ -10842,11 +10842,11 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     //    parent->plot->print(true, String(""), cout);
     
-    for(i=0; i<(parent->chart_frame).size(); i++){
+    for(i=0; i<(parent->chart_frames).size(); i++){
         
         //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-        ((((parent->chart_frame)[i])->draw_panel)->*((((parent->chart_frame)[i])->draw_panel)->Draw))();
-        (((parent->chart_frame)[i])->draw_panel)->PaintNow();
+        ((((parent->chart_frames)[i])->draw_panel)->*((((parent->chart_frames)[i])->draw_panel)->Draw))();
+        (((parent->chart_frames)[i])->draw_panel)->PaintNow();
         
     }
     
@@ -11702,9 +11702,9 @@ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
     highlighted_route = ((((plot->sight_list)[i]).related_route).value);
     
     
-    for(i=0; i<chart_frame.size(); i++){
+    for(i=0; i<chart_frames.size(); i++){
         
-        ((chart_frame[i])->draw_panel)->PaintNow();
+        ((chart_frames[i])->draw_panel)->PaintNow();
         
     }
     
@@ -11800,9 +11800,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
     }
     
-    for(i=0; i<chart_frame.size(); i++){
+    for(i=0; i<chart_frames.size(); i++){
         
-        ((chart_frame[i])->draw_panel)->PaintNow();
+        ((chart_frames[i])->draw_panel)->PaintNow();
         
     }
     
@@ -11817,9 +11817,9 @@ void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
     MousePositionOnListControl(listcontrol_positions, &highlighted_position);
     
-    for(i=0; i<chart_frame.size(); i++){
+    for(i=0; i<chart_frames.size(); i++){
         
-        ((chart_frame[i])->draw_panel)->PaintNow();
+        ((chart_frames[i])->draw_panel)->PaintNow();
         
     }
     
@@ -12547,11 +12547,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     parent->plot->print(true, String(""), cout);
     
     
-    for(i=0; i<(parent->chart_frame).size(); i++){
+    for(i=0; i<(parent->chart_frames).size(); i++){
         
         //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-        ((((parent->chart_frame)[i])->draw_panel)->*((((parent->chart_frame)[i])->draw_panel)->Draw))();
-        (((parent->chart_frame)[i])->draw_panel)->PaintNow();
+        ((((parent->chart_frames)[i])->draw_panel)->*((((parent->chart_frames)[i])->draw_panel)->Draw))();
+        (((parent->chart_frames)[i])->draw_panel)->PaintNow();
         
     }
     

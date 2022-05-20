@@ -8171,6 +8171,8 @@ template<class T> void ChartFrame::MoveRight(T& event){
 //resets the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event){
     
+    idling = false;
+    
     (draw_panel->x_min) = (draw_panel->x_min_0);
     (draw_panel->x_max) = (draw_panel->x_max_0);
     (draw_panel->y_min) = (draw_panel->y_min_0);

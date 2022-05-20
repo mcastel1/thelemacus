@@ -9092,7 +9092,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 if(!idling){
                     
                     //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    idling = true;
+                    
                     (print_error_message->control) = NULL;
                     (print_error_message->title) = String("Chart outside boundaries!");
                     (print_error_message->message) = String("The chart must lie within the boundaries.");
@@ -9132,7 +9132,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 if(!idling){
                     
                     //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    idling = true;
+                    
                     (print_error_message->control) = NULL;
                     (print_error_message->title) = String("Route ground or start position outside plot area!");
                     (print_error_message->message) = String("Route start or start position must lie within the plot area.");
@@ -9158,7 +9158,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 if(!idling){
                     
                     //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    idling = true;
+                    
                     (print_error_message->control) = NULL;
                     (print_error_message->title) = String("Position outside plot area!");
                     (print_error_message->message) = String("The position must lie within the plot area.");
@@ -9261,7 +9261,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             if(!idling){
                 
             //set the title and message for the functor print_error_message, and then call the functor
-                idling = true;
+                
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Zoom level exceeded its maximal value!");
             (print_error_message->message) = String(s.str().c_str());
@@ -9320,7 +9320,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //print an info message
                         if(!idling){
                             
-                            idling = true;
+                            
                             ((parent->print_error_message)->control) = NULL;
                             ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
                             ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
@@ -9506,7 +9506,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             if(!idling){
                 
                 //print an info message
-                idling = true;
+                
                 ((parent->print_error_message)->control) = NULL;
                 ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
                 ((parent->print_error_message)->message) = String("The drag must go through valid points.");
@@ -9575,7 +9575,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             if(!idling){
                 
                 //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-                idling = true;
+                
                 (print_error_message->control) = NULL;
                 (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
                 (print_error_message->message) = String("The chart must lie within the boundaries.");
@@ -10157,7 +10157,7 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
     
     
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-    //    f->SetIdling(true);
+    (f->idling = true);
     
     if(control != NULL){
         

@@ -9089,17 +9089,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 (this->*Draw)();
                 PaintNow();
                 
-                if(!idling){
-                    
-                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    
-                    (print_error_message->control) = NULL;
-                    (print_error_message->title) = String("Chart outside boundaries!");
-                    (print_error_message->message) = String("The chart must lie within the boundaries.");
-                    (*print_error_message)();
-                    
-                }
-                
+                //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("Chart outside boundaries!");
+                (print_error_message->message) = String("The chart must lie within the boundaries.");
+                (*print_error_message)();
                 
             }
             
@@ -9129,16 +9123,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 TabulateRoutes_Mercator();
                 PaintNow();
                 
-                if(!idling){
-                    
-                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    
-                    (print_error_message->control) = NULL;
-                    (print_error_message->title) = String("Route ground or start position outside plot area!");
-                    (print_error_message->message) = String("Route start or start position must lie within the plot area.");
-                    (*print_error_message)();
-                    
-                }
+                //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("Route ground or start position outside plot area!");
+                (print_error_message->message) = String("Route start or start position must lie within the plot area.");
+                (*print_error_message)();
                 
             }
             
@@ -9155,16 +9144,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 //given that the position under consideration has changed, I re-pain the chart
                 PaintNow();
                 
-                if(!idling){
-                    
-                    //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    
-                    (print_error_message->control) = NULL;
-                    (print_error_message->title) = String("Position outside plot area!");
-                    (print_error_message->message) = String("The position must lie within the plot area.");
-                    (*print_error_message)();
-                    
-                }
+                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("Position outside plot area!");
+                (print_error_message->message) = String("The position must lie within the plot area.");
+                (*print_error_message)();
                 
             }
             
@@ -9257,17 +9241,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             s.str("");
             s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
             
-            
-            if(!idling){
-                
             //set the title and message for the functor print_error_message, and then call the functor
-                
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Zoom level exceeded its maximal value!");
             (print_error_message->message) = String(s.str().c_str());
             (*print_error_message)();
-                
-            }
             
         }
         
@@ -9318,15 +9296,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         
                         //print an info message
-                        if(!idling){
-                            
-                            
-                            ((parent->print_error_message)->control) = NULL;
-                            ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
-                            ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
-                            parent->CallAfter(*(parent->print_error_message));
-                            
-                        }
+                        
+                        ((parent->print_error_message)->control) = NULL;
+                        ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
+                        ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
+                        parent->CallAfter(*(parent->print_error_message));
+                        
                         
                     }
                     
@@ -9503,17 +9478,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
         }else{
             //in this case, position_drag_now is not a valid position
             
-            if(!idling){
-                
-                //print an info message
-                
-                ((parent->print_error_message)->control) = NULL;
-                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
-                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
-                //            ((parent->print_error_message)->f_ok) = NULL;
-                parent->CallAfter(*(parent->print_error_message));
-                
-            }
+            //print an info message
+            
+            ((parent->print_error_message)->control) = NULL;
+            ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
+            ((parent->print_error_message)->message) = String("The drag must go through valid points.");
+            parent->CallAfter(*(parent->print_error_message));
             
         }
         
@@ -9572,16 +9542,13 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             parent->UpdateSlider();
             parent->UpdateSliderLabel();
             
-            if(!idling){
-                
-                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-                
-                (print_error_message->control) = NULL;
-                (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
-                (print_error_message->message) = String("The chart must lie within the boundaries.");
-                (*print_error_message)();
-                
-            }
+            //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+            (print_error_message->control) = NULL;
+            (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
+            (print_error_message->message) = String("The chart must lie within the boundaries.");
+            (*print_error_message)();
+            
+            
             
         }else{
             //if the slide operation is valid, I update everything and re-draw the chart
@@ -10156,32 +10123,34 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(void){
     
     
-    //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-    (f->idling = true);
-    
-    if(control != NULL){
+    if(!(f->idling)){
         
-        if(((control->GetBackgroundColour()) != *wxRED)){
+        //I may be about to prompt a temporary dialog window, thus I set f->idling to true
+        (f->idling = true);
+        
+        if(control != NULL){
+            
+            if(((control->GetBackgroundColour()) != *wxRED)){
+                
+                message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+                message_frame ->Show(true);
+                
+                control->SetFocus();
+                control->SetBackgroundColour(*wxRED);
+                
+            }
+            
+        }else{
             
             message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
-            control->SetFocus();
-            control->SetBackgroundColour(*wxRED);
-            
         }
         
-    }else{
-        
-        message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
-        message_frame ->Show(true);
+        //The temporary dialog window may have been closed, thus I set f->idling to false
+        //    f->SetIdling(false);
         
     }
-    
-    //The temporary dialog window may have been closed, thus I set f->idling to false
-    //    f->SetIdling(false);
-    
-    
     
 }
 

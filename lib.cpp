@@ -8439,6 +8439,7 @@ template<class T>void CheckBody::operator()(T& event){
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            (f->idling) = false;
             ((f->print_error_message)->control) = (p->name);
             ((f->print_error_message)->title) = String("Body not found in catalog!");
             ((f->print_error_message)->message) = String("Body must be in catalog.");

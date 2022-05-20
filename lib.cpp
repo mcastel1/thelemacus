@@ -10128,11 +10128,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 
 
 template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(void){
-    
-    
-    //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-    f->SetIdling(true);
-    
+
     if(control != NULL){
         
         if(((control->GetBackgroundColour()) != *wxRED)){
@@ -10151,11 +10147,6 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
         message_frame ->Show(true);
         
     }
-    
-    //The temporary dialog window may have been closed, thus I set f->idling to false
-    f->SetIdling(false);
-    
-    
     
 }
 

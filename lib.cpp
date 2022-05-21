@@ -7950,7 +7950,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     //initialize the variable neededed for slider
     zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, floor_exp(zoom_factor_old - 1), floor_exp(zoom_factor_old - 1), floor_exp((zoom_factor_max.value) - 1), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -8378,13 +8378,20 @@ bool ChartFrame::ZoomFactor(double delta_x, double* f){
 void ChartFrame::UpdateSlider(void){
     
     double f;
+    int temp;
     
     //compute the zooming factor of the chart and write it into zoom_factor_old
     ZoomFactor(((draw_panel->x_max)-(draw_panel->x_min)), &f);
-    zoom_factor_old = ((unsigned int)f);
+    //    zoom_factor_old = ((unsigned int)f);
     
+    //a tentative value for the value of slizer
+    temp = round(exp(((zoom_factor.value) - 1.0)/( (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax()))) )));
     
-    slider->SetValue(floor_exp(zoom_factor_old - 1));
+    //if the tentative value exceeds the slider boundaries, I set it to the respective boundary
+    if(temp > (slider->GetMax())){temp = (slider->GetMax());}
+    if(temp < 1){temp = 1;}
+    
+    slider->SetValue(temp);
     
     UpdateSliderLabel();
     
@@ -9518,6 +9525,8 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
      1 <= n <= n_max
      
      z = a*log(n) + b
+     
+     n = exp((z-b)/a)
      
      b=1, a=(zoom_factor_max -1)/log(n_max)
      

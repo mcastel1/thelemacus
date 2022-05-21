@@ -9535,11 +9535,21 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
      
      */
     
-    //the zooming ration relative to the last scroll
-    double r;
     
     cout << "Slider getvalue = " << ((double)((parent->slider)->GetValue())) << "\n";
-    cout << "value slider old = " << ((double)(parent->zoom_factor_old)) << "\n";
+    cout << "Zoom factor = " << ((double)(parent->zoom_factor).value) << "\n";
+    
+    //set zoom_factor from the value of slider
+    (parent->zoom_factor).set(
+                    String("Newly set zoom factor"),
+                    1.0 + (-1.0 + ((parent->zoom_factor_max).value))/Log(nmax)*log(((double)((parent->slider)->GetValue())))
+                    ,
+                    String("")
+                    );
+    //if the resulting value of zoom_factor is outside the boundaries I set it back to the rspective boundary
+    if(((parent->zoom_factor).value) < 1.0){((parent->zoom_factor).value) = 1.0;}
+    if(((parent->zoom_factor).value) > ((parent->zoom_factor_max).value)){((parent->zoom_factor).value) = ((parent->zoom_factor_max).value);}
+//sign
     
     r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)((parent->slider)->GetValue()))));
     

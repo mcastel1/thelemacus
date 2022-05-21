@@ -6885,6 +6885,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     rp_now_drag = gsl_vector_alloc(3);
     rp_end_drag = gsl_vector_alloc(3);
     
+    //set the zoom factor to 1 for the initial configuration of the projection
+    zoom_factor.set(String(""), 1.0, String(""));
+    
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;

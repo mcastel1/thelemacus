@@ -7979,11 +7979,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
     draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
-    draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
+    draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUpOnDrawPanel), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
-    
+
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -9076,7 +9076,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
 }
 
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
-void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
+void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
     
     SetCursor(*wxCROSS_CURSOR);
     

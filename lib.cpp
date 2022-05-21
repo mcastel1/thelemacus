@@ -6899,9 +6899,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     rp_now_drag = gsl_vector_alloc(3);
     rp_end_drag = gsl_vector_alloc(3);
     
-    //set the zoom factor to 1 for the initial configuration of the projection
-    zoom_factor.set(String(""), 1.0, String(""));
-    
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
     selection_rectangle = false;
     mouse_dragging = false;
@@ -7907,10 +7904,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     
+    //set the zoom factor to 1 for the initial configuration of the projection
+    zoom_factor.set(String(""), 1.0, String(""));
+    
     file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
     zoom_factor_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
-    
+  
     //read relative_displacement from file_init
     relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
     

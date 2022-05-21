@@ -175,6 +175,20 @@ void File::close(String prefix){
     
 }
 
+void Double::set(String name, double x, String prefix){
+    
+    String new_prefix;
+    
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    value = x;
+    
+    if(name != String("")){print(name, prefix, cout);}
+    
+}
+
+
 
 void Double::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     

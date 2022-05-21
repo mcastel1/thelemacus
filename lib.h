@@ -553,6 +553,7 @@ public:
     
     void read_from_file(String, File&, bool, String);
     void read_from_file(String, String, String);
+    void set(String, double, String);
     void print(String, String, ostream&);
     Double operator+(const Double&);
     

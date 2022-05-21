@@ -9530,9 +9530,6 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
      
      b=1, a=(zoom_factor_max -1)/log(n_max)
      
-     
-     
-     
      */
     
     
@@ -9551,7 +9548,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     if(((parent->zoom_factor).value) > ((parent->zoom_factor_max).value)){((parent->zoom_factor).value) = ((parent->zoom_factor_max).value);}
 //sign
     
-    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)((parent->slider)->GetValue()))));
+//    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)((parent->slider)->GetValue()))));
     
     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
     x_min_old = x_min;

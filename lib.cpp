@@ -8374,7 +8374,7 @@ bool ChartFrame::ZoomFactor(double delta_x, double* f){
     
 }
 
-//this function updates the slider according to the zooming factor of the chart.
+//this function updates the slider according to the zooming factor of the chart: it sets the slider value to the integer value closest to zoom_factor
 void ChartFrame::UpdateSlider(void){
     
     double f;

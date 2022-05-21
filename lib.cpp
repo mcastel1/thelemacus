@@ -7904,6 +7904,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     (parent->plot)->show(true, String(""));
     
+    mouse_scrolling = false;
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
     
@@ -7982,7 +7983,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUpOnDrawPanel), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     
-    slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(DrawPanel::OnScroll), draw_panel);
+    slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll), this);
+    slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
 
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -9182,6 +9184,20 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
     
 }
 
+
+void ChartFrame::OnMouseLeftUpOnSlider(wxMouseEvent &event){
+    
+    
+    //if the mouse left button was previously down because of a scrolling event, then the sliding event is now over, and I set mouse_sliding = false;
+    if(mouse_scrolling){mouse_scrolling = false;}
+    
+ 
+    
+    event.Skip(true);
+    
+}
+
+
 void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     
     stringstream s;
@@ -9515,7 +9531,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
 } 
 
-void DrawPanel::OnScroll(wxScrollEvent &event){
+void ChartFrame::OnScroll(wxScrollEvent &event){
     
     /*
      n = value of slider,
@@ -9533,23 +9549,23 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
      */
     
     
-    cout << "Slider getvalue = " << ((double)((parent->slider)->GetValue())) << "\n";
-    cout << "Zoom factor = " << ((double)(parent->zoom_factor).value) << "\n";
+    cout << "Slider getvalue = " << ((double)(slider->GetValue())) << "\n";
+    cout << "Zoom factor = " << ((double)zoom_factor.value) << "\n";
     
     //set zoom_factor from the value of slider
-    (parent->zoom_factor).set(
+    zoom_factor.set(
                     String("Newly set zoom factor"),
-                    1.0 + (-1.0 + ((parent->zoom_factor_max).value))/Log(nmax)*log(((double)((parent->slider)->GetValue())))
+                    1.0 + (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax())))*log(((double)(slider->GetValue())))
                     ,
                     String("")
                     );
     //if the resulting value of zoom_factor is outside the boundaries I set it back to the rspective boundary
-    if(((parent->zoom_factor).value) < 1.0){((parent->zoom_factor).value) = 1.0;}
-    if(((parent->zoom_factor).value) > ((parent->zoom_factor_max).value)){((parent->zoom_factor).value) = ((parent->zoom_factor_max).value);}
+    if((zoom_factor.value) < 1.0){(zoom_factor.value) = 1.0;}
+    if((zoom_factor.value) > (zoom_factor_max.value)){(zoom_factor.value) = (zoom_factor_max.value);}
 //sign
     
-//    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)((parent->slider)->GetValue()))));
-    
+//    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)(slider->GetValue()))));
+    /*
     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
     x_min_old = x_min;
     x_max_old = x_max;
@@ -9603,7 +9619,7 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
             Update_lambda_phi_min_max();
             
             //update parent->zoom_factor_old
-            (parent->zoom_factor_old) = 1.0 + log((double)((parent->slider)->GetValue()));
+            (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
             
             (this->*Draw)();
             PaintNow();
@@ -9616,13 +9632,14 @@ void DrawPanel::OnScroll(wxScrollEvent &event){
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
         
         //update parent->zoom_factor_old
-        (parent->zoom_factor_old) = 1.0 + log((double)((parent->slider)->GetValue()));
+        (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
         
         (this->*Draw)();
         PaintNow();
         parent->UpdateSliderLabel();
         
     }
+     */
     
     event.Skip(true);
     

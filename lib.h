@@ -1446,7 +1446,7 @@ public:
     Rotation rotation, /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the initial orientation of the earth*/rotation_0;
     Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructed*/d, d_0, /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
     wxStaticText*text_position_start, *text_position_end;
-    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*this is true if the user is currently scrolling*/scrolling;
+    bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling;
     Position /*these are the positions where the right mouse button is clicked at the beginning and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_end, /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis;
     Angle rotation_angle;
     Projection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/start_selection, end_selection;
@@ -1509,7 +1509,6 @@ public:
     void OnMouseLeftUpOnDrawPanel(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
-    void OnScroll(wxScrollEvent&);
     void OnChooseProjection(wxCommandEvent&);
 
     
@@ -1981,7 +1980,7 @@ public:
     //in these vectors, I store the 2d coordindates of the Mercator projection and of the 3D rendering, respectively
     vector<double> x, y, x_3d, y_3d;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
-    bool idling;
+    bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling;
     //This is the actual value of the maximal zoom factor allowed
     Int zoom_factor_max;
    
@@ -1993,6 +1992,8 @@ public:
     void UpdateSlider(void);
     bool ZoomFactor(double, double*);
     void UpdateSliderLabel(void);
+    void OnMouseLeftUpOnSlider(wxMouseEvent&);
+    void OnScroll(wxScrollEvent&);
     void SetIdling(bool);
     void AllOk(void);
     

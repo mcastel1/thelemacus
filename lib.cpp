@@ -9493,6 +9493,22 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void DrawPanel::OnScroll(wxScrollEvent &event){
     
+    /*
+     n = value of slider,
+     z = zoom factor,
+     
+     1 <= z <= zoom_factor_max
+     1 <= n <= n_max
+     
+     z = a*log(n) + b
+     
+     b=1, a=(zoom_factor_max -1)/log(n_max)
+     
+     
+     
+     
+     */
+    
     //the zooming ration relative to the last scroll
     double r;
     

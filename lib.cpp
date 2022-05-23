@@ -7911,7 +7911,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
     zoom_factor_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
-  
+    
     //read relative_displacement from file_init
     relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
     
@@ -7949,7 +7949,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //initialize the variable neededed for slider
-//    zoom_factor_old = 1 + epsilon_double;
+    //    zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
@@ -7986,7 +7986,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll), this);
     slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
     slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
-
+    
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -9310,7 +9310,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     event.Skip(true);
     
 }
- 
+
 void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
     if(wxGetMouseState().LeftIsDown()){
@@ -9574,21 +9574,25 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     //if the resulting value of zoom_factor is outside the boundaries I set it back to the rspective boundary
     if((zoom_factor.value) < 1.0){(zoom_factor.value) = 1.0;}
     if((zoom_factor.value) > (zoom_factor_max.value)){(zoom_factor.value) = (zoom_factor_max.value);}
-//sign
+    //sign
     
-//    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)(slider->GetValue()))));
-    /*
     //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
-    x_min_old = x_min;
-    x_max_old = x_max;
-    y_min_old = y_min;
-    y_max_old = y_max;
+    (draw_panel->x_min_old) = (draw_panel->x_min);
+    (draw_panel->x_max_old) = (draw_panel->x_max);
+    (draw_panel->y_min_old) = (draw_panel->y_min);
+    (draw_panel->y_max_old) = (draw_panel->y_max);
     
     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-    x_min = (x_max_old + x_min_old)/2.0 - ( (x_max_old-x_min_old)/2.0 * r );
-    x_max = (x_max_old + x_min_old)/2.0 + ( (x_max_old-x_min_old)/2.0 * r );
-    y_min = (y_max_old + y_min_old)/2.0 - ( (y_max_old-y_min_old)/2.0 * r );
-    y_max = (y_max_old + y_min_old)/2.0 + ( (y_max_old-y_min_old)/2.0 * r );
+    //cahnge this later
+    (draw_panel->x_min) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 - ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 * (zoom_factor.value) );
+    (draw_panel->x_max) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 + ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 * (zoom_factor.value) );
+    (draw_panel->y_min) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 - ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 * (zoom_factor.value) );
+    (draw_panel->y_max) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 + ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 * (zoom_factor.value) );
+    
+    
+    
+    //    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)(slider->GetValue()))));
+    
     
     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
         
@@ -9600,22 +9604,36 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             x_span = 2.0*M_PI - (x_min-x_max);
         }
         
-        if(!((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_span < 2.0*M_PI))){
-            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+        if(((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_span < 2.0*M_PI))){
             
-            x_min = x_min_old;
-            x_max = x_max_old;
-            y_min = y_min_old;
-            y_max = y_max_old;
-            
+            //if the slide operation is valid, I update everything and re-draw the chart
             Update_lambda_phi_min_max();
-            
-            //put the slider back to the value before the scroll
+            ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
+
+            //            //update parent->zoom_factor_old
+            //            (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
             
             (this->*Draw)();
             PaintNow();
-            parent->UpdateSlider();
-            parent->UpdateSliderLabel();
+            UpdateSlider();
+            UpdateSliderLabel();
+            
+        }else{
+            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+            
+            (draw_panel->x_min) = (draw_panel->x_min_old);
+            (draw_panel->x_max) = (draw_panel->x_max_old);
+            (draw_panel->y_min) = (draw_panel->y_min_old);
+            (draw_panel->y_max) = (draw_panel->y_max_old);
+            
+            Update_lambda_phi_min_max();
+            ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
+            
+            //put the slider back to the value before the scroll
+            (this->*Draw)();
+            PaintNow();
+            UpdateSlider();
+            UpdateSliderLabel();
             
             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;
@@ -9625,34 +9643,22 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             
             
             
-        }else{
-            //if the slide operation is valid, I update everything and re-draw the chart
-            
-            Update_lambda_phi_min_max();
-            
-            //update parent->zoom_factor_old
-            (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
-            
-            (this->*Draw)();
-            PaintNow();
-            parent->UpdateSliderLabel();
-            
         }
         
     }
-    
-    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
-        
-        //update parent->zoom_factor_old
-        (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
-        
-        (this->*Draw)();
-        PaintNow();
-        parent->UpdateSliderLabel();
-        
-    }
-     */
-    
+    //
+    //    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+    //
+    //        //update parent->zoom_factor_old
+    //        (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
+    //
+    //        (this->*Draw)();
+    //        PaintNow();
+    //        parent->UpdateSliderLabel();
+    //
+    //    }
+    //
+    //
     event.Skip(true);
     
 }
@@ -9770,7 +9776,7 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
 }
 
- 
+
 
 
 template<class P> void FunctionOnPressOk<P>::operator()(wxCommandEvent& event){

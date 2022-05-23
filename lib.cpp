@@ -9607,14 +9607,14 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         if(((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_span < 2.0*M_PI))){
             
             //if the slide operation is valid, I update everything and re-draw the chart
-            Update_lambda_phi_min_max();
+            draw_panel->Update_lambda_phi_min_max();
             ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
 
             //            //update parent->zoom_factor_old
             //            (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
             
-            (this->*Draw)();
-            PaintNow();
+            (draw_panel->*(draw_panel->Draw))();
+            draw_panel->PaintNow();
             UpdateSlider();
             UpdateSliderLabel();
             
@@ -9626,12 +9626,12 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             (draw_panel->y_min) = (draw_panel->y_min_old);
             (draw_panel->y_max) = (draw_panel->y_max_old);
             
-            Update_lambda_phi_min_max();
+            draw_panel->Update_lambda_phi_min_max();
             ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
             
             //put the slider back to the value before the scroll
-            (this->*Draw)();
-            PaintNow();
+            (draw_panel->*(draw_panel->Draw))();
+            draw_panel->PaintNow();
             UpdateSlider();
             UpdateSliderLabel();
             

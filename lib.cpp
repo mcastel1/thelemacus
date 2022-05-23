@@ -8383,7 +8383,7 @@ void ChartFrame::UpdateSlider(void){
     int temp;
     
     //compute the zooming factor of the chart and write it into zoom_factor_old
-    ZoomFactor(((draw_panel->x_max)-(draw_panel->x_min)), &f);
+    ZoomFactor((draw_panel->x_max)-(draw_panel->x_min), &f);
     //    zoom_factor_old = ((unsigned int)f);
     
     //a tentative value for the value of slizer

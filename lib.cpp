@@ -7949,13 +7949,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     //initialize the variable neededed for slider
-    zoom_factor_old = 1 + epsilon_double;
+//    zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //text field showing the current value of the zoom slider
     s.str("");
-    s << "1:" << zoom_factor_old;
+    s << "1:" << (zoom_factor.value);
     text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //navigation buttons
@@ -8357,33 +8357,36 @@ void ChartFrame::UpdateSliderLabel(void){
     stringstream s;
     
     s.str("");
-    s << "1:" << zoom_factor_old;
+    s << "1:" << (zoom_factor.value);
     text_slider->SetLabel(s.str().c_str());
     
 }
 
-//computes the zoom factor of the chart based on the currenct value of span_x and writes it as a double into *f. It returns true if the zooming factor is smaller than zoom_factor_max, and false otherwise
-bool ChartFrame::ZoomFactor(double delta_x, double* f){
+//computes the zoom factor of the chart based on the currenct value of span_x. It returns true and writes the value in zoom_factor if the zooming factor is smaller than zoom_factor_max, and returns false otherwise
+bool ChartFrame::ZoomFactor(double delta_x){
     
-    double x;
+    double temp;
+    bool output;
     
-    x = ((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
+    temp = ((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
     
-    //if f != NULL, then I write the zoom factor into f
-    if(f){(*f) = x;}
+    output = ((1 <= ((unsigned int)temp)) && (((unsigned int)temp) <= (zoom_factor_max.value)));
     
-    return(((unsigned int)x) < (zoom_factor_max.value));
+    if(output){
+        zoom_factor.set(String(""), temp, String(""));
+    }
+    
+    return(output);
     
 }
 
 //this function updates the slider according to the zoom factor of the chart: it sets the slider value to the integer value closest to zoom_factor
 void ChartFrame::UpdateSlider(void){
     
-    double f;
     int temp;
     
-    //compute the zooming factor of the chart and write it into zoom_factor_old
-    ZoomFactor((draw_panel->x_max)-(draw_panel->x_min), &f);
+    //compute the zooming factor of the chart and write it into zoom_factor
+    ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
     //    zoom_factor_old = ((unsigned int)f);
     
     //a tentative value for the value of slizer
@@ -9235,7 +9238,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         //stores the x at the end of the selection process, to compute the zoom factor later
         ScreenToMercator(position_end_selection, &end_selection);
         
-        if((parent->ZoomFactor(fabs((end_selection.x)-(start_selection.x)), NULL))){
+        if((parent->ZoomFactor(fabs((end_selection.x)-(start_selection.x))))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
             cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";

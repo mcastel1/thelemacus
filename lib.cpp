@@ -7984,6 +7984,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll), this);
+    slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
     slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
 
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -9188,13 +9189,21 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
 }
 
 
+void ChartFrame::OnMouseLeftDownOnSlider(wxMouseEvent &event){
+    
+    //mouse scrolling starts
+    mouse_scrolling = true;
+    
+    event.Skip(true);
+    
+}
+
+
+
 void ChartFrame::OnMouseLeftUpOnSlider(wxMouseEvent &event){
     
-    
-    //if the mouse left button was previously down because of a scrolling event, then the sliding event is now over, and I set mouse_sliding = false;
-    if(mouse_scrolling){mouse_scrolling = false;}
-    
- 
+    //mouse scrolling ends
+    mouse_scrolling = false;
     
     event.Skip(true);
     

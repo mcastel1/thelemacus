@@ -1988,6 +1988,7 @@ public:
     void UpdateSlider(void);
     bool ZoomFactor(double);
     void UpdateSliderLabel(void);
+    void OnMouseLeftDownOnSlider(wxMouseEvent&);
     void OnMouseLeftUpOnSlider(wxMouseEvent&);
     void OnScroll(wxScrollEvent&);
     void SetIdling(bool);

@@ -9594,14 +9594,14 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     //    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)(slider->GetValue()))));
     
     
-    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+    if(((projection->name)->GetValue()) == wxString("Mercator")){
         
-        if(x_max >= x_min){
+        if((draw_panel->x_max) >= (draw_panel->x_min)){
             //in this case, x_max, x_min do not encompass the meridian lambda = pi
-            x_span = x_max-x_min;
+            (draw_panel->x_span) = (draw_panel->x_max)-(draw_panel->x_min);
         }else{
             //in this case, x_max, x_min encompass the meridian lambda = pi
-            x_span = 2.0*M_PI - (x_min-x_max);
+            (draw_panel->x_span) = 2.0*M_PI - ((draw_panel->x_min)-(draw_panel->x_max));
         }
         
         if(((y_max < y_mercator(floor_max_lat)) && (y_min > y_mercator(ceil_min_lat)) && (x_span < 2.0*M_PI))){

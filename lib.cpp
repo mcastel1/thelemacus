@@ -8376,7 +8376,7 @@ bool ChartFrame::ZoomFactor(double delta_x, double* f){
     
 }
 
-//this function updates the slider according to the zooming factor of the chart: it sets the slider value to the integer value closest to zoom_factor
+//this function updates the slider according to the zoom factor of the chart: it sets the slider value to the integer value closest to zoom_factor
 void ChartFrame::UpdateSlider(void){
     
     double f;
@@ -9555,7 +9555,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     //set zoom_factor from the value of slider
     zoom_factor.set(
                     String("Newly set zoom factor"),
-                    1.0 + (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax())))*log(((double)(slider->GetValue())))
+                    (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax())))*log(((double)(slider->GetValue()))) + 1.0
                     ,
                     String("")
                     );

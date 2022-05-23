@@ -9604,8 +9604,11 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             (draw_panel->x_span) = 2.0*M_PI - ((draw_panel->x_min)-(draw_panel->x_max));
         }
         
-        if((((draw_panel->y_max) <= y_mercator(floor_max_lat)) && ((draw_panel->y_min) >= y_mercator(ceil_min_lat)) && ((draw_panel->x_span) <= 2.0*M_PI))){
+        if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span) <= 2.0*M_PI))){
             
+            cout << "y_mercator_max = " << y_mercator(max_lat) << "\n";
+            cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
+
             //if the slide operation is valid, I update everything and re-draw the chart
             draw_panel->Update_lambda_phi_min_max();
             ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));

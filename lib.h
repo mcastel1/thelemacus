@@ -1435,7 +1435,7 @@ public:
     SplineLayer *spline_layer;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_start_drag, position_end_drag, position_now_drag, position_draw_panel_now;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
-    double /*min and max values of the Mercator or 3D projections x, y*/x_min, x_max, y_min, y_max, /*this is a definition of the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/x_span, x_min_start_drag, x_max_start_drag, y_min_start_drag, y_max_start_drag,
+    double /*min and max values of the Mercator or 3D projections x, y*/x_min, x_max, y_min, y_max, x_min_start_drag, x_max_start_drag, y_min_start_drag, y_max_start_drag,
     /*these are the values of x_min .. y_max and x_span when the plot is first drawn*/
     x_min_0, x_max_0, y_min_0, y_max_0, x_span_0,
     /*the coordinates of the center of the projection when scrolling starts*/ x_center_scrolling, y_center_scrolling,
@@ -1498,6 +1498,7 @@ public:
     void Set_x_y_min_max_3D(void);
     bool check(const Projection);
     bool check_x(const Projection);
+    double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
     void Render_Mercator(wxDC&);

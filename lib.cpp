@@ -8260,6 +8260,19 @@ void DrawPanel::Set_x_y_min_max_Mercator(void){
     
 }
 
+/*returns a double: the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/
+double DrawPanel::x_span(void){
+   
+    if(x_max >= x_min){
+        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+        return(x_max-x_min);
+    }else{
+        //in this case, x_max, x_min encompass the meridian lambda = pi
+        return(2.0*M_PI - (x_min-x_max));
+    }
+
+}
+
 //this function computes x_min, ... y_max from d in the 3D projection
 void DrawPanel::Set_x_y_min_max_3D(void){
     

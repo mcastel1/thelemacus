@@ -9209,7 +9209,7 @@ void ChartFrame::OnMouseLeftUpOnSlider(wxMouseEvent &event){
     
 }
 
-
+ 
 void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     
     stringstream s;

@@ -9584,10 +9584,10 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     
     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
     //cahnge this later
-    (draw_panel->x_min) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 - ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 * (zoom_factor.value) );
-    (draw_panel->x_max) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 + ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 * (zoom_factor.value) );
-    (draw_panel->y_min) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 - ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 * (zoom_factor.value) );
-    (draw_panel->y_max) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 + ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 * (zoom_factor.value) );
+    (draw_panel->x_min) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 - ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->x_max) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 + ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->y_min) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 - ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->y_max) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 + ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
     
     
     

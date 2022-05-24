@@ -7174,7 +7174,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
         dc.DrawRotatedText(
                            wx_string,
-                           (position_plot_area.x) + ((temp.x)-x_min)/x_span*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                           (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
                            (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
                            + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
                            0);
@@ -7534,34 +7534,34 @@ void DrawPanel::Draw_Mercator(void){
     
     //    cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
     
-    if(x_max >= x_min){
-        //in this case, x_max, x_min do not encompass the meridian lambda = pi
-        x_span = x_max-x_min;
-    }else{
-        //in this case, x_max, x_min encompass the meridian lambda = pi
-        x_span = 2.0*M_PI - (x_min-x_max);
-    }
-    
+//    if(x_max >= x_min){
+//        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+//        x_span = x_max-x_min;
+//    }else{
+//        //in this case, x_max, x_min encompass the meridian lambda = pi
+//        x_span = 2.0*M_PI - (x_min-x_max);
+//    }
+
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-    if((y_max-y_min) > x_span){
+    if((y_max-y_min) > x_span()){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/x_span),
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/x_span()),
                         (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
                         );
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         height_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
-        width_chart = height_chart/((y_max-y_min)/x_span);
+        width_chart = height_chart/((y_max-y_min)/x_span());
     }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
                         (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()),
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span)
+                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
                         );
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         width_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
-        height_chart = width_chart*((y_max-y_min)/x_span);
+        height_chart = width_chart*((y_max-y_min)/x_span());
     }
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
@@ -7582,7 +7582,7 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //draw meridians
-    lambda_span = K*x_span;
+    lambda_span = K*x_span();
     
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);
@@ -7654,9 +7654,9 @@ void DrawPanel::Draw_Mercator(void){
                     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     chart->addLine(
-                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
+                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
                                    (position_plot_area.y) + height_plot_area,
-                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span*width_plot_area,
+                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
                                    (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
                                    0x0000ff, 1);
                     
@@ -7705,7 +7705,7 @@ void DrawPanel::Draw_Mercator(void){
     (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
     
     //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area
-    (temp.x) = x_min + x_span/2.0;
+    (temp.x) = x_min + x_span()/2.0;
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
         ((dummy_route.reference_position).lambda).set(String(""), k*lambda_mercator(x_min), String(""));
@@ -7717,7 +7717,7 @@ void DrawPanel::Draw_Mercator(void){
         if(((temp.y) >= y_min) && ((temp.y) <= y_max)){
             
             //I set the length of the Route corresponding to the parallel
-            (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span, String(""));
+            (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
             dummy_route.draw(((plot->n_points_routes).value), this);
             
         }
@@ -7748,7 +7748,7 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart->xAxis())->setLinearScale(x_min, x_min+x_span, 1.7E+308);
+    (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
     (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
     // Set the axes line width to 3 pixels
@@ -8007,7 +8007,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->x_max_0) = (draw_panel->x_max);
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
-    (draw_panel->x_span_0) = (draw_panel->x_span);
+    (draw_panel->x_span_0) = (draw_panel->x_span());
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
@@ -8110,7 +8110,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     
     double delta;
     
-    delta = (relative_displacement.value) * (draw_panel->x_span);
+    delta = (relative_displacement.value) * (draw_panel->x_span());
     
     //update lambda_min, lambda_max according to the drag.
     (((draw_panel->plot)->lambda_min).value) += delta;
@@ -8170,7 +8170,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
     
     double delta;
     
-    delta = (relative_displacement.value) * (draw_panel->x_span);
+    delta = (relative_displacement.value) * (draw_panel->x_span());
     
     //update lambda_min, lambda_max according to the drag.
     (((draw_panel->plot)->lambda_min).value) -= delta;
@@ -8242,7 +8242,7 @@ void DrawPanel::Update_lambda_phi_min_max(void){
     
 }
 
-//this function computes x_min, ... y_max and x_span from lambda_min ... phi_max in the Mercator projection
+//this function computes x_min, ... y_max and from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void){
     
     x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
@@ -8250,13 +8250,13 @@ void DrawPanel::Set_x_y_min_max_Mercator(void){
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
     
-    if(x_max >= x_min){
-        //in this case, x_max, x_min do not encompass the meridian lambda = pi
-        x_span = x_max-x_min;
-    }else{
-        //in this case, x_max, x_min encompass the meridian lambda = pi
-        x_span = 2.0*M_PI - (x_min-x_max);
-    }
+//    if(x_max >= x_min){
+//        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+//        x_span = x_max-x_min;
+//    }else{
+//        //in this case, x_max, x_min encompass the meridian lambda = pi
+//        x_span = 2.0*M_PI - (x_min-x_max);
+//    }
     
 }
 
@@ -8410,7 +8410,7 @@ void ChartFrame::UpdateSlider(void){
     int temp;
     
     //compute the zooming factor of the chart and write it into zoom_factor
-    ZoomFactor((draw_panel->x_span));
+    ZoomFactor((draw_panel->x_span()));
     //    zoom_factor_old = ((unsigned int)f);
     
     //a tentative value for the value of slizer
@@ -8733,7 +8733,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (temp.x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span;
+    (temp.x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span();
     (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
     
     if(check(temp)){
@@ -8833,12 +8833,12 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
         if((temp.x) > x_min){
             //in this case, (temp.x) has not been diminuished due to the  periodicity
             
-            (p->x) = (position_plot_area.x) + ((temp.x)-x_min)/x_span*width_plot_area;
+            (p->x) = (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area;
             
         }else{
             //in this case, (temp.x) has  been diminuished due to the  periodicity
             
-            (p->x) = (position_plot_area.x) + ((2.0*M_PI+(temp.x))-x_min)/x_span*width_plot_area;
+            (p->x) = (position_plot_area.x) + ((2.0*M_PI+(temp.x))-x_min)/x_span()*width_plot_area;
             
         }
         
@@ -9123,7 +9123,7 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
             
             double delta_x, delta_y;
             
-            delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
+            delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
             delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
             
             if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
@@ -9414,7 +9414,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     double delta_x, delta_y;
                     
-                    delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span;
+                    delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
                     delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
                     
                     if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
@@ -9627,34 +9627,21 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
     (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
     //change this
-    (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span))) / ((double)(draw_panel->width_chart)) )/2.0;
-    (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span))) / ((double)(draw_panel->width_chart)) )/2.0;
+    (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
+    (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
     
 
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
-        
-        //x_span_temp is a temporary value of x_span, to be checked later
-        if((draw_panel->x_max) >= (draw_panel->x_min)){
-            //in this case, x_max, x_min do not encompass the meridian lambda = pi
-            x_span_temp = (draw_panel->x_max)-(draw_panel->x_min);
-        }else{
-            //in this case, x_max, x_min encompass the meridian lambda = pi
-            x_span_temp = 2.0*M_PI - ((draw_panel->x_min)-(draw_panel->x_max));
-        }
-        
+                
         cout << "y_mercator_max = " << y_mercator(max_lat) << "\n";
         cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
         
-        
-        if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && (x_span_temp <= 2.0*M_PI))){
+        if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
-       
-            //if the slide operation is valid, I set x_span to the tempoerary value x_span_temp, update everything and re-draw the chart
-            (draw_panel->x_span) = x_span_temp;
-            draw_panel->Update_lambda_phi_min_max();
-//            ZoomFactor((draw_panel->x_span));
-        
+             draw_panel->Update_lambda_phi_min_max();
+            //            ZoomFactor((draw_panel->x_span));
+            
             (draw_panel->*(draw_panel->Draw))();
             draw_panel->PaintNow();
             UpdateSlider();
@@ -9669,7 +9656,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             (draw_panel->y_max) = (draw_panel->y_max_old);
             
 //            draw_panel->Update_lambda_phi_min_max();
-            ZoomFactor((draw_panel->x_span));
+            ZoomFactor((draw_panel->x_span()));
             
             //put the slider back to the value before the scroll
             (draw_panel->*(draw_panel->Draw))();

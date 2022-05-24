@@ -7984,7 +7984,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll), this);
-    slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
+    slider->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
     slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
     
     empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -9630,11 +9630,13 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             x_span_temp = 2.0*M_PI - ((draw_panel->x_min)-(draw_panel->x_max));
         }
         
+        cout << "y_mercator_max = " << y_mercator(max_lat) << "\n";
+        cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
+        
+        
         if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && (x_span_temp <= 2.0*M_PI))){
             
-            cout << "y_mercator_max = " << y_mercator(max_lat) << "\n";
-            cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
-
+       
             //if the slide operation is valid, I set x_span to the tempoerary value x_span_temp, update everything and re-draw the chart
             (draw_panel->x_span) = x_span_temp;
             draw_panel->Update_lambda_phi_min_max();

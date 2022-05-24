@@ -8007,6 +8007,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->x_max_0) = (draw_panel->x_max);
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
+    (draw_panel->x_span_0) = (draw_panel->x_span);
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
@@ -8396,7 +8397,7 @@ void ChartFrame::UpdateSlider(void){
     int temp;
     
     //compute the zooming factor of the chart and write it into zoom_factor
-    ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
+    ZoomFactor((draw_panel->x_span));
     //    zoom_factor_old = ((unsigned int)f);
     
     //a tentative value for the value of slizer
@@ -9557,6 +9558,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void ChartFrame::OnScroll(wxScrollEvent &event){
     
+    double x_span_temp;
+    
     /*
      n = value of slider,
      z = zoom factor,
@@ -9614,33 +9617,29 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span))) / ((double)(draw_panel->width_chart)) )/2.0;
     (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span))) / ((double)(draw_panel->width_chart)) )/2.0;
     
-    
-    
-    //    r = ((double)(parent->zoom_factor_old)) / (1.0 + log(((double)(slider->GetValue()))));
-    
+
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
+        //x_span_temp is a temporary value of x_span, to be checked later
         if((draw_panel->x_max) >= (draw_panel->x_min)){
             //in this case, x_max, x_min do not encompass the meridian lambda = pi
-            (draw_panel->x_span) = (draw_panel->x_max)-(draw_panel->x_min);
+            x_span_temp = (draw_panel->x_max)-(draw_panel->x_min);
         }else{
             //in this case, x_max, x_min encompass the meridian lambda = pi
-            (draw_panel->x_span) = 2.0*M_PI - ((draw_panel->x_min)-(draw_panel->x_max));
+            x_span_temp = 2.0*M_PI - ((draw_panel->x_min)-(draw_panel->x_max));
         }
         
-        if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span) <= 2.0*M_PI))){
+        if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && (x_span_temp <= 2.0*M_PI))){
             
             cout << "y_mercator_max = " << y_mercator(max_lat) << "\n";
             cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
 
-            //if the slide operation is valid, I update everything and re-draw the chart
+            //if the slide operation is valid, I set x_span to the tempoerary value x_span_temp, update everything and re-draw the chart
+            (draw_panel->x_span) = x_span_temp;
             draw_panel->Update_lambda_phi_min_max();
-            ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
-
-            //            //update parent->zoom_factor_old
-            //            (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
-            
+//            ZoomFactor((draw_panel->x_span));
+        
             (draw_panel->*(draw_panel->Draw))();
             draw_panel->PaintNow();
             UpdateSlider();
@@ -9654,8 +9653,8 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             (draw_panel->y_min) = (draw_panel->y_min_old);
             (draw_panel->y_max) = (draw_panel->y_max_old);
             
-            draw_panel->Update_lambda_phi_min_max();
-            ZoomFactor((draw_panel->x_max)-(draw_panel->x_min));
+//            draw_panel->Update_lambda_phi_min_max();
+            ZoomFactor((draw_panel->x_span));
             
             //put the slider back to the value before the scroll
             (draw_panel->*(draw_panel->Draw))();

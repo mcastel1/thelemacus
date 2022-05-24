@@ -8353,7 +8353,7 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     
 }
 
-//updates the text in text_slider by writing in it the current value of the zoom factor, rounded to an integer for clarity 
+//updates the text in text_slider by writing in it the current value of the zoom factor, rounded to an integer for clarity
 void ChartFrame::UpdateSliderLabel(void){
     
     stringstream s;
@@ -9195,6 +9195,9 @@ void ChartFrame::OnMouseLeftDownOnSlider(wxMouseEvent &event){
     //mouse scrolling starts
     mouse_scrolling = true;
     
+    (draw_panel->x_center_scrolling) = ((draw_panel->x_min) + (draw_panel->x_max))/2.0;
+    (draw_panel->y_center_scrolling) = ((draw_panel->y_min) + (draw_panel->y_max))/2.0;
+
     event.Skip(true);
     
 }
@@ -9577,7 +9580,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     if((zoom_factor.value) > (zoom_factor_max.value)){(zoom_factor.value) = (zoom_factor_max.value);}
     //sign
     
-    //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old. The value of the slider before the sliding event is already stored in zoom_factor_old
+    //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old.
     (draw_panel->x_min_old) = (draw_panel->x_min);
     (draw_panel->x_max_old) = (draw_panel->x_max);
     (draw_panel->y_min_old) = (draw_panel->y_min);
@@ -9585,10 +9588,10 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     
     //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
     //cahnge this later
-    (draw_panel->x_min) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 - ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 / (zoom_factor.value) );
-    (draw_panel->x_max) = ((draw_panel->x_max_0) + (draw_panel->x_min_0))/2.0 + ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 / (zoom_factor.value) );
-    (draw_panel->y_min) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 - ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
-    (draw_panel->y_max) = ((draw_panel->y_max_0) + (draw_panel->y_min_0))/2.0 + ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->x_min) = (draw_panel->x_center_scrolling) - /*change this part*/( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->x_max) = (draw_panel->x_center_scrolling) + ( ((draw_panel->x_max_0)-(draw_panel->x_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->y_min) = (draw_panel->y_center_scrolling) - ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->y_max) = (draw_panel->y_center_scrolling) + ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
     
     
     

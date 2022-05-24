@@ -8241,13 +8241,21 @@ void DrawPanel::Update_lambda_phi_min_max(void){
     
 }
 
-//this function computes x_min, ... y_max from lambda_min ... phi_max in the Mercator projection
+//this function computes x_min, ... y_max and x_span from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void){
     
     x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
     x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
+    
+    if(x_max >= x_min){
+        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+        x_span = x_max-x_min;
+    }else{
+        //in this case, x_max, x_min encompass the meridian lambda = pi
+        x_span = 2.0*M_PI - (x_min-x_max);
+    }
     
 }
 
@@ -9596,13 +9604,15 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
      
      delta_x = w/z/ (w_0/delta_x_0) = w*delta_x_0/(z*w_0)
      
+     height_chart/width_chart * x_span = (y_max-y_min);
+
      
      */
-    (draw_panel->x_min) = (draw_panel->x_center_scrolling) - ( (draw_panel->width_chart) * ((draw_panel->x_max_0)-(draw_panel->x_min_0)) / ((zoom_factor.value)*(draw_panel->width_chart_0)) )/2.0;
-    (draw_panel->x_max) = (draw_panel->x_center_scrolling) + ( (draw_panel->width_chart) * ((draw_panel->x_max_0)-(draw_panel->x_min_0)) / ((zoom_factor.value)*(draw_panel->width_chart_0)) )/2.0;
+    (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
+    (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
     //change this
-    (draw_panel->y_min) = (draw_panel->y_center_scrolling) - ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
-    (draw_panel->y_max) = (draw_panel->y_center_scrolling) + ( ((draw_panel->y_max_0)-(draw_panel->y_min_0))/2.0 / (zoom_factor.value) );
+    (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span))) / ((double)(draw_panel->width_chart)) )/2.0;
+    (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span))) / ((double)(draw_panel->width_chart)) )/2.0;
     
     
     

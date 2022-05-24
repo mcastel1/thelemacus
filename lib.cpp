@@ -8353,12 +8353,13 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     
 }
 
+//updates the text in text_slider by writing in it the current value of the zoom factor, rounded to an integer for clarity 
 void ChartFrame::UpdateSliderLabel(void){
     
     stringstream s;
     
     s.str("");
-    s << "1:" << (zoom_factor.value);
+    s << "1:" << round(zoom_factor.value);
     text_slider->SetLabel(s.str().c_str());
     
 }

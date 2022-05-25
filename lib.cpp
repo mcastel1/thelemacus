@@ -8214,12 +8214,13 @@ template<class T> void ChartFrame::Reset(T& event){
         
     }
     
-    UpdateSlider();
-    UpdateSliderLabel();
-    
+     
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-    
+
+    UpdateSlider();
+    UpdateSliderLabel();
+
     event.Skip(true);
     
 }

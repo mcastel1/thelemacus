@@ -9599,7 +9599,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
                     (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax())))*log(((double)(slider->GetValue()))) + 1.0
                     ,
                     String("")
-                    );
+                    ); 
     //if the resulting value of zoom_factor is outside the boundaries I set it back to the rspective boundary
     if((zoom_factor.value) < 1.0){(zoom_factor.value) = 1.0;}
     if((zoom_factor.value) > (zoom_factor_max.value)){(zoom_factor.value) = (zoom_factor_max.value);}

@@ -7614,9 +7614,9 @@ void DrawPanel::Draw_Mercator(void){
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
 
-    //compute p_up, and p_down, which are two geographic positions whose latitudes are close (modulo 2 pixels) to the edge of the draw area, but slightly within the draw area. These latitudes are then used to draw the meridian, in such a way that all points of the meridian lie within the plot area, and the meridian is not cut.
-    (this->*ScreenToGeo)(position_draw_panel + position_plot_area + wxPoint(0, 2), &p_up);
-    (this->*ScreenToGeo)(position_draw_panel + position_plot_area + wxPoint(0, height_plot_area-2), &p_down);
+    //compute p_up, and p_down, which are two geographic positions whose latitudes are close (modulo 1 pixel) to the edge of the draw area, but slightly within the draw area. These latitudes are then used to draw the meridian, in such a way that all points of the meridian lie within the plot area, and the meridian is not cut.
+    (this->*ScreenToGeo)(position_draw_panel + position_plot_area + wxPoint(0, 1), &p_up);
+    (this->*ScreenToGeo)(position_draw_panel + position_plot_area + wxPoint(0, height_plot_area-1), &p_down);
 
     (dummy_route.type).set(String(""), String("o"), String(""));
     ((dummy_route.reference_position).phi) = (p_down.phi);

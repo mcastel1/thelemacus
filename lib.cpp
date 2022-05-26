@@ -9226,9 +9226,13 @@ void ChartFrame::OnMouseLeftDownOnSlider(wxMouseEvent &event){
     //mouse scrolling starts
     mouse_scrolling = true;
     
-    (draw_panel->x_center_scrolling) = ((draw_panel->x_min) + (draw_panel->x_max))/2.0;
-    (draw_panel->y_center_scrolling) = ((draw_panel->y_min) + (draw_panel->y_max))/2.0;
-
+    if(((projection->name)->GetValue()) == wxString("Mercator")){
+        
+        (draw_panel->x_center_scrolling) = ((draw_panel->x_min) + (draw_panel->x_max))/2.0;
+        (draw_panel->y_center_scrolling) = ((draw_panel->y_min) + (draw_panel->y_max))/2.0;
+        
+    }
+        
     event.Skip(true);
     
 }
@@ -9621,27 +9625,29 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         (zoom_factor.value) = (zoom_factor_max.value);
     }
     
-    //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old.
-    (draw_panel->x_min_old) = (draw_panel->x_min);
-    (draw_panel->x_max_old) = (draw_panel->x_max);
-    (draw_panel->y_min_old) = (draw_panel->y_min);
-    (draw_panel->y_max_old) = (draw_panel->y_max);
     
-    //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-    (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
-    (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
-    (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
-    (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
     
-
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
-                
+        
         cout << "\n\n\n\ny_mercator_max = " << y_mercator(max_lat) << "\n";
         cout << "y_max = " << (draw_panel->y_max) << "\n";
         cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
         cout << "y_min = " << (draw_panel->y_min) << "\n";
-
+        
+        //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old.
+        //        (draw_panel->x_min_old) = (draw_panel->x_min);
+        //        (draw_panel->x_max_old) = (draw_panel->x_max);
+        //        (draw_panel->y_min_old) = (draw_panel->y_min);
+        //        (draw_panel->y_max_old) = (draw_panel->y_max);
+        
+        //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
+        (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
+        (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
+        (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
+        (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
+     
+        
         if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
              draw_panel->Update_lambda_phi_min_max();
@@ -9688,19 +9694,20 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         }
         
     }
-    //
-    //    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
-    //
-    //        //update parent->zoom_factor_old
-    //        (parent->zoom_factor_old) = 1.0 + log((double)(slider->GetValue()));
-    //
-    //        (this->*Draw)();
-    //        PaintNow();
-    //        parent->UpdateSliderLabel();
-    //
-    //    }
-    //
-    //
+    
+    if(((projection->name)->GetValue()) == wxString("3D")){
+        
+        (draw_panel->d).set(String("new d"), ((draw_panel->d_0).value)/(zoom_factor.value), String(""));
+        (draw_panel->*(draw_panel->Set_x_y_min_max))();
+        
+        (draw_panel->*(draw_panel->Draw))();
+        draw_panel->PaintNow();
+        UpdateSlider();
+        UpdateSliderLabel();
+
+    }
+    
+    
     event.Skip(true);
     
 }

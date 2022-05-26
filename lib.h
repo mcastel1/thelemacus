@@ -1988,7 +1988,7 @@ public:
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);
     void UpdateSlider(void);
-    bool ZoomFactor(double);
+    bool ZoomFactor_Mercator(double);
     void UpdateSliderLabel(void);
     void OnMouseLeftDownOnSlider(wxMouseEvent&);
     void OnMouseLeftUpOnSlider(wxMouseEvent&);

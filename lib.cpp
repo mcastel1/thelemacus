@@ -8396,7 +8396,7 @@ void ChartFrame::UpdateSliderLabel(void){
 }
 
 //computes the zoom factor of the chart based on the currenct value of span_x. It returns true and writes the value in zoom_factor if the zooming factor is smaller than zoom_factor_max, and returns false otherwise
-bool ChartFrame::ZoomFactor(double delta_x){
+bool ChartFrame::ZoomFactor_Mercator(double delta_x){
     
     double temp;
     bool output;
@@ -8419,7 +8419,7 @@ void ChartFrame::UpdateSlider(void){
     int temp;
     
     //compute the zooming factor of the chart and write it into zoom_factor
-    ZoomFactor((draw_panel->x_span()));
+    ZoomFactor_Mercator((draw_panel->x_span()));
     //    zoom_factor_old = ((unsigned int)f);
     
     //a tentative value for the value of slizer
@@ -9286,7 +9286,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         //stores the x at the end of the selection process, to compute the zoom factor later
         ScreenToMercator(position_end_selection, &end_selection);
         
-        if((parent->ZoomFactor(fabs((end_selection.x)-(start_selection.x))))){
+        if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
             cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
@@ -9651,7 +9651,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
              draw_panel->Update_lambda_phi_min_max();
-            //            ZoomFactor((draw_panel->x_span));
+            //            ZoomFactor_Mercator((draw_panel->x_span));
             
             (draw_panel->*(draw_panel->Draw))();
             draw_panel->PaintNow();
@@ -9673,7 +9673,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             cout << "\ny_max_old = " << (draw_panel->y_max_old);
 
 //            draw_panel->Update_lambda_phi_min_max();
-            ZoomFactor((draw_panel->x_span()));
+            ZoomFactor_Mercator((draw_panel->x_span()));
             
             //put the slider back to the value before the scroll
             (draw_panel->*(draw_panel->Draw))();

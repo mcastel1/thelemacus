@@ -52,6 +52,6 @@ color selected item = (51,153,255)
 maximal zoom factor = 200
 relative displacement = 0.1
 d draw 3d = 3.0
-default projection = Mercator
+default projection = 3D
 #the number of chart frames opened when the program starts
 number chart frames = 2

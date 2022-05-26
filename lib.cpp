@@ -8891,6 +8891,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
+        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_Mercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
@@ -8911,6 +8912,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
+        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);

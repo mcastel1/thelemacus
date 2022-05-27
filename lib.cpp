@@ -8413,6 +8413,23 @@ bool ChartFrame::ZoomFactor_Mercator(double delta_x){
     
 }
 
+//computes the zoom factor of the chart based on d_in. It returns true and writes the value in zoom_factor if the zooming factor is smaller than zoom_factor_max, and returns false otherwise
+bool ChartFrame::ZoomFactor_3D(double d_in){
+    
+    bool output;
+    double temp;
+    
+    temp = ((draw_panel->d_0).value)/d_in;
+    output = ((1.0 <= temp) && (temp <= (zoom_factor_max.value)));
+    
+    if(output){
+        zoom_factor.set(String(""), temp, String(""));
+    }
+    
+    return(output);
+    
+}
+
 //this function updates the slider according to the zoom factor of the chart: it sets the slider value to the integer value closest to zoom_factor
 void ChartFrame::UpdateSlider(void){
     

@@ -8413,17 +8413,16 @@ bool ChartFrame::ZoomFactor_Mercator(double delta_x){
     
 }
 
-//computes the zoom factor of the chart based on d_in. It returns true and writes the value in zoom_factor if the zooming factor is smaller than zoom_factor_max, and returns false otherwise
-bool ChartFrame::ZoomFactor_3D(double d_in){
+bool ChartFrame::ZoomFactor_3D(void){
     
     bool output;
-    double temp;
-    
-    temp = ((draw_panel->d_0).value)/d_in;
-    output = ((1.0 <= temp) && (temp <= (zoom_factor_max.value)));
+        
+    output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= (zoom_factor_max.value)));
     
     if(output){
-        zoom_factor.set(String(""), temp, String(""));
+        
+        (draw_panel->d).set(String(""), ((draw_panel->d_0).value)/(zoom_factor.value), String(""));
+        
     }
     
     return(output);
@@ -8436,8 +8435,18 @@ void ChartFrame::UpdateSlider(void){
     int temp;
     
     //compute the zooming factor of the chart and write it into zoom_factor
-    ZoomFactor_Mercator((draw_panel->x_span()));
-    //    zoom_factor_old = ((unsigned int)f);
+    
+    if(((projection->name)->GetValue()) == wxString("Mercator")){
+    
+        ZoomFactor_Mercator((draw_panel->x_span()));
+        
+    }
+    
+    if(((projection->name)->GetValue()) == wxString("3D")){
+        //is this necessary here ? 
+        ZoomFactor_3D();
+
+    }
     
     //a tentative value for the value of slizer
     temp = round(exp(((zoom_factor.value) - 1.0)/( (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax()))) )));
@@ -8908,7 +8917,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
-        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_Mercator);
+//        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_Mercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
@@ -8929,7 +8938,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
-        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
+//        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);
@@ -9716,7 +9725,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     
     if(((projection->name)->GetValue()) == wxString("3D")){
         
-        (draw_panel->d).set(String("new d"), ((draw_panel->d_0).value)/(zoom_factor.value), String(""));
+        ZoomFactor_3D();
         (draw_panel->*(draw_panel->Set_x_y_min_max))();
         
         (draw_panel->*(draw_panel->Draw))();

@@ -1986,13 +1986,13 @@ public:
     
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::ZoomFactor_Mercator or ChartFrame::ZoomFactor_3D, according to my needs, and similarly for the other pointers
-    bool (ChartFrame::*ZoomFactor)(double);
+//    bool (ChartFrame::*ZoomFactor)(double);
  
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);
     void UpdateSlider(void);
     bool ZoomFactor_Mercator(double);
-    bool ZoomFactor_3D(double);
+    bool ZoomFactor_3D(void);
     void UpdateSliderLabel(void);
     void OnMouseLeftDownOnSlider(wxMouseEvent&);
     void OnMouseLeftUpOnSlider(wxMouseEvent&);

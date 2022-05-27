@@ -8443,7 +8443,7 @@ void ChartFrame::UpdateSlider(void){
     }
     
     if(((projection->name)->GetValue()) == wxString("3D")){
-        //is this necessary here ? 
+        //is this necessary here ?
         ZoomFactor_3D();
 
     }
@@ -9721,7 +9721,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
              
         }
         
-    }
+    } 
     
     if(((projection->name)->GetValue()) == wxString("3D")){
         

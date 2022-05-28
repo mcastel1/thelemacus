@@ -8216,9 +8216,10 @@ template<class T> void ChartFrame::Reset(T& event){
     }
     
     if(((projection->name)->GetValue()) == wxString("3D")){
-        //reset the earth orientation to the initial one
+        //reset the earth orientation to the initial one and the zoom factor to 1
         
         (draw_panel->rotation) = (draw_panel->rotation_0);
+        zoom_factor.set(String(""), 1.0, String(""));
         
     }
     
@@ -9721,7 +9722,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
              
         }
         
-    } 
+    }
     
     if(((projection->name)->GetValue()) == wxString("3D")){
         

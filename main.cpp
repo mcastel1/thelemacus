@@ -40,6 +40,7 @@
  - add margins in ChartFrame
 - meridians are not shown sometimes
  - fix "14:17:41: Debug: Adding duplicate image handler for 'PNG file'"
+ - Reset does not work properly for 3D projection 
  */
 
 

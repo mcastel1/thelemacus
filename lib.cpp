@@ -8220,6 +8220,7 @@ template<class T> void ChartFrame::Reset(T& event){
         
         (draw_panel->rotation) = (draw_panel->rotation_0);
         zoom_factor.set(String(""), 1.0, String(""));
+        ZoomFactor_3D();
         
     }
     

@@ -6725,29 +6725,26 @@ void ChartFrame::GetCoastLineData_Mercator(void){
             every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
             if(every == 0){every = 1;}
             
-            for(l=0; l<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
-                
-                //                cout << "\n l = " << l;
-                
-                
-                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l];
-                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l];
+            //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+            for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
+                   
+                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
+                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                 
                 //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                if((l % every) == 0){
+//                if((l % every) == 0){
                     
                     if((draw_panel->check(temp))){
                         
                         if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                             (temp.x) += 2.0*M_PI;
-                            
                         }
                         x.push_back((temp.x));
                         y.push_back((temp.y));
                         
                     }
                     
-                }
+//                }
                 
                 
             }

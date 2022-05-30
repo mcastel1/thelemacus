@@ -6719,7 +6719,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
             //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
             //            flush(cout);
             
-            //count how many datapoints are in data_x[i] and in data_y[i]
+            //count how many datapoints are in data_x[i][j] and in data_y[i][j]
             n = ((parent->data_x)[i - floor_min_lat][j % 360]).size();
             
             every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));

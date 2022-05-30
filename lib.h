@@ -1965,7 +1965,6 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;
-    File file_init;
     wxStaticText *text_position_now, *text_slider;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxGridSizer* sizer_buttons;

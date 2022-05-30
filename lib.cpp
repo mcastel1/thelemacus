@@ -6909,24 +6909,12 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
     
-    //start - delete this later
-    gsl_rng_env_setup();
-    gsl_rng * myran = gsl_rng_alloc(gsl_rng_gfsr4);
-    gsl_rng_set(myran, 0);
-    
-    /*
-     euler_a.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-     euler_b.set(String(""), (-1.0+2.0*gsl_rng_uniform(myran))*M_PI/2.0, String(""));
-     euler_c.set(String(""), gsl_rng_uniform(myran)*2.0*M_PI, String(""));
-     */
-    //end - delete this later
-    
     rotation = Rotation(
                         Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
                         Angle(String("Euler angle beta"), 0.0, String("")),
                         Angle(String("Euler angle gamma"), 0.0, String(""))
                         );
-    rotation.print(String("initial rotation"), String(""), cout);
+//    rotation.print(String("initial rotation"), String(""), cout);
     
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());
@@ -7901,33 +7889,26 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     parent = parent_input;
     
-    file_init.set_name(String(path_file_init));
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    
-    
-    //    (parent->plot)->show(true, String(""));
-    
+     
     mouse_scrolling = false;
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
     
-    file_init.open(String("in"), prefix);
     //read zoom_factor_max from file_init
-    zoom_factor_max.read_from_file(String("maximal zoom factor"), file_init, true, String(""));
+    zoom_factor_max.read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
     
     //read relative_displacement from file_init
-    relative_displacement.read_from_file(String("relative displacement"), file_init, true, String(""));
+    relative_displacement.read_from_file(String("relative displacement"), String(path_file_init), String(""));
     
     //read standard_thickness_over_length_screen from file_init
-    standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), file_init, true, String(""));
+    standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
     
     //read large_thickness_over_length_screen from file_init
-    large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), file_init, true, String(""));
-    
-    file_init.close(prefix);
-    
+    large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
+        
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     print_error_message = new PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);

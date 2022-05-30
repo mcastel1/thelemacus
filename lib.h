@@ -998,7 +998,7 @@ public:
     void print_sights(String, ostream&);
     void print_positions(String, ostream&);
     void print_routes(bool, String, ostream&);
-    void show(bool, String);
+    //    void show(bool, String);
     void menu(String);
     void compute_crossings(String);
     

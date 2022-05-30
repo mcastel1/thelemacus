@@ -3643,7 +3643,7 @@ void Plot::menu(String prefix){
             //I commented this out because the way to enteer the sight has changed with the GUI
             //            add_sight_and_reduce(new_prefix);
             print(true, new_prefix, cout);
-            show(false, new_prefix);
+            //            show(false, new_prefix);
             menu(prefix);
             
         }
@@ -3661,7 +3661,7 @@ void Plot::menu(String prefix){
                 
                 modify_sight(i, new_prefix);
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+//                show(false, new_prefix);
                 
             }else{
                 
@@ -3686,7 +3686,7 @@ void Plot::menu(String prefix){
                 //this  needs one additional argument: I commented it out
                 //                remove_sight(i, new_prefix);
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 cout << RED << "There are no sights to delete!\n" << RESET;
@@ -3701,7 +3701,7 @@ void Plot::menu(String prefix){
             
             add_position(new_prefix);
             print(true, new_prefix, cout);
-            show(false, new_prefix);
+            //show(false, new_prefix);
             menu(prefix);
             
         }
@@ -3720,7 +3720,7 @@ void Plot::menu(String prefix){
                 
                 (position_list[i]).modify(new_prefix);
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 cout << RED << "There are no positions to modify!\n" << RESET;
@@ -3742,7 +3742,7 @@ void Plot::menu(String prefix){
                 
                 transport_position(i, new_prefix);
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //show(false, new_prefix);
                 
             }else{
                 cout << RED << "There are no positions to transport!\n" << RESET;
@@ -3765,7 +3765,7 @@ void Plot::menu(String prefix){
                 
                 remove_position(i, new_prefix);
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 cout << RED << "There are no positions to delete!\n" << RESET;
@@ -3781,7 +3781,7 @@ void Plot::menu(String prefix){
             //            I commented this out because now add_route takes an additional argument
             //            add_route(new_prefix);
             print(true, new_prefix, cout);
-            show(false, new_prefix);
+            //show(false, new_prefix);
             menu(prefix);
             
         }
@@ -3800,7 +3800,7 @@ void Plot::menu(String prefix){
                 
                 transport_route(i, new_prefix);
                 print_routes(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 
@@ -3839,7 +3839,7 @@ void Plot::menu(String prefix){
             crossing_route_list.clear();
             
             print(true, new_prefix, cout);
-            show(false, new_prefix);
+            //show(false, new_prefix);
             menu(prefix);
             
         }
@@ -3859,7 +3859,7 @@ void Plot::menu(String prefix){
                 //I commented this out because now remove_route has an additional argument
                 //                remove_route(i, new_prefix);
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 cout << RED << "There are no routes to delete!\n" << RESET;
@@ -3873,7 +3873,7 @@ void Plot::menu(String prefix){
             
         case 12:{
             
-            show(false, new_prefix);
+            //            show(false, new_prefix);
             menu(prefix);
             
         }
@@ -3881,7 +3881,7 @@ void Plot::menu(String prefix){
             
         case 13:{
             
-            show(true, new_prefix);
+            //            show(true, new_prefix);
             menu(prefix);
             
         }
@@ -3904,7 +3904,7 @@ void Plot::menu(String prefix){
                 }
                 
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 
@@ -3963,7 +3963,7 @@ void Plot::menu(String prefix){
                 position_list.push_back(p);
                 
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 
@@ -4046,7 +4046,7 @@ void Plot::menu(String prefix){
             
             if(read_from_file(file, new_prefix)){
                 print(true, new_prefix, cout);
-                show(false, new_prefix);
+                //                show(false, new_prefix);
             }
             
             menu(prefix);
@@ -4665,274 +4665,274 @@ void Plot::transport_position(unsigned int i, String prefix){
 }
 
 // if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
-void Plot::show(bool zoom_out, String prefix){
-    
-    stringstream line_ins, /*plot_style contains the chunk of the gnuplot command line containing the style (dashtype, line type, color, ...) of the Routes and Position to be plotted*/plot_style, /*plot_title contains the gnuplot title of the Route to be plotted*/ plot_title;
-    string line;
-    //    unsigned int i;
-    
-    
-    //    gsl_function F;
-    //    const gsl_root_fsolver_type *T;
-    //    gsl_root_fsolver *s;
-    
-    //append \t to prefix
-    
-    
-    
-    //        T = gsl_root_fsolver_brent;
-    //        s = gsl_root_fsolver_alloc(T);
-    //
-    
-    
-    
-    
-    
-    //
-    //    //    //plot routes
-    //
-    //    for(i=0; i<(route_list.size()); i++){
-    //
-    //
-    //
-    //        switch(((route_list[i]).type.value)[0]){
-    //
-    //            case 'l':
-    //                //plot a loxodrome
-    //            {
-    //
-    //
-    //                break;
-    //            }
-    //
-    //            case 'o':
-    //                //plot an orthodrome
-    //            {
-    //
-    //
-    //                break;
-    //            }
-    //
-    //
-    //            case 'c':
-    //                //plot a circle of equal altitude
-    //            {
-    //
-    //
-    //                //if abs(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (route_list[i]).reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(route_list[i]).reference_position.lambda_{t = t_{min}} and (route_list[i]).reference_position.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output.
-    //                if(abs(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))) < 1.0){
-    //
-    //                    //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
-    //                    t_max.set(String(""), acos(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
-    //                    t_min.set(String(""), 2.0*M_PI - acos(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
-    //
-    //                    //p_max =  circle of equal altitude computed at t_max
-    //                    ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_max.value);
-    //                    (route_list[i]).compute_end(new_prefix);
-    //                    p_max = ((route_list[i]).end);
-    //
-    //                    ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_min.value);
-    //                    (route_list[i]).compute_end(new_prefix);
-    //                    p_min = ((route_list[i]).end);
-    //                    //p_min =  circle of equal altitude computed at t_min
-    //
-    //                    /* p_max.print(String("p_max"), new_prefix, cout); */
-    //                    /* p_min.print(String("p_min"), new_prefix, cout); */
-    //
-    //                    if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
-    //                        cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
-    //                        //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
-    //
-    //                        if((route_list[i]).reference_position.lambda.value > M_PI){
-    //                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
-    //
-    //                            cout << prefix.value << "Case I:\n";
-    //
-    //                            // interval where I know that there will be t_p
-    //                            x_lo_p = (t_max.value);
-    //                            x_hi_p = M_PI;
-    //
-    //                            //interval where I know that there will be t_m
-    //                            x_lo_m = 0.0;
-    //                            x_hi_m = (t_max.value);
-    //
-    //                        }else{
-    //                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
-    //                            //here I select an interval where I know that there will be t_m
-    //
-    //                            cout << prefix.value << "Case II:\n";
-    //
-    //                            // interval where I know that there will be t_p
-    //                            x_lo_p = (t_min.value);
-    //                            x_hi_p = 2.0*M_PI;
-    //
-    //                            //interval where I know that there will be t_m
-    //                            x_lo_m = M_PI;
-    //                            x_hi_m = (t_min.value);
-    //
-    //                        }
-    //
-    //                        (route_list[i]).temp_prefix = prefix;
-    //                        F.params = &(route_list[i]);
-    //                        F.function = &((route_list[i]).lambda_minus_pi);
-    //
-    //
-    //
-    //                        //solve for t_p
-    //
-    //                        gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
-    //
-    //                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
-    //
-    //                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-    //                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-    //
-    //                        iter = 0;
-    //                        do{
-    //
-    //                            iter++;
-    //                            status = gsl_root_fsolver_iterate(s);
-    //
-    //                            x = gsl_root_fsolver_root(s);
-    //                            x_lo_p = gsl_root_fsolver_x_lower(s);
-    //                            x_hi_p = gsl_root_fsolver_x_upper(s);
-    //                            status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
-    //                            if(status == GSL_SUCCESS){
-    //                                cout << new_prefix.value << "Converged:\n";
-    //                            }
-    //                            cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
-    //                        }
-    //                        while((status == GSL_CONTINUE) && (iter < max_iter));
-    //
-    //                        t_p.value = (x_lo_p+x_hi_p)/2.0;
-    //                        t_p.print(String("t_+"), new_prefix, cout);
-    //
-    //
-    //
-    //
-    //
-    //                        //solve for t_m
-    //
-    //                        gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
-    //
-    //                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
-    //
-    //                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-    //                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-    //
-    //                        iter = 0;
-    //                        do{
-    //
-    //                            iter++;
-    //                            status = gsl_root_fsolver_iterate(s);
-    //
-    //                            x = gsl_root_fsolver_root(s);
-    //                            x_lo_m = gsl_root_fsolver_x_lower(s);
-    //                            x_hi_m = gsl_root_fsolver_x_upper(s);
-    //                            status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
-    //                            if(status == GSL_SUCCESS){
-    //                                cout << new_prefix.value << "Converged:\n";
-    //                            }
-    //                            cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
-    //                        }
-    //                        while((status == GSL_CONTINUE) && (iter < max_iter));
-    //
-    //                        t_m.value = (x_lo_m+x_hi_m)/2.0;
-    //                        t_m.print(String("t_-"), new_prefix, cout);
-    //
-    //                        //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-    //
-    //                        plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << ",\\\\\\\n";
-    //                        //maybe wrong
-    //                        plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti,\\\\\\\n";
-    //                        //maybe wrong
-    //                        plot_command << "[" << t_p.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
-    //
-    //                    }else{
-    //                        //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
-    //
-    //                        plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
-    //
-    //                    }
-    //
-    //                }else{
-    //                    //in this case (route_list[i]).reference_position.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that (route_list[i]).reference_position.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
-    //
-    //                    // interval where I know that there will be t_s
-    //                    if((-sin(((route_list[i]).omega.value))/cos(((route_list[i]).reference_position.phi.value) - (((route_list[i]).omega.value)))) > 0.0){
-    //                        //in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
-    //                        if((route_list[i]).reference_position.lambda.value < M_PI){
-    //                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-    //                            x_lo_s = 0.0;
-    //                            x_hi_s = M_PI;
-    //                        }else{
-    //                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-    //                            x_lo_s = M_PI;
-    //                            x_hi_s = 2.0*M_PI;
-    //                        }
-    //                    }else{
-    //                        //in this case lambda'(t = 0) < 0.0 -> lambda'(t) < 0.0  for all t
-    //                        if((route_list[i]).reference_position.lambda.value < M_PI){
-    //                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-    //                            x_lo_s = M_PI;
-    //                            x_hi_s = 2.0*M_PI;
-    //                        }else{
-    //                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-    //                            x_lo_s = 0.0;
-    //                            x_hi_s = M_PI;
-    //                        }
-    //
-    //                    }
-    //
-    //                    (route_list[i]).temp_prefix = prefix;
-    //                    F.params = &(route_list[i]);
-    //                    F.function = &((route_list[i]).lambda_minus_pi);
-    //
-    //                    //solve for t_s
-    //
-    //                    gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
-    //
-    //                    cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-    //                    cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-    //
-    //                    iter = 0;
-    //                    do{
-    //
-    //                        iter++;
-    //                        status = gsl_root_fsolver_iterate(s);
-    //
-    //                        x = gsl_root_fsolver_root(s);
-    //                        x_lo_s = gsl_root_fsolver_x_lower(s);
-    //                        x_hi_s = gsl_root_fsolver_x_upper(s);
-    //                        status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
-    //                        if(status == GSL_SUCCESS){
-    //                            cout << new_prefix.value << "Converged:\n";
-    //                        }
-    //                        cout << new_prefix.value << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
-    //                    }
-    //                    while((status == GSL_CONTINUE) && (iter < max_iter));
-    //
-    //                    t_s.value = (x_lo_s+x_hi_s)/2.0;
-    //                    t_s.print(String("t_*"), new_prefix, cout);
-    //
-    //
-    //                    //                        //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-    //                    //
-    //                    //                        plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << " ,\\\\\\\n";
-    //                    //
-    //                    //                        plot_command << "[" << t_s.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
-    //                    //
-    //                }
-    //
-    //            }
-    //
-    //        }
-    //
-    //
-    //
-    //    }
-    //
-}
+//void Plot::show(bool zoom_out, String prefix){
+//
+//    stringstream line_ins, /*plot_style contains the chunk of the gnuplot command line containing the style (dashtype, line type, color, ...) of the Routes and Position to be plotted*/plot_style, /*plot_title contains the gnuplot title of the Route to be plotted*/ plot_title;
+//    string line;
+//    unsigned int i;
+
+
+//    gsl_function F;
+//    const gsl_root_fsolver_type *T;
+//    gsl_root_fsolver *s;
+
+//append \t to prefix
+
+
+
+//        T = gsl_root_fsolver_brent;
+//        s = gsl_root_fsolver_alloc(T);
+//
+
+
+
+
+
+//
+//    //    //plot routes
+//
+//    for(i=0; i<(route_list.size()); i++){
+//
+//
+//
+//        switch(((route_list[i]).type.value)[0]){
+//
+//            case 'l':
+//                //plot a loxodrome
+//            {
+//
+//
+//                break;
+//            }
+//
+//            case 'o':
+//                //plot an orthodrome
+//            {
+//
+//
+//                break;
+//            }
+//
+//
+//            case 'c':
+//                //plot a circle of equal altitude
+//            {
+//
+//
+//                //if abs(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (route_list[i]).reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(route_list[i]).reference_position.lambda_{t = t_{min}} and (route_list[i]).reference_position.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output.
+//                if(abs(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))) < 1.0){
+//
+//                    //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
+//                    t_max.set(String(""), acos(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
+//                    t_min.set(String(""), 2.0*M_PI - acos(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
+//
+//                    //p_max =  circle of equal altitude computed at t_max
+//                    ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_max.value);
+//                    (route_list[i]).compute_end(new_prefix);
+//                    p_max = ((route_list[i]).end);
+//
+//                    ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_min.value);
+//                    (route_list[i]).compute_end(new_prefix);
+//                    p_min = ((route_list[i]).end);
+//                    //p_min =  circle of equal altitude computed at t_min
+//
+//                    /* p_max.print(String("p_max"), new_prefix, cout); */
+//                    /* p_min.print(String("p_min"), new_prefix, cout); */
+//
+//                    if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
+//                        cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
+//                        //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
+//
+//                        if((route_list[i]).reference_position.lambda.value > M_PI){
+//                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+//
+//                            cout << prefix.value << "Case I:\n";
+//
+//                            // interval where I know that there will be t_p
+//                            x_lo_p = (t_max.value);
+//                            x_hi_p = M_PI;
+//
+//                            //interval where I know that there will be t_m
+//                            x_lo_m = 0.0;
+//                            x_hi_m = (t_max.value);
+//
+//                        }else{
+//                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
+//                            //here I select an interval where I know that there will be t_m
+//
+//                            cout << prefix.value << "Case II:\n";
+//
+//                            // interval where I know that there will be t_p
+//                            x_lo_p = (t_min.value);
+//                            x_hi_p = 2.0*M_PI;
+//
+//                            //interval where I know that there will be t_m
+//                            x_lo_m = M_PI;
+//                            x_hi_m = (t_min.value);
+//
+//                        }
+//
+//                        (route_list[i]).temp_prefix = prefix;
+//                        F.params = &(route_list[i]);
+//                        F.function = &((route_list[i]).lambda_minus_pi);
+//
+//
+//
+//                        //solve for t_p
+//
+//                        gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
+//
+//                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
+//
+//                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+//                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+//
+//                        iter = 0;
+//                        do{
+//
+//                            iter++;
+//                            status = gsl_root_fsolver_iterate(s);
+//
+//                            x = gsl_root_fsolver_root(s);
+//                            x_lo_p = gsl_root_fsolver_x_lower(s);
+//                            x_hi_p = gsl_root_fsolver_x_upper(s);
+//                            status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
+//                            if(status == GSL_SUCCESS){
+//                                cout << new_prefix.value << "Converged:\n";
+//                            }
+//                            cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
+//                        }
+//                        while((status == GSL_CONTINUE) && (iter < max_iter));
+//
+//                        t_p.value = (x_lo_p+x_hi_p)/2.0;
+//                        t_p.print(String("t_+"), new_prefix, cout);
+//
+//
+//
+//
+//
+//                        //solve for t_m
+//
+//                        gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
+//
+//                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
+//
+//                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+//                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+//
+//                        iter = 0;
+//                        do{
+//
+//                            iter++;
+//                            status = gsl_root_fsolver_iterate(s);
+//
+//                            x = gsl_root_fsolver_root(s);
+//                            x_lo_m = gsl_root_fsolver_x_lower(s);
+//                            x_hi_m = gsl_root_fsolver_x_upper(s);
+//                            status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
+//                            if(status == GSL_SUCCESS){
+//                                cout << new_prefix.value << "Converged:\n";
+//                            }
+//                            cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
+//                        }
+//                        while((status == GSL_CONTINUE) && (iter < max_iter));
+//
+//                        t_m.value = (x_lo_m+x_hi_m)/2.0;
+//                        t_m.print(String("t_-"), new_prefix, cout);
+//
+//                        //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+//
+//                        plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << ",\\\\\\\n";
+//                        //maybe wrong
+//                        plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti,\\\\\\\n";
+//                        //maybe wrong
+//                        plot_command << "[" << t_p.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
+//
+//                    }else{
+//                        //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
+//
+//                        plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
+//
+//                    }
+//
+//                }else{
+//                    //in this case (route_list[i]).reference_position.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that (route_list[i]).reference_position.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
+//
+//                    // interval where I know that there will be t_s
+//                    if((-sin(((route_list[i]).omega.value))/cos(((route_list[i]).reference_position.phi.value) - (((route_list[i]).omega.value)))) > 0.0){
+//                        //in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
+//                        if((route_list[i]).reference_position.lambda.value < M_PI){
+//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
+//                            x_lo_s = 0.0;
+//                            x_hi_s = M_PI;
+//                        }else{
+//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
+//                            x_lo_s = M_PI;
+//                            x_hi_s = 2.0*M_PI;
+//                        }
+//                    }else{
+//                        //in this case lambda'(t = 0) < 0.0 -> lambda'(t) < 0.0  for all t
+//                        if((route_list[i]).reference_position.lambda.value < M_PI){
+//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
+//                            x_lo_s = M_PI;
+//                            x_hi_s = 2.0*M_PI;
+//                        }else{
+//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
+//                            x_lo_s = 0.0;
+//                            x_hi_s = M_PI;
+//                        }
+//
+//                    }
+//
+//                    (route_list[i]).temp_prefix = prefix;
+//                    F.params = &(route_list[i]);
+//                    F.function = &((route_list[i]).lambda_minus_pi);
+//
+//                    //solve for t_s
+//
+//                    gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
+//
+//                    cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+//                    cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+//
+//                    iter = 0;
+//                    do{
+//
+//                        iter++;
+//                        status = gsl_root_fsolver_iterate(s);
+//
+//                        x = gsl_root_fsolver_root(s);
+//                        x_lo_s = gsl_root_fsolver_x_lower(s);
+//                        x_hi_s = gsl_root_fsolver_x_upper(s);
+//                        status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
+//                        if(status == GSL_SUCCESS){
+//                            cout << new_prefix.value << "Converged:\n";
+//                        }
+//                        cout << new_prefix.value << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
+//                    }
+//                    while((status == GSL_CONTINUE) && (iter < max_iter));
+//
+//                    t_s.value = (x_lo_s+x_hi_s)/2.0;
+//                    t_s.print(String("t_*"), new_prefix, cout);
+//
+//
+//                    //                        //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
+//                    //
+//                    //                        plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << " ,\\\\\\\n";
+//                    //
+//                    //                        plot_command << "[" << t_s.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
+//                    //
+//                }
+//
+//            }
+//
+//        }
+//
+//
+//
+//    }
+//
+//}
 
 bool Sight::enter(Catalog catalog, String name, String prefix){
     
@@ -6727,24 +6727,24 @@ void ChartFrame::GetCoastLineData_Mercator(void){
             
             //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
             for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
-                   
+                
                 (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
                 (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                 
                 //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-//                if((l % every) == 0){
+                //                if((l % every) == 0){
+                
+                if((draw_panel->check(temp))){
                     
-                    if((draw_panel->check(temp))){
-                        
-                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
-                            (temp.x) += 2.0*M_PI;
-                        }
-                        x.push_back((temp.x));
-                        y.push_back((temp.y));
-                        
+                    if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
+                        (temp.x) += 2.0*M_PI;
                     }
+                    x.push_back((temp.x));
+                    y.push_back((temp.y));
                     
-//                }
+                }
+                
+                //                }
                 
                 
             }
@@ -7532,14 +7532,14 @@ void DrawPanel::Draw_Mercator(void){
     
     //    cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
     
-//    if(x_max >= x_min){
-//        //in this case, x_max, x_min do not encompass the meridian lambda = pi
-//        x_span = x_max-x_min;
-//    }else{
-//        //in this case, x_max, x_min encompass the meridian lambda = pi
-//        x_span = 2.0*M_PI - (x_min-x_max);
-//    }
-
+    //    if(x_max >= x_min){
+    //        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+    //        x_span = x_max-x_min;
+    //    }else{
+    //        //in this case, x_max, x_min encompass the meridian lambda = pi
+    //        x_span = 2.0*M_PI - (x_min-x_max);
+    //    }
+    
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
@@ -7610,11 +7610,11 @@ void DrawPanel::Draw_Mercator(void){
     
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-
+    
     //compute p_up, and p_down, which are two geographic positions whose latitudes are close (modulo 1 pixel) to the edge of the draw area, but slightly within the draw area. These latitudes are then used to draw the meridian, in such a way that all points of the meridian lie within the plot area, and the meridian is not cut.
     (this->*ScreenToGeo)(position_draw_panel + position_plot_area + wxPoint(0, 1), &p_up);
     (this->*ScreenToGeo)(position_draw_panel + position_plot_area + wxPoint(0, height_plot_area-1), &p_down);
-
+    
     (dummy_route.type).set(String(""), String("o"), String(""));
     ((dummy_route.reference_position).phi) = (p_down.phi);
     (p_up.phi).normalize_pm_pi();
@@ -7626,7 +7626,7 @@ void DrawPanel::Draw_Mercator(void){
     //    cout << "xxxx k*(phi_mercator(y_max) - phi_mercator(y_min))*Re = " << k*(phi_mercator(y_max) - phi_mercator(y_min))*Re << "\n";
     
     (dummy_route.alpha).set(String(""), 0.0, String(""));
-   
+    
     
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
     //set a dummy value for temp.y
@@ -7907,7 +7907,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     new_prefix = prefix.append(String("\t"));
     
     
-    (parent->plot)->show(true, String(""));
+    //    (parent->plot)->show(true, String(""));
     
     mouse_scrolling = false;
     //set the zoom factor to 1 for the initial configuration of the projection
@@ -8217,17 +8217,17 @@ template<class T> void ChartFrame::Reset(T& event){
         
         (draw_panel->rotation) = (draw_panel->rotation_0);
         zoom_factor.set(String(""), 1.0, String(""));
-        ZoomFactor_3D(); 
+        ZoomFactor_3D();
         
     }
     
-     
+    
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
+    
     UpdateSlider();
     UpdateSliderLabel();
-
+    
     event.Skip(true);
     
 }
@@ -8258,19 +8258,19 @@ void DrawPanel::Set_x_y_min_max_Mercator(void){
     y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
     y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
     
-//    if(x_max >= x_min){
-//        //in this case, x_max, x_min do not encompass the meridian lambda = pi
-//        x_span = x_max-x_min;
-//    }else{
-//        //in this case, x_max, x_min encompass the meridian lambda = pi
-//        x_span = 2.0*M_PI - (x_min-x_max);
-//    }
+    //    if(x_max >= x_min){
+    //        //in this case, x_max, x_min do not encompass the meridian lambda = pi
+    //        x_span = x_max-x_min;
+    //    }else{
+    //        //in this case, x_max, x_min encompass the meridian lambda = pi
+    //        x_span = 2.0*M_PI - (x_min-x_max);
+    //    }
     
 }
 
 /*returns a double: the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/
 double DrawPanel::x_span(void){
-   
+    
     if(x_max >= x_min){
         //in this case, x_max, x_min do not encompass the meridian lambda = pi
         return(x_max-x_min);
@@ -8278,7 +8278,7 @@ double DrawPanel::x_span(void){
         //in this case, x_max, x_min encompass the meridian lambda = pi
         return(2.0*M_PI - (x_min-x_max));
     }
-
+    
 }
 
 //this function computes x_min, ... y_max from d in the 3D projection
@@ -8415,7 +8415,7 @@ bool ChartFrame::ZoomFactor_Mercator(double delta_x){
 bool ChartFrame::ZoomFactor_3D(void){
     
     bool output;
-        
+    
     output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= (zoom_factor_max.value)));
     
     if(output){
@@ -8436,7 +8436,7 @@ void ChartFrame::UpdateSlider(void){
     //compute the zooming factor of the chart and write it into zoom_factor
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
-    
+        
         ZoomFactor_Mercator((draw_panel->x_span()));
         
     }
@@ -8444,7 +8444,7 @@ void ChartFrame::UpdateSlider(void){
     if(((projection->name)->GetValue()) == wxString("3D")){
         //is this necessary here ?
         ZoomFactor_3D();
-
+        
     }
     
     //a tentative value for the value of slizer
@@ -8916,7 +8916,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
-//        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_Mercator);
+        //        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_Mercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
@@ -8937,7 +8937,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
-//        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
+        //        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);
@@ -9259,7 +9259,7 @@ void ChartFrame::OnMouseLeftDownOnSlider(wxMouseEvent &event){
         (draw_panel->y_center_scrolling) = ((draw_panel->y_min) + (draw_panel->y_max))/2.0;
         
     }
-        
+    
     event.Skip(true);
     
 }
@@ -9275,7 +9275,7 @@ void ChartFrame::OnMouseLeftUpOnSlider(wxMouseEvent &event){
     
 }
 
- 
+
 void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     
     stringstream s;
@@ -9610,7 +9610,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 } 
 
 void ChartFrame::OnScroll(wxScrollEvent &event){
-        
+    
     /*
      n = value of slider,
      z = zoom factor,
@@ -9629,7 +9629,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
      delta_x = w/z/ (w_0/delta_x_0) = w*delta_x_0/(z*w_0)
      
      height_chart/width_chart * x_span = (y_max-y_min);
-
+     
      
      */
     
@@ -9673,11 +9673,11 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
         (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
         (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
-     
+        
         
         if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
-             draw_panel->Update_lambda_phi_min_max();
+            draw_panel->Update_lambda_phi_min_max();
             //            ZoomFactor_Mercator((draw_panel->x_span));
             
             (draw_panel->*(draw_panel->Draw))();
@@ -9689,24 +9689,24 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
             
             /*
-            (draw_panel->x_min) = (draw_panel->x_min_old);
-            (draw_panel->x_max) = (draw_panel->x_max_old);
-            (draw_panel->y_min) = (draw_panel->y_min_old);
-            (draw_panel->y_max) = (draw_panel->y_max_old);
-            
-            cout << "\nx_min_old = " << (draw_panel->x_min_old);
-            cout << "\nx_max_old = " << (draw_panel->x_max_old);
-            cout << "\ny_min_old = " << (draw_panel->y_min_old);
-            cout << "\ny_max_old = " << (draw_panel->y_max_old);
-
-//            draw_panel->Update_lambda_phi_min_max();
-            ZoomFactor_Mercator((draw_panel->x_span()));
-            
-            //put the slider back to the value before the scroll
-            (draw_panel->*(draw_panel->Draw))();
-            draw_panel->PaintNow();
-            UpdateSlider();
-            UpdateSliderLabel();
+             (draw_panel->x_min) = (draw_panel->x_min_old);
+             (draw_panel->x_max) = (draw_panel->x_max_old);
+             (draw_panel->y_min) = (draw_panel->y_min_old);
+             (draw_panel->y_max) = (draw_panel->y_max_old);
+             
+             cout << "\nx_min_old = " << (draw_panel->x_min_old);
+             cout << "\nx_max_old = " << (draw_panel->x_max_old);
+             cout << "\ny_min_old = " << (draw_panel->y_min_old);
+             cout << "\ny_max_old = " << (draw_panel->y_max_old);
+             
+             //            draw_panel->Update_lambda_phi_min_max();
+             ZoomFactor_Mercator((draw_panel->x_span()));
+             
+             //put the slider back to the value before the scroll
+             (draw_panel->*(draw_panel->Draw))();
+             draw_panel->PaintNow();
+             UpdateSlider();
+             UpdateSliderLabel();
              */
             
             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
@@ -9715,9 +9715,9 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             (print_error_message->message) = String("The chart must lie within the boundaries.");
             (*print_error_message)();
             
-            //I reset the chart to its original configuration 
+            //I reset the chart to its original configuration
             Reset<wxCommandEvent>(event);
-             
+            
         }
         
     }
@@ -9731,7 +9731,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         draw_panel->PaintNow();
         UpdateSlider();
         UpdateSliderLabel();
-
+        
     }
     
     

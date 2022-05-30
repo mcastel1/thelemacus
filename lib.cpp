@@ -8178,11 +8178,6 @@ template<class T> void ChartFrame::Reset(T& event){
     idling = false;
     (draw_panel->idling) = false;
     
-//    (draw_panel->x_min) = (draw_panel->x_min_0);
-//    (draw_panel->x_max) = (draw_panel->x_max_0);
-//    (draw_panel->y_min) = (draw_panel->y_min_0);
-//    (draw_panel->y_max) = (draw_panel->y_max_0);
-//
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
         //read lambda_min, ...., phi_max from file_init
@@ -8203,8 +8198,9 @@ template<class T> void ChartFrame::Reset(T& event){
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
         
         (draw_panel->d_0).read_from_file(String("d draw 3d"), String(path_file_init), String(""));
-        (draw_panel->d) = (draw_panel->d_0);
-    
+        zoom_factor.set(String(""), 1.0, String(""));
+        ZoomFactor_3D();
+
         (draw_panel->rotation_0) = Rotation(
                             Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
                             Angle(String("Euler angle beta"), 0.0, String("")),
@@ -8213,16 +8209,26 @@ template<class T> void ChartFrame::Reset(T& event){
         (draw_panel->rotation) = (draw_panel->rotation_0);
         
         draw_panel->Set_x_y_min_max_3D();
-        ZoomFactor_3D();
-
+        
     }
+    
+    //now that x_min ... y_max have been set, I set x_min_0 ... equal to x_min ...
+    (draw_panel->x_min_0) = (draw_panel->x_min);
+    (draw_panel->x_max_0) = (draw_panel->x_max);
+    (draw_panel->y_min_0) = (draw_panel->y_min);
+    (draw_panel->y_max_0) = (draw_panel->y_max);
     
     
     (draw_panel->*(draw_panel->Draw))();
+    
+    //now that width_chart and height_chart have been set, I set width_chart_0 and height_chart_0 equal to width_chart and height_chart
+    (draw_panel->width_chart_0) = (draw_panel->width_chart);
+    (draw_panel->height_chart_0) = (draw_panel->height_chart);
+
+    
     draw_panel->PaintNow();
     
     UpdateSlider();
-    UpdateSliderLabel();
     
     event.Skip(true);
     
@@ -9677,7 +9683,6 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             (draw_panel->*(draw_panel->Draw))();
             draw_panel->PaintNow();
             UpdateSlider();
-            UpdateSliderLabel();
             
         }else{
             //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
@@ -9724,7 +9729,6 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         (draw_panel->*(draw_panel->Draw))();
         draw_panel->PaintNow();
         UpdateSlider();
-        UpdateSliderLabel();
         
     }
     

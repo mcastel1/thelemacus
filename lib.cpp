@@ -7997,10 +7997,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
-    //stores the orientatio of the earth of the first time the chart is shown into rotation_0
-    (draw_panel->d_0) = (draw_panel->d);
-    (draw_panel->rotation_0) = (draw_panel->rotation);
-    
+      
     
     //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
     //
@@ -8181,12 +8178,21 @@ template<class T> void ChartFrame::Reset(T& event){
     idling = false;
     (draw_panel->idling) = false;
     
-    (draw_panel->x_min) = (draw_panel->x_min_0);
-    (draw_panel->x_max) = (draw_panel->x_max_0);
-    (draw_panel->y_min) = (draw_panel->y_min_0);
-    (draw_panel->y_max) = (draw_panel->y_max_0);
-    
+//    (draw_panel->x_min) = (draw_panel->x_min_0);
+//    (draw_panel->x_max) = (draw_panel->x_max_0);
+//    (draw_panel->y_min) = (draw_panel->y_min_0);
+//    (draw_panel->y_max) = (draw_panel->y_max_0);
+//
     if(((projection->name)->GetValue()) == wxString("Mercator")){
+        
+        //read lambda_min, ...., phi_max from file_init
+        ((parent->plot)->lambda_min).read_from_file(String("minimal longitude"), String(path_file_init), String(""));
+        ((parent->plot)->lambda_max).read_from_file(String("maximal longitude"), String(path_file_init), String(""));
+        ((parent->plot)->phi_min).read_from_file(String("minimal latitude"), String(path_file_init), String(""));
+        ((parent->plot)->phi_max).read_from_file(String("maximal latitude"), String(path_file_init), String(""));
+        draw_panel->Set_x_y_min_max_Mercator();
+        ZoomFactor_Mercator(draw_panel->x_span());
+   
         
         //reset the chart boundaries to the initial ones
         draw_panel->Update_lambda_phi_min_max();
@@ -8194,12 +8200,21 @@ template<class T> void ChartFrame::Reset(T& event){
     }
     
     if(((projection->name)->GetValue()) == wxString("3D")){
-        //reset the earth orientation to the initial one and the zoom factor to 1
+        //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
         
+        (draw_panel->d_0).read_from_file(String("d draw 3d"), String(path_file_init), String(""));
+        (draw_panel->d) = (draw_panel->d_0);
+    
+        (draw_panel->rotation_0) = Rotation(
+                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
+                            Angle(String("Euler angle beta"), 0.0, String("")),
+                            Angle(String("Euler angle gamma"), 0.0, String(""))
+                            );
         (draw_panel->rotation) = (draw_panel->rotation_0);
-        zoom_factor.set(String(""), 1.0, String(""));
-        ZoomFactor_3D();
         
+        draw_panel->Set_x_y_min_max_3D();
+        ZoomFactor_3D();
+
     }
     
     
@@ -8919,6 +8934,8 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         //        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
+              
+
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);
@@ -8929,12 +8946,8 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         
     }
     
-    (this->*(Set_x_y_min_max))();
-    
-    
-    //change thsis: this should be called only if name->GetValue has changed.
-    (this->*Draw)();
-    PaintNow();
+    //reset everything and draw
+    parent->Reset<wxCommandEvent>(event);
     
     event.Skip(true);
     

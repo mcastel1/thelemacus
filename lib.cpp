@@ -6627,17 +6627,13 @@ void ChartFrame::GetCoastLineData_3D(void){
     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}
     
-    for(x_3d.clear(), y_3d.clear(), i=0; i<(parent->data_3d).size(); i++){
+    for(x_3d.clear(), y_3d.clear(), i=0; every*i<(parent->data_3d).size(); i++){
         
         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-        if((i % every) == 0){
+        if((draw_panel->GeoTo3D((parent->data_3d)[every*i], &temp))){
             
-            if((draw_panel->GeoTo3D((parent->data_3d)[i], &temp))){
-                
-                x_3d.push_back(temp.x);
-                y_3d.push_back(temp.y);
-                
-            }
+            x_3d.push_back(temp.x);
+            y_3d.push_back(temp.y);
             
         }
         

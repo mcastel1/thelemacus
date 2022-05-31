@@ -7888,6 +7888,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
+    
+    this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnClose, this);
+
      
     mouse_scrolling = false;
     //set the zoom factor to 1 for the initial configuration of the projection
@@ -8029,6 +8032,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     //    CenterOnScreen();
     
+}
+
+void ChartFrame::OnClose(wxCloseEvent& event){
+
+    Destroy();  // you may also do:  event.Skip();
+                // since the default event handler does call Destroy(), too
 }
 
 //moves (makes slide) up the chart

@@ -1996,6 +1996,7 @@ public:
     void OnMouseLeftDownOnSlider(wxMouseEvent&);
     void OnMouseLeftUpOnSlider(wxMouseEvent&);
     void OnScroll(wxScrollEvent&);
+    void OnClose(wxCloseEvent&);
     void SetIdling(bool);
     void AllOk(void);
     
@@ -2007,6 +2008,7 @@ public:
     
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;
+    
 
 
     

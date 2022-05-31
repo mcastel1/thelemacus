@@ -8035,9 +8035,17 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
 }
 
 void ChartFrame::OnClose(wxCloseEvent& event){
+    
+    vector<ChartFrame*>::iterator i;
+
+    i = find((parent->chart_frames).begin(), (parent->chart_frames).end(), this);
+
 
     Destroy();  // you may also do:  event.Skip();
-                // since the default event handler does call Destroy(), too
+    
+    (parent->chart_frames).erase(i);
+
+    // since the default event handler does call Destroy(), too
 }
 
 //moves (makes slide) up the chart

@@ -11373,6 +11373,15 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     highlighted_route = -1;
     highlighted_position = -1;
     
+    menu_bar = new wxMenuBar;
+    menu_chart = new wxMenu;
+    
+    menu_chart->Append(wxID_ANY, wxT("New chart"), wxT(""));
+    menu_bar->Append(menu_chart, wxT("&Chart"));
+    SetMenuBar(menu_bar);
+
+    menu_chart->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
+
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
@@ -11609,6 +11618,31 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
     //    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
     //
+}
+
+//create a new ChartFrame and appends it to the end of chart_frames
+void ListFrame::OnAddChartFrame(wxCommandEvent& event){
+    
+    stringstream s;
+    
+    chart_frames.resize(chart_frames.size()+1);
+    
+    s.str("");
+    s << "Chart #" << (chart_frames.size())+1;
+    
+    (chart_frames.back()) = new ChartFrame(
+                                                   this,
+                                                   s.str(),
+                                                   /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
+                                                   wxPoint(0, 0),
+                                                   wxDefaultSize,
+                                                   String("")
+                                                   );
+    (chart_frames.back())->Show(true);
+    
+    
+    
+    
 }
 
 //writes the ids of the related sights and route in the GUI fields in ListFrame -> this, by reading them from the non-GUI object Plot

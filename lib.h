@@ -1780,6 +1780,8 @@ public:
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
     //    wxListBox* listbox;
+    wxMenuBar *menu_bar;
+    wxMenu *menu_chart;
     ListControl *listcontrol_sights, *listcontrol_routes, *listcontrol_positions;
     wxPanel *panel;
     wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position, *button_add_route, *button_delete_route;
@@ -1816,7 +1818,9 @@ public:
     void OnAddRoute(wxCommandEvent& event);
     void OnModifyRoute(wxCommandEvent& event);
     void OnPressDeleteRoute(wxCommandEvent& event);
-    
+
+    void OnAddChartFrame(wxCommandEvent& event);
+
     void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseOnListControlPositions(wxMouseEvent&);

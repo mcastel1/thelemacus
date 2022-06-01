@@ -8045,9 +8045,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
 }
 
+//when a ChartFrame is closed, I destroy it, delete the respecive item in parent->chart_frames vector, and rename all the other ChartFrames in that vector to take into account the shifting of the CartFrame ids due to the Chartframe deletion
 void ChartFrame::OnClose(wxCloseEvent& event){
     
     vector<ChartFrame*>::iterator i;
+    unsigned int j;
+    stringstream s;
 
     i = find((parent->chart_frames).begin(), (parent->chart_frames).end(), this);
 
@@ -8055,8 +8058,15 @@ void ChartFrame::OnClose(wxCloseEvent& event){
     Destroy();  // you may also do:  event.Skip();
     
     (parent->chart_frames).erase(i);
+    for(j=0; j<(parent->chart_frames).size(); j++){
+        
+        s.str("");
+        s << "Chart #" << j+1 << " - " << ((((parent->chart_frames)[j])->projection)->name)->GetValue() << " projection";
 
-    // since the default event handler does call Destroy(), too
+        ((parent->chart_frames)[j])->SetTitle(wxString(s.str().c_str()));
+        
+    }
+
 }
 
 //moves (makes slide) up the chart
@@ -11661,7 +11671,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
     chart_frames.resize(chart_frames.size()+1);
     
     s.str("");
-    s << "Chart #" << (chart_frames.size());
+    s << "Chart #" << (chart_frames.size()) << " - " << (projection.value) << " projection";
     
     (chart_frames.back()) = new ChartFrame(
                                            this,

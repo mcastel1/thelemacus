@@ -53,6 +53,7 @@ bool MyApp::OnInit(){
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
+    String default_projection;
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
@@ -70,8 +71,11 @@ bool MyApp::OnInit(){
     (list_frame->chart_frames).resize(n_chart_frames.value);
     for(i=0; i<(list_frame->chart_frames).size(); i++){
         
+        default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+   
+        
         s.str("");
-        s << "Chart #" << i+1;
+        s << "Chart #" << i+1 << " - " << (default_projection.value) << " projection";
         
         (list_frame->chart_frames)[i] = new ChartFrame(
                                                        list_frame,

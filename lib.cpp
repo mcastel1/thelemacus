@@ -10604,9 +10604,6 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintErrorMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
-    
-    //    wxMenu *menuFile = new wxMenu;
-    
     //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set position_in_listcontrol_positions to a 'NULL' value (position_in_listcontrol_positions = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set position_in_listcontrol_positions to position_in_listcontrol_positions_in.
     if(position_in != NULL){
         position = position_in;
@@ -11375,12 +11372,19 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     menu_bar = new wxMenuBar;
     menu_chart = new wxMenu;
+    menu_new_chart = new wxMenu;
+    menu_item_mercator = new wxMenu;
+    menu_item_3d = new wxMenu;
+
     
-    menu_chart->Append(wxID_ANY, wxT("New chart"), wxT(""));
+    menu_new_chart->AppendSubMenu(menu_item_mercator, wxT("Mercator"), wxT(""));
+    menu_new_chart->AppendSubMenu(menu_item_3d, wxT("3D"), wxT(""));
+    menu_chart->AppendSubMenu(menu_new_chart, wxT("New chart"), wxT(""));
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
 
-    menu_chart->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
+    menu_item_mercator->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
+    menu_item_3d->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
 
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);

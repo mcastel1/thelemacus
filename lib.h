@@ -1781,7 +1781,7 @@ public:
     Catalog *catalog;
     //    wxListBox* listbox;
     wxMenuBar *menu_bar;
-    wxMenu *menu_chart;
+    wxMenu *menu_chart, *menu_new_chart, *menu_item_mercator, *menu_item_3d;
     ListControl *listcontrol_sights, *listcontrol_routes, *listcontrol_positions;
     wxPanel *panel;
     wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position, *button_add_route, *button_delete_route;

@@ -8063,7 +8063,7 @@ void ChartFrame::OnClose(wxCloseEvent& event){
         s.str("");
         s << "Chart #" << j+1 << " - " << ((((parent->chart_frames)[j])->projection)->name)->GetValue() << " projection";
 
-        ((parent->chart_frames)[j])->SetTitle(wxString(s.str().c_str()));
+        ((parent->chart_frames)[j])->SetLabel(wxString(s.str().c_str()));
         
     }
 
@@ -8942,6 +8942,15 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 
 void DrawPanel::OnChooseProjection(wxCommandEvent& event){
     
+    stringstream s;
+    vector<ChartFrame*>::iterator i;
+    
+    //set the ChartFrame title
+    s.str("");
+    s << "Chart #" << /*this is the position of parent->this in the vector chart_frames, which is the id of the chart frame to be shown in the ChartFrame title*/distance(((parent->parent)->chart_frames).begin(), find(((parent->parent)->chart_frames).begin(), ((parent->parent)->chart_frames).end(), parent)) << " - " << (((parent->projection)->name)->GetValue().ToStdString()) << " projection";
+    parent->SetLabel(wxString(s.str().c_str()));
+
+    
     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
         //if in projection "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
         
@@ -8960,7 +8969,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
-        
+                
     }
     
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
@@ -8983,7 +8992,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         (parent->button_down)->Enable(false);
         (parent->button_left)->Enable(false);
         (parent->button_right)->Enable(false);
-        
+                
     }
     
     //reset everything and draw

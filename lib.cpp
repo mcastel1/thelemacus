@@ -11628,7 +11628,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
     chart_frames.resize(chart_frames.size()+1);
     
     s.str("");
-    s << "Chart #" << (chart_frames.size())+1;
+    s << "Chart #" << (chart_frames.size());
     
     (chart_frames.back()) = new ChartFrame(
                                                    this,

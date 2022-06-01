@@ -11377,14 +11377,17 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     menu_item_3d = new wxMenu;
 
     
-    menu_new_chart->AppendSubMenu(menu_item_mercator, wxT("Mercator"), wxT(""));
-    menu_new_chart->AppendSubMenu(menu_item_3d, wxT("3D"), wxT(""));
+//    menu_chart->Append(wxID_ANY, wxT("New chart"), wxT(""));
+
+    
+    menu_new_chart->Append(101, wxT("Mercator"), wxT(""));
+    menu_new_chart->Append(102, wxT("3D"), wxT(""));
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New chart"), wxT(""));
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
 
-    menu_item_mercator->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
-    menu_item_3d->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
+    menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, 101);
+//    menu_item_3d->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
 
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);

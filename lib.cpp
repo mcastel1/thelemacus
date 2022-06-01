@@ -7874,7 +7874,7 @@ void DrawPanel::Draw_3D(void){
 }
 
 
-ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;
     String new_prefix, default_projection;
@@ -7981,10 +7981,21 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const wxString& title, const wxP
     
     
     
-    //when the ChartFrame is initialized, I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these, create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice above.
-    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
-    (projection->name)->SetValue(wxString(default_projection.value));
+    //when the ChartFrame is initialized with projection_in = "", I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these,
+    if(projection_in == String("")){
+        //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
+        
+        default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+        (projection->name)->SetValue(wxString(default_projection.value));
+        
+    }else{
+        //if the construtor has been called with projection_in non-empty, I set projection_in equal to projection_in
+        
+        (projection->name)->SetValue(wxString(projection_in.value));
+
+    }
     
+    //create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice of the projeciton above.
     draw_panel->OnChooseProjection(dummy_event);
     
     //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
@@ -11631,14 +11642,18 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 void ListFrame::OnAddChartFrame(wxCommandEvent& event){
     
     stringstream s;
+    String projection;
     
+    //recognizes whether the creation of a new chart frame has been triggered by pressing the "Mercator" or the "3D" button, and writes the respective proejction namee into projection.
     if(event.GetId() == wxID_HIGHEST + 1){
         
+        projection = String("Mercator");
         
     }
     
     if(event.GetId() == wxID_HIGHEST + 2){
         
+        projection = String("3D");
         
     }
     
@@ -11649,13 +11664,14 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
     s << "Chart #" << (chart_frames.size());
     
     (chart_frames.back()) = new ChartFrame(
-                                                   this,
-                                                   s.str(),
-                                                   /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
-                                                   wxPoint(0, 0),
-                                                   wxDefaultSize,
-                                                   String("")
-                                                   );
+                                           this,
+                                           projection,
+                                           s.str(),
+                                           /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
+                                           wxPoint(0, 0),
+                                           wxDefaultSize,
+                                           String("")
+                                           );
     (chart_frames.back())->Show(true);
     
     

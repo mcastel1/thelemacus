@@ -1964,7 +1964,7 @@ public:
 class ChartFrame: public wxFrame{
     
 public:
-    ChartFrame(ListFrame*, const wxString&, const wxPoint&, const wxSize&, String);
+    ChartFrame(ListFrame*, String, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
     DrawPanel *draw_panel;

@@ -42,6 +42,7 @@
  - fix "14:17:41: Debug: Adding duplicate image handler for 'PNG file'"
  - rotation_0 should be read from file at the beginning
  - bind function when you close a ChartFrame that deletes the chartframe object from the vector list
+ - in OnChooseProjection , change title of ChartFrame by ptting the name of the new projection. 
  */
 
 

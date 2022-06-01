@@ -11380,14 +11380,14 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 //    menu_chart->Append(wxID_ANY, wxT("New chart"), wxT(""));
 
     
-    menu_new_chart->Append(101, wxT("Mercator"), wxT(""));
-    menu_new_chart->Append(102, wxT("3D"), wxT(""));
+    menu_new_chart->Append(wxID_HIGHEST + 1, wxT("Mercator"), wxT(""));
+    menu_new_chart->Append(wxID_HIGHEST + 2, wxT("3D"), wxT(""));
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New chart"), wxT(""));
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
 
-    menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, 101);
-//    menu_item_3d->Bind(wxEVT_COMMAND_MENU_SELECTED, &ListFrame::OnAddChartFrame, this);
+    menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 1);
+    menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
 
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
@@ -11631,6 +11631,17 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
 void ListFrame::OnAddChartFrame(wxCommandEvent& event){
     
     stringstream s;
+    
+    if(event.GetId() == wxID_HIGHEST + 1){
+        
+        
+    }
+    
+    if(event.GetId() == wxID_HIGHEST + 2){
+        
+        
+    }
+    
     
     chart_frames.resize(chart_frames.size()+1);
     

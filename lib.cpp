@@ -11618,7 +11618,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
     //    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
     //
-}
+} 
 
 //create a new ChartFrame and appends it to the end of chart_frames
 void ListFrame::OnAddChartFrame(wxCommandEvent& event){

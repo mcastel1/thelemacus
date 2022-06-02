@@ -6637,8 +6637,8 @@ void ChartFrame::GetCoastLineData_3D(void){
     //convert rp -> r through rotation^{-1}
     gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
     
-    //obtain the  geographic position of the center of the circle of equal altitude above 
-    p.set(String(""), draw_panel->r, String(""));
+    //obtain the  geographic position of the center of the circle of equal altitude above
+    p.set(String("xxx GP"), draw_panel->r, String(""));
 
     
     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));

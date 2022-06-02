@@ -6671,10 +6671,6 @@ void ChartFrame::GetCoastLineData_3D(void){
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most
 void ChartFrame::GetCoastLineData_Mercator(void){
     
-    
-    //    File file_n_line, file_coastline_data_blocked/*, outfile_selected_coastline_data*/;
-    //    string data, line;
-    //    stringstream ins;
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
     Projection temp;

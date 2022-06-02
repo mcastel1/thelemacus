@@ -6657,7 +6657,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     //obtain the  geographic position of the center of the circle of equal altitude above
     p.set(String("GP of visibility cone"), draw_panel->r, String(""));
     
-    
+     
     //set lambda/phi/min/max ... int
     q = (p.phi)+omega;
     q.normalize_pm_pi();

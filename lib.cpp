@@ -5987,8 +5987,15 @@ void Position::enter(String name, String prefix){
 //set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
 void Position::set(String name, gsl_vector* r, String prefix){
     
-    lambda.set(String(name), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
-    phi.set(String(name), asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(prefix));
+    String new_prefix;
+
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+  
+    cout << prefix.value << name.value << "\n";
+    
+    lambda.set(String("latitude"), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
+    phi.set(String("longitude"), asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(prefix));
     
 }
 
@@ -6638,7 +6645,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
     
     //obtain the  geographic position of the center of the circle of equal altitude above
-    p.set(String("xxx GP"), draw_panel->r, String(""));
+    p.set(String("xxx GP of visibility cone"), draw_panel->r, String(""));
 
     
     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));

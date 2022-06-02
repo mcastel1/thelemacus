@@ -6636,12 +6636,12 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 
 void ChartFrame::GetCoastLineData_3D(void){
     
-    unsigned int i, every;
+    unsigned long every, l, n, n_points_grid;
     //integer values of min/max lat/lon to be extractd from data_3d
-    int lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
+    int i, j, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int, i_min, i_max, j_min, j_max;
     Projection temp;
     //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture omega and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
-    Angle omega;
+    Angle omega, q;
     Position p;
     
     omega.set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
@@ -6658,17 +6658,85 @@ void ChartFrame::GetCoastLineData_3D(void){
     p.set(String("GP of visibility cone"), draw_panel->r, String(""));
     
     
-    omega.normalize_pm_pi();
+    //set lambda/phi/min/max ... int
+    q = (p.phi)+omega;
+    q.normalize_pm_pi();
+    phi_max_int = ceil(K*(q.value));
     
-    phi_min_int = floor(K*(((parent->plot)->phi_min).value));
-    phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
+    q = (p.phi)-omega;
+    q.normalize_pm_pi();
+    phi_min_int = floor(K*(q.value));
+
+    q = (p.lambda)+omega;
+    lambda_max_int = ceil(K*(q.value));
+
+    q = (p.lambda)-omega;
+    lambda_min_int = floor(K*(q.value));
+
+    
+    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
+        //in this case, x_min and x_max embrace the meridian lambda = 0
+
+        j_min = lambda_max_int;
+        j_max = 360 + lambda_min_int;
+        
+    }else{
+        //in thi case, both x_min and x_max lie either in the interval [-pi, 0] or in [0, pi]
+
+        j_min = lambda_max_int;
+        j_max = lambda_min_int;
+        
+    }
+    
+    i_min = phi_min_int;
+    i_max = phi_max_int;
  
-    
-    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
-    lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
+    //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
+    n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
 
+    x_3d.clear();
+    y_3d.clear();
+    
+    for(i=i_min; i<i_max; i++){
+        
+        //        cout << "\n i = " << i;
+        
+        for(j=j_min; j<j_max; j++){
+            
+            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+            //            flush(cout);
+            
+            //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
+            n = ((parent->data_x)[i - floor_min_lat][j % 360]).size();
+            
+            //I plot every 'every' data points
+            every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+            if(every == 0){every = 1;}
+            
+            //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+            for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
+                
+                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
+                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+                
+                //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                
+                if((draw_panel->check(temp))){
+                    
+                    x_3d.push_back((temp.x));
+                    y_3d.push_back((temp.y));
+                    
+                }
+             
+                
+            }
+            
+        }
+        
+    }
 
     
+    /*
     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}
     
@@ -6683,7 +6751,7 @@ void ChartFrame::GetCoastLineData_3D(void){
         }
         
     }
-    
+    */
     
     
 }
@@ -6714,13 +6782,13 @@ void ChartFrame::GetCoastLineData_Mercator(void){
         //this is the 'normal' case where x_min, x_max do not embrace the meridian lambda = pi
         
         if((lambda_min_int < 180) && (lambda_max_int >= 180)){
-            //in thi case, both x_min and x_max lie either in the interval [-pi, 0] or in [0, pi]
-            
+            //in this case, x_min and x_max embrace the meridian lambda = 0
+
             j_min = lambda_max_int;
             j_max = 360 + lambda_min_int;
             
         }else{
-            //in this case, x_min and x_max embrace the meridian lambda = 0
+            //in thi case, both x_min and x_max lie either in the interval [-pi, 0] or in [0, pi]
             
             j_min = lambda_max_int;
             j_max = lambda_min_int;
@@ -6737,8 +6805,6 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     i_min = phi_min_int;
     i_max = phi_max_int;
-    
-    //    cout << "\n\n\n\n\nCoordinates: " << phi_min_int << " " << phi_max_int << " " << lambda_min_int << " " << lambda_max_int << "\n";
     
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);

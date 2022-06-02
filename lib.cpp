@@ -6691,9 +6691,19 @@ void ChartFrame::GetCoastLineData_3D(void){
 //    j_min = lambda_min_int;
 //    j_max = lambda_max_int;
 
-    i_min = phi_min_int;
-    i_max = phi_max_int;
- 
+    //I set i_min and i_max from phi_min_int and phi_max_int: if phi_min/max_int exceed the values given by the coastline data, I set them to the maximal available values comprised in the coastline data
+    if(phi_min_int - floor_min_lat >=0){
+        i_min = phi_min_int;
+    }else{
+        i_min = floor_min_lat;
+    }
+    
+    if(phi_max_int - floor_min_lat <= (parent->data_3d).size()){
+        i_max = phi_max_int;
+    }else{
+        i_max = floor_min_lat + (parent->data_3d).size();
+    }
+     
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
 

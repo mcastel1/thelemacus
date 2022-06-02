@@ -1793,8 +1793,9 @@ public:
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<float> > > data_x, data_y;
+    vector< vector< vector<Position> > > data_3d;
     //a vector which contains the Positions of the coastline profiles of the entire world
-    vector<Position> data_3d;
+//    vector<Position> data_3d;
     vector<wxColour> color_list;
     //the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area
     wxColour color_selected_item;

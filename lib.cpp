@@ -6672,22 +6672,25 @@ void ChartFrame::GetCoastLineData_3D(void){
 
     q = (p.lambda)-omega;
     lambda_min_int = floor(K*(q.value));
-
     
-    if((lambda_min_int < 180) && (lambda_max_int >= 180)){
-        //in this case, x_min and x_max embrace the meridian lambda = 0
-
-        j_min = lambda_max_int;
-        j_max = 360 + lambda_min_int;
+    
+    if((lambda_min_int >= 180) && (lambda_max_int < 180)){
+        
+        j_min = lambda_min_int;
+        j_max = 360 + lambda_max_int;
+        
         
     }else{
-        //in thi case, both x_min and x_max lie either in the interval [-pi, 0] or in [0, pi]
-
-        j_min = lambda_max_int;
-        j_max = lambda_min_int;
+        
+        j_min = lambda_min_int;
+        j_max = lambda_max_int;
         
     }
     
+    
+//    j_min = lambda_min_int;
+//    j_max = lambda_max_int;
+
     i_min = phi_min_int;
     i_max = phi_max_int;
  
@@ -6707,22 +6710,22 @@ void ChartFrame::GetCoastLineData_3D(void){
             //            flush(cout);
             
             //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-            n = ((parent->data_x)[i - floor_min_lat][j % 360]).size();
+            n = ((parent->data_3d)[i - floor_min_lat][j % 360]).size();
             
             //I plot every 'every' data points
             every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
             if(every == 0){every = 1;}
             
             //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-            for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
+            for(l=0; (l*every)<((parent->data_3d)[i - floor_min_lat][j % 360]).size(); l++){
                 
-                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
-                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+//                (temp.x) = (parent->data_3d)[i - floor_min_lat][j % 360][l*every];
+//                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                 
                 //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                 
-                if((draw_panel->check(temp))){
-                    
+                //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                if((draw_panel->GeoTo3D((parent->data_3d)[i - floor_min_lat][j % 360][l*every], &temp))){
                     x_3d.push_back((temp.x));
                     y_3d.push_back((temp.y));
                     
@@ -6909,9 +6912,14 @@ void ListFrame::GetAllCoastLineData(void){
         data_x.resize(i+1);
         data_y.resize(i+1);
         
+        data_3d.resize(i+1);
+
+        
         (data_x[i]).resize(360);
         (data_y[i]).resize(360);
-        
+
+        (data_3d[i]).resize(360);
+
         for(j=0; j<360; j++){
             
             // read data as a block:
@@ -6949,7 +6957,8 @@ void ListFrame::GetAllCoastLineData(void){
                 
                 (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                 (p_temp.phi).set(String(""), k*phi_temp, String(""));
-                data_3d.push_back(p_temp);
+
+                (data_3d[i][j]).push_back(p_temp);
                 
                 pos_beg = pos_end+1;
                 pos_end = data.find(" ", pos_beg);

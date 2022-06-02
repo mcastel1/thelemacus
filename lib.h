@@ -1443,7 +1443,7 @@ public:
     //the euler angles which specify the orientation of the earth for the 3d representation
     //two auxiliary vectors which will be used later
     gsl_vector *r, *rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;
-    Rotation rotation, /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the initial orientation of the earth*/rotation_0;
+    Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
     Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructed*/d, d_0, /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
     wxStaticText*text_position_start, *text_position_end;
     bool selection_rectangle, /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling;

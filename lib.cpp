@@ -6640,11 +6640,10 @@ void ChartFrame::GetCoastLineData_3D(void){
     //integer values of min/max lat/lon to be extractd from data_3d
     int i, j, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int, i_min, i_max, j_min, j_max;
     Projection temp;
-    //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture omega and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
-    Angle omega, q;
-    Position p;
+    //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture (draw_panel->omega_observer) and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
+    Angle q;
     
-    omega.set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
+    (draw_panel->omega_observer).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
     
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
     gsl_vector_set(draw_panel->rp, 0, 0.0);
@@ -6655,22 +6654,22 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
     
     //obtain the  geographic position of the center of the circle of equal altitude above
-    p.set(String("GP of visibility cone"), draw_panel->r, String(""));
+    (draw_panel->GP_observer).set(String("GP of visibility cone"), draw_panel->r, String(""));
     
      
     //set lambda/phi/min/max ... int
-    q = (p.phi)+omega;
+    q = ((draw_panel->GP_observer).phi)+(draw_panel->omega_observer);
     q.normalize_pm_pi();
     phi_max_int = ceil(K*(q.value));
     
-    q = (p.phi)-omega;
+    q = ((draw_panel->GP_observer).phi)-(draw_panel->omega_observer);
     q.normalize_pm_pi();
     phi_min_int = floor(K*(q.value));
 
-    q = (p.lambda)+omega;
+    q = ((draw_panel->GP_observer).lambda)+(draw_panel->omega_observer);
     lambda_max_int = ceil(K*(q.value));
 
-    q = (p.lambda)-omega;
+    q = ((draw_panel->GP_observer).lambda)-(draw_panel->omega_observer);
     lambda_min_int = floor(K*(q.value));
     
     
@@ -7973,9 +7972,15 @@ void DrawPanel::Draw_3D(void){
     }
     
     
-    //draw the circle repreentig the edge of the earth
-    //    (chart->getDrawArea())->circle(0.0, 0.0, x_max, y_max, 1, Chart::Transparent);
+    //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
+    (dummy_route.type).set(String(""), String("c"), String(""));
+    (dummy_route.reference_position) = GP_observer;
+    (dummy_route.omega) = omega_observer;
+    dummy_route.draw(((plot->n_points_routes).value), this);
+
     
+    
+
     
     
     mem_block = (chart->makeChart(Chart::BMP));

@@ -6625,11 +6625,21 @@ void ChartFrame::GetCoastLineData_3D(void){
     Projection temp;
     //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture omega and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
     Angle omega;
+    Position p;
     
-    omega.set(String("limit angle"), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
+    omega.set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
     
-    gsl_vector_set(rp, )
+    //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
+    gsl_vector_set(draw_panel->rp, 0, 0.0);
+    gsl_vector_set(draw_panel->rp, 1, -1.0);
+    gsl_vector_set(draw_panel->rp, 2, 0.0);
     
+    //convert rp -> r through rotation^{-1}
+    gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
+    
+    //obtain the  geographic position of the center of the circle of equal altitude above 
+    p.set(String(""), draw_panel->r, String(""));
+
     
     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}

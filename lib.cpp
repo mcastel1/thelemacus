@@ -5987,15 +5987,23 @@ void Position::enter(String name, String prefix){
 //set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
 void Position::set(String name, gsl_vector* r, String prefix){
     
-    String new_prefix;
+    String new_prefix, name_lambda, name_phi;
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
+    
+    if(name != String("")){
+        name_lambda = String("longitude");
+        name_phi = String("latitude");
+    }else{
+        name_lambda = String("");
+        name_phi = String("");
+    }
   
     cout << prefix.value << name.value << "\n";
     
-    lambda.set(String("latitude"), -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
-    phi.set(String("longitude"), asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(prefix));
+    lambda.set(name_lambda, -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
+    phi.set(name_phi, asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(prefix));
     
 }
 
@@ -6629,6 +6637,8 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 void ChartFrame::GetCoastLineData_3D(void){
     
     unsigned int i, every;
+    //integer values of min/max lat/lon to be extractd from data_3d
+    int lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     Projection temp;
     //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture omega and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
     Angle omega;
@@ -6645,7 +6655,18 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
     
     //obtain the  geographic position of the center of the circle of equal altitude above
-    p.set(String("xxx GP of visibility cone"), draw_panel->r, String(""));
+    p.set(String("GP of visibility cone"), draw_panel->r, String(""));
+    
+    
+    omega.normalize_pm_pi();
+    
+    phi_min_int = floor(K*(((parent->plot)->phi_min).value));
+    phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
+ 
+    
+    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
+    lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
+
 
     
     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));

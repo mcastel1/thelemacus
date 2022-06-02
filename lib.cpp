@@ -6628,6 +6628,8 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     omega.set(String("limit angle"), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
     
+    gsl_vector_set(rp, )
+    
     
     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
     if(every == 0){every = 1;}

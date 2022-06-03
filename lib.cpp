@@ -1080,8 +1080,8 @@ void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 }
 
 
-//draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color'
-void Route::draw(unsigned int n_points, int color, DrawPanel* draw_panel){
+//draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
+void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_panel){
     
     vector< vector<double> > x;
     vector< vector<double> > y;
@@ -1139,7 +1139,9 @@ void Route::draw(unsigned int n_points, int color, DrawPanel* draw_panel){
             
             (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), /*0x808080*/color, ""));
             (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (int)(x[i]).size()));
-            //            (draw_panel->spline_layer)->setLineWidth(width);
+            if(width != -1){
+                (draw_panel->spline_layer)->setLineWidth(width);
+            }
 
         }
         
@@ -7754,7 +7756,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, this);
+            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
             
         }
         
@@ -7833,7 +7835,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //I set the length of the Route corresponding to the parallel
             (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
-            dummy_route.draw(((plot->n_points_routes).value), 0x808080, this);
+            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
         }
         
@@ -7950,7 +7952,7 @@ void DrawPanel::Draw_3D(void){
         
         //I fix the longitude of the ground position of dummy_route, according to lambda
         ((dummy_route.reference_position).lambda).set(String(""), lambda+M_PI/2.0, String(""));
-        dummy_route.draw(((plot->n_points_routes).value), 0x808080, this);
+        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
         
     }
     
@@ -7968,7 +7970,7 @@ void DrawPanel::Draw_3D(void){
         
         //I fix the latitude of the start position of dummy_route, according to phi
         (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
-        dummy_route.draw(((plot->n_points_routes).value), 0x808080, this);
+        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
         
     }
     
@@ -7976,22 +7978,22 @@ void DrawPanel::Draw_3D(void){
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
     (dummy_route.type).set(String(""), String("c"), String(""));
     (dummy_route.reference_position) = GP_observer;
+    /*
     //set omega to a value slightly smaller than omega_observer, specifically chosen in such a way that  dummy_route lies more towards the GP of the observer, by one pixel
     (dummy_route.omega).set(String("Omega adjusted"),
-                            
                             asin(
                                  
                                  (sqrt(2.0 + (d.value))*sqrt((d.value)*((double)height_plot_area)*gsl_pow_2(sin(omega_observer)) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max))/
-                                    sqrt((d.value)*(2.0 + (d.value))*((double)height_plot_area) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max)
+                                 sqrt((d.value)*(2.0 + (d.value))*((double)height_plot_area) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max)
                                  
                                  )
-                            
-                            
-                            
-                            , String(""));
+                            , String("")
+                            );
+     */
+    (dummy_route.omega) = omega_observer;
     
     
-    dummy_route.draw(((plot->n_points_routes).value), 0x00BFFF, this);
+    dummy_route.draw(((plot->n_points_routes).value), 0x00BFFF, 5,this);
 
     
     

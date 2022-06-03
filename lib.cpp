@@ -7979,13 +7979,12 @@ void DrawPanel::Draw_3D(void){
     //set omega to a value slightly smaller than omega_observer, specifically chosen in such a way that  dummy_route lies more towards the GP of the observer, by one pixel
     (dummy_route.omega).set(String("Omega adjusted"),
                             
-                            acos(sqrt(
-                                      
-                                      /*this 1 represents one pixel*/1 * 2.0*y_max*((d.value)+1.0)/((d.value)*((double)height_plot_area))
-                                      
-                                      + gsl_pow_2(cos(omega_observer))
-                                      
-                                      ))
+                            asin(
+                                 
+                                 (sqrt(2.0 + (d.value))*sqrt((d.value)*((double)height_plot_area)*gsl_pow_2(sin(omega_observer)) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max))/
+                                    sqrt((d.value)*(2.0 + (d.value))*((double)height_plot_area) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max)
+                                 
+                                 )
                             
                             
                             

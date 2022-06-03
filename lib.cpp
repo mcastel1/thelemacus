@@ -7993,7 +7993,7 @@ void DrawPanel::Draw_3D(void){
     (dummy_route.omega) = omega_observer;
     
     
-    dummy_route.draw(((plot->n_points_routes).value), 0x00BFFF, 5,this);
+    dummy_route.draw(((plot->n_points_routes).value), 0x00BFFF, -1, this);
 
     
     

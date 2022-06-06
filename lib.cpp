@@ -5345,6 +5345,141 @@ double Route::lambda_minus_pi(double t, void* route){
     
 }
 
+void Route::compute_lambda_edges(void){
+    
+    
+    if(abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0){
+        
+        //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
+        t_max.set(String(""), acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
+        t_min.set(String(""), 2.0*M_PI - acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
+        
+        //p_max =  circle of equal altitude computed at t_max
+        (l.value) = Re * sin((omega.value)) * (t_max.value);
+        compute_end(new_prefix);
+        p_max = (end);
+        
+        (l.value) = Re * sin((omega.value)) * (t_min.value);
+        compute_end(new_prefix);
+        p_min = (end);
+        //p_min =  circle of equal altitude computed at t_min
+        
+        /* p_max.print(String("p_max"), new_prefix, cout); */
+        /* p_min.print(String("p_min"), new_prefix, cout); */
+        
+        if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
+            cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
+            //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
+            
+            if(reference_position.lambda.value > M_PI){
+                //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
+                
+                cout << prefix.value << "Case I:\n";
+                
+                // interval where I know that there will be t_p
+                x_lo_p = (t_max.value);
+                x_hi_p = M_PI;
+                
+                //interval where I know that there will be t_m
+                x_lo_m = 0.0;
+                x_hi_m = (t_max.value);
+                
+            }else{
+                //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
+                //here I select an interval where I know that there will be t_m
+                
+                cout << prefix.value << "Case II:\n";
+                
+                // interval where I know that there will be t_p
+                x_lo_p = (t_min.value);
+                x_hi_p = 2.0*M_PI;
+                
+                //interval where I know that there will be t_m
+                x_lo_m = M_PI;
+                x_hi_m = (t_min.value);
+                
+            }
+            
+            temp_prefix = prefix;
+            F.params = &(route_list[i]);
+            F.function = &(lambda_minus_pi);
+            
+            
+            
+            //solve for t_p
+            
+            gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
+            
+            cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
+            
+            cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+            cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+            
+            iter = 0;
+            do{
+                
+                iter++;
+                status = gsl_root_fsolver_iterate(s);
+                
+                x = gsl_root_fsolver_root(s);
+                x_lo_p = gsl_root_fsolver_x_lower(s);
+                x_hi_p = gsl_root_fsolver_x_upper(s);
+                status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
+                if(status == GSL_SUCCESS){
+                    cout << new_prefix.value << "Converged:\n";
+                }
+                cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
+            }
+            while((status == GSL_CONTINUE) && (iter < max_iter));
+            
+            t_p.value = (x_lo_p+x_hi_p)/2.0;
+            t_p.print(String("t_+"), new_prefix, cout);
+            
+            
+            
+            
+            
+            //solve for t_m
+            
+            gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
+            
+            cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
+            
+            cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
+            cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
+            
+            iter = 0;
+            do{
+                
+                iter++;
+                status = gsl_root_fsolver_iterate(s);
+                
+                x = gsl_root_fsolver_root(s);
+                x_lo_m = gsl_root_fsolver_x_lower(s);
+                x_hi_m = gsl_root_fsolver_x_upper(s);
+                status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
+                if(status == GSL_SUCCESS){
+                    cout << new_prefix.value << "Converged:\n";
+                }
+                cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
+            }
+            while((status == GSL_CONTINUE) && (iter < max_iter));
+            
+            t_m.value = (x_lo_m+x_hi_m)/2.0;
+            t_m.print(String("t_-"), new_prefix, cout);
+            
+                
+        }else{
+            //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
+            
+            
+        }
+        
+    }
+    
+    
+}
+
 
 double Sight::rhs_DH_parallax_and_limb(double h, void* sight){
     

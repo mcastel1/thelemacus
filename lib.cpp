@@ -815,6 +815,12 @@ bool Angle::operator>(const Angle& x){
     
 }
 
+bool Angle::operator<(const Angle& x){
+    
+    return((((*this).value) < (x.value)));
+    
+}
+
 
 //I added the booleian variable search_entire_file. If true, then this function rewinds the file pointer to the beginning of file and goes through the file until it finds the quantity 'name'. If false, it reads the angle at the position where 'file' was when it was passed to this function
 void Angle::read_from_file(String name, File& file, bool search_entire_file, String prefix){
@@ -1142,7 +1148,7 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
             if(width != -1){
                 (draw_panel->spline_layer)->setLineWidth(width);
             }
-
+            
         }
         
     }
@@ -3664,7 +3670,7 @@ void Plot::menu(String prefix){
                 
                 modify_sight(i, new_prefix);
                 print(true, new_prefix, cout);
-//                show(false, new_prefix);
+                //                show(false, new_prefix);
                 
             }else{
                 
@@ -5345,156 +5351,69 @@ double Route::lambda_minus_pi(double t, void* route){
     
 }
 
-void Route::compute_lambda_edges(String prefix){
+//comppute the minimal and maximal longitude taken by the points lying on *this, if *this is a circle of equal altitude
+bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
     
     String new_prefix;
-    int iter, status;
-    double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m;
-    Angle t_min, t_max, t_p, t_m;
+    Angle t_min, t_max;
     Position p_min, p_max;
-    gsl_function F;
-    const gsl_root_fsolver_type *T;
-    gsl_root_fsolver *s;
+    bool check;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-   
     
-    T = gsl_root_fsolver_brent;
-    s = gsl_root_fsolver_alloc(T);
+    check = true;
+    
+    if(type == String("c")){
+        
+        //if abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
+        if(abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0){
+            
+            //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
+            t_max.set(String(""), acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
+            t_min.set(String(""), 2.0*M_PI - acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
+            
+            //p_max =  Position on the circle of equal altitude  at t = t_max
+            (l.value) = Re * sin((omega.value)) * (t_max.value);
+            compute_end(new_prefix);
+            p_max = end;
+            
+            //p_min =  Position on circle of equal altitude  at t = t_min
+            (l.value) = Re * sin((omega.value)) * (t_min.value);
+            compute_end(new_prefix);
+            p_min = end;
+            
+            //write the result in lambda_min, lambda_max
+            if((p_min.lambda) < (p_max.lambda)){
+                
+                (*lambda_min) = (p_min.lambda);
+                (*lambda_max) = (p_max.lambda);
 
-    
-    if(abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0){
-        
-        //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
-        t_max.set(String(""), acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
-        t_min.set(String(""), 2.0*M_PI - acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
-        
-        //p_max =  circle of equal altitude computed at t_max
-        (l.value) = Re * sin((omega.value)) * (t_max.value);
-        compute_end(new_prefix);
-        p_max = end;
-        
-        (l.value) = Re * sin((omega.value)) * (t_min.value);
-        compute_end(new_prefix);
-        p_min = end;
-        //p_min =  circle of equal altitude computed at t_min
-        
-        /* p_max.print(String("p_max"), new_prefix, cout); */
-        /* p_min.print(String("p_min"), new_prefix, cout); */
-        
-        if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
-            cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
-            //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
-            
-            if(reference_position.lambda.value > M_PI){
-                //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
-                
-                cout << prefix.value << "Case I:\n";
-                
-                // interval where I know that there will be t_p
-                x_lo_p = (t_max.value);
-                x_hi_p = M_PI;
-                
-                //interval where I know that there will be t_m
-                x_lo_m = 0.0;
-                x_hi_m = (t_max.value);
-                
             }else{
-                //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
-                //here I select an interval where I know that there will be t_m
                 
-                cout << prefix.value << "Case II:\n";
-                
-                // interval where I know that there will be t_p
-                x_lo_p = (t_min.value);
-                x_hi_p = 2.0*M_PI;
-                
-                //interval where I know that there will be t_m
-                x_lo_m = M_PI;
-                x_hi_m = (t_min.value);
+                (*lambda_min) = (p_max.lambda);
+                (*lambda_max) = (p_min.lambda);
                 
             }
             
-            temp_prefix = prefix;
-            F.params = this;
-            F.function = &(lambda_minus_pi);
+            /* p_max.print(String("p_max"), new_prefix, cout); */
+            /* p_min.print(String("p_min"), new_prefix, cout); */
             
-            
-            
-            //solve for t_p
-            
-            gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
-            
-            cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
-            
-            cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-            cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-            
-            iter = 0;
-            status = 0;
-            do{
-                
-                iter++;
-                status = gsl_root_fsolver_iterate(s);
-                
-                x = gsl_root_fsolver_root(s);
-                x_lo_p = gsl_root_fsolver_x_lower(s);
-                x_hi_p = gsl_root_fsolver_x_upper(s);
-                status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
-                if(status == GSL_SUCCESS){
-                    cout << new_prefix.value << "Converged:\n";
-                }
-                cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
-            }
-            while((status == GSL_CONTINUE) && (iter < max_iter));
-            
-            t_p.value = (x_lo_p+x_hi_p)/2.0;
-            t_p.print(String("t_+"), new_prefix, cout);
-            
-            
-            
-            
-            
-            //solve for t_m
-            
-            gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
-            
-            cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
-            
-            cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-            cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-            
-            iter = 0;
-            do{
-                
-                iter++;
-                status = gsl_root_fsolver_iterate(s);
-                
-                x = gsl_root_fsolver_root(s);
-                x_lo_m = gsl_root_fsolver_x_lower(s);
-                x_hi_m = gsl_root_fsolver_x_upper(s);
-                status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
-                if(status == GSL_SUCCESS){
-                    cout << new_prefix.value << "Converged:\n";
-                }
-                cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
-            }
-            while((status == GSL_CONTINUE) && (iter < max_iter));
-            
-            t_m.value = (x_lo_m+x_hi_m)/2.0;
-            t_m.print(String("t_-"), new_prefix, cout);
-            
-                
         }else{
-            //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
             
+            check &= false;
             
         }
         
+        
+    }else{
+        
+        cout << prefix.value << RED << "Route is not a circle of equal altitude: lambda min/max can be computed only for a circle of equal altitude!\n" << RESET;
+        check &= false;
+        
     }
     
-    gsl_root_fsolver_free(s);
+    return check;
     
     
 }
@@ -6145,7 +6064,7 @@ void Position::enter(String name, String prefix){
 void Position::set(String name, gsl_vector* r, String prefix){
     
     String new_prefix, name_lambda, name_phi;
-
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
@@ -6156,7 +6075,7 @@ void Position::set(String name, gsl_vector* r, String prefix){
         name_lambda = String("");
         name_phi = String("");
     }
-  
+    
     cout << prefix.value << name.value << "\n";
     
     lambda.set(name_lambda, -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
@@ -6814,7 +6733,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     //obtain the  geographic position of the center of the circle of equal altitude above
     (draw_panel->GP_observer).set(String("GP of visibility cone"), draw_panel->r, String(""));
     
-     
+    
     //set lambda/phi/min/max ... int
     q = ((draw_panel->GP_observer).phi)+(draw_panel->omega_observer);
     q.normalize_pm_pi();
@@ -6823,10 +6742,10 @@ void ChartFrame::GetCoastLineData_3D(void){
     q = ((draw_panel->GP_observer).phi)-(draw_panel->omega_observer);
     q.normalize_pm_pi();
     phi_min_int = floor(K*(q.value));
-
+    
     q = ((draw_panel->GP_observer).lambda)+(draw_panel->omega_observer);
     lambda_max_int = ceil(K*(q.value));
-
+    
     q = ((draw_panel->GP_observer).lambda)-(draw_panel->omega_observer);
     lambda_min_int = floor(K*(q.value));
     
@@ -6845,9 +6764,9 @@ void ChartFrame::GetCoastLineData_3D(void){
     }
     
     
-//    j_min = lambda_min_int;
-//    j_max = lambda_max_int;
-
+    //    j_min = lambda_min_int;
+    //    j_max = lambda_max_int;
+    
     //I set i_min and i_max from phi_min_int and phi_max_int: if phi_min/max_int exceed the values given by the coastline data, I set them to the maximal available values comprised in the coastline data
     /*
      if(phi_min_int - floor_min_lat >=0){
@@ -6864,11 +6783,11 @@ void ChartFrame::GetCoastLineData_3D(void){
      */
     i_min = phi_min_int;
     i_max = phi_max_int;
-
+    
     
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
-
+    
     x_3d.clear();
     y_3d.clear();
     
@@ -6885,7 +6804,7 @@ void ChartFrame::GetCoastLineData_3D(void){
             if(!((i >= -90) && (i <= 90))){
                 
                 if(i <= -90){
-                                    
+                    
                     if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->data_3d).size())){
                         
                         ip = -(180+i);
@@ -6970,24 +6889,24 @@ void ChartFrame::GetCoastLineData_3D(void){
         }
         
     }
-
+    
     
     /*
-    every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
-    if(every == 0){every = 1;}
-    
-    for(x_3d.clear(), y_3d.clear(), i=0; every*i<(parent->data_3d).size(); i++){
-        
-        //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-        if((draw_panel->GeoTo3D((parent->data_3d)[every*i], &temp))){
-            
-            x_3d.push_back(temp.x);
-            y_3d.push_back(temp.y);
-            
-        }
-        
-    }
-    */
+     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
+     if(every == 0){every = 1;}
+     
+     for(x_3d.clear(), y_3d.clear(), i=0; every*i<(parent->data_3d).size(); i++){
+     
+     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+     if((draw_panel->GeoTo3D((parent->data_3d)[every*i], &temp))){
+     
+     x_3d.push_back(temp.x);
+     y_3d.push_back(temp.y);
+     
+     }
+     
+     }
+     */
     
     
 }
@@ -7019,7 +6938,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
         
         if((lambda_min_int < 180) && (lambda_max_int >= 180)){
             //in this case, x_min and x_max embrace the meridian lambda = 0
-
+            
             j_min = lambda_max_int;
             j_max = 360 + lambda_min_int;
             
@@ -7146,13 +7065,13 @@ void ListFrame::GetAllCoastLineData(void){
         data_y.resize(i+1);
         
         data_3d.resize(i+1);
-
+        
         
         (data_x[i]).resize(360);
         (data_y[i]).resize(360);
-
+        
         (data_3d[i]).resize(360);
-
+        
         for(j=0; j<360; j++){
             
             // read data as a block:
@@ -7190,7 +7109,7 @@ void ListFrame::GetAllCoastLineData(void){
                 
                 (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                 (p_temp.phi).set(String(""), k*phi_temp, String(""));
-
+                
                 (data_3d[i][j]).push_back(p_temp);
                 
                 pos_beg = pos_end+1;
@@ -7259,7 +7178,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
                         Angle(String("Euler angle beta"), 0.0, String("")),
                         Angle(String("Euler angle gamma"), 0.0, String(""))
                         );
-//    rotation.print(String("initial rotation"), String(""), cout);
+    //    rotation.print(String("initial rotation"), String(""), cout);
     
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());
@@ -8200,25 +8119,25 @@ void DrawPanel::Draw_3D(void){
     (dummy_route.type).set(String(""), String("c"), String(""));
     (dummy_route.reference_position) = GP_observer;
     /*
-    //set omega to a value slightly smaller than omega_observer, specifically chosen in such a way that  dummy_route lies more towards the GP of the observer, by one pixel
-    (dummy_route.omega).set(String("Omega adjusted"),
-                            asin(
-                                 
-                                 (sqrt(2.0 + (d.value))*sqrt((d.value)*((double)height_plot_area)*gsl_pow_2(sin(omega_observer)) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max))/
-                                 sqrt((d.value)*(2.0 + (d.value))*((double)height_plot_area) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max)
-                                 
-                                 )
-                            , String("")
-                            );
+     //set omega to a value slightly smaller than omega_observer, specifically chosen in such a way that  dummy_route lies more towards the GP of the observer, by one pixel
+     (dummy_route.omega).set(String("Omega adjusted"),
+     asin(
+     
+     (sqrt(2.0 + (d.value))*sqrt((d.value)*((double)height_plot_area)*gsl_pow_2(sin(omega_observer)) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max))/
+     sqrt((d.value)*(2.0 + (d.value))*((double)height_plot_area) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max)
+     
+     )
+     , String("")
+     );
      */
     (dummy_route.omega) = omega_observer;
     
     
     dummy_route.draw(((plot->n_points_routes).value), 0x00BFFF, -1, this);
-
     
     
-
+    
+    
     
     
     mem_block = (chart->makeChart(Chart::BMP));
@@ -8259,8 +8178,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     new_prefix = prefix.append(String("\t"));
     
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnClose, this);
-
-     
+    
+    
     mouse_scrolling = false;
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
@@ -8276,7 +8195,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read large_thickness_over_length_screen from file_init
     large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
-        
+    
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     print_error_message = new PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
@@ -8361,7 +8280,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
         //if the construtor has been called with projection_in non-empty, I set projection_in equal to projection_in
         
         (projection->name)->SetValue(wxString(projection_in.value));
-
+        
     }
     
     //create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice of the projeciton above.
@@ -8376,7 +8295,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
-      
+    
     
     //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
     //
@@ -8420,10 +8339,10 @@ void ChartFrame::OnClose(wxCloseEvent& event){
     vector<ChartFrame*>::iterator i;
     unsigned int j;
     stringstream s;
-
+    
     i = find((parent->chart_frames).begin(), (parent->chart_frames).end(), this);
-
-
+    
+    
     Destroy();  // you may also do:  event.Skip();
     
     (parent->chart_frames).erase(i);
@@ -8431,11 +8350,11 @@ void ChartFrame::OnClose(wxCloseEvent& event){
         
         s.str("");
         s << "Chart #" << j+1 << " - " << ((((parent->chart_frames)[j])->projection)->name)->GetValue() << " projection";
-
+        
         ((parent->chart_frames)[j])->SetLabel(wxString(s.str().c_str()));
         
     }
-
+    
 }
 
 //moves (makes slide) up the chart
@@ -8590,7 +8509,7 @@ template<class T> void ChartFrame::Reset(T& event){
         ((parent->plot)->phi_max).read_from_file(String("maximal latitude"), String(path_file_init), String(""));
         draw_panel->Set_x_y_min_max_Mercator();
         ZoomFactor_Mercator(draw_panel->x_span());
-   
+        
         
         //reset the chart boundaries to the initial ones
         draw_panel->Update_lambda_phi_min_max();
@@ -8603,12 +8522,12 @@ template<class T> void ChartFrame::Reset(T& event){
         (draw_panel->d_0).read_from_file(String("d draw 3d"), String(path_file_init), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
         ZoomFactor_3D();
-
+        
         (draw_panel->rotation_0) = Rotation(
-                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
-                            Angle(String("Euler angle beta"), 0.0, String("")),
-                            Angle(String("Euler angle gamma"), 0.0, String(""))
-                            );
+                                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
+                                            Angle(String("Euler angle beta"), 0.0, String("")),
+                                            Angle(String("Euler angle gamma"), 0.0, String(""))
+                                            );
         (draw_panel->rotation) = (draw_panel->rotation_0);
         
         draw_panel->Set_x_y_min_max_3D();
@@ -8627,7 +8546,7 @@ template<class T> void ChartFrame::Reset(T& event){
     //now that width_chart and height_chart have been set, I set width_chart_0 and height_chart_0 equal to width_chart and height_chart
     (draw_panel->width_chart_0) = (draw_panel->width_chart);
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
-
+    
     
     draw_panel->PaintNow();
     
@@ -9318,7 +9237,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
     s.str("");
     s << "Chart #" << /*this is the position of parent->this in the vector chart_frames, which is the id of the chart frame to be shown in the ChartFrame title*/distance(((parent->parent)->chart_frames).begin(), find(((parent->parent)->chart_frames).begin(), ((parent->parent)->chart_frames).end(), parent)) << " - " << (((parent->projection)->name)->GetValue().ToStdString()) << " projection";
     parent->SetLabel(wxString(s.str().c_str()));
-
+    
     
     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
         //if in projection "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
@@ -9338,7 +9257,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         (parent->button_down)->Enable(true);
         (parent->button_left)->Enable(true);
         (parent->button_right)->Enable(true);
-                
+        
     }
     
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
@@ -9352,8 +9271,8 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         //        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
-              
-
+        
+        
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);
@@ -9361,7 +9280,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         (parent->button_down)->Enable(false);
         (parent->button_left)->Enable(false);
         (parent->button_right)->Enable(false);
-                
+        
     }
     
     //reset everything and draw
@@ -11774,20 +11693,20 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     menu_new_chart = new wxMenu;
     menu_item_mercator = new wxMenu;
     menu_item_3d = new wxMenu;
-
     
-//    menu_chart->Append(wxID_ANY, wxT("New chart"), wxT(""));
-
+    
+    //    menu_chart->Append(wxID_ANY, wxT("New chart"), wxT(""));
+    
     
     menu_new_chart->Append(wxID_HIGHEST + 1, wxT("Mercator"), wxT(""));
     menu_new_chart->Append(wxID_HIGHEST + 2, wxT("3D"), wxT(""));
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New chart"), wxT(""));
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
-
+    
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 1);
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
-
+    
     
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);

@@ -684,7 +684,7 @@ public:
 
     Angle();
     Angle(String, double, String);
-    bool operator==(const Angle&), operator>(const Angle&);
+    bool operator == (const Angle&), operator > (const Angle&), operator < (const Angle&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     
 };
@@ -811,7 +811,7 @@ public:
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     void draw(unsigned int, int, int, DrawPanel*);
-    void compute_lambda_edges(String);
+    bool lambda_min_max(Angle*, Angle*, String);
 
 };
 

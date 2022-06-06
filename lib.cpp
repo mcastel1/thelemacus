@@ -11336,6 +11336,11 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         
     }
     
+    //
+    Angle lambda_min, lambda_max;
+    route->lambda_min_max(&lambda_min, &lambda_max, String(""));
+    
+    //
     
     event.Skip(true);
     

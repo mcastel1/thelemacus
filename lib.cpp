@@ -6714,10 +6714,10 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     unsigned long every, l, n, n_points_grid;
     //integer values of min/max lat/lon to be extractd from data_3d
-    int i, j, ip, jp, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int, i_min, i_max, j_min, j_max;
+    int i, j, ip, jp, lambda_min_circle_observer_int, lambda_max_circle_observer_int, phi_min_circle_observer_int, phi_max_circle_observer_int, i_min, i_max, j_min, j_max;
     Projection temp;
     //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture ((draw_panel->circle_observer).omega) and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
-    Angle q;
+    Angle q, lambda_min_circle_observer, lambda_max_circle_observer;
     bool check;
     
     ((draw_panel->circle_observer).omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
@@ -6731,156 +6731,178 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
     
     //obtain the  geographic position of the center of the circle of equal altitude above
-    ((draw_panel->circle_observer).reference_position).set(String("GP of visibility cone"), draw_panel->r, String(""));
+    ((draw_panel->circle_observer).reference_position).set(String("GP of circle observer"), draw_panel->r, String(""));
     
     
-    //set lambda/phi/min/max ... int
-    q = (((draw_panel->circle_observer).reference_position).phi)+((draw_panel->circle_observer).omega);
-    q.normalize_pm_pi();
-    phi_max_int = ceil(K*(q.value));
-    
-    q = (((draw_panel->circle_observer).reference_position).phi)-((draw_panel->circle_observer).omega);
-    q.normalize_pm_pi();
-    phi_min_int = floor(K*(q.value));
-    
-    q = (((draw_panel->circle_observer).reference_position).lambda)+((draw_panel->circle_observer).omega);
-    lambda_max_int = ceil(K*(q.value));
-    
-    q = (((draw_panel->circle_observer).reference_position).lambda)-((draw_panel->circle_observer).omega);
-    lambda_min_int = floor(K*(q.value));
-    
-    
-    if((lambda_min_int >= 180) && (lambda_max_int < 180)){
+    if((draw_panel->circle_observer).lambda_min_max(&lambda_min_circle_observer, &lambda_max_circle_observer, String(""))){
+        //in this case,  min/max latitudes at the edges of circle_observer can be obtained correctly, so I proceeed
         
-        j_min = lambda_min_int;
-        j_max = 360 + lambda_max_int;
+        //set lambda/phi/min/max_circle_observer_int
+        q = (((draw_panel->circle_observer).reference_position).phi)+((draw_panel->circle_observer).omega);
+        q.normalize_pm_pi();
+        phi_max_circle_observer_int = ceil(K*(q.value));
         
+        q = (((draw_panel->circle_observer).reference_position).phi)-((draw_panel->circle_observer).omega);
+        q.normalize_pm_pi();
+        phi_min_circle_observer_int = floor(K*(q.value));
         
-    }else{
-        
-        j_min = lambda_min_int;
-        j_max = lambda_max_int;
-        
-    }
-    
-    
-    //    j_min = lambda_min_int;
-    //    j_max = lambda_max_int;
-    
-    //I set i_min and i_max from phi_min_int and phi_max_int: if phi_min/max_int exceed the values given by the coastline data, I set them to the maximal available values comprised in the coastline data
-    /*
-     if(phi_min_int - floor_min_lat >=0){
-     i_min = phi_min_int;
-     }else{
-     i_min = floor_min_lat;
-     }
-     
-     if(phi_max_int - floor_min_lat <= (parent->data_3d).size()){
-     i_max = phi_max_int;
-     }else{
-     i_max = floor_min_lat + (parent->data_3d).size();
-     }
-     */
-    i_min = phi_min_int;
-    i_max = phi_max_int;
-    
-    
-    //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
-    n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
-    
-    x_3d.clear();
-    y_3d.clear();
-    
-    for(i=i_min; i<i_max; i++){
-        
-        //        cout << "\n i = " << i;
-        
-        for(j=j_min; j<j_max; j++){
+        //set lambda_max/min_int in such a way that they comprise all the area within circle_observer
+        if(((lambda_min_circle_observer.value) < M_PI) && ((lambda_max_circle_observer.value) > M_PI)){
+            //in this case, circl_observer encompasses the prime meridian
             
-            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-            //            flush(cout);
+            lambda_max_circle_observer_int = floor(K*(lambda_max_circle_observer.value));
+            lambda_min_circle_observer_int = ceil(K*(lambda_min_circle_observer.value));
+ 
             
+        }else{
+            //in this case, circl_observer does not encompass the prime meridian
             
-            if(!((i >= -90) && (i <= 90))){
+            lambda_max_circle_observer_int = ceil(K*(lambda_max_circle_observer.value));
+            lambda_min_circle_observer_int = floor(K*(lambda_min_circle_observer.value));
+            
+        }
+        
+        
+        
+        
+        
+        
+//
+//        if((lambda_min_circle_observer_int >= 180) && (lambda_max_circle_observer_int < 180)){
+//
+//            j_min = lambda_min_circle_observer_int;
+        //            j_max = 360 + lambda_max_circle_observer_int;
+        //
+        //
+        //        }else{
+        //
+        //            j_min = lambda_min_circle_observer_int;
+        //            j_max = lambda_max_circle_observer_int;
+        //
+        //        }
+        
+        
+        j_min = lambda_min_circle_observer_int;
+        j_max = lambda_max_circle_observer_int;
+        
+        //I set i_min and i_max from phi_min_circle_observer_int and phi_max_circle_observer_int: if phi_min/max_int exceed the values given by the coastline data, I set them to the maximal available values comprised in the coastline data
+        /*
+         if(phi_min_circle_observer_int - floor_min_lat >=0){
+         i_min = phi_min_circle_observer_int;
+         }else{
+         i_min = floor_min_lat;
+         }
+         
+         if(phi_max_circle_observer_int - floor_min_lat <= (parent->data_3d).size()){
+         i_max = phi_max_circle_observer_int;
+         }else{
+         i_max = floor_min_lat + (parent->data_3d).size();
+         }
+         */
+        i_min = phi_min_circle_observer_int;
+        i_max = phi_max_circle_observer_int;
+        
+        
+        //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
+        n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
+        
+        x_3d.clear();
+        y_3d.clear();
+        
+        for(i=i_min; i<i_max; i++){
+            
+            //        cout << "\n i = " << i;
+            
+            for(j=j_min; j<j_max; j++){
                 
-                if(i <= -90){
+                //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+                //            flush(cout);
+                
+                
+                if(!((i >= -90) && (i <= 90))){
+                    //in this case, i needs to be adjusted because it is not between -90 and +90
                     
-                    if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->data_3d).size())){
+                    if(i <= -90){
                         
-                        ip = -(180+i);
-                        jp = 180+j;
-                        
-                        check = true;
-                        
-                    }else{
-                        
-                        check = false;
+                        if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->data_3d).size())){
+                            
+                            ip = -(180+i);
+                            jp = 180+j;
+                            
+                            check = true;
+                            
+                        }else{
+                            
+                            check = false;
+                            
+                        }
                         
                     }
                     
-                }
-                
-                if(i >= 90){
-                    
-                    if((180-i - floor_min_lat >=0) && (180-i - floor_min_lat < (parent->data_3d).size())){
+                    if(i >= 90){
                         
-                        ip = 180 - i;
-                        jp = 180 + j;
-                        
-                        check = true;
-                        
-                    }else{
-                        
-                        check = false;
+                        if((180-i - floor_min_lat >=0) && (180-i - floor_min_lat < (parent->data_3d).size())){
+                            
+                            ip = 180 - i;
+                            jp = 180 + j;
+                            
+                            check = true;
+                            
+                        }else{
+                            
+                            check = false;
+                            
+                        }
                         
                     }
                     
-                }
-                
-                
-            }else{
-                
-                if((i - floor_min_lat >=0) && (i - floor_min_lat < (parent->data_3d).size())){
-                    
-                    ip = i;
-                    jp = j;
-                    
-                    check = true;
                     
                 }else{
                     
-                    check = false;
-                    
-                }
-                
-            }
-            
-            
-            
-            if(check){
-                
-                //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((parent->data_3d)[ip - floor_min_lat][jp % 360]).size();
-                
-                //I plot every 'every' data points
-                every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
-                if(every == 0){every = 1;}
-                
-                //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for(l=0; (l*every)<((parent->data_3d)[ip - floor_min_lat][jp % 360]).size(); l++){
-                    
-                    //                (temp.x) = (parent->data_3d)[i - floor_min_lat][j % 360][l*every];
-                    //                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
-                    
-                    //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                    
-                    //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                    if((draw_panel->GeoTo3D((parent->data_3d)[ip - floor_min_lat][jp % 360][l*every], &temp))){
-                        x_3d.push_back((temp.x));
-                        y_3d.push_back((temp.y));
+                    if((i - floor_min_lat >=0) && (i - floor_min_lat < (parent->data_3d).size())){
+                        
+                        ip = i;
+                        jp = j;
+                        
+                        check = true;
+                        
+                    }else{
+                        
+                        check = false;
                         
                     }
                     
+                }
+                
+                
+                
+                if(check){
+                    
+                    //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
+                    n = ((parent->data_3d)[ip - floor_min_lat][jp % 360]).size();
+                    
+                    //I plot every 'every' data points
+                    every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+                    if(every == 0){every = 1;}
+                    
+                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+                    for(l=0; (l*every)<((parent->data_3d)[ip - floor_min_lat][jp % 360]).size(); l++){
+                        
+                        //                (temp.x) = (parent->data_3d)[i - floor_min_lat][j % 360][l*every];
+                        //                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+                        
+                        //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                        
+                        //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                        if((draw_panel->GeoTo3D((parent->data_3d)[ip - floor_min_lat][jp % 360][l*every], &temp))){
+                            
+                            x_3d.push_back((temp.x));
+                            y_3d.push_back((temp.y));
+                            
+                        }
+                        
+                        
+                    }
                     
                 }
                 
@@ -6888,8 +6910,8 @@ void ChartFrame::GetCoastLineData_3D(void){
             
         }
         
+        
     }
-    
     
     /*
      every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));

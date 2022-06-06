@@ -6752,6 +6752,10 @@ void ChartFrame::GetCoastLineData_3D(void){
             
             lambda_max_circle_observer_int = floor(K*(lambda_max_circle_observer.value));
             lambda_min_circle_observer_int = ceil(K*(lambda_min_circle_observer.value));
+            
+            j_min = lambda_max_circle_observer_int;
+            j_max = 360 + lambda_min_circle_observer_int;
+            
  
             
         }else{
@@ -6759,6 +6763,10 @@ void ChartFrame::GetCoastLineData_3D(void){
             
             lambda_max_circle_observer_int = ceil(K*(lambda_max_circle_observer.value));
             lambda_min_circle_observer_int = floor(K*(lambda_min_circle_observer.value));
+            
+            j_min = lambda_min_circle_observer_int;
+            j_max = lambda_max_circle_observer_int;
+        
             
         }
         
@@ -6768,23 +6776,21 @@ void ChartFrame::GetCoastLineData_3D(void){
         
         
 //
-//        if((lambda_min_circle_observer_int >= 180) && (lambda_max_circle_observer_int < 180)){
+        if((lambda_max_circle_observer_int >= 180) && (lambda_min_circle_observer_int < 180)){
+            
+ 
+            
+        }else{
+            
+            j_min = lambda_min_circle_observer_int;
+            j_max = lambda_max_circle_observer_int;
+            
+        }
+        
+        
+//        j_min = lambda_min_circle_observer_int;
+//        j_max = lambda_max_circle_observer_int;
 //
-//            j_min = lambda_min_circle_observer_int;
-        //            j_max = 360 + lambda_max_circle_observer_int;
-        //
-        //
-        //        }else{
-        //
-        //            j_min = lambda_min_circle_observer_int;
-        //            j_max = lambda_max_circle_observer_int;
-        //
-        //        }
-        
-        
-        j_min = lambda_min_circle_observer_int;
-        j_max = lambda_max_circle_observer_int;
-        
         //I set i_min and i_max from phi_min_circle_observer_int and phi_max_circle_observer_int: if phi_min/max_int exceed the values given by the coastline data, I set them to the maximal available values comprised in the coastline data
         /*
          if(phi_min_circle_observer_int - floor_min_lat >=0){

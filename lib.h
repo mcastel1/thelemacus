@@ -811,7 +811,7 @@ public:
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     void draw(unsigned int, int, int, DrawPanel*);
-    void compute_lambda_edges(void);
+    void compute_lambda_edges(String);
 
 };
 

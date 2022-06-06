@@ -5345,8 +5345,24 @@ double Route::lambda_minus_pi(double t, void* route){
     
 }
 
-void Route::compute_lambda_edges(void){
+void Route::compute_lambda_edges(String prefix){
     
+    String new_prefix;
+    int iter, status;
+    double x, x_lo_p, x_lo_m, x_hi_p, x_hi_m;
+    Angle t_min, t_max, t_p, t_m;
+    Position p_min, p_max;
+    gsl_function F;
+    const gsl_root_fsolver_type *T;
+    gsl_root_fsolver *s;
+    
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+   
+    
+    T = gsl_root_fsolver_brent;
+    s = gsl_root_fsolver_alloc(T);
+
     
     if(abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0){
         
@@ -5357,11 +5373,11 @@ void Route::compute_lambda_edges(void){
         //p_max =  circle of equal altitude computed at t_max
         (l.value) = Re * sin((omega.value)) * (t_max.value);
         compute_end(new_prefix);
-        p_max = (end);
+        p_max = end;
         
         (l.value) = Re * sin((omega.value)) * (t_min.value);
         compute_end(new_prefix);
-        p_min = (end);
+        p_min = end;
         //p_min =  circle of equal altitude computed at t_min
         
         /* p_max.print(String("p_max"), new_prefix, cout); */
@@ -5401,7 +5417,7 @@ void Route::compute_lambda_edges(void){
             }
             
             temp_prefix = prefix;
-            F.params = &(route_list[i]);
+            F.params = this;
             F.function = &(lambda_minus_pi);
             
             
@@ -5416,6 +5432,7 @@ void Route::compute_lambda_edges(void){
             cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
             
             iter = 0;
+            status = 0;
             do{
                 
                 iter++;
@@ -5476,6 +5493,8 @@ void Route::compute_lambda_edges(void){
         }
         
     }
+    
+    gsl_root_fsolver_free(s);
     
     
 }

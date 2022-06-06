@@ -42,7 +42,7 @@
  - fix "14:17:41: Debug: Adding duplicate image handler for 'PNG file'"
  - rotation_0 should be read from file at the beginning
  - fix that some coastline data is not shown when the GP of the visible circle of equal altitde is close to the N/S pole
- - blue cricle at edge of the planet is not very visible: make it thicker
+ - blue cricle at edge of the planet is not very visible
  */
 
 

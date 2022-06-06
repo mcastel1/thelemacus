@@ -6716,11 +6716,11 @@ void ChartFrame::GetCoastLineData_3D(void){
     //integer values of min/max lat/lon to be extractd from data_3d
     int i, j, ip, jp, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int, i_min, i_max, j_min, j_max;
     Projection temp;
-    //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture (draw_panel->omega_observer) and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
+    //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture ((draw_panel->circle_observer).omega) and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
     Angle q;
     bool check;
     
-    (draw_panel->omega_observer).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
+    ((draw_panel->circle_observer).omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
     
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
     gsl_vector_set(draw_panel->rp, 0, 0.0);
@@ -6731,22 +6731,22 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
     
     //obtain the  geographic position of the center of the circle of equal altitude above
-    (draw_panel->GP_observer).set(String("GP of visibility cone"), draw_panel->r, String(""));
+    ((draw_panel->circle_observer).reference_position).set(String("GP of visibility cone"), draw_panel->r, String(""));
     
     
     //set lambda/phi/min/max ... int
-    q = ((draw_panel->GP_observer).phi)+(draw_panel->omega_observer);
+    q = (((draw_panel->circle_observer).reference_position).phi)+((draw_panel->circle_observer).omega);
     q.normalize_pm_pi();
     phi_max_int = ceil(K*(q.value));
     
-    q = ((draw_panel->GP_observer).phi)-(draw_panel->omega_observer);
+    q = (((draw_panel->circle_observer).reference_position).phi)-((draw_panel->circle_observer).omega);
     q.normalize_pm_pi();
     phi_min_int = floor(K*(q.value));
     
-    q = ((draw_panel->GP_observer).lambda)+(draw_panel->omega_observer);
+    q = (((draw_panel->circle_observer).reference_position).lambda)+((draw_panel->circle_observer).omega);
     lambda_max_int = ceil(K*(q.value));
     
-    q = ((draw_panel->GP_observer).lambda)-(draw_panel->omega_observer);
+    q = (((draw_panel->circle_observer).reference_position).lambda)-((draw_panel->circle_observer).omega);
     lambda_min_int = floor(K*(q.value));
     
     
@@ -7178,6 +7178,10 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
                         Angle(String("Euler angle beta"), 0.0, String("")),
                         Angle(String("Euler angle gamma"), 0.0, String(""))
                         );
+    
+    //specify that circle_observer is a circle of equal altitude
+    circle_observer.type = String("c");
+    
     //    rotation.print(String("initial rotation"), String(""), cout);
     
     //allocates points_route_list and ts_route_list
@@ -8116,8 +8120,6 @@ void DrawPanel::Draw_3D(void){
     
     
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    (dummy_route.reference_position) = GP_observer;
     /*
      //set omega to a value slightly smaller than omega_observer, specifically chosen in such a way that  dummy_route lies more towards the GP of the observer, by one pixel
      (dummy_route.omega).set(String("Omega adjusted"),
@@ -8130,10 +8132,7 @@ void DrawPanel::Draw_3D(void){
      , String("")
      );
      */
-    (dummy_route.omega) = omega_observer;
-    
-    
-    dummy_route.draw(((plot->n_points_routes).value), 0x00BFFF, -1, this);
+    circle_observer.draw(((plot->n_points_routes).value), 0x00BFFF, -1, this);
     
     
     

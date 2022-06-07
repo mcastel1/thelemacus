@@ -5402,8 +5402,8 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
         }else{
             //in this case,  reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
             
-            (*lambda_min).set(String(""), ((reference_position.lambda).value)-M_PI, String(""));
-            (*lambda_max).set(String(""), ((reference_position.lambda).value)+M_PI, String(""));
+            (*lambda_min).set(String(""), ((reference_position.lambda).value)-M_PI/2.0, String(""));
+            (*lambda_max).set(String(""), ((reference_position.lambda).value)+M_PI/2.0, String(""));
             
             if((*lambda_min) > (*lambda_max)){
                 
@@ -6786,16 +6786,16 @@ void ChartFrame::GetCoastLineData_3D(void){
         
         
 //
-        if((lambda_max_circle_observer_int >= 180) && (lambda_min_circle_observer_int < 180)){
-            
- 
-            
-        }else{
-            
-            j_min = lambda_min_circle_observer_int;
-            j_max = lambda_max_circle_observer_int;
-            
-        }
+//        if((lambda_max_circle_observer_int >= 180) && (lambda_min_circle_observer_int < 180)){
+//
+//
+//
+//        }else{
+//
+//            j_min = lambda_min_circle_observer_int;
+//            j_max = lambda_max_circle_observer_int;
+//
+//        }
         
         
 //        j_min = lambda_min_circle_observer_int;

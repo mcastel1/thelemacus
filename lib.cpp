@@ -725,6 +725,7 @@ Rotation::Rotation(void){
     
 }
 
+//sets the rotation from the Euler angles a, b, c 
 void Rotation::set(Angle a, Angle b, Angle c){
     
     gsl_matrix_set(matrix, 0 ,0 , cos(a)*cos(c) - cos(b)*sin(a)*sin(c));
@@ -748,7 +749,7 @@ Rotation::Rotation(Angle a, Angle b, Angle c){
     matrix = gsl_matrix_alloc(3, 3);
     
     set(a,b,c);
- 
+    
 }
 
 //returns the inverse of the rotation (*this)
@@ -796,16 +797,18 @@ void Rotation::print(String name, String prefix, ostream& ostr){
     
 }
 
+
+//reads the Rotation from file whose path is filename, by looking through the entire file
 void Rotation::read_from_file(String name, String filename, String prefix){
     
     string line;
     File file;
     Angle alpha, beta, gamma;
     String new_prefix;
-
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-  
+    
     
     file.set_name(filename);
     file.open(String("in"), prefix);
@@ -817,13 +820,13 @@ void Rotation::read_from_file(String name, String filename, String prefix){
         getline(file.value, line);
         
     }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
-        
+    
     alpha.read_from_file(String("alpha"), file, false, new_prefix);
     beta.read_from_file(String("beta"), file, false, new_prefix);
     gamma.read_from_file(String("gamma"), file, false, new_prefix);
     
     set(alpha, beta, gamma);
-
+    
     file.close(String(""));
     
 }
@@ -8545,11 +8548,11 @@ template<class T> void ChartFrame::Reset(T& event){
         zoom_factor.set(String(""), 1.0, String(""));
         ZoomFactor_3D();
         
-//        (draw_panel->rotation_0) = Rotation(
-//                                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
-//                                            Angle(String("Euler angle beta"), 0.0, String("")),
-//                                            Angle(String("Euler angle gamma"), 0.0, String(""))
-//                                            );
+        //        (draw_panel->rotation_0) = Rotation(
+        //                                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
+        //                                            Angle(String("Euler angle beta"), 0.0, String("")),
+        //                                            Angle(String("Euler angle gamma"), 0.0, String(""))
+        //                                            );
         (draw_panel->rotation_0).read_from_file(String("rotation 0"), String(path_file_init), String(""));
         
         (draw_panel->rotation) = (draw_panel->rotation_0);
@@ -11499,7 +11502,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
     
     //image
-   //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
@@ -11629,12 +11632,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     size_t pos_end;
     
     //image
-//    wxBMPHandler *handler = new wxBMPHandler;
-//    wxPNGHandler *handler_png = new wxPNGHandler;
-//    wxImage::AddHandler(handler);
-//    wxImage::AddHandler(handler_png);
- 
- 
+    //    wxBMPHandler *handler = new wxBMPHandler;
+    //    wxPNGHandler *handler_png = new wxPNGHandler;
+    //    wxImage::AddHandler(handler);
+    //    wxImage::AddHandler(handler_png);
+    
+    
     
     plot = new Plot(catalog, String(""));
     

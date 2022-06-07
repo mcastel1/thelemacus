@@ -24,7 +24,7 @@
  - add margins in chart in such a way that ylabels are not cut
  - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
  - create your own color class and a function to elegantly read colors from file.
-- add separator between recent items and non-recent items in BodyField->name
+ - add separator between recent items and non-recent items in BodyField->name
  - replaces multiple ifs with switch cases
  - fill the cases in Route::draw_3D for l and o
  - check why body field gets empty after you entered body name and kill focus
@@ -38,8 +38,7 @@
  - try DrawPanel::OnScroll -> ChartFrame::OnScroll to avoid multiple pop-ups of error window
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - add margins in ChartFrame
-- meridians are not shown sometimes
- - rotation_0 should be read from file at the beginning
+ - meridians are not shown sometimes
  - blue cricle at edge of the planet is not very visible
  */
 
@@ -71,7 +70,7 @@ bool MyApp::OnInit(){
     for(i=0; i<(list_frame->chart_frames).size(); i++){
         
         default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
-   
+        
         
         s.str("");
         s << "Chart #" << i+1 << " - " << (default_projection.value) << " projection";

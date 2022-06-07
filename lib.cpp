@@ -725,12 +725,7 @@ Rotation::Rotation(void){
     
 }
 
-
-//constructor of a Rotation instance which sets the rotation matrix according to three Euler angles
-Rotation::Rotation(Angle a, Angle b, Angle c){
-    
-    //allocate and set the rotation matrix
-    matrix = gsl_matrix_alloc(3, 3);
+void Rotation::set(Angle a, Angle b, Angle c){
     
     gsl_matrix_set(matrix, 0 ,0 , cos(a)*cos(c) - cos(b)*sin(a)*sin(c));
     gsl_matrix_set(matrix, 0 ,1 , -(cos(c)*sin(a)) - cos(a)*cos(b)*sin(c));
@@ -744,6 +739,16 @@ Rotation::Rotation(Angle a, Angle b, Angle c){
     gsl_matrix_set(matrix, 2 ,1 , -(cos(a)*sin(b)));
     gsl_matrix_set(matrix, 2 ,2 , cos(b));
     
+}
+
+//constructor of a Rotation instance which sets the rotation matrix according to three Euler angles
+Rotation::Rotation(Angle a, Angle b, Angle c){
+    
+    //allocate and set the rotation matrix
+    matrix = gsl_matrix_alloc(3, 3);
+    
+    set(a,b,c);
+ 
 }
 
 //returns the inverse of the rotation (*this)
@@ -794,8 +799,13 @@ void Rotation::print(String name, String prefix, ostream& ostr){
 void Rotation::read_from_file(String name, String filename, String prefix){
     
     string line;
-    size_t pos;
     File file;
+    Angle alpha, beta, gamma;
+    String new_prefix;
+
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+  
     
     file.set_name(filename);
     file.open(String("in"), prefix);
@@ -807,11 +817,13 @@ void Rotation::read_from_file(String name, String filename, String prefix){
         getline(file.value, line);
         
     }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+        
+    alpha.read_from_file(String("alpha"), file, false, new_prefix);
+    beta.read_from_file(String("beta"), file, false, new_prefix);
+    gamma.read_from_file(String("gamma"), file, false, new_prefix);
     
-    
-    pos = line.find(" = ");
-    
-    
+    set(alpha, beta, gamma);
+
     file.close(String(""));
     
 }
@@ -8533,11 +8545,13 @@ template<class T> void ChartFrame::Reset(T& event){
         zoom_factor.set(String(""), 1.0, String(""));
         ZoomFactor_3D();
         
-        (draw_panel->rotation_0) = Rotation(
-                                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
-                                            Angle(String("Euler angle beta"), 0.0, String("")),
-                                            Angle(String("Euler angle gamma"), 0.0, String(""))
-                                            );
+//        (draw_panel->rotation_0) = Rotation(
+//                                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
+//                                            Angle(String("Euler angle beta"), 0.0, String("")),
+//                                            Angle(String("Euler angle gamma"), 0.0, String(""))
+//                                            );
+        (draw_panel->rotation_0).read_from_file(String("rotation 0"), String(path_file_init), String(""));
+        
         (draw_panel->rotation) = (draw_panel->rotation_0);
         
         draw_panel->Set_x_y_min_max_3D();

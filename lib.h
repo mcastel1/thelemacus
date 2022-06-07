@@ -701,6 +701,7 @@ public:
     Rotation(Angle, Angle, Angle);
     Rotation operator *(const Rotation&);
     Rotation inverse(void);
+    void set(Angle, Angle, Angle);
     void print(String, String, ostream&);
     void read_from_file(String, String, String);
     

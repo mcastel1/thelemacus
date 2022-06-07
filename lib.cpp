@@ -6726,7 +6726,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     unsigned long every, l, n, n_points_grid;
     //integer values of min/max lat/lon to be extractd from data_3d
-    int i, j, i_adjusted, j_adjusted, phi_min_circle_observer_int, phi_max_circle_observer_int, i_min, i_max, j_min, j_max;
+    int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
     Projection temp;
     //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture ((draw_panel->circle_observer).omega) and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
     Angle q, lambda_min_circle_observer, lambda_max_circle_observer;
@@ -9468,7 +9468,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
         gsl_vector_memcpy(rp_start_drag, rp);
         rotation_start_drag = rotation;
-        geo_start_drag.print(String("geo start drag"), String(""), cout);
+        geo_start_drag.print(String("position start drag"), String(""), cout);
         rotation_start_drag.print(String("rotation start drag"), String(""), cout);
         
     }

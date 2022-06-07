@@ -258,6 +258,8 @@ void Double::read_from_file(String name, String filename, String prefix){
     
     print(name, prefix, cout);
     
+    file.close(prefix);
+    
 }
 
 
@@ -338,7 +340,6 @@ void Int::read_from_file(String name, String filename, String prefix){
         
     }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
     
-    
     pos = line.find(" = ");
     
     //read the string after ' = ' until the end of line string and store it into value
@@ -347,6 +348,8 @@ void Int::read_from_file(String name, String filename, String prefix){
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
     print(name, prefix, cout);
+    
+    file.close(prefix);
     
 }
 
@@ -785,6 +788,31 @@ void Rotation::print(String name, String prefix, ostream& ostr){
         ostr << "\n";
         
     }
+    
+}
+
+void Rotation::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    size_t pos;
+    File file;
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+    
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+    
+    
+    pos = line.find(" = ");
+    
+    
+    file.close(String(""));
     
 }
 

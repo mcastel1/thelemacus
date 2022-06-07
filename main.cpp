@@ -40,6 +40,7 @@
  - add margins in ChartFrame
  - meridians are not shown sometimes
  - blue cricle at edge of the planet is not very visible
+ - add ft unit for lengths
  */
 
 

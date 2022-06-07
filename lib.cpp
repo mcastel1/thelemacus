@@ -1846,7 +1846,7 @@ Route Position::transport(String prefix){
         t_start.enter(String("start time of course"), new_prefix);
         t_end.enter(String("end time of course"), new_prefix);
         if(t_start > t_end){
-            cout << new_prefix.value << RED << "start time of course is larger than end time of course!\n" << RESET;
+            cout << new_prefix.value << RED << "Start time of course is larger than end time of course!\n" << RESET;
         }
         
     }while(t_start > t_end);
@@ -1889,8 +1889,8 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
     //rotate u according to r and write the result in s and then in (*this)
     gsl_blas_dgemv(CblasNoTrans, 1.0, r.matrix, u, 0.0, s);
     
-    cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
-    cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
+    //     cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
+    //     cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
     
     p->set(name, s, prefix);
     
@@ -7867,11 +7867,6 @@ void DrawPanel::Draw_Mercator(void){
     (p_up.phi).normalize_pm_pi();
     (p_down.phi).normalize_pm_pi();
     (dummy_route.l).set(String(""), (((p_up.phi).value) - ((p_down.phi).value))*Re, String(""));
-    
-    //    cout << "xxxx phi_mercator(y_max) = " << phi_mercator(y_max) << "\n";
-    //    cout << "xxxx phi_mercator(y_min) = " << phi_mercator(y_min) << "\n";
-    //    cout << "xxxx k*(phi_mercator(y_max) - phi_mercator(y_min))*Re = " << k*(phi_mercator(y_max) - phi_mercator(y_min))*Re << "\n";
-    
     (dummy_route.alpha).set(String(""), 0.0, String(""));
     
     
@@ -8669,19 +8664,19 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
         
         
         
-        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
-        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
-        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
-        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+//        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+//        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
+//        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
+//        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
         
         rotation_axis.set(String("rotaion axis"), rp, String(""));
         
         
         
-        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
-        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
-        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
-        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
+//        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
+//        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
+//        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
+//        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
         
         geo_end_drag.print(String("geo now drag"), String("\t"), cout);
         //    rotation.print(String("rotation"), String("\t"), cout);
@@ -9627,11 +9622,6 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         stringstream s;
         
-        //        cout << "You started drawing\n";
-        //        ((parent->plot)->lambda_min) = (p.lambda);
-        //        ((parent->plot)->phi_min) = (p.phi);
-        //
-        
         GetMouseGeoPosition(&p_start);
         position_start_selection = position_screen_now;
         //stores the x at the beginning of the selection process, to compute the zoom factor later
@@ -9642,7 +9632,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         text_position_start->SetLabel(wxString(s.str().c_str()));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
-        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_start.phi).to_string(String("NS"), display_precision, false) << " }\n";
+//        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_start.phi).to_string(String("NS"), display_precision, false) << " }\n";
         
     }else{
         
@@ -9656,7 +9646,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
-            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
+//            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
             
             //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
             delete chart;
@@ -9974,8 +9964,8 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
      */
     
     
-    cout << "Slider getvalue = " << ((double)(slider->GetValue())) << "\n";
-    cout << "Zoom factor = " << ((double)zoom_factor.value) << "\n";
+//    cout << "Slider getvalue = " << ((double)(slider->GetValue())) << "\n";
+    //     cout << "Zoom factor = " << ((double)zoom_factor.value) << "\n";
     
     //set zoom_factor from the value of slider
     zoom_factor.set(
@@ -9997,10 +9987,10 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
-        cout << "\n\n\n\ny_mercator_max = " << y_mercator(max_lat) << "\n";
-        cout << "y_max = " << (draw_panel->y_max) << "\n";
-        cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
-        cout << "y_min = " << (draw_panel->y_min) << "\n";
+        //     cout << "\n\n\n\ny_mercator_max = " << y_mercator(max_lat) << "\n";
+        //     cout << "y_max = " << (draw_panel->y_max) << "\n";
+        //     cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
+        //     cout << "y_min = " << (draw_panel->y_min) << "\n";
         
         //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old.
         //        (draw_panel->x_min_old) = (draw_panel->x_min);

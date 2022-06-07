@@ -6818,6 +6818,9 @@ void ChartFrame::GetCoastLineData_3D(void){
         i_min = phi_min_circle_observer_int;
         i_max = phi_max_circle_observer_int;
         
+        cout << "i_min/max = \t\t" << i_min << " , " << i_max << "\n";
+        cout << "j_min/max = \t\t" << j_min << " , " << j_max << "\n";
+
         
         //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
         n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
@@ -6838,7 +6841,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                 if(!((i >= -90) && (i <= 90))){
                     //in this case, i needs to be adjusted because it is not between -90 and +90
                     
-                    if(i <= -90){
+                    if(i < -90){
                         
                         if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->data_3d).size())){
                             
@@ -6855,7 +6858,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                         
                     }
                     
-                    if(i >= 90){
+                    if(i > 90){
                         
                         if((180-i - floor_min_lat >=0) && (180-i - floor_min_lat < (parent->data_3d).size())){
                             

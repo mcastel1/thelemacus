@@ -5400,7 +5400,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
             /* p_min.print(String("p_min"), new_prefix, cout); */
             
         }else{
-            //in this case,  reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
+            //in this case, reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
             
             (*lambda_min).set(String(""), ((reference_position.lambda).value)-M_PI/2.0, String(""));
             (*lambda_max).set(String(""), ((reference_position.lambda).value)+M_PI/2.0, String(""));

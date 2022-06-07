@@ -5355,7 +5355,7 @@ double Route::lambda_minus_pi(double t, void* route){
 bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
     
     String new_prefix;
-    Angle t_min, t_max;
+    Angle t_min, t_max, temp;
     Position p_min, p_max;
     bool check;
     
@@ -5366,9 +5366,9 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
     
     if(type == String("c")){
         
-        //if abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
         if(abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0){
-            
+            //im this case ( abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
+     
             //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
             t_max.set(String(""), acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
             t_min.set(String(""), 2.0*M_PI - acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
@@ -5400,9 +5400,19 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
             /* p_min.print(String("p_min"), new_prefix, cout); */
             
         }else{
+            //in this case,  reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
             
-            check &= false;
+            (*lambda_min).set(String(""), ((reference_position.lambda).value)-M_PI, String(""));
+            (*lambda_max).set(String(""), ((reference_position.lambda).value)+M_PI, String(""));
             
+            if((*lambda_min) > (*lambda_max)){
+                
+                temp = (*lambda_min);
+                (*lambda_min) = (*lambda_max);
+                (*lambda_max) = temp;
+                
+            }
+
         }
         
         
@@ -8676,61 +8686,80 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     gsl_vector* rp_start, *rp_end;
     Angle rotation_angle;
     
-    rp_start = gsl_vector_alloc(3);
-    rp_end = gsl_vector_alloc(3);
-    
-    //I call ScreenToGeo to compute rp_start and rp_end only
-    ScreenToGeo_3D(start, &geo_start);
-    gsl_vector_memcpy(rp_start, rp);
-    
-    ScreenToGeo_3D(end, &geo_end);
-    gsl_vector_memcpy(rp_end, rp);
-    
-    
-    //compute the dot product between rp_start and rp_end and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
-    gsl_blas_ddot(rp_start, rp_end, &cos_rotation_angle);
-    rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
-    
-    //compute the cross product  rp_start x rp_end store it into rp and normalize it
-    gsl_vector_set(rp, 0, gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 2) - gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 1));
-    gsl_vector_set(rp, 1, gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 0) - gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 2));
-    gsl_vector_set(rp, 2, gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 1) - gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 0));
-    gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
-    
-    
-    
-    cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
-    cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
-    cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
-    cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
-    
-    rotation_axis.set(String("rotaion axis"), rp, String(""));
-    
-    
-    
-    cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
-    cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
-    cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
-    cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
-    
-    geo_end_drag.print(String("geo now drag"), String("\t"), cout);
-    //    rotation.print(String("rotation"), String("\t"), cout);
-    
-    
-    
-    gsl_vector_free(rp_start);
-    gsl_vector_free(rp_end);
-    
-    return (Rotation(
-                     Angle(String(""), 0.0, String("")),
-                     Angle(String(""), M_PI/2.0-(((rotation_axis).phi).value), String("")),
-                     Angle(String(""), -((((rotation_axis).lambda).value) + M_PI/2.0), String(""))
-                     )
-            * Rotation(
-                       Angle(String(""), (((rotation_axis).lambda).value) + M_PI/2.0, String("")),
-                       Angle(String(""), -(M_PI/2.0-(((rotation_axis).phi).value)), String("")),
-                       Angle(String(""), rotation_angle.value, String(""))
-                       ));
+    if(start != end){
+        
+        rp_start = gsl_vector_alloc(3);
+        rp_end = gsl_vector_alloc(3);
+        
+        //I call ScreenToGeo to compute rp_start and rp_end only
+        ScreenToGeo_3D(start, &geo_start);
+        gsl_vector_memcpy(rp_start, rp);
+        
+        ScreenToGeo_3D(end, &geo_end);
+        gsl_vector_memcpy(rp_end, rp);
+        
+        
+        //compute the dot product between rp_start and rp_end and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+        gsl_blas_ddot(rp_start, rp_end, &cos_rotation_angle);
+        //I  set rotation_angle to 0 if cos_rotation_angle is slightly larger than 1 because of numerical rounding
+        //    if(cos_rotation_angle < 1.0){
+        rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
+        //    }else{
+        //        rotation_angle.set(String("rotation angle"), 0.0, String("\t"));
+        //    }
+        
+        //compute the cross product  rp_start x rp_end store it into rp and normalize it
+        gsl_vector_set(rp, 0, gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 2) - gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 1));
+        gsl_vector_set(rp, 1, gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 0) - gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 2));
+        gsl_vector_set(rp, 2, gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 1) - gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 0));
+        gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
+        
+        
+        
+        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
+        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
+        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+        
+        rotation_axis.set(String("rotaion axis"), rp, String(""));
+        
+        
+        
+        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
+        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
+        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
+        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
+        
+        geo_end_drag.print(String("geo now drag"), String("\t"), cout);
+        //    rotation.print(String("rotation"), String("\t"), cout);
+        
+        
+        
+        gsl_vector_free(rp_start);
+        gsl_vector_free(rp_end);
+        
+        return (Rotation(
+                         Angle(String(""), 0.0, String("")),
+                         Angle(String(""), M_PI/2.0-(((rotation_axis).phi).value), String("")),
+                         Angle(String(""), -((((rotation_axis).lambda).value) + M_PI/2.0), String(""))
+                         )
+                * Rotation(
+                           Angle(String(""), (((rotation_axis).lambda).value) + M_PI/2.0, String("")),
+                           Angle(String(""), -(M_PI/2.0-(((rotation_axis).phi).value)), String("")),
+                           Angle(String(""), rotation_angle.value, String(""))
+                           ));
+        
+        
+    }else{
+        //if start = end, I return the identity as rotation
+        
+        return (Rotation(
+                         Angle(String(""), 0.0, String("")),
+                         Angle(String(""), 0.0, String("")),
+                         Angle(String(""), 0.0, String(""))
+                         ));
+        
+    }
     
 }
 

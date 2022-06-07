@@ -6086,7 +6086,9 @@ void Position::set(String name, gsl_vector* r, String prefix){
         name_phi = String("");
     }
     
-    cout << prefix.value << name.value << "\n";
+    if(name!=String("")){
+        cout << prefix.value << name.value << "\n";
+    }
     
     lambda.set(name_lambda, -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
     phi.set(name_phi, asin(gsl_vector_get(r, 2)/gsl_blas_dnrm2(r)), String(prefix));

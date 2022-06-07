@@ -6757,26 +6757,25 @@ void ChartFrame::GetCoastLineData_3D(void){
         phi_min_circle_observer_int = floor(K*(q.value));
         
         //set lambda_max/min_int in such a way that they comprise all the area within circle_observer
-        if(((lambda_min_circle_observer.value) < M_PI) && ((lambda_max_circle_observer.value) > M_PI)){
-            //in this case, circl_observer encompasses the prime meridian
-            
-            lambda_max_circle_observer_int = floor(K*(lambda_max_circle_observer.value));
-            lambda_min_circle_observer_int = ceil(K*(lambda_min_circle_observer.value));
-            
-            j_min = lambda_max_circle_observer_int;
-            j_max = 360 + lambda_min_circle_observer_int;
-            
- 
-            
-        }else{
-            //in this case, circl_observer does not encompass the prime meridian
+        if(((lambda_min_circle_observer) < (((draw_panel->circle_observer).reference_position).lambda)) && ((lambda_max_circle_observer) > (((draw_panel->circle_observer).reference_position).lambda))){
+            //in this case, lambda_min/max_circle_observer encompass the GP of the observer, and I simply set
             
             lambda_max_circle_observer_int = ceil(K*(lambda_max_circle_observer.value));
             lambda_min_circle_observer_int = floor(K*(lambda_min_circle_observer.value));
             
             j_min = lambda_min_circle_observer_int;
             j_max = lambda_max_circle_observer_int;
-        
+            
+            
+        }else{
+            //in this case, lambda_min/max_circle_observer do not encompass the GP of the observer,  I simply set j_min/max as follows in order to show the longitude range which comprises the GP of the observer
+
+            lambda_max_circle_observer_int = floor(K*(lambda_max_circle_observer.value));
+            lambda_min_circle_observer_int = ceil(K*(lambda_min_circle_observer.value));
+            
+            j_min = lambda_max_circle_observer_int;
+            j_max = 360 + lambda_min_circle_observer_int;
+            
             
         }
         

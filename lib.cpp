@@ -5368,7 +5368,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
         
         if(abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0){
             //im this case ( abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
-     
+            
             //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
             t_max.set(String(""), acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
             t_min.set(String(""), 2.0*M_PI - acos(-tan(reference_position.phi.value)*tan((omega.value))), new_prefix);
@@ -5388,7 +5388,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
                 
                 (*lambda_min) = (p_min.lambda);
                 (*lambda_max) = (p_max.lambda);
-
+                
             }else{
                 
                 (*lambda_min) = (p_max.lambda);
@@ -5412,7 +5412,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
                 (*lambda_max) = temp;
                 
             }
-
+            
         }
         
         
@@ -6743,7 +6743,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
     
     //obtain the  geographic position of the center of the circle of equal altitude above
-    ((draw_panel->circle_observer).reference_position).set(String("GP of circle observer"), draw_panel->r, String(""));
+    ((draw_panel->circle_observer).reference_position).set(String(""), draw_panel->r, String(""));
     
     
     if((draw_panel->circle_observer).lambda_min_max(&lambda_min_circle_observer, &lambda_max_circle_observer, String(""))){
@@ -6773,11 +6773,11 @@ void ChartFrame::GetCoastLineData_3D(void){
             
             
         }
-    
+        
         
         //        cout << "i_min/max = \t\t" << i_min << " , " << i_max << "\n";
         //        cout << "j_min/max = \t\t" << j_min << " , " << j_max << "\n";
-
+        
         
         //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
         n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
@@ -6863,7 +6863,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                     
                     //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
                     for(l=0; (l*every)<((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
-                                                             
+                        
                         //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                         if((draw_panel->GeoTo3D((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &temp))){
                             
@@ -8653,7 +8653,7 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
         gsl_blas_ddot(rp_start, rp_end, &cos_rotation_angle);
         //I  set rotation_angle to 0 if cos_rotation_angle is slightly larger than 1 because of numerical rounding
         //    if(cos_rotation_angle < 1.0){
-        rotation_angle.set(String("rotation angle"), acos(cos_rotation_angle), String("\t"));
+        rotation_angle.set(String(""), acos(cos_rotation_angle), String("\t"));
         //    }else{
         //        rotation_angle.set(String("rotation angle"), 0.0, String("\t"));
         //    }
@@ -8666,21 +8666,21 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
         
         
         
-//        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
-//        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
-//        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
-//        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+        //        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+        //        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
+        //        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
+        //        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
         
-        rotation_axis.set(String("rotaion axis"), rp, String(""));
+        rotation_axis.set(String(""), rp, String(""));
         
         
         
-//        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
-//        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
-//        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
-//        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
+        //        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
+        //        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
+        //        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
+        //        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
         
-        geo_end_drag.print(String("geo now drag"), String("\t"), cout);
+        //        geo_end_drag.print(String("geo now drag"), String("\t"), cout);
         //    rotation.print(String("rotation"), String("\t"), cout);
         
         
@@ -9527,8 +9527,8 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
             
             gsl_vector_memcpy(rp_end_drag, rp);
             rotation_end_drag = rotation;
-            geo_end_drag.print(String("position end drag"), String(""), cout);
-            rotation_end_drag.print(String("rotation end drag"), String(""), cout);
+            //            geo_end_drag.print(String("position end drag"), String(""), cout);
+            //            rotation_end_drag.print(String("rotation end drag"), String(""), cout);
             
         }
         
@@ -9634,7 +9634,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         text_position_start->SetLabel(wxString(s.str().c_str()));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
-//        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_start.phi).to_string(String("NS"), display_precision, false) << " }\n";
+        //        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_start.phi).to_string(String("NS"), display_precision, false) << " }\n";
         
     }else{
         
@@ -9648,7 +9648,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
-//            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
+            //            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
             
             //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
             delete chart;
@@ -9966,7 +9966,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
      */
     
     
-//    cout << "Slider getvalue = " << ((double)(slider->GetValue())) << "\n";
+    //    cout << "Slider getvalue = " << ((double)(slider->GetValue())) << "\n";
     //     cout << "Zoom factor = " << ((double)zoom_factor.value) << "\n";
     
     //set zoom_factor from the value of slider

@@ -39,7 +39,6 @@
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - add margins in ChartFrame
 - meridians are not shown sometimes
- - fix "14:17:41: Debug: Adding duplicate image handler for 'PNG file'"
  - rotation_0 should be read from file at the beginning
  - blue cricle at edge of the planet is not very visible
  */

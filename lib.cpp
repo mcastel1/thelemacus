@@ -8203,11 +8203,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     
-    //image
-    wxBMPHandler *handler = new wxBMPHandler;
-    wxImage::AddHandler(handler);
-    
-    
     //initialize the variable neededed for slider
     //    zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
@@ -11454,7 +11449,6 @@ void PositionFrame::AllOk(void){
 template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
-    wxPNGHandler *handler;
     wxRect rectangle;
     
     f_ok = f_ok_in;
@@ -11463,9 +11457,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
     
     //image
-    handler = new wxPNGHandler;
-    wxImage::AddHandler(handler);
-    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+   //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
@@ -11517,7 +11509,6 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFrame(wxWindow* parent, F_YES* f_yes_in, F_NO* f_no_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
-    wxPNGHandler *handler;
     wxRect rectangle;
     
     f_yes = f_yes_in;
@@ -11527,8 +11518,6 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     close_frame = new CloseFrame< QuestionFrame<F_YES, F_NO> >(this);
     
     //image
-    handler = new wxPNGHandler;
-    wxImage::AddHandler(handler);
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle = (display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth())*1./1000.0);
@@ -11597,6 +11586,13 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
     
+    //image
+//    wxBMPHandler *handler = new wxBMPHandler;
+//    wxPNGHandler *handler_png = new wxPNGHandler;
+//    wxImage::AddHandler(handler);
+//    wxImage::AddHandler(handler_png);
+ 
+ 
     
     plot = new Plot(catalog, String(""));
     

@@ -9527,8 +9527,8 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
             
             gsl_vector_memcpy(rp_end_drag, rp);
             rotation_end_drag = rotation;
-            //            geo_end_drag.print(String("position end drag"), String(""), cout);
-            //            rotation_end_drag.print(String("rotation end drag"), String(""), cout);
+            geo_end_drag.print(String("position end drag"), String(""), cout);
+            rotation_end_drag.print(String("rotation end drag"), String(""), cout);
             
         }
         

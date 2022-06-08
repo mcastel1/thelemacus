@@ -8829,12 +8829,24 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
 }
 
 //updates the text in text_slider by writing in it the current value of the zoom factor, rounded to an integer for clarity
-void ChartFrame::UpdateSliderLabel(void){
+void ChartFrame::UpdateSliderLabel_Mercator(void){
     
     stringstream s;
     
     s.str("");
     s << "1:" << round(zoom_factor.value);
+    text_slider->SetLabel(s.str().c_str());
+    
+}
+
+//updates the text in text_slider by writing in it the current value of the altitude of the observer with respect to the earth surface
+void ChartFrame::UpdateSliderLabel_3D(void){
+    
+    stringstream s;
+    
+    s.str("");
+    //d = 1 corresponds to one earth radsius, so the height of the observer is
+    s << round(((draw_panel->d).value)*Re) << " nm";
     text_slider->SetLabel(s.str().c_str());
     
 }
@@ -8901,8 +8913,8 @@ void ChartFrame::UpdateSlider(void){
     
     slider->SetValue(temp);
     
-    UpdateSliderLabel();
-    
+    (this->*UpdateSliderLabel)();
+
 }
 
 
@@ -9370,7 +9382,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
-        //        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_Mercator);
+        (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
@@ -9391,8 +9403,8 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
-        //        (parent->ZoomFactor) = (&ChartFrame::ZoomFactor_3D);
-        
+        (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
+
         
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
@@ -10152,7 +10164,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
              (draw_panel->*(draw_panel->Draw))();
              draw_panel->PaintNow();
              UpdateSlider();
-             UpdateSliderLabel();
+             UpdateSliderLabel_Mercator();
              */
             
             //        set the wxControl, title and message for the functor print_error_message, and then call the functor

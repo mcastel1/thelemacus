@@ -2004,15 +2004,16 @@ public:
     Double  /*the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight*/ relative_displacement, /*the default thickness of the line with which routes are drawn*/ standard_thickness_over_length_screen, /*the thickness with which highlighted routes are drawn*/ large_thickness_over_length_screen, /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
     
     
-    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::ZoomFactor_Mercator or ChartFrame::ZoomFactor_3D, according to my needs, and similarly for the other pointers
-//    bool (ChartFrame::*ZoomFactor)(double);
- 
+    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
+    void (ChartFrame::*UpdateSliderLabel)(void);
+
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);
     void UpdateSlider(void);
     bool ZoomFactor_Mercator(double);
     bool ZoomFactor_3D(void);
-    void UpdateSliderLabel(void);
+    void UpdateSliderLabel_Mercator(void);
+    void UpdateSliderLabel_3D(void);
     void OnMouseLeftDownOnSlider(wxMouseEvent&);
     void OnMouseLeftUpOnSlider(wxMouseEvent&);
     void OnScroll(wxScrollEvent&);

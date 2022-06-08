@@ -9389,11 +9389,22 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 void DrawPanel::OnChooseProjection(wxCommandEvent& event){
     
     stringstream s;
+    String temp;
+    size_t pos;
     vector<ChartFrame*>::iterator i;
     
     //set the ChartFrame title
+    //extract the part of the title which comes before the name of the projection type
+    temp = String((parent->GetLabel()).ToStdString());
+    pos = (temp.value).find(" - ");
+    temp.set(String(""), String((temp.value).substr(0, pos).c_str()), String(""));
+    
+    //put together temp and the new name of the projection type and write the result into the title of parent
     s.str("");
-    s << "Chart #" << /*this is the position of parent->this in the vector chart_frames, which is the id of the chart frame to be shown in the ChartFrame title*/distance(((parent->parent)->chart_frames).begin(), find(((parent->parent)->chart_frames).begin(), ((parent->parent)->chart_frames).end(), parent)) << " - " << (((parent->projection)->name)->GetValue().ToStdString()) << " projection";
+    s << (temp.value) << " - " <<  (((parent->projection)->name)->GetValue().ToStdString()) << " projection";
+    //
+    temp.set(String(""), s.str(), String(""));
+    //
     parent->SetLabel(wxString(s.str().c_str()));
     
     

@@ -8851,12 +8851,24 @@ void ChartFrame::UpdateSliderLabel_Mercator(void){
 //updates the text in text_slider by writing in it the current value of the altitude of the observer with respect to the earth surface
 void ChartFrame::UpdateSliderLabel_3D(void){
     
-    stringstream s;
-    
-    s.str("");
+    String s;
+    Length l;
+        
     //d = 1 corresponds to one earth radsius, so the height of the observer is
-    s << round(((draw_panel->d).value)*Re) << " nm";
-    text_slider->SetLabel(s.str().c_str());
+    l.set(String(""), ((draw_panel->d).value)*Re, String(""));
+    
+    if((l.value) > 1.0){
+        //if the altitude is larger than 1 nm, I output it in units of nm
+        
+        s = (l.to_string(String("nm"), display_precision));
+        
+    }else{
+        //if the altitude is smaller than 1 nm, I output it in units of m
+
+        s = (l.to_string(String("m"), display_precision));
+    }
+    
+    text_slider->SetLabel(s.value);
     
 }
 

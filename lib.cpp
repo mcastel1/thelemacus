@@ -8175,7 +8175,7 @@ void DrawPanel::Draw_3D(void){
                                    (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
                                    (r.y)/y_max * ((double)width_plot_area)/2.0,
                                    (r.y)/y_max * ((double)width_plot_area)/2.0,
-                                   (parent->color_horizon).GetRGB(),
+                                   (parent->color_horizon).GetRGBA(),
                                    Chart::Transparent
                                    );
     

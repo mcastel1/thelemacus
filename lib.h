@@ -1769,8 +1769,10 @@ public:
 class Color: public wxColour{
     
 public:
+    Color();
     Color(unsigned char, unsigned char, unsigned char);
-    
+    Color(unsigned char, unsigned char, unsigned char, unsigned char);
+
 };
 
 
@@ -1805,9 +1807,9 @@ public:
     vector< vector< vector<Position> > > data_3d;
     //a vector which contains the Positions of the coastline profiles of the entire world
 //    vector<Position> data_3d;
-    vector<wxColour> color_list;
+    vector<Color> color_list;
     //the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area
-    wxColour color_selected_item;
+    Color color_selected_item;
     //the rectangle used to measure the size of the display
     wxDisplay display;
     wxRect rectangle_display;

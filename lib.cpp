@@ -7321,7 +7321,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     bool first_label;
     int i, j, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
     
-    wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
+    wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetBrush(brush);
     
@@ -7400,7 +7400,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     }
     
     //   reset the pen to its default parameters
-    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+    dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
     
     if(selection_rectangle){
@@ -7548,7 +7548,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     Route dummy_route;
     wxPoint p;
     
-    wxBrush brush(wxColour(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
+    wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     dc.SetBrush(brush);
     
     //draw coastlines
@@ -7556,7 +7556,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     
     //set the pen to grey
-    dc.SetPen(wxPen(wxColor(128,128,128), 1));
+    dc.SetPen(wxPen(Color(128,128,128), 1));
     
     
     color_id = 0;
@@ -7628,7 +7628,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     }
     
     //   reset the pen to its default parameters
-    dc.SetPen(wxPen(wxColor(255,175,175), 1 ) ); // 1-pixels-thick pink outline
+    dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
     
     
@@ -8205,12 +8205,23 @@ void DrawPanel::Draw_3D(void){
 }
 
 
+//constructs a color object by setting no arguments
+Color::Color() : wxColour(){
+
+}
+
+
 //constructs a color objct by setting its rgb values to red, green, blue
 Color::Color(unsigned char red, unsigned char green, unsigned char blue) : wxColour(red, green, blue){
-    
-    
-    
+
 }
+
+//constructs a color objct by setting its rgb values to red, green, blue and transparency (alpha)
+Color::Color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) : wxColour(red, green, blue, alpha){
+
+}
+
+
 
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
@@ -8278,7 +8289,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     blue = stoi((color.value).substr(0, pos_end+1).c_str());
     
     //write the color that I just read in color_list
-    color_horizon = wxColor(red, green, blue);
+    color_horizon = Color(red, green, blue);
     
     
     
@@ -11740,7 +11751,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         blue = stoi((s.value).substr(0, pos_end+1).c_str());
         
         //write the color that I just read in color_list
-        color_list[i] = wxColor(red, green, blue);
+        color_list[i] = Color(red, green, blue);
         
     }
     
@@ -11777,7 +11788,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     blue = stoi((s.value).substr(0, pos_end+1).c_str());
     
     //write the color that I just read in color_list
-    color_selected_item = wxColor(red, green, blue);
+    color_selected_item = Color(red, green, blue);
     
     
     

@@ -10060,7 +10060,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     
     //set zoom_factor from the value of slider
     zoom_factor.set(
-                    String("Newly set zoom factor"),
+                    String(""),
                     (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax())))*log(((double)(slider->GetValue()))) + 1.0
                     ,
                     String("")

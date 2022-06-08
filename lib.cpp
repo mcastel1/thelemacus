@@ -8271,10 +8271,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
-    size_t pos_beg, pos_end;
-    int red, green, blue;
-
-    
     
     parent = parent_input;
     
@@ -8301,37 +8297,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //read large_thickness_over_length_screen from file_init
     large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
     
-    
     //read color horizon from file
-    color.read_from_file(String("color horizon"), String(path_file_init), String(""));
-    
-    //get rid of everything that comes before and at '(' at the beginnign of color
-    pos_end = (color.value).find("(");
-    color.set(String(""), String((color.value).substr(pos_end+1).c_str()), String(""));
-    //look for the first ','
-    
-    pos_end = (color.value).find(",");
-    
-    //read red
-    red = stoi(((color.value).substr(0, pos_end)).c_str());
-    
-    //get rid of the first ','
-    color.set(String(""), String((color.value).substr(pos_end+1).c_str()), String(""));
-    
-    pos_end = (color.value).find(",");
-    
-    green = stoi((color.value).substr(0, pos_end).c_str());
-    
-    //get rid of the second ','
-    color.set(String(""), String((color.value).substr(pos_end+1).c_str()), String(""));
-    
-    pos_end = (color.value).find(")");
-    //get rid of '('
-    blue = stoi((color.value).substr(0, pos_end+1).c_str());
-    
-    //write the color that I just read in color_list
-    color_horizon = Color(red, green, blue);
-    
+    color_horizon.read_from_file(String("color horizon"), String(path_file_init), String(""));
     
     
     idling = false;
@@ -11796,47 +11763,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
         
     }
     
-    
-    
-    
-    
-    
     //read color selected item from file
-    s.read_from_file(String("color selected item"), String(path_file_init), String(""));
-    
-    //get rid of everything that comes before and at '(' at the beginnign of s
-    pos_end = (s.value).find("(");
-    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
-    //look for the first ','
-    
-    pos_end = (s.value).find(",");
-    
-    //read red
-    red = stoi(((s.value).substr(0, pos_end)).c_str());
-    
-    //get rid of the first ','
-    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
-    
-    pos_end = (s.value).find(",");
-    
-    green = stoi((s.value).substr(0, pos_end).c_str());
-    
-    //get rid of the second ','
-    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
-    
-    pos_end = (s.value).find(")");
-    //get rid of '('
-    blue = stoi((s.value).substr(0, pos_end+1).c_str());
-    
-    //write the color that I just read in color_list
-    color_selected_item = Color(red, green, blue);
-    
-    
-    
-    
-    
-    
-    
+    color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
     
     
     //no positions nor routes are highlighted when ListFrame is constructed

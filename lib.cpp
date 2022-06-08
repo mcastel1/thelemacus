@@ -8935,7 +8935,7 @@ void ChartFrame::UpdateSlider(void){
     
 //    cout << "\t\t\ttemp = " << temp << "\n";
 //    cout << "\t\t\tzoom_factor = " << (zoom_factor.value) << "\n";
-    
+     
     slider->SetValue(temp);
     
     (this->*UpdateSliderLabel)();

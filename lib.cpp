@@ -8330,9 +8330,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //sets the coefficients for the function which relates the zoom factor to the slider value
-    e_zoom = 0.5;
-    a_zoom = (-1.0 + (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom));
-    b_zoom = (pow(((double)(slider->GetMax())), e_zoom) - (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom));
+    e_zoom.set(String(""), 0.5, String(""));
+    a_zoom.set(String(""), (-1.0 + (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
+    b_zoom.set(String(""), (pow(((double)(slider->GetMax())), e_zoom.value) - (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
 
     
     //text field showing the current value of the zoom slider
@@ -8914,7 +8914,7 @@ void ChartFrame::UpdateSlider(void){
     }
     
     //a tentative value for the value of slizer
-    temp = round(pow(((zoom_factor.value)-b_zoom)/a_zoom, 1.0/e_zoom));
+    temp = round(pow(((zoom_factor.value)-(b_zoom.value))/(a_zoom.value), 1.0/(e_zoom.value)));
     
    
     //if the tentative value exceeds the slider boundaries, I set it to the respective boundary
@@ -10118,7 +10118,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     //set zoom_factor from the value of slider
     zoom_factor.set(
                     String(""),
-                    a_zoom * pow((slider->GetValue()), e_zoom) + b_zoom
+                    (a_zoom.value) * pow((slider->GetValue()), e_zoom.value) + (b_zoom.value)
                     ,
                     String("")
                     );

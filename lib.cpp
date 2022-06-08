@@ -8205,6 +8205,13 @@ void DrawPanel::Draw_3D(void){
 }
 
 
+//constructs a color objct by setting its rgb values to red, green, blue
+Color::Color(unsigned char red, unsigned char green, unsigned char blue) : wxColour(red, green, blue){
+    
+    
+    
+}
+
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;

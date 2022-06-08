@@ -1765,8 +1765,13 @@ public:
 
 
 
-
-
+//a class for color objects
+class Color: public wxColour{
+    
+public:
+    Color(unsigned char, unsigned char, unsigned char);
+    
+};
 
 
 

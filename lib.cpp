@@ -8175,7 +8175,7 @@ void DrawPanel::Draw_3D(void){
                                    (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
                                    (r.y)/y_max * ((double)width_plot_area)/2.0,
                                    (r.y)/y_max * ((double)width_plot_area)/2.0,
-                                   0x00BFFF,
+                                   (parent->color_horizon).GetRGB(),
                                    Chart::Transparent
                                    );
     
@@ -8208,10 +8208,13 @@ void DrawPanel::Draw_3D(void){
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;
-    String new_prefix, default_projection;
+    String new_prefix, default_projection, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
+    size_t pos_beg, pos_end;
+    int red, green, blue;
+
     
     
     parent = parent_input;
@@ -8238,6 +8241,39 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read large_thickness_over_length_screen from file_init
     large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
+    
+    
+    //read color horizon from file
+    color.read_from_file(String("color horizon"), String(path_file_init), String(""));
+    
+    //get rid of everything that comes before and at '(' at the beginnign of color
+    pos_end = (color.value).find("(");
+    color.set(String(""), String((color.value).substr(pos_end+1).c_str()), String(""));
+    //look for the first ','
+    
+    pos_end = (color.value).find(",");
+    
+    //read red
+    red = stoi(((color.value).substr(0, pos_end)).c_str());
+    
+    //get rid of the first ','
+    color.set(String(""), String((color.value).substr(pos_end+1).c_str()), String(""));
+    
+    pos_end = (color.value).find(",");
+    
+    green = stoi((color.value).substr(0, pos_end).c_str());
+    
+    //get rid of the second ','
+    color.set(String(""), String((color.value).substr(pos_end+1).c_str()), String(""));
+    
+    pos_end = (color.value).find(")");
+    //get rid of '('
+    blue = stoi((color.value).substr(0, pos_end+1).c_str());
+    
+    //write the color that I just read in color_list
+    color_horizon = wxColor(red, green, blue);
+    
+    
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);

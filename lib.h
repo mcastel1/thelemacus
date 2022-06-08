@@ -1981,6 +1981,8 @@ public:
     TextBox* box;
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
+    //the color of the horizon circle for the 3D projection
+    wxColor color_horizon;
     ProjectionField* projection;
     PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     //in these vectors, I store the 2d coordindates of the Mercator projection and of the 3D rendering, respectively

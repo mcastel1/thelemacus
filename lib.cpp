@@ -8163,8 +8163,17 @@ void DrawPanel::Draw_3D(void){
      , String("")
      );
      */
-    circle_observer.draw(((plot->n_points_routes).value), 0x00BFFF, -1, this);
+    //    circle_observer.draw(((plot->n_points_routes).value), 0x00BFFF, -1, this);
     
+        
+    (chart->getDrawArea())->circle(
+                                   (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
+                                   (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
+                                   (d.value)/((d.value) + 1.0)/y_max * ((double)width_plot_area)/2.0,
+                                   (d.value)/((d.value) + 1.0)/y_max * ((double)width_plot_area)/2.0,
+                                   0x00BFFF,
+                                   Chart::Transparent
+                                   );
     
     
     

@@ -8329,8 +8329,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
-    //sets the coefficients for the function which relates the zoom factor to the slider value
-    e_zoom.set(String(""), 0.5, String(""));
+    //sets the coefficients for the function which relates the zoom factor to the slider value: read from file e_zoom and set a_zoom, b_zoom 
+    e_zoom.read_from_file(String("exponent zoom"), String(path_file_init), String(""));
     a_zoom.set(String(""), (-1.0 + (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
     b_zoom.set(String(""), (pow(((double)(slider->GetMax())), e_zoom.value) - (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
 

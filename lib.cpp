@@ -5779,10 +5779,10 @@ string Length::to_string(String unit, unsigned int precision){
     
     output.precision(precision);
     
-    if(unit == String("nm")){output << value << " nm";}
-    if(unit == String("m")){output << value*1e3*nm << " m";}
+    if(unit == String("nm")){output << fixed << value << " nm";}
+    if(unit == String("m")){output << fixed << value*1e3*nm << " m";}
     
-    return (output.str().c_str());
+    return(output.str().c_str());
     
 }
 
@@ -8860,12 +8860,12 @@ void ChartFrame::UpdateSliderLabel_3D(void){
     if((l.value) > 1.0){
         //if the altitude is larger than 1 nm, I output it in units of nm
         
-        s = (l.to_string(String("nm"), display_precision));
+        s = (l.to_string(String("nm"), 0));
         
     }else{
         //if the altitude is smaller than 1 nm, I output it in units of m
 
-        s = (l.to_string(String("m"), display_precision));
+        s = (l.to_string(String("m"), 0));
     }
     
     text_slider->SetLabel(s.value);

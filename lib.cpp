@@ -10083,27 +10083,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
 void ChartFrame::OnScroll(wxScrollEvent &event){
         
-    /*
-     n = value of slider,
-     z = zoom factor,
-     
-     1 <= z <= zoom_factor_max
-     1 <= n <= n_max
-     
-     z = a*log(n) + b
-     
-     n = exp((z-b)/a)
-     
-     b=1, a=(zoom_factor_max -1)/log(n_max)
-     
-     z = w/delta_x / (w_0/delta_x_0)
-     
-     delta_x = w/z/ (w_0/delta_x_0) = w*delta_x_0/(z*w_0)
-     
-     height_chart/width_chart * x_span = (y_max-y_min);
-     
-     
-     */
+
     
     /*
      n = value of slider,

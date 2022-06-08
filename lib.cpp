@@ -8933,8 +8933,8 @@ void ChartFrame::UpdateSlider(void){
     if(temp > (slider->GetMax())){temp = (slider->GetMax());}
     if(temp < 1){temp = 1;}
     
-    cout << "\t\t\ttemp = " << temp << "\n";
-    cout << "\t\t\tzoom_factor = " << (zoom_factor.value) << "\n";
+//    cout << "\t\t\ttemp = " << temp << "\n";
+//    cout << "\t\t\tzoom_factor = " << (zoom_factor.value) << "\n";
     
     slider->SetValue(temp);
     

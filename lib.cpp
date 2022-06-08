@@ -442,6 +442,47 @@ String::String(string s){
 }
 
 
+//reads from file the color written after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
+void Color::read_from_file(String name, String filename, String prefix){
+    
+    String new_prefix, s;
+    size_t pos_end;
+    int red, green, blue;
+
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    s.read_from_file(name, filename, new_prefix);
+    
+    //get rid of everything that comes before and at '(' at the beginnign of s
+    pos_end = (s.value).find("(");
+    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+    //look for the first ','
+    
+    pos_end = (s.value).find(",");
+    
+    //read red
+    red = stoi(((s.value).substr(0, pos_end)).c_str());
+    
+    //get rid of the first ','
+    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+    
+    pos_end = (s.value).find(",");
+    
+    green = stoi((s.value).substr(0, pos_end).c_str());
+    
+    //get rid of the second ','
+    s.set(String(""), String((s.value).substr(pos_end+1).c_str()), String(""));
+    
+    pos_end = (s.value).find(")");
+    //get rid of '('
+    blue = stoi((s.value).substr(0, pos_end+1).c_str());
+    
+    (*this) = Color(red, green, blue);
+    
+    
+}
+ 
 //reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
 void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     

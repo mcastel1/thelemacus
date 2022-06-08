@@ -1772,6 +1772,8 @@ public:
     Color();
     Color(unsigned char, unsigned char, unsigned char);
     Color(unsigned char, unsigned char, unsigned char, unsigned char);
+    
+    void read_from_file(String, String, String);
 
 };
 

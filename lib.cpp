@@ -10077,11 +10077,13 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
      1 <= z <= zoom_factor_max
      1 <= n <= n_max
      
-     z = a*log(n) + b
      
-     n = exp((z-b)/a)
+     z = a*n^exponent + b
      
-     b=1, a=(zoom_factor_max -1)/log(n_max)
+     n = log((z-b)/a)/exponent
+     
+     a = (-1 + zoom_factor_max)/(-1 + n_max^exponent);
+     b = (n_max^exponent - zoom_factor_max)/(-1 + n_max^exponent);
      
      z = w/delta_x / (w_0/delta_x_0)
      

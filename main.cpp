@@ -42,6 +42,7 @@
  - add ft unit for lengths
  - read sequence of colors from init file with COlor class member function 
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
+ - by decreasing number of points for routes, for example setting it to 100, the drag is much more fluid in the 3d projection !
  */
 
 

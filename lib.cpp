@@ -8282,6 +8282,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     
     mouse_scrolling = false;
+    
+ 
+    
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
     
@@ -8325,6 +8328,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    
+    //sets the coefficients for the function which relates the zoom factor to the slider value
+    e_zoom = 0.5;
+    a_zoom = (-1.0 + (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom));
+    b_zoom = (pow(((double)(slider->GetMax())), e_zoom) - (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom));
+
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -8905,11 +8914,15 @@ void ChartFrame::UpdateSlider(void){
     }
     
     //a tentative value for the value of slizer
-    temp = round(exp(((zoom_factor.value) - 1.0)/( (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax()))) )));
+    temp = round(pow(((zoom_factor.value)-b_zoom)/a_zoom, 1.0/e_zoom));
     
+   
     //if the tentative value exceeds the slider boundaries, I set it to the respective boundary
     if(temp > (slider->GetMax())){temp = (slider->GetMax());}
     if(temp < 1){temp = 1;}
+    
+    cout << "\t\t\ttemp = " << temp << "\n";
+    cout << "\t\t\tzoom_factor = " << (zoom_factor.value) << "\n";
     
     slider->SetValue(temp);
     
@@ -10069,7 +10082,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 } 
 
 void ChartFrame::OnScroll(wxScrollEvent &event){
-    
+        
     /*
      n = value of slider,
      z = zoom factor,
@@ -10099,13 +10112,15 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
      1 <= z <= zoom_factor_max
      1 <= n <= n_max
      
+     n = ((double)(slider->GetValue()));
+     n_max = ((double)(slider->GetMax()))
      
-     z = a*n^exponent + b
+     z = a_zoom*n^e_zoom + b_zoom
+     n = log((z-b_zoom)/a_zoom)/e_zoom
+    
      
-     n = log((z-b)/a)/exponent
-     
-     a = (-1 + zoom_factor_max)/(-1 + n_max^exponent);
-     b = (n_max^exponent - zoom_factor_max)/(-1 + n_max^exponent);
+     a_zoom = (-1 + zoom_factor_max)/(-1 + n_max^e_zoom);
+     b_zoom = (n_max^e_zoom - zoom_factor_max)/(-1 + n_max^e_zoom);
      
      z = w/delta_x / (w_0/delta_x_0)
      
@@ -10123,10 +10138,11 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
     //set zoom_factor from the value of slider
     zoom_factor.set(
                     String(""),
-                    (-1.0 + (zoom_factor_max.value))/log(((double)(slider->GetMax())))*log(((double)(slider->GetValue()))) + 1.0
+                    a_zoom * pow((slider->GetValue()), e_zoom) + b_zoom
                     ,
                     String("")
                     );
+    
     //if the resulting value of zoom_factor is outside the boundaries I set it back to the rspective boundary
     if((zoom_factor.value) < 1.0){
         (zoom_factor.value) = 1.0;

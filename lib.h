@@ -2000,7 +2000,8 @@ public:
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling;
     //This is the actual value of the maximal zoom factor allowed
     Int zoom_factor_max;
-    
+    //the numerical coefficients which define the function which relates the slider value to the zoom factor
+    double a_zoom, b_zoom, e_zoom;
     Double  /*the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight*/ relative_displacement, /*the default thickness of the line with which routes are drawn*/ standard_thickness_over_length_screen, /*the thickness with which highlighted routes are drawn*/ large_thickness_over_length_screen, /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
     
     

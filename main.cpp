@@ -40,7 +40,7 @@
  - add margins in ChartFrame
  - meridians are not shown sometimes
  - add ft unit for lengths
- - create color class and pack the lines where you read a color from file into a member function
+ - read sequence of colors from init file with COlor class member function 
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  */
 

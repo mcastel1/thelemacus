@@ -8072,7 +8072,10 @@ void DrawPanel::Draw_3D(void){
     
     double lambda, phi;
     Route dummy_route;
+    Position q;
     wxPoint p;
+    Projection r;
+    Rotation rotation_temp;
     
     
     parent->GetCoastLineData_3D();
@@ -8151,26 +8154,27 @@ void DrawPanel::Draw_3D(void){
     
     
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
-    /*
-     //set omega to a value slightly smaller than omega_observer, specifically chosen in such a way that  dummy_route lies more towards the GP of the observer, by one pixel
-     (dummy_route.omega).set(String("Omega adjusted"),
-     asin(
-     
-     (sqrt(2.0 + (d.value))*sqrt((d.value)*((double)height_plot_area)*gsl_pow_2(sin(omega_observer)) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max))/
-     sqrt((d.value)*(2.0 + (d.value))*((double)height_plot_area) - 2.0*(2.0 + (d.value) - gsl_pow_2(sin(omega_observer)))*y_max)
-     
-     )
-     , String("")
-     );
-     */
-    //    circle_observer.draw(((plot->n_points_routes).value), 0x00BFFF, -1, this);
+    //store rotation in rotation_temp
+    rotation_temp = rotation;
+    //set rotation to a straightforward rotation
+    rotation =  Rotation(
+                         Angle(String(""), -M_PI/2.0, String("")),
+                         Angle(String(""), 0.0, String("")),
+                         Angle(String(""), 0.0, String(""))
+                         );
+    //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection r: the resulting r.y is the radius of the circular horizon of the earth in 3d projection cooordinates
+    (q.lambda).set(String(""), 0.0, String(""));
+    (q.phi).set(String(""),  asin(sqrt(gsl_pow_2(1.0+(d.value))-1.0)/((d.value)+1.0)) , String(""));
+    GeoTo3D(q, &r);
+    //restore rotation
+    rotation = rotation_temp;
     
-        
+    //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     (chart->getDrawArea())->circle(
                                    (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
                                    (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
-                                   (d.value)/((d.value) + 1.0)/y_max * ((double)width_plot_area)/2.0,
-                                   (d.value)/((d.value) + 1.0)/y_max * ((double)width_plot_area)/2.0,
+                                   (r.y)/y_max * ((double)width_plot_area)/2.0,
+                                   (r.y)/y_max * ((double)width_plot_area)/2.0,
                                    0x00BFFF,
                                    Chart::Transparent
                                    );

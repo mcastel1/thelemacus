@@ -6816,6 +6816,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     Angle q, lambda_min_circle_observer, lambda_max_circle_observer;
     bool check;
     
+    //compute circle_observer
     ((draw_panel->circle_observer).omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
     
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
@@ -8674,7 +8675,7 @@ void DrawPanel::SetIdling(bool b){
     
 }
 
-//this function computes lambda_min, ... phi_max from x_min ... y_max
+//this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 void DrawPanel::Update_lambda_phi_min_max_Mercator(void){
     
     (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
@@ -8684,6 +8685,34 @@ void DrawPanel::Update_lambda_phi_min_max_Mercator(void){
     (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
     
 }
+
+//this function computes lambda_min, ... phi_max (the  min/max latitudes and longitudes which encompass circle_observer) for the 3D projection
+void DrawPanel::Update_lambda_phi_min_max_3D(void){
+    
+    //compute circle_observer
+    (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
+    
+    //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
+    gsl_vector_set(rp, 0, 0.0);
+    gsl_vector_set(rp, 1, -1.0);
+    gsl_vector_set(rp, 2, 0.0);
+    
+    //convert rp -> r through rotation^{-1}
+    gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, rp, 0.0, r);
+    
+    //obtain the  geographic position of the center of the circle of equal altitude above
+    (circle_observer.reference_position).set(String(""), r, String(""));
+    
+    
+    //set lambda_min/max from circle_observer
+    circle_observer.lambda_min_max(&(plot->lambda_min), &(plot->lambda_max), String(""));
+
+    //set phi_min/max
+    (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
+    (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
+    
+}
+
 
 //this function computes x_min, ... y_max and from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void){

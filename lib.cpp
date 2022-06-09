@@ -6858,8 +6858,8 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
-  
-
+    
+    
     if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
         j_min = floor(K*((plot->lambda_max).value));
@@ -8175,7 +8175,7 @@ void DrawPanel::Draw_3D(void){
     //draw meridians
     //set delta_lambda
     lambda_span = K*fabs(((plot->lambda_max)-(plot->lambda_min)).value);
-
+    
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
     
@@ -8185,7 +8185,7 @@ void DrawPanel::Draw_3D(void){
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
     //    delta_lambda = 15.0;
-
+    
     
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
@@ -8198,19 +8198,19 @@ void DrawPanel::Draw_3D(void){
     do{
         
         //I fix the longitude of the ground position of dummy_route, according to lambda
-      
+        
         dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
         (((dummy_route.reference_position).lambda).value) -= k*delta_lambda;
-
+        
     }while(GeoTo3D(dummy_route.reference_position, NULL));
     
-//    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
-//        
-//        //I fix the longitude of the ground position of dummy_route, according to lambda
-//        ((dummy_route.reference_position).lambda).set(String(""), lambda+M_PI/2.0, String(""));
-//        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-//        
-//    }
+    //    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
+    //
+    //        //I fix the longitude of the ground position of dummy_route, according to lambda
+    //        ((dummy_route.reference_position).lambda).set(String(""), lambda+M_PI/2.0, String(""));
+    //        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+    //
+    //    }
     
     
     //draw parallels

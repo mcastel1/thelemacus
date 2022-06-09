@@ -8194,6 +8194,8 @@ void DrawPanel::Draw_3D(void){
     ((dummy_route.reference_position).phi).set(String(""), ((plot->phi_min).value) + 1e-2, String(""));
         
     (((dummy_route.reference_position).lambda).value) = k*((((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda);
+    
+    
     do{
                 
         dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);

@@ -6843,17 +6843,11 @@ void ChartFrame::GetCoastLineData_3D(void){
     //integer values of min/max lat/lon to be extractd from data_3d
     int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
     Projection temp;
-    //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture ((draw_panel->circle_observer).omega) and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
     bool check;
     
     //set the latitudes and longitudes which comrpise circle_observer
     (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
     
-//    q = (((draw_panel->circle_observer).reference_position).phi)+((draw_panel->circle_observer).omega);
-//    q.normalize_pm_pi();
-
-//    q = (((draw_panel->circle_observer).reference_position).phi)-((draw_panel->circle_observer).omega);
-//    q.normalize_pm_pi();
     
     //set i_min/max, j_min/max
     (plot->phi_min).normalize_pm_pi();

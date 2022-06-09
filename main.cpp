@@ -11,7 +11,6 @@
 
 /*
  notes: set parents to constructors of all frames that you defined
- - when you click on modify and then press reduce, the code should not insert a new item in listcontrol, but replace the old one
  - add instrumental error
  - revise Angle::to_string in such a way that all angles take the same space when printed out to string
  - all quantities in pixels must be relative to screen size, not absolute pixel size.

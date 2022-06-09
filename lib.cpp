@@ -8481,8 +8481,8 @@ template<class T> void ChartFrame::MoveUp(T& event){
         (draw_panel->y_min) += delta;
         (draw_panel->y_max) += delta;
         
-        draw_panel->Update_lambda_phi_min_max_Mercator();
-        
+        (draw_panel->*(draw_panel->Update_lambda_phi_min_max))();
+
         //re-draw the chart
         (draw_panel->*(draw_panel->Draw))();
         draw_panel->PaintNow();
@@ -8622,7 +8622,8 @@ template<class T> void ChartFrame::Reset(T& event){
         
         
         //reset the chart boundaries to the initial ones
-        draw_panel->Update_lambda_phi_min_max_Mercator();
+        (draw_panel->*(draw_panel->Update_lambda_phi_min_max))();
+
         
     }
     
@@ -9701,7 +9702,8 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
                 y_min = y_min_start_drag;
                 y_max = y_max_start_drag;
                 
-                Update_lambda_phi_min_max_Mercator();
+                (this->*Update_lambda_phi_min_max)();
+
                 
                 //re-draw the chart
                 (this->*Draw)();
@@ -9996,9 +9998,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             y_max += delta_y;
                             
                             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-                                
-                                Update_lambda_phi_min_max_Mercator();
-                                
+                                (this->*Update_lambda_phi_min_max)();
                             }
                             
                             //re-draw the chart
@@ -10215,7 +10215,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         
         if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
-            draw_panel->Update_lambda_phi_min_max_Mercator();
+            (draw_panel->*(draw_panel->Update_lambda_phi_min_max))();
             //            ZoomFactor_Mercator((draw_panel->x_span));
             
             (draw_panel->*(draw_panel->Draw))();

@@ -8480,7 +8480,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
         (draw_panel->y_min) += delta;
         (draw_panel->y_max) += delta;
         
-        draw_panel->Update_lambda_phi_min_max();
+        draw_panel->Update_lambda_phi_min_max_Mercator();
         
         //re-draw the chart
         (draw_panel->*(draw_panel->Draw))();
@@ -8506,7 +8506,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
         (draw_panel->y_min) -= delta;
         (draw_panel->y_max) -= delta;
         
-        draw_panel->Update_lambda_phi_min_max();
+        draw_panel->Update_lambda_phi_min_max_Mercator();
         
         //re-draw the chart
         (draw_panel->*(draw_panel->Draw))();
@@ -8621,7 +8621,7 @@ template<class T> void ChartFrame::Reset(T& event){
         
         
         //reset the chart boundaries to the initial ones
-        draw_panel->Update_lambda_phi_min_max();
+        draw_panel->Update_lambda_phi_min_max_Mercator();
         
     }
     
@@ -8675,7 +8675,7 @@ void DrawPanel::SetIdling(bool b){
 }
 
 //this function computes lambda_min, ... phi_max from x_min ... y_max
-void DrawPanel::Update_lambda_phi_min_max(void){
+void DrawPanel::Update_lambda_phi_min_max_Mercator(void){
     
     (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
     (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
@@ -9670,7 +9670,7 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
                 y_min = y_min_start_drag;
                 y_max = y_max_start_drag;
                 
-                Update_lambda_phi_min_max();
+                Update_lambda_phi_min_max_Mercator();
                 
                 //re-draw the chart
                 (this->*Draw)();
@@ -9966,7 +9966,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             
                             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                                 
-                                Update_lambda_phi_min_max();
+                                Update_lambda_phi_min_max_Mercator();
                                 
                             }
                             
@@ -10184,7 +10184,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         
         if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
-            draw_panel->Update_lambda_phi_min_max();
+            draw_panel->Update_lambda_phi_min_max_Mercator();
             //            ZoomFactor_Mercator((draw_panel->x_span));
             
             (draw_panel->*(draw_panel->Draw))();
@@ -10205,7 +10205,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
              cout << "\ny_min_old = " << (draw_panel->y_min_old);
              cout << "\ny_max_old = " << (draw_panel->y_max_old);
              
-             //            draw_panel->Update_lambda_phi_min_max();
+             //            draw_panel->Update_lambda_phi_min_max_Mercator();
              ZoomFactor_Mercator((draw_panel->x_span()));
              
              //put the slider back to the value before the scroll

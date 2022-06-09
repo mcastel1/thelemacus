@@ -1497,7 +1497,7 @@ public:
     bool ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
-    void Update_lambda_phi_min_max(void);
+    void Update_lambda_phi_min_max_Mercator(void);
     void Set_x_y_min_max_Mercator(void);
     void Set_x_y_min_max_3D(void);
     bool check(const Projection);

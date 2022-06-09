@@ -893,15 +893,33 @@ bool Angle::operator==(const Angle& x){
     
 }
 
+bool Angle::operator==(const double& x){
+    
+    return((((*this).value) == x));
+    
+}
+
 bool Angle::operator>(const Angle& x){
     
     return((((*this).value) > (x.value)));
     
 }
 
+bool Angle::operator>(const double& x){
+    
+    return((((*this).value) > x));
+    
+}
+
 bool Angle::operator<(const Angle& x){
     
     return((((*this).value) < (x.value)));
+    
+}
+
+bool Angle::operator<(const double& x){
+    
+    return((((*this).value) < x));
     
 }
 
@@ -5435,7 +5453,7 @@ double Route::lambda_minus_pi(double t, void* route){
     
 }
 
-//comppute the extremal longidues taken by the points lying on *this, if *this is a circle of equal altitude, and writes them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center. If *this is not a circle of equal altitude, an error is printed and lambda_min /max are not touched. 
+//comppute the extremal longidues taken by the points lying on *this, if *this is a circle of equal altitude, and writes them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center. If *this is not a circle of equal altitude, an error is printed and lambda_min /max are not touched.
 bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
     
     String new_prefix;
@@ -6857,18 +6875,15 @@ void ChartFrame::GetCoastLineData_3D(void){
         i_min = floor(K*(q.value));
         
         //set lambda_max/min_int in such a way that they comprise all the area within circle_observer
-        if(((lambda_min_circle_observer) < (((draw_panel->circle_observer).reference_position).lambda)) && ((lambda_max_circle_observer) > (((draw_panel->circle_observer).reference_position).lambda))){
-            //in this case, lambda_min/max_circle_observer encompass the GP of the observer, and I simply set
-            
-            j_min = floor(K*(lambda_min_circle_observer.value));
-            j_max = ceil(K*(lambda_max_circle_observer.value));
-            
-        }else{
-            //in this case, lambda_min/max_circle_observer do not encompass the GP of the observer,  I simply set j_min/max as follows in order to show the longitude range which comprises the GP of the observer
+        if((lambda_min_circle_observer < M_PI) && (lambda_max_circle_observer > M_PI)){
             
             j_min = floor(K*(lambda_max_circle_observer.value));
             j_max = 360 + ceil(K*(lambda_min_circle_observer.value));
             
+        }else{
+             
+            j_min = floor(K*(lambda_max_circle_observer.value));
+            j_max = ceil(K*(lambda_min_circle_observer.value));
             
         }
         

@@ -1478,6 +1478,7 @@ public:
     void (DrawPanel::*Render)(wxDC&);
     bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
+    void (DrawPanel::*Update_lambda_phi_min_max)(void);
 
     
     void SetIdling(bool);

@@ -8191,17 +8191,11 @@ void DrawPanel::Draw_3D(void){
     (dummy_route.type).set(String(""), String("o"), String(""));
     (dummy_route.alpha).set(String(""), 0.0, String(""));
     (dummy_route.l).set(String(""), Re*2.0*((circle_observer.omega).value), String(""));
-
-
-    ((dummy_route.reference_position).phi).set(String(""), ((plot->phi_min).value) + epsilon_double, String(""));
-    
-    //    lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
-    
+    ((dummy_route.reference_position).phi).set(String(""), ((plot->phi_min).value) + 1e-2, String(""));
+        
     (((dummy_route.reference_position).lambda).value) = k*((((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda);
     do{
-        
-        //I fix the longitude of the ground position of dummy_route, according to lambda
-        
+                
         dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
         (((dummy_route.reference_position).lambda).value) -= k*delta_lambda;
         

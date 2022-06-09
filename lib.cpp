@@ -5435,7 +5435,7 @@ double Route::lambda_minus_pi(double t, void* route){
     
 }
 
-//comppute the minimal and maximal longitude taken by the points lying on *this, if *this is a circle of equal altitude
+//comppute the extremal longidues taken by the points lying on *this, if *this is a circle of equal altitude, and writes them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center. If *this is not a circle of equal altitude, an error is printed and lambda_min /max are not touched. 
 bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
     
     String new_prefix;
@@ -5467,18 +5467,10 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
             compute_end(new_prefix);
             p_min = end;
             
-            //write the result in lambda_min, lambda_max
-            if((p_min.lambda) < (p_max.lambda)){
-                
-                (*lambda_min) = (p_min.lambda);
-                (*lambda_max) = (p_max.lambda);
-                
-            }else{
-                
-                (*lambda_min) = (p_max.lambda);
-                (*lambda_max) = (p_min.lambda);
-                
-            }
+            //set lambda_min/max in this order, which is eventually rectified at the end of this function
+            (*lambda_min) = (p_min.lambda);
+            (*lambda_max) = (p_max.lambda);
+            
             
             /* p_max.print(String("p_max"), new_prefix, cout); */
             /* p_min.print(String("p_min"), new_prefix, cout); */
@@ -5486,10 +5478,25 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
         }else{
             //in this case, reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
             
+            //set lambda_min/max in this order, which is eventually rectified at the end of this function
             (*lambda_min).set(String(""), ((reference_position.lambda).value)-M_PI/2.0, String(""));
             (*lambda_max).set(String(""), ((reference_position.lambda).value)+M_PI/2.0, String(""));
             
-            if((*lambda_min) > (*lambda_max)){
+        }
+        
+        //sort lambda_min and lambda_max
+        if((*lambda_min) > (*lambda_max)){
+            
+            temp = (*lambda_min);
+            (*lambda_min) = (*lambda_max);
+            (*lambda_max) = temp;
+            
+        }
+        
+        //eventually swap lambda_min/max in such a way that lambda_min lies on the left and lambda_max lies on the right as seen from the observer's position looking at the earth's center
+        if((((*lambda_min).value) < M_PI) && (((*lambda_max).value) > M_PI)){
+            
+            if(!(((reference_position.lambda) < (*lambda_min)) || ((reference_position.lambda) > (*lambda_max)))){
                 
                 temp = (*lambda_min);
                 (*lambda_min) = (*lambda_max);
@@ -5497,6 +5504,12 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
                 
             }
             
+        }else{
+            
+            temp = (*lambda_min);
+            (*lambda_min) = (*lambda_max);
+            (*lambda_max) = temp;
+
         }
         
         

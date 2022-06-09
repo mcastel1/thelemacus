@@ -7933,7 +7933,6 @@ void DrawPanel::Draw_Mercator(void){
     dummy.from_sign_deg_min('+', 179, 59);
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    
     n_intervals_ticks_max = ((unsigned int)floor(((double)width_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision, false)))).GetWidth()))));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
@@ -8125,13 +8124,13 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda, phi;
+    double lambda, phi, lambda_span;
     Route dummy_route;
     Position q;
     wxPoint p;
     Projection r;
     Rotation rotation_temp;
-    
+    unsigned int n_intervals_ticks;
     
     parent->GetCoastLineData_3D();
     
@@ -8170,24 +8169,48 @@ void DrawPanel::Draw_3D(void){
                            "", Chart::CircleSymbol, 1, 000000);
     
     
-    
+    //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
+    n_intervals_ticks = (unsigned int)((plot->n_intervals_ticks_preferred).value);
     
     //draw meridians
     //set delta_lambda
-    delta_lambda = 15.0;
+    lambda_span = K*fabs(((plot->lambda_max)-(plot->lambda_min)).value);
+
+    if(lambda_span > 1.0){gamma_lambda = 1.0;}
+    else{gamma_lambda = 60.0;}
+    
+    delta_lambda=1.0/gamma_lambda;
+    while(n_intervals_ticks*delta_lambda<lambda_span){
+        if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
+        else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
+    }
+    //    delta_lambda = 15.0;
+
     
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("c"), String(""));
     (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
     ((dummy_route.reference_position).phi).set(String(""), 0.0, String(""));
     
-    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
+    //    lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
+    
+    ((dummy_route.reference_position).lambda).set(String(""), k*((((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda)+M_PI/2.0, String(""));
+    do{
         
         //I fix the longitude of the ground position of dummy_route, according to lambda
-        ((dummy_route.reference_position).lambda).set(String(""), lambda+M_PI/2.0, String(""));
+      
         dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-        
-    }
+        (((dummy_route.reference_position).lambda).value) -= k*delta_lambda;
+
+    }while(GeoTo3D(dummy_route.reference_position, NULL));
+    
+//    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
+//        
+//        //I fix the longitude of the ground position of dummy_route, according to lambda
+//        ((dummy_route.reference_position).lambda).set(String(""), lambda+M_PI/2.0, String(""));
+//        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+//        
+//    }
     
     
     //draw parallels
@@ -9313,8 +9336,10 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     
 }
 
-//converts the geographic Position p  to the  3D projection (x,y)
+//converts the geographic Position p  to the  3D projection (x,y): if the projeciton of  p lies on the visible part of the sphere: if q != NULL  it writes the result into q and returns true, if q = NULL it returns false. If the projection of p does not lie on the visible side of the sphere, it returns false.
 bool DrawPanel::GeoTo3D(Position p, Projection* q){
+    
+    bool check;
     
     //set r according equal to the 3d vector corresponding to the geographic position p
     gsl_vector_set(r, 0, cos((p.lambda))*cos((p.phi)));
@@ -9324,13 +9349,19 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q){
     //rotate r by rotation, and write the result in rp!
     gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
     
-    (q->x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
-    (q->y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+    check = gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value));
+    
+    if(check && (q != NULL)){
+        
+        (q->x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+        (q->y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+        
+    }
     
     
     //I return true if p lies on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) ), and I return false otherwise.
     
-    return(gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value)));
+    return(check);
     
 }
 

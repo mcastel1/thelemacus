@@ -5527,7 +5527,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
             temp = (*lambda_min);
             (*lambda_min) = (*lambda_max);
             (*lambda_max) = temp;
-
+            
         }
         
         
@@ -6844,114 +6844,87 @@ void ChartFrame::GetCoastLineData_3D(void){
     int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
     Projection temp;
     //the angle which defines the portion of data which I need ot extract from data_3d: only points within a circle of equal altitude with aperture ((draw_panel->circle_observer).omega) and centeret at the intersection berween the earth surface and the line between the observer and the erarth center, are visible
-    Angle q, lambda_min_circle_observer, lambda_max_circle_observer;
     bool check;
     
-    //compute circle_observer
-    ((draw_panel->circle_observer).omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+((draw_panel->d).value))))/(1.0/(1.0+((draw_panel->d).value))) ), String(""));
+    //set the latitudes and longitudes which comrpise circle_observer
+    (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
     
-    //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
-    gsl_vector_set(draw_panel->rp, 0, 0.0);
-    gsl_vector_set(draw_panel->rp, 1, -1.0);
-    gsl_vector_set(draw_panel->rp, 2, 0.0);
+//    q = (((draw_panel->circle_observer).reference_position).phi)+((draw_panel->circle_observer).omega);
+//    q.normalize_pm_pi();
+
+//    q = (((draw_panel->circle_observer).reference_position).phi)-((draw_panel->circle_observer).omega);
+//    q.normalize_pm_pi();
     
-    //convert rp -> r through rotation^{-1}
-    gsl_blas_dgemv(CblasTrans, 1.0, (draw_panel->rotation).matrix, draw_panel->rp, 0.0, draw_panel->r);
+    //set i_min/max, j_min/max
+    (plot->phi_min).normalize_pm_pi();
+    (plot->phi_max).normalize_pm_pi();
     
-    //obtain the  geographic position of the center of the circle of equal altitude above
-    ((draw_panel->circle_observer).reference_position).set(String(""), draw_panel->r, String(""));
+    i_min = floor(K*((plot->phi_min).value));
+    i_max = ceil(K*((plot->phi_max).value));
+    
+    (plot->phi_min).normalize();
+    (plot->phi_max).normalize();
+  
+
+    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        
+        j_min = floor(K*((plot->lambda_max).value));
+        j_max = 360 + ceil(K*((plot->lambda_min).value));
+        
+    }else{
+        
+        j_min = floor(K*((plot->lambda_max).value));
+        j_max = ceil(K*((plot->lambda_min).value));
+        
+    }
     
     
-    if((draw_panel->circle_observer).lambda_min_max(&lambda_min_circle_observer, &lambda_max_circle_observer, String(""))){
-        //in this case,  min/max latitudes at the edges of circle_observer can be obtained correctly, so I proceeed
+    //        cout << "i_min/max = \t\t" << i_min << " , " << i_max << "\n";
+    //        cout << "j_min/max = \t\t" << j_min << " , " << j_max << "\n";
+    
+    
+    //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
+    n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
+    
+    x_3d.clear();
+    y_3d.clear();
+    
+    for(i=i_min; i<i_max; i++){
         
-        //set lambda/phi/min/max_circle_observer_int
-        q = (((draw_panel->circle_observer).reference_position).phi)+((draw_panel->circle_observer).omega);
-        q.normalize_pm_pi();
-        i_max = ceil(K*(q.value));
+        //        cout << "\n i = " << i;
         
-        q = (((draw_panel->circle_observer).reference_position).phi)-((draw_panel->circle_observer).omega);
-        q.normalize_pm_pi();
-        i_min = floor(K*(q.value));
-        
-        //set lambda_max/min_int in such a way that they comprise all the area within circle_observer
-        if((lambda_min_circle_observer < M_PI) && (lambda_max_circle_observer > M_PI)){
+        for(j=j_min; j<j_max; j++){
             
-            j_min = floor(K*(lambda_max_circle_observer.value));
-            j_max = 360 + ceil(K*(lambda_min_circle_observer.value));
+            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+            //            flush(cout);
             
-        }else{
-             
-            j_min = floor(K*(lambda_max_circle_observer.value));
-            j_max = ceil(K*(lambda_min_circle_observer.value));
             
-        }
-        
-        
-        //        cout << "i_min/max = \t\t" << i_min << " , " << i_max << "\n";
-        //        cout << "j_min/max = \t\t" << j_min << " , " << j_max << "\n";
-        
-        
-        //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
-        n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
-        
-        x_3d.clear();
-        y_3d.clear();
-        
-        for(i=i_min; i<i_max; i++){
-            
-            //        cout << "\n i = " << i;
-            
-            for(j=j_min; j<j_max; j++){
+            if(!((i >= -90) && (i <= 90))){
+                //in this case, i needs to be adjusted because it is not between -90 and +90
                 
-                //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-                //            flush(cout);
-                
-                
-                if(!((i >= -90) && (i <= 90))){
-                    //in this case, i needs to be adjusted because it is not between -90 and +90
+                if(i < -90){
                     
-                    if(i < -90){
+                    if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->data_3d).size())){
                         
-                        if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->data_3d).size())){
-                            
-                            i_adjusted = -(180+i);
-                            j_adjusted = 180+j;
-                            
-                            check = true;
-                            
-                        }else{
-                            
-                            check = false;
-                            
-                        }
+                        i_adjusted = -(180+i);
+                        j_adjusted = 180+j;
+                        
+                        check = true;
+                        
+                    }else{
+                        
+                        check = false;
                         
                     }
                     
-                    if(i > 90){
-                        
-                        if((180-i - floor_min_lat >=0) && (180-i - floor_min_lat < (parent->data_3d).size())){
-                            
-                            i_adjusted = 180 - i;
-                            j_adjusted = 180 + j;
-                            
-                            check = true;
-                            
-                        }else{
-                            
-                            check = false;
-                            
-                        }
-                        
-                    }
+                }
+                
+                if(i > 90){
                     
-                    
-                }else{
-                    
-                    if((i - floor_min_lat >=0) && (i - floor_min_lat < (parent->data_3d).size())){
+                    if((180-i - floor_min_lat >=0) && (180-i - floor_min_lat < (parent->data_3d).size())){
                         
-                        i_adjusted = i;
-                        j_adjusted = j;
+                        i_adjusted = 180 - i;
+                        j_adjusted = 180 + j;
                         
                         check = true;
                         
@@ -6964,29 +6937,45 @@ void ChartFrame::GetCoastLineData_3D(void){
                 }
                 
                 
+            }else{
                 
-                if(check){
+                if((i - floor_min_lat >=0) && (i - floor_min_lat < (parent->data_3d).size())){
                     
-                    //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-                    n = ((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+                    i_adjusted = i;
+                    j_adjusted = j;
                     
-                    //I plot every 'every' data points
-                    every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
-                    if(every == 0){every = 1;}
+                    check = true;
                     
-                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                    for(l=0; (l*every)<((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
+                }else{
+                    
+                    check = false;
+                    
+                }
+                
+            }
+            
+            
+            
+            if(check){
+                
+                //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
+                n = ((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+                
+                //I plot every 'every' data points
+                every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+                if(every == 0){every = 1;}
+                
+                //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+                for(l=0; (l*every)<((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
+                    
+                    //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                    if((draw_panel->GeoTo3D((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &temp))){
                         
-                        //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                        if((draw_panel->GeoTo3D((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &temp))){
-                            
-                            x_3d.push_back((temp.x));
-                            y_3d.push_back((temp.y));
-                            
-                        }
-                        
+                        x_3d.push_back((temp.x));
+                        y_3d.push_back((temp.y));
                         
                     }
+                    
                     
                 }
                 
@@ -6994,8 +6983,10 @@ void ChartFrame::GetCoastLineData_3D(void){
             
         }
         
-        
     }
+    
+    
+    
     
     /*
      every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
@@ -8302,6 +8293,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     wxCommandEvent dummy_event;
     
     parent = parent_input;
+    plot = (parent->plot);
     
     
     //append \t to prefix
@@ -8510,7 +8502,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
         (draw_panel->y_max) += delta;
         
         (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
+        
         //re-draw the chart
         (draw_panel->*(draw_panel->Draw))();
         draw_panel->PaintNow();
@@ -8651,7 +8643,7 @@ template<class T> void ChartFrame::Reset(T& event){
         
         //reset the chart boundaries to the initial ones
         (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
+        
         
     }
     
@@ -8735,7 +8727,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     
     //set lambda_min/max from circle_observer
     circle_observer.lambda_min_max(&(plot->lambda_min), &(plot->lambda_max), String(""));
-
+    
     //set phi_min/max
     (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
     (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
@@ -9731,7 +9723,7 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
                 y_max = y_max_start_drag;
                 
                 (this->*Set_lambda_phi_min_max)();
-
+                
                 
                 //re-draw the chart
                 (this->*Draw)();

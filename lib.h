@@ -1996,6 +1996,8 @@ public:
     Color color_horizon;
     ProjectionField* projection;
     PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
+    //pointer used to shorten the reference to parent->plot
+    Plot* plot;
     //in these vectors, I store the 2d coordindates of the Mercator projection and of the 3D rendering, respectively
     vector<double> x, y, x_3d, y_3d;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false

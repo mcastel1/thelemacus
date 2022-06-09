@@ -448,7 +448,7 @@ void Color::read_from_file(String name, String filename, String prefix){
     String new_prefix, s;
     size_t pos_end;
     int red, green, blue;
-
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
@@ -482,7 +482,7 @@ void Color::read_from_file(String name, String filename, String prefix){
     
     
 }
- 
+
 //reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
 void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     
@@ -8248,18 +8248,18 @@ void DrawPanel::Draw_3D(void){
 
 //constructs a color object by setting no arguments
 Color::Color() : wxColour(){
-
+    
 }
 
 
 //constructs a color objct by setting its rgb values to red, green, blue
 Color::Color(unsigned char red, unsigned char green, unsigned char blue) : wxColour(red, green, blue){
-
+    
 }
 
 //constructs a color objct by setting its rgb values to red, green, blue and transparency (alpha)
 Color::Color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) : wxColour(red, green, blue, alpha){
-
+    
 }
 
 
@@ -8283,7 +8283,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     mouse_scrolling = false;
     
- 
+    
     
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
@@ -8329,11 +8329,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
-    //sets the coefficients for the function which relates the zoom factor to the slider value: read from file e_zoom and set a_zoom, b_zoom 
+    //sets the coefficients for the function which relates the zoom factor to the slider value: read from file e_zoom and set a_zoom, b_zoom
     e_zoom.read_from_file(String("exponent zoom"), String(path_file_init), String(""));
     a_zoom.set(String(""), (-1.0 + (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
     b_zoom.set(String(""), (pow(((double)(slider->GetMax())), e_zoom.value) - (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
-
+    
     
     //text field showing the current value of the zoom slider
     s.str("");
@@ -8853,7 +8853,7 @@ void ChartFrame::UpdateSliderLabel_3D(void){
     
     String s;
     Length l;
-        
+    
     //d = 1 corresponds to one earth radsius, so the height of the observer is
     l.set(String(""), ((draw_panel->d).value)*Re, String(""));
     
@@ -8864,7 +8864,7 @@ void ChartFrame::UpdateSliderLabel_3D(void){
         
     }else{
         //if the altitude is smaller than 1 nm, I output it in units of m
-
+        
         s = (l.to_string(String("m"), 0));
     }
     
@@ -8928,18 +8928,18 @@ void ChartFrame::UpdateSlider(void){
     //a tentative value for the value of slizer
     temp = round(pow(((zoom_factor.value)-(b_zoom.value))/(a_zoom.value), 1.0/(e_zoom.value)));
     
-   
+    
     //if the tentative value exceeds the slider boundaries, I set it to the respective boundary
     if(temp > (slider->GetMax())){temp = (slider->GetMax());}
     if(temp < 1){temp = 1;}
     
-//    cout << "\t\t\ttemp = " << temp << "\n";
-//    cout << "\t\t\tzoom_factor = " << (zoom_factor.value) << "\n";
-     
+    //    cout << "\t\t\ttemp = " << temp << "\n";
+    //    cout << "\t\t\tzoom_factor = " << (zoom_factor.value) << "\n";
+    
     slider->SetValue(temp);
     
     (this->*UpdateSliderLabel)();
-
+    
 }
 
 
@@ -9440,7 +9440,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
-
+        
         
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
@@ -9874,98 +9874,117 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
 
 void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
-    if(wxGetMouseState().LeftIsDown()){
+    if((!idling) && (!(parent->idling))){
+        //I proceed only if this and its parent are not in idling mode
         
-        if(!mouse_dragging){
-            //in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
+        if(wxGetMouseState().LeftIsDown()){
             
-            if(((parent->parent)->highlighted_route) != -1){
-                //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
+            if(!mouse_dragging){
+                //in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
                 
-                if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                if(((parent->parent)->highlighted_route) != -1){
+                    //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
                     
-                    route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position);
-                    
-                    if(((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1){
-                        //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
+                    if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
-                        int i_sight, i_route;
+                        route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position);
                         
-                        i_route = ((parent->parent)->highlighted_route);
-                        i_sight = ((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value);
+                        if(((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1){
+                            //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
+                            
+                            int i_sight, i_route;
+                            
+                            i_route = ((parent->parent)->highlighted_route);
+                            i_sight = ((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value);
+                            
+                            //disconnect route and sight
+                            (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
+                            (((plot->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
+                            
+                            //update the related wxListCtrls in ListFrame
+                            ((plot->sight_list)[i_sight]).update_wxListCtrl(i_sight, parent->parent->listcontrol_sights);
+                            ((plot->route_list)[i_route]).update_wxListCtrl(i_route, parent->parent->listcontrol_routes);
+                            
+                            //set the background color of the related sight to white
+                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
+                            
+                            
+                            //print an info message
+                            
+                            ((parent->print_error_message)->control) = NULL;
+                            ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
+                            ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
+                            parent->CallAfter(*(parent->print_error_message));
+                            
+                            
+                        }
                         
-                        //disconnect route and sight
-                        (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
-                        (((plot->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
                         
-                        //update the related wxListCtrls in ListFrame
-                        ((plot->sight_list)[i_sight]).update_wxListCtrl(i_sight, parent->parent->listcontrol_sights);
-                        ((plot->route_list)[i_route]).update_wxListCtrl(i_route, parent->parent->listcontrol_routes);
+                    }else{
                         
-                        //set the background color of the related sight to white
-                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
-                        
-                        
-                        //print an info message
-                        
-                        ((parent->print_error_message)->control) = NULL;
-                        ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
-                        ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
-                        parent->CallAfter(*(parent->print_error_message));
-                        
+                        route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position);
                         
                     }
                     
                     
-                }else{
-                    
-                    route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position);
-                    
                 }
-                
                 
             }
             
-        }
-        
-        mouse_dragging = true;
-        
-        SetCursor(wxCURSOR_HAND);
-        
-        position_now_drag = wxGetMousePosition();
-        
-        
-        //        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
-        //           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
-        
-        if((this->*ScreenToGeo)(position_now_drag, NULL)){
-            //in this case, position_drag_now is a valid position
+            mouse_dragging = true;
             
-            if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){
-                //in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
+            SetCursor(wxCURSOR_HAND);
+            
+            position_now_drag = wxGetMousePosition();
+            
+            
+            //        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
+            //           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
+            
+            if((this->*ScreenToGeo)(position_now_drag, NULL)){
+                //in this case, position_drag_now is a valid position
                 
-                if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-                    //in this case, I am using the mercator projection
+                if(((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))){
+                    //in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
                     
-                    double delta_x, delta_y;
-                    
-                    delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
-                    delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-                    
-                    if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
-                        //in this case, the drag operation does not end out of the min and max latitude contained in the data files
+                    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+                        //in this case, I am using the mercator projection
                         
-                        //update x_min, ..., y_max according to the drag.
-                        x_min -= delta_x;
-                        x_max -= delta_x;
-                        y_min += delta_y;
-                        y_max += delta_y;
+                        double delta_x, delta_y;
                         
-                        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+                        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
+                        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+                        
+                        if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
+                            //in this case, the drag operation does not end out of the min and max latitude contained in the data files
                             
-                            Update_lambda_phi_min_max();
+                            //update x_min, ..., y_max according to the drag.
+                            x_min -= delta_x;
+                            x_max -= delta_x;
+                            y_min += delta_y;
+                            y_max += delta_y;
+                            
+                            if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+                                
+                                Update_lambda_phi_min_max();
+                                
+                            }
+                            
+                            //re-draw the chart
+                            (this->*Draw)();
+                            PaintNow();
                             
                         }
+                        
+                    }
+                    
+                    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+                        //in this case, I am using the 3d projection
+                        
+                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                        rotation =
+                        rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        
                         
                         //re-draw the chart
                         (this->*Draw)();
@@ -9973,128 +9992,114 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                     }
                     
-                }
-                
-                if((((parent->projection)->name)->GetValue()) == wxString("3D")){
-                    //in this case, I am using the 3d projection
                     
-                    //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                    rotation =
-                    rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                }else{
+                    //in this case I am moving a position / route (the mouse is over a route or a position while dragging)
                     
+                    unsigned int i;
                     
-                    //re-draw the chart
-                    (this->*Draw)();
-                    PaintNow();
-                    
-                }
-                
-                
-            }else{
-                //in this case I am moving a position / route (the mouse is over a route or a position while dragging)
-                
-                unsigned int i;
-                
-                if(((parent->parent)->highlighted_route) != -1){
-                    //in this case, the mouse is over a route
-                    
-                    
-                    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-                        
-                        wxPoint p;
-                        
-                        //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
-                        
-                        (this->*GeoToDrawPanel)(route_position_start_drag, &p);
-                        
-                        //this command is the same for all types of Routes
-                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));
-                        
-                    }
-                    
-                    
-                    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+                    if(((parent->parent)->highlighted_route) != -1){
+                        //in this case, the mouse is over a route
                         
                         
-                        //compose rotation with the rotation resulting from the drag and then apply it to route_position_start_drag: route_position_start_drag -> rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag. In this way, when Render() will plot the position route_position_start_drag, it will apply to route_position_start_drag the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag = (rotation due to drag).rotation.route_position_start_drag, which is the desired result (i.e. route_position_start_drag rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                        rotation_now_drag =
-                        (rotation.inverse()) *
-                        rotation_start_end(position_start_drag, position_now_drag) *
-                        rotation;
-                        
-                        //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
-                        
-                        if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                             
-                            //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));
-                            route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                            wxPoint p;
                             
-                        }else{
+                            //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
                             
-                            route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                            (this->*GeoToDrawPanel)(route_position_start_drag, &p);
+                            
+                            //this command is the same for all types of Routes
+                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));
+                            
+                        }
+                        
+                        
+                        if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+                            
+                            
+                            //compose rotation with the rotation resulting from the drag and then apply it to route_position_start_drag: route_position_start_drag -> rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag. In this way, when Render() will plot the position route_position_start_drag, it will apply to route_position_start_drag the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag = (rotation due to drag).rotation.route_position_start_drag, which is the desired result (i.e. route_position_start_drag rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                            rotation_now_drag =
+                            (rotation.inverse()) *
+                            rotation_start_end(position_start_drag, position_now_drag) *
+                            rotation;
+                            
+                            //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
+                            
+                            if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                                
+                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));
+                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                                
+                            }else{
+                                
+                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                                
+                            }
+                            
+                        }
+                        
+                        //update the data of the Route under consideration in listcontrol_routes
+                        ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
+                        
+                        //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
+                        for(i=0; i<((parent->parent)->chart_frames).size(); i++){
+                            
+                            (((((parent->parent)->chart_frames)[i])->draw_panel)->*((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes)();
+                            ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
                             
                         }
                         
                     }
                     
-                    //update the data of the Route under consideration in listcontrol_routes
-                    ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
-                    
-                    //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
-                    for(i=0; i<((parent->parent)->chart_frames).size(); i++){
+                    if(((parent->parent)->highlighted_position) != -1){
+                        //in this case, the mouse is over a position
                         
-                        (((((parent->parent)->chart_frames)[i])->draw_panel)->*((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes)();
-                        ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
+                        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+                            
+                            //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
+                            (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                            
+                        }
+                        
+                        
+                        if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+                            
+                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &((plot->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                            rotation_now_drag =
+                            (rotation.inverse()) *
+                            rotation_start_end(position_start_drag, position_now_drag) *
+                            rotation;
+                            geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
+                            
+                        }
+                        
+                        //update the data of the Position under consideration in listcontrol_positions
+                        ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                        
+                        //given that the Position under consideration has changed, I re-paint the charts
+                        for(i=0; i<((parent->parent)->chart_frames).size(); i++){
+                            
+                            ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
+                            
+                        }
                         
                     }
                     
                 }
                 
-                if(((parent->parent)->highlighted_position) != -1){
-                    //in this case, the mouse is over a position
-                    
-                    if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-                        
-                        //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                        (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                        
-                    }
-                    
-                    
-                    if((((parent->projection)->name)->GetValue()) == wxString("3D")){
-                        
-                        //compose rotation with the rotation resulting from the drag and then apply it to pp == &((plot->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                        rotation_now_drag =
-                        (rotation.inverse()) *
-                        rotation_start_end(position_start_drag, position_now_drag) *
-                        rotation;
-                        geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
-                        
-                    }
-                    
-                    //update the data of the Position under consideration in listcontrol_positions
-                    ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
-                    
-                    //given that the Position under consideration has changed, I re-paint the charts
-                    for(i=0; i<((parent->parent)->chart_frames).size(); i++){
-                        
-                        ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
-                        
-                    }
-                    
-                }
+            }else{
+                //in this case, position_drag_now is not a valid position
+                
+                //print an info message
+                
+                ((parent->print_error_message)->control) = NULL;
+                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
+                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
+                parent->CallAfter(*(parent->print_error_message));
                 
             }
-            
-        }else{
-            //in this case, position_drag_now is not a valid position
-            
-            //print an info message
-            
-            ((parent->print_error_message)->control) = NULL;
-            ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
-            ((parent->print_error_message)->message) = String("The drag must go through valid points.");
-            parent->CallAfter(*(parent->print_error_message));
             
         }
         
@@ -10105,8 +10110,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 } 
 
 void ChartFrame::OnScroll(wxScrollEvent &event){
-        
-
+    
+    
     
     /*
      n = value of slider,
@@ -10120,7 +10125,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
      
      z = a_zoom*n^e_zoom + b_zoom
      n = log((z-b_zoom)/a_zoom)/e_zoom
-    
+     
      
      a_zoom = (-1 + zoom_factor_max)/(-1 + n_max^e_zoom);
      b_zoom = (n_max^e_zoom - zoom_factor_max)/(-1 + n_max^e_zoom);

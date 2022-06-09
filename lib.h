@@ -1478,7 +1478,7 @@ public:
     void (DrawPanel::*Render)(wxDC&);
     bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
-    void (DrawPanel::*Update_lambda_phi_min_max)(void);
+    void (DrawPanel::*Set_lambda_phi_min_max)(void);
 
     
     void SetIdling(bool);
@@ -1498,8 +1498,8 @@ public:
     bool ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
-    void Update_lambda_phi_min_max_Mercator(void);
-    void Update_lambda_phi_min_max_3D(void);
+    void Set_lambda_phi_min_max_Mercator(void);
+    void Set_lambda_phi_min_max_3D(void);
     void Set_x_y_min_max_Mercator(void);
     void Set_x_y_min_max_3D(void);
     bool check(const Projection);

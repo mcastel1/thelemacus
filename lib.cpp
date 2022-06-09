@@ -8481,7 +8481,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
         (draw_panel->y_min) += delta;
         (draw_panel->y_max) += delta;
         
-        (draw_panel->*(draw_panel->Update_lambda_phi_min_max))();
+        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
 
         //re-draw the chart
         (draw_panel->*(draw_panel->Draw))();
@@ -8507,7 +8507,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
         (draw_panel->y_min) -= delta;
         (draw_panel->y_max) -= delta;
         
-        draw_panel->Update_lambda_phi_min_max_Mercator();
+        draw_panel->Set_lambda_phi_min_max_Mercator();
         
         //re-draw the chart
         (draw_panel->*(draw_panel->Draw))();
@@ -8622,7 +8622,7 @@ template<class T> void ChartFrame::Reset(T& event){
         
         
         //reset the chart boundaries to the initial ones
-        (draw_panel->*(draw_panel->Update_lambda_phi_min_max))();
+        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
 
         
     }
@@ -8677,7 +8677,7 @@ void DrawPanel::SetIdling(bool b){
 }
 
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
-void DrawPanel::Update_lambda_phi_min_max_Mercator(void){
+void DrawPanel::Set_lambda_phi_min_max_Mercator(void){
     
     (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
     (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
@@ -8688,7 +8688,7 @@ void DrawPanel::Update_lambda_phi_min_max_Mercator(void){
 }
 
 //this function computes lambda_min, ... phi_max (the  min/max latitudes and longitudes which encompass circle_observer) for the 3D projection
-void DrawPanel::Update_lambda_phi_min_max_3D(void){
+void DrawPanel::Set_lambda_phi_min_max_3D(void){
     
     //compute circle_observer
     (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
@@ -9448,7 +9448,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
-        Update_lambda_phi_min_max = (&DrawPanel::Update_lambda_phi_min_max_Mercator);
+        Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
@@ -9470,7 +9470,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
-        Update_lambda_phi_min_max = (&DrawPanel::Update_lambda_phi_min_max_3D);
+        Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
         
         
@@ -9702,7 +9702,7 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
                 y_min = y_min_start_drag;
                 y_max = y_max_start_drag;
                 
-                (this->*Update_lambda_phi_min_max)();
+                (this->*Set_lambda_phi_min_max)();
 
                 
                 //re-draw the chart
@@ -9998,7 +9998,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             y_max += delta_y;
                             
                             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-                                (this->*Update_lambda_phi_min_max)();
+                                (this->*Set_lambda_phi_min_max)();
                             }
                             
                             //re-draw the chart
@@ -10215,7 +10215,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
         
         if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
-            (draw_panel->*(draw_panel->Update_lambda_phi_min_max))();
+            (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
             //            ZoomFactor_Mercator((draw_panel->x_span));
             
             (draw_panel->*(draw_panel->Draw))();
@@ -10236,7 +10236,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
              cout << "\ny_min_old = " << (draw_panel->y_min_old);
              cout << "\ny_max_old = " << (draw_panel->y_max_old);
              
-             //            draw_panel->Update_lambda_phi_min_max_Mercator();
+             //            draw_panel->Set_lambda_phi_min_max_Mercator();
              ZoomFactor_Mercator((draw_panel->x_span()));
              
              //put the slider back to the value before the scroll

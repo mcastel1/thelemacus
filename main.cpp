@@ -23,24 +23,18 @@
  - turn gamma_lambda into an unsigned int
  - add margins in chart in such a way that ylabels are not cut
  - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
- - create your own color class and a function to elegantly read colors from file.
  - add separator between recent items and non-recent items in BodyField->name
- - replaces multiple ifs with switch cases
  - fill the cases in Route::draw_3D for l and o
  - check why body field gets empty after you entered body name and kill focus
  - replace 'lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
  phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));' with a function
  - when I translate an orthodrome with mouse drag, its reference_position assumes nan coordinates
- - change screen region sensible to mouse hovering from circles to a stripe
  - change Route -> alpha to Z
- - when you drag a Route in the Mercator projection, make sure that you can keep dragging it even if the reference_position falls outside the plot area
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
- - try DrawPanel::OnScroll -> ChartFrame::OnScroll to avoid multiple pop-ups of error window
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - add margins in ChartFrame
  - meridians are not shown sometimes
  - add ft unit for lengths
- - read sequence of colors from init file with COlor class member function 
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  - by decreasing number of points for routes, for example setting it to 100, the drag is much more fluid in the 3d projection !
  */

@@ -8188,13 +8188,16 @@ void DrawPanel::Draw_3D(void){
     
     
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
-    ((dummy_route.reference_position).phi).set(String(""), 0.0, String(""));
+    (dummy_route.type).set(String(""), String("o"), String(""));
+    (dummy_route.alpha).set(String(""), 0.0, String(""));
+    (dummy_route.l).set(String(""), Re*2.0*((circle_observer.omega).value), String(""));
+
+
+    ((dummy_route.reference_position).phi).set(String(""), ((plot->phi_min).value) + epsilon_double, String(""));
     
     //    lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
     
-    ((dummy_route.reference_position).lambda).set(String(""), k*((((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda)+M_PI/2.0, String(""));
+    (((dummy_route.reference_position).lambda).value) = k*((((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda);
     do{
         
         //I fix the longitude of the ground position of dummy_route, according to lambda
@@ -9349,7 +9352,7 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q){
     //rotate r by rotation, and write the result in rp!
     gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
     
-    check = gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value));
+    check = (gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value)));
     
     if(check && (q != NULL)){
         

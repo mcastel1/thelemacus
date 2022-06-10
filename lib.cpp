@@ -8127,9 +8127,10 @@ void DrawPanel::Draw_3D(void){
     double lambda_span, phi_span, lambda_start, lambda_end, phi_start, phi_end;
     Route dummy_route;
     Position q;
+    Projection temp;
     wxPoint p;
-    Projection r;
-    Rotation rotation_temp;
+//    Projection r;
+//    Rotation rotation_temp;
     unsigned int n_intervals_ticks;
     
     parent->GetCoastLineData_3D();
@@ -8279,26 +8280,34 @@ void DrawPanel::Draw_3D(void){
     
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
     //store rotation in rotation_temp
-    rotation_temp = rotation;
+//    rotation_temp = rotation;
     //set rotation to a straightforward rotation
-    rotation =  Rotation(
-                         Angle(String(""), -M_PI/2.0, String("")),
-                         Angle(String(""), 0.0, String("")),
-                         Angle(String(""), 0.0, String(""))
-                         );
+//    rotation =  Rotation(
+//                         Angle(String(""), -M_PI/2.0, String("")),
+//                         Angle(String(""), 0.0, String("")),
+//                         Angle(String(""), 0.0, String(""))
+//                         );
     //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection r: the resulting r.y is the radius of the circular horizon of the earth in 3d projection cooordinates
     (q.lambda).set(String(""), 0.0, String(""));
     (q.phi).set(String(""),  asin(sqrt(gsl_pow_2(1.0+(d.value))-1.0)/((d.value)+1.0)) , String(""));
-    GeoTo3D(q, &r);
+    
+    
+    gsl_vector_set(rp, 0, 0.0);
+    gsl_vector_set(rp, 1, -cos(q.phi));
+    gsl_vector_set(rp, 2, sin((q.phi)));
+
+    temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
+    
+//    GeoTo3D(q, &r);
     //restore rotation
-    rotation = rotation_temp;
+//    rotation = rotation_temp;
     
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     (chart->getDrawArea())->circle(
                                    (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
                                    (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
-                                   (r.y)/y_max * ((double)width_plot_area)/2.0,
-                                   (r.y)/y_max * ((double)width_plot_area)/2.0,
+                                   (temp.y)/y_max * ((double)width_plot_area)/2.0,
+                                   (temp.y)/y_max * ((double)width_plot_area)/2.0,
                                    (parent->color_horizon).GetRGBA(),
                                    Chart::Transparent
                                    );

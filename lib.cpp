@@ -8187,29 +8187,23 @@ void DrawPanel::Draw_3D(void){
     //    delta_lambda = 15.0;
     
     
-    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
-    ((dummy_route.reference_position).phi).set(String(""), 0.0, String(""));
-    q = (dummy_route.reference_position);
-        
-    (((dummy_route.reference_position).lambda).value) = k*((((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda)-M_PI/2.0;
-    do{
-                
-        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-        (((dummy_route.reference_position).lambda).value) -= k*delta_lambda;
-        
-        (q.lambda).set(String(""), (((dummy_route.reference_position).lambda).value)+M_PI/2.0, String(""));
-        
-    }while(GeoTo3D(q, NULL));
+    //draw meridians
+    //set delta_lambda
+    //    delta_lambda = 15.0;
     
-    //    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
-    //
-    //        //I fix the longitude of the ground position of dummy_route, according to lambda
-    //        ((dummy_route.reference_position).lambda).set(String(""), lambda+M_PI/2.0, String(""));
-    //        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-    //
-    //    }
+    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    (dummy_route.type).set(String(""), String("o"), String(""));
+    (dummy_route.alpha).set(String(""), 0.0, String(""));
+    ((dummy_route.reference_position).phi) = (plot->phi_min);
+    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
+
+    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
+        
+        //I fix the longitude of the ground position of dummy_route, according to lambda
+        ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
+        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+        
+    }
     
     
     //draw parallels
@@ -9348,7 +9342,7 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q){
     //rotate r by rotation, and write the result in rp!
     gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
     
-    check = gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value));
+    check = (gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value)));
     
     if(check && (q != NULL)){
         

@@ -8178,32 +8178,24 @@ void DrawPanel::Draw_3D(void){
         
         lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
         lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
-        lambda_span = K*(((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI);
+        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
 
     }else{
         
         lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
         lambda_end = ((plot->lambda_min).value);
-        lambda_span = K*(((plot->lambda_min).value) - ((plot->lambda_max).value));
+        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
 
     }
 
-    if(lambda_span > 1.0){gamma_lambda = 1.0;}
+    if(lambda_span > k){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
     
-    delta_lambda=1.0/gamma_lambda;
+    delta_lambda=k*1.0/gamma_lambda;
     while(n_intervals_ticks*delta_lambda<lambda_span){
-        if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
-        else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
+        if(delta_lambda == k*1.0/gamma_lambda){delta_lambda += k*4.0/gamma_lambda;}
+        else{delta_lambda += k*5.0/gamma_lambda;}
     }
-    //convert delta_lambda to radians
-    delta_lambda*=k;
-    //    delta_lambda = 15.0;
-    
-    
-    //draw meridians
-    //set delta_lambda
-    //    delta_lambda = 15.0;
     
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("o"), String(""));

@@ -8198,10 +8198,10 @@ void DrawPanel::Draw_3D(void){
     }
     
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("o"), String(""));
-    (dummy_route.alpha).set(String(""), 0.0, String(""));
+    (dummy_route.type).set(String("Type of meridian"), String("o"), String(""));
+    (dummy_route.alpha).set(String("Azimuth of meridian"), 0.0, String(""));
     ((dummy_route.reference_position).phi) = (plot->phi_min);
-    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
+    (dummy_route.l).set(String("Length of meridian"), Re* 2.0*((circle_observer.omega).value), String(""));
     
     for(
         (((dummy_route.reference_position).lambda).value) = lambda_start;
@@ -8243,8 +8243,8 @@ void DrawPanel::Draw_3D(void){
 
     
     //set dummy_route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
-    (dummy_route.type).set(String(""), String("l"), String(""));
-    (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
+    (dummy_route.type).set(String("Route type"), String("l"), String(""));
+    (dummy_route.alpha).set(String("Azimuth of parallel"), M_PI/2.0, String(""));
     ((dummy_route.reference_position).lambda) =  (plot->lambda_min);
     
     for(
@@ -8253,7 +8253,10 @@ void DrawPanel::Draw_3D(void){
         (((dummy_route.reference_position).phi).value) += delta_phi
         ){
             
-            (dummy_route.l).set(String(""), Re*cos((dummy_route.reference_position).phi)*2.0*((circle_observer.omega).value), String(""));
+            if((((dummy_route.reference_position).phi) < M_PI/2.0) && (((dummy_route.reference_position).phi)) > 3.0*M_PI/2.0){
+                (dummy_route.l).set(String("length of parallel"), Re*cos((dummy_route.reference_position).phi)*2.0*((circle_observer.omega).value), String("\t"));
+            }
+            
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
         }

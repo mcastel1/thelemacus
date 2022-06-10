@@ -8124,7 +8124,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double phi, lambda_span, lambda_start, lambda_end;
+    double lambda_span, phi_span, lambda_start, lambda_end, phi_start, phi_end;
     Route dummy_route;
     Position q;
     wxPoint p;
@@ -8179,15 +8179,15 @@ void DrawPanel::Draw_3D(void){
         lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
         lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
-
+        
     }else{
         
         lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
         lambda_end = ((plot->lambda_min).value);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
-
+        
     }
-
+    
     if(lambda_span > k){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
     
@@ -8204,7 +8204,7 @@ void DrawPanel::Draw_3D(void){
     (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
     
     for(
-        ((dummy_route.reference_position).lambda).set(String(""), lambda_start, String(""));
+        (((dummy_route.reference_position).lambda).value) = lambda_start;
         (((dummy_route.reference_position).lambda).value) < lambda_end;
         (((dummy_route.reference_position).lambda).value) += delta_lambda){
             
@@ -8216,22 +8216,63 @@ void DrawPanel::Draw_3D(void){
     
     
     //draw parallels
+    
+    
     //set delta_phi
-    delta_phi = 15.0;
+    phi_span =  2.0*((circle_observer.omega).value);
+
+    //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+    if(phi_span > k){gamma_phi = 1.0;}
+    else{gamma_phi = 60.0;}
     
-    //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    ((dummy_route.reference_position).lambda).set(String(""), 0.0, String(""));
-    ((dummy_route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
-    
-    for(phi = floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi > -M_PI/2.0; phi-= k*delta_phi){
-        
-        //I fix the latitude of the start position of dummy_route, according to phi
-        (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
-        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-        
+    delta_phi=k*1.0/gamma_phi;
+    while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
+        if(delta_phi == k*1.0/gamma_phi){delta_phi += k*4.0/gamma_phi;}
+        else{delta_phi += k*5.0/gamma_phi;}
     }
     
+    //set phi_start/end
+    (plot->phi_min).normalize_pm_pi();
+    (plot->phi_max).normalize_pm_pi();
+    
+    phi_start = (floor( ((plot->phi_min).value)/delta_phi ) -1)*delta_phi;
+    phi_end = ((plot->phi_max).value);
+    
+    (plot->phi_min).normalize();
+    (plot->phi_max).normalize();
+
+    
+    //set dummy_route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
+    (dummy_route.type).set(String(""), String("l"), String(""));
+    (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
+    ((dummy_route.reference_position).lambda) =  (plot->lambda_min);
+    
+    for(
+        (((dummy_route.reference_position).phi).value) = phi_start;
+        (((dummy_route.reference_position).phi).value) < phi_end;
+        (((dummy_route.reference_position).phi).value) += delta_phi
+        ){
+            
+            (dummy_route.l).set(String(""), Re*cos((dummy_route.reference_position).phi)*2.0*((circle_observer.omega).value), String(""));
+            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            
+        }
+    
+    
+    
+    //    //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
+    //    (dummy_route.type).set(String(""), String("c"), String(""));
+    //    ((dummy_route.reference_position).lambda).set(String(""), 0.0, String(""));
+    //    ((dummy_route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
+    //
+    //    for(phi = floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi > -M_PI/2.0; phi-= k*delta_phi){
+    //
+    //        //I fix the latitude of the start position of dummy_route, according to phi
+    //        (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
+    //        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+    //
+    //    }
+    //
     
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
     //store rotation in rotation_temp

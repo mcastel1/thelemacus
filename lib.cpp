@@ -8287,21 +8287,19 @@ void DrawPanel::Draw_3D(void){
 //                         Angle(String(""), 0.0, String("")),
 //                         Angle(String(""), 0.0, String(""))
 //                         );
-    //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection r: the resulting r.y is the radius of the circular horizon of the earth in 3d projection cooordinates
+    //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
+    //set q
     (q.lambda).set(String(""), 0.0, String(""));
     (q.phi).set(String(""),  asin(sqrt(gsl_pow_2(1.0+(d.value))-1.0)/((d.value)+1.0)) , String(""));
     
-    
+    //obtain the coordinates of q in the reference frame x'y'z'
     gsl_vector_set(rp, 0, 0.0);
     gsl_vector_set(rp, 1, -cos(q.phi));
     gsl_vector_set(rp, 2, sin((q.phi)));
 
+    //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
-    
-//    GeoTo3D(q, &r);
-    //restore rotation
-//    rotation = rotation_temp;
-    
+        
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     (chart->getDrawArea())->circle(
                                    (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),

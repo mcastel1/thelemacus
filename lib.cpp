@@ -8124,7 +8124,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda, phi, lambda_span;
+    double phi, lambda_span, lambda_start, lambda_end;
     Route dummy_route;
     Position q;
     wxPoint p;
@@ -8184,6 +8184,8 @@ void DrawPanel::Draw_3D(void){
         if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
         else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
     }
+    //convert delta_lambda to radians
+    delta_lambda*=k;
     //    delta_lambda = 15.0;
     
     
@@ -8196,14 +8198,29 @@ void DrawPanel::Draw_3D(void){
     (dummy_route.alpha).set(String(""), 0.0, String(""));
     ((dummy_route.reference_position).phi) = (plot->phi_min);
     (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
+    
+    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        
+        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
+        lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
+        
+    }else{
+        
+        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
+        lambda_end = ((plot->lambda_min).value);
 
-    for(lambda = 0.0; lambda < 2.0*M_PI; lambda+= k*delta_lambda){
-        
-        //I fix the longitude of the ground position of dummy_route, according to lambda
-        ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
-        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-        
     }
+    
+    for(
+        ((dummy_route.reference_position).lambda).set(String(""), lambda_start, String(""));
+        (((dummy_route.reference_position).lambda).value) < lambda_end;
+        (((dummy_route.reference_position).lambda).value) += delta_lambda){
+            
+            //I fix the longitude of the ground position of dummy_route, according to lambda
+//            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
+            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            
+        }
     
     
     //draw parallels

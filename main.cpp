@@ -38,7 +38,6 @@
  - by decreasing number of points for routes, for example setting it to 100, the drag is much more fluid in the 3d projection !
  - with the recent modification to GeoTo3D, the new horizon is not shown
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
- - the definition of lambda_span in Draw_3D turns around in the wrong direction
  */
 
 

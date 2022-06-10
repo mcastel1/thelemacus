@@ -8173,9 +8173,21 @@ void DrawPanel::Draw_3D(void){
     n_intervals_ticks = (unsigned int)((plot->n_intervals_ticks_preferred).value);
     
     //draw meridians
-    //set delta_lambda
-    lambda_span = K*fabs(((plot->lambda_max)-(plot->lambda_min)).value);
-    
+    //set lambda_start, lambda_end and delta_lambda
+    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        
+        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
+        lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
+        lambda_span = K*(((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI);
+
+    }else{
+        
+        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
+        lambda_end = ((plot->lambda_min).value);
+        lambda_span = K*(((plot->lambda_min).value) - ((plot->lambda_max).value));
+
+    }
+
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
     
@@ -8199,25 +8211,13 @@ void DrawPanel::Draw_3D(void){
     ((dummy_route.reference_position).phi) = (plot->phi_min);
     (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
     
-    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
-        
-        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
-        lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
-        
-    }else{
-        
-        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
-        lambda_end = ((plot->lambda_min).value);
-
-    }
-    
     for(
         ((dummy_route.reference_position).lambda).set(String(""), lambda_start, String(""));
         (((dummy_route.reference_position).lambda).value) < lambda_end;
         (((dummy_route.reference_position).lambda).value) += delta_lambda){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda
-//            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
+            //            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
         }

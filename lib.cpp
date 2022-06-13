@@ -8227,6 +8227,9 @@ void DrawPanel::Draw_3D(void){
     t.set(String("lambda start"), lambda_start, String("\t\t"));
     t.set(String("lambda end"), lambda_end, String("\t\t"));
 
+    t.set(String("phi start"), phi_start, String("\t\t"));
+    t.set(String("phi end"), phi_end, String("\t\t"));
+
     
     //draw meridians
 

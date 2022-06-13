@@ -8249,7 +8249,7 @@ void DrawPanel::Draw_3D(void){
             if(gamma_lambda == 60.0){
                                 
                 (lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
-                (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value)/10.0, String(""));
+                (dummy_route.l).set(String(""), Re*2.0*((circle_observer.omega).value)*((parent->tick_length_over_aperture_circle_observer).value), String(""));
 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(delta_lambda_min = 0.0; delta_lambda_min < delta_lambda; delta_lambda_min += k*1.0/(10.0*60.0)){

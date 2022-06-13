@@ -7259,7 +7259,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     plot = ((parent->parent)->plot);
     
     SetCursor(*wxCROSS_CURSOR);
-    tic_length_over_width_plot_area = 0.01;
     
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
@@ -7910,7 +7909,7 @@ void DrawPanel::Draw_Mercator(void){
     }
     width_plot_area = width_chart*length_plot_area_over_length_chart;
     height_plot_area = height_chart*length_plot_area_over_length_chart;
-    tic_length = tic_length_over_width_plot_area*width_plot_area;
+    tick_length = ((parent->tick_length_over_width_plot_area).value)*width_plot_area;
     
     //draw coastlines
     
@@ -8003,7 +8002,7 @@ void DrawPanel::Draw_Mercator(void){
                                    (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
                                    (position_plot_area.y) + height_plot_area,
                                    (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
-                                   (position_plot_area.y) + height_plot_area - height_plot_area*tic_length_over_width_plot_area,
+                                   (position_plot_area.y) + height_plot_area - height_plot_area*((parent->tick_length_over_width_plot_area).value),
                                    0x0000ff, 1);
                     
                 }
@@ -8079,7 +8078,7 @@ void DrawPanel::Draw_Mercator(void){
                     chart->addLine(
                                    (position_plot_area.x),
                                    (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
-                                   (position_plot_area.x) + width_plot_area*tic_length_over_width_plot_area,
+                                   (position_plot_area.x) + width_plot_area*((parent->tick_length_over_width_plot_area).value),
                                    (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
                                    0x0000ff, 1);
                     
@@ -8420,7 +8419,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read color horizon from file
     color_horizon.read_from_file(String("color horizon"), String(path_file_init), String(""));
-    
+
+    //read tick length over width plot area from file_init
+    tick_length_over_width_plot_area.read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
+
+    //read tick length over width plot area from file_init
+    tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
+
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);

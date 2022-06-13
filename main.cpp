@@ -39,6 +39,7 @@
  - with the recent modification to GeoTo3D, the new horizon is not shown
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
+ - 3d projection : minor xticks cannot be made smaller , and parallels disappear for large zooms. 
  */
 
 

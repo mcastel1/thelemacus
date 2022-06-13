@@ -8249,7 +8249,7 @@ void DrawPanel::Draw_3D(void){
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(delta_lambda_min = 0.0; delta_lambda_min < k*1.0/60.0; delta_lambda_min += k*1.0/(10.0*60.0)){
-                    
+                     
                     (((dummy_route.reference_position).lambda).value) += delta_lambda_min;
                     (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value)/10.0, String(""));
                     (((dummy_route.reference_position).phi).value) = (ceil( ((plot->phi_min).value)/delta_phi ) -1)*delta_phi;

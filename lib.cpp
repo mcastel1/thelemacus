@@ -8172,8 +8172,8 @@ void DrawPanel::Draw_3D(void){
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks = (unsigned int)((plot->n_intervals_ticks_preferred).value);
+
     
-    //draw meridians
     //set lambda_start, lambda_end and delta_lambda
     if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
@@ -8198,42 +8198,8 @@ void DrawPanel::Draw_3D(void){
         else{delta_lambda += k*5.0/gamma_lambda;}
     }
     
-    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("o"), String(""));
-    (dummy_route.alpha).set(String(""), 0.0, String(""));
-    ((dummy_route.reference_position).phi) = (plot->phi_min);
-    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
     
-    for(
-        (((dummy_route.reference_position).lambda).value) = lambda_start;
-        (((dummy_route.reference_position).lambda).value) < lambda_end;
-        (((dummy_route.reference_position).lambda).value) += delta_lambda){
-            
-            //I fix the longitude of the ground position of dummy_route, according to lambda
-            //            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
-            (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
-            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            
-            if(gamma_lambda == 60.0){
-                
-                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                for(delta_lambda_min = 0.0; delta_lambda_min < k*1.0/60.0; delta_lambda_min += k*1.0/(10.0*60.0)){
-                    
-                    (((dummy_route.reference_position).lambda).value) += delta_lambda_min;
-                    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value)/10.0, String(""));
-                    dummy_route.draw(((plot->n_points_routes).value), 0xFF0000, -1, this);
-                    
-                }
-                
-            }
-            
-        }
-    
-    
-    //draw parallels
-    
-    
-    //set delta_phi
+    //set phi_start, phi_end and delta_phi
     phi_span =  2.0*((circle_observer.omega).value);
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
@@ -8257,6 +8223,47 @@ void DrawPanel::Draw_3D(void){
     (plot->phi_max).normalize();
     
     
+    
+    
+    //draw meridians
+
+    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    (dummy_route.type).set(String(""), String("o"), String(""));
+    (dummy_route.alpha).set(String(""), 0.0, String(""));
+    ((dummy_route.reference_position).phi) = (plot->phi_min);
+    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
+    
+    for(
+        (((dummy_route.reference_position).lambda).value) = lambda_start;
+        (((dummy_route.reference_position).lambda).value) < lambda_end;
+        (((dummy_route.reference_position).lambda).value) += delta_lambda){
+            
+            //I fix the longitude of the ground position of dummy_route, according to lambda
+            //            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
+            (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
+            ((dummy_route.reference_position).phi) = (plot->phi_min);
+            
+            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            
+            if(gamma_lambda == 60.0){
+                
+                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                for(delta_lambda_min = 0.0; delta_lambda_min < k*1.0/60.0; delta_lambda_min += k*1.0/(10.0*60.0)){
+                    
+                    (((dummy_route.reference_position).lambda).value) += delta_lambda_min;
+                    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value)/10.0, String(""));
+                    (((dummy_route.reference_position).phi).value) = (ceil( ((plot->phi_min).value)/delta_phi ) -1)*delta_phi;
+
+                    dummy_route.draw(((plot->n_points_routes).value), 0xFF0000, -1, this);
+                    
+                }
+                
+            }
+            
+        }
+    
+    
+    //draw parallels
     //set dummy_route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
     (dummy_route.type).set(String(""), String("l"), String(""));
     (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));

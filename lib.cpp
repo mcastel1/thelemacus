@@ -8177,13 +8177,13 @@ void DrawPanel::Draw_3D(void){
     //set lambda_start, lambda_end and delta_lambda
     if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
-        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
+        lambda_start = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
         lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
         
     }else{
         
-        lambda_start = ((floor(((plot->lambda_max).value)/delta_lambda))+1)*delta_lambda;
+        lambda_start = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
         lambda_end = ((plot->lambda_min).value);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
         
@@ -8216,15 +8216,17 @@ void DrawPanel::Draw_3D(void){
     (plot->phi_min).normalize_pm_pi();
     (plot->phi_max).normalize_pm_pi();
     
-    phi_start = (floor( ((plot->phi_min).value)/delta_phi ) -1)*delta_phi;
+    phi_start = floor(((plot->phi_min).value)/delta_phi)*delta_phi;
     phi_end = ((plot->phi_max).value);
     phi_middle = (((plot->phi_min).value)+((plot->phi_max).value))/2.0;
     
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
     
-    
-    
+    Angle t;
+    t.set(String("lambda start"), lambda_start, String("\t\t"));
+    t.set(String("lambda end"), lambda_end, String("\t\t"));
+
     
     //draw meridians
 

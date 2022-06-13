@@ -8124,14 +8124,15 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, lambda_start, lambda_end, phi_start, phi_end;
+    double lambda_span, phi_span, lambda_start, lambda_end, phi_start, phi_end, delta_lambda_min;
     Route dummy_route;
     Position q;
     Projection temp;
     wxPoint p;
-//    Projection r;
-//    Rotation rotation_temp;
+    //    Projection r;
+    //    Rotation rotation_temp;
     unsigned int n_intervals_ticks;
+    int i;
     
     parent->GetCoastLineData_3D();
     
@@ -8211,7 +8212,22 @@ void DrawPanel::Draw_3D(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda
             //            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
+            (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            
+            if(gamma_lambda == 60.0){
+                
+                //plot the xticks from lambda to the next lambda (lambda + dlambda)
+                for(delta_lambda_min = 0.0; delta_lambda_min < k*1.0/60.0; delta_lambda_min += k*1.0/(10.0*60.0)){
+                    //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                    
+                    (((dummy_route.reference_position).lambda).value) += delta_lambda_min;
+                    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value)/10.0, String(""));
+                    dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+                    
+                }
+                
+            }
             
         }
     
@@ -8221,7 +8237,7 @@ void DrawPanel::Draw_3D(void){
     
     //set delta_phi
     phi_span =  2.0*((circle_observer.omega).value);
-
+    
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > k){gamma_phi = 1.0;}
     else{gamma_phi = 60.0;}
@@ -8241,7 +8257,7 @@ void DrawPanel::Draw_3D(void){
     
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
-
+    
     
     //set dummy_route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
     (dummy_route.type).set(String(""), String("l"), String(""));
@@ -8280,13 +8296,13 @@ void DrawPanel::Draw_3D(void){
     
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
     //store rotation in rotation_temp
-//    rotation_temp = rotation;
+    //    rotation_temp = rotation;
     //set rotation to a straightforward rotation
-//    rotation =  Rotation(
-//                         Angle(String(""), -M_PI/2.0, String("")),
-//                         Angle(String(""), 0.0, String("")),
-//                         Angle(String(""), 0.0, String(""))
-//                         );
+    //    rotation =  Rotation(
+    //                         Angle(String(""), -M_PI/2.0, String("")),
+    //                         Angle(String(""), 0.0, String("")),
+    //                         Angle(String(""), 0.0, String(""))
+    //                         );
     //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
     //set q
     (q.lambda).set(String(""), 0.0, String(""));
@@ -8296,10 +8312,10 @@ void DrawPanel::Draw_3D(void){
     gsl_vector_set(rp, 0, 0.0);
     gsl_vector_set(rp, 1, -cos(q.phi));
     gsl_vector_set(rp, 2, sin((q.phi)));
-
+    
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
-        
+    
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     (chart->getDrawArea())->circle(
                                    (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
@@ -10236,7 +10252,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
     
     event.Skip(true);
     
-} 
+}
 
 void ChartFrame::OnScroll(wxScrollEvent &event){
     
@@ -12215,7 +12231,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
     //    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
     //
-} 
+}
 
 //create a new ChartFrame and appends it to the end of chart_frames
 void ListFrame::OnAddChartFrame(wxCommandEvent& event){

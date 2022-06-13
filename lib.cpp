@@ -8230,7 +8230,6 @@ void DrawPanel::Draw_3D(void){
     t.set(String("phi start"), phi_start, String("\t\t"));
     t.set(String("phi end"), phi_end, String("\t\t"));
 
-    
     //draw meridians
 
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -8285,7 +8284,7 @@ void DrawPanel::Draw_3D(void){
         (((dummy_route.reference_position).phi).value) += delta_phi
         ){
             
-            if((((dummy_route.reference_position).phi) < M_PI/2.0) && (((dummy_route.reference_position).phi)) > 3.0*M_PI/2.0){
+            if(cos((dummy_route.reference_position).phi) > 0.0){
                 (dummy_route.l).set(String(""), Re*cos((dummy_route.reference_position).phi)*2.0*((circle_observer.omega).value), String("\t"));
             }
             

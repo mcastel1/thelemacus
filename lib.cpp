@@ -8132,7 +8132,6 @@ void DrawPanel::Draw_3D(void){
     //    Projection r;
     //    Rotation rotation_temp;
     unsigned int n_intervals_ticks;
-    int i;
     
     parent->GetCoastLineData_3D();
     
@@ -8217,13 +8216,12 @@ void DrawPanel::Draw_3D(void){
             
             if(gamma_lambda == 60.0){
                 
-                //plot the xticks from lambda to the next lambda (lambda + dlambda)
+                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(delta_lambda_min = 0.0; delta_lambda_min < k*1.0/60.0; delta_lambda_min += k*1.0/(10.0*60.0)){
-                    //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                     
                     (((dummy_route.reference_position).lambda).value) += delta_lambda_min;
                     (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value)/10.0, String(""));
-                    dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+                    dummy_route.draw(((plot->n_points_routes).value), 0xFF0000, -1, this);
                     
                 }
                 

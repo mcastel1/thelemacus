@@ -34,7 +34,6 @@
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 #define color_white  (wxColour(255,255,255))
-#define n_points_minor_ticks 3
 #define path_file_utc_date_and_time "utc.txt"
 #define path_file_init "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/init.txt"
 #define path_file_recent "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/recent.txt"

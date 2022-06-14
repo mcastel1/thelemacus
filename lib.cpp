@@ -8304,7 +8304,7 @@ void DrawPanel::Draw_3D(void){
                     (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((dummy_route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    dummy_route.draw(n_points_minor_ticks, 0x0000ff, -1, this);
+                    dummy_route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                     
                 }
                 
@@ -8347,7 +8347,7 @@ void DrawPanel::Draw_3D(void){
                     (((dummy_route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        dummy_route.draw(n_points_minor_ticks, 0x0000ff, -1, this);
+                        dummy_route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                         
                     }
                 
@@ -8451,6 +8451,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read zoom_factor_max from file_init
     zoom_factor_max.read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
+    
+    //read n_points_minor_ticks from file_init
+    n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
     
     //read relative_displacement from file_init
     relative_displacement.read_from_file(String("relative displacement"), String(path_file_init), String(""));

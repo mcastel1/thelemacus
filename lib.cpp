@@ -7699,9 +7699,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
     
-    
+     
     //draw labels on the y axis
-    //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth 
+    //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
     for(first_label = true,
         ((q.phi).value) = (phi_start.value),
         (q.lambda).set(String(""), lambda_middle.value, String(""));

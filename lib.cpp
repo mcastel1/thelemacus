@@ -7726,9 +7726,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                 
             }else{
                 //in this case, ((q.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-                
-                //                s << phi.min_to_string(String("NS"), display_precision);
-                
+                                
                 if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
                     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
@@ -7741,6 +7739,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                     }else{
                         s << (q.phi).min_to_string(String("NS"), display_precision);
                     }
+                    
                 }
                 
                 
@@ -7750,7 +7749,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
         wx_string = wxString(s.str().c_str());
         
+        //convert q to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
         (this->*GeoToDrawPanel)(q, &p);
+        p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*length_border_over_length_frame);
         
         dc.DrawRotatedText(wx_string, p, 0);
         
@@ -8267,6 +8268,7 @@ void DrawPanel::Draw_3D(void){
     (plot->lambda_max).normalize_pm_pi();
     
     (lambda_middle.value) = (((plot->lambda_min).value)+((plot->lambda_max).value))/2.0;
+    (lambda_middle.value) =  round((lambda_middle.value)/delta_lambda) * delta_lambda;
     
     (plot->lambda_min).normalize();
     (plot->lambda_max).normalize();

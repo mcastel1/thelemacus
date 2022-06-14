@@ -7540,7 +7540,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         phi.set(String(""), k*dummy, String(""));
         phi.normalize_pm_pi();
         
-        if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
+        if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather than phi itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
             //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             s << phi.deg_to_string(String("NS"), display_precision);
         }else{
@@ -7655,7 +7655,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
             if((points_route_list[i][j]).size() > 1){
                 //I need to add this consdition to make sure that the index j below lies in a valid range
                 
-                dc.DrawSpline((points_route_list[i][j]).size(), (points_route_list[i][j]).data());
+                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
                 
             }
             
@@ -7702,7 +7702,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         s.str("");
         (q.phi).normalize_pm_pi();
         
-        if(/*If this condition is true, then (q.phi).value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors *//*delta_phi== round(delta_phi)*/delta_phi_is_int){
+        if(/*If this condition is true, then (q.phi).value*K is an integer multiple of one degree*/fabs(K*((q.phi).value)-round(K*((q.phi).value))) < epsilon_double){
             //in this case, ((q.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             s << (q.phi).deg_to_string(String("NS"), display_precision);
         }else{

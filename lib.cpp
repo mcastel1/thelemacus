@@ -8214,7 +8214,12 @@ void DrawPanel::Draw_3D(void){
             delta_lambda_minor = tenth_arcmin_radians;
         }
     }
-    
+
+    delta_lambda=k/gamma_lambda;
+    while(n_intervals_ticks*delta_lambda<lambda_span){
+        if(delta_lambda == k/gamma_lambda){delta_lambda += k*4.0/gamma_lambda;}
+        else{delta_lambda += k*5.0/gamma_lambda;}
+    }
     
     
     
@@ -8237,8 +8242,7 @@ void DrawPanel::Draw_3D(void){
             delta_phi_minor = tenth_arcmin_radians;
         }
     }
-    
-    
+
     delta_phi=k/gamma_phi;
     while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
         if(delta_phi == k/gamma_phi){delta_phi += k*4.0/gamma_phi;}
@@ -8256,6 +8260,10 @@ void DrawPanel::Draw_3D(void){
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
     
+    
+    
+    
+    
     Angle t;
     t.set(String("lambda start"), lambda_start, String("\t\t"));
     t.set(String("lambda end"), lambda_end, String("\t\t"));
@@ -8263,8 +8271,11 @@ void DrawPanel::Draw_3D(void){
     t.set(String("phi start"), phi_start, String("\t\t"));
     t.set(String("phi end"), phi_end, String("\t\t"));
     
-    //draw meridians
     
+    
+    
+    
+    //draw meridians
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (dummy_route.type).set(String(""), String("o"), String(""));
     (dummy_route.alpha).set(String(""), 0.0, String(""));

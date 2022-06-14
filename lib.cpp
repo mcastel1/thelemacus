@@ -8219,12 +8219,12 @@ void DrawPanel::Draw_3D(void){
         gamma_phi = 1.0;
         delta_delta_phi_min = -1.0;
     }else{
-        if(phi_span > arcmin_radians){
-            //in this case, one arcdegree > phi_span > one arcminute
+        if(phi_span > 10.0*arcmin_radians){
+            //in this case, one arcdegree > phi_span > 10 arcminutes
             gamma_phi = 60.0;
             delta_delta_phi_min = arcmin_radians;
         }else{
-            //in this case, one arcminute > phi_span
+            //in this case, 10 arcminutes > phi_span
             gamma_phi = 600.0;
             delta_delta_phi_min = tenth_arcmin_radians;
         }

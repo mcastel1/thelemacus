@@ -8123,9 +8123,9 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, lambda_start, lambda_end, phi_start, phi_end, phi_middle, delta_lambda_min;
+    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, lambda_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_min, delta_phi_min;
     Route dummy_route;
-    Angle lambda_saved;
+    Angle lambda_saved, phi_saved;
     Position q;
     Projection temp;
     wxPoint p;
@@ -8188,6 +8188,17 @@ void DrawPanel::Draw_3D(void){
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
         
     }
+    
+    //compute lambda_middle
+    (plot->lambda_min).normalize_pm_pi();
+    (plot->lambda_max).normalize_pm_pi();
+    
+    lambda_middle = (((plot->lambda_min).value)+((plot->lambda_max).value))/2.0;
+
+    (plot->lambda_min).normalize();
+    (plot->lambda_max).normalize();
+
+    
     
     if(lambda_span > k){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
@@ -8289,6 +8300,27 @@ void DrawPanel::Draw_3D(void){
             }
             
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            
+            
+            if(gamma_phi == 60.0){
+                                
+                (phi_saved.value) = (((dummy_route.reference_position).phi).value);
+                (dummy_route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+
+                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                for(delta_phi_min = 0.0; delta_phi_min < delta_phi; delta_phi_min += k*1.0/(10.0*60.0)){
+                     
+                    (((dummy_route.reference_position).phi).value) = (phi_saved.value) + delta_phi_min;
+                    (((dummy_route.reference_position).lambda).value) = round(lambda_middle/delta_lambda) * delta_lambda;
+
+                    dummy_route.draw(((plot->n_points_routes).value), 0x0000ff, -1, this);
+                    
+                }
+                
+                (((dummy_route.reference_position).phi).value) = (phi_saved.value);
+                
+            }
+            
             
         }
     

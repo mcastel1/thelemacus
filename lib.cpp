@@ -8123,7 +8123,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, lambda_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_min, delta_phi_min, delta_delta_phi_min;
+    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, lambda_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route dummy_route;
     Angle lambda_saved, phi_saved;
     Position q;
@@ -8198,16 +8198,24 @@ void DrawPanel::Draw_3D(void){
     (plot->lambda_min).normalize();
     (plot->lambda_max).normalize();
     
-    
-    
-    if(lambda_span > k){gamma_lambda = 1.0;}
-    else{gamma_lambda = 60.0;}
-    
-    delta_lambda=k*1.0/gamma_lambda;
-    while(n_intervals_ticks*delta_lambda<lambda_span){
-        if(delta_lambda == k*1.0/gamma_lambda){delta_lambda += k*4.0/gamma_lambda;}
-        else{delta_lambda += k*5.0/gamma_lambda;}
+    //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+    if(lambda_span > k){
+        //in this case, lambda_span is larger than one degree
+        gamma_lambda = 1.0;
+        delta_lambda_minor = -1.0;
+    }else{
+        if(lambda_span > 10.0*arcmin_radians){
+            //in this case, one arcdegree > lambda_span > 10 arcminutes
+            gamma_lambda = 60.0;
+            delta_lambda_minor = arcmin_radians;
+        }else{
+            //in this case, 10 arcminutes > lambda_span
+            gamma_lambda = 600.0;
+            delta_lambda_minor = tenth_arcmin_radians;
+        }
     }
+    
+    
     
     
     //set phi_start, phi_end and delta_phi
@@ -8217,16 +8225,16 @@ void DrawPanel::Draw_3D(void){
     if(phi_span > k){
         //in this case, phi_span is larger than one degree
         gamma_phi = 1.0;
-        delta_delta_phi_min = -1.0;
+        delta_phi_minor = -1.0;
     }else{
         if(phi_span > 10.0*arcmin_radians){
             //in this case, one arcdegree > phi_span > 10 arcminutes
             gamma_phi = 60.0;
-            delta_delta_phi_min = arcmin_radians;
+            delta_phi_minor = arcmin_radians;
         }else{
             //in this case, 10 arcminutes > phi_span
             gamma_phi = 600.0;
-            delta_delta_phi_min = tenth_arcmin_radians;
+            delta_phi_minor = tenth_arcmin_radians;
         }
     }
     
@@ -8274,16 +8282,16 @@ void DrawPanel::Draw_3D(void){
             
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
-            if(gamma_lambda == 60.0){
+            if(gamma_lambda != 1.0){
                 
-                (lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
-                (dummy_route.l).set(String(""), Re*2.0*((circle_observer.omega).value)*((parent->tick_length_over_aperture_circle_observer).value), String(""));
+                
+                (dummy_route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                (((dummy_route.reference_position).phi).value) = round(phi_middle/delta_phi) * delta_phi;
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                for(delta_lambda_min = 0.0; delta_lambda_min < delta_lambda; delta_lambda_min += k*1.0/(10.0*60.0)){
-                    
-                    (((dummy_route.reference_position).lambda).value) = (lambda_saved.value) + delta_lambda_min;
-                    (((dummy_route.reference_position).phi).value) = round(phi_middle/delta_phi) * delta_phi;
+                for((lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
+                    (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
+                    (((dummy_route.reference_position).lambda).value) += delta_lambda_minor){
                     
                     dummy_route.draw(((plot->n_points_routes).value), 0x0000ff, -1, this);
                     
@@ -8325,10 +8333,8 @@ void DrawPanel::Draw_3D(void){
                 for(
                     (phi_saved.value) = (((dummy_route.reference_position).phi).value);
                     (((dummy_route.reference_position).phi).value) - (phi_saved.value) < delta_phi;
-                    (((dummy_route.reference_position).phi).value) += delta_delta_phi_min
+                    (((dummy_route.reference_position).phi).value) += delta_phi_minor
                     ){
-                        
-                        //                    (((dummy_route.reference_position).phi).value) = (phi_saved.value) + delta_phi_min;
                         
                         dummy_route.draw(((plot->n_points_routes).value), 0x0000ff, -1, this);
                         

@@ -7596,9 +7596,9 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 void DrawPanel::Render_3D(wxDC&  dc){
     
     int i, j, color_id;
-    double dummy, thickness;
+    double thickness;
     bool first_label;
-    Angle lambda, phi;
+    Angle lambda, phi_start, phi_end;
     stringstream s;
     wxString wx_string;
     //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
@@ -7689,13 +7689,23 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
+    //set phi_start/end
+    (plot->phi_min).normalize_pm_pi();
+    (plot->phi_max).normalize_pm_pi();
+    
+    (phi_start.value) = ceil(((plot->phi_min).value)/delta_phi)*delta_phi;
+    (phi_end.value) = ((plot->phi_max).value);
+     
+    (plot->phi_min).normalize();
+    (plot->phi_max).normalize();
+    
     
     //draw labels on the y axis
     //starts for loop which draws the ylabels
     for(first_label = true,
-        (q.phi).set(String(""), ceil((((plot->phi_min).value))/delta_phi)*delta_phi, String("")),
+        ((q.phi).value) = (phi_start.value),
         (q.lambda).set(String(""), lambda_middle.value, String(""));
-        ((q.phi).value)<((plot->phi_max).value);
+        ((q.phi).value) < (phi_end.value);
         ((q.phi).value) += delta_phi
         ){
         
@@ -7705,6 +7715,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         if(/*If this condition is true, then (q.phi).value*K is an integer multiple of one degree*/fabs(K*((q.phi).value)-round(K*((q.phi).value))) < epsilon_double){
             //in this case, ((q.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             s << (q.phi).deg_to_string(String("NS"), display_precision);
+            
         }else{
             
             //in this case, delta_phi  is not an integer multiple of a degree. However, ((q.phi).value) may still be or not be a multiple integer of a degree

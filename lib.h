@@ -117,7 +117,7 @@ class Body;
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //one arcminute in units of radians
-#arcmin_radians (k/60.0)
+#define arcmin_radians (k/60.0)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC  
 #define MJD_min 57388.00041666666666666664
 //NASA's webgeocalc datafiles show L lines per day

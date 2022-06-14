@@ -8214,8 +8214,18 @@ void DrawPanel::Draw_3D(void){
     phi_span =  2.0*((circle_observer.omega).value);
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-    if(phi_span > k){gamma_phi = 1.0;}
-    else{gamma_phi = 60.0;}
+    if(phi_span > k){
+        //in this case, phi_span is larger than one degree
+        gamma_phi = 1.0;
+    }else{
+        if(phi_span > arcmin_radians){
+            //in this case, one arcdegree > phi_span > one arcminute
+            gamma_phi = 60.0
+        }else{
+            //in this case, one arcminute > phi_span
+            gamma_phi = 600.0
+        }
+    }
     
     delta_phi=k*1.0/gamma_phi;
     while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){

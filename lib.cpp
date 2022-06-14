@@ -8123,7 +8123,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, lambda_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_min, delta_phi_min;
+    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, lambda_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_min, delta_phi_min, delta_delta_phi_min;
     Route dummy_route;
     Angle lambda_saved, phi_saved;
     Position q;
@@ -8217,19 +8217,23 @@ void DrawPanel::Draw_3D(void){
     if(phi_span > k){
         //in this case, phi_span is larger than one degree
         gamma_phi = 1.0;
+        delta_delta_phi_min = -1.0;
     }else{
         if(phi_span > arcmin_radians){
             //in this case, one arcdegree > phi_span > one arcminute
-            gamma_phi = 60.0
+            gamma_phi = 60.0;
+            delta_delta_phi_min = arcmin_radians;
         }else{
             //in this case, one arcminute > phi_span
-            gamma_phi = 600.0
+            gamma_phi = 600.0;
+            delta_delta_phi_min = tenth_arcmin_radians;
         }
     }
     
-    delta_phi=k*1.0/gamma_phi;
+    
+    delta_phi=k/gamma_phi;
     while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
-        if(delta_phi == k*1.0/gamma_phi){delta_phi += k*4.0/gamma_phi;}
+        if(delta_phi == k/gamma_phi){delta_phi += k*4.0/gamma_phi;}
         else{delta_phi += k*5.0/gamma_phi;}
     }
     
@@ -8312,14 +8316,16 @@ void DrawPanel::Draw_3D(void){
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
             
-            if(gamma_phi == 60.0){
+            if(gamma_phi != 1.0){
+                
+             
                                 
                 (phi_saved.value) = (((dummy_route.reference_position).phi).value);
                 (dummy_route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 (((dummy_route.reference_position).lambda).value) = round(lambda_middle/delta_lambda) * delta_lambda;
 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                for(delta_phi_min = 0.0; delta_phi_min < delta_phi; delta_phi_min += k*1.0/(10.0*60.0)){
+                for(delta_phi_min = 0.0; delta_phi_min < delta_phi; delta_phi_min += delta_delta_phi_min){
                      
                     (((dummy_route.reference_position).phi).value) = (phi_saved.value) + delta_phi_min;
 

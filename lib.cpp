@@ -8267,11 +8267,11 @@ void DrawPanel::Draw_3D(void){
 //    Angle t;
 //    t.set(String("lambda start"), lambda_start, String("\t\t"));
 //    t.set(String("lambda end"), lambda_end, String("\t\t"));
-//    
+//
 //    t.set(String("phi start"), phi_start, String("\t\t"));
 //    t.set(String("phi end"), phi_end, String("\t\t"));
-//    
-//    
+//
+//
     
     
     
@@ -8329,7 +8329,7 @@ void DrawPanel::Draw_3D(void){
         ){
             
             if(cos((dummy_route.reference_position).phi) > 0.0){
-                (dummy_route.l).set(String(""), Re*cos((dummy_route.reference_position).phi)*2.0*((circle_observer.omega).value), String("\t"));
+                (dummy_route.l).set(String(""), Re*cos((dummy_route.reference_position).phi)*lambda_span, String("\t"));
             }
             
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);

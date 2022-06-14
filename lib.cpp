@@ -7695,13 +7695,13 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     (phi_start.value) = ceil(((plot->phi_min).value)/delta_phi)*delta_phi;
     (phi_end.value) = ((plot->phi_max).value);
-     
+    
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
     
     
     //draw labels on the y axis
-    //starts for loop which draws the ylabels
+    //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth 
     for(first_label = true,
         ((q.phi).value) = (phi_start.value),
         (q.lambda).set(String(""), lambda_middle.value, String(""));
@@ -7709,53 +7709,59 @@ void DrawPanel::Render_3D(wxDC&  dc){
         ((q.phi).value) += delta_phi
         ){
         
-        s.str("");
-        (q.phi).normalize_pm_pi();
-        
-        if(/*If this condition is true, then (q.phi).value*K is an integer multiple of one degree*/fabs(K*((q.phi).value)-round(K*((q.phi).value))) < epsilon_double){
-            //in this case, ((q.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-            s << (q.phi).deg_to_string(String("NS"), display_precision);
+        if((this->*GeoToDrawPanel)(q, &p)){
+            //if Position q lies on the visible side of the Earth, I proceed and draw its label
             
-        }else{
             
-            //in this case, delta_phi  is not an integer multiple of a degree. However, ((q.phi).value) may still be or not be a multiple integer of a degree
-            if(fabs(K*((q.phi).value) - ((double)round(K*((q.phi).value)))) < delta_phi/2.0){
-                //in this case, ((q.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                
+            s.str("");
+            (q.phi).normalize_pm_pi();
+            
+            if(/*If this condition is true, then (q.phi).value*K is an integer multiple of one degree*/fabs(K*((q.phi).value)-round(K*((q.phi).value))) < epsilon_double){
+                //in this case, ((q.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
                 s << (q.phi).deg_to_string(String("NS"), display_precision);
                 
             }else{
-                //in this case, ((q.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-                                
-                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
-                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                
+                //in this case, delta_phi  is not an integer multiple of a degree. However, ((q.phi).value) may still be or not be a multiple integer of a degree
+                if(fabs(K*((q.phi).value) - ((double)round(K*((q.phi).value)))) < delta_phi/2.0){
+                    //in this case, ((q.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                     
-                    s << (q.phi).min_to_string(String("NS"), display_precision);
+                    s << (q.phi).deg_to_string(String("NS"), display_precision);
+                    
                 }else{
-                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    //in this case, ((q.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                     
-                    if(first_label){
-                        s << (q.phi).to_string(String("NS"), display_precision, false);
-                    }else{
+                    if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+                        //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                        
                         s << (q.phi).min_to_string(String("NS"), display_precision);
+                    }else{
+                        //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                        
+                        if(first_label){
+                            s << (q.phi).to_string(String("NS"), display_precision, false);
+                        }else{
+                            s << (q.phi).min_to_string(String("NS"), display_precision);
+                        }
+                        
                     }
+                    
                     
                 }
                 
-                
             }
             
+            wx_string = wxString(s.str().c_str());
+            
+            //convert q to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
+            (this->*GeoToDrawPanel)(q, &p);
+            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*length_border_over_length_frame);
+            
+            dc.DrawRotatedText(wx_string, p, 0);
+            
+            first_label = false;
+            
         }
-        
-        wx_string = wxString(s.str().c_str());
-        
-        //convert q to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
-        (this->*GeoToDrawPanel)(q, &p);
-        p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*length_border_over_length_frame);
-        
-        dc.DrawRotatedText(wx_string, p, 0);
-        
-        first_label = false;
         
     }
     
@@ -8289,7 +8295,7 @@ void DrawPanel::Draw_3D(void){
             delta_lambda_minor = tenth_arcmin_radians;
         }
     }
-
+    
     delta_lambda=k/gamma_lambda;
     while(n_intervals_ticks*delta_lambda<lambda_span){
         if(delta_lambda == k/gamma_lambda){delta_lambda += k*4.0/gamma_lambda;}
@@ -8317,7 +8323,7 @@ void DrawPanel::Draw_3D(void){
             delta_phi_minor = tenth_arcmin_radians;
         }
     }
-
+    
     delta_phi=k/gamma_phi;
     while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
         if(delta_phi == k/gamma_phi){delta_phi += k*4.0/gamma_phi;}
@@ -8339,14 +8345,14 @@ void DrawPanel::Draw_3D(void){
     
     
     
-//    Angle t;
-//    t.set(String("lambda start"), lambda_start, String("\t\t"));
-//    t.set(String("lambda end"), lambda_end, String("\t\t"));
-//
-//    t.set(String("phi start"), phi_start, String("\t\t"));
-//    t.set(String("phi end"), phi_end, String("\t\t"));
-//
-//
+    //    Angle t;
+    //    t.set(String("lambda start"), lambda_start, String("\t\t"));
+    //    t.set(String("lambda end"), lambda_end, String("\t\t"));
+    //
+    //    t.set(String("phi start"), phi_start, String("\t\t"));
+    //    t.set(String("phi end"), phi_end, String("\t\t"));
+    //
+    //
     
     
     

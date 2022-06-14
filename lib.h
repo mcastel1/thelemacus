@@ -145,6 +145,7 @@ class Body;
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 #define color_white  (wxColour(255,255,255))
+#define n_points_minor_ticks 3
 
 
 static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};

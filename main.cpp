@@ -32,7 +32,6 @@
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - add margins in ChartFrame
- - meridians are not shown sometimes
  - add ft unit for lengths
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  - by decreasing number of points for routes, for example setting it to 100, the drag is much more fluid in the 3d projection !

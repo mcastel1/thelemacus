@@ -7596,11 +7596,16 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 void DrawPanel::Render_3D(wxDC&  dc){
     
     int i, j, color_id;
-    double thickness;
+    double dummy, thickness;
+    bool first_label;
+    Angle lambda, phi;
+    stringstream s;
+    wxString wx_string;
     //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
     vector<wxPoint> points_dummy_route;
     Route dummy_route;
     wxPoint p;
+    Position q;
     
     wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     dc.SetBrush(brush);
@@ -7684,6 +7689,63 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
+    
+    //draw labels on the y axis
+    //starts for loop which draws the ylabels
+    for(first_label = true,
+        (q.phi).set(String(""), ceil((((plot->phi_min).value))/delta_phi)*delta_phi, String("")),
+        (q.lambda).set(String(""), lambda_middle.value, String(""));
+        ((q.phi).value)<((plot->phi_max).value);
+        ((q.phi).value) += delta_phi
+        ){
+        
+        s.str("");
+        (q.phi).normalize_pm_pi();
+        
+        if(/*If this condition is true, then (q.phi).value*K is an integer multiple of one degree. I use delta_phi to check this condition rather tahn lambda itself, because delta_phi is not subject to rounding errors *//*delta_phi== round(delta_phi)*/delta_phi_is_int){
+            //in this case, ((q.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+            s << (q.phi).deg_to_string(String("NS"), display_precision);
+        }else{
+            
+            //in this case, delta_phi  is not an integer multiple of a degree. However, ((q.phi).value) may still be or not be a multiple integer of a degree
+            if(fabs(K*((q.phi).value) - ((double)round(K*((q.phi).value)))) < delta_phi/2.0){
+                //in this case, ((q.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                
+                s << (q.phi).deg_to_string(String("NS"), display_precision);
+                
+            }else{
+                //in this case, ((q.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                
+                //                s << phi.min_to_string(String("NS"), display_precision);
+                
+                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    
+                    s << (q.phi).min_to_string(String("NS"), display_precision);
+                }else{
+                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    
+                    if(first_label){
+                        s << (q.phi).to_string(String("NS"), display_precision, false);
+                    }else{
+                        s << (q.phi).min_to_string(String("NS"), display_precision);
+                    }
+                }
+                
+                
+            }
+            
+        }
+        
+        wx_string = wxString(s.str().c_str());
+        
+        (this->*GeoToDrawPanel)(q, &p);
+        
+        dc.DrawRotatedText(wx_string, p, 0);
+        
+        first_label = false;
+        
+    }
     
     
 }
@@ -8123,7 +8185,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, lambda_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
+    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route dummy_route;
     Angle lambda_saved, phi_saved;
     Position q;
@@ -8193,7 +8255,7 @@ void DrawPanel::Draw_3D(void){
     (plot->lambda_min).normalize_pm_pi();
     (plot->lambda_max).normalize_pm_pi();
     
-    lambda_middle = (((plot->lambda_min).value)+((plot->lambda_max).value))/2.0;
+    (lambda_middle.value) = (((plot->lambda_min).value)+((plot->lambda_max).value))/2.0;
     
     (plot->lambda_min).normalize();
     (plot->lambda_max).normalize();
@@ -8338,7 +8400,7 @@ void DrawPanel::Draw_3D(void){
             if(gamma_phi != 1.0){
                 
                 (dummy_route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                (((dummy_route.reference_position).lambda).value) = round(lambda_middle/delta_lambda) * delta_lambda;
+                (((dummy_route.reference_position).lambda).value) = round((lambda_middle.value)/delta_lambda) * delta_lambda;
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(

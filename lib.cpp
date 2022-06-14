@@ -8959,9 +8959,33 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     circle_observer.lambda_min_max(&(plot->lambda_min), &(plot->lambda_max), String(""));
     
     //set phi_min/max
-    (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
-    (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
-    
+    if(((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) < M_PI/2.0) &&
+       ((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) > -M_PI/2.0)){
+        //in this case, circle_observer does not encircle the N/S pole
+   
+        (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
+        (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
+        
+    }else{
+        
+        if((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) > M_PI/2.0){
+            //in this case, circle_observer encircles the N pole
+  
+            (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
+            (plot->phi_max).set(String(""), M_PI/2.0, String(""));
+            
+        }
+        
+        if((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) < -M_PI/2.0){
+            //in this case, circle_observer encircles the S pole
+            
+            (plot->phi_min).set(String(""), -M_PI/2.0, String(""));
+            (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
+            
+        }
+        
+    }
+
 }
 
 

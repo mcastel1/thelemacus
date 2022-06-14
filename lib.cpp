@@ -8257,7 +8257,6 @@ void DrawPanel::Draw_3D(void){
             //I fix the longitude of the ground position of dummy_route, according to lambda
             //            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
             (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
-            ((dummy_route.reference_position).phi) = (plot->phi_min);
             
             dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
@@ -8277,7 +8276,8 @@ void DrawPanel::Draw_3D(void){
                 }
                 
                 (((dummy_route.reference_position).lambda).value) = (lambda_saved.value);
-                
+                ((dummy_route.reference_position).phi) = (plot->phi_min);
+
             }
             
         }
@@ -8306,18 +8306,20 @@ void DrawPanel::Draw_3D(void){
                                 
                 (phi_saved.value) = (((dummy_route.reference_position).phi).value);
                 (dummy_route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                (((dummy_route.reference_position).lambda).value) = round(lambda_middle/delta_lambda) * delta_lambda;
 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(delta_phi_min = 0.0; delta_phi_min < delta_phi; delta_phi_min += k*1.0/(10.0*60.0)){
                      
                     (((dummy_route.reference_position).phi).value) = (phi_saved.value) + delta_phi_min;
-                    (((dummy_route.reference_position).lambda).value) = round(lambda_middle/delta_lambda) * delta_lambda;
 
                     dummy_route.draw(((plot->n_points_routes).value), 0x0000ff, -1, this);
                     
                 }
                 
                 (((dummy_route.reference_position).phi).value) = (phi_saved.value);
+                ((dummy_route.reference_position).lambda) = (plot->lambda_min);
+
                 
             }
             
@@ -8326,29 +8328,9 @@ void DrawPanel::Draw_3D(void){
     
     
     
-    //    //set dummy_route equal to a parallel going through phi: I set everything except for the latitude of the starting position, which will vary in the loop  for and will be fixed inside the loop
-    //    (dummy_route.type).set(String(""), String("c"), String(""));
-    //    ((dummy_route.reference_position).lambda).set(String(""), 0.0, String(""));
-    //    ((dummy_route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
-    //
-    //    for(phi = floor(M_PI/2.0/(k*delta_phi))*(k*delta_phi); phi > -M_PI/2.0; phi-= k*delta_phi){
-    //
-    //        //I fix the latitude of the start position of dummy_route, according to phi
-    //        (dummy_route.omega).set(String(""), M_PI/2.0 - phi, String(""));
-    //        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-    //
-    //    }
-    //
+
     
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
-    //store rotation in rotation_temp
-    //    rotation_temp = rotation;
-    //set rotation to a straightforward rotation
-    //    rotation =  Rotation(
-    //                         Angle(String(""), -M_PI/2.0, String("")),
-    //                         Angle(String(""), 0.0, String("")),
-    //                         Angle(String(""), 0.0, String(""))
-    //                         );
     //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
     //set q
     (q.lambda).set(String(""), 0.0, String(""));

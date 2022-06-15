@@ -1568,7 +1568,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         }else{
             
             ((*t)[0]).set(String(""), (t_b.value), new_prefix);
-            ((*t)[1]).set(String(""), (t_b.value), new_prefix);
+            ((*t)[1]).set(String(""), (t_a.value), new_prefix);
             
         }
                 

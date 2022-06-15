@@ -1312,7 +1312,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             for(i=0; i<n_points; i++){
                 
                 //set the temporarly length across the Route
-                l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
+                l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)(i+1))/((double)(n_points+1)), String(""));
                 compute_end(String(""));
                 
                 if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
@@ -1513,7 +1513,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         //in this case, *this and route are both circles of equal altitude -> I check check whetehr they intersect
         
         //compute theta, the angle between the GPs of *this and route
-        theta.set(String("angle between the two GPs"), acos(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))), prefix);
+        theta.set(String(""), acos(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))), prefix);
         
         //sort (*this).omega and route.omega and writes them into omega_max, omega_min
         if(omega > (route.omega)){
@@ -1573,6 +1573,9 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                              (gsl_sf_pow_int(cos((route.reference_position.phi.value)),2)*(-6 + 2*cos(2*((*this).reference_position.phi.value)) + 2*cos(2*((*this).reference_position.lambda.value) - 2*(route.reference_position.lambda.value)) + cos(2*(((*this).reference_position.phi.value) + ((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2*(((*this).reference_position.phi.value) - ((*this).reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8*gsl_sf_pow_int(cos(((*this).reference_position.phi.value)),2)*gsl_sf_pow_int(sin((route.reference_position.phi.value)),2) +
                               4*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(2*((*this).reference_position.phi.value))*sin(2*(route.reference_position.phi.value))));
             
+            //normalize t_a and t_b to put them in a proper form and then properly compare their values
+            t_a.normalize();
+            t_b.normalize();
             
             //write t_a, t_b in t by sorting them in ascending order.
             if(t_a < t_b){

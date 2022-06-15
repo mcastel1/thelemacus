@@ -8514,7 +8514,7 @@ void DrawPanel::Draw_3D(void){
                 (((route.reference_position).lambda).value) - ((lambda_saved.value)+M_PI/2.0) < delta_lambda;
                 (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                     
                 }
                 

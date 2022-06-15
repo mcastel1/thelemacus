@@ -8543,8 +8543,7 @@ void DrawPanel::Draw_3D(void){
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
     (route.type).set(String(""), String("c"), String(""));
-    //    (route.alpha).set(String(""), M_PI/2.0, String(""));
-    ((route.reference_position).lambda).set(String(""), lambda_middle.value, String(""));
+    ((route.reference_position).lambda) = lambda_middle;
     ((route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
     
     for(
@@ -8559,28 +8558,29 @@ void DrawPanel::Draw_3D(void){
             //
             route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            /*
-             if(gamma_phi != 1.0){
-             
-             (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-             (((route.reference_position).lambda).value) = round((lambda_middle.value)/delta_lambda) * delta_lambda;
-             
-             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-             for(
-             (phi_saved.value) = (((route.reference_position).phi).value);
-             (((route.reference_position).phi).value) - (phi_saved.value) < delta_phi;
-             (((route.reference_position).phi).value) += delta_phi_minor
-             ){
-             
-             route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
-             
-             }
-             
-             (((route.reference_position).phi).value) = (phi_saved.value);
-             ((route.reference_position).lambda) = (plot->lambda_min);
-             
-             }
-             */
+            
+            if(gamma_phi != 1.0){
+                
+                (route.type).set(String(""), String("l"), String(""));
+                (route.alpha).set(String(""), M_PI/2.0, String(""));
+                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                
+                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                for(
+                    (((route.reference_position).phi).value) = M_PI/2.0 - ((route.omega).value);
+                    (((route.reference_position).phi).value) - (M_PI/2.0 - ((route.omega).value)) < delta_phi;
+                    (((route.reference_position).phi).value) += delta_phi_minor
+                    ){
+                        
+                        route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+                        
+                    }
+                
+                (route.type).set(String(""), String("c"), String(""));
+                ((route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
+
+            }
+            
             
         }
     

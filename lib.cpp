@@ -1258,6 +1258,89 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     
 }
 
+void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
+    
+    vector< vector<double> > x;
+    vector< vector<double> > y;
+    Projection temp;
+    bool end_connected;
+    unsigned int i;
+    vector<Angle> t(2);
+    
+    if(type == String("c")){
+        //if the Route this is a circle of equal altitde, its total length is the length of the circle itself, which reads:
+        
+        intersection(draw_panel->circle_observer, &t, String(""));
+        
+        if(((t[1]).value) - ((t[0]).value) < M_PI){
+            
+            l.set(String(""), ((t[1]-t[0]).value)*(Re*sin(omega)), String(""));
+            
+        }else{
+            
+            l.set(String(""), (2.0*M_PI - ((t[1]-t[0]).value))*(Re*sin(omega)), String(""));
+            
+        }
+        
+        
+        
+        
+        //tabulate the Route points
+        for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
+            
+            //set the temporarly length across the Route
+            l.set(String(""), (l_tot.value)*((double)i)/((double)(n_points-1)), String(""));
+            compute_end(String(""));
+            
+            
+            if((draw_panel->*(draw_panel->GeoToProjection))(end, &temp)){
+                
+                if(end_connected){
+                    
+                    x.resize(x.size() + 1);
+                    y.resize(y.size() + 1);
+                    end_connected = false;
+                    
+                }
+                
+                (x[x.size()-1]).push_back(temp.x);
+                (y[y.size()-1]).push_back(temp.y);
+                
+            }else{
+                
+                end_connected = true;
+                
+            }
+            
+        }
+        
+        //run all the connected components of the tabulated Route and draw each of them in draw_panel
+        for(i=0; i<x.size(); i++){
+            
+            if(((x[i]).size()) > 1){
+                
+                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), /*0x808080*/color, ""));
+                (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (int)(x[i]).size()));
+                if(width != -1){
+                    (draw_panel->spline_layer)->setLineWidth(width);
+                }
+                
+            }
+            
+        }
+        
+    }else{
+        //otherwise, the total length is simply written in the l object in this
+        
+        cout << prefix.value << RED << "Cannot execute draw_3D: the Route is not a circle of equal altitude!\n" << RESET;
+        
+    }
+    
+    t.clear();
+    
+    
+}
+
 void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     unsigned int j;

@@ -8444,39 +8444,30 @@ void DrawPanel::Draw_3D(void){
     
     //draw meridians
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("o"), String(""));
-    (dummy_route.alpha).set(String(""), 0.0, String(""));
-    ((dummy_route.reference_position).phi) = (plot->phi_min);
-    (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
+    (dummy_route.type).set(String(""), String("c"), String(""));
+    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
+    ((dummy_route.reference_position).phi).set(String(""), 0.0, String(""));
     
     for(
-        (((dummy_route.reference_position).lambda).value) = lambda_start;
-        (((dummy_route.reference_position).lambda).value) < lambda_end;
+        (((dummy_route.reference_position).lambda).value) = lambda_start - M_PI/2.0;
+        (((dummy_route.reference_position).lambda).value) < lambda_end - M_PI/2.0;
         (((dummy_route.reference_position).lambda).value) += delta_lambda){
             
-            //I fix the longitude of the ground position of dummy_route, according to lambda
-            //            ((dummy_route.reference_position).lambda).set(String(""), lambda, String(""));
-            (dummy_route.l).set(String(""), Re* 2.0*((circle_observer.omega).value), String(""));
             
-            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            dummy_route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this);
             
             if(gamma_lambda != 1.0){
-                
-                
-                (dummy_route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                (((dummy_route.reference_position).phi).value) = round(phi_middle/delta_phi) * delta_phi;
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
                     (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((dummy_route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    dummy_route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+                    dummy_route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                     
                 }
                 
                 (((dummy_route.reference_position).lambda).value) = (lambda_saved.value);
-                ((dummy_route.reference_position).phi) = (plot->phi_min);
                 
             }
             

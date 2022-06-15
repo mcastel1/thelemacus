@@ -8381,13 +8381,13 @@ void DrawPanel::Draw_3D(void){
     //set lambda_start, lambda_end and delta_lambda
     if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
-        lambda_start = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        lambda_start = ceil(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
         lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
         
     }else{
         
-        lambda_start = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        lambda_start = ceil(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
         lambda_end = ((plot->lambda_min).value);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
         

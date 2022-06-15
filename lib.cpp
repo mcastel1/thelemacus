@@ -8341,7 +8341,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, /*an intermediate value of the latitude used to draw things in the middle of observer_circle*/phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
+    double lambda_span, phi_span, /*an intermediate value of the latitude used to draw things in the middle of observer_circle*/phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
     Angle lambda_saved, phi_saved;
     Position q;
@@ -8395,14 +8395,14 @@ void DrawPanel::Draw_3D(void){
     //set lambda_start, lambda_end and delta_lambda
     if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
-        lambda_start = ceil(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        lambda_end = ((plot->lambda_min).value) + (2.0*M_PI);
+        (lambda_start.value) = ceil(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
         
     }else{
         
-        lambda_start = ceil(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        lambda_end = ((plot->lambda_min).value);
+        (lambda_start.value) = ceil(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_end.value) = ((plot->lambda_min).value);
         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
         
     }
@@ -8479,17 +8479,7 @@ void DrawPanel::Draw_3D(void){
     (plot->phi_max).normalize();
     
     
-    
-    
-    
-    //    Angle t;
-    //    t.set(String("lambda start"), lambda_start, String("\t\t"));
-    //    t.set(String("lambda end"), lambda_end, String("\t\t"));
-    //
-    //    t.set(String("phi start"), phi_start, String("\t\t"));
-    //    t.set(String("phi end"), phi_end, String("\t\t"));
-    //
-    //
+   
     
     
     
@@ -8500,8 +8490,8 @@ void DrawPanel::Draw_3D(void){
     ((route.reference_position).phi).set(String(""), 0.0, String(""));
     
     for(
-        (((route.reference_position).lambda).value) = lambda_start - M_PI/2.0;
-        (((route.reference_position).lambda).value) < lambda_end - M_PI/2.0;
+        (((route.reference_position).lambda).value) = (lambda_start.value) - M_PI/2.0;
+        (((route.reference_position).lambda).value) < (lambda_end.value) - M_PI/2.0;
         (((route.reference_position).lambda).value) += delta_lambda){
             
             

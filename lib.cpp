@@ -7827,16 +7827,6 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
-    //set phi_start/end
-    (plot->phi_min).normalize_pm_pi();
-    (plot->phi_max).normalize_pm_pi();
-    
-    (phi_start.value) = ceil(((plot->phi_min).value)/delta_phi)*delta_phi;
-    (phi_end.value) = ((plot->phi_max).value);
-    
-    (plot->phi_min).normalize();
-    (plot->phi_max).normalize();
-    
     
     //draw labels on the y axis
     //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth

@@ -1097,7 +1097,7 @@ void Position::modify(String prefix){
         cout << prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
     }
     
-    enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), prefix);
+    enter_unsigned_int(&i, true, 1, ((unsigned int)(items.size()))+1, String("choice #"), prefix);
     
     switch(i){
             
@@ -1316,10 +1316,12 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                 l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
                 compute_end(String(""));
                 
-                ((draw_panel->*(draw_panel->GeoToProjection))(end, &temp));
-                
-                x[i] = (temp.x);
-                y[i] = (temp.y);
+                if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                    
+                    x[i] = (temp.x);
+                    y[i] = (temp.y);
+                    
+                }
                 
             }
             

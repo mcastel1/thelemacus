@@ -1302,7 +1302,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             }else{
                 
                 l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-                l_end.set(String(""), (2.0*M_PI + ((t[1]).value))*(Re*sin(omega)), String(""));
+                l_end.set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
                 
             }
             

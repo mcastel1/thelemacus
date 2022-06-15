@@ -1503,7 +1503,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
 bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;
-    Angle t_a, t_b, theta;
+    Angle t_a, t_b, theta, omega_max, omega_min;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -1511,10 +1511,23 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     if((((*this).type == String("c")) && (route.type == String("c")))){
         //in this case, *this and route are both circles of equal altitude -> I check check whetehr they intersect
         
-        //theta is the angle between the GPs of *this and route
+        //compute theta, the angle between the GPs of *this and route
         theta.set(String("angle between the two GPs"), acos(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))), prefix);
         
-        if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
+        //sort (*this).omega and route.omega and writes them into omega_max, omega_min
+        if(omega > (route.omega)){
+            
+            omega_max = omega;
+            omega_min = (route.omega);
+            
+        }else{
+            
+            omega_max = (route.omega);
+            omega_min = omega;
+            
+        }
+        
+        if(/*this is the condition that *this and route intersect*/(theta > omega_max - omega_min) && (theta < omega_max + omega_min)){
             //in this case, *this and route intersect
             
             t_a.value = atan((8*cos((route.reference_position.phi.value))*((cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((*this).reference_position.phi.value)) - cos(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value)))*(cos(((*this).reference_position.phi.value))*cos((route.reference_position.phi.value))*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin(((*this).reference_position.phi.value))*sin((route.reference_position.phi.value))) +

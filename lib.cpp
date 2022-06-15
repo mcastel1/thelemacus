@@ -1283,8 +1283,7 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
 void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
     unsigned int i;
-    vector<double> x(n_points);
-    vector<double> y(n_points);
+    vector<double> x, y;
     Projection temp;
     Length l_start, l_end;
     vector<Angle> t(2);
@@ -1318,8 +1317,8 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                 
                 if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                     
-                    x[i] = (temp.x);
-                    y[i] = (temp.y);
+                    x.push_back(temp.x);
+                    y.push_back(temp.y);
                     
                 }
                 

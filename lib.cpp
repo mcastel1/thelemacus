@@ -1412,7 +1412,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
 }
 
 //returns in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route r
-bool Route::t_crossing(Route route, vector<Angle> *t, String prefix){
+bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;
     bool check = true;
@@ -1554,8 +1554,8 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
             
             cout << prefix.value << "Routes intersect\n";
             
-            (*this).t_crossing(route, &t, new_prefix);
-            route.t_crossing((*this), &u, new_prefix);
+            (*this).intersection(route, &t, new_prefix);
+            route.intersection((*this), &u, new_prefix);
             
             ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[0]).value), prefix);
             (*this).compute_end(new_prefix);

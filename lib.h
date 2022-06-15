@@ -739,7 +739,7 @@ public:
     bool crossing(Route, vector<Position>*, double*, String);
     void transport(String);
     static double lambda_minus_pi(double, void*);
-    bool t_crossing(Route, vector<Angle>*, String);
+    bool intersection(Route, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);

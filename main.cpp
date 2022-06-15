@@ -42,6 +42,7 @@
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
  - include logical condition in Route::intersection on whether the intersection exists
  - transforms all exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
+ - now that you draw properly circles of equal altitude only in the visible region, reduce number of poitns for routes later to speed up
  */
  
 

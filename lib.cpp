@@ -7743,7 +7743,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     vector<wxPoint> points_dummy_route;
     Route dummy_route;
     wxPoint p;
-    Position q;
+    Position q, temp;
     
     wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     dc.SetBrush(brush);
@@ -7841,36 +7841,39 @@ void DrawPanel::Render_3D(wxDC&  dc){
         if((this->*GeoToDrawPanel)(q, &p)){
             //if Position q lies on the visible side of the Earth, I proceed and draw its label
             
-            s.str("");
-            (q.lambda).normalize_pm_pi();
+            //stores q in a temporary position temp, which will be modifie by the functiosn which act on it in the following lines. In this way, q will not be modified and stay intact
+            temp = q;
             
-            if(/*If this condition is true, then (q.lambda).value*K is an integer multiple of one degree*/fabs(K*((q.lambda).value)-round(K*((q.lambda).value))) < epsilon_double){
-                //in this case, ((q.lambda).value) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-                s << (q.phi).deg_to_string(String("EW"), display_precision);
+            s.str("");
+//            (q.lambda).normalize_pm_pi();
+            
+            if(/*If this condition is true, then (temp.lambda).value*K is an integer multiple of one degree*/fabs(K*((temp.lambda).value)-round(K*((temp.lambda).value))) < epsilon_double){
+                //in this case, ((temp.lambda).value) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+                s << (temp.lambda).deg_to_string(String("EW"), display_precision);
                 
             }else{
-                //in this case, (q.lambda).value*K is not an integer multiple of a degree. However, ((q.phi).value) may still be or not be a multiple integer of a degree
+                //in this case, (temp.lambda).value*K is not an integer multiple of a degree. However, ((temp.phi).value) may still be or not be a multiple integer of a degree
                 
-                if(fabs(K*((q.lambda).value) - ((double)round(K*((q.lambda).value)))) < delta_lambda/2.0){
-                    //in this case, ((q.lambda).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                if(fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0){
+                    //in this case, ((temp.lambda).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                     
-                    s << (q.lambda).deg_to_string(String("EW"), display_precision);
+                    s << (temp.lambda).deg_to_string(String("EW"), display_precision);
                     
                 }else{
-                    //in this case, ((q.lambda).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                    //in this case, ((temp.lambda).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                     
                     if(ceil((K*(lambda_end.value)))  - floor((K*(lambda_start.value))) != 1){
                         //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                         
-                        s << (q.lambda).min_to_string(String("EW"), display_precision);
+                        s << (temp.lambda).min_to_string(String("EW"), display_precision);
                         
                     }else{
                         //in this case, the lambda interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                         
                         if(first_label){
-                            s << (q.lambda).to_string(String("EW"), display_precision, false);
+                            s << (temp.lambda).to_string(String("EW"), display_precision, false);
                         }else{
-                            s << (q.lambda).min_to_string(String("EW"), display_precision);
+                            s << (temp.lambda).min_to_string(String("EW"), display_precision);
                         }
                         
                     }

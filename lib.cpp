@@ -7736,7 +7736,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     int i, j, color_id;
     double thickness;
     bool first_label;
-    Angle lambda, phi_start, phi_end;
+    Angle lambda;
     stringstream s;
     wxString wx_string;
     //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
@@ -8341,7 +8341,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, /*an intermediate value of the latitude used to draw things in the middle of observer_circle*/phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
+    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, /*an intermediate value of the latitude used to draw things in the middle of observer_circle*/phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
     Angle lambda_saved, phi_saved;
     Position q;
@@ -8471,8 +8471,8 @@ void DrawPanel::Draw_3D(void){
     (plot->phi_min).normalize_pm_pi();
     (plot->phi_max).normalize_pm_pi();
     
-    phi_start = floor(((plot->phi_min).value)/delta_phi)*delta_phi;
-    phi_end = ((plot->phi_max).value);
+    (phi_start.value) = floor(((plot->phi_min).value)/delta_phi)*delta_phi;
+    (phi_end.value) = ((plot->phi_max).value);
     phi_middle = round(((((plot->phi_min).value)+((plot->phi_max).value))/2.0)/delta_phi) * delta_phi;
     
     (plot->phi_min).normalize();
@@ -8546,8 +8546,8 @@ void DrawPanel::Draw_3D(void){
     ((route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
     
     for(
-        ((route.omega).value) = M_PI/2.0 - phi_start;
-        ((route.omega).value) > M_PI/2.0 - phi_end;
+        ((route.omega).value) = M_PI/2.0 - (phi_start.value);
+        ((route.omega).value) > M_PI/2.0 - (phi_end.value);
         ((route.omega).value) -= delta_phi
         ){
             

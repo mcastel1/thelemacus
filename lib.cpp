@@ -8331,7 +8331,7 @@ void DrawPanel::Draw_Mercator(void){
 void DrawPanel::Draw_3D(void){
     
     double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
-    Route dummy_route;
+    Route route;
     Angle lambda_saved, phi_saved;
     Position q;
     Projection temp;
@@ -8484,78 +8484,78 @@ void DrawPanel::Draw_3D(void){
     
     
     //draw meridians
-    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (dummy_route.type).set(String(""), String("c"), String(""));
-    (dummy_route.omega).set(String(""), M_PI/2.0, String(""));
-    ((dummy_route.reference_position).phi).set(String(""), 0.0, String(""));
+    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    (route.type).set(String(""), String("c"), String(""));
+    (route.omega).set(String(""), M_PI/2.0, String(""));
+    ((route.reference_position).phi).set(String(""), 0.0, String(""));
     
     for(
-        (((dummy_route.reference_position).lambda).value) = lambda_start - M_PI/2.0;
-        (((dummy_route.reference_position).lambda).value) < lambda_end - M_PI/2.0;
-        (((dummy_route.reference_position).lambda).value) += delta_lambda){
+        (((route.reference_position).lambda).value) = lambda_start - M_PI/2.0;
+        (((route.reference_position).lambda).value) < lambda_end - M_PI/2.0;
+        (((route.reference_position).lambda).value) += delta_lambda){
             
             
-            dummy_route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            /*
+            
             if(gamma_lambda != 1.0){
                 
                  //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                 for((lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
-                 (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
-                 (((dummy_route.reference_position).lambda).value) += delta_lambda_minor){
+                 for((lambda_saved.value) = (((route.reference_position).lambda).value);
+                 (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
+                 (((route.reference_position).lambda).value) += delta_lambda_minor){
                  
-                 dummy_route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                 route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                  
                  }
                  
                 
-                (((dummy_route.reference_position).lambda).value) = (lambda_saved.value);
+                (((route.reference_position).lambda).value) = (lambda_saved.value);
                 
             }
              
-             */
+             
             
         }
     
     
     //draw parallels
-    //set dummy_route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
-    (dummy_route.type).set(String(""), String("l"), String(""));
-    (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
-    ((dummy_route.reference_position).lambda) =  (plot->lambda_min);
+    //set route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
+    (route.type).set(String(""), String("l"), String(""));
+    (route.alpha).set(String(""), M_PI/2.0, String(""));
+    ((route.reference_position).lambda) =  (plot->lambda_min);
     
     for(
-        (((dummy_route.reference_position).phi).value) = phi_start;
-        (((dummy_route.reference_position).phi).value) < phi_end;
-        (((dummy_route.reference_position).phi).value) += delta_phi
+        (((route.reference_position).phi).value) = phi_start;
+        (((route.reference_position).phi).value) < phi_end;
+        (((route.reference_position).phi).value) += delta_phi
         ){
             
-            if(cos((dummy_route.reference_position).phi) > 0.0){
-                (dummy_route.l).set(String(""), Re*cos((dummy_route.reference_position).phi)*lambda_span, String("\t"));
+            if(cos((route.reference_position).phi) > 0.0){
+                (route.l).set(String(""), Re*cos((route.reference_position).phi)*lambda_span, String("\t"));
             }
             
-            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
             
             if(gamma_phi != 1.0){
                 
-                (dummy_route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                (((dummy_route.reference_position).lambda).value) = round((lambda_middle.value)/delta_lambda) * delta_lambda;
+                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                (((route.reference_position).lambda).value) = round((lambda_middle.value)/delta_lambda) * delta_lambda;
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(
-                    (phi_saved.value) = (((dummy_route.reference_position).phi).value);
-                    (((dummy_route.reference_position).phi).value) - (phi_saved.value) < delta_phi;
-                    (((dummy_route.reference_position).phi).value) += delta_phi_minor
+                    (phi_saved.value) = (((route.reference_position).phi).value);
+                    (((route.reference_position).phi).value) - (phi_saved.value) < delta_phi;
+                    (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        dummy_route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+                        route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                         
                     }
                 
-                (((dummy_route.reference_position).phi).value) = (phi_saved.value);
-                ((dummy_route.reference_position).lambda) = (plot->lambda_min);
+                (((route.reference_position).phi).value) = (phi_saved.value);
+                ((route.reference_position).lambda) = (plot->lambda_min);
                 
             }
             

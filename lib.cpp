@@ -1285,7 +1285,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     unsigned int i;
     vector<double> x, y;
     Projection temp;
-    Length l_start, l_end;
+    Length l_start, l_end, l1, l2;
     vector<Angle> t(2);
     
     if(type == String("c")){
@@ -1293,10 +1293,21 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         
         if(intersection(draw_panel->circle_observer, &t, String(""))){
             
-            if(((t[1]-t[0]).value) < M_PI){
+            //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
+            l.set(String(""), ((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega)), String(""));
+            compute_end(String(""));
+            ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+            
+            l.set(String(""), (((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega)), String(""));
+            compute_end(String(""));
+            ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+            
+            if(l2>l1){
                 
                 l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
                 l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                
+                  
                 
             }else{
                 
@@ -8511,8 +8522,8 @@ void DrawPanel::Draw_3D(void){
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((((route.reference_position).lambda).value) = (lambda_saved.value)+M_PI/2.0;
-                (((route.reference_position).lambda).value) - ((lambda_saved.value)+M_PI/2.0) < delta_lambda;
-                (((route.reference_position).lambda).value) += delta_lambda_minor){
+                    (((route.reference_position).lambda).value) - ((lambda_saved.value)+M_PI/2.0) < delta_lambda;
+                    (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
                     route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                     
@@ -8523,51 +8534,53 @@ void DrawPanel::Draw_3D(void){
                 ((route.reference_position).phi).set(String(""), 0.0, String(""));
                 
             }
-             
-             
+            
+            
             
         }
     
     
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
-    (route.type).set(String(""), String("l"), String(""));
-    (route.alpha).set(String(""), M_PI/2.0, String(""));
-    ((route.reference_position).lambda) =  (plot->lambda_min);
+    (route.type).set(String(""), String("c"), String(""));
+    //    (route.alpha).set(String(""), M_PI/2.0, String(""));
+    ((route.reference_position).lambda).set(String(""), lambda_middle.value, String(""));
+    ((route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
     
     for(
-        (((route.reference_position).phi).value) = phi_start;
-        (((route.reference_position).phi).value) < phi_end;
-        (((route.reference_position).phi).value) += delta_phi
+        ((route.omega).value) = M_PI/2.0 - phi_start;
+        ((route.omega).value) > M_PI/2.0 - phi_end;
+        ((route.omega).value) -= delta_phi
         ){
             
-            if(cos((route.reference_position).phi) > 0.0){
-                (route.l).set(String(""), Re*cos((route.reference_position).phi)*lambda_span, String("\t"));
-            }
+            //            if(cos((route.reference_position).phi) > 0.0){
+            //                (route.l).set(String(""), Re*cos((route.reference_position).phi)*lambda_span, String("\t"));
+            //            }
+            //
+            route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            
-            
-            if(gamma_phi != 1.0){
-                
-                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                (((route.reference_position).lambda).value) = round((lambda_middle.value)/delta_lambda) * delta_lambda;
-                
-                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                for(
-                    (phi_saved.value) = (((route.reference_position).phi).value);
-                    (((route.reference_position).phi).value) - (phi_saved.value) < delta_phi;
-                    (((route.reference_position).phi).value) += delta_phi_minor
-                    ){
-                        
-                        route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
-                        
-                    }
-                
-                (((route.reference_position).phi).value) = (phi_saved.value);
-                ((route.reference_position).lambda) = (plot->lambda_min);
-                
-            }
+            /*
+             if(gamma_phi != 1.0){
+             
+             (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+             (((route.reference_position).lambda).value) = round((lambda_middle.value)/delta_lambda) * delta_lambda;
+             
+             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+             for(
+             (phi_saved.value) = (((route.reference_position).phi).value);
+             (((route.reference_position).phi).value) - (phi_saved.value) < delta_phi;
+             (((route.reference_position).phi).value) += delta_phi_minor
+             ){
+             
+             route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+             
+             }
+             
+             (((route.reference_position).phi).value) = (phi_saved.value);
+             ((route.reference_position).lambda) = (plot->lambda_min);
+             
+             }
+             */
             
         }
     

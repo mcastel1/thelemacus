@@ -8411,8 +8411,7 @@ void DrawPanel::Draw_3D(void){
     (plot->lambda_min).normalize_pm_pi();
     (plot->lambda_max).normalize_pm_pi();
     
-    (lambda_middle.value) = (((plot->lambda_min).value)+((plot->lambda_max).value))/2.0;
-    (lambda_middle.value) =  round((lambda_middle.value)/delta_lambda) * delta_lambda;
+    (lambda_middle.value) = round(((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0)/delta_lambda) * delta_lambda;
     
     (plot->lambda_min).normalize();
     (plot->lambda_max).normalize();

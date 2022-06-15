@@ -390,6 +390,28 @@ Length Length::operator+ (const Length& l){
     
 }
 
+Length Length::operator- (const Length& l){
+    
+    Length s;
+    
+    if(value >= (l.value)){
+        
+        (s.value) = value - (l.value);
+        
+    }else{
+        
+        cout << RED << "Length resulting from substraction is negative!\n" << RESET;
+        
+        (s.value) = 0.0;
+        
+    }
+    
+    return s;
+    
+}
+
+
+
 bool Speed::check_valid(String name, String prefix){
     
     bool check = true;
@@ -1260,11 +1282,11 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
 
 void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
-    vector< vector<double> > x;
-    vector< vector<double> > y;
-    Projection temp;
-    bool end_connected;
     unsigned int i;
+    vector<double> x(n_points);
+    vector<double> y(n_points);
+    Projection temp;
+    Length l_start, l_end;
     vector<Angle> t(2);
     
     if(type == String("c")){
@@ -1272,72 +1294,53 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         
         intersection(draw_panel->circle_observer, &t, String(""));
         
-        if(((t[1]).value) - ((t[0]).value) < M_PI){
+        if(((t[1]-t[0]).value) < M_PI){
             
-            l.set(String(""), ((t[1]-t[0]).value)*(Re*sin(omega)), String(""));
-            
+            l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
+            l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+
         }else{
             
-            l.set(String(""), (2.0*M_PI - ((t[1]-t[0]).value))*(Re*sin(omega)), String(""));
-            
+            l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+            l_end.set(String(""), (2.0*M_PI + ((t[1]).value))*(Re*sin(omega)), String(""));
+
         }
         
         
         
         
         //tabulate the Route points
-        for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
+        for(i=0; i<n_points; i++){
             
             //set the temporarly length across the Route
-            l.set(String(""), (l_tot.value)*((double)i)/((double)(n_points-1)), String(""));
+            l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
             compute_end(String(""));
             
-            
-            if((draw_panel->*(draw_panel->GeoToProjection))(end, &temp)){
+            ((draw_panel->*(draw_panel->GeoToProjection))(end, &temp));
                 
-                if(end_connected){
-                    
-                    x.resize(x.size() + 1);
-                    y.resize(y.size() + 1);
-                    end_connected = false;
-                    
-                }
-                
-                (x[x.size()-1]).push_back(temp.x);
-                (y[y.size()-1]).push_back(temp.y);
-                
-            }else{
-                
-                end_connected = true;
-                
-            }
-            
+            x[i] = (temp.x);
+            y[i] = (temp.y);
+
         }
         
-        //run all the connected components of the tabulated Route and draw each of them in draw_panel
-        for(i=0; i<x.size(); i++){
-            
-            if(((x[i]).size()) > 1){
-                
-                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), /*0x808080*/color, ""));
-                (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (int)(x[i]).size()));
-                if(width != -1){
-                    (draw_panel->spline_layer)->setLineWidth(width);
-                }
-                
-            }
-            
+        //draw the Route in draw_panel
+        
+        (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+        (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+        if(width != -1){
+            (draw_panel->spline_layer)->setLineWidth(width);
         }
         
     }else{
-        //otherwise, the total length is simply written in the l object in this
         
         cout << prefix.value << RED << "Cannot execute draw_3D: the Route is not a circle of equal altitude!\n" << RESET;
         
     }
-    
+
+    //free up memory
+    x.clear();
+    y.clear();
     t.clear();
-    
     
 }
 

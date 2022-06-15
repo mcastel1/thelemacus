@@ -8341,7 +8341,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, /*an intermediate value of the latitude used to draw things in the middle of observer_circle*/phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
+    double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
     Angle lambda_saved, phi_saved;
     Position q;
@@ -8473,7 +8473,7 @@ void DrawPanel::Draw_3D(void){
     
     (phi_start.value) = floor(((plot->phi_min).value)/delta_phi)*delta_phi;
     (phi_end.value) = ((plot->phi_max).value);
-    phi_middle = round(((((plot->phi_min).value)+((plot->phi_max).value))/2.0)/delta_phi) * delta_phi;
+    (phi_middle.value) = round(((((plot->phi_min).value)+((plot->phi_max).value))/2.0)/delta_phi) * delta_phi;
     
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
@@ -8506,7 +8506,7 @@ void DrawPanel::Draw_3D(void){
                 (route.type).set(String(""), String("o"), String(""));
                 (route.alpha).set(String(""), 0.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                ((route.reference_position).phi).set(String(""), phi_middle, String(""));
+                ((route.reference_position).phi) = phi_middle;
                 
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)

@@ -7828,6 +7828,74 @@ void DrawPanel::Render_3D(wxDC&  dc){
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
     
+    
+    //draw labels on the x axis
+    //starts for loop which draws the labels of meridians: labels will be drawn near Position q, and this loop is over the longitude of  q. (q.phi) is set to phi_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
+    for(first_label = true,
+        ((q.lambda).value) = (lambda_start.value),
+        (q.phi) = phi_middle;
+        ((q.lambda).value) < (lambda_end.value);
+        ((q.lambda).value) += delta_lambda
+        ){
+        
+        if((this->*GeoToDrawPanel)(q, &p)){
+            //if Position q lies on the visible side of the Earth, I proceed and draw its label
+            
+            s.str("");
+            (q.lambda).normalize_pm_pi();
+            
+            if(/*If this condition is true, then (q.lambda).value*K is an integer multiple of one degree*/fabs(K*((q.lambda).value)-round(K*((q.lambda).value))) < epsilon_double){
+                //in this case, ((q.lambda).value) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+                s << (q.phi).deg_to_string(String("EW"), display_precision);
+                
+            }else{
+                //in this case, (q.lambda).value*K is not an integer multiple of a degree. However, ((q.phi).value) may still be or not be a multiple integer of a degree
+                
+                if(fabs(K*((q.lambda).value) - ((double)round(K*((q.lambda).value)))) < delta_lambda/2.0){
+                    //in this case, ((q.lambda).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                    
+                    s << (q.lambda).deg_to_string(String("EW"), display_precision);
+                    
+                }else{
+                    //in this case, ((q.lambda).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                    
+                    if(ceil((K*(lambda_end.value)))  - floor((K*(lambda_start.value))) != 1){
+                        //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                        
+                        s << (q.lambda).min_to_string(String("EW"), display_precision);
+                        
+                    }else{
+                        //in this case, the lambda interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                        
+                        if(first_label){
+                            s << (q.lambda).to_string(String("EW"), display_precision, false);
+                        }else{
+                            s << (q.lambda).min_to_string(String("EW"), display_precision);
+                        }
+                        
+                    }
+                    
+                    
+                }
+                
+            }
+            
+            wx_string = wxString(s.str().c_str());
+            
+            //convert q to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
+            (this->*GeoToDrawPanel)(q, &p);
+            p -= wxPoint((GetTextExtent(wx_string).GetWidth())/2, (GetTextExtent(wx_string).GetHeight())+((parent->GetSize()).GetWidth())*length_border_over_length_frame);
+            
+            dc.DrawRotatedText(wx_string, p, 0);
+            
+            first_label = false;
+            
+        }
+        
+    }
+
+    
+    
     //draw labels on the y axis
     //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
     for(first_label = true,

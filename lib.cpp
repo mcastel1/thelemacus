@@ -1292,43 +1292,45 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     if(type == String("c")){
         //if the Route this is a circle of equal altitde, its total length is the length of the circle itself, which reads:
         
-        intersection(draw_panel->circle_observer, &t, String(""));
-        
-        if(((t[1]-t[0]).value) < M_PI){
+        if(intersection(draw_panel->circle_observer, &t, String(""))){
             
-            l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
-            l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-
-        }else{
-            
-            l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-            l_end.set(String(""), (2.0*M_PI + ((t[1]).value))*(Re*sin(omega)), String(""));
-
-        }
-        
-        
-        
-        
-        //tabulate the Route points
-        for(i=0; i<n_points; i++){
-            
-            //set the temporarly length across the Route
-            l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
-            compute_end(String(""));
-            
-            ((draw_panel->*(draw_panel->GeoToProjection))(end, &temp));
+            if(((t[1]-t[0]).value) < M_PI){
                 
-            x[i] = (temp.x);
-            y[i] = (temp.y);
-
-        }
-        
-        //draw the Route in draw_panel
-        
-        (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
-        (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-        if(width != -1){
-            (draw_panel->spline_layer)->setLineWidth(width);
+                l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
+                l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                
+            }else{
+                
+                l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                l_end.set(String(""), (2.0*M_PI + ((t[1]).value))*(Re*sin(omega)), String(""));
+                
+            }
+            
+            
+            
+            
+            //tabulate the Route points
+            for(i=0; i<n_points; i++){
+                
+                //set the temporarly length across the Route
+                l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
+                compute_end(String(""));
+                
+                ((draw_panel->*(draw_panel->GeoToProjection))(end, &temp));
+                
+                x[i] = (temp.x);
+                y[i] = (temp.y);
+                
+            }
+            
+            //draw the Route in draw_panel
+            
+            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+            (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+            if(width != -1){
+                (draw_panel->spline_layer)->setLineWidth(width);
+            }
+            
         }
         
     }else{
@@ -1336,7 +1338,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         cout << prefix.value << RED << "Cannot execute draw_3D: the Route is not a circle of equal altitude!\n" << RESET;
         
     }
-
+    
     //free up memory
     x.clear();
     y.clear();
@@ -7785,7 +7787,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
     
-     
+    
     //draw labels on the y axis
     //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
     for(first_label = true,
@@ -9043,7 +9045,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     if(((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) < M_PI/2.0) &&
        ((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) > -M_PI/2.0)){
         //in this case, circle_observer does not encircle the N/S pole
-   
+        
         (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
         (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
         
@@ -9051,7 +9053,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
         
         if((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) > M_PI/2.0){
             //in this case, circle_observer encircles the N pole
-  
+            
             (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
             (plot->phi_max).set(String(""), M_PI/2.0, String(""));
             
@@ -9066,7 +9068,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
         }
         
     }
-
+    
 }
 
 

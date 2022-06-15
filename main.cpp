@@ -43,7 +43,7 @@
  - include logical condition in Route::intersection on whether the intersection exists
  - transforms all exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
  */
-
+ 
 
 
 wxIMPLEMENT_APP(MyApp);

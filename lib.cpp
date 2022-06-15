@@ -1558,12 +1558,20 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     check &= (!isnan(t_b.value));
     
     if(check){
+        //write t_a, t_b in t by sorting them in ascending order.
         
-        ((*t)[0]).normalize();
-        ((*t)[0]).set(String(""), (t_a.value), new_prefix);
-        ((*t)[1]).normalize();
-        ((*t)[1]).set(String(""), (t_b.value), new_prefix);
-        
+        if(t_a < t_b){
+            
+            ((*t)[0]).set(String(""), (t_a.value), new_prefix);
+            ((*t)[1]).set(String(""), (t_b.value), new_prefix);
+            
+        }else{
+            
+            ((*t)[0]).set(String(""), (t_b.value), new_prefix);
+            ((*t)[1]).set(String(""), (t_b.value), new_prefix);
+            
+        }
+                
     }else{
         
         cout << new_prefix.value << RED << "\tValues of intersections are not valid!\n" << RESET;

@@ -8518,8 +8518,9 @@ void DrawPanel::Draw_3D(void){
                     
                 }
                 
-                (((route.reference_position).lambda).value) = (lambda_saved.value);
                 (route.type).set(String(""), String("c"), String(""));
+                (((route.reference_position).lambda).value) = (lambda_saved.value);
+                ((route.reference_position).phi).set(String(""), 0.0, String(""));
                 
             }
              

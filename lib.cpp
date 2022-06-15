@@ -3735,8 +3735,8 @@ bool Plot::read_from_file(File& file, String prefix){
                     cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
                     
                     //I link the sight to the route, and the route to the sight
-                    ((route_list[route_list.size()-1].related_sight).value) = sight_list.size()-1;
-                    (sight_list[sight_list.size()-1].related_route.value) = route_list.size()-1;
+                    ((route_list[route_list.size()-1].related_sight).value) = ((int)(sight_list.size()))-1;
+                    ((sight_list[sight_list.size()-1].related_route).value) = ((int)(route_list.size()))-1;
                     
                 }
                 
@@ -8493,24 +8493,24 @@ void DrawPanel::Draw_3D(void){
             
             dummy_route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
+            /*
             if(gamma_lambda != 1.0){
                 
-                
-                
-                
-                
-                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                for((lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
-                    (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
-                    (((dummy_route.reference_position).lambda).value) += delta_lambda_minor){
-                    
-                    dummy_route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
-                    
-                }
+                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                 for((lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
+                 (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
+                 (((dummy_route.reference_position).lambda).value) += delta_lambda_minor){
+                 
+                 dummy_route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                 
+                 }
+                 
                 
                 (((dummy_route.reference_position).lambda).value) = (lambda_saved.value);
                 
             }
+             
+             */
             
         }
     

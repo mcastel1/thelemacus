@@ -8454,7 +8454,7 @@ void DrawPanel::Draw_3D(void){
         (((dummy_route.reference_position).lambda).value) += delta_lambda){
             
             
-            dummy_route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this);
+            dummy_route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
             if(gamma_lambda != 1.0){
                 
@@ -8463,7 +8463,7 @@ void DrawPanel::Draw_3D(void){
                     (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((dummy_route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    dummy_route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+                    dummy_route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                     
                 }
                 

@@ -44,7 +44,8 @@
  - transforms all remaining exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
  - now that you draw properly circles of equal altitude only in the visible region, reduce number of poitns for routes later to speed up
  - update Route::draw
- - in Route::draw_3D, code the part for loxodrome and orthodrome curves 
+ - in Route::draw_3D, code the part for loxodrome and orthodrome curves
+ - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection `
  */
  
 

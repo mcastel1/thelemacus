@@ -41,8 +41,10 @@
  - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
  - include logical condition in Route::intersection on whether the intersection exists
- - transforms all exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
+ - transforms all remaining exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
  - now that you draw properly circles of equal altitude only in the visible region, reduce number of poitns for routes later to speed up
+ - update Route::draw
+ - in Route::draw_3D, code the part for loxodrome and orthodrome curves 
  */
  
 

@@ -1312,7 +1312,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             for(i=0; i<n_points; i++){
                 
                 //set the temporarly length across the Route
-                l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)(i+1))/((double)(n_points+1)), String(""));
+                l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
                 compute_end(String(""));
                 
                 if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){

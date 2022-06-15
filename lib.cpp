@@ -8458,6 +8458,10 @@ void DrawPanel::Draw_3D(void){
             
             if(gamma_lambda != 1.0){
                 
+                
+                
+                
+                
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((lambda_saved.value) = (((dummy_route.reference_position).lambda).value);
                     (((dummy_route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;

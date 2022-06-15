@@ -8330,7 +8330,7 @@ void DrawPanel::Draw_Mercator(void){
 //this function draws coastlines, Routes and Positions in the 3D case
 void DrawPanel::Draw_3D(void){
     
-    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
+    double lambda_span, phi_span, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/lambda_start, lambda_end, phi_start, phi_end, /*an intermediate value of the latitude used to draw things in the middle of observer_circle*/phi_middle, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
     Angle lambda_saved, phi_saved;
     Position q;
@@ -8457,13 +8457,13 @@ void DrawPanel::Draw_3D(void){
         else{delta_phi += k*5.0/gamma_phi;}
     }
     
-    //set phi_start/end
+    //set phi_start/end and phi_middle
     (plot->phi_min).normalize_pm_pi();
     (plot->phi_max).normalize_pm_pi();
     
     phi_start = floor(((plot->phi_min).value)/delta_phi)*delta_phi;
     phi_end = ((plot->phi_max).value);
-    phi_middle = (((plot->phi_min).value)+((plot->phi_max).value))/2.0;
+    phi_middle = round(((((plot->phi_min).value)+((plot->phi_max).value))/2.0)/delta_phi) * delta_phi;
     
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
@@ -8499,18 +8499,27 @@ void DrawPanel::Draw_3D(void){
             
             
             if(gamma_lambda != 1.0){
+                //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
-                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                 for((lambda_saved.value) = (((route.reference_position).lambda).value);
-                 (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
-                 (((route.reference_position).lambda).value) += delta_lambda_minor){
-                 
-                 route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
-                 
-                 }
-                 
+                (lambda_saved.value) = (((route.reference_position).lambda).value);
+                
+                (route.type).set(String(""), String("o"), String(""));
+                (route.alpha).set(String(""), 0.0, String(""));
+                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                ((route.reference_position).phi).set(String(""), phi_middle, String(""));
+                
+                
+                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                for((((route.reference_position).lambda).value) = (lambda_saved.value)+M_PI/2.0;
+                (((route.reference_position).lambda).value) - ((lambda_saved.value)+M_PI/2.0) < delta_lambda;
+                (((route.reference_position).lambda).value) += delta_lambda_minor){
+                    
+                    route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    
+                }
                 
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
+                (route.type).set(String(""), String("c"), String(""));
                 
             }
              

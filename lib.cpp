@@ -1300,37 +1300,48 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     unsigned int i;
     vector<double> x, y;
     Projection temp;
-    Length l_start, l_end, l1, l2;
+    Length /*the start and eng length used in the loop to draw *this */l_start, l_end, l1, l2;
     vector<Angle> t(2);
     
     if(type == String("c")){
         //if the Route this is a circle of equal altitde, its total length is the length of the circle itself, which reads:
         
-        if(intersection(draw_panel->circle_observer, &t, String(""))){
+        if(common_area(draw_panel->circle_observer, &t, String(""))){
+            //there is a common area between *this and circle_observer -> some part of *this will lie on the visible part of the earth
             
-            //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
-            l.set(String(""), ((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega)), String(""));
-            compute_end(String(""));
-            ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
-            
-            l.set(String(""), (((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega)), String(""));
-            compute_end(String(""));
-            ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
-            
-            if(l2>l1){
+            if((t[0] == 0.0) && (t[1] == 0.0)){
+                //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                 
-                l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
-                l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-                
-                  
+                l_start.set(String(""), 0.0, String(""));
+                l_end.set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
                 
             }else{
+                //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
                 
-                l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-                l_end.set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
+                
+                //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
+                l.set(String(""), ((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega)), String(""));
+                compute_end(String(""));
+                ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+                
+                l.set(String(""), (((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega)), String(""));
+                compute_end(String(""));
+                ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+                
+                if(l2>l1){
+                    
+                    l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
+                    l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                    
+                }else{
+                    
+                    l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                    l_end.set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
+                    
+                }
                 
             }
-            
+     
             
             
             

@@ -7074,13 +7074,13 @@ void ChartFrame::GetCoastLineData_3D(void){
     (plot->phi_max).normalize();
     
     if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
-        //in this case,Set_lambda_phi_min_max found out that circle_observer spans all latitudes, thus I set
+        //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
         
         j_min = 0;
         j_max = 360;
         
     }else{
-        //in this case, Set_lambda_phi_min_max found out that there are two finite latitudes which encircle circle_observer, thus I set
+        //in this case, Set_lambda_phi_min_max found out that there are two finite longitudes which encircle circle_observer, thus I set
         
         if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
             
@@ -8542,20 +8542,34 @@ void DrawPanel::Draw_3D(void){
     
     
     //set lambda_start, lambda_end and delta_lambda
-    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+        //in this case circle_observer spans all longitudes
         
-        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
-        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+        (lambda_start.value) = 0.0;
+        (lambda_end.value) = 2.0*M_PI;
+        //because in this case lambda_min/max span the whole angle 2 pi and cannot define a range for lambda_span, I set
+        lambda_span = 2.0*((circle_observer.omega).value);
         
     }else{
+        //in this case, there are two finite longitudes which encircle circle_observer
         
-        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        (lambda_end.value) = ((plot->lambda_min).value);
-        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
+        if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+            
+            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
+            lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+            
+        }else{
+            
+            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((plot->lambda_min).value);
+            lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
+            
+        }
         
     }
     
+
     //compute lambda_middle
     (plot->lambda_min).normalize_pm_pi();
     (plot->lambda_max).normalize_pm_pi();

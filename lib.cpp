@@ -7989,34 +7989,36 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
             
             s.str("");
-            (q.phi).normalize_pm_pi();
+            //stores q in a temporary position temp, which will be modifie by the functiosn which act on it in the following lines. In this way, q will not be modified and stay intact
+            temp = q;
+            (temp.phi).normalize_pm_pi();
             
-            if(/*If this condition is true, then (q.phi).value*K is an integer multiple of one degree*/fabs(K*((q.phi).value)-round(K*((q.phi).value))) < epsilon_double){
-                //in this case, ((q.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-                s << (q.phi).deg_to_string(String("NS"), display_precision);
+            if(/*If this condition is true, then (temp.phi).value*K is an integer multiple of one degree*/fabs(K*((temp.phi).value)-round(K*((temp.phi).value))) < epsilon_double){
+                //in this case, ((temp.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+                s << (temp.phi).deg_to_string(String("NS"), display_precision);
                 
             }else{
                 
-                //in this case, delta_phi  is not an integer multiple of a degree. However, ((q.phi).value) may still be or not be a multiple integer of a degree
-                if(fabs(K*((q.phi).value) - ((double)round(K*((q.phi).value)))) < delta_phi/2.0){
-                    //in this case, ((q.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                //in this case, delta_phi  is not an integer multiple of a degree. However, ((temp.phi).value) may still be or not be a multiple integer of a degree
+                if(fabs(K*((temp.phi).value) - ((double)round(K*((temp.phi).value)))) < delta_phi/2.0){
+                    //in this case, ((temp.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                     
-                    s << (q.phi).deg_to_string(String("NS"), display_precision);
+                    s << (temp.phi).deg_to_string(String("NS"), display_precision);
                     
                 }else{
-                    //in this case, ((q.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                    //in this case, ((temp.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                     
                     if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
                         //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                         
-                        s << (q.phi).min_to_string(String("NS"), display_precision);
+                        s << (temp.phi).min_to_string(String("NS"), display_precision);
                     }else{
                         //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                         
                         if(first_label){
-                            s << (q.phi).to_string(String("NS"), display_precision, false);
+                            s << (temp.phi).to_string(String("NS"), display_precision, false);
                         }else{
-                            s << (q.phi).min_to_string(String("NS"), display_precision);
+                            s << (temp.phi).min_to_string(String("NS"), display_precision);
                         }
                         
                     }
@@ -8028,8 +8030,8 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
             wx_string = wxString(s.str().c_str());
             
-            //convert q to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
-            (this->*GeoToDrawPanel)(q, &p);
+            //convert temp to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
+            (this->*GeoToDrawPanel)(temp, &p);
             p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*length_border_over_length_frame);
             
             dc.DrawRotatedText(wx_string, p, 0);

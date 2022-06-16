@@ -5710,9 +5710,9 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
         }else{
             //in this case, reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
             
-            //set lambda_min/max in this order, which is eventually rectified at the end of this function
-            (*lambda_min).set(String(""), ((reference_position.lambda).value)-M_PI/2.0, String(""));
-            (*lambda_max).set(String(""), ((reference_position.lambda).value)+M_PI/2.0, String(""));
+            //set lambda_min/max in this order, meaning that *this spans all longitudes, from 0 to 2 pi
+            (*lambda_min).set(String(""), 0.0, String(""));
+            (*lambda_max).set(String(""), 0.0, String(""));
             
         }
         
@@ -7073,19 +7073,31 @@ void ChartFrame::GetCoastLineData_3D(void){
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
     
-    
-    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+        //in this case,Set_lambda_phi_min_max found out that circle_observer spans all latitudes, thus I set
         
-        j_min = floor(K*((plot->lambda_max).value));
-        j_max = 360 + ceil(K*((plot->lambda_min).value));
+        j_min = 0;
+        j_max = 360;
         
     }else{
+        //in this case, Set_lambda_phi_min_max found out that there are two finite latitudes which encircle circle_observer, thus I set
         
-        j_min = floor(K*((plot->lambda_max).value));
-        j_max = ceil(K*((plot->lambda_min).value));
+        if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+            
+            j_min = floor(K*((plot->lambda_max).value));
+            j_max = 360 + ceil(K*((plot->lambda_min).value));
+            
+        }else{
+            
+            j_min = floor(K*((plot->lambda_max).value));
+            j_max = ceil(K*((plot->lambda_min).value));
+            
+        }
         
     }
+
     
+
     
     //        cout << "i_min/max = \t\t" << i_min << " , " << i_max << "\n";
     //        cout << "j_min/max = \t\t" << j_min << " , " << j_max << "\n";

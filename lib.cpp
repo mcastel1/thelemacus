@@ -8477,12 +8477,10 @@ void DrawPanel::Draw_3D(void){
     
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
-    Angle phi, lambda_saved, phi_saved;
+    Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved;
     Position q;
     Projection temp;
     wxPoint p;
-    //    Projection r;
-    //    Rotation rotation_temp;
     unsigned int n_intervals_ticks;
     
     parent->GetCoastLineData_3D();
@@ -8612,10 +8610,7 @@ void DrawPanel::Draw_3D(void){
     (plot->phi_min).normalize();
     (plot->phi_max).normalize();
     
-    
-   
-    
-    
+ 
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -8628,9 +8623,7 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) < (lambda_end.value) - M_PI/2.0;
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            
             route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
-            
             
             if(gamma_lambda != 1.0){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -8658,8 +8651,6 @@ void DrawPanel::Draw_3D(void){
                 
             }
             
-            
-            
         }
     
     
@@ -8668,26 +8659,21 @@ void DrawPanel::Draw_3D(void){
     (route.type).set(String(""), String("c"), String(""));
     ((route.reference_position).lambda) = lambda_middle;
     
+    //this loop runs over the latitude of the parallel, which we call phi
     for(
         (phi.value) = (phi_start.value);
         (phi.value) < (phi_end.value);
         (phi.value) += delta_phi
         ){
             
-            
+            //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
             (route.omega).set(String(""), M_PI/2.0 - fabs(phi.value), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI/2.0, String(""));
             
-            
-            
-            //            if(cos((route.reference_position).phi) > 0.0){
-            //                (route.l).set(String(""), Re*cos((route.reference_position).phi)*lambda_span, String("\t"));
-            //            }
-            
             route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            
             if(gamma_phi != 1.0){
+                //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
                 (route.type).set(String(""), String("l"), String(""));
                 (route.alpha).set(String(""), M_PI/2.0, String(""));
@@ -8707,7 +8693,6 @@ void DrawPanel::Draw_3D(void){
                 (route.type).set(String(""), String("c"), String(""));
 
             }
-            
             
         }
     

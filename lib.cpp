@@ -8477,7 +8477,7 @@ void DrawPanel::Draw_3D(void){
     
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
-    Angle lambda_saved, phi_saved;
+    Angle phi, lambda_saved, phi_saved;
     Position q;
     Projection temp;
     wxPoint p;
@@ -8667,18 +8667,23 @@ void DrawPanel::Draw_3D(void){
     //set route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
     (route.type).set(String(""), String("c"), String(""));
     ((route.reference_position).lambda) = lambda_middle;
-    ((route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
     
     for(
-        ((route.omega).value) = M_PI/2.0 - (phi_start.value);
-        ((route.omega).value) > M_PI/2.0 - (phi_end.value);
-        ((route.omega).value) -= delta_phi
+        (phi.value) = (phi_start.value);
+        (phi.value) < (phi_end.value);
+        (phi.value) += delta_phi
         ){
+            
+            
+            (route.omega).set(String(""), M_PI/2.0 - fabs(phi.value), String(""));
+            ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI/2.0, String(""));
+            
+            
             
             //            if(cos((route.reference_position).phi) > 0.0){
             //                (route.l).set(String(""), Re*cos((route.reference_position).phi)*lambda_span, String("\t"));
             //            }
-            //
+            
             route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
             
@@ -8690,8 +8695,8 @@ void DrawPanel::Draw_3D(void){
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(
-                    (((route.reference_position).phi).value) = M_PI/2.0 - ((route.omega).value);
-                    (((route.reference_position).phi).value) - (M_PI/2.0 - ((route.omega).value)) < delta_phi;
+                    (((route.reference_position).phi).value) = (phi.value);
+                    (((route.reference_position).phi).value) - (phi.value) < delta_phi;
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
@@ -8700,7 +8705,6 @@ void DrawPanel::Draw_3D(void){
                     }
                 
                 (route.type).set(String(""), String("c"), String(""));
-                ((route.reference_position).phi).set(String(""), M_PI/2.0, String(""));
 
             }
             

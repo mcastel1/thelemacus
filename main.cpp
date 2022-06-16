@@ -47,6 +47,7 @@
  - in Route::draw_3D, code the part for loxodrome and orthodrome curves
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - fix issue that a route is not drawn when it does not touch circle_observer and it is entirelty within it
+ - sometimes some odd meridians appear in the 3d projection
  */
  
 

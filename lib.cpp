@@ -1511,8 +1511,18 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     
 }
 
-//returns true if *this and route are circles of equal altitude and they have a common  area, false othewisse. If true is returnes, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route, it returns 0, 0 in t. 
+//returns true if *this and route are circles of equal altitude and they have a common  area, false othewisse. If true is returnes, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route, it returns 0, 0 in t.
 bool Route::common_area(Route route, vector<Angle> *t, String prefix){
+    
+    if((((*this).type) == String("c")) && ((route.type) == String("c"))){
+        
+        
+    }else{
+        
+        cout << prefix.value << RED << "Cannot compute the common area because routes are not circles of equal altitude!\n" << RESET;
+
+        
+    }
 
 }
 

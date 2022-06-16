@@ -1529,9 +1529,20 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
         if((l.value) < Re*((omega+(route.omega)).value)){
             //the routes have a common area
             
+            if(!(intersection(route, t, new_prefix))){
+                //the routes do no intersect: I write 0, 0 into t
+                
+                ((*t)[0]).set(String(""), 0.0, new_prefix);
+                ((*t)[1]).set(String(""), 0.0, new_prefix);
+                
+            }
+            
+            return true;
             
         }else{
             //the routes don't have a common area
+            
+            return false;
             
         }
         
@@ -1539,6 +1550,8 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
     }else{
         
         cout << prefix.value << RED << "Cannot compute the common area because routes are not circles of equal altitude!\n" << RESET;
+        
+        return false;
 
         
     }

@@ -380,6 +380,21 @@ bool Length::operator>(const Length& r){
     
 }
 
+//evaluates whether Length (*this) is larger than the double r
+bool Length::operator>(const double& r){
+    
+    return((((*this).value) > r));
+    
+}
+
+//evaluates whether Length (*this) is smaller than the double r
+bool Length::operator<(const double& r){
+    
+    return((((*this).value) < r));
+    
+}
+
+
 Length Length::operator+ (const Length& l){
     
     Length s;

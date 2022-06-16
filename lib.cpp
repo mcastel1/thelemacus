@@ -9246,7 +9246,10 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     //set lambda_min/max from circle_observer
     circle_observer.lambda_min_max(&(plot->lambda_min), &(plot->lambda_max), String(""));
     
+    
     //set phi_min/max
+    ((circle_observer.reference_position).phi).normalize_pm_pi();
+
     if(((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) < M_PI/2.0) &&
        ((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) > -M_PI/2.0)){
         //in this case, circle_observer does not encircle the N/S pole
@@ -9274,6 +9277,8 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
         
     }
     
+    ((circle_observer.reference_position).phi).normalize();
+
 }
 
 

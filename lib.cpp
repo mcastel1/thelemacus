@@ -1511,6 +1511,11 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     
 }
 
+//returns true if *this and route are circles of equal altitude and they have a common  area, false othewisse. If true is returnes, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route, it returns 0, 0 in t. 
+bool Route::common_area(Route route, vector<Angle> *t, String prefix){
+
+}
+
 //If *this and route are not circles of equal altitide, it returns false. Othwewise, If *this and route intersect, it writes in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route r and returns true. If *this and rout do not intersect, it returns false.
 bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     

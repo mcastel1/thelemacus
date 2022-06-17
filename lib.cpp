@@ -8733,8 +8733,8 @@ void DrawPanel::Draw_3D(void){
     //set phi_start/end and phi_middle
     (phi_start.value) = floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
     (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
-    (phi_middle.value) = round((((((plot->phi_min).normalize_pm_pi_ret()).value)+(((plot->phi_max).normalize_pm_pi_ret()).value))/2.0)/delta_phi) * delta_phi;
-
+    phi_middle.set(String(""), round((((circle_observer.reference_position).phi).value)/delta_phi) * delta_phi, String(""));
+ 
  
     
     //draw meridians

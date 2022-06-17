@@ -8066,7 +8066,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //draw  labels of parallels
     //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
     if(((plot->phi_min) != -M_PI/2.0) && ((plot->phi_max) != -M_PI/2.0)){
-        
+        //circle_observer does not encicle either of the poles
         
         for(first_label = true,
             ((q.phi).value) = (phi_start.value),
@@ -8083,7 +8083,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     }else{
         
         if((plot->phi_max) == M_PI/2.0){
-            //circle_observer encircles the N pole: I draw labels
+            //circle_observer encircles the N pole
             
             for(first_label = true,
                 ((q.phi).value) = ((plot->phi_min).value),
@@ -8099,7 +8099,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         
         if((plot->phi_min) == -M_PI/2.0){
-            //circle_observer encircles the S pole: I draw labels
+            //circle_observer encircles the S pole
             
             for(first_label = true,
                 ((q.phi).value) = ((plot->phi_max).value),

@@ -1689,7 +1689,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         }else{
             //in this case, *this and route do not intersect
             
-            cout << new_prefix.value << RED << "Routes do not intersect!\n" << RESET;
+//            cout << new_prefix.value << RED << "Routes do not intersect!\n" << RESET;
             
             return false;
             

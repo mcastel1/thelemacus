@@ -7849,7 +7849,7 @@ void DrawPanel::DrawParallelLabel(const Position& q, wxDC&  dc){
 
         s.str("");
         //stores q in a temporary position temp, which will be modifie by the functiosn which act on it in the following lines. In this way, q will not be modified and stay intact
-        temp = q;
+        temp = q; 
         (temp.phi).normalize_pm_pi();
         
         if(/*If this condition is true, then (temp.phi).value*K is an integer multiple of one degree*/fabs(K*((temp.phi).value)-round(K*((temp.phi).value))) < epsilon_double){

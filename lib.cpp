@@ -6598,11 +6598,7 @@ string Angle::deg_to_string(String mode, unsigned int precision){
             
             if(mode == String("NS")){
                 //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
-                
-//                if(value>M_PI){value-=2.0*M_PI;}
-//                output << round(fabs(K*value)) << "°";
-//
-                
+                 
                 if(value < M_PI){
                     
                     if(value < M_PI/2.0){
@@ -6639,6 +6635,10 @@ string Angle::deg_to_string(String mode, unsigned int precision){
                 else{output << " E";}
                 
             }
+            
+        }else{
+            
+            output << "0°";
             
         }
         
@@ -8676,25 +8676,27 @@ void DrawPanel::Draw_3D(void){
     
 
     //compute lambda_middle
-    (plot->lambda_min).normalize_pm_pi();
-    (plot->lambda_max).normalize_pm_pi();
+    lambda_middle.set(String(""), round((((circle_observer.reference_position).lambda).value)/delta_lambda) * delta_lambda, String(""));
     
-    lambda_in.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0), String(""));
-    lambda_out.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0) + M_PI, String(""));
+//    (plot->lambda_min).normalize_pm_pi();
+//    (plot->lambda_max).normalize_pm_pi();
+//
+//    lambda_in.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0), String(""));
+//    lambda_out.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0) + M_PI, String(""));
+//
+//    if(fabs((lambda_in.value) - (((circle_observer.reference_position).lambda).value)) < fabs((lambda_out.value) - (((circle_observer.reference_position).lambda).value))){
+//
+//        (lambda_middle.value) = round((lambda_in.value)/delta_lambda) * delta_lambda;
+//
+//    }else{
+//
+//        (lambda_middle.value) = round((lambda_out.value)/delta_lambda) * delta_lambda;
+//
+//    }
+
     
-    if(fabs((lambda_in.value) - (((circle_observer.reference_position).lambda).value)) < fabs((lambda_out.value) - (((circle_observer.reference_position).lambda).value))){
-
-        (lambda_middle.value) = round((lambda_in.value)/delta_lambda) * delta_lambda;
-
-    }else{
-        
-        (lambda_middle.value) = round((lambda_out.value)/delta_lambda) * delta_lambda;
-
-    }
-
-    
-    (plot->lambda_min).normalize();
-    (plot->lambda_max).normalize();
+//    (plot->lambda_min).normalize();
+//    (plot->lambda_max).normalize();
     
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(lambda_span > k){

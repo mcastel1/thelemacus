@@ -10814,6 +10814,20 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 //this function is called whenever mouse wheel is turned on *this
 void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
+    cout << "Wheel rotation = " << event.GetWheelRotation() << "\n";
+    
+    //    ((parent->slider)->GetValue()) + ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)(event.GetWheelRotation()))/360.0));
+    
+    (parent->slider)->SetValue(
+                               
+                               ((parent->slider)->GetValue()) + ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)(event.GetWheelRotation()))/360.0))
+                               
+                               );
+    
+    wxScrollEvent dummy;
+    
+    parent->OnScroll(dummy);
+    
 }
 
 

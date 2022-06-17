@@ -8077,7 +8077,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     //draw  labels of parallels
     //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
-    if(((plot->phi_min) != -M_PI/2.0) && ((plot->phi_max) != M_PI/2.0)){
+    if(((plot->phi_min) != 3.0*M_PI/2.0) && ((plot->phi_max) != M_PI/2.0)){
         //circle_observer does not encicle either of the poles
         
         for(first_label = true,
@@ -8098,9 +8098,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
             //circle_observer encircles the N pole
             
             for(first_label = true,
-                ((q.phi).value) = ((plot->phi_min).value),
-                (q.lambda).set(String(""), lambda_middle.value, String(""));
-                fabs(((q.phi).value)) > fabs((plot->phi_min).value);
+                (q.lambda).set(String(""), lambda_middle.value, String("")),
+                ((q.phi).value) = (floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi);
+                ((q.phi).value) < ((((circle_observer.reference_position).phi).normalize_pm_pi_ret()).value) + ((circle_observer.omega).value);
                 ((q.phi).value) += delta_phi
                 ){
                 
@@ -8110,13 +8110,13 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
         }
         
-        if((plot->phi_min) == -M_PI/2.0){
+        if((plot->phi_min) == 3.0*M_PI/2.0){
             //circle_observer encircles the S pole
             
             for(first_label = true,
-                ((q.phi).value) = ((plot->phi_max).value),
-                (q.lambda).set(String(""), lambda_middle.value, String(""));
-                fabs(((q.phi).value)) > fabs((plot->phi_max).value);
+                (q.lambda).set(String(""), lambda_middle.value, String("")),
+                ((q.phi).value) = (ceil((((plot->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi);
+                ((q.phi).value) > ((((circle_observer.reference_position).phi).normalize_pm_pi_ret()).value) - ((circle_observer.omega).value);
                 ((q.phi).value) -= delta_phi
                 ){
                 
@@ -9340,7 +9340,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
         if((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) < -M_PI/2.0){
             //in this case, circle_observer encircles the S pole
             
-            (plot->phi_min).set(String(""), -M_PI/2.0, String(""));
+            (plot->phi_min).set(String(""), 3.0*M_PI/2.0, String(""));
             (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
             
         }

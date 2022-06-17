@@ -8678,25 +8678,6 @@ void DrawPanel::Draw_3D(void){
     //compute lambda_middle
     lambda_middle.set(String(""), round((((circle_observer.reference_position).lambda).value)/delta_lambda) * delta_lambda, String(""));
     
-//    (plot->lambda_min).normalize_pm_pi();
-//    (plot->lambda_max).normalize_pm_pi();
-//
-//    lambda_in.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0), String(""));
-//    lambda_out.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0) + M_PI, String(""));
-//
-//    if(fabs((lambda_in.value) - (((circle_observer.reference_position).lambda).value)) < fabs((lambda_out.value) - (((circle_observer.reference_position).lambda).value))){
-//
-//        (lambda_middle.value) = round((lambda_in.value)/delta_lambda) * delta_lambda;
-//
-//    }else{
-//
-//        (lambda_middle.value) = round((lambda_out.value)/delta_lambda) * delta_lambda;
-//
-//    }
-
-    
-//    (plot->lambda_min).normalize();
-//    (plot->lambda_max).normalize();
     
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(lambda_span > k){

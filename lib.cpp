@@ -7825,7 +7825,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
 }
 
-
+//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi
 void DrawPanel::DrawParallelLabel(const Position& q, wxDC&  dc){
     
     wxPoint p;

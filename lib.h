@@ -1453,6 +1453,7 @@ public:
     void OnMouseLeftUpOnDrawPanel(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
+    void OnMouseWheel(wxMouseEvent&);
     void OnChooseProjection(wxCommandEvent&);
 
     

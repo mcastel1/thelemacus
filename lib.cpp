@@ -6592,23 +6592,52 @@ string Angle::deg_to_string(String mode, unsigned int precision){
     }else{
         //in this case, I print out the angle in the format >=-180° and <180°
         
-        if(value>M_PI){value-=2.0*M_PI;}
-        output << round(fabs(K*value)) << "°";
-        
+          
         //I append NS or EW only if the angle is != 0, otherwise it is pointless to add these labels
         if(value != 0.0){
             
             if(mode == String("NS")){
                 //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
                 
-                if(value>0.0){output << " N";}
-                else{output << " S";}
-            }
-            if(mode == String("EW")){
+//                if(value>M_PI){value-=2.0*M_PI;}
+//                output << round(fabs(K*value)) << "°";
+//
+                
+                if(value < M_PI){
+                    
+                    if(value < M_PI/2.0){
+                        
+                        output << round(fabs(K*value)) << "° N";
+                        
+                    }else{
+
+                        output << round(fabs(K*(M_PI-value))) << "° N";
+
+                    }
+                    
+                }else{
+                    
+                    if(value < 3.0*M_PI/2.0){
+                        
+                        output << round(fabs(K*(-M_PI+value))) << "° S";
+                        
+                    }else{
+                        
+                        output << round(fabs(K*(2.0*M_PI-value))) << "° S";
+                        
+                    }
+                    
+                }
+                
+            }else{
                 //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
+                
+                if(value>M_PI){value-=2.0*M_PI;}
+                output << round(fabs(K*value)) << "°";
                 
                 if(value>0.0){output << " W";}
                 else{output << " E";}
+                
             }
             
         }
@@ -7849,7 +7878,7 @@ void DrawPanel::DrawParallelLabel(const Position& q, wxDC&  dc){
 
         s.str("");
         //stores q in a temporary position temp, which will be modifie by the functiosn which act on it in the following lines. In this way, q will not be modified and stay intact
-        temp = q; 
+        temp = q;
         (temp.phi).normalize_pm_pi();
         
         if(/*If this condition is true, then (temp.phi).value*K is an integer multiple of one degree*/fabs(K*((temp.phi).value)-round(K*((temp.phi).value))) < epsilon_double){
@@ -8570,7 +8599,7 @@ void DrawPanel::Draw_3D(void){
     
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
-    Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved;
+    Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved, lambda_in, lambda_out;
     Position q;
     Projection temp;
     wxPoint p;
@@ -8650,7 +8679,19 @@ void DrawPanel::Draw_3D(void){
     (plot->lambda_min).normalize_pm_pi();
     (plot->lambda_max).normalize_pm_pi();
     
-    (lambda_middle.value) = round(((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0)/delta_lambda) * delta_lambda;
+    lambda_in.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0), String(""));
+    lambda_out.set(String(""), ((((plot->lambda_min).value)+((plot->lambda_max).value))/2.0) + M_PI, String(""));
+    
+    if(fabs((lambda_in.value) - (((circle_observer.reference_position).lambda).value)) < fabs((lambda_out.value) - (((circle_observer.reference_position).lambda).value))){
+
+        (lambda_middle.value) = round((lambda_in.value)/delta_lambda) * delta_lambda;
+
+    }else{
+        
+        (lambda_middle.value) = round((lambda_out.value)/delta_lambda) * delta_lambda;
+
+    }
+
     
     (plot->lambda_min).normalize();
     (plot->lambda_max).normalize();

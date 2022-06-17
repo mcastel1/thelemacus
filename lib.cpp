@@ -7065,20 +7065,21 @@ void ChartFrame::GetCoastLineData_3D(void){
     int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
     Projection temp;
     bool check;
+    Angle phi;
     
     //set the latitudes and longitudes which comrpise circle_observer
     (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
     
     
     //set i_min/max, j_min/max
-    (plot->phi_min).normalize_pm_pi();
-    (plot->phi_max).normalize_pm_pi();
+    phi = (plot->phi_min);
+    phi.normalize_pm_pi();
+    i_min = floor(K*(phi.value));
     
-    i_min = floor(K*((plot->phi_min).value));
-    i_max = ceil(K*((plot->phi_max).value));
+    phi = (plot->phi_max);
+    phi.normalize_pm_pi();
+    i_max = ceil(K*(phi.value));
     
-    (plot->phi_min).normalize();
-    (plot->phi_max).normalize();
     
     if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
         //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
@@ -8069,7 +8070,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     //draw  labels of parallels
     //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
-    if(((plot->phi_min) != -M_PI/2.0) && ((plot->phi_max) != -M_PI/2.0)){
+    if(((plot->phi_min) != -M_PI/2.0) && ((plot->phi_max) != M_PI/2.0)){
         //circle_observer does not encicle either of the poles
         
         for(first_label = true,
@@ -8699,16 +8700,16 @@ void DrawPanel::Draw_3D(void){
     }
     
     //set phi_start/end and phi_middle
-    (plot->phi_min).normalize_pm_pi();
-    (plot->phi_max).normalize_pm_pi();
+    phi = (plot->phi_min);
+    phi.normalize_pm_pi();
+    (phi_start.value) = floor((phi.value)/delta_phi)*delta_phi;
+
+    phi = (plot->phi_max);
+    phi.normalize_pm_pi();
+    (phi_end.value) = (phi.value);
     
-    (phi_start.value) = floor(((plot->phi_min).value)/delta_phi)*delta_phi;
-    (phi_end.value) = ((plot->phi_max).value);
     (phi_middle.value) = round(((((plot->phi_min).value)+((plot->phi_max).value))/2.0)/delta_phi) * delta_phi;
-    
-    (plot->phi_min).normalize();
-    (plot->phi_max).normalize();
-    
+
  
     
     //draw meridians

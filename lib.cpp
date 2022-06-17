@@ -6454,11 +6454,23 @@ void Angle::normalize(void){
     
 }
 
-//reports the angle in the interval [-pi, pi)
+//puts the angle in the interval [-pi, pi) and writes the result in *this
 void Angle::normalize_pm_pi(void){
     
     normalize();
     if(value > M_PI){value-=2.0*M_PI;}
+    
+}
+
+//puts the angle in the interval [-pi, pi), it does not alter *this and returns the result
+Angle Angle::normalize_pm_pi_ret(void){
+    
+    Angle temp;
+    
+    temp = (*this);
+    temp.normalize_pm_pi();
+    
+    return temp;
     
 }
 
@@ -7065,20 +7077,15 @@ void ChartFrame::GetCoastLineData_3D(void){
     int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
     Projection temp;
     bool check;
-    Angle phi;
     
     //set the latitudes and longitudes which comrpise circle_observer
     (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
     
     
     //set i_min/max, j_min/max
-    phi = (plot->phi_min);
-    phi.normalize_pm_pi();
-    i_min = floor(K*(phi.value));
     
-    phi = (plot->phi_max);
-    phi.normalize_pm_pi();
-    i_max = ceil(K*(phi.value));
+    i_min = floor(K*(((plot->phi_min).normalize_pm_pi_ret()).value));
+    i_max = ceil(K*(((plot->phi_max).normalize_pm_pi_ret()).value));
     
     
     if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
@@ -8700,15 +8707,9 @@ void DrawPanel::Draw_3D(void){
     }
     
     //set phi_start/end and phi_middle
-    phi = (plot->phi_min);
-    phi.normalize_pm_pi();
-    (phi_start.value) = floor((phi.value)/delta_phi)*delta_phi;
-
-    phi = (plot->phi_max);
-    phi.normalize_pm_pi();
-    (phi_end.value) = (phi.value);
-    
-    (phi_middle.value) = round(((((plot->phi_min).value)+((plot->phi_max).value))/2.0)/delta_phi) * delta_phi;
+    (phi_start.value) = floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
+    (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
+    (phi_middle.value) = round((((((plot->phi_min).normalize_pm_pi_ret()).value)+(((plot->phi_max).normalize_pm_pi_ret()).value))/2.0)/delta_phi) * delta_phi;
 
  
     

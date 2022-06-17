@@ -601,6 +601,7 @@ public:
     double value;
     void normalize(void);
     void normalize_pm_pi(void);
+    Angle normalize_pm_pi_ret(void);
     void enter(String, String);
     void set(String, double, String);
     void print(String, String, ostream&);

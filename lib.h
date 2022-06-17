@@ -615,7 +615,7 @@ public:
 
     Angle();
     Angle(String, double, String);
-    bool operator == (const Angle&), operator == (const double&), operator > (const Angle&), operator < (const Angle&), operator > (const double&), operator < (const double&);
+    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator < (const Angle&), operator > (const double&), operator < (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     
 };
@@ -1442,6 +1442,7 @@ public:
     
     void Render_Mercator(wxDC&);
     void Render_3D(wxDC&);
+    void DrawParallelLabel(const Position&, wxDC&);
 
     bool GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);

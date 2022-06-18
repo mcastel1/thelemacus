@@ -10815,17 +10815,30 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
     cout << "Wheel rotation = " << event.GetWheelRotation() << "\n";
+    int j;
     
-    //    ((parent->slider)->GetValue()) + ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)(event.GetWheelRotation()))/360.0));
+    j = (event.GetWheelRotation());
     
-    (parent->slider)->SetValue(
-                               
-                               ((parent->slider)->GetValue()) + ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)(event.GetWheelRotation()))/360.0))
-                               
-                               );
-    
-    
-    parent->OnScroll<wxMouseEvent>(event);
+    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((parent->zoom_factor_max).value)))){
+        
+        unsigned int i;
+        
+        //set the new value of slider, i,  according to the rotation of the mouse wheel:
+        if(j < 0){
+            
+            i = ((parent->slider)->GetValue()) - ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/360.0));
+            
+        }else{
+            
+            i = ((parent->slider)->GetValue()) - ((int)((-1 + ((parent->slider)->GetValue())) * ((double)j)/360.0));
+            
+        }
+        
+        (parent->slider)->SetValue(i);
+        //call OnScroll to update evrything adter the change of the value of slider
+        parent->OnScroll<wxMouseEvent>(event);
+        
+    }
     
 }
 

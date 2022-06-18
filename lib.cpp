@@ -10824,14 +10824,13 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
                                
                                );
     
-    wxScrollEvent dummy;
     
-    parent->OnScroll(dummy);
+    parent->OnScroll<wxMouseEvent>(event);
     
 }
 
 
-void ChartFrame::OnScroll(wxScrollEvent &event){
+template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     
     
     
@@ -10944,7 +10943,7 @@ void ChartFrame::OnScroll(wxScrollEvent &event){
             (*print_error_message)();
             
             //I reset the chart to its original configuration
-            Reset<wxCommandEvent>(event);
+            Reset<T>(event);
             
         }
         

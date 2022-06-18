@@ -1957,7 +1957,7 @@ public:
     void UpdateSliderLabel_3D(void);
     void OnMouseLeftDownOnSlider(wxMouseEvent&);
     void OnMouseLeftUpOnSlider(wxMouseEvent&);
-    void OnScroll(wxScrollEvent&);
+    template<class T> void OnScroll(T&);
     void OnClose(wxCloseEvent&);
     void SetIdling(bool);
     void AllOk(void);

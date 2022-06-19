@@ -10815,44 +10815,53 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 //this function is called whenever mouse wheel is turned on *this
 void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
-    cout << "Wheel rotation = " << event.GetWheelRotation() << "\n";
-    int j;
+    int i, j;
     
     j = (event.GetWheelRotation());
     
-    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((parent->zoom_factor_max).value)))){
-        
-        unsigned int i;
-        
-        //set the new value of slider, i,  according to the rotation of the mouse wheel:
-        if(j < 0){
-            
-            i = ((parent->slider)->GetValue()) - ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/360.0));
-            
-        }else{
-            
-            i = ((parent->slider)->GetValue()) - ((int)((-1 + ((parent->slider)->GetValue())) * ((double)j)/360.0));
-            
-        }
-        
-        //if i gets out of range, put it back in the correct range
-        if(i<1){
-            i=1;
-        }
-        if(i>((parent->zoom_factor_max).value)){
-            i=((parent->zoom_factor_max).value);
-        }
+    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
+    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
+    //    cout << "Zoom factor max = " << ((parent->zoom_factor_max).value) << "\n";
+    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
+    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
+    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
+    
+    //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((parent->zoom_factor_max).value)))){
+    
+    //        int i;
+    
+    //set the new value of slider, i,  according to the rotation of the mouse wheel:
+//    if(j < 0){
+//
+//        i = ((int)((parent->slider)->GetValue())) - ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
+//
+//    }else{
+//
+//        i = ((int)((parent->slider)->GetValue())) - ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
+//
+//    }
+
+    i =  ((int)((parent->slider)->GetValue())) - j;
+    
+    cout << "Slier value new = " << i << "\n";
+    
+    //if i gets out of range, put it back in the correct range
+    if((i>=1) && (i<=((parent->zoom_factor_max).value))){
         
         if(!(parent->mouse_scrolling)){
             parent->OnMouseLeftDownOnSlider(event);
         }
         (parent->slider)->SetValue(i);
-
+        
         //call OnScroll to update evrything adter the change of the value of slider
         parent->OnScroll(event);
         parent->OnMouseLeftUpOnSlider(event);
         
     }
+    
+    //    }
+    
+    event.Skip(true);
     
 }
 

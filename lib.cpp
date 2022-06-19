@@ -10325,6 +10325,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
         x_max_start_drag = x_max;
         y_min_start_drag = y_min;
         y_max_start_drag = y_max;
+        x_span_start_drag = x_span();
         
     }
     
@@ -10451,7 +10452,7 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
 }
 
 
-void ChartFrame::OnMouseLeftDownOnSlider(wxMouseEvent &event){
+template<class T> void ChartFrame::OnMouseLeftDownOnSlider(T &event){
     
     //mouse scrolling starts
     mouse_scrolling = true;
@@ -10469,7 +10470,7 @@ void ChartFrame::OnMouseLeftDownOnSlider(wxMouseEvent &event){
 
 
 
-void ChartFrame::OnMouseLeftUpOnSlider(wxMouseEvent &event){
+template<class T> void ChartFrame::OnMouseLeftUpOnSlider(T &event){
     
     //mouse scrolling ends
     mouse_scrolling = false;
@@ -10659,14 +10660,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
                         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
                         
-                        if((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))){
+                        if((y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_max_start_drag) < y_mercator(floor_max_lat)) && (y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min_start_drag) > y_mercator(ceil_min_lat))){
                             //in this case, the drag operation does not end out of the min and max latitude contained in the data files
                             
                             //update x_min, ..., y_max according to the drag.
-                            x_min -= delta_x;
-                            x_max -= delta_x;
-                            y_min += delta_y;
-                            y_max += delta_y;
+                            x_min = x_min_start_drag - ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span_start_drag;
+                            x_max = x_max_start_drag - ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span_start_drag;
+                            y_min = y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max_start_drag-y_min_start_drag);
+                            y_max = y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max_start_drag-y_min_start_drag);
                             
                             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                                 (this->*Set_lambda_phi_min_max)();
@@ -10834,9 +10835,22 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
             
         }
         
+        //if i gets out of range, put it back in the correct range
+        if(i<1){
+            i=1;
+        }
+        if(i>((parent->zoom_factor_max).value)){
+            i=((parent->zoom_factor_max).value);
+        }
+        
+        if(!(parent->mouse_scrolling)){
+            parent->OnMouseLeftDownOnSlider(event);
+        }
         (parent->slider)->SetValue(i);
+
         //call OnScroll to update evrything adter the change of the value of slider
-        parent->OnScroll<wxMouseEvent>(event);
+        parent->OnScroll(event);
+        parent->OnMouseLeftUpOnSlider(event);
         
     }
     

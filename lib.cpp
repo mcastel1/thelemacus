@@ -2251,9 +2251,8 @@ void Route::compute_end(String prefix){
 
             (end.lambda).set(String(""), -atan((cos((reference_position.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((reference_position.lambda.value)) * (-cos((l.value)/Re) * cos((reference_position.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((reference_position.phi.value))))/( cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) -  cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value))))), prefix);
             
-            if(cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) - cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value))) < 0.0){(end.lambda.value) += M_PI;}
+            if(cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) - cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value))) < 0.0){(end.lambda) += M_PI;}
             
-            (end.lambda).normalize();
             
             break;
         }
@@ -2315,11 +2314,10 @@ void Route::compute_end(String prefix){
             
             (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value))), prefix);            
             
-            (end.lambda.value) = -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))))));
+            (end.lambda).set(String(""), -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value)))))), prefix);
             if(cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){
-                (end.lambda.value) -= M_PI;
+                (end.lambda) -= M_PI;
             }
-            (end.lambda).normalize();
             
         }
             
@@ -3140,6 +3138,27 @@ Angle& Angle::operator += (const double& x){
     return (*this);
     
 }
+
+Angle& Angle::operator -= (const Angle& angle){
+    
+    
+    value -= (angle.value);
+    normalize();
+    
+    return (*this);
+    
+}
+
+Angle& Angle::operator -= (const double& x){
+    
+    
+    value -= x;
+    normalize();
+    
+    return (*this);
+    
+}
+
 
 
 Angle Angle::operator- (const Angle& angle){

@@ -9957,25 +9957,16 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 //converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p is a valid point which corresponds to a geographic position, and false otherwise.
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
-    double x, z, /*the argument of the square root which apears in the formulas to obtain q: only if arg_sqrt > 0 then the coordinate transformation is well defined*/arg_sqrt;
+    Projection temp;
     
-    //updates the position of the draw pane this
-    position_draw_panel = (this->GetScreenPosition());
-    
-    x = x_min + ((((double)(p.x)) - ((position_draw_panel.x)+(position_plot_area.x)) ) / ((double)width_plot_area))*(x_max-x_min);
-    z = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
-    
-  
-    arg_sqrt = -(gsl_sf_pow_int(x,2)*(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) + 2*(d.value)*(gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)) ));
-    
-    if(arg_sqrt >= 0.0){
+    if(ScreenTo3D(p, &temp)){
         
         if(q!=NULL){
             
-            //here I put the sign of x in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for x<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger x -> I pick the solution with a positive sign in front of the square root through GSL_SIGN(x)
+            //here I put the sign of (temp.x) in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for (temp.x)<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger (temp.x) -> I pick the solution with a positive sign in front of the square root through GSL_SIGN((temp.x))
             //set rp
-            gsl_vector_set(rp, 0, (-GSL_SIGN(x)*sqrt(arg_sqrt) + (d.value)*((d.value) + 1.0)*x)/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2)));
-            gsl_vector_set(rp, 2, (-GSL_SIGN(x)*(sqrt(arg_sqrt)*z) + (d.value)*((d.value) + 1.0)*x*z)/(x*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int(x,2) + gsl_sf_pow_int(z,2))));
+            gsl_vector_set(rp, 0, (-GSL_SIGN((temp.x))*sqrt(arg_sqrt) + (d.value)*((d.value) + 1.0)*(temp.x))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)));
+            gsl_vector_set(rp, 2, (-GSL_SIGN((temp.x))*(sqrt(arg_sqrt)*(temp.y)) + (d.value)*((d.value) + 1.0)*(temp.x)*(temp.y))/((temp.x)*(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2))));
             gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));
             
             //r = (rotation.matrix)^T . rp
@@ -9984,10 +9975,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
             q->set(String(""), r, String(""));
             
         }
-        //        cout << "\n rp = " << xp << " " << yp << " " << zp;
-        //        cout << "\n r = " << x << " " << "/" << " " << z;
-        //        cout << "\nsqrt xxx = " << arg_sqrt;
-        
+               
         return true;
         
     }else{
@@ -10030,7 +10018,6 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  3D projection (x,y)
 bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     
-    double arg_sqrt;
     Projection temp;
     
     //updates the position of the draw pane this

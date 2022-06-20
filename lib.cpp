@@ -2298,11 +2298,9 @@ void Route::compute_end(String prefix){
             
             /* t.print("t", prefix, cout); */
             
-            (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(reference_position.phi.value)) ) );
-            (end.phi).normalize();
+            (end.phi).set(String(""), asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(reference_position.phi.value)) ) ), prefix);
             
-            (end.lambda.value) = (reference_position.lambda.value) + sigma*(t.value);
-            (end.lambda).normalize();
+            (end.lambda).set(String(""), (reference_position.lambda.value) + sigma*(t.value), prefix);
             
             break;
         }
@@ -2315,9 +2313,7 @@ void Route::compute_end(String prefix){
             //R sin omega = r, r t = l, t = l / (R sin omega)
             t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
             
-            (end.phi.value) = M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value)));
-            (end.phi).normalize();
-            
+            (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value))), prefix);            
             
             (end.lambda.value) = -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))))));
             if(cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){

@@ -3121,6 +3121,27 @@ Angle Angle::operator+ (const Angle& angle){
     
 }
 
+Angle& Angle::operator += (const Angle& angle){
+    
+    
+    value += (angle.value);
+    normalize();
+    
+    return (*this);
+    
+}
+
+Angle& Angle::operator += (const double& x){
+    
+    
+    value += x;
+    normalize();
+    
+    return (*this);
+    
+}
+
+
 Angle Angle::operator- (const Angle& angle){
     Angle temp;
     

@@ -10121,37 +10121,28 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p){
     
 }
 
-//this function converts the geographic position q into the  position p with respect to the origin of the mercator draw panel
+//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and it does not write into p. 
 bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
     
     Projection temp;
     
-    (temp.x) = x_mercator(K*((q.lambda).value));
-    (temp.y) = y_mercator(K*((q.phi).value));
-    
-    if(check(temp)){
-        //if the point falls within the plot area, write it into p
+    if(GeoToMercator(q, &temp)){
         
-        if((temp.x) > x_min){
-            //in this case, (temp.x) has not been diminuished due to the  periodicity
+        if(p){
             
             (p->x) = (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area;
-            
-        }else{
-            //in this case, (temp.x) has  been diminuished due to the  periodicity
-            
-            (p->x) = (position_plot_area.x) + ((2.0*M_PI+(temp.x))-x_min)/x_span()*width_plot_area;
-            
+            (p->y) = (position_plot_area.y) + height_plot_area - (((temp.y)-y_min)/(y_max-y_min)*height_plot_area);
+         
         }
-        
-        (p->y) = (position_plot_area.y) + height_plot_area - (((temp.y)-y_min)/(y_max-y_min)*height_plot_area);
         
         return true;
         
     }else{
         
         return false;
+        
     }
+    
     
     
 }

@@ -2247,14 +2247,13 @@ void Route::compute_end(String prefix){
             
             //orthodrome route
             
-            (end.phi.value) = asin(cos((alpha.value)) * cos((reference_position.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((reference_position.phi.value)));
-            (end.phi).normalize();
+            (end.phi).set(String(""), asin(cos((alpha.value)) * cos((reference_position.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((reference_position.phi.value)), prefix);
+            (end.lambda).set(String(""), -atan((cos((reference_position.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((reference_position.lambda.value)) * (-cos((l.value)/Re) * cos((reference_position.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((reference_position.phi.value))))/( cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) -  cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value)))), prefix);
             
-            (end.lambda.value) = -atan((cos((reference_position.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((reference_position.lambda.value)) * (-cos((l.value)/Re) * cos((reference_position.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((reference_position.phi.value))))/( cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) -  cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value)))));
-            
-            if(cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) - cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value))) < 0.0){(end.lambda.value) += M_PI;}
-            
-            (end.lambda).normalize();
+            if(cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) - cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value))) < 0.0){
+                (end.lambda.value) += M_PI;
+                (end.lambda).normalize();
+            }
             
             break;
         }
@@ -2287,23 +2286,20 @@ void Route::compute_end(String prefix){
             if(((alpha.value) != M_PI/2.0) && ((alpha.value) != 3.0*M_PI/2.0)){
                 //this is the general expression of t vs l for alpha != pi/2
                 
-                t.value = -tau*sqrt((1.0-C)/C)
+                (t.value) = -tau*sqrt((1.0-C)/C)
                 * log( 1.0/eta * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(reference_position.phi.value))/(1.0+sin(reference_position.phi.value)))) ) );
                 
             }else{
                 //this is the limit of the expression above in the case alpha -> pi/2
                 
-                t.value = (l.value)*(1.0+gsl_pow_2(eta))/(2.0*Re*eta);
+                (t.value) = (l.value)*(1.0+gsl_pow_2(eta))/(2.0*Re*eta);
                 
             }
             
             /* t.print("t", prefix, cout); */
             
-            (end.phi.value) = asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(reference_position.phi.value)) ) );
-            (end.phi).normalize();
-            
-            (end.lambda.value) = (reference_position.lambda.value) + sigma*(t.value);
-            (end.lambda).normalize();
+            (end.phi).set(String(""), asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(reference_position.phi.value)) ) ), prefix);
+            (end.lambda).set(String(""), (reference_position.lambda.value) + sigma*(t.value), prefix);
             
             break;
         }
@@ -2316,15 +2312,13 @@ void Route::compute_end(String prefix){
             //R sin omega = r, r t = l, t = l / (R sin omega)
             t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
             
-            (end.phi.value) = M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value)));
-            (end.phi).normalize();
+            (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value))), prefix);
             
-            
-            (end.lambda.value) = -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))))));
+            (end.lambda).set(String(""), -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value)))))), prefix);
             if(cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){
                 (end.lambda.value) -= M_PI;
+                (end.lambda).normalize();
             }
-            (end.lambda).normalize();
             
         }
             

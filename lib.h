@@ -1429,6 +1429,7 @@ public:
     void GeoToScreen(Position, wxPoint*);
     bool DrawPanelToGeo(wxPoint, Position*);
     bool ScreenToMercator(wxPoint, Projection*);
+    bool ScreenTo3D(wxPoint, Projection*);
     bool GeoTo3D(Position, Projection*);
     bool GeoToMercator(Position, Projection*);
     bool ScreenToGeo_Mercator(wxPoint, Position*);

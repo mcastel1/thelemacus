@@ -10027,7 +10027,7 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
     
     //I pulled out a factor (temp.x)^2 from arg_sqrt for clarity
-    arg_sqrt = -(/*gsl_sf_pow_int((temp.x),2)**/(gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) + 2*(d.value)*(gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) ));
+    arg_sqrt = -((gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) + 2*(d.value)*(gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) ));
 
     
     if(arg_sqrt >= 0.0){

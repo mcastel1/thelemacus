@@ -1613,9 +1613,15 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     new_prefix = prefix.append(String("\t"));
     
     if((route.type) == String("c")){
+        //route is a circle of equal altitude
+        
+        if((((*this).type == String("o")))){
+            //*this is an orthodrome -> I check whether route and *this intersect
+
+        }
         
         if((((*this).type == String("c")))){
-            //in this case, *this and route are both circles of equal altitude -> I check check whetehr they intersect
+            //*this is a circle of equal altitude -> I check check whetehr *this and route intersect
             
             reference_position.distance(route.reference_position, &d, String(""), new_prefix);
             

@@ -8733,7 +8733,12 @@ void DrawPanel::Draw_3D(void){
     //set phi_start/end and phi_middle
     (phi_start.value) = floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
     (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
+    
     phi_middle.set(String(""), round((((circle_observer.reference_position).phi).value)/delta_phi) * delta_phi, String(""));
+    //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd -> 
+    if((fabs((phi_middle.value)-M_PI/2.0) < epsilon_double) || (fabs((phi_middle.value)- (3.0*M_PI/2.0)) < epsilon_double)){
+        (phi_middle.value) -= GSL_SIGN((phi_middle.normalize_pm_pi_ret()).value) * delta_phi;
+    }
  
  
     

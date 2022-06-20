@@ -1602,7 +1602,7 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
 
 }
 
-//If *this and route are not circles of equal altitide, it returns false. Othwewise, If *this and route intersect, it writes in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route r and returns true. If *this and rout do not intersect, it returns false.
+//If *this and route are not circles of equal altitide, it returns false. Othwewise, If *this and route intersect, it allocates 2 slots in t and it writes in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route r, and returns true. If *this and rout do not intersect, it returns false and does nothing with t
 bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;
@@ -1635,6 +1635,8 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
 //
         if(/*this is the condition that *this and route intersect*/(d > Re*fabs((omega.value)- ((route.omega).value))) && (d < Re*((omega + (route.omega)).value))){
             //in this case, *this and route intersect
+            
+            (*t).resize(2);
             
             t_a.value = atan((8*cos((route.reference_position).phi)*((cos((route.reference_position).phi)*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*sin((((*this).reference_position).phi)) - cos((((*this).reference_position).phi))*sin((route.reference_position).phi))*(cos((((*this).reference_position).phi))*cos((route.reference_position).phi)*cos(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value))*cot(((*this).omega.value)) - cos((route.omega.value))*csc(((*this).omega.value)) + cot(((*this).omega.value))*sin((((*this).reference_position).phi))*sin((route.reference_position).phi)) +
                                                                            abs(sin(((*this).reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position).phi)*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc(((*this).omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position).phi),2)*gsl_sf_pow_int(cos(((*this).reference_position).lambda),2)*gsl_sf_pow_int(cos((route.reference_position).lambda),2)*gsl_sf_pow_int(sin((((*this).reference_position).phi)),2) +
@@ -1782,7 +1784,7 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
             
             //t contains the parametric angle of Route (*this) where (*this) crosses route
             //u contains the parametric angle of Route route where route crosses (*this)
-            vector<Angle> t(2), u(2);
+            vector<Angle> t, u;
             
             cout << prefix.value << "Routes intersect\n";
             

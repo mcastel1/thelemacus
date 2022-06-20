@@ -10121,7 +10121,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p){
     
 }
 
-//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and it does not write into p. 
+//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and it does not write into p.
 bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
     
     Projection temp;

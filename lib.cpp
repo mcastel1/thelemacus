@@ -1302,13 +1302,13 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     
 }
 
-//draws the Route *this into draw_panel, with the Mercator projection
+//draws the Route *this into draw_panel, with the Mercator projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
 void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
 
     
 }
 
-//draws the Route *this into draw_panel, with the 3D projection
+//draws the Route *this into draw_panel, with the 3D projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
 void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
     unsigned int i;

@@ -8599,7 +8599,7 @@ void DrawPanel::Draw_3D(void){
     
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
-    Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved, lambda_in, lambda_out;
+    Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved, alpha_saved, lambda_in, lambda_out;
     Position q;
     Projection temp;
     wxPoint p;
@@ -8739,23 +8739,53 @@ void DrawPanel::Draw_3D(void){
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (route.type).set(String(""), String("c"), String(""));
-    (route.omega).set(String(""), M_PI/2.0, String(""));
-    ((route.reference_position).phi).set(String(""), 0.0, String(""));
+    (route.type).set(String(""), String("o"), String(""));
+    (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+    
+    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+        //in this case circle_observer encircles a pole and thus it spans all longitudes
+        
+        if((plot->phi_max) == M_PI/2.0){
+            //circle_observer encircles the N pole
+            
+            (route.alpha).set(String(""), 0.0, String(""));
+            ((route.reference_position).phi) = (plot->phi_min);
+            
+        }
+        
+        if((plot->phi_min) == 3.0*M_PI/2.0){
+            //circle_observer encircles the S pole
+      
+            (route.alpha).set(String(""), M_PI, String(""));
+            ((route.reference_position).phi) = (plot->phi_max);
+ 
+        }
+        
+    }else{
+        //circle_observer does not encircle any pole and thus it does not span all longitudes
+ 
+        (route.alpha).set(String(""), 0.0, String(""));
+        ((route.reference_position).phi) = (plot->phi_min);
+     
+    }
+    
     
     for(
-        (((route.reference_position).lambda).value) = (lambda_start.value) - M_PI/2.0;
-        (((route.reference_position).lambda).value) < (lambda_end.value) - M_PI/2.0;
+        (((route.reference_position).lambda).value) = (lambda_start.value);
+        (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            //replace this with draw_3D adter you revised draw_3D
+            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             
             if(gamma_lambda != 1.0){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
-                
-                (route.type).set(String(""), String("o"), String(""));
+                phi_saved = ((route.reference_position).phi);
+                alpha_saved = (route.alpha);
+
+//                (route.type).set(String(""), String("o"), String(""));
                 (route.alpha).set(String(""), 0.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 ((route.reference_position).phi) = phi_middle;
@@ -8770,9 +8800,13 @@ void DrawPanel::Draw_3D(void){
                     
                 }
                 
-                (route.type).set(String(""), String("c"), String(""));
+//                (route.type).set(String(""), String("c"), String(""));
+                (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+                (route.alpha) = alpha_saved;
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
-                ((route.reference_position).phi).set(String(""), 0.0, String(""));
+                ((route.reference_position).phi) = phi_saved;
+             
+
                 
             }
             

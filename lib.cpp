@@ -380,10 +380,9 @@ bool Length::operator>(const Length& r){
     
 }
 
-//evaluates whether Length (*this) is smaller than r
-bool Length::operator<(const Length& r){
+bool operator<(const Length& l, const Length& s){
     
-    return((((*this).value) < (r.value)));
+    return((l.value) < (s.value));
     
 }
 
@@ -1660,7 +1659,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
             }
             
-            min_element(s.begin(), s.end());
+            min_element(s.begin(), s.end())->print(String("minimal distance"), String("nm"), prefix, cout);
 
 
         }

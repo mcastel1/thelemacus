@@ -126,10 +126,6 @@ string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
-
-
-
-
 inline double cot(double x){
     
     return 1.0/tan(x);
@@ -555,7 +551,7 @@ public:
     void read_from_file(String, File&, bool, String);
     bool check_valid(String, String);
     string to_string(String, unsigned int);
-    bool operator> (const Length&), operator< (const Length&), operator<= (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
+    bool operator> (const Length&), operator<= (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
     Length operator + (const Length&), operator - (const Length&);
     
 };

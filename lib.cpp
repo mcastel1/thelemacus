@@ -1615,7 +1615,7 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
     
 }
 
-//If *this is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates 2 slots in t and it writes in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route route. If *this and rout do not intersect, it returns false and does nothing with t. 
+//If *this is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates 2 slots in t and it writes in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route route. If *this and rout do not intersect, it returns false and does nothing with t.
 bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;
@@ -1633,7 +1633,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         if((((*this).type == String("o")))){
             //*this is an orthodrome -> I check whether route and *this intersect
             
-            reference_position.distance(route.reference_position, s.data(), String("distance between starting point and GP"), prefix);
+            reference_position.distance(route.reference_position, s.data(), String(""), prefix);
             
             compute_end(prefix);
             end.distance(route.reference_position, (s.data())+1, String("distance between end point and GP"), prefix);
@@ -1659,7 +1659,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
             }
             
-            min_element(s.begin(), s.end())->print(String("minimal distance"), String("nm"), prefix, cout);
+            return((*min_element(s.begin(), s.end())) < Re*(route.omega.value));
             
             
         }

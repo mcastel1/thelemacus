@@ -68,7 +68,8 @@ bool MyApp::OnInit(){
     
     
     //
-    cout << "Intersection = " << ((list_frame->plot->route_list)[0]).intersection(((list_frame->plot->route_list)[1]), NULL, String("****")) << "\n";
+    cout << "Intersection 1-0= " << ((list_frame->plot->route_list)[1]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
+    cout << "Intersection 3-0= " << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
     //
     
     //allocate and show the chart frames

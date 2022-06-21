@@ -2406,7 +2406,7 @@ bool Route::compute_end(Length d, String prefix){
         
     }else{
         
-        cout << prefix.value << RED << "Length is larger than Route length!\n" << RESET;
+        //        cout << prefix.value << RED << "Length is larger than Route length!\n" << RESET;
         
         return false;
         

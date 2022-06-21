@@ -1658,7 +1658,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 end.distance(route.reference_position, &(s.back()), String(""), prefix);
                 
             }
-             
+    
             if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
                 
                 return true;

@@ -69,6 +69,7 @@ bool MyApp::OnInit(){
     
     //
     cout << "Intersection 1-0= " << ((list_frame->plot->route_list)[1]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
+    cout << "Intersection 2-0= " << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
     cout << "Intersection 3-0= " << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
     //
     

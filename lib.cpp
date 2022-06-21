@@ -1636,7 +1636,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             reference_position.distance(route.reference_position, s.data(), String(""), prefix);
             
             compute_end(prefix);
-            end.distance(route.reference_position, (s.data())+1, String("distance between end point and GP"), prefix);
+            end.distance(route.reference_position, (s.data())+1, String(""), prefix);
             
             cos_ts.set(String(""),
                        (cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)))/sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda)) - cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) + cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),2) + gsl_sf_pow_int(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)),2)),
@@ -1647,7 +1647,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             if(compute_end(d, prefix)){
                 
                 s.resize(s.size()+1);
-                end.distance(route.reference_position, &(s.back()), String("extremum distance 1 between end point and GP"), prefix);
+                end.distance(route.reference_position, &(s.back()), String(""), prefix);
                 
             }
             
@@ -1655,11 +1655,19 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             if(compute_end(d, prefix)){
                 
                 s.resize(s.size()+1);
-                end.distance(route.reference_position, &(s.back()), String("extremum distance 2 between end point and GP"), prefix);
+                end.distance(route.reference_position, &(s.back()), String(""), prefix);
                 
             }
             
-            return((*min_element(s.begin(), s.end())) < Re*(route.omega.value));
+            if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
+                
+                return true;
+                
+            }else{
+                
+                return false;
+                
+            }
             
             
         }

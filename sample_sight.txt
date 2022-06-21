@@ -54,7 +54,7 @@
                 longitude = 65° 18.4353'
                 label = Rohaldsgfdhf Dahl
             starting heading = 27° 13.7477'
-            length = 13223.345 nm
+            length = 8111.345 nm
             label = Forno
             Positions in the plot:
 		Position #1:

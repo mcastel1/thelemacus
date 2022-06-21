@@ -380,6 +380,20 @@ bool Length::operator>(const Length& r){
     
 }
 
+//evaluates whether Length (*this) is smaller than r
+bool Length::operator<(const Length& r){
+    
+    return((((*this).value) < (r.value)));
+    
+}
+
+//evaluates whether Length (*this) is <= r
+bool Length::operator<=(const Length& r){
+    
+    return(!((*this) > r));
+    
+}
+
 //evaluates whether Length (*this) is larger than the double r
 bool Length::operator>(const double& r){
     
@@ -1608,6 +1622,8 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     String new_prefix;
     Angle t_a, t_b;
     Length d;
+    vector<Length> s(2);
+    Double cos_ts;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -1617,6 +1633,35 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         
         if((((*this).type == String("o")))){
             //*this is an orthodrome -> I check whether route and *this intersect
+            
+            reference_position.distance(route.reference_position, s.data(), String("distance between starting point and GP"), prefix);
+            
+            compute_end(prefix);
+            end.distance(route.reference_position, (s.data())+1, String("distance between end point and GP"), prefix);
+            
+            cos_ts.set(String(""),
+                      (cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)))/sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda)) - cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) + cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),2) + gsl_sf_pow_int(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)),2)),
+                      prefix
+                       );
+            
+            d.set(String(""), Re*acos(cos_ts.value), prefix);
+            if(compute_end(d, prefix)){
+                
+                s.resize(s.size()+1);
+                end.distance(route.reference_position, &(s.back()), String("extremum distance 1 between end point and GP"), prefix);
+                
+            }
+            
+            d.set(String(""), Re*(M_PI-acos(cos_ts.value)), prefix);
+            if(compute_end(d, prefix)){
+                
+                s.resize(s.size()+1);
+                end.distance(route.reference_position, &(s.back()), String("extremum distance 2 between end point and GP"), prefix);
+                
+            }
+            
+            min_element(s.begin(), s.end());
+
 
         }
         
@@ -2241,7 +2286,7 @@ void Position::read_from_file(File& file, String prefix){
 }
 
  
-//returns a position on the Route at length l along the Route from start
+//writes into this->end the position on the Route at length this->l along the Route from start
 void Route::compute_end(String prefix){
     
     //picks the first (and only) character in string type.value
@@ -2333,6 +2378,31 @@ void Route::compute_end(String prefix){
     (end.label.value) = "";
     
 }
+
+//This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
+bool Route::compute_end(Length d, String prefix){
+    
+    if(d<=l){
+        
+        Length l_saved;
+        
+        l_saved = l;
+        l = d;
+        compute_end(prefix);
+        l = l_saved;
+        
+        return true;
+        
+    }else{
+        
+        cout << prefix.value << RED << "Length is larger than Route length!\n" << RESET;
+        
+        return false;
+        
+    }
+    
+}
+ 
 
 
 bool Body::operator==(const Body& body){

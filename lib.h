@@ -555,7 +555,7 @@ public:
     void read_from_file(String, File&, bool, String);
     bool check_valid(String, String);
     string to_string(String, unsigned int);
-    bool operator> (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
+    bool operator> (const Length&), operator< (const Length&), operator<= (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
     Length operator + (const Length&), operator - (const Length&);
     
 };
@@ -738,6 +738,7 @@ public:
     void print(String, String, ostream&);
     void read_from_file(File&, String);
     void compute_end(String);
+    bool compute_end(Length, String);
     bool crossing(Route, vector<Position>*, double*, String);
     void transport(String);
     static double lambda_minus_pi(double, void*);

@@ -1697,10 +1697,12 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
                 if(t){
                     
+                    unsigned int i;
                     Double a, b, square_root, cos_t_p, cos_t_m;
                     Length temp;
                     
                     t->clear();
+                    s.clear();
                     
                     
                     a.set(String(""),
@@ -1721,7 +1723,10 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*acos(cos_t_p)), prefix)){
                         
                         t->resize((t->size())+1);
-                        end.distance(route.reference_position, &temp, String(""), prefix);
+                        s.resize(s.size()+1);
+
+                        end.distance(route.reference_position, &(s.back()), String("distance 1.1"), prefix);
+                        
                         (t->back()).set(String(""), (temp.value)/Re, prefix);
                         
                         end.print(String("crossing Position 1.1"), String("\t"), cout);
@@ -1729,7 +1734,9 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                             
                             t->resize((t->size())+1);
-                            end.distance(route.reference_position, &temp, String(""), prefix);
+                            s.resize(s.size()+1);
+                            
+                            end.distance(route.reference_position, &(s.back()), String("distance 1.2"), prefix);
                             (t->back()).set(String(""), (temp.value)/Re, prefix);
                             
                             end.print(String("crossing Position 1.2"), String("\t"), cout);
@@ -1741,7 +1748,9 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*acos(cos_t_m)), prefix)){
                         
                         t->resize((t->size())+1);
-                        end.distance(route.reference_position, &temp, String(""), prefix);
+                        s.resize(s.size()+1);
+
+                        end.distance(route.reference_position, &(s.back()), String("distance 2.1"), prefix);
                         (t->back()).set(String(""), (temp.value)/Re, prefix);
                         
                         end.print(String("crossing Position 2.1"), String("\t"), cout);
@@ -1749,7 +1758,9 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                             
                             t->resize((t->size())+1);
-                            end.distance(route.reference_position, &temp, String(""), prefix);
+                            s.resize(s.size()+1);
+
+                            end.distance(route.reference_position, &(s.back()), String("distance 2.2"), prefix);
                             (t->back()).set(String(""), (temp.value)/Re, prefix);
                             
                             end.print(String("crossing Position 2.2"), String("\t"), cout);
@@ -1757,6 +1768,12 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         }
                         
                     }
+                    
+                    for(i=0; i<s.size(); i++){
+                        s[i] = fabs((s[i] - Re*(route.omega.value)).value);
+                    }
+                    
+                    sort(s.begin(), s.end());
                     
                 }
                 
@@ -2411,7 +2428,7 @@ void Route::compute_end(String prefix){
             
             t.set(String(""), (l.value)/Re, prefix);
             
-            (end.phi).set(String(""), asin(cos(alpha) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);            
+            (end.phi).set(String(""), asin(cos(alpha) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
             (end.lambda).set(String(""),
                              -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) +  sin(t) * (sin(alpha) * sin(reference_position.lambda) -  cos(alpha) * cos(reference_position.lambda) * sin(reference_position.phi))
                                    ,

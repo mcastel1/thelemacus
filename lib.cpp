@@ -1643,7 +1643,7 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
     
 }
 
-//If *this is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates 2 slots in t and it writes in t the two values of the parametric angles t for circle of equal altitude (*this), at which (*this) crosses Route route. If *this and rout do not intersect, it returns false and does nothing with t.
+//If *this is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates t and it writes in t the  values of the parametric angles t of (*this), at which (*this) crosses route. If *this and route do not intersect, it returns false and does nothing with t.
 bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;
@@ -1690,57 +1690,63 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 end.distance(route.reference_position, &(s.back()), String(""), prefix);
                 
             }
-    
+            
             //obtain the minimum distance across cases 1, 2 and 3 and chekwhetehr it is smaller than Re * apertur angle of route
             if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
-
-                Double a, b, square_root, cos_t_p, cos_t_m;
-                s.clear();
                 
-                //this is the value of cos(l/Re) such that the distance between end(l)  and route.reference_position equals Re*(route.omega), i.e., it is the value of cos(l/Re) such that end(l) lies on route.
-                
-                a.set(String(""),
-                      -(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi))) - sin((reference_position.phi))*sin(((route.reference_position).phi)),
-                      prefix);
-                
-                b.set(String(""),
-                      -(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) - cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),
-                      prefix);
-                
-                
-                square_root.set(String(""), sqrt(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2) - gsl_sf_pow_int(cos(route.omega),2)), String(""));
-                
-                cos_t_p.set(String(""), (-((a.value)*cos(route.omega)) + (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
-                cos_t_m.set(String(""), (-((a.value)*cos(route.omega)) - (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
-                
-                if(compute_end(Length(Re*acos(cos_t_p)), prefix)){
+                if(t){
                     
-                    s.resize(s.size()+1);
-                    end.distance(route.reference_position, &(s.back()), String(""), prefix);
-                    (s.back()) -= Re*((route.omega).value);
+                    Double a, b, square_root, cos_t_p, cos_t_m;
+                    Length temp;
                     
-                    if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
+                    t->clear();
+                    
+                    
+                    a.set(String(""),
+                          -(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi))) - sin((reference_position.phi))*sin(((route.reference_position).phi)),
+                          prefix);
+                    
+                    b.set(String(""),
+                          -(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) - cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),
+                          prefix);
+                    
+                    
+                    square_root.set(String(""), sqrt(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2) - gsl_sf_pow_int(cos(route.omega),2)), String(""));
+                    
+                    //these are the values of cos(t) such that the distance between this->end at t  and route.reference_position equals Re*(route.omega), i.e., it is the value of cos(t) such that end(t) lies on route. There are two of them.
+                    cos_t_p.set(String(""), (-((a.value)*cos(route.omega)) + (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
+                    cos_t_m.set(String(""), (-((a.value)*cos(route.omega)) - (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
+                    
+                    if(compute_end(Length(Re*acos(cos_t_p)), prefix)){
                         
-                        s.resize(s.size()+1);
-                        end.distance(route.reference_position, &(s.back()), String(""), prefix);
-                        (s.back()) -= Re*((route.omega).value);
+                        t->resize((t->size())+1);
+                        end.distance(route.reference_position, &temp, String(""), prefix);
+                        (t->back()).set(String(""), (temp.value)/Re, prefix);
+                        
+                        if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
+                            
+                            t->resize((t->size())+1);
+                            end.distance(route.reference_position, &temp, String(""), prefix);
+                            (t->back()).set(String(""), (temp.value)/Re, prefix);
+
+                        }
                         
                     }
                     
-                }
-                
-                if(compute_end(Length(Re*acos(cos_t_m)), prefix)){
-                    
-                    s.resize(s.size()+1);
-                    end.distance(route.reference_position, &(s.back()), String(""), prefix);
-                    (s.back()) -= Re*((route.omega).value);
-                    
-                    if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
+                    if(compute_end(Length(Re*acos(cos_t_m)), prefix)){
                         
-                        s.resize(s.size()+1);
-                        end.distance(route.reference_position, &(s.back()), String(""), prefix);
-                        (s.back()) -= Re*((route.omega).value);
+                        t->resize((t->size())+1);
+                        end.distance(route.reference_position, &temp, String(""), prefix);
+                        (t->back()).set(String(""), (temp.value)/Re, prefix);
+
+                        if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
+                            
+                            t->resize((t->size())+1);
+                            end.distance(route.reference_position, &temp, String(""), prefix);
+                            (t->back()).set(String(""), (temp.value)/Re, prefix);
+
+                        }
                         
                     }
                     

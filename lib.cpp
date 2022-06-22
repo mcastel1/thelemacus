@@ -2411,14 +2411,12 @@ void Route::compute_end(String prefix){
             
             t.set(String(""), (l.value)/Re, prefix);
             
-            (end.phi).set(String(""), asin(cos(alpha) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
-            
+            (end.phi).set(String(""), asin(cos(alpha) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);            
             (end.lambda).set(String(""),
-                             
                              -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) +  sin(t) * (sin(alpha) * sin(reference_position.lambda) -  cos(alpha) * cos(reference_position.lambda) * sin(reference_position.phi))
                                    ,
                                    (cos(reference_position.lambda) * sin(t) * sin(alpha) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) +  cos(alpha) * sin(t) * sin(reference_position.phi)))),
-                             prefix);           
+                             prefix);
             
             break;
         }

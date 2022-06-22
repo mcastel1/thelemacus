@@ -34,7 +34,7 @@
  - add margins in ChartFrame
  - add ft unit for lengths
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
-   - check all times that GeoTo3D is called to see whether they are compatible with the new modification
+ - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
  - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
@@ -44,7 +44,7 @@
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - fix issue that a route is not drawn when it does not touch circle_observer and it is entirelty within it 
  */
- 
+
 
 
 wxIMPLEMENT_APP(MyApp);
@@ -71,10 +71,10 @@ bool MyApp::OnInit(){
     cout << "Intersection 1-0= " << ((list_frame->plot->route_list)[1]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
     cout << "Intersection 2-0= " << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
     cout << "Intersection 3-0= " << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[0]), NULL, String("****")) << "\n";
-  
+    
     cout << "Intersection 2-1= " << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[1]), NULL, String("****")) << "\n";
     cout << "Intersection 3-1= " << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[1]), NULL, String("****")) << "\n";
-//
+    //
     
     //allocate and show the chart frames
     n_chart_frames.read_from_file(String("number chart frames"), String(path_file_init), String(""));

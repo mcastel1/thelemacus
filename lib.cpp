@@ -477,14 +477,14 @@ void Speed::enter(String name, String prefix){
 }
 
 
-
+//default constructor, which sets value to an empty string by default
 String::String(){
     
     value = "";
     
 }
 
-
+//constructor which sets value to s
 String::String(string s){
     
     value = s;
@@ -6129,6 +6129,21 @@ bool Sight::compute_DH_refraction(String prefix){
     return check;
     
 }
+
+//default constructor, which sets value to 0.0 by default
+Length::Length(){
+    
+    value = 0.0;
+    
+}
+
+//constructor which sets value to x
+Length::Length(double x){
+    
+    value = x;
+    
+}
+
 
 void Length::set(String name, double x, String prefix){
     

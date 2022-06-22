@@ -545,6 +545,9 @@ class Length{
 public:
     double value;
     
+    Length();
+    Length(double);
+    
     void set(String, double, String);
     void enter(String, String, String);
     void print(String, String, String, ostream&);

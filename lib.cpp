@@ -1660,11 +1660,14 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             }
     
             if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
+                //in this case, *this and route intersect
+
                 
                 return true;
                 
             }else{
-                
+                //in this case, *this and route do not intersect
+
                 return false;
                 
             }

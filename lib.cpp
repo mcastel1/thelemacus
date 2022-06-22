@@ -1666,7 +1666,24 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
 
+                Double A, B, square_root, cos_t_p, cos_t_m;
                 
+                //this is the value of cos(l/Re) such that the distance between end(l)  and route.reference_position equals Re*(route.omega), i.e., it is the value of cos(l/Re) such that end(l) lies on route.
+                
+                A.set(String(""),
+                      -(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi))) - sin((reference_position.phi))*sin(((route.reference_position).phi)),
+                      prefix);
+                
+                B.set(String(""),
+                      -(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) - cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),
+                      prefix);
+                
+                
+                square_root.set(String(""), sqrt(gsl_sf_pow_int((A.value),2) + gsl_sf_pow_int((B.value),2) - gsl_sf_pow_int(cos(route.omega),2)), String(""));
+                
+                cos_t_p.set(String(""), (-((A.value)*cos(route.omega)) + (square_root.value)*fabs((B.value)))/(gsl_sf_pow_int((A.value),2) + gsl_sf_pow_int((B.value),2)), prefix);
+                cos_t_m.set(String(""), (-((A.value)*cos(route.omega)) - (square_root.value)*fabs((B.value)))/(gsl_sf_pow_int((A.value),2) + gsl_sf_pow_int((B.value),2)), prefix);
+    
                 return true;
                 
             }else{

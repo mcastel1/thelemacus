@@ -1770,7 +1770,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     }
                     
                     for(i=0; i<s.size(); i++){
-                        s[i] = fabs((s[i] - Re*(route.omega.value)).value);
+                        s[i] = fabs((s[i] - (Re*((route.omega).value))).value);
                     }
                     
                     sort(s.begin(), s.end());

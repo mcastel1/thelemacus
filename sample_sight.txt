@@ -51,7 +51,7 @@
             type = o
             start position:
                 latitude = 342° 20.1005'
-                longitude = 35° 18.4353'
+                longitude = 55° 18.4353'
                 label = My favorite british author
             starting heading = 64° 14.7477'
             length = 8111.345 nm

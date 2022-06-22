@@ -1724,11 +1724,15 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         end.distance(route.reference_position, &temp, String(""), prefix);
                         (t->back()).set(String(""), (temp.value)/Re, prefix);
                         
+                        end.print(String("crossing Position 1.1"), String("\t"), cout);
+                        
                         if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                             
                             t->resize((t->size())+1);
                             end.distance(route.reference_position, &temp, String(""), prefix);
                             (t->back()).set(String(""), (temp.value)/Re, prefix);
+                            
+                            end.print(String("crossing Position 1.2"), String("\t"), cout);
 
                         }
                         
@@ -1739,12 +1743,16 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         t->resize((t->size())+1);
                         end.distance(route.reference_position, &temp, String(""), prefix);
                         (t->back()).set(String(""), (temp.value)/Re, prefix);
+                        
+                        end.print(String("crossing Position 2.1"), String("\t"), cout);
 
                         if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                             
                             t->resize((t->size())+1);
                             end.distance(route.reference_position, &temp, String(""), prefix);
                             (t->back()).set(String(""), (temp.value)/Re, prefix);
+                            
+                            end.print(String("crossing Position 2.2"), String("\t"), cout);
 
                         }
                         

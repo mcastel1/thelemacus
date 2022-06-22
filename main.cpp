@@ -70,12 +70,11 @@ bool MyApp::OnInit(){
     //
     vector<Angle> t;
     
-    cout << "Intersection 1-0= " << ((list_frame->plot->route_list)[1]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
-    cout << "Intersection 2-0= " << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
-    cout << "Intersection 3-0= " << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
-    
-    cout << "Intersection 2-1= " << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[1]), &t, String("****")) << "\n";
-    cout << "Intersection 3-1= " << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[1]), &t, String("****")) << "\n";
+    cout << "Intersection 1-0:\n" << ((list_frame->plot->route_list)[1]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
+    cout << "Intersection 2-0:\n" << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
+    cout << "Intersection 3-0:\n" << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
+    cout << "Intersection 2-1:\n" << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[1]), &t, String("****")) << "\n";
+    cout << "Intersection 3-1:\n" << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[1]), &t, String("****")) << "\n";
     
     
     //

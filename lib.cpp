@@ -1720,10 +1720,14 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     cos_t_p.set(String(""), (-((a.value)*cos(route.omega)) + (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
                     cos_t_m.set(String(""), (-((a.value)*cos(route.omega)) - (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
                     
-                    if(compute_end(Length(Re*acos(cos_t_p)), prefix)){
+                    
+                    
+                    if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
                         
                         t->resize((t->size())+1);
                         s.resize(s.size()+1);
+                        
+                        cout << "check 1 = " << -((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) << "\n";
 
                         end.distance(route.reference_position, &(s.back()), String("distance 1.1"), prefix);
                         
@@ -1745,10 +1749,13 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         
                     }
                     
-                    if(compute_end(Length(Re*acos(cos_t_m)), prefix)){
+                    if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
                         
                         t->resize((t->size())+1);
                         s.resize(s.size()+1);
+                        
+                        cout << "check 2 = " << -((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) << "\n";
+
 
                         end.distance(route.reference_position, &(s.back()), String("distance 2.1"), prefix);
                         (t->back()).set(String(""), (temp.value)/Re, prefix);
@@ -1767,7 +1774,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
 
                         }
                         
-                    } 
+                    }
                     
                     for(i=0; i<s.size(); i++){
                         s[i] = fabs(((s[i]).value) - (Re*((route.omega).value)));

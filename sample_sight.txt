@@ -50,10 +50,10 @@
         Route #1:
             type = o
             start position:
-                latitude = 6° 20.1005'
-                longitude = 65° 18.4353'
+                latitude = 12° 20.1005'
+                longitude = 35° 18.4353'
                 label = Rohaldsgfdhf Dahl
-            starting heading = 27° 13.7477'
+            starting heading = 34° 14.7477'
             length = 8111.345 nm
             label = Forno
             Positions in the plot:

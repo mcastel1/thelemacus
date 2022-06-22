@@ -1643,7 +1643,7 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
     
 }
 
-//If *this is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates t and it writes in t the  values of the parametric angles t of (*this), at which (*this) crosses route. If *this and route do not intersect, it returns false and does nothing with t.
+//If *this is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates t and it writes in t the  values of the parametric angles t of (*this), at which (*this) crosses route. If *this and route do not intersect, it returns false and does nothing with t. 
 bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;

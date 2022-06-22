@@ -1664,7 +1664,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
             //obtain the minimum distance across cases 1, 2 and 3 and chekwhetehr it is smaller than Re * apertur angle of route
             if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
-                //in this case, *this and route intersect
+                //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
 
                 
                 return true;

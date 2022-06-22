@@ -2407,14 +2407,18 @@ void Route::compute_end(String prefix){
         {
             
             //orthodrome route
+            Angle t;
             
-
-            (end.phi).set(String(""), asin(cos((alpha.value)) * cos((reference_position.phi.value)) * sin((l.value)/Re) + cos((l.value)/Re) * sin((reference_position.phi.value))), prefix);
-
-            (end.lambda).set(String(""), -atan((cos((reference_position.lambda.value)) * sin((l.value)/Re) * sin((alpha.value)) + sin((reference_position.lambda.value)) * (-cos((l.value)/Re) * cos((reference_position.phi.value)) +  cos((alpha.value)) * sin((l.value)/Re) * sin((reference_position.phi.value))))/( cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) +  sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) -  cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value))))), prefix);
+            t.set(String(""), (l.value)/Re, prefix);
             
-            if(cos((l.value)/Re) * cos((reference_position.lambda.value)) * cos((reference_position.phi.value)) + sin((l.value)/Re) * (sin((alpha.value)) * sin((reference_position.lambda.value)) - cos((alpha.value)) * cos((reference_position.lambda.value)) * sin((reference_position.phi.value))) < 0.0){(end.lambda) += M_PI;}
+            (end.phi).set(String(""), asin(cos(alpha) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
             
+            (end.lambda).set(String(""),
+                             
+                             -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) +  sin(t) * (sin(alpha) * sin(reference_position.lambda) -  cos(alpha) * cos(reference_position.lambda) * sin(reference_position.phi))
+                                   ,
+                                   (cos(reference_position.lambda) * sin(t) * sin(alpha) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) +  cos(alpha) * sin(t) * sin(reference_position.phi)))),
+                             prefix);           
             
             break;
         }

@@ -6,11 +6,24 @@ inline double sin(Angle x){
     
 }
 
+inline double asin(Double x){
+    
+    return asin(x.value);
+    
+}
+
 inline double cos(Angle x){
     
     return cos(x.value);
     
 }
+
+inline double acos(Double x){
+    
+    return acos(x.value);
+    
+}
+
 
 bool String::operator==(const String& s){
     
@@ -1683,7 +1696,21 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
                 cos_t_p.set(String(""), (-((a.value)*cos(route.omega)) + (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
                 cos_t_m.set(String(""), (-((a.value)*cos(route.omega)) - (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
+                
+                if(Re*acos(cos_t_p) < l){
+                    
+                }
+                if(Re*(2.0*M_PI-acos(cos_t_p)) < l){
+                    
+                }
+                if(Re*acos(cos_t_m) < l){
+                    
+                }
+                if(Re*(2.0*M_PI-acos(cos_t_m)) < l){
+                    
+                }
     
+        
                 return true;
                 
             }else{

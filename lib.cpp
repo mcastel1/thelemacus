@@ -1631,8 +1631,9 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         //route is a circle of equal altitude
         
         if((((*this).type == String("o")))){
-            //*this is an orthodrome -> I check whether route and *this intersect
+            //*this is an orthodrome -> I check whether route and *this intersect: I compute the minimal distance between a point on *this and the GP (reference position) of route. I do this by checking the distance at the two extrema (at the beginning and at the end of *this), and by looking for an extremum in the middle of *this
             
+            //case 1: the beinning of this
             reference_position.distance(route.reference_position, s.data(), String(""), prefix);
             
             compute_end(prefix);
@@ -1643,6 +1644,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                        prefix
                        );
             
+            //case 2: an extremum in the middle of this
             d.set(String(""), Re*acos(cos_ts.value), prefix);
             if(compute_end(d, prefix)){
                 
@@ -1651,6 +1653,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
             }
             
+            //case 3: the end of *this
             d.set(String(""), Re*(M_PI-acos(cos_ts.value)), prefix);
             if(compute_end(d, prefix)){
                 
@@ -1659,6 +1662,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
             }
     
+            //obtain the minimum distance across cases 1, 2 and 3 and chekwhetehr it is smaller than Re * apertur angle of route
             if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
                 //in this case, *this and route intersect
 

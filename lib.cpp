@@ -385,6 +385,21 @@ bool Length::operator!=(const Length& length){
     
 }
 
+Length& Length::operator+= (const Length& length){
+    
+    value += (length.value);
+    
+    return (*this);
+    
+}
+
+Length& Length::operator-= (const Length& length){
+    
+    value -= (length.value);
+    
+    return (*this);
+    
+}
 
 //evaluates whether Length (*this) is larger than r
 bool Length::operator>(const Length& r){

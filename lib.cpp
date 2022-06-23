@@ -1299,10 +1299,7 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
         
-        //set the temporarly length across the Route
-        l.set(String(""), (l_tot.value)*((double)i)/((double)(n_points-1)), String(""));
-        compute_end(String(""));
-        
+        compute_end(Length((l_tot.value)*((double)i)/((double)(n_points-1))), String(""));
         
         if((draw_panel->*(draw_panel->GeoToProjection))(end, &temp)){
             
@@ -1603,13 +1600,11 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
                 , new_prefix);
         
         //determine which one between the point on (*this) at t_1 and the one at t_2 is the one with minimum distance with respect to q, and store this point into (*p)
-        l.set(String(""), (t_1.value)*Re*sin(omega.value), new_prefix);
-        compute_end(new_prefix);
+        compute_end(Length((t_1.value)*Re*sin(omega.value)), new_prefix);
         p_1 = end;
         q.distance(p_1, &s_1, String("Distance with respect to p_1"), new_prefix);
         
-        l.set(String(""), (t_2.value)*Re*sin(omega.value), new_prefix);
-        compute_end(new_prefix);
+        compute_end(Length((t_2.value)*Re*sin(omega.value)), new_prefix);
         p_2 = end;
         q.distance(p_2, &s_2, String("Distance with respect to p_2"), new_prefix);
         
@@ -2077,18 +2072,15 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
             (*this).intersection(route, &t, new_prefix);
             route.intersection((*this), &u, new_prefix);
             
-            ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[0]).value), prefix);
-            (*this).compute_end(new_prefix);
+            (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), new_prefix);
             (*p)[0] = ((*this).end);
             ((*p)[0]).label.set(String(""), String("crossing"), prefix);
             
-            ((*this).l).set(String(""), Re * sin((*this).omega.value) * ((t[1]).value), prefix);
-            (*this).compute_end(new_prefix);
+            (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[1]).value)), new_prefix);
             (*p)[1] = ((*this).end);
             ((*p)[1]).label.set(String(""), String("crossing"), prefix);
             
-            (route.l).set(String("l of intersection"), Re * sin(route.omega.value) * ((u[0]).value), prefix);
-            route.compute_end(prefix);
+            route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
             
             check &= ((*p)[0]).distance(route.end, &r, String(""), prefix);
             check &= ((*p)[1]).distance(route.end, &s, String(""), prefix);
@@ -2105,12 +2097,10 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
                     
                 }
                 
-                ((*this).l).set(String("l of intersection 1 for Route 1"), Re * sin((*this).omega.value) * ((t[0]).value), prefix);
-                (*this).compute_end(prefix);
+                (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), prefix);
                 ((*this).end).print(String("position of intersection 1 for Route 1"), prefix, cout);
                 
-                (route.l).set(String("l of intersection 1 for Route 2"), Re * sin(route.omega.value) * ((u[0]).value), prefix);
-                route.compute_end(prefix);
+                route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
                 (route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);
                 
                 (*cos_crossing_angle) = cos((((*this).reference_position).phi))*cos((route.reference_position).phi)*sin(t[0])*sin(u[0]) + (cos(t[0])*sin(((*this).reference_position).lambda) - cos(((*this).reference_position).lambda)*sin((((*this).reference_position).phi))*sin(t[0]))*(cos(u[0])*sin((route.reference_position).lambda) - cos((route.reference_position).lambda)*sin((route.reference_position).phi)*sin(u[0])) +

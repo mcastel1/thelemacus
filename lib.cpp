@@ -2643,7 +2643,7 @@ void Route::compute_end(String prefix){
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
 bool Route::compute_end(Length d, String prefix){
      
-    if(d<=l){
+    if((type == String("c")) || (d<=l)){
         
         Length l_saved;
         

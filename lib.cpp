@@ -957,6 +957,15 @@ Angle::Angle(void){
 }
 
 //constructor of Angle, which sets the value of the angle to x
+Angle::Angle(double x){
+ 
+    value = x;
+    normalize();
+    
+}
+
+
+//constructor of Angle, which sets the value of the angle to x and eventually prints *this
 Angle::Angle(String name, double x, String prefix){
     
     value = x;
@@ -1427,10 +1436,18 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                     
                     
                     //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
-                    compute_end(Length(((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega))), String(""));
+                    compute_end(
+                                Length(
+                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0)).value) * (Re*sin(omega))
+                                       ),
+                                String(""));
                     ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
                     
-                    compute_end(Length((((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega))), String(""));
+                    compute_end(
+                                Length(
+                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0+M_PI)).value) * (Re*sin(omega))
+                                       ),
+                                String(""));
                     ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
                     
                     if(l2>l1){

@@ -996,15 +996,15 @@ bool Angle::operator>(const double& x){
     
 }
 
-bool Angle::operator<(const Angle& x){
+bool operator<(const Angle& x, const Angle& y){
     
-    return((((*this).value) < (x.value)));
+    return(((x.value) < (y.value)));
     
 }
 
-bool Angle::operator<(const double& x){
+bool operator<(const Angle& x, const double& y){
     
-    return((((*this).value) < x));
+    return(((x.value) < y));
     
 }
 

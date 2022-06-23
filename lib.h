@@ -616,7 +616,7 @@ public:
 
     Angle();
     Angle(String, double, String);
-    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator < (const Angle&), operator > (const double&), operator < (const double&);
+    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
     

@@ -9186,6 +9186,7 @@ void DrawPanel::Draw_3D(void){
             
             //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
             (route.omega).set(String(""), M_PI/2.0 - fabs(phi.value), String(""));
+            (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI/2.0, String(""));
             
             route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));

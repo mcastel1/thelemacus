@@ -1384,9 +1384,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
-                    //set the temporarly length across the Route
-                    l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
-                    compute_end(String(""));
+                    compute_end(Length((l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1))), String(""));
                     
                     if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                         
@@ -1432,12 +1430,10 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                     
                     
                     //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
-                    l.set(String(""), ((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega)), String(""));
-                    compute_end(String(""));
+                    compute_end(Length(((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega))), String(""));
                     ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
                     
-                    l.set(String(""), (((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega)), String(""));
-                    compute_end(String(""));
+                    compute_end(Length((((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega))), String(""));
                     ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
                     
                     if(l2>l1){
@@ -1459,8 +1455,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                 for(i=0; i<n_points; i++){
                     
                     //set the temporarly length across the Route
-                    l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
-                    compute_end(String(""));
+                    compute_end(Length((l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1))), String(""));
                     
                     if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                         
@@ -1756,6 +1751,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                     if(!(intersection(route, t, new_prefix))){
                         //the routes do no intersect: I write 0, 0 into t
                         
+                        t->resize(2);
                         ((*t)[0]).set(String(""), 0.0, new_prefix);
                         ((*t)[1]).set(String(""), 0.0, new_prefix);
                         

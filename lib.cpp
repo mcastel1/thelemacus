@@ -1751,7 +1751,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                     if(!(intersection(route, t, new_prefix))){
                         //the routes do no intersect: I write 0, 0 into t
                         
-                        t->resize(2);
+                        t->resize(2); 
                         ((*t)[0]).set(String(""), 0.0, new_prefix);
                         ((*t)[1]).set(String(""), 0.0, new_prefix);
                         

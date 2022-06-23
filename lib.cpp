@@ -1611,41 +1611,63 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
     
     if(((route.type) == String("c"))){
         
-        if((((*this).type) == String("o"))){
-
-        }
-        
-        if((((*this).type) == String("c"))){
-            
-            Length l;
-            
-            reference_position.distance(route.reference_position, &l, String(""), new_prefix);
-            
-            if((l.value) < Re*((omega+(route.omega)).value)){
-                //the routes have a common area
+        switch((((*this).type).value)[0]){
                 
-                if(!(intersection(route, t, new_prefix))){
-                    //the routes do no intersect: I write 0, 0 into t
+            case 'l':
+            {
+                
+                cout << prefix.value << RED << "Cannot determine whether *this is included in route, because *this is a loxodrome!\n" << RESET;
+                                
+                break;
+                
+            }
+                
+            case 'o':
+            {
+                
+                break;
+                
+            }
+                
+            case 'c':
+            {
+                
+                Length l;
+                
+                reference_position.distance(route.reference_position, &l, String(""), new_prefix);
+                
+                if((l.value) < Re*((omega+(route.omega)).value)){
+                    //the routes have a common area
                     
-                    ((*t)[0]).set(String(""), 0.0, new_prefix);
-                    ((*t)[1]).set(String(""), 0.0, new_prefix);
+                    if(!(intersection(route, t, new_prefix))){
+                        //the routes do no intersect: I write 0, 0 into t
+                        
+                        ((*t)[0]).set(String(""), 0.0, new_prefix);
+                        ((*t)[1]).set(String(""), 0.0, new_prefix);
+                        
+                    }
+                    
+                    return true;
+                    
+                }else{
+                    //the routes don't have a common area
+                    
+                    return false;
                     
                 }
                 
-                return true;
-                
-            }else{
-                //the routes don't have a common area
-                
-                return false;
+                break;
                 
             }
-            
+                
         }
+        
+        
+        
         
     }else{
         
-        cout << prefix.value << RED << "Cannot compute the common area because route is not a circle of equal altitude!\n" << RESET;
+        cout << prefix.value << RED << "Cannot determine whether *this is included in route, because route is not a circle of equal altitude!\n" << RESET;
         
         return false;
         
@@ -2489,6 +2511,8 @@ void Route::compute_end(String prefix){
             if(cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){
                 (end.lambda) -= M_PI;
             }
+            
+            break;
             
         }
             

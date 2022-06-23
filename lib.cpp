@@ -1258,7 +1258,7 @@ void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
     }else{
         //in this case, I delete the i-th elment in listcontrol and replace it
         
-        i = position_in_listcontrol;
+        i = ((unsigned int)position_in_listcontrol);
         listcontrol->DeleteItem(i);
         
     }

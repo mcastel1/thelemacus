@@ -4057,11 +4057,9 @@ void Plot::print_to_kml(String prefix){
             
             for(j=0; j<(unsigned int)(n_points_routes.value); j++){
                 
-                //I set equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
-                ((route_list[i]).l).set(String(""), 2.0*M_PI*(Re*sin(((route_list[i]).omega.value)))*((double)j)/((double)(n_points_routes.value-1)), new_prefix);
-                
+                //I consider a Length equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
                 //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above
-                (route_list[i]).compute_end(new_prefix);
+                (route_list[i]).compute_end(Length(2.0*M_PI*(Re*sin(((route_list[i]).omega.value)))*((double)j)/((double)(n_points_routes.value-1))), new_prefix);
                 
                 //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90.
                 
@@ -8582,14 +8580,9 @@ void DrawPanel::TabulateRoutes_Mercator(void){
         //compute points of l-th chunk of route #i
         for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
-            //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
-            (((plot->route_list)[i]).l).set(
-                                            String(""),
-                                            (l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1)),
-                                            String(""));
-            
+            //I consider a Length which spans between 0 and  l_tot
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-            ((plot->route_list)[i]).compute_end(String(""));
+            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
             
             if(GeoToDrawPanel_Mercator(((plot->route_list)[i]).end, &p)){
                 
@@ -8660,14 +8653,9 @@ void DrawPanel::TabulateRoutes_3D(void){
         //compute points of route #i
         for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
             
-            //across the for loop over l, I set the length of the route equal to a temporary value, which spans between 0 and  l_tot
-            (((plot->route_list)[i]).l).set(
-                                            String(""),
-                                            (l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1)),
-                                            String(""));
-            
+            //I consider a Length which spans between 0 and  l_tot
             //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-            ((plot->route_list)[i]).compute_end(String(""));
+            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
             
             if(GeoToDrawPanel_3D(((plot->route_list)[i]).end, &p)){
                 

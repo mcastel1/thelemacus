@@ -1362,89 +1362,100 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     Length /*the start and eng length used in the loop to draw *this */l_start, l_end, l1, l2;
     vector<Angle> t;
 
-    if(type == String("o")){
-        //the Route this is an orthodrome
-
-    }
-    
-    if(type == String("c")){
-        //if the Route this is a circle of equal altitde, its total length is the length of the circle itself, which reads:
-        
-        if(is_included_in(draw_panel->circle_observer, &t, String(""))){
-            //there is a common area between *this and circle_observer -> some part of *this will lie on the visible part of the earth
+    switch((type.value)[0]){
             
-            if((t[0] == 0.0) && (t[1] == 0.0)){
-                //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+        case 'l':{
+            
+            cout << prefix.value << RED << "Cannot execute draw_3D: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
                 
-                l_start.set(String(""), 0.0, String(""));
-                l_end.set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
+            break;
+            
+        }
+            
+        case 'o':{
+            //the Route this is an orthodrome
+
+            
+            break;
+            
+        }
+            
+        case 'c':{
+            //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
+            
+            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+                //there is a common area between *this and circle_observer -> some part of *this will lie on the visible part of the earth
                 
-            }else{
-                //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
-                
-                
-                //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
-                l.set(String(""), ((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega)), String(""));
-                compute_end(String(""));
-                ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
-                
-                l.set(String(""), (((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega)), String(""));
-                compute_end(String(""));
-                ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
-                
-                if(l2>l1){
+                if((t[0] == 0.0) && (t[1] == 0.0)){
+                    //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                     
-                    l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
-                    l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                    l_start.set(String(""), 0.0, String(""));
+                    l_end.set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
                     
                 }else{
+                    //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
                     
-                    l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-                    l_end.set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
+                    
+                    //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
+                    l.set(String(""), ((((t[0]).value)+((t[1]).value)))/2.0*(Re*sin(omega)), String(""));
+                    compute_end(String(""));
+                    ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+                    
+                    l.set(String(""), (((((t[0]).value)+((t[1]).value)))/2.0+M_PI)*(Re*sin(omega)), String(""));
+                    compute_end(String(""));
+                    ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+                    
+                    if(l2>l1){
+                        
+                        l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
+                        l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                        
+                    }else{
+                        
+                        l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                        l_end.set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
+                        
+                    }
+                    
+                }
+         
+ 
+                //tabulate the Route points
+                for(i=0; i<n_points; i++){
+                    
+                    //set the temporarly length across the Route
+                    l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
+                    compute_end(String(""));
+                    
+                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                        
+                        x.push_back(temp.x);
+                        y.push_back(temp.y);
+            
+                    }
                     
                 }
                 
-            }
-     
-            
-            
-            
-            //tabulate the Route points
-            for(i=0; i<n_points; i++){
+                //draw the Route in draw_panel
                 
-                //set the temporarly length across the Route
-                l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
-                compute_end(String(""));
+                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+                if(width != -1){
+                    (draw_panel->spline_layer)->setLineWidth(width);
+                }
                 
-                if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
-                    
-                    x.push_back(temp.x);
-                    y.push_back(temp.y);
-        
-                } 
+                //free up memory
+                x.clear();
+                y.clear();
+                t.clear();
                 
             }
             
-            //draw the Route in draw_panel
-            
-            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
-            (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-            if(width != -1){
-                (draw_panel->spline_layer)->setLineWidth(width);
-            }
+            break;
             
         }
-        
-    }else{
-        
-        cout << prefix.value << RED << "Cannot execute draw_3D: the Route is not a circle of equal altitude!\n" << RESET;
-        
+                
     }
-    
-    //free up memory
-    x.clear();
-    y.clear();
-    t.clear();
     
 }
 

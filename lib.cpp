@@ -1601,7 +1601,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     
 }
 
-//returns true if *this and route are circles of equal altitude and they have a common  area, false othewisse. If true is returnes, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route, it returns 0, 0 in t.
+//If route is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and route and *this have a common  area, it returns true, and false other wise. If true is returned, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route, it returns 0, 0 in t.
 bool Route::common_area(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;
@@ -1609,37 +1609,39 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    
-    if((((*this).type) == String("c")) && ((route.type) == String("c"))){
+    if(((route.type) == String("c"))){
         
-        Length l;
-        
-        reference_position.distance(route.reference_position, &l, String(""), new_prefix);
-        
-        if((l.value) < Re*((omega+(route.omega)).value)){
-            //the routes have a common area
+        if((((*this).type) == String("c"))){
             
-            if(!(intersection(route, t, new_prefix))){
-                //the routes do no intersect: I write 0, 0 into t
+            Length l;
+            
+            reference_position.distance(route.reference_position, &l, String(""), new_prefix);
+            
+            if((l.value) < Re*((omega+(route.omega)).value)){
+                //the routes have a common area
                 
-                ((*t)[0]).set(String(""), 0.0, new_prefix);
-                ((*t)[1]).set(String(""), 0.0, new_prefix);
+                if(!(intersection(route, t, new_prefix))){
+                    //the routes do no intersect: I write 0, 0 into t
+                    
+                    ((*t)[0]).set(String(""), 0.0, new_prefix);
+                    ((*t)[1]).set(String(""), 0.0, new_prefix);
+                    
+                }
+                
+                return true;
+                
+            }else{
+                //the routes don't have a common area
+                
+                return false;
                 
             }
             
-            return true;
-            
-        }else{
-            //the routes don't have a common area
-            
-            return false;
-            
         }
-        
         
     }else{
         
-        cout << prefix.value << RED << "Cannot compute the common area because routes are not circles of equal altitude!\n" << RESET;
+        cout << prefix.value << RED << "Cannot compute the common area because route is not a circle of equal altitude!\n" << RESET;
         
         return false;
         

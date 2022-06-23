@@ -1613,8 +1613,9 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
         
         switch((((*this).type).value)[0]){
                 
-            case 'l':
-            {
+            case 'l':{
+                
+                //*this is a loxodrome
                 
                 cout << prefix.value << RED << "Cannot determine whether *this is included in route, because *this is a loxodrome!\n" << RESET;
                                 
@@ -1622,15 +1623,67 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                 
             }
                 
-            case 'o':
-            {
+            case 'o':{
+                
+                //*this is an orthodrome
+                
+                if(!(intersection(route, t, new_prefix))){
+                    //*this and route do not intersect: check whether *this is fully included into route
+                    
+                    Length l;
+                    
+                    reference_position.distance(route.reference_position, &l, String(""), new_prefix);
+                    
+                    if(l <= Re*((route.omega).value)){
+                        //reference_position is included into the circle of route, thus *this is included into route
+                        
+                        t->resize(2);
+                        ((*t)[0]).set(String(""), 0.0, new_prefix);
+                        ((*t)[1]).set(String(""), (l.value)/Re, new_prefix);
+                        
+                        
+                        return true;
+
+                        
+                    }else{
+                        //reference_position is not included into the circle of route, thus *this is not included into route
+
+                        
+                        return false;
+                        
+                        
+                    }
+                    
+
+                }else{
+                    //*this and route intersect
+                    
+                    switch(t->size()){
+                     
+                        case 1:{
+                            
+                            break;
+                            
+                        }
+                            
+                        case 2:{
+                            
+                            break;
+                            
+                        }
+                            
+                    }
+
+                    
+                    
+                }
                 
                 break;
                 
             }
                 
-            case 'c':
-            {
+            case 'c':{
+                //*this is a circle of equal altitude
                 
                 Length l;
                 

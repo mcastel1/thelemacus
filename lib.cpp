@@ -1741,17 +1741,17 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
             case 'c':{
                 //*this is a circle of equal altitude
                 
-                Length l;
+                Length d;
                 
-                reference_position.distance(route.reference_position, &l, String(""), new_prefix);
+                reference_position.distance(route.reference_position, &d, String(""), new_prefix);
                 
-                if((l.value) < Re*((omega+(route.omega)).value)){
+                if((d.value) < Re*((omega+(route.omega)).value)){
                     //the routes have a common area
                     
                     if(!(intersection(route, t, new_prefix))){
                         //the routes do no intersect: I write 0, 0 into t
                         
-                        t->resize(2); 
+                        t->resize(2);
                         ((*t)[0]).set(String(""), 0.0, new_prefix);
                         ((*t)[1]).set(String(""), 0.0, new_prefix);
                         

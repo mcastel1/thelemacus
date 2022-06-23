@@ -9158,8 +9158,9 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) += delta_lambda){
             
             //replace this with draw_3D adter you revised draw_3D
-            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            
+            //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+
             if(gamma_lambda != 1.0){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 

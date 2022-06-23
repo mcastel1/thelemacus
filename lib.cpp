@@ -2019,6 +2019,7 @@ void Route::read_from_file(File& file, String prefix){
         
         reference_position.read_from_file(file, new_prefix);
         omega.read_from_file(String("omega"), file, false, new_prefix);
+        l.set(String("length"), 2.0*M_PI*Re*sin(omega), new_prefix);
         
     }else{
         

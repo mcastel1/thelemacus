@@ -1624,17 +1624,19 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
             }
                 
             case 'o':{
-                
                 //*this is an orthodrome
+
+                Length d_start, d_end;
                 
+                reference_position.distance(route.reference_position, &d_start, String(""), new_prefix);
+                compute_end(new_prefix);
+                end.distance(route.reference_position, &d_end, String(""), new_prefix);
+
+
                 if(!(intersection(route, t, new_prefix))){
                     //*this and route do not intersect: check whether *this is fully included into route
-                    
-                    Length l;
-                    
-                    reference_position.distance(route.reference_position, &l, String(""), new_prefix);
-                    
-                    if(l <= Re*((route.omega).value)){
+                                        
+                    if(d_start <= Re*((route.omega).value)){
                         //reference_position is included into the circle of route, thus *this is included into route
                         
                         t->resize(2);
@@ -1661,12 +1663,29 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                     switch(t->size()){
                      
                         case 1:{
+                            //there is one intersection point
+                            
+                            if(d_start <= Re*((route.omega).value)){
+                                //this->reference position is included into the circle of route -> the part of *this comprised into route is the one with 0 <= t <= (*t)[0]
+                                
+                                t->insert(t->begin(), Angle(0.0));
+                                
+                            }else{
+                                //this->reference position is not included into the circle of route -> this->end must be included into the circle of route -> the part of *this comprised into route is the one with  (*t)[0] <= t <= (l.value)/Re
+                          
+                                t->push_back(Angle((l.value)/Re));
+
+                                
+                            }
                             
                             break;
                             
                         }
                             
                         case 2:{
+                            //there are two intersection points -> the part of *this comprised into route is the one with (*t)[0] < t <(*t)[1] -> all I need to do is sort t
+                            
+                            sort(t.begin(), t.end());
                             
                             break;
                             
@@ -1674,7 +1693,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                             
                     }
 
-                    
+                    return true;
                     
                 }
                 

@@ -3106,6 +3106,7 @@ void Route::enter(String name, String prefix){
         //if the route is a circle of equal altitude, I enter its ground position and its aperture angle (alpha remains unused) ...
         reference_position.enter(String("ground position"), new_prefix);
         omega.enter(String("aperture angle"), new_prefix);
+        l.set(String("length"), 2.0*M_PI*Re*sin(omega), new_prefix);
         
         /* //... and then compute the resulting starting position and starting heading */
         /* reference_position.phi.set(String("latitude of ground position"), (reference_position.phi.value) - (omega.value), true, new_prefix); */

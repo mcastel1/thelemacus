@@ -1745,7 +1745,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                 
                 reference_position.distance(route.reference_position, &d, String(""), new_prefix);
                 
-                if((d.value) < Re*((omega+(route.omega)).value)){
+                if(d < (Re*((omega+(route.omega)).value))){
                     //the routes have a common area
                     
                     if(!(intersection(route, t, new_prefix))){

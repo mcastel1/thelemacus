@@ -1360,7 +1360,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     vector<double> x, y;
     Projection temp;
     Length /*the start and eng length used in the loop to draw *this */l_start, l_end, l1, l2;
-    vector<Angle> t(2);
+    vector<Angle> t;
     
     if(type == String("c")){
         //if the Route this is a circle of equal altitde, its total length is the length of the circle itself, which reads:

@@ -1375,6 +1375,41 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         case 'o':{
             //the Route this is an orthodrome
 
+            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
+
+                l_start.set(String(""), Re*((t[0]).value), String(""));
+                l_end.set(String(""), Re*((t[1]).value), String(""));
+         
+                //tabulate the Route points
+                for(i=0; i<n_points; i++){
+                    
+                    //set the temporarly length across the Route
+                    l.set(String(""), (l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1)), String(""));
+                    compute_end(String(""));
+                    
+                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                        
+                        x.push_back(temp.x);
+                        y.push_back(temp.y);
+            
+                    }
+                    
+                }
+                
+                //draw the Route in draw_panel
+                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+                if(width != -1){
+                    (draw_panel->spline_layer)->setLineWidth(width);
+                }
+                
+                //free up memory
+                x.clear();
+                y.clear();
+                t.clear();
+                
+            }
             
             break;
             
@@ -1384,7 +1419,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
             
             if(is_included_in(draw_panel->circle_observer, &t, String(""))){
-                //there is a common area between *this and circle_observer -> some part of *this will lie on the visible part of the earth
+                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
                 
                 if((t[0] == 0.0) && (t[1] == 0.0)){
                     //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this

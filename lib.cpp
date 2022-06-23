@@ -1370,7 +1370,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     if(type == String("c")){
         //if the Route this is a circle of equal altitde, its total length is the length of the circle itself, which reads:
         
-        if(common_area(draw_panel->circle_observer, &t, String(""))){
+        if(is_included_in(draw_panel->circle_observer, &t, String(""))){
             //there is a common area between *this and circle_observer -> some part of *this will lie on the visible part of the earth
             
             if((t[0] == 0.0) && (t[1] == 0.0)){
@@ -1601,8 +1601,8 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     
 }
 
-//If route is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and route and *this have a common  area, it returns true, and false other wise. If true is returned, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route, it returns 0, 0 in t.
-bool Route::common_area(Route route, vector<Angle> *t, String prefix){
+//If route is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and a part of *this is included into the circle of route, it returns true, and false other wise. If true is returned, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route, it returns 0, 0 in t.
+bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
     
     String new_prefix;
     
@@ -1610,6 +1610,10 @@ bool Route::common_area(Route route, vector<Angle> *t, String prefix){
     new_prefix = prefix.append(String("\t"));
     
     if(((route.type) == String("c"))){
+        
+        if((((*this).type) == String("o"))){
+
+        }
         
         if((((*this).type) == String("c"))){
             

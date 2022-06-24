@@ -958,7 +958,7 @@ Angle::Angle(void){
 
 //constructor of Angle, which sets the value of the angle to x
 Angle::Angle(double x){
- 
+    
     value = x;
     normalize();
     
@@ -1351,11 +1351,11 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
 
 //draws the Route *this into draw_panel, with the Mercator projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
 void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
-
+    
     if(type == String("o")){
         
     }
-
+    
     
 }
 
@@ -1367,26 +1367,26 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     Projection temp;
     Length /*the start and eng length used in the loop to draw *this */l_start, l_end, l1, l2;
     vector<Angle> t;
-
+    
     switch((type.value)[0]){
             
         case 'l':{
             
             cout << prefix.value << RED << "Cannot execute draw_3D: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
-                
+            
             break;
             
         }
             
         case 'o':{
             //the Route this is an orthodrome
-
+            
             if(is_included_in(draw_panel->circle_observer, &t, String(""))){
                 //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-
+                
                 l_start.set(String(""), Re*((t[0]).value), String(""));
                 l_end.set(String(""), Re*((t[1]).value), String(""));
-         
+                
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
@@ -1396,7 +1396,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                         
                         x.push_back(temp.x);
                         y.push_back(temp.y);
-            
+                        
                     }
                     
                 }
@@ -1463,8 +1463,8 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                     }
                     
                 }
-         
- 
+                
+                
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
@@ -1475,7 +1475,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                         
                         x.push_back(temp.x);
                         y.push_back(temp.y);
-            
+                        
                     }
                     
                 }
@@ -1498,7 +1498,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             break;
             
         }
-                
+            
     }
     
 }
@@ -1671,24 +1671,24 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                 //*this is a loxodrome
                 
                 cout << prefix.value << RED << "Cannot determine whether *this is included in route, because *this is a loxodrome!\n" << RESET;
-                                
+                
                 break;
                 
             }
                 
             case 'o':{
                 //*this is an orthodrome
-
+                
                 Length d_start, d_end;
                 
                 reference_position.distance(route.reference_position, &d_start, String(""), new_prefix);
                 compute_end(new_prefix);
                 end.distance(route.reference_position, &d_end, String(""), new_prefix);
-
-
+                
+                
                 if(!(intersection(route, t, new_prefix))){
                     //*this and route do not intersect: check whether *this is fully included into route
-                                        
+                    
                     if(d_start <= Re*((route.omega).value)){
                         //reference_position is included into the circle of route, thus *this is included into route
                         
@@ -1698,7 +1698,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                         
                         
                         return true;
-
+                        
                         
                     }else{
                         //reference_position is not included into the circle of route, thus *this is not included into route
@@ -1706,12 +1706,12 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                         return false;
                         
                     }
-
+                    
                 }else{
                     //*this and route intersect
                     
                     switch(t->size()){
-                     
+                            
                         case 1:{
                             //there is one intersection point
                             
@@ -1722,7 +1722,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                                 
                             }else{
                                 //this->reference position is not included into the circle of route -> this->end must be included into the circle of route -> the part of *this comprised into route is the one with  (*t)[0] <= t <= (l.value)/Re
-                          
+                                
                                 t->push_back(Angle(String(""), (l.value)/Re, new_prefix));
                                 
                             }
@@ -1741,7 +1741,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                         }
                             
                     }
-
+                    
                     return true;
                     
                 }
@@ -1872,7 +1872,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 cos_t_p.set(String(""), (-((a.value)*cos(route.omega)) + (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
                 cos_t_m.set(String(""), (-((a.value)*cos(route.omega)) - (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
                 
-                
+                //this will be the output of this function: it is set to false for starters
                 output = false;
                 
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
@@ -1880,18 +1880,17 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     t->resize((t->size())+1);
                     (t->back()).set(String(""), acos(cos_t_p), prefix);
                     
+                    //if I find a viable instersection point, I set output to true
                     output = true;
-                    
-//                    end.print(String("crossing Position 1.1"), String("\t"), cout);
                     
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                         
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
-  
+                        
+                        //if I find a viable instersection point, I set output to true
                         output = true;
                         
-//                        end.print(String("crossing Position 1.2"), String("\t"), cout);
                         
                     }
                     
@@ -1902,18 +1901,18 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     t->resize((t->size())+1);
                     (t->back()).set(String(""), acos(cos_t_m), prefix);
                     
+                    //if I find a viable instersection point, I set output to true
                     output = true;
                     
-//                    end.print(String("crossing Position 2.1"), String("\t"), cout);
                     
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                         
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
                         
+                        //if I find a viable instersection point, I set output to true
                         output = true;
                         
-//                        end.print(String("crossing Position 2.2"), String("\t"), cout);
                         
                     }
                     
@@ -2553,7 +2552,7 @@ void Position::read_from_file(File& file, String prefix){
     
 }
 
- 
+
 //writes into this->end the position on the Route at length this->l along the Route from start
 void Route::compute_end(String prefix){
     
@@ -2619,7 +2618,7 @@ void Route::compute_end(String prefix){
             /* t.print("t", prefix, cout); */
             
             (end.phi).set(String(""), asin( tanh( tau*sqrt(C/(1.0-C))*(t.value) + atanh(sin(reference_position.phi.value)) ) ), prefix);
-
+            
             (end.lambda).set(String(""), (reference_position.lambda.value) + sigma*(t.value), prefix);
             
             break;
@@ -2633,7 +2632,7 @@ void Route::compute_end(String prefix){
             //R sin omega = r, r t = l, t = l / (R sin omega)
             t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
             
-
+            
             (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value))), prefix);            
             
             (end.lambda).set(String(""), -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value)))))), prefix);
@@ -2653,7 +2652,7 @@ void Route::compute_end(String prefix){
 
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
 bool Route::compute_end(Length d, String prefix){
-     
+    
     if((type == String("c")) || (d<=l)){
         
         Length l_saved;
@@ -2674,7 +2673,7 @@ bool Route::compute_end(Length d, String prefix){
     }
     
 }
- 
+
 
 
 bool Body::operator==(const Body& body){
@@ -6990,13 +6989,13 @@ string Angle::deg_to_string(String mode, unsigned int precision){
     }else{
         //in this case, I print out the angle in the format >=-180° and <180°
         
-          
+        
         //I append NS or EW only if the angle is != 0, otherwise it is pointless to add these labels
         if(value != 0.0){
             
             if(mode == String("NS")){
                 //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
-                 
+                
                 if(value < M_PI){
                     
                     if(value < M_PI/2.0){
@@ -7004,9 +7003,9 @@ string Angle::deg_to_string(String mode, unsigned int precision){
                         output << round(fabs(K*value)) << "° N";
                         
                     }else{
-
+                        
                         output << round(fabs(K*(M_PI-value))) << "° N";
-
+                        
                     }
                     
                 }else{
@@ -7537,9 +7536,9 @@ void ChartFrame::GetCoastLineData_3D(void){
         }
         
     }
-
     
-
+    
+    
     
     //        cout << "i_min/max = \t\t" << i_min << " , " << i_max << "\n";
     //        cout << "j_min/max = \t\t" << j_min << " , " << j_max << "\n";
@@ -8264,7 +8263,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 void DrawPanel::DrawParallelLabel(const Position& q, wxDC&  dc){
     
     wxPoint p;
-
+    
     
     if(/* convert temp to draw_panel coordinates p*/(this->*GeoToDrawPanel)(q, &p)){
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -8272,8 +8271,8 @@ void DrawPanel::DrawParallelLabel(const Position& q, wxDC&  dc){
         Position temp;
         wxString wx_string;
         stringstream s;
-     
-
+        
+        
         s.str("");
         //stores q in a temporary position temp, which will be modifie by the functiosn which act on it in the following lines. In this way, q will not be modified and stay intact
         temp = q;
@@ -8448,7 +8447,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
             temp = q;
             
             s.str("");
-//            (q.lambda).normalize_pm_pi();
+            //            (q.lambda).normalize_pm_pi();
             
             if(/*If this condition is true, then (temp.lambda).value*K is an integer multiple of one degree*/fabs(K*((temp.lambda).value)-round(K*((temp.lambda).value))) < epsilon_double){
                 //in this case, ((temp.lambda).value) = n degrees, with n integer: I write on the axis the value of phi  in degrees
@@ -8499,7 +8498,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         
     }
-
+    
     
     
     //draw  labels of parallels
@@ -8555,7 +8554,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     }
     
     
-   
+    
     
     
 }
@@ -8816,7 +8815,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-        
+    
     (dummy_route.type).set(String(""), String("o"), String(""));
     (dummy_route.alpha).set(String(""), 0.0, String(""));
     (dummy_route.l).set(String(""), Re * ((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
@@ -9055,7 +9054,7 @@ void DrawPanel::Draw_3D(void){
         
     }
     
-
+    
     //compute lambda_middle
     lambda_middle.set(String(""), round((((circle_observer.reference_position).lambda).value)/delta_lambda) * delta_lambda, String(""));
     
@@ -9120,8 +9119,8 @@ void DrawPanel::Draw_3D(void){
     if((fabs((phi_middle.value)-M_PI/2.0) < epsilon_double) || (fabs((phi_middle.value)- (3.0*M_PI/2.0)) < epsilon_double)){
         (phi_middle.value) -= GSL_SIGN((phi_middle.normalize_pm_pi_ret()).value) * delta_phi;
     }
- 
- 
+    
+    
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -9141,18 +9140,18 @@ void DrawPanel::Draw_3D(void){
         
         if((plot->phi_min) == 3.0*M_PI/2.0){
             //circle_observer encircles the S pole
-      
+            
             (route.alpha).set(String(""), M_PI, String(""));
             ((route.reference_position).phi) = (plot->phi_max);
- 
+            
         }
         
     }else{
         //circle_observer does not encircle any pole and thus it does not span all longitudes
- 
+        
         (route.alpha).set(String(""), 0.0, String(""));
         ((route.reference_position).phi) = (plot->phi_min);
-     
+        
     }
     
     
@@ -9164,15 +9163,15 @@ void DrawPanel::Draw_3D(void){
             //replace this with draw_3D adter you revised draw_3D
             //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
-
+            
             if(gamma_lambda != 1.0){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
                 phi_saved = ((route.reference_position).phi);
                 alpha_saved = (route.alpha);
-
-//                (route.type).set(String(""), String("o"), String(""));
+                
+                //                (route.type).set(String(""), String("o"), String(""));
                 (route.alpha).set(String(""), 0.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 ((route.reference_position).phi) = phi_middle;
@@ -9187,13 +9186,13 @@ void DrawPanel::Draw_3D(void){
                     
                 }
                 
-//                (route.type).set(String(""), String("c"), String(""));
+                //                (route.type).set(String(""), String("c"), String(""));
                 (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
                 (route.alpha) = alpha_saved;
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
                 ((route.reference_position).phi) = phi_saved;
-             
-
+                
+                
                 
             }
             
@@ -9239,7 +9238,7 @@ void DrawPanel::Draw_3D(void){
                     }
                 
                 (route.type).set(String(""), String("c"), String(""));
-
+                
             }
             
         }
@@ -9421,7 +9420,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUpOnDrawPanel), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     draw_panel->Bind(wxEVT_MOUSEWHEEL, wxMouseEventHandler(DrawPanel::OnMouseWheel), draw_panel);
-
+    
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll), this);
     slider->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
     slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
@@ -9699,7 +9698,7 @@ template<class T> void ChartFrame::Reset(T& event){
         
         draw_panel->Set_x_y_min_max_3D();
         (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
+        
     }
     
     //now that x_min ... y_max have been set, I set x_min_0 ... equal to x_min ...
@@ -9764,7 +9763,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     
     //set phi_min/max
     ((circle_observer.reference_position).phi).normalize_pm_pi();
-
+    
     if(((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) < M_PI/2.0) &&
        ((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) > -M_PI/2.0)){
         //in this case, circle_observer does not encircle the N/S pole
@@ -9793,7 +9792,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     }
     
     ((circle_observer.reference_position).phi).normalize();
-
+    
 }
 
 
@@ -10319,7 +10318,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
             q->set(String(""), r, String(""));
             
         }
-               
+        
         return true;
         
     }else{
@@ -10372,7 +10371,7 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     
     //I pulled out a factor (temp.x)^2 from arg_sqrt for clarity
     arg_sqrt = -((gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) + 2*(d.value)*(gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) ));
-
+    
     
     if(arg_sqrt >= 0.0){
         
@@ -10476,7 +10475,7 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
             
             (p->x) = (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area;
             (p->y) = (position_plot_area.y) + height_plot_area - (((temp.y)-y_min)/(y_max-y_min)*height_plot_area);
-         
+            
         }
         
         return true;
@@ -11252,16 +11251,16 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     //        int i;
     
     //set the new value of slider, i,  according to the rotation of the mouse wheel:
-//    if(j < 0){
-//
-//        i = ((int)((parent->slider)->GetValue())) - ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
-//
-//    }else{
-//
-//        i = ((int)((parent->slider)->GetValue())) - ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
-//
-//    }
-
+    //    if(j < 0){
+    //
+    //        i = ((int)((parent->slider)->GetValue())) - ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
+    //
+    //    }else{
+    //
+    //        i = ((int)((parent->slider)->GetValue())) - ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
+    //
+    //    }
+    
     i =  ((int)((parent->slider)->GetValue())) - j;
     
     cout << "Slier value new = " << i << "\n";

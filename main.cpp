@@ -67,18 +67,6 @@ bool MyApp::OnInit(){
     list_frame->Show(true);
     
     
-    //
-    vector<Angle> t;
-    
-    cout << "Intersection 1-0:\n" << ((list_frame->plot->route_list)[1]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
-    cout << "Intersection 2-0:\n" << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
-    cout << "Intersection 3-0:\n" << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[0]), &t, String("****")) << "\n";
-    cout << "Intersection 2-1:\n" << ((list_frame->plot->route_list)[2]).intersection(((list_frame->plot->route_list)[1]), &t, String("****")) << "\n";
-    cout << "Intersection 3-1:\n" << ((list_frame->plot->route_list)[3]).intersection(((list_frame->plot->route_list)[1]), &t, String("****")) << "\n";
-    
-    
-    //
-    
     //allocate and show the chart frames
     n_chart_frames.read_from_file(String("number chart frames"), String(path_file_init), String(""));
     (list_frame->chart_frames).resize(n_chart_frames.value);

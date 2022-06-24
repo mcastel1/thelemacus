@@ -2633,7 +2633,7 @@ void Route::compute_end(String prefix){
             t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
             
             
-            (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value))), prefix);            
+            (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value))), prefix);
             
             (end.lambda).set(String(""), -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value)))))), prefix);
             if(cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){
@@ -9115,7 +9115,7 @@ void DrawPanel::Draw_3D(void){
     (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
     
     phi_middle.set(String(""), round((((circle_observer.reference_position).phi).value)/delta_phi) * delta_phi, String(""));
-    //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd -> 
+    //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd ->
     if((fabs((phi_middle.value)-M_PI/2.0) < epsilon_double) || (fabs((phi_middle.value)- (3.0*M_PI/2.0)) < epsilon_double)){
         (phi_middle.value) -= GSL_SIGN((phi_middle.normalize_pm_pi_ret()).value) * delta_phi;
     }
@@ -9171,11 +9171,9 @@ void DrawPanel::Draw_3D(void){
                 phi_saved = ((route.reference_position).phi);
                 alpha_saved = (route.alpha);
                 
-                //                (route.type).set(String(""), String("o"), String(""));
                 (route.alpha).set(String(""), 0.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 ((route.reference_position).phi) = phi_middle;
-                
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((((route.reference_position).lambda).value) = (lambda_saved.value);
@@ -9186,13 +9184,10 @@ void DrawPanel::Draw_3D(void){
                     
                 }
                 
-                //                (route.type).set(String(""), String("c"), String(""));
                 (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
                 (route.alpha) = alpha_saved;
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
                 ((route.reference_position).phi) = phi_saved;
-                
-                
                 
             }
             

@@ -55,7 +55,7 @@ color selected item = (51,153,255)
 color horizon = (0,191,255)
 #the exponent which sets the relation between zoom factor and value of slider
 exponent zoom = 2.0
-maximal zoom factor = 10000
+maximal zoom factor = 10000000
 relative displacement = 0.1
 d draw 3d = 3.0
 default projection = 3D

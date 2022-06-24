@@ -1847,74 +1847,85 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             }
             
             //obtain the minimum distance across cases 1, 2 and 3 and chekwhetehr it is smaller than Re * apertur angle of route
-            if((*min_element(s.begin(), s.end())) < Re*(route.omega.value)){
+            if((*min_element(s.begin(), s.end())) < Re*((route.omega).value)){
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
                 
-                if(t){
+                //                if(t){
+                
+                Double a, b, square_root, cos_t_p, cos_t_m;
+                bool output;
+                
+                t->clear();
+                
+                a.set(String(""),
+                      -(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi))) - sin((reference_position.phi))*sin(((route.reference_position).phi)),
+                      prefix);
+                
+                b.set(String(""),
+                      -(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) - cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),
+                      prefix);
+                
+                
+                square_root.set(String(""), sqrt(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2) - gsl_sf_pow_int(cos(route.omega),2)), String(""));
+                
+                //these are the values of cos(t) such that the distance between this->end at t  and route.reference_position equals Re*(route.omega), i.e., it is the value of cos(t) such that end(t) lies on route. There are two of them.
+                cos_t_p.set(String(""), (-((a.value)*cos(route.omega)) + (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
+                cos_t_m.set(String(""), (-((a.value)*cos(route.omega)) - (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
+                
+                
+                output = false;
+                
+                if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
                     
-                    Double a, b, square_root, cos_t_p, cos_t_m;
+                    t->resize((t->size())+1);
+                    (t->back()).set(String(""), acos(cos_t_p), prefix);
                     
-                    t->clear();
+                    output = true;
                     
-                    a.set(String(""),
-                          -(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi))) - sin((reference_position.phi))*sin(((route.reference_position).phi)),
-                          prefix);
+//                    end.print(String("crossing Position 1.1"), String("\t"), cout);
                     
-                    b.set(String(""),
-                          -(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) - cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),
-                          prefix);
-                    
-                    
-                    square_root.set(String(""), sqrt(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2) - gsl_sf_pow_int(cos(route.omega),2)), String(""));
-                    
-                    //these are the values of cos(t) such that the distance between this->end at t  and route.reference_position equals Re*(route.omega), i.e., it is the value of cos(t) such that end(t) lies on route. There are two of them.
-                    cos_t_p.set(String(""), (-((a.value)*cos(route.omega)) + (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
-                    cos_t_m.set(String(""), (-((a.value)*cos(route.omega)) - (square_root.value)*fabs((b.value)))/(gsl_sf_pow_int((a.value),2) + gsl_sf_pow_int((b.value),2)), prefix);
-                    
-                    
-                    if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
+                    if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                         
                         t->resize((t->size())+1);
-                        (t->back()).set(String(""), acos(cos_t_p), prefix);
+                        (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
+  
+                        output = true;
                         
-                        end.print(String("crossing Position 1.1"), String("\t"), cout);
-                        
-                        if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
-                            
-                            t->resize((t->size())+1);
-                            (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
-                            
-                            end.print(String("crossing Position 1.2"), String("\t"), cout);
-
-                        }
-                        
-                    }
-                    
-                    if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
-                        
-                        t->resize((t->size())+1);
-                        (t->back()).set(String(""), acos(cos_t_m), prefix);
-                        
-                        end.print(String("crossing Position 2.1"), String("\t"), cout);
-
-                        if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
-                            
-                            t->resize((t->size())+1);
-                            (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
-                            
-                            end.print(String("crossing Position 2.2"), String("\t"), cout);
-
-                        }
+//                        end.print(String("crossing Position 1.2"), String("\t"), cout);
                         
                     }
                     
                 }
                 
-                return true;
+                if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
+                    
+                    t->resize((t->size())+1);
+                    (t->back()).set(String(""), acos(cos_t_m), prefix);
+                    
+                    output = true;
+                    
+//                    end.print(String("crossing Position 2.1"), String("\t"), cout);
+                    
+                    if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
+                        
+                        t->resize((t->size())+1);
+                        (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
+                        
+                        output = true;
+                        
+//                        end.print(String("crossing Position 2.2"), String("\t"), cout);
+                        
+                    }
+                    
+                }
+                
+                //                }
+                
+                return output;
                 
             }else{
                 //in this case, *this and route do not intersect
-
+                
                 return false;
                 
             }
@@ -9168,8 +9179,8 @@ void DrawPanel::Draw_3D(void){
                 
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                for((((route.reference_position).lambda).value) = (lambda_saved.value)+M_PI/2.0;
-                    (((route.reference_position).lambda).value) - ((lambda_saved.value)+M_PI/2.0) < delta_lambda;
+                for((((route.reference_position).lambda).value) = (lambda_saved.value);
+                    (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
                     route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
@@ -9222,7 +9233,8 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        //because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
+                        route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                         
                     }
                 

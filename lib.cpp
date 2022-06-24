@@ -1376,8 +1376,36 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
 //draws the Route *this into draw_panel, with the Mercator projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
 void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
-    if(type == String("o")){
+    if(type != String("l")){
+        //*this is either an orthodrome or a circle of equal altitude
         
+        Route route;
+        
+        //set route equal to a parallel with latitude phi_min
+        (route.type) = String("c");
+        ((route.reference_position).lambda) = 0.0;
+        if(((draw_panel->plot)->phi_min) < M_PI/2.0){
+            
+            ((route.reference_position).phi) = M_PI/2.0;
+            (route.omega).set(String(""), M_PI/2.0 - (((draw_panel->plot)->phi_min).value), String(""));
+            
+        }else{
+            
+            ((route.reference_position).phi) = -M_PI/2.0;
+            (route.omega).set(String(""), -3.0*M_PI/2.0 + (((draw_panel->plot)->phi_min).value), String(""));
+
+        }
+        
+        
+        
+        
+//        crossing(<#Route#>, <#vector<Position> *#>, <#double *#>, <#String#>)
+        
+    }else{
+        //*this is a loxodrome
+        
+        cout << prefix.value << RED << "Cannot execute draw_Mercator: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
+                
     }
     
     

@@ -8829,11 +8829,7 @@ void DrawPanel::Draw_Mercator(void){
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
                             );
-    
-    //    if(((plot->n_intervals_ticks_preferred).value) > n_intervals_ticks_max){
-    //        cout << "xxxxxxxxx      I have to reduce the number of ticks!\n";
-    //    }
-    
+
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
@@ -8870,8 +8866,9 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
-            
+//            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
+            dummy_route.draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
+
         }
         
         if(gamma_lambda == 60.0){
@@ -8949,7 +8946,9 @@ void DrawPanel::Draw_Mercator(void){
             
             //I set the length of the Route corresponding to the parallel
             (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
-            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+                        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+//            dummy_route.draw_Mercator(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            
             
         }
         

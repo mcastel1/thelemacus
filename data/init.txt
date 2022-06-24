@@ -58,7 +58,7 @@ exponent zoom = 2.0
 maximal zoom factor = 10000000
 relative displacement = 0.1
 d draw 3d = 3.0
-default projection = 3D
+default projection = Mercator
 #the number of chart frames opened when the program starts
 number chart frames = 1
 #initial rotation with which the 3D projection is displayed

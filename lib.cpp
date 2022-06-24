@@ -1380,27 +1380,16 @@ void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
         //*this is either an orthodrome or a circle of equal altitude
         
         Route route;
+        vector<Angle> t;
         
         //set route equal to a parallel with latitude phi_min
         (route.type) = String("c");
         ((route.reference_position).lambda) = 0.0;
-        if(((draw_panel->plot)->phi_min) < M_PI/2.0){
-            
-            ((route.reference_position).phi) = M_PI/2.0;
-            (route.omega).set(String(""), M_PI/2.0 - (((draw_panel->plot)->phi_min).value), String(""));
-            
-        }else{
-            
-            ((route.reference_position).phi) = -M_PI/2.0;
-            (route.omega).set(String(""), -3.0*M_PI/2.0 + (((draw_panel->plot)->phi_min).value), String(""));
+        ((route.reference_position).phi) = GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0;
+        (route.omega).set(String(""), M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value), String(""));
+        
+        intersection(route, &t, String(""));
 
-        }
-        
-        
-        
-        
-//        crossing(<#Route#>, <#vector<Position> *#>, <#double *#>, <#String#>)
-        
     }else{
         //*this is a loxodrome
         

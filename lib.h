@@ -707,6 +707,7 @@ public:
     Route transport(String);
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
+    bool is_in(Route, String);
     bool operator==(const Position&);
     bool operator!=(const Position&);
     void add_to_wxListCtrl(long, wxListCtrl*);

@@ -1155,6 +1155,30 @@ bool Position::distance(Position p, Length* l, String name, String prefix){
     
 }
 
+//if route is a circle of equal altitude, it returns true if *this is into the circle, and zero otherwise. If route is not a circle of equal altitude, it prints an error message and returns false.
+bool Position::is_in(Route route, String prefix){
+    
+    if((route.type) == String("c")){
+        
+        Length d;
+        
+        distance(route.reference_position, &d, String(""), prefix);
+        
+        return(d < (Re*((route.omega).value)));
+        
+        
+    }else{
+        
+        cout << prefix.value << RED << "route is not a circle of equal altitude: I cannot tell whether the position is into route!\n" << RESET;
+        
+        return false;
+        
+    }
+    
+    
+}
+
+
 void Position::modify(String prefix){
     
     unsigned int i;

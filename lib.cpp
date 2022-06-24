@@ -1164,7 +1164,7 @@ bool Position::is_in(Route route, String prefix){
         
         distance(route.reference_position, &d, String(""), prefix);
         
-        return(d < (Re*((route.omega).value)));
+        return(d <= (Re*((route.omega).value)));
         
         
     }else{
@@ -1703,26 +1703,17 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
             case 'o':{
                 //*this is an orthodrome
                 
-                Length d_start, d_end;
-                
-                reference_position.distance(route.reference_position, &d_start, String(""), new_prefix);
-                compute_end(new_prefix);
-                end.distance(route.reference_position, &d_end, String(""), new_prefix);
-                
-                
                 if(!(intersection(route, t, new_prefix))){
                     //*this and route do not intersect: check whether *this is fully included into route
                     
-                    if(d_start <= Re*((route.omega).value)){
+                    if(reference_position.is_in(route, prefix)){
                         //reference_position is included into the circle of route, thus *this is included into route
                         
                         t->resize(2);
                         ((*t)[0]).set(String(""), 0.0, new_prefix);
                         ((*t)[1]).set(String(""), (l.value)/Re, new_prefix);
                         
-                        
                         return true;
-                        
                         
                     }else{
                         //reference_position is not included into the circle of route, thus *this is not included into route
@@ -1739,7 +1730,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                         case 1:{
                             //there is one intersection point
                             
-                            if(d_start <= Re*((route.omega).value)){
+                            if(reference_position.is_in(route, prefix)){
                                 //this->reference position is included into the circle of route -> the part of *this comprised into route is the one with 0 <= t <= (*t)[0]
                                 
                                 t->insert(t->begin(), Angle(String(""), 0.0, new_prefix));

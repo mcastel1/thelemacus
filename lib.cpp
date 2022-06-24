@@ -9264,9 +9264,6 @@ void DrawPanel::Draw_3D(void){
                                    );
     
     
-    
-    
-    
     mem_block = (chart->makeChart(Chart::BMP));
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));

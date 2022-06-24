@@ -39,10 +39,10 @@
  - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
  - transforms all remaining exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
- - update Route::draw
- - in Route::draw_3D, code the part for loxodrome and orthodrome curves
+ - delete Route::draw after replacing it with Route::draw_3D everywhere
+ - in Route::draw_3D, code the part for loxodrome curves
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
- - fix issue that a route is not drawn when it does not touch circle_observer and it is entirelty within it 
+ - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  */
 
 

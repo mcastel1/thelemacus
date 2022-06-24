@@ -9227,7 +9227,6 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        //because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
                         route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                         
                     }

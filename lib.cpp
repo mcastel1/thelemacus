@@ -2738,7 +2738,7 @@ bool Sight::modify(Catalog catalog, String prefix){
         cout << new_prefix.value << "\t(" << i+1 << ") " << (items[i]).value << "\n";
     }
     
-    enter_unsigned_int(&i, true, 1, items.size()+1, String("choice #"), new_prefix);
+    enter_unsigned_int(&i, true, 1, ((unsigned int)(items.size()))+1, String("choice #"), new_prefix);
     //decrease i because the user entered it in format starting from i=1;
     i--;
     
@@ -4378,7 +4378,7 @@ void Plot::menu(String prefix){
     
     
     
-    enter_unsigned_int(&i, true, 1, choices.size()+1, String("choice #"), prefix);
+    enter_unsigned_int(&i, true, 1, ((unsigned int)(choices.size()))+1, String("choice #"), prefix);
     
     
     
@@ -4426,7 +4426,7 @@ void Plot::menu(String prefix){
                 
                 print_sights(new_prefix, cout);
                 
-                enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to delete"), new_prefix);
+                enter_unsigned_int(&i, true, 1, ((unsigned int)(sight_list.size()))+1, String("# of sight that you want to delete"), new_prefix);
                 i--;
                 
                 //this  needs one additional argument: I commented it out
@@ -4483,7 +4483,7 @@ void Plot::menu(String prefix){
                 
                 print_positions(new_prefix, cout);
                 
-                enter_unsigned_int(&i, true, 1, position_list.size()+1, String("# of position that you want to transport"), new_prefix);
+                enter_unsigned_int(&i, true, 1, ((unsigned int)(position_list.size()))+1, String("# of position that you want to transport"), new_prefix);
                 i--;
                 
                 transport_position(i, new_prefix);
@@ -4541,7 +4541,7 @@ void Plot::menu(String prefix){
                 
                 print_routes(true, new_prefix, cout);
                 
-                enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to transport"), new_prefix);
+                enter_unsigned_int(&i, true, 1, ((unsigned int)(route_list.size()))+1, String("# of route that you want to transport"), new_prefix);
                 i--;
                 
                 transport_route(i, new_prefix);

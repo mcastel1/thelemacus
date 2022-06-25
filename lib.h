@@ -736,6 +736,7 @@ public:
     Position* points;
     
     Route(void);
+    Route(String, String, Position, Angle, Length, String);
     void enter(String, String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);

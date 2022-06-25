@@ -698,6 +698,7 @@ public:
     vector<String> items;
     
     Position();
+    Position(Angle, Angle);
     void enter(String, String);
     void set(String, gsl_vector*, String);
     void modify(String);
@@ -736,8 +737,8 @@ public:
     Position* points;
     
     Route(void);
-    Route(String, String, Position, Angle, Length, String);
-    Route(String, String, Position, Angle, String);
+    Route(String, Position, Angle, Length);
+    Route(String, Position, Angle);
     void enter(String, String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);

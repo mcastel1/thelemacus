@@ -1129,6 +1129,17 @@ Position::Position(void){
     
 }
 
+Position::Position(Angle lambda_in, Angle phi_in){
+    
+    lambda = lambda_in;
+    phi = phi_in;
+    
+    items.push_back(String("latitude"));
+    items.push_back(String("longitude"));
+    items.push_back(String("label"));
+    
+}
+
 //here name is the name of the distance that I am computing; for example 'distance between positions A and B'
 bool Position::distance(Position p, Length* l, String name, String prefix){
     
@@ -1279,25 +1290,25 @@ Route::Route(void){
 
 
 //constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet.
-Route::Route(String name, String type_in, Position reference_position_in, Angle alpha_in, Length l_in, String prefix){
+Route::Route(String type_in, Position reference_position_in, Angle alpha_in, Length l_in){
     
     type = type_in;
     reference_position = reference_position_in;
     alpha = alpha_in;
     l = l_in;
     
-    related_sight.set(String(""), -1, prefix);
+    related_sight.set(String(""), -1, String(""));
     
 }
 
 //constructs a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.
-Route::Route(String name, String type_in, Position reference_position_in, Angle omega_in, String prefix){
+Route::Route(String type_in, Position reference_position_in, Angle omega_in){
     
     type = type_in;
     reference_position = reference_position_in;
     omega = omega_in;
     
-    related_sight.set(String(""), -1, prefix);
+    related_sight.set(String(""), -1, String(""));
     
 }
 
@@ -1403,16 +1414,23 @@ void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
     if(type != String("l")){
         //*this is either an orthodrome or a circle of equal altitude
         
-        Route route;
+//        Route route;
         vector<Angle> t;
         
-        //set route equal to a parallel with latitude phi_min
-        (route.type) = String("c");
-        ((route.reference_position).lambda) = 0.0;
-        ((route.reference_position).phi) = GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0;
-        (route.omega).set(String(""), M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value), String(""));
-        
-        intersection(route, &t, String(""));
+//        //set route equal to a parallel with latitude phi_min
+//        (route.type) = String("c");
+//        ((route.reference_position).lambda) = 0.0;
+//        ((route.reference_position).phi) = GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0;
+//        (route.omega).set(String(""), M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value), String(""));
+//
+        intersection(
+                     Route(
+                           String("c"),
+                           Position(Angle(0.0), Angle(GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0)),
+                           Angle(M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value))
+                           ),
+                     &t,
+                     String(""));
 
     }else{
         //*this is a loxodrome
@@ -8890,8 +8908,8 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
-            //            dummy_route.draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
+//            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
+            dummy_route.draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
 
         }
         

@@ -8866,8 +8866,8 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-//            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
-            dummy_route.draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
+            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
+            //            dummy_route.draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
 
         }
         

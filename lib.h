@@ -737,6 +737,7 @@ public:
     
     Route(void);
     Route(String, String, Position, Angle, Length, String);
+    Route(String, String, Position, Angle, String);
     void enter(String, String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);

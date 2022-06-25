@@ -1277,6 +1277,30 @@ Route::Route(void){
     
 }
 
+
+//constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet.
+Route::Route(String name, String type_in, Position reference_position_in, Angle alpha_in, Length l_in, String prefix){
+    
+    type = type_in;
+    reference_position = reference_position_in;
+    alpha = alpha_in;
+    l = l_in;
+    
+    related_sight.set(String(""), -1, prefix);
+    
+}
+
+//constructs a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.
+Route::Route(String name, String type_in, Position reference_position_in, Angle omega_in, String prefix){
+    
+    type = type_in;
+    reference_position = reference_position_in;
+    omega = omega_in;
+    
+    related_sight.set(String(""), -1, prefix);
+    
+}
+
 //I add the Route this to the wxListCtrl listcontrol
 void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol){
     

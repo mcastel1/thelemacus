@@ -44,6 +44,7 @@
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - when you draw routes in Render_Mercator and Render_3D, you should use the function draw_Mercator and draw_3D
+ - check that phi_min, phi_max, lambda_min, lambda_max are always normalized throughout the code: change lines that alter the values of these angles, for example by replacing phi_min.normalize_pm_pi() with phi_min.normalize_pm_pi_ret()
  */
 
 

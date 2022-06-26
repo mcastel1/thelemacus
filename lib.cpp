@@ -1887,7 +1887,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                 if(d < (Re*((omega+(route.omega)).value))){
                     //the routes have a common area
                     
-                    if(t!=NULL) && (!(intersection(route, t, new_prefix)))){
+                    if((t!=NULL) && (!(intersection(route, t, new_prefix)))){
                         //the routes do no intersect: I write 0, 0 into t
                         
                         t->resize(2);

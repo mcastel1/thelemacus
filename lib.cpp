@@ -1586,6 +1586,96 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     
 }
 
+//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible. 
+void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
+    
+    vector<Angle> t;
+    
+    switch((type.value)[0]){
+            
+        case 'l':{
+            
+            cout << prefix.value << RED << "Cannot execute compute_l_ends: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
+            
+            break;
+            
+        }
+            
+        case 'o':{
+            //the Route this is an orthodrome
+            
+            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
+                
+                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
+                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
+                
+                t.clear();
+                
+            }
+            
+            break;
+      
+        }
+            
+        case 'c':{
+            //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
+            
+            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
+                
+                if((t[0] == 0.0) && (t[1] == 0.0)){
+                    //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+                    
+                    ((*s)[0]).set(String(""), 0.0, String(""));
+                    ((*s)[1]).set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
+                    
+                }else{
+                    //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
+                    
+                    Length l1, l2;
+
+                    //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
+                    compute_end(
+                                Length(
+                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0)).value) * (Re*sin(omega))
+                                       ),
+                                String(""));
+                    ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+                    
+                    compute_end(
+                                Length(
+                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0+M_PI)).value) * (Re*sin(omega))
+                                       ),
+                                String(""));
+                    ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+                    
+                    if(l2>l1){
+                        
+                        ((*s)[0]).set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
+                        ((*s)[1]).set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                        
+                    }else{
+                        
+                        ((*s)[0]).set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                        ((*s)[1]).set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
+                        
+                    }
+                    
+                }
+                
+                t.clear();
+                
+            }
+            
+            break;
+            
+        }
+            
+    }
+    
+}
+
 void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
     unsigned int j;

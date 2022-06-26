@@ -756,6 +756,7 @@ public:
     void draw_Mercator(unsigned int, int, int, DrawPanel*, String);
     void draw_3D(unsigned int, int, int, DrawPanel*, String);
     bool lambda_min_max(Angle*, Angle*, String);
+    void compute_l_ends(vector<Length>*, DrawPanel*, String);
 
 };
 

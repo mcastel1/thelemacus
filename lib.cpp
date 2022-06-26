@@ -1414,15 +1414,15 @@ void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
     if(type != String("l")){
         //*this is either an orthodrome or a circle of equal altitude
         
-//        Route route;
+        //        Route route;
         vector<Angle> t;
         
-//        //set route equal to a parallel with latitude phi_min
-//        (route.type) = String("c");
-//        ((route.reference_position).lambda) = 0.0;
-//        ((route.reference_position).phi) = GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0;
-//        (route.omega).set(String(""), M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value), String(""));
-//
+        //        //set route equal to a parallel with latitude phi_min
+        //        (route.type) = String("c");
+        //        ((route.reference_position).lambda) = 0.0;
+        //        ((route.reference_position).phi) = GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0;
+        //        (route.omega).set(String(""), M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value), String(""));
+        //
         intersection(
                      Route(
                            String("c"),
@@ -1431,12 +1431,12 @@ void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
                            ),
                      &t,
                      String(""));
-
+        
     }else{
         //*this is a loxodrome
         
         cout << prefix.value << RED << "Cannot execute draw_Mercator: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
-                
+        
     }
     
     
@@ -1468,7 +1468,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             
             //revise this functio nin such a way that accepts NULL
             if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
-                 
+                
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
@@ -1497,7 +1497,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             }
             
             break;
-      
+            
         }
             
         case 'c':{
@@ -1571,7 +1571,7 @@ void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
             }
             
             break;
-      
+            
         }
             
         case 'c':{
@@ -1590,7 +1590,7 @@ void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
                     
                     Length l1, l2;
-
+                    
                     //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
                     compute_end(
                                 Length(
@@ -1975,7 +1975,6 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 Double a, b, square_root, cos_t_p, cos_t_m;
                 bool output;
                 
-                t->clear();
                 
                 a.set(String(""),
                       -(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi))) - sin((reference_position.phi))*sin(((route.reference_position).phi)),
@@ -1997,16 +1996,22 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
                     
-                    t->resize((t->size())+1);
-                    (t->back()).set(String(""), acos(cos_t_p), prefix);
+                    if(t){
+                        t->clear();
+                        t->resize((t->size())+1);
+                        (t->back()).set(String(""), acos(cos_t_p), prefix);
+                    }
                     
                     //if I find a viable instersection point, I set output to true
                     output = true;
                     
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                         
-                        t->resize((t->size())+1);
-                        (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
+                        if(t){
+                            t->clear();
+                            t->resize((t->size())+1);
+                            (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
+                        }
                         
                         //if I find a viable instersection point, I set output to true
                         output = true;
@@ -2018,8 +2023,11 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
                     
-                    t->resize((t->size())+1);
-                    (t->back()).set(String(""), acos(cos_t_m), prefix);
+                    if(t){
+                        t->clear();
+                        t->resize((t->size())+1);
+                        (t->back()).set(String(""), acos(cos_t_m), prefix);
+                    }
                     
                     //if I find a viable instersection point, I set output to true
                     output = true;
@@ -2027,18 +2035,18 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                         
-                        t->resize((t->size())+1);
-                        (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
+                        if(t){
+                            t->clear();
+                            t->resize((t->size())+1);
+                            (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
+                        }
                         
                         //if I find a viable instersection point, I set output to true
                         output = true;
                         
-                        
                     }
                     
                 }
-                
-                //                }
                 
                 return output;
                 
@@ -2048,7 +2056,6 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 return false;
                 
             }
-            
             
         }
         
@@ -2144,7 +2151,6 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         return false;
         
     }
-    
     
 }
 
@@ -8917,7 +8923,7 @@ void DrawPanel::Draw_Mercator(void){
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
                             );
-
+    
     //set delta_lambda
     if(lambda_span > 1.0){gamma_lambda = 1.0;}
     else{gamma_lambda = 60.0;}
@@ -8954,9 +8960,9 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-//            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
+            //            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
             dummy_route.draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
-
+            
         }
         
         if(gamma_lambda == 60.0){
@@ -9034,8 +9040,8 @@ void DrawPanel::Draw_Mercator(void){
             
             //I set the length of the Route corresponding to the parallel
             (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
-                        dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-//            dummy_route.draw_Mercator(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            //            dummy_route.draw_Mercator(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
             
         }

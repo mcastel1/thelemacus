@@ -9289,7 +9289,7 @@ void DrawPanel::Draw_3D(void){
             if(gamma_phi != 1.0){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
-                (route.type).set(String(""), String("l"), String(""));
+                (route.type).set(String(""), String("o"), String(""));
                 (route.alpha).set(String(""), M_PI/2.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 
@@ -9300,7 +9300,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+                        route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                         
                     }
                 

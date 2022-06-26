@@ -1466,7 +1466,6 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         case 'o':{
             //the Route this is an orthodrome
             
-            //revise this functio nin such a way that accepts NULL
             if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
                 
                 //tabulate the Route points

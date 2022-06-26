@@ -1448,8 +1448,10 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     unsigned int i;
     vector<double> x, y;
     Projection temp;
-    Length /*the start and eng length used in the loop to draw *this */l_start, l_end, l1, l2;
-    vector<Angle> t;
+    vector<Length> s(2);
+    
+    //comoute the end values of l and writes them in s
+    compute_l_ends(&s, draw_panel, prefix);
     
     switch((type.value)[0]){
             
@@ -1464,16 +1466,13 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         case 'o':{
             //the Route this is an orthodrome
             
-            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
-                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-                
-                l_start.set(String(""), Re*((t[0]).value), String(""));
-                l_end.set(String(""), Re*((t[1]).value), String(""));
-                
+            //revise this functio nin such a way that accepts NULL
+            if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
+                 
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
-                    compute_end(Length((l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1))), String(""));
+                    compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
                     
                     if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                         
@@ -1494,7 +1493,6 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                 //free up memory
                 x.clear();
                 y.clear();
-                t.clear();
                 
             }
             
@@ -1505,54 +1503,14 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         case 'c':{
             //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
             
-            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+            if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
                 //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-                
-                if((t[0] == 0.0) && (t[1] == 0.0)){
-                    //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
-                    
-                    l_start.set(String(""), 0.0, String(""));
-                    l_end.set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
-                    
-                }else{
-                    //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
-                    
-                    
-                    //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
-                    compute_end(
-                                Length(
-                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0)).value) * (Re*sin(omega))
-                                       ),
-                                String(""));
-                    ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
-                    
-                    compute_end(
-                                Length(
-                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0+M_PI)).value) * (Re*sin(omega))
-                                       ),
-                                String(""));
-                    ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
-                    
-                    if(l2>l1){
-                        
-                        l_start.set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
-                        l_end.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-                        
-                    }else{
-                        
-                        l_start.set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-                        l_end.set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
-                        
-                    }
-                    
-                }
-                
                 
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
                     //set the temporarly length across the Route
-                    compute_end(Length((l_start.value) + ((l_end-l_start).value)*((double)i)/((double)(n_points-1))), String(""));
+                    compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
                     
                     if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                         
@@ -1564,7 +1522,6 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                 }
                 
                 //draw the Route in draw_panel
-                
                 (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
                 (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
                 if(width != -1){
@@ -1574,7 +1531,6 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
                 //free up memory
                 x.clear();
                 y.clear();
-                t.clear();
                 
             }
             
@@ -1586,7 +1542,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     
 }
 
-//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible. 
+//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible.
 void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
     
     vector<Angle> t;

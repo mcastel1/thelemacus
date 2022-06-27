@@ -1573,8 +1573,8 @@ void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint
     
 }
 
-//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible.
-void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
+//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible. It returns true if the values of the length above could be computed succesfully, and false otherwise. 
+bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
     
     vector<Angle> t;
     
@@ -1583,6 +1583,8 @@ void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
         case 'l':{
             
             cout << prefix.value << RED << "Cannot execute compute_l_ends: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
+            
+            return false;
             
             break;
             
@@ -1598,6 +1600,12 @@ void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
                 
                 t.clear();
+                
+                return true;
+                
+            }else{
+                
+                return false;
                 
             }
             
@@ -1652,6 +1660,12 @@ void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 }
                 
                 t.clear();
+                
+                return true;
+                
+            }else{
+                
+                return false;
                 
             }
             

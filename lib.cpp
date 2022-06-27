@@ -1435,6 +1435,26 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
                      &t_phi_max,
                      String(""));
         
+        intersection(
+                     Route(
+                           String("o"),
+                           Position(((draw_panel->plot)->lambda_min), Angle(-M_PI/2.0)),
+                           Angle(0.0),
+                           Length(Re*M_PI)
+                           ),
+                     &t_lambda_min,
+                     String(""));
+        
+        intersection(
+                     Route(
+                           String("o"),
+                           Position(((draw_panel->plot)->lambda_max), Angle(-M_PI/2.0)),
+                           Angle(0.0),
+                           Length(Re*M_PI)
+                           ),
+                     &t_lambda_max,
+                     String(""));
+        
     }else{
         //*this is a loxodrome
         

@@ -8804,7 +8804,9 @@ void DrawPanel::TabulateRoutes(void){
     //tabulate the points of routes
     for((plot->route_list).resize((plot->route_list).size()), i=0; i<(plot->route_list).size(); i++){
         
-        ((plot->route_list)[i]).Draw_3D((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
+        (((plot->route_list)[i]).*DrawRoute)((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
+
+//        ((plot->route_list)[i]).Draw_3D((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
         
     }
     
@@ -10626,7 +10628,6 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
         DrawRoute = (&Route::Draw_3D);
-        
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode
         //        (parent->slider)->Enable(false);

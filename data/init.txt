@@ -60,7 +60,7 @@ relative displacement = 0.1
 d draw 3d = 3.0
 default projection = 3D
 #the number of chart frames opened when the program starts
-number chart frames = 1
+number chart frames = 2
 #initial rotation with which the 3D projection is displayed
 rotation 0 =
 alpha = 268° 3.43879'

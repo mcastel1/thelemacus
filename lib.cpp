@@ -1408,8 +1408,9 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     
 }
 
-//draws the Route *this into draw_panel, with the Mercator projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
+
+
+void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
     if(type != String("l")){
         //*this is either an orthodrome or a circle of equal altitude
@@ -1438,12 +1439,6 @@ void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
         cout << prefix.value << RED << "Cannot execute draw_Mercator: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
         
     }
-    
-    
-}
-
-void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
-    
     
 }
 
@@ -8937,7 +8932,7 @@ void DrawPanel::Draw_Mercator(void){
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
             //            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
-            dummy_route.draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
+            dummy_route.Draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
             
         }
         

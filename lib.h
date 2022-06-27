@@ -753,7 +753,6 @@ public:
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     void draw(unsigned int, int, int, DrawPanel*);
-    void draw_Mercator(unsigned int, int, int, DrawPanel*, String);
  
     void Draw_Mercator(unsigned int, int, int, DrawPanel*, String);
     void Draw_Mercator(unsigned int, DrawPanel*, vector<wxPoint>*, String);

@@ -1415,22 +1415,24 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
     if(type != String("l")){
         //*this is either an orthodrome or a circle of equal altitude
         
-        //        Route route;
-        vector<Angle> t;
-        
-        //        //set route equal to a parallel with latitude phi_min
-        //        (route.type) = String("c");
-        //        ((route.reference_position).lambda) = 0.0;
-        //        ((route.reference_position).phi) = GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0;
-        //        (route.omega).set(String(""), M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value), String(""));
-        //
+        vector<Angle> t_lambda_min, t_lambda_max, t_phi_min, t_phi_max;
+
         intersection(
                      Route(
                            String("c"),
                            Position(Angle(0.0), Angle(GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0)),
                            Angle(M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value))
                            ),
-                     &t,
+                     &t_phi_min,
+                     String(""));
+        
+        intersection(
+                     Route(
+                           String("c"),
+                           Position(Angle(0.0), Angle(GSL_SIGN((((draw_panel->plot)->phi_max).normalize_pm_pi_ret()).value) * M_PI/2.0)),
+                           Angle(M_PI/2.0 - fabs((((draw_panel->plot)->phi_max).normalize_pm_pi_ret()).value))
+                           ),
+                     &t_phi_max,
                      String(""));
         
     }else{
@@ -2025,9 +2027,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             //obtain the minimum distance across all cases, which may be 2, 3, or 4, and chekwhetehr it is smaller than Re * apertur angle of route
             if((*min_element(s.begin(), s.end())) < Re*((route.omega).value)){
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
-                
-                //                if(t){
-                
+                                
                 Double a, b, square_root, cos_t_p, cos_t_m;
                 bool output;
                 
@@ -2056,7 +2056,6 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
                     
                     if(t){
-                        //                        t->clear();
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_p), prefix);
                     }
@@ -2067,7 +2066,6 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                         
                         if(t){
-                            //                            t->clear();
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
                         }
@@ -2083,7 +2081,6 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
                     
                     if(t){
-                        //                        t->clear();
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_m), prefix);
                     }
@@ -2095,7 +2092,6 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                         
                         if(t){
-                            //                            t->clear();
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
                         }

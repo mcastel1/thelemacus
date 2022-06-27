@@ -1541,9 +1541,32 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     
 }
 
-
-void Route::draw_3D(unsigned int n_points, int color, int width, vector<wxPoint>* v, String prefix){
-
+//tabulate the points of Route *this in the 3D projection of draw_panel and writes them into v
+void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* v, String prefix){
+    
+    unsigned int i;
+    wxPoint p;
+    vector<Length> s(2);
+    
+    //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
+    if(compute_l_ends(&s, draw_panel, prefix)){
+        //the Route this is an orthodrome
+        
+        //tabulate the Route points
+        for(v->clear(), i=0; i<n_points; i++){
+            
+            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+            
+            if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
+                
+                (*v).push_back(p);
+                
+            }
+            
+        }
+                
+    }
+    
 }
 
 //computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible.

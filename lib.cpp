@@ -8534,14 +8534,15 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //draw routes
     for(i=0; i<(plot->route_list).size(); i++){
         
+        //set the route thickness and pen
         if(i == ((parent->parent)->highlighted_route)){
             thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }else{
             thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }
-        
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
+        //draw the reference_position
         if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
             //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
             
@@ -8559,7 +8560,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
         }
     
-        
+        //draw the route points
         if((points_route_list[i]).size() > 1){
             //I need to add this consdition to make sure that the index j below lies in a valid range
             
@@ -8569,15 +8570,16 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
     }
     
+    
     //draw positions
     for(i=0; i<(plot->position_list).size(); i++){
         
+        //set thickness and pen
         if(i == ((parent->parent)->highlighted_position)){
             thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }else{
             thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
         }
-        
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         if(GeoToDrawPanel_3D((plot->position_list)[i], &p)){
@@ -8660,7 +8662,6 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         
     }
-    
     
     
     //draw  labels of parallels

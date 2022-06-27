@@ -1308,6 +1308,9 @@ Route::Route(String type_in, Position reference_position_in, Angle omega_in){
     reference_position = reference_position_in;
     omega = omega_in;
     
+    //the lenght of the circle of equal altitude is set by default 
+    l.set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
+    
     related_sight.set(String(""), -1, String(""));
     
 }

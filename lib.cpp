@@ -1442,6 +1442,11 @@ void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
     
 }
 
+void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
+    
+    
+}
+
 //draws the Route *this into draw_panel, with the 3D projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
 void Route::Draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
@@ -1538,6 +1543,10 @@ void Route::Draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
         }
             
     }
+    
+}
+
+void Route::Draw_Mercator(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* v, String prefix){
     
 }
 
@@ -10594,7 +10603,8 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
-        
+        DrawRoute = (&Route::Draw_Mercator);
+
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);
@@ -10615,7 +10625,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
-        
+        DrawRoute = (&Route::Draw_3D);
         
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode

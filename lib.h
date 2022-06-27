@@ -754,8 +754,12 @@ public:
     void update_wxListCtrl(long, wxListCtrl*);
     void draw(unsigned int, int, int, DrawPanel*);
     void draw_Mercator(unsigned int, int, int, DrawPanel*, String);
+ 
+    void Draw_Mercator(unsigned int, int, int, DrawPanel*, String);
+    void Draw_Mercator(unsigned int, DrawPanel*, vector<wxPoint>*, String);
     void Draw_3D(unsigned int, int, int, DrawPanel*, String);
     void Draw_3D(unsigned int, DrawPanel*, vector<wxPoint>*, String);
+    
     bool lambda_min_max(Angle*, Angle*, String);
     bool compute_l_ends(vector<Length>*, DrawPanel*, String);
 
@@ -1419,13 +1423,15 @@ public:
  
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
-    bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
+     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*);
     void (DrawPanel::*Render)(wxDC&);
     bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
-
+    //this may point to either Rooute.Draw_Mercator or Route.Draw_3D
+    void (Route::*DrawRoute)(unsigned int, DrawPanel*, vector<wxPoint>*, String);
+  
     
     void SetIdling(bool);
     void Draw_Mercator(void);

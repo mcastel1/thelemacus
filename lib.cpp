@@ -8567,8 +8567,6 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
         }
         
-        
-        
     }
     
     //draw positions
@@ -8582,21 +8580,17 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
-        
         if(GeoToDrawPanel_3D((plot->position_list)[i], &p)){
             //if the point returned from GeoToDrawPanel_Mercator falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
             
         }
-        
-        
-        
+                
     }
     
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
-    
     
     
     //draw labels of meridians
@@ -8685,7 +8679,6 @@ void DrawPanel::Render_3D(wxDC&  dc){
             
         }
         
-        
     }else{
         
         if((plot->phi_max) == M_PI/2.0){
@@ -8721,13 +8714,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
     }
     
-    
-    
-    
-    
 }
-
-
 
 
 

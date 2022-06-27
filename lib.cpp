@@ -1558,9 +1558,7 @@ void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint
             compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
             
             if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
-                
-                (*v).push_back(p);
-                
+                (*v).push_back(p);                
             }
             
         }

@@ -754,8 +754,8 @@ public:
     void update_wxListCtrl(long, wxListCtrl*);
     void draw(unsigned int, int, int, DrawPanel*);
     void draw_Mercator(unsigned int, int, int, DrawPanel*, String);
-    void draw_3D(unsigned int, int, int, DrawPanel*, String);
-    void draw_3D(unsigned int, DrawPanel*, vector<wxPoint>*, String);
+    void Draw_3D(unsigned int, int, int, DrawPanel*, String);
+    void Draw_3D(unsigned int, DrawPanel*, vector<wxPoint>*, String);
     bool lambda_min_max(Angle*, Angle*, String);
     bool compute_l_ends(vector<Length>*, DrawPanel*, String);
 

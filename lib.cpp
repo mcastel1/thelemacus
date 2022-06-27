@@ -1443,7 +1443,7 @@ void Route::draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
 }
 
 //draws the Route *this into draw_panel, with the 3D projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
+void Route::Draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
     unsigned int i;
     vector<double> x, y;
@@ -1457,7 +1457,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
             
         case 'l':{
             
-            cout << prefix.value << RED << "Cannot execute draw_3D: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
+            cout << prefix.value << RED << "Cannot execute Draw_3D: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
             
             break;
             
@@ -1542,7 +1542,7 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
 }
 
 //tabulate the points of Route *this in the 3D projection of draw_panel and writes them into v
-void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* v, String prefix){
+void Route::Draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* v, String prefix){
     
     unsigned int i;
     wxPoint p;
@@ -1558,7 +1558,7 @@ void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint
             compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
             
             if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
-                (*v).push_back(p);                
+                (*v).push_back(p);
             }
             
         }
@@ -9340,9 +9340,9 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            //replace this with draw_3D adter you revised draw_3D
+            //replace this with Draw_3D adter you revised Draw_3D
             //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
             if(gamma_lambda != 1.0){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9360,7 +9360,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    route.Draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                     
                 }
                 
@@ -9391,7 +9391,7 @@ void DrawPanel::Draw_3D(void){
             (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI/2.0, String(""));
             
-            route.draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
             if(gamma_phi != 1.0){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9407,7 +9407,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        route.Draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                         
                     }
                 

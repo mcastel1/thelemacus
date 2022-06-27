@@ -1541,6 +1541,11 @@ void Route::draw_3D(unsigned int n_points, int color, int width, DrawPanel* draw
     
 }
 
+
+void Route::draw_3D(unsigned int n_points, int color, int width, vector<wxPoint>* v, String prefix){
+
+}
+
 //computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible.
 void Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
     

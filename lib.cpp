@@ -1308,7 +1308,7 @@ Route::Route(String type_in, Position reference_position_in, Angle omega_in){
     reference_position = reference_position_in;
     omega = omega_in;
     
-    //the lenght of the circle of equal altitude is set by default 
+    //the lenght of the circle of equal altitude is set by default
     l.set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
     
     related_sight.set(String(""), -1, String(""));
@@ -1458,7 +1458,7 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
                            ),
                      &t_lambda_max,
                      String(""));
-        
+     
         u[0] = t_phi_min[1];
         u[1] = t_phi_max[1];
         u[2] = t_lambda_min[1];

@@ -1565,6 +1565,10 @@ void Route::draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint
             
         }
                 
+    }else{
+        
+        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
+        
     }
     
 }

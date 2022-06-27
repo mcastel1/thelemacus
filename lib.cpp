@@ -8722,7 +8722,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
 //this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
 void DrawPanel::TabulateRoutes_Mercator(void){
     
-    unsigned int i, j, l;
+    unsigned int i, l;
     Length l_tot;
     wxPoint p;
     bool end_connected;

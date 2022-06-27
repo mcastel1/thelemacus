@@ -1942,10 +1942,13 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         if((((*this).type == String("o")))){
             //*this is an orthodrome -> I check whether route and *this intersect: I compute the minimal distance between a point on *this and the GP (reference position) of route. I do this by checking the distance at the two extrema (at the beginning and at the end of *this), and by looking for an extremum in the middle of *this
             
-            vector<Length> s(2);
+            vector<Length> s;
+            
+            s.clear();
             
             //case 1: the beinning of this
-            reference_position.distance(route.reference_position, s.data(), String(""), prefix);
+            s.resize(s.size()+1);
+            reference_position.distance(route.reference_position, &(s.back()), String(""), prefix);
             
             compute_end(prefix);
             end.distance(route.reference_position, (s.data())+1, String(""), prefix);

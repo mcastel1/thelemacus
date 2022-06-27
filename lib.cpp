@@ -8804,53 +8804,11 @@ void DrawPanel::TabulateRoutes_3D(void){
         (points_route_list[i]).clear();
     }
     
-    
     //tabulate the points of routes
     for((plot->route_list).resize((plot->route_list).size()), i=0; i<(plot->route_list).size(); i++){
         
         ((plot->route_list)[i]).Draw_3D((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
         
-        //        points_route_list.resize(points_route_list.size()+1);
-        //
-        //        if((((plot->route_list)[i]).type) == String("c")){
-        //            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
-        //
-        //            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
-        //
-        //        }else{
-        //            //otherwise, the total length is simply written in the l object
-        //
-        //            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
-        //
-        //        }
-        //
-        //        //compute points of route #i
-        //        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
-        //
-        //            //I consider a Length which spans between 0 and  l_tot
-        //            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-        //            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
-        //
-        //            if(GeoToDrawPanel_3D(((plot->route_list)[i]).end, &p)){
-        //
-        //                if(end_connected){
-        //
-        //                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
-        //                    end_connected = false;
-        //
-        //                }
-        //
-        //
-        //                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
-        //
-        //            }else{
-        //
-        //                end_connected = true;
-        //
-        //            }
-        //
-        //        }
-        //
     }
     
 }
@@ -9270,34 +9228,8 @@ void DrawPanel::Draw_3D(void){
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
     (route.l).set(String(""), Re*M_PI, String(""));
-    
-    //    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
-    //        //in this case circle_observer encircles a pole and thus it spans all longitudes
-    //
-    //        if((plot->phi_max) == M_PI/2.0){
-    //            //circle_observer encircles the N pole
-    //
-    //            (route.alpha).set(String(""), 0.0, String(""));
-    //            ((route.reference_position).phi) = (plot->phi_min);
-    //
-    //        }
-    //
-    //        if((plot->phi_min) == 3.0*M_PI/2.0){
-    //            //circle_observer encircles the S pole
-    //
-    //            (route.alpha).set(String(""), M_PI, String(""));
-    //            ((route.reference_position).phi) = (plot->phi_max);
-    //
-    //        }
-    //
-    //    }else{
-    //        //circle_observer does not encircle any pole and thus it does not span all longitudes
-    //
     (route.alpha).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = -M_PI/2.0;
-    
-    //    }
-    //
     
     for(
         (((route.reference_position).lambda).value) = (lambda_start.value);

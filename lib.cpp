@@ -1415,7 +1415,8 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
     if(type != String("l")){
         //*this is either an orthodrome or a circle of equal altitude
         
-        vector<Angle> t_lambda_min, t_lambda_max, t_phi_min, t_phi_max;
+        vector<Angle> t_lambda_min, t_lambda_max, t_phi_min, t_phi_max, u(4);
+        Angle t_min, t_max;
 
         intersection(
                      Route(
@@ -1455,6 +1456,19 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
                      &t_lambda_max,
                      String(""));
         
+        u[0] = t_phi_min[1];
+        u[1] = t_phi_max[1];
+        u[2] = t_lambda_min[1];
+        u[3] = t_lambda_max[1];
+        t_min = (*min_element(u.begin(), u.end()));
+  
+        u[0] = t_phi_min[0];
+        u[1] = t_phi_max[0];
+        u[2] = t_lambda_min[0];
+        u[3] = t_lambda_max[0];
+        t_max = (*max_element(u.begin(), u.end()));
+  
+
     }else{
         //*this is a loxodrome
         

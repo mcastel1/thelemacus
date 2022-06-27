@@ -1562,7 +1562,7 @@ void Route::Draw_3D(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint
             }
             
         }
-                
+        
     }else{
         
         cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
@@ -1987,7 +1987,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             //*this is an orthodrome -> I check whether route and *this intersect: I compute the minimal distance between a point on *this and the GP (reference position) of route. I do this by checking the distance at the two extrema (at the beginning and at the end of *this), and by looking for an extremum in the middle of *this
             
             vector<Length> s(2);
-                        
+            
             //case 1: the starting point (or reference_position) of *this
             reference_position.distance(route.reference_position, s.data(), String(""), prefix);
             
@@ -2052,7 +2052,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
                     
                     if(t){
-//                        t->clear();
+                        //                        t->clear();
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_p), prefix);
                     }
@@ -2063,7 +2063,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                         
                         if(t){
-//                            t->clear();
+                            //                            t->clear();
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
                         }
@@ -2079,7 +2079,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
                     
                     if(t){
-//                        t->clear();
+                        //                        t->clear();
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_m), prefix);
                     }
@@ -2091,7 +2091,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                         
                         if(t){
-//                            t->clear();
+                            //                            t->clear();
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
                         }
@@ -8125,10 +8125,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     //allocates points_route_list and ts_route_list
     points_route_list.resize((plot->route_list).size());
     for(i=0; i<(plot->route_list).size(); i++){
-        
-        for(j=0; j<(points_route_list[i]).size(); j++){(points_route_list[i][j]).clear();}
         (points_route_list[i]).clear();
-        
     }
     
     idling = false;
@@ -8221,7 +8218,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     bool first_label;
-    int i, j, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
+    int i,  /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
     
     wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -8262,21 +8259,14 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         }
         
         
-        //run over the connected chunks of the i-th route
-        for(j=0; j<(points_route_list[i]).size(); j++){
+        if((points_route_list[i]).size() > 1){
+            //I need to add this consdition to make sure that the index j below lies in a valid range
             
-            //                for(l=0; l<(points_route_list[i][j]).size(); l++){
-            //                    dc.DrawCircle(points_route_list[i][j][l], 4.0*thickness);
-            //                }
-            //
-            if((points_route_list[i][j]).size() > 1){
-                //I need to add this consdition to make sure that the index j below lies in a valid range
-                
-                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
-                
-            }
+            dc.DrawSpline((int)((points_route_list[i]).size()), (points_route_list[i]).data());
             
         }
+        
+        
         
     }
     
@@ -8517,7 +8507,7 @@ void DrawPanel::DrawParallelLabel(const Position& q, wxDC&  dc){
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC&  dc){
     
-    int i, j, color_id;
+    int i, color_id;
     double thickness;
     Angle lambda;
     stringstream s;
@@ -8568,19 +8558,16 @@ void DrawPanel::Render_3D(wxDC&  dc){
             }
             
         }
+    
         
-        
-        //run over the connected chunks of the i-th route
-        for(j=0; j<(points_route_list[i]).size(); j++){
+        if((points_route_list[i]).size() > 1){
+            //I need to add this consdition to make sure that the index j below lies in a valid range
             
-            if((points_route_list[i][j]).size() > 1){
-                //I need to add this consdition to make sure that the index j below lies in a valid range
-                
-                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
-                
-            }
+            dc.DrawSpline((int)((points_route_list[i]).size()), (points_route_list[i]).data());
             
         }
+        
+        
         
     }
     
@@ -8754,19 +8741,8 @@ void DrawPanel::TabulateRoutes_Mercator(void){
     
     //clear up points_route_list
     for(i=0; i<points_route_list.size(); i++){
-        
-        for(j=0; j<(points_route_list[i]).size(); j++){
-            
-            //            if(((points_route_list[i][j]).data()) != NULL){
-            (points_route_list[i][j]).clear();
-            //            }
-            
-        }
-        
         (points_route_list[i]).clear();
-        
     }
-    points_route_list.clear();
     
     
     //compute the points of  routes
@@ -8803,7 +8779,7 @@ void DrawPanel::TabulateRoutes_Mercator(void){
                     
                 }
                 
-                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
+                (points_route_list[i]).push_back(p);
                 
             }else{
                 
@@ -8820,73 +8796,61 @@ void DrawPanel::TabulateRoutes_Mercator(void){
 //this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
 void DrawPanel::TabulateRoutes_3D(void){
     
-    unsigned int i, j, l;
-    Length l_tot;
+    unsigned int i;
     wxPoint p;
-    bool end_connected;
     
     //clear up points_route_list
     for(i=0; i<points_route_list.size(); i++){
-        
-        for(j=0; j<(points_route_list[i]).size(); j++){
-            
-            //            if(((points_route_list[i][j]).data()) != NULL){
-            (points_route_list[i][j]).clear();
-            //            }
-            
-        }
-        
         (points_route_list[i]).clear();
-        
     }
-    points_route_list.clear();
     
     
-    //compute the points of  routes
-    //run over all routes
-    for(i=0; i<(plot->route_list).size(); i++){
+    //tabulate the points of routes
+    for((plot->route_list).resize((plot->route_list).size()), i=0; i<(plot->route_list).size(); i++){
         
-        points_route_list.resize(points_route_list.size()+1);
+        ((plot->route_list)[i]).Draw_3D((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
         
-        if((((plot->route_list)[i]).type) == String("c")){
-            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
-            
-            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
-            
-        }else{
-            //otherwise, the total length is simply written in the l object
-            
-            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
-            
-        }
-        
-        //compute points of route #i
-        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
-            
-            //I consider a Length which spans between 0 and  l_tot
-            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
-            
-            if(GeoToDrawPanel_3D(((plot->route_list)[i]).end, &p)){
-                
-                if(end_connected){
-                    
-                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
-                    end_connected = false;
-                    
-                }
-                
-                
-                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
-                
-            }else{
-                
-                end_connected = true;
-                
-            }
-            
-        }
-        
+        //        points_route_list.resize(points_route_list.size()+1);
+        //
+        //        if((((plot->route_list)[i]).type) == String("c")){
+        //            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
+        //
+        //            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
+        //
+        //        }else{
+        //            //otherwise, the total length is simply written in the l object
+        //
+        //            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
+        //
+        //        }
+        //
+        //        //compute points of route #i
+        //        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+        //
+        //            //I consider a Length which spans between 0 and  l_tot
+        //            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
+        //            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
+        //
+        //            if(GeoToDrawPanel_3D(((plot->route_list)[i]).end, &p)){
+        //
+        //                if(end_connected){
+        //
+        //                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
+        //                    end_connected = false;
+        //
+        //                }
+        //
+        //
+        //                (points_route_list[i][(points_route_list[i]).size()-1]).push_back(p);
+        //
+        //            }else{
+        //
+        //                end_connected = true;
+        //
+        //            }
+        //
+        //        }
+        //
     }
     
 }
@@ -9307,33 +9271,33 @@ void DrawPanel::Draw_3D(void){
     (route.type).set(String(""), String("o"), String(""));
     (route.l).set(String(""), Re*M_PI, String(""));
     
-//    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
-//        //in this case circle_observer encircles a pole and thus it spans all longitudes
-//
-//        if((plot->phi_max) == M_PI/2.0){
-//            //circle_observer encircles the N pole
-//
-//            (route.alpha).set(String(""), 0.0, String(""));
-//            ((route.reference_position).phi) = (plot->phi_min);
-//
-//        }
-//
-//        if((plot->phi_min) == 3.0*M_PI/2.0){
-//            //circle_observer encircles the S pole
-//
-//            (route.alpha).set(String(""), M_PI, String(""));
-//            ((route.reference_position).phi) = (plot->phi_max);
-//
-//        }
-//
-//    }else{
-//        //circle_observer does not encircle any pole and thus it does not span all longitudes
-//
-        (route.alpha).set(String(""), 0.0, String(""));
-        ((route.reference_position).phi) = -M_PI/2.0;
-        
-//    }
-//
+    //    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+    //        //in this case circle_observer encircles a pole and thus it spans all longitudes
+    //
+    //        if((plot->phi_max) == M_PI/2.0){
+    //            //circle_observer encircles the N pole
+    //
+    //            (route.alpha).set(String(""), 0.0, String(""));
+    //            ((route.reference_position).phi) = (plot->phi_min);
+    //
+    //        }
+    //
+    //        if((plot->phi_min) == 3.0*M_PI/2.0){
+    //            //circle_observer encircles the S pole
+    //
+    //            (route.alpha).set(String(""), M_PI, String(""));
+    //            ((route.reference_position).phi) = (plot->phi_max);
+    //
+    //        }
+    //
+    //    }else{
+    //        //circle_observer does not encircle any pole and thus it does not span all longitudes
+    //
+    (route.alpha).set(String(""), 0.0, String(""));
+    ((route.reference_position).phi) = -M_PI/2.0;
+    
+    //    }
+    //
     
     for(
         (((route.reference_position).lambda).value) = (lambda_start.value);
@@ -10767,7 +10731,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     Position p;
     wxPoint q;
     stringstream s;
-    unsigned int i, j , l;
+    int i, l;
     
     //    cout << "\nMouse moved";
     
@@ -10794,7 +10758,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     if(!mouse_dragging){
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
-        //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i][j], which are also with respect to the origin of the draw panel
+        //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
         
         //        cout << "route liist size = " << (plot->route_list).size() << "\nlistcontrol routes size = " << ((parent->parent)->listcontrol_routes)->GetItemCount() << "\n";
@@ -10809,57 +10773,51 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             }
             
             
-            for(j=0; j<(points_route_list[i]).size(); j++){
+            
+            for(l=0; l<(points_route_list[i]).size()-1; l++){
                 
-                for(l=0; l<(points_route_list[i][j]).size()-1; l++){
+                //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+                
+                if(/*to recognize that the mouse is hivering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ ( ((points_route_list[i][l]).x) != ((points_route_list[i][l+1]).x) )
+                   
+                   &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
+                   
+                   ( ((((points_route_list[i][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][l+1]).x))) ||
                     
-                    //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+                    ((((points_route_list[i][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][l]).x))) )
+                   
+                   &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
+                   
+                   (
+                    fabs(
+                         (position_draw_panel_now.y) -
+                         (((points_route_list[i][l]).y) + ((double)(((points_route_list[i][l+1]).y) - ((points_route_list[i][l]).y))) / ((double)(((points_route_list[i][l+1]).x) - ((points_route_list[i][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][l]).x))))
+                         )
                     
-                    /*
-                     ((points_route_list[i][j][l]).y) + (((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y)) / (((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x)) * ((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x));
-                     */
+                    <= (thickness_route_selection_over_length_screen.value)*((double)(((parent->parent)->rectangle_display).GetWidth()))/2.0
+                    )
+                   ){
                     
-                    if(/*to recognize that the mouse is hivering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ ( ((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l+1]).x) )
-                       
-                       &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
-                       
-                       ( ((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l+1]).x))) ||
-                        
-                        ((((points_route_list[i][j][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))) )
-                       
-                       &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
-                       
-                       (
-                        fabs(
-                             (position_draw_panel_now.y) -
-                             (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
-                             )
-                        
-                        <= (thickness_route_selection_over_length_screen.value)*((double)(((parent->parent)->rectangle_display).GetWidth()))/2.0
-                        )
-                       ){
-                        
-                        //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                        //                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
-                        
-                        //sets the highlighted route to i, so as to use highlighted_route in other functions
-                        ((parent->parent)->highlighted_route) = i;
-                        
-                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
-                        if((((plot->route_list)[i]).related_sight).value != -1){
-                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
-                        }
-                        
-                        // quit the loops over l and j
-                        break;
-                        break;
-                        
+                    //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][l]).y))) <
+                    //                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
+                    
+                    //sets the highlighted route to i, so as to use highlighted_route in other functions
+                    ((parent->parent)->highlighted_route) = i;
+                    
+                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                    ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
+                    if((((plot->route_list)[i]).related_sight).value != -1){
+                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
                     }
+                    
+                    // quit the loops over l
+                    break;
                     
                 }
                 
             }
+            
+            
             
             
         }

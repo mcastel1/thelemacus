@@ -2002,10 +2002,13 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 //this will be the output of this function: it is set to false for starters
                 output = false;
                 
+                //clear up t because I will write in i in what follows
+                if(t){t->clear();}
+                
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
                     
                     if(t){
-                        t->clear();
+//                        t->clear();
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_p), prefix);
                     }
@@ -2016,7 +2019,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                         
                         if(t){
-                            t->clear();
+//                            t->clear();
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
                         }
@@ -2032,7 +2035,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
                     
                     if(t){
-                        t->clear();
+//                        t->clear();
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_m), prefix);
                     }
@@ -2044,7 +2047,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                         
                         if(t){
-                            t->clear();
+//                            t->clear();
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
                         }

@@ -9260,7 +9260,7 @@ void DrawPanel::Draw_3D(void){
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
-    (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+    (route.l).set(String(""), Re*M_PI, String(""));
     
     if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
         //in this case circle_observer encircles a pole and thus it spans all longitudes
@@ -9319,7 +9319,7 @@ void DrawPanel::Draw_3D(void){
                     
                 }
                 
-                (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+                (route.l).set(String(""), Re*M_PI, String(""));
                 (route.alpha) = alpha_saved;
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
                 ((route.reference_position).phi) = phi_saved;

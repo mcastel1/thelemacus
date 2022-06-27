@@ -1942,14 +1942,12 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
         if((((*this).type == String("o")))){
             //*this is an orthodrome -> I check whether route and *this intersect: I compute the minimal distance between a point on *this and the GP (reference position) of route. I do this by checking the distance at the two extrema (at the beginning and at the end of *this), and by looking for an extremum in the middle of *this
             
-            vector<Length> s;
+            vector<Length> s(2);
+                        
+            //case 1: the starting point (or reference_position) of *this
+            reference_position.distance(route.reference_position, s.data(), String(""), prefix);
             
-            s.clear();
-            
-            //case 1: the beinning of this
-            s.resize(s.size()+1);
-            reference_position.distance(route.reference_position, &(s.back()), String(""), prefix);
-            
+            //case 2: the end point of *this
             compute_end(prefix);
             end.distance(route.reference_position, (s.data())+1, String(""), prefix);
             
@@ -1958,7 +1956,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                        prefix
                        );
             
-            //case 2: an extremum in the middle of this
+            //case 3:  extremum n. 1 in the middle of *this
             d.set(String(""), Re*acos(cos_ts.value), prefix);
             if(compute_end(d, prefix)){
                 
@@ -1967,7 +1965,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
             }
             
-            //case 3: the end of *this
+            //case 4: extremum n. 2 in the middle of *this
             d.set(String(""), Re*(M_PI-acos(cos_ts.value)), prefix);
             if(compute_end(d, prefix)){
                 
@@ -1976,7 +1974,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                 
             }
             
-            //obtain the minimum distance across cases 1, 2 and 3 and chekwhetehr it is smaller than Re * apertur angle of route
+            //obtain the minimum distance across all cases, which may be 2, 3, or 4, and chekwhetehr it is smaller than Re * apertur angle of route
             if((*min_element(s.begin(), s.end())) < Re*((route.omega).value)){
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
                 
@@ -9262,33 +9260,33 @@ void DrawPanel::Draw_3D(void){
     (route.type).set(String(""), String("o"), String(""));
     (route.l).set(String(""), Re*M_PI, String(""));
     
-    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
-        //in this case circle_observer encircles a pole and thus it spans all longitudes
-        
-        if((plot->phi_max) == M_PI/2.0){
-            //circle_observer encircles the N pole
-            
-            (route.alpha).set(String(""), 0.0, String(""));
-            ((route.reference_position).phi) = (plot->phi_min);
-            
-        }
-        
-        if((plot->phi_min) == 3.0*M_PI/2.0){
-            //circle_observer encircles the S pole
-            
-            (route.alpha).set(String(""), M_PI, String(""));
-            ((route.reference_position).phi) = (plot->phi_max);
-            
-        }
-        
-    }else{
-        //circle_observer does not encircle any pole and thus it does not span all longitudes
-        
+//    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+//        //in this case circle_observer encircles a pole and thus it spans all longitudes
+//
+//        if((plot->phi_max) == M_PI/2.0){
+//            //circle_observer encircles the N pole
+//
+//            (route.alpha).set(String(""), 0.0, String(""));
+//            ((route.reference_position).phi) = (plot->phi_min);
+//
+//        }
+//
+//        if((plot->phi_min) == 3.0*M_PI/2.0){
+//            //circle_observer encircles the S pole
+//
+//            (route.alpha).set(String(""), M_PI, String(""));
+//            ((route.reference_position).phi) = (plot->phi_max);
+//
+//        }
+//
+//    }else{
+//        //circle_observer does not encircle any pole and thus it does not span all longitudes
+//
         (route.alpha).set(String(""), 0.0, String(""));
-        ((route.reference_position).phi) = (plot->phi_min);
+        ((route.reference_position).phi) = -M_PI/2.0;
         
-    }
-    
+//    }
+//
     
     for(
         (((route.reference_position).lambda).value) = (lambda_start.value);

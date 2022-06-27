@@ -8718,71 +8718,71 @@ void DrawPanel::Render_3D(wxDC&  dc){
 }
 
 
+//
+////this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
+//void DrawPanel::TabulateRoutes_Mercator(void){
+//
+//    unsigned int i, l;
+//    Length l_tot;
+//    wxPoint p;
+//    bool end_connected;
+//
+//    //clear up points_route_list
+//    for(i=0; i<points_route_list.size(); i++){
+//        (points_route_list[i]).clear();
+//    }
+//
+//
+//    //compute the points of  routes
+//    //run over all routes
+//    for(i=0; i<(plot->route_list).size(); i++){
+//
+//        points_route_list.resize(points_route_list.size()+1);
+//
+//        if((((plot->route_list)[i]).type) == String("c")){
+//            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
+//
+//            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
+//
+//        }else{
+//            //otherwise, the total length is simply written in the l object
+//
+//            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
+//
+//        }
+//
+//        //compute points of l-th chunk of route #i
+//        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
+//
+//            //I consider a Length which spans between 0 and  l_tot
+//            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
+//            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
+//
+//            if(GeoToDrawPanel_Mercator(((plot->route_list)[i]).end, &p)){
+//
+//                if(end_connected){
+//
+//                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
+//                    end_connected = false;
+//
+//                }
+//
+//                (points_route_list[i]).push_back(p);
+//
+//            }else{
+//
+//                end_connected = true;
+//
+//            }
+//
+//        }
+//
+//    }
+//
+//}
 
 //this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
-void DrawPanel::TabulateRoutes_Mercator(void){
-    
-    unsigned int i, l;
-    Length l_tot;
-    wxPoint p;
-    bool end_connected;
-    
-    //clear up points_route_list
-    for(i=0; i<points_route_list.size(); i++){
-        (points_route_list[i]).clear();
-    }
-    
-    
-    //compute the points of  routes
-    //run over all routes
-    for(i=0; i<(plot->route_list).size(); i++){
-        
-        points_route_list.resize(points_route_list.size()+1);
-        
-        if((((plot->route_list)[i]).type) == String("c")){
-            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
-            
-            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
-            
-        }else{
-            //otherwise, the total length is simply written in the l object
-            
-            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
-            
-        }
-        
-        //compute points of l-th chunk of route #i
-        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
-            
-            //I consider a Length which spans between 0 and  l_tot
-            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
-            
-            if(GeoToDrawPanel_Mercator(((plot->route_list)[i]).end, &p)){
-                
-                if(end_connected){
-                    
-                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
-                    end_connected = false;
-                    
-                }
-                
-                (points_route_list[i]).push_back(p);
-                
-            }else{
-                
-                end_connected = true;
-                
-            }
-            
-        }
-        
-    }
-    
-}
-
-//this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
-void DrawPanel::TabulateRoutes_3D(void){
+void DrawPanel::TabulateRoutes(void){
     
     unsigned int i;
     wxPoint p;
@@ -9052,7 +9052,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
-    TabulateRoutes_Mercator();
+    TabulateRoutes();
     
     //free up resources
     (parent->x).clear();
@@ -9331,7 +9331,7 @@ void DrawPanel::Draw_3D(void){
     memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
-    TabulateRoutes_3D();
+    TabulateRoutes();
     
     (parent->x).clear();
     (parent->y).clear();
@@ -10587,7 +10587,6 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         //if in projection "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
         
         Draw = (&DrawPanel::Draw_Mercator);
-        TabulateRoutes = (&DrawPanel::TabulateRoutes_Mercator);
         Render = (&DrawPanel::Render_Mercator);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
@@ -10609,7 +10608,6 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         //if in projection "3D" is selected, then I let the Draw function pointer point to Draw_3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
         
         Draw = (&DrawPanel::Draw_3D);
-        TabulateRoutes = (&DrawPanel::TabulateRoutes_3D);
         Render = (&DrawPanel::Render_3D);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
@@ -10880,7 +10878,7 @@ void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
                 
                 (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
                 
-                TabulateRoutes_Mercator();
+                TabulateRoutes();
                 PaintNow();
                 
                 //set the wxControl, title and message for the functor print_error_message, and then call the functor
@@ -11218,7 +11216,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
                         for(i=0; i<((parent->parent)->chart_frames).size(); i++){
                             
-                            (((((parent->parent)->chart_frames)[i])->draw_panel)->*((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes)();
+                            ((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes();
                             ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
                             
                         }

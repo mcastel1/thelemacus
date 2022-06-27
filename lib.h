@@ -1419,7 +1419,6 @@ public:
  
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
-    void (DrawPanel::*TabulateRoutes)(void);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*);
     void (DrawPanel::*Render)(wxDC&);
@@ -1431,8 +1430,8 @@ public:
     void SetIdling(bool);
     void Draw_Mercator(void);
     void Draw_3D(void);
-    void TabulateRoutes_Mercator(void);
-    void TabulateRoutes_3D(void);
+//    void TabulateRoutes_Mercator(void);
+    void TabulateRoutes(void);
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
     

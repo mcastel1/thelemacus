@@ -1418,6 +1418,8 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
     if(type != String("l")){
         //*this is either an orthodrome or a circle of equal altitude
         
+        Length s;
+        
         //construct the circle of equal altitude which comprises the rectangle delimited by phi_min ... lambda_max
         
         //compute the midpoint of the rectangle and write it into circle_observer.refernce_position
@@ -1427,8 +1429,14 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
         ((draw_panel->circle_observer).reference_position).lambda.set(String(""),
                                 (((((draw_panel->plot)->lambda_min).normalize_pm_pi_ret()).value) + ((((draw_panel->plot)->lambda_max).normalize_pm_pi_ret()).value))/2.0,
                                 String(""));
-  
-  
+        
+        
+        //compute the distance between the midpoint and one point at the corners of the rectangle, and set this (divided by Re) equal to the aperture angle of circle_observer: in this way, circle_observer is centered at the midpoint of the rectangle, and it is wide enough to comprise the rectangle
+        ((draw_panel->circle_observer).reference_position).distance(
+                                                                    Position(((draw_panel->plot)->lambda_min), ((draw_panel->plot)->phi_min)),
+                                                                    &s,
+                                                                    String(""), prefix);
+        ((draw_panel->circle_observer).omega).set(String(""), (s.value)/Re, prefix);
 
     }else{
         //*this is a loxodrome

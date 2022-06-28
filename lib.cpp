@@ -8945,6 +8945,7 @@ void DrawPanel::Draw_Mercator(void){
     (dummy_route.type).set(String(""), String("o"), String(""));
     (dummy_route.alpha).set(String(""), 0.0, String(""));
     (dummy_route.l).set(String(""), Re*M_PI, String(""));
+    //
     ((dummy_route.reference_position).phi) = -M_PI/2.0;
     
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;

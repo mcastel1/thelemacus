@@ -8801,7 +8801,7 @@ void DrawPanel::Draw_Mercator(void){
     //the total length of each Route
     Angle dummy;
     Route dummy_route;
-    Length s;(circle_observer)
+    Length s;
     //this is a pointer to parent->parent->plot, created only to shorten the code
     String prefix, new_prefix;
     

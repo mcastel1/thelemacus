@@ -1420,8 +1420,8 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
         
         Length s;
         
-
-
+        
+        
     }else{
         //*this is a loxodrome
         
@@ -2014,7 +2014,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             //obtain the minimum distance across all cases, which may be 2, 3, or 4, and chekwhetehr it is smaller than Re * apertur angle of route
             if((*min_element(s.begin(), s.end())) < Re*((route.omega).value)){
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
-                                
+                
                 Double a, b, square_root, cos_t_p, cos_t_m;
                 bool output;
                 
@@ -8293,127 +8293,130 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     }
     
     //draw labels on the x axis
-    
-    
     //starts the loop which draws the labels
-    
-    for(lambda.set(String(""), k * floor((K*((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), (temp.y) = 0.0, (temp.x) = x_mercator(K*(lambda.value)), first_label = true; check_x(temp); (lambda.value)-=k*delta_lambda){
-        
-        
-        (temp.x) = x_mercator(K*(lambda.value));
-        if((x_max < x_min) && ((temp.x) < x_max)){(temp.x) += 2.0*M_PI;}
-        
-        
-        s.str("");
-        //        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
-        
-        if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */delta_lambda == round(delta_lambda)){
-            //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
-            s << lambda.deg_to_string(String("EW"), display_precision);
-        }else{
-            //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
+    for(
+        lambda.set(String(""), floor((((plot->lambda_min).value)/delta_lambda))*delta_lambda, String("")), (temp.y) = 0.0,
+        (temp.x) = x_mercator(K*(lambda.value)),
+        first_label = true;
+        check_x(temp);
+        (lambda.value)-=delta_lambda
+        ){
             
-            if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < delta_lambda/2.0){
-                //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                
+            
+            (temp.x) = x_mercator(K*(lambda.value));
+            if((x_max < x_min) && ((temp.x) < x_max)){(temp.x) += 2.0*M_PI;}
+            
+            
+            s.str("");
+            //        lambda.set(String(""), k*lambda_mercator(dummy), String(""));
+            
+            if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */fabs(K*delta_lambda - round(K*delta_lambda)) < epsilon_double){
+                //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
                 s << lambda.deg_to_string(String("EW"), display_precision);
-                
             }else{
-                //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
+                //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
                 
-                
-                if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
-                    //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < K*delta_lambda/2.0){
+                    //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                     
-                    s << lambda.min_to_string(String("EW"), display_precision);
+                    s << lambda.deg_to_string(String("EW"), display_precision);
+                    
                 }else{
-                    //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                    //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
                     
-                    if(first_label){
-                        s << lambda.to_string(String("EW"), display_precision, true);
-                    }else{
+                    
+                    if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
+                        //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                        
                         s << lambda.min_to_string(String("EW"), display_precision);
-                    }
-                }
-                
-            }
-        }
-        wx_string = wxString(s.str().c_str());
-        
-        dc.DrawRotatedText(
-                           wx_string,
-                           (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
-                           (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
-                           + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                           0);
-        
-        first_label = false;
-        
-    }
-    
-    //draw labels on the y axis
-    //set first value of dummy
-    //    if(y_min > floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi){
-    dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-    //    }else{
-    //        dummy = floor((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-    //    }
-    //starts for loop which draws the ylabels
-    for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
-        
-        s.str("");
-        phi.set(String(""), k*dummy, String(""));
-        phi.normalize_pm_pi();
-        
-        if(/*If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather than phi itself, because delta_phi is not subject to rounding errors */delta_phi== round(delta_phi)){
-            //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-            s << phi.deg_to_string(String("NS"), display_precision);
-        }else{
-            
-            //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
-            if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
-                //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                
-                s << phi.deg_to_string(String("NS"), display_precision);
-                
-            }else{
-                //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-                
-                //                s << phi.min_to_string(String("NS"), display_precision);
-                
-                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
-                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
-                    
-                    s << phi.min_to_string(String("NS"), display_precision);
-                }else{
-                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-                    
-                    if(first_label){
-                        s << phi.to_string(String("NS"), display_precision, false);
                     }else{
-                        s << phi.min_to_string(String("NS"), display_precision);
+                        //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                        
+                        if(first_label){
+                            s << lambda.to_string(String("EW"), display_precision, true);
+                        }else{
+                            s << lambda.min_to_string(String("EW"), display_precision);
+                        }
                     }
+                    
                 }
-                
-                
             }
+            wx_string = wxString(s.str().c_str());
+            
+            dc.DrawRotatedText(
+                               wx_string,
+                               (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
+                               (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
+                               + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                               0);
+            
+            first_label = false;
             
         }
-        
-        wx_string = wxString(s.str().c_str());
-        
-        dc.DrawRotatedText(
-                           wx_string,
-                           (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) - /*this is the border, to allow some empty space between the text and the axis*/
-                           ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                           (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
-                           0);
-        
-        first_label = false;
-        
-    }
     
     
+    /*
+     //draw labels on the y axis
+     //set first value of dummy
+     dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
+     //starts for loop which draws the ylabels
+     for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
+     
+     s.str("");
+     phi.set(String(""), k*dummy, String(""));
+     phi.normalize_pm_pi();
+     
+     if(
+     //If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather than phi itself, because delta_phi is not subject to rounding errors
+     delta_phi== round(delta_phi)){
+     //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+     s << phi.deg_to_string(String("NS"), display_precision);
+     }else{
+     
+     //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
+     if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
+     //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
+     
+     s << phi.deg_to_string(String("NS"), display_precision);
+     
+     }else{
+     //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+     
+     //                s << phi.min_to_string(String("NS"), display_precision);
+     
+     if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+     
+     s << phi.min_to_string(String("NS"), display_precision);
+     }else{
+     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+     
+     if(first_label){
+     s << phi.to_string(String("NS"), display_precision, false);
+     }else{
+     s << phi.min_to_string(String("NS"), display_precision);
+     }
+     }
+     
+     
+     }
+     
+     }
+     
+     wx_string = wxString(s.str().c_str());
+     
+     dc.DrawRotatedText(
+     wx_string,
+     (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) -
+     //this is the border, to allow some empty space between the text and the axis
+     ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+     (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
+     0);
+     
+     first_label = false;
+     
+     }
+     */
     
 }
 
@@ -8546,7 +8549,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
             }
             
         }
-    
+        
         //draw the route points
         if((points_route_list[i]).size() > 1){
             //I need to add this consdition to make sure that the index j below lies in a valid range
@@ -8575,7 +8578,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
             dc.DrawCircle(p, 4.0*thickness);
             
         }
-                
+        
     }
     
     //   reset the pen to its default parameters
@@ -8783,8 +8786,8 @@ void DrawPanel::TabulateRoutes(void){
     for((plot->route_list).resize((plot->route_list).size()), i=0; i<(plot->route_list).size(); i++){
         
         (((plot->route_list)[i]).*DrawRoute)((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
-
-//        ((plot->route_list)[i]).Draw_3D((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
+        
+        //        ((plot->route_list)[i]).Draw_3D((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
         
     }
     
@@ -8820,29 +8823,29 @@ void DrawPanel::Draw_Mercator(void){
     //construct the circle of equal altitude which comprises the rectangle delimited by phi_min ... lambda_max
     //compute the midpoint of the rectangle and write it into circle_observer.refernce_position
     (circle_observer.reference_position).phi.set(String(""),
-                            ((((plot->phi_min).normalize_pm_pi_ret()).value) + (((plot->phi_max).normalize_pm_pi_ret()).value))/2.0,
-                            String(""));
+                                                 ((((plot->phi_min).normalize_pm_pi_ret()).value) + (((plot->phi_max).normalize_pm_pi_ret()).value))/2.0,
+                                                 String(""));
     (circle_observer.reference_position).lambda.set(String(""),
-                            ((((plot->lambda_min).normalize_pm_pi_ret()).value) + (((plot->lambda_max).normalize_pm_pi_ret()).value))/2.0,
-                            String(""));
+                                                    ((((plot->lambda_min).normalize_pm_pi_ret()).value) + (((plot->lambda_max).normalize_pm_pi_ret()).value))/2.0,
+                                                    String(""));
     
     
     //compute the maximal distance between the midpoint and the corners of the rectangle, by considering two different corners, and set this (divided by Re) equal to the aperture angle of circle_observer: in this way, circle_observer is centered at the midpoint of the rectangle, and it is wide enough to comprise the rectangle
     (circle_observer.reference_position).distance(
-                                                                Position(plot->lambda_min, plot->phi_min),
-                                                                &r,
-                                                                String(""), prefix
+                                                  Position(plot->lambda_min, plot->phi_min),
+                                                  &r,
+                                                  String(""), prefix
                                                   );
     (circle_observer.reference_position).distance(
-                                                                Position(plot->lambda_min, plot->phi_max),
-                                                                &s,
-                                                                String(""), prefix
+                                                  Position(plot->lambda_min, plot->phi_max),
+                                                  &s,
+                                                  String(""), prefix
                                                   );
     (circle_observer.omega).set(String(""), ((max(r,s)).value)/Re, prefix);
     
     
     
-
+    
     
     
     
@@ -8900,7 +8903,7 @@ void DrawPanel::Draw_Mercator(void){
     //set lambda_span
     if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
-         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
         
     }else{
         
@@ -8936,79 +8939,79 @@ void DrawPanel::Draw_Mercator(void){
         
         (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
         (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
-          
+        
     }else{
         
         (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
         (lambda_end.value) = ((plot->lambda_min).value);
-         
+        
     }
-
-
- 
     
     
-
-
+    
+    
+    
+    
+    
     
     /*
-    //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
-    //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    
-    (dummy_route.type).set(String(""), String("o"), String(""));
-    (dummy_route.alpha).set(String(""), 0.0, String(""));
-    //set ((dummy_route.reference_position).phi) as the midpoint between phi_min and -PI/2, in this way we avoid the singularities which would arise if we set ((dummy_route.reference_position).phi) = -pi/2
-    (((dummy_route.reference_position).phi).value) = ((plot->phi_min).value);
-    (dummy_route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
-
-    lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
-    //set a dummy value for temp.y
-    (temp.y) = 0.0;
-    (delta_temp.y) = 0.0;
-    do{
-        
-        (temp.x) = x_mercator(lambda);
-        
-        if((x_max < x_min) && ((temp.x) < x_max)){
-            (temp.x) += 2.0*M_PI;
-        }
-        
-        if(check_x(temp)){
-            
-            //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
-            ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-            dummy_route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
-            
-        }
-        
-        if(gamma_lambda == 60.0){
-            
-            //plot the xticks from lambda to the next lambda (lambda + dlambda)
-            for(i = 60*10*delta_lambda; i>=0; i--){
-                
-                (delta_temp.x) = k*(((double)i)/10.0)/60.0;
-                
-                if(check_x(temp+delta_temp)){
-                    //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                    
-                    chart->addLine(
-                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
-                                   (position_plot_area.y) + height_plot_area,
-                                   (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
-                                   (position_plot_area.y) + height_plot_area - height_plot_area*((parent->tick_length_over_width_plot_area).value),
-                                   0x0000ff, 1);
-                    
-                }
-                
-            }
-            
-        }
-        
-        lambda-=delta_lambda;
-        (temp.x) = x_mercator(lambda);
-        
-    }while(check_x(temp));
-    */
+     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
+     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+     
+     (dummy_route.type).set(String(""), String("o"), String(""));
+     (dummy_route.alpha).set(String(""), 0.0, String(""));
+     //set ((dummy_route.reference_position).phi) as the midpoint between phi_min and -PI/2, in this way we avoid the singularities which would arise if we set ((dummy_route.reference_position).phi) = -pi/2
+     (((dummy_route.reference_position).phi).value) = ((plot->phi_min).value);
+     (dummy_route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+     
+     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
+     //set a dummy value for temp.y
+     (temp.y) = 0.0;
+     (delta_temp.y) = 0.0;
+     do{
+     
+     (temp.x) = x_mercator(lambda);
+     
+     if((x_max < x_min) && ((temp.x) < x_max)){
+     (temp.x) += 2.0*M_PI;
+     }
+     
+     if(check_x(temp)){
+     
+     //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
+     ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
+     dummy_route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+     
+     }
+     
+     if(gamma_lambda == 60.0){
+     
+     //plot the xticks from lambda to the next lambda (lambda + dlambda)
+     for(i = 60*10*delta_lambda; i>=0; i--){
+     
+     (delta_temp.x) = k*(((double)i)/10.0)/60.0;
+     
+     if(check_x(temp+delta_temp)){
+     //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+     
+     chart->addLine(
+     (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
+     (position_plot_area.y) + height_plot_area,
+     (position_plot_area.x) + (((temp.x) + k*(((double)i)/10.0)/60.0)-x_min)/x_span()*width_plot_area,
+     (position_plot_area.y) + height_plot_area - height_plot_area*((parent->tick_length_over_width_plot_area).value),
+     0x0000ff, 1);
+     
+     }
+     
+     }
+     
+     }
+     
+     lambda-=delta_lambda;
+     (temp.x) = x_mercator(lambda);
+     
+     }while(check_x(temp));
+     */
     
     
     //
@@ -9018,7 +9021,7 @@ void DrawPanel::Draw_Mercator(void){
     (route.alpha).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = (plot->phi_min);
     (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
-
+    
     
     for(
         (((route.reference_position).lambda).value) = (lambda_start.value);
@@ -9059,79 +9062,79 @@ void DrawPanel::Draw_Mercator(void){
     
     //draw parallels
     /*
-    phi_span = K*(((plot->phi_max).value) - ((plot->phi_min).value));
-    
-    //I create an angle which has the largest posible label when printed out in the "NS" format, so as to compute the  value of n_interval_ticks which allows the y-axis labels not to superpose
-    dummy.from_sign_deg_min('+', 89, 59);
-    
-    //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    
-    n_intervals_ticks_max = ((unsigned int)floor(((double)height_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision, false)))).GetHeight()))));
-    n_intervals_ticks = min(
-                            (unsigned int)((plot->n_intervals_ticks_preferred).value),
-                            n_intervals_ticks_max
-                            );
-    
-    
-    //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-    if(phi_span > 1.0){gamma_phi = 1.0;}
-    else{gamma_phi = 60.0;}
-    
-    delta_phi=1.0/gamma_phi;
-    while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
-        //print delta_phi;
-        if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
-        else{delta_phi = delta_phi + 5.0/gamma_phi;}
-    }
-    
-    //set route equal to a parallel of latitude phi, i.e., an orthodrome with starting angle pi/2
-    (route.type).set(String(""), String("l"), String(""));
-    (route.alpha).set(String(""), M_PI/2.0, String(""));
-    
-    //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area
-    (temp.x) = x_min + x_span()/2.0;
-    for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
-        
-        ((route.reference_position).lambda).set(String(""), k*lambda_mercator(x_min), String(""));
-        ((route.reference_position).phi).set(String(""), k*phi, String(""));
-        
-        
-        (temp.y) = y_mercator(phi);
-        
-        if(((temp.y) >= y_min) && ((temp.y) <= y_max)){
-            
-            //I set the length of the Route corresponding to the parallel
-            (route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
-//            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
-
-            
-        }
-        
-        if(gamma_phi == 60.0){
-            
-            //plot the yticks from phi to the next phi (phi + dphi)
-            for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
-                
-                if((phi + (((double)i)/10.0)*1.0/60.0 >= (K*(((plot->phi_min).value)))) && (phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((plot->phi_max).value))))){
-                    //set custom-made minor yticks every tenths (i/10.0) of arcminutes (60.0)
-                    
-                    chart->addLine(
-                                   (position_plot_area.x),
-                                   (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
-                                   (position_plot_area.x) + width_plot_area*((parent->tick_length_over_width_plot_area).value),
-                                   (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
-                                   0x0000ff, 1);
-                    
-                }
-                
-            }
-            
-        }
-        
-        
-        
-    }
+     phi_span = K*(((plot->phi_max).value) - ((plot->phi_min).value));
+     
+     //I create an angle which has the largest posible label when printed out in the "NS" format, so as to compute the  value of n_interval_ticks which allows the y-axis labels not to superpose
+     dummy.from_sign_deg_min('+', 89, 59);
+     
+     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
+     
+     n_intervals_ticks_max = ((unsigned int)floor(((double)height_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("NS"), display_precision, false)))).GetHeight()))));
+     n_intervals_ticks = min(
+     (unsigned int)((plot->n_intervals_ticks_preferred).value),
+     n_intervals_ticks_max
+     );
+     
+     
+     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+     if(phi_span > 1.0){gamma_phi = 1.0;}
+     else{gamma_phi = 60.0;}
+     
+     delta_phi=1.0/gamma_phi;
+     while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
+     //print delta_phi;
+     if(delta_phi == 1.0/gamma_phi){delta_phi = delta_phi + 4.0/gamma_phi;}
+     else{delta_phi = delta_phi + 5.0/gamma_phi;}
+     }
+     
+     //set route equal to a parallel of latitude phi, i.e., an orthodrome with starting angle pi/2
+     (route.type).set(String(""), String("l"), String(""));
+     (route.alpha).set(String(""), M_PI/2.0, String(""));
+     
+     //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area
+     (temp.x) = x_min + x_span()/2.0;
+     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
+     
+     ((route.reference_position).lambda).set(String(""), k*lambda_mercator(x_min), String(""));
+     ((route.reference_position).phi).set(String(""), k*phi, String(""));
+     
+     
+     (temp.y) = y_mercator(phi);
+     
+     if(((temp.y) >= y_min) && ((temp.y) <= y_max)){
+     
+     //I set the length of the Route corresponding to the parallel
+     (route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
+     //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+     route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+     
+     
+     }
+     
+     if(gamma_phi == 60.0){
+     
+     //plot the yticks from phi to the next phi (phi + dphi)
+     for(i=0; (((double)i)/10.0)*1.0/60.0 < delta_phi; i++){
+     
+     if((phi + (((double)i)/10.0)*1.0/60.0 >= (K*(((plot->phi_min).value)))) && (phi + (((double)i)/10.0)*1.0/60.0 <= (K*(((plot->phi_max).value))))){
+     //set custom-made minor yticks every tenths (i/10.0) of arcminutes (60.0)
+     
+     chart->addLine(
+     (position_plot_area.x),
+     (position_plot_area.y) + height_plot_area - (( y_mercator(phi + ((double)i)/10.0/60.0)  -y_min)/(y_max-y_min)*height_plot_area),
+     (position_plot_area.x) + width_plot_area*((parent->tick_length_over_width_plot_area).value),
+     (position_plot_area.y) + height_plot_area - ((y_mercator(phi + ((double)i)/10.0/60.0)-y_min)/(y_max-y_min)*height_plot_area),
+     0x0000ff, 1);
+     
+     }
+     
+     }
+     
+     }
+     
+     
+     
+     }
      */
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
@@ -10693,7 +10696,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
         DrawRoute = (&Route::Draw_Mercator);
-
+        
         //I enable the buttons up ... right because they are needed in Mercator mode
         //        (parent->slider)->Enable(true);
         (parent->button_up)->Enable(true);

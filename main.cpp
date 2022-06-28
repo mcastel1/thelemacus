@@ -48,6 +48,7 @@
  -                                 sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - revise Route::intersection so as to make it work also in the singular case where this->reference_position->phi = pi/2 and route.reference_position.phi = pi/2 etc
  - in DrawPanel::Draw_3D delta_lambda is used without being initialized (?)
+ - check fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0 in  DrawPanel::Render_3D: it seems that this line has been written as if delta_lambda were expressed in degrees, while it is expressed in radians
  */
 
 

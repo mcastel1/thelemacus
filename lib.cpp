@@ -8801,7 +8801,7 @@ void DrawPanel::Draw_Mercator(void){
     //the total length of each Route
     Angle dummy;
     Route dummy_route;
-    Length s;
+    Length r, s;
     //this is a pointer to parent->parent->plot, created only to shorten the code
     String prefix, new_prefix;
     
@@ -8828,12 +8828,18 @@ void DrawPanel::Draw_Mercator(void){
                             String(""));
     
     
-    //compute the distance between the midpoint and one point at the corners of the rectangle, and set this (divided by Re) equal to the aperture angle of circle_observer: in this way, circle_observer is centered at the midpoint of the rectangle, and it is wide enough to comprise the rectangle
+    //compute the maximal distance between the midpoint and the corners of the rectangle, by considering two different corners, and set this (divided by Re) equal to the aperture angle of circle_observer: in this way, circle_observer is centered at the midpoint of the rectangle, and it is wide enough to comprise the rectangle
     (circle_observer.reference_position).distance(
                                                                 Position(plot->lambda_min, plot->phi_min),
+                                                                &r,
+                                                                String(""), prefix
+                                                  );
+    (circle_observer.reference_position).distance(
+                                                                Position(plot->lambda_min, plot->phi_max),
                                                                 &s,
-                                                                String(""), prefix);
-    (circle_observer.omega).set(String(""), (s.value)/Re, prefix);
+                                                                String(""), prefix
+                                                  );
+    (circle_observer.omega).set(String(""), ((max(r,s)).value)/Re, prefix);
     
     
     

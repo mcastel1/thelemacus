@@ -1420,56 +1420,65 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
         
         vector<Angle> t_lambda_min, t_lambda_max, t_phi_min, t_phi_max, u(4);
         Angle t_min, t_max;
+        
+        
+        if(intersection(
+                        Route(
+                              String("c"),
+                              Position(Angle(0.0), Angle(GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0)),
+                              Angle(M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value))
+                              ),
+                        &t_phi_min,
+                        String("")) ||
+           intersection(
+                        Route(
+                              String("c"),
+                              Position(Angle(0.0), Angle(GSL_SIGN((((draw_panel->plot)->phi_max).normalize_pm_pi_ret()).value) * M_PI/2.0)),
+                              Angle(M_PI/2.0 - fabs((((draw_panel->plot)->phi_max).normalize_pm_pi_ret()).value))
+                              ),
+                        &t_phi_max,
+                        String("")) ||
+           intersection(
+                        Route(
+                              String("o"),
+                              Position(((draw_panel->plot)->lambda_min), Angle(-M_PI/2.0)),
+                              Angle(0.0),
+                              Length(Re*M_PI)
+                              ),
+                        &t_lambda_min,
+                        String("")) ||
+           intersection(
+                        Route(
+                              String("o"),
+                              Position(((draw_panel->plot)->lambda_max), Angle(-M_PI/2.0)),
+                              Angle(0.0),
+                              Length(Re*M_PI)
+                              ),
+                        &t_lambda_max,
+                        String(""))){
+                            //*this insersects one of the boundaries of the rectangle delimited by lambda_min ... phi_max
+                            
+                            
+                        }else{
+                            //*this does not insersect any of the boundaries of the rectangle delimited by lambda_min ... phi_max
 
-        intersection(
-                     Route(
-                           String("c"),
-                           Position(Angle(0.0), Angle(GSL_SIGN((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) * M_PI/2.0)),
-                           Angle(M_PI/2.0 - fabs((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value))
-                           ),
-                     &t_phi_min,
-                     String(""));
-        
-        intersection(
-                     Route(
-                           String("c"),
-                           Position(Angle(0.0), Angle(GSL_SIGN((((draw_panel->plot)->phi_max).normalize_pm_pi_ret()).value) * M_PI/2.0)),
-                           Angle(M_PI/2.0 - fabs((((draw_panel->plot)->phi_max).normalize_pm_pi_ret()).value))
-                           ),
-                     &t_phi_max,
-                     String(""));
-        
-        intersection(
-                     Route(
-                           String("o"),
-                           Position(((draw_panel->plot)->lambda_min), Angle(-M_PI/2.0)),
-                           Angle(0.0),
-                           Length(Re*M_PI)
-                           ),
-                     &t_lambda_min,
-                     String(""));
-        
-        intersection(
-                     Route(
-                           String("o"),
-                           Position(((draw_panel->plot)->lambda_max), Angle(-M_PI/2.0)),
-                           Angle(0.0),
-                           Length(Re*M_PI)
-                           ),
-                     &t_lambda_max,
-                     String(""));
-     
-        u[0] = t_phi_min[1];
-        u[1] = t_phi_max[1];
-        u[2] = t_lambda_min[1];
-        u[3] = t_lambda_max[1];
-        t_min = (*min_element(u.begin(), u.end()));
-  
-        u[0] = t_phi_min[0];
-        u[1] = t_phi_max[0];
-        u[2] = t_lambda_min[0];
-        u[3] = t_lambda_max[0];
-        t_max = (*max_element(u.begin(), u.end()));
+                            
+                        }
+           
+            
+            
+             
+//        u[0] = t_phi_min[1];
+//        u[1] = t_phi_max[1];
+//        u[2] = t_lambda_min[1];
+//        u[3] = t_lambda_max[1];
+//        t_min = (*min_element(u.begin(), u.end()));
+//
+//        u[0] = t_phi_min[0];
+//        u[1] = t_phi_max[0];
+//        u[2] = t_lambda_min[0];
+//        u[3] = t_lambda_max[0];
+//        t_max = (*max_element(u.begin(), u.end()));
   
 
     }else{

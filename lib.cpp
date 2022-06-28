@@ -9016,9 +9016,9 @@ void DrawPanel::Draw_Mercator(void){
             
             //I set the length of the Route corresponding to the parallel
             (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
-            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            //            dummy_route.draw_Mercator(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
-            
+//            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            dummy_route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+
             
         }
         

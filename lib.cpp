@@ -8794,13 +8794,12 @@ void DrawPanel::TabulateRoutes(void){
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){
     
-    double lambda, phi, phi_span, lambda_span;
+    double lambda_span, delta_lambda_minor;
     Projection temp, delta_temp;
-    int i;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
-    Angle dummy;
-    Route dummy_route;
+    Angle dummy, lambda_saved, alpha_saved, phi_saved;
+    Route route;
     Length r, s;
     //this is a pointer to parent->parent->plot, created only to shorten the code
     String prefix, new_prefix;
@@ -8888,8 +8887,21 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //draw meridians
-    lambda_span = K*x_span();
-    
+    //set lambda_start, lambda_end and delta_lambda
+    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        
+        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
+        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+        
+    }else{
+        
+        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_end.value) = ((plot->lambda_min).value);
+        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
+        
+    }
+
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);
     
@@ -8900,17 +8912,28 @@ void DrawPanel::Draw_Mercator(void){
                             n_intervals_ticks_max
                             );
     
-    //set delta_lambda
-    if(lambda_span > 1.0){gamma_lambda = 1.0;}
-    else{gamma_lambda = 60.0;}
-    
-    delta_lambda=1.0/gamma_lambda;
-    while(n_intervals_ticks*delta_lambda<lambda_span){
-        if(delta_lambda == 1.0/gamma_lambda){delta_lambda = delta_lambda + 4.0/gamma_lambda;}
-        else{delta_lambda = delta_lambda + 5.0/gamma_lambda;}
+    //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+    if(lambda_span > k){
+        //in this case, lambda_span is larger than one degree
+        gamma_lambda = 1.0;
+        delta_lambda_minor = -1.0;
+    }else{
+        if(lambda_span > 10.0*arcmin_radians){
+            //in this case, one arcdegree > lambda_span > 10 arcminutes
+            gamma_lambda = 60.0;
+            delta_lambda_minor = arcmin_radians;
+        }else{
+            //in this case, 10 arcminutes > lambda_span
+            gamma_lambda = 600.0;
+            delta_lambda_minor = tenth_arcmin_radians;
+        }
     }
     
     
+
+
+    
+    /*
     //I start with a lambda which is slightly outside the plot area, in order to draw the ticks on the left edge of the plot area
     //set dummy_route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     
@@ -8936,7 +8959,6 @@ void DrawPanel::Draw_Mercator(void){
             
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
-            //            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
             dummy_route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
         }
@@ -8968,11 +8990,59 @@ void DrawPanel::Draw_Mercator(void){
         (temp.x) = x_mercator(lambda);
         
     }while(check_x(temp));
+    */
     
     
+    //
+    //draw meridians
+    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    (route.type).set(String(""), String("o"), String(""));
+    (route.l).set(String(""), Re*M_PI, String(""));
+    (route.alpha).set(String(""), 0.0, String(""));
+    ((route.reference_position).phi) = -M_PI/2.0;
     
+    for(
+        (((route.reference_position).lambda).value) = (lambda_start.value);
+        (((route.reference_position).lambda).value) < (lambda_end.value);
+        (((route.reference_position).lambda).value) += delta_lambda){
+            
+            //replace this with Draw_3D adter you revised Draw_3D
+            //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            
+            if(gamma_lambda != 1.0){
+                //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
+                
+                (lambda_saved.value) = (((route.reference_position).lambda).value);
+                phi_saved = ((route.reference_position).phi);
+                alpha_saved = (route.alpha);
+                
+                (route.alpha).set(String(""), 0.0, String(""));
+                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                ((route.reference_position).phi) = phi_middle;
+                
+                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                for((((route.reference_position).lambda).value) = (lambda_saved.value);
+                    (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
+                    (((route.reference_position).lambda).value) += delta_lambda_minor){
+                    
+                    route.Draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    
+                }
+                
+                (route.l).set(String(""), Re*M_PI, String(""));
+                (route.alpha) = alpha_saved;
+                (((route.reference_position).lambda).value) = (lambda_saved.value);
+                ((route.reference_position).phi) = phi_saved;
+                
+            }
+            
+        }
+    
+    //
     
     //draw parallels
+    /*
     phi_span = K*(((plot->phi_max).value) - ((plot->phi_min).value));
     
     //I create an angle which has the largest posible label when printed out in the "NS" format, so as to compute the  value of n_interval_ticks which allows the y-axis labels not to superpose
@@ -8998,16 +9068,16 @@ void DrawPanel::Draw_Mercator(void){
         else{delta_phi = delta_phi + 5.0/gamma_phi;}
     }
     
-    //set dummy_route equal to a parallel of latitude phi, i.e., an orthodrome with starting angle pi/2
-    (dummy_route.type).set(String(""), String("l"), String(""));
-    (dummy_route.alpha).set(String(""), M_PI/2.0, String(""));
+    //set route equal to a parallel of latitude phi, i.e., an orthodrome with starting angle pi/2
+    (route.type).set(String(""), String("l"), String(""));
+    (route.alpha).set(String(""), M_PI/2.0, String(""));
     
     //set a dummy value for temp.x: the only thing that matters is that this value falls within the plot area
     (temp.x) = x_min + x_span()/2.0;
     for(phi = (((int)((K*(((plot->phi_min).value)))/delta_phi))-1)*delta_phi; phi<(K*(((plot->phi_max).value))); phi+= delta_phi){
         
-        ((dummy_route.reference_position).lambda).set(String(""), k*lambda_mercator(x_min), String(""));
-        ((dummy_route.reference_position).phi).set(String(""), k*phi, String(""));
+        ((route.reference_position).lambda).set(String(""), k*lambda_mercator(x_min), String(""));
+        ((route.reference_position).phi).set(String(""), k*phi, String(""));
         
         
         (temp.y) = y_mercator(phi);
@@ -9015,9 +9085,9 @@ void DrawPanel::Draw_Mercator(void){
         if(((temp.y) >= y_min) && ((temp.y) <= y_max)){
             
             //I set the length of the Route corresponding to the parallel
-            (dummy_route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
-//            dummy_route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            dummy_route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            (route.l).set(String(""), Re*cos(k*phi)*x_span(), String(""));
+//            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
 
             
         }
@@ -9046,6 +9116,7 @@ void DrawPanel::Draw_Mercator(void){
         
         
     }
+     */
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);

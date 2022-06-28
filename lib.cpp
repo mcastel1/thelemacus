@@ -1420,23 +1420,7 @@ void Route::Draw_Mercator(unsigned int n_points, int color, int width, DrawPanel
         
         Length s;
         
-        //construct the circle of equal altitude which comprises the rectangle delimited by phi_min ... lambda_max
-        
-        //compute the midpoint of the rectangle and write it into circle_observer.refernce_position
-        ((draw_panel->circle_observer).reference_position).phi.set(String(""),
-                                (((((draw_panel->plot)->phi_min).normalize_pm_pi_ret()).value) + ((((draw_panel->plot)->phi_max).normalize_pm_pi_ret()).value))/2.0,
-                                String(""));
-        ((draw_panel->circle_observer).reference_position).lambda.set(String(""),
-                                (((((draw_panel->plot)->lambda_min).normalize_pm_pi_ret()).value) + ((((draw_panel->plot)->lambda_max).normalize_pm_pi_ret()).value))/2.0,
-                                String(""));
-        
-        
-        //compute the distance between the midpoint and one point at the corners of the rectangle, and set this (divided by Re) equal to the aperture angle of circle_observer: in this way, circle_observer is centered at the midpoint of the rectangle, and it is wide enough to comprise the rectangle
-        ((draw_panel->circle_observer).reference_position).distance(
-                                                                    Position(((draw_panel->plot)->lambda_min), ((draw_panel->plot)->phi_min)),
-                                                                    &s,
-                                                                    String(""), prefix);
-        ((draw_panel->circle_observer).omega).set(String(""), (s.value)/Re, prefix);
+
 
     }else{
         //*this is a loxodrome
@@ -8817,6 +8801,7 @@ void DrawPanel::Draw_Mercator(void){
     //the total length of each Route
     Angle dummy;
     Route dummy_route;
+    Length s;(circle_observer)
     //this is a pointer to parent->parent->plot, created only to shorten the code
     String prefix, new_prefix;
     
@@ -8832,15 +8817,30 @@ void DrawPanel::Draw_Mercator(void){
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
     
-    //    cout << "\nx_max = " << x_max << "\tx_min = " << x_min;
     
-    //    if(x_max >= x_min){
-    //        //in this case, x_max, x_min do not encompass the meridian lambda = pi
-    //        x_span = x_max-x_min;
-    //    }else{
-    //        //in this case, x_max, x_min encompass the meridian lambda = pi
-    //        x_span = 2.0*M_PI - (x_min-x_max);
-    //    }
+    //construct the circle of equal altitude which comprises the rectangle delimited by phi_min ... lambda_max
+    //compute the midpoint of the rectangle and write it into circle_observer.refernce_position
+    (circle_observer.reference_position).phi.set(String(""),
+                            ((((plot->phi_min).normalize_pm_pi_ret()).value) + (((plot->phi_max).normalize_pm_pi_ret()).value))/2.0,
+                            String(""));
+    (circle_observer.reference_position).lambda.set(String(""),
+                            ((((plot->lambda_min).normalize_pm_pi_ret()).value) + (((plot->lambda_max).normalize_pm_pi_ret()).value))/2.0,
+                            String(""));
+    
+    
+    //compute the distance between the midpoint and one point at the corners of the rectangle, and set this (divided by Re) equal to the aperture angle of circle_observer: in this way, circle_observer is centered at the midpoint of the rectangle, and it is wide enough to comprise the rectangle
+    (circle_observer.reference_position).distance(
+                                                                Position(plot->lambda_min, plot->phi_min),
+                                                                &s,
+                                                                String(""), prefix);
+    (circle_observer.omega).set(String(""), (s.value)/Re, prefix);
+    
+    
+    
+
+    
+    
+    
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){

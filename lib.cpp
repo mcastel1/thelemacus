@@ -9039,7 +9039,7 @@ void DrawPanel::Draw_Mercator(void){
                 phi_saved = ((route.reference_position).phi);
                 
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                ((route.reference_position).phi) = phi_middle;
+                ((route.reference_position).phi) = (plot->phi_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((((route.reference_position).lambda).value) = (lambda_saved.value);

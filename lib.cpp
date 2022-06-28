@@ -8910,7 +8910,9 @@ void DrawPanel::Draw_Mercator(void){
     
     (dummy_route.type).set(String(""), String("o"), String(""));
     (dummy_route.alpha).set(String(""), 0.0, String(""));
+    //set ((dummy_route.reference_position).phi) as the midpoint between phi_min and -PI/2, in this way we avoid the singularities which would arise if we set ((dummy_route.reference_position).phi) = -pi/2
     ((dummy_route.reference_position).phi) = (((plot->phi_min).value)+(-M_PI/2.0))/2.0;
+    //set the length of dummy_route in such a way that dummy_routes extends until the N pole
     (dummy_route.l).set(String(""), Re*(M_PI/2.0 - ((((dummy_route.reference_position).phi).normalize_pm_pi_ret()).value)), String(""));
 
     lambda = (((int)((K*(((plot->lambda_min).value)))/delta_lambda))+1)*delta_lambda;
@@ -8930,7 +8932,7 @@ void DrawPanel::Draw_Mercator(void){
             //I fix the longitude of the ground position of dummy_route, according to lambda, and plot the meridian
             ((dummy_route.reference_position).lambda).set(String(""), k*lambda, String(""));
             //            dummy_route.draw(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this);
-            dummy_route.Draw_Mercator(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
+            dummy_route.Draw_3D(/*2 points are enough to draw a line!*/ 2, 0x808080, -1, this, String(""));
             
         }
         

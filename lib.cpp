@@ -8885,23 +8885,6 @@ void DrawPanel::Draw_Mercator(void){
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
     
-    
-    //draw meridians
-    //set lambda_start, lambda_end and delta_lambda
-    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
-        
-        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
-        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
-        
-    }else{
-        
-        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        (lambda_end.value) = ((plot->lambda_min).value);
-        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
-        
-    }
-
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);
     
@@ -8911,6 +8894,19 @@ void DrawPanel::Draw_Mercator(void){
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
                             );
+    
+    
+    
+    //set lambda_span
+    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        
+         lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+        
+    }else{
+        
+        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
+        
+    }
     
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(lambda_span > k){
@@ -8928,6 +8924,28 @@ void DrawPanel::Draw_Mercator(void){
             delta_lambda_minor = tenth_arcmin_radians;
         }
     }
+    
+    delta_lambda=k/gamma_lambda;
+    while(n_intervals_ticks*delta_lambda<lambda_span){
+        if(delta_lambda == k/gamma_lambda){delta_lambda += k*4.0/gamma_lambda;}
+        else{delta_lambda += k*5.0/gamma_lambda;}
+    }
+    
+    
+    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        
+        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
+          
+    }else{
+        
+        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_end.value) = ((plot->lambda_min).value);
+         
+    }
+
+
+ 
     
     
 
@@ -8997,9 +9015,10 @@ void DrawPanel::Draw_Mercator(void){
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
-    (route.l).set(String(""), Re*M_PI, String(""));
     (route.alpha).set(String(""), 0.0, String(""));
-    ((route.reference_position).phi) = -M_PI/2.0;
+    ((route.reference_position).phi) = (plot->phi_min);
+    (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+
     
     for(
         (((route.reference_position).lambda).value) = (lambda_start.value);
@@ -9015,9 +9034,7 @@ void DrawPanel::Draw_Mercator(void){
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
                 phi_saved = ((route.reference_position).phi);
-                alpha_saved = (route.alpha);
                 
-                (route.alpha).set(String(""), 0.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 ((route.reference_position).phi) = phi_middle;
                 
@@ -9030,8 +9047,7 @@ void DrawPanel::Draw_Mercator(void){
                     
                 }
                 
-                (route.l).set(String(""), Re*M_PI, String(""));
-                (route.alpha) = alpha_saved;
+                (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
                 ((route.reference_position).phi) = phi_saved;
                 

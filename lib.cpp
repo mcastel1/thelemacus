@@ -8358,9 +8358,9 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
     //draw labels on the y axis
     //set first value of dummy
-    dummy = ceil(((((plot->phi_min).value)))/delta_phi)*delta_phi;
+    dummy = ceil((((((plot->phi_min).normalize_pm_pi_ret()).value)))/delta_phi)*delta_phi;
     //starts for loop which draws the ylabels
-    for(first_label = true; dummy<(((plot->phi_max).value)); dummy+= delta_phi){
+    for(first_label = true; dummy<((((plot->phi_max).normalize_pm_pi_ret()).value)); dummy+= delta_phi){
         
         s.str("");
         phi.set(String(""), dummy, String(""));

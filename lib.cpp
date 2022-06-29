@@ -8797,11 +8797,11 @@ void DrawPanel::TabulateRoutes(void){
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){
     
-    double lambda_span, delta_lambda_minor;
+    double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Projection temp, delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
-    Angle dummy, lambda_saved, alpha_saved, phi_saved;
+    Angle dummy, phi, lambda_saved, alpha_saved, phi_saved;
     Route route;
     Length r, s;
     //this is a pointer to parent->parent->plot, created only to shorten the code
@@ -8947,9 +8947,37 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
+    //set phi_start, phi_end and delta_phi
+    phi_span =  2.0*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value));
     
+    //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+    if(phi_span > k){
+        //in this case, phi_span is larger than one degree
+        gamma_phi = 1.0;
+        delta_phi_minor = -1.0;
+    }else{
+        if(phi_span > 10.0*arcmin_radians){
+            //in this case, one arcdegree > phi_span > 10 arcminutes
+            gamma_phi = 60.0;
+            delta_phi_minor = arcmin_radians;
+        }else{
+            //in this case, 10 arcminutes > phi_span
+            gamma_phi = 600.0;
+            delta_phi_minor = tenth_arcmin_radians;
+        }
+    }
     
+    delta_phi=k/gamma_phi;
+    while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
+        if(delta_phi == k/gamma_phi){delta_phi += k*4.0/gamma_phi;}
+        else{delta_phi += k*5.0/gamma_phi;}
+    }
     
+    //set phi_start/end and phi_middle
+    (phi_start.value) = floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
+    (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
+    
+
     
     
     
@@ -9136,6 +9164,49 @@ void DrawPanel::Draw_Mercator(void){
      
      }
      */
+    
+    //draw parallels
+    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
+    (route.type).set(String(""), String("c"), String(""));
+    ((route.reference_position).lambda) = 0.0;
+    
+    //this loop runs over the latitude of the parallel, which we call phi
+    for(
+        (phi.value) = (phi_start.value);
+        (phi.value) < (phi_end.value);
+        (phi.value) += delta_phi
+        ){
+            
+            //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
+            (route.omega).set(String(""), M_PI/2.0 - fabs(phi.value), String(""));
+            (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
+            ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI/2.0, String(""));
+            
+            route.Draw_3D(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            
+            if(gamma_phi != 1.0){
+                //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
+                
+                (route.type).set(String(""), String("o"), String(""));
+                (route.alpha).set(String(""), M_PI/2.0, String(""));
+                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                
+                //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                for(
+                    (((route.reference_position).phi).value) = (phi.value);
+                    (((route.reference_position).phi).value) - (phi.value) < delta_phi;
+                    (((route.reference_position).phi).value) += delta_phi_minor
+                    ){
+                        
+                        route.Draw_3D((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        
+                    }
+                
+                (route.type).set(String(""), String("c"), String(""));
+                
+            }
+            
+        }
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
@@ -9360,7 +9431,7 @@ void DrawPanel::Draw_3D(void){
     
     
     //draw parallels
-    //set route equal to a parallel of latitude phi, i.e., a loxodrome with starting angle pi/2
+    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String(""), String("c"), String(""));
     ((route.reference_position).lambda) = lambda_middle;
     

@@ -8757,7 +8757,7 @@ void DrawPanel::Draw_Mercator(void){
     Angle dummy, phi, lambda_saved, alpha_saved, phi_saved;
     Route route;
     Length r, s;
-    //this is a pointer to parent->parent->plot, created only to shorten the code
+    Position q;
     String prefix, new_prefix;
     
     
@@ -9021,6 +9021,17 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //draw labels on parallels
+    for(first_label = true,
+        ((q.phi).value) = (phi_start.value),
+        (q.lambda) = (plot->lambda_min);
+        ((q.phi).value) < (phi_end.value);
+        ((q.phi).value) += delta_phi
+        ){
+        
+        DrawParallelLabel(q);
+        
+    }
+    
     
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument

@@ -9019,6 +9019,10 @@ void DrawPanel::Draw_Mercator(void){
             
         }
     
+    
+    //draw labels on parallels
+    
+    
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
     (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
@@ -9028,7 +9032,7 @@ void DrawPanel::Draw_Mercator(void){
     chart->yAxis()->setWidth(2);
     
     // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    chart->addScatterLayer(DoubleArray((parent->x).data(), (parent->x).size()), DoubleArray((parent->y).data(), (parent->y).size()), "", Chart::CircleSymbol, 1, 000000);
+    chart->addScatterLayer(DoubleArray((parent->x).data(), (int)((parent->x).size())), DoubleArray((parent->y).data(), (int)((parent->y).size())), "", Chart::CircleSymbol, 1, 000000);
     
     //    chart->makeChart(path_file_chart);
     mem_block = (chart->makeChart(Chart::BMP));

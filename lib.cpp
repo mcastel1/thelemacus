@@ -8108,6 +8108,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     circle_observer.type = String("c");
     
     //clears the vector label_phi because tehre are not y labels yet.
+    label_lambda.resize(0);
     label_phi.resize(0);
     
     //    rotation.print(String("initial rotation"), String(""), cout);
@@ -8365,15 +8366,15 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //        ((q.phi).value) += delta_phi
     //        ){
     //
-    //        DrawLabel(q);
+    //        PutLabel(q);
     //
     //    }
     
     
 }
 
-//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi, and the labels are wxStaticText objects which are stored into *labels. min and max are the minimal and maximal latitudes that are covered in the drawing process
-void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, vector<wxStaticText*>* labels){
+//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi, and the labels are wxStaticText objects which are stored into *labels. min and max are the minimal and maximal latitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
+void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStaticText*>* labels, String mode){
     
     wxPoint p;
     
@@ -8393,7 +8394,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, vector<wxStat
         if(/*If this condition is true, then (temp.phi).value*K is an integer multiple of one degree*/fabs(K*((temp.phi).value)-round(K*((temp.phi).value))) < epsilon_double){
             //in this case, ((temp.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             
-            s << (temp.phi).deg_to_string(String("NS"), display_precision);
+            s << (temp.phi).deg_to_string(mode, display_precision);
             
         }else{
             
@@ -8401,27 +8402,27 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, vector<wxStat
             if(k*fabs(K*((temp.phi).value) - ((double)round(K*((temp.phi).value)))) < delta_phi/2.0){
                 //in this case, ((temp.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                 
-                s << (temp.phi).deg_to_string(String("NS"), display_precision);
+                s << (temp.phi).deg_to_string(mode, display_precision);
                 
             }else{
                 //in this case, ((temp.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                 
 //                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
-                if(ceil((K*(max.value)))  - floor((K*(min.value))) != 1){
+                if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
                   //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
-                    s << (temp.phi).min_to_string(String("NS"), display_precision);
+                    s << (temp.phi).min_to_string(mode, display_precision);
                     
                 }else{
                     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                     
                     if(first_label){
                         
-                        s << (temp.phi).to_string(String("NS"), display_precision, false);
+                        s << (temp.phi).to_string(mode, display_precision, false);
                         
                     }else{
                         
-                        s << (temp.phi).min_to_string(String("NS"), display_precision);
+                        s << (temp.phi).min_to_string(mode, display_precision);
                         
                     }
                     
@@ -8622,7 +8623,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //            ((q.phi).value) += delta_phi
     //            ){
     //
-    //            DrawLabel(q, dc);
+    //            PutLabel(q, dc);
     //
     //        }
     //
@@ -8638,7 +8639,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //                ((q.phi).value) += delta_phi
     //                ){
     //
-    //                DrawLabel(q, dc);
+    //                PutLabel(q, dc);
     //
     //            }
     //
@@ -8654,7 +8655,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //                ((q.phi).value) -= delta_phi
     //                ){
     //
-    //                DrawLabel(q, dc);
+    //                PutLabel(q, dc);
     //
     //            }
     //
@@ -8771,9 +8772,11 @@ void DrawPanel::Draw_Mercator(void){
     new_prefix = prefix.append(String("\t"));
     
     //clears all labels previously drawn
+    for(i=0; i<label_lambda.size(); i++){(label_lambda[i])->Destroy();}
+    label_lambda.resize(0);
     for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
     label_phi.resize(0);
-    
+
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
@@ -9034,7 +9037,15 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        DrawLabel(q, plot->phi_min, plot->phi_max, &label_phi);
+        PutLabel(q, plot->phi_min, plot->phi_max, &label_phi, String("NS"));
+        PutLabel(q,
+                 Angle(min(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
+                 Angle(max(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
+                 &label_lambda,
+                 String("EW")
+                 );
+
+       
         
     }
     

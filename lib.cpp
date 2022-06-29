@@ -8355,68 +8355,74 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         }
     
     
-    /*
-     //draw labels on the y axis
-     //set first value of dummy
-     dummy = ceil((K*(((plot->phi_min).value)))/delta_phi)*delta_phi;
-     //starts for loop which draws the ylabels
-     for(first_label = true; dummy<(K*(((plot->phi_max).value))); dummy+= delta_phi){
-     
-     s.str("");
-     phi.set(String(""), k*dummy, String(""));
-     phi.normalize_pm_pi();
-     
-     if(
-     //If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather than phi itself, because delta_phi is not subject to rounding errors
-     delta_phi== round(delta_phi)){
-     //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-     s << phi.deg_to_string(String("NS"), display_precision);
-     }else{
-     
-     //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
-     if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
-     //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
-     
-     s << phi.deg_to_string(String("NS"), display_precision);
-     
-     }else{
-     //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-     
-     //                s << phi.min_to_string(String("NS"), display_precision);
-     
-     if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
-     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
-     
-     s << phi.min_to_string(String("NS"), display_precision);
-     }else{
-     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-     
-     if(first_label){
-     s << phi.to_string(String("NS"), display_precision, false);
-     }else{
-     s << phi.min_to_string(String("NS"), display_precision);
-     }
-     }
-     
-     
-     }
-     
-     }
-     
-     wx_string = wxString(s.str().c_str());
-     
-     dc.DrawRotatedText(
-     wx_string,
-     (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) -
-     //this is the border, to allow some empty space between the text and the axis
-     ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-     (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
-     0);
-     
-     first_label = false;
-     
-     }
-     */
+    
+    //draw labels on the y axis
+    //set first value of dummy
+    dummy = ceil(((((plot->phi_min).value)))/delta_phi)*delta_phi;
+    //starts for loop which draws the ylabels
+    for(first_label = true; dummy<(((plot->phi_max).value)); dummy+= delta_phi){
+        
+        s.str("");
+        phi.set(String(""), dummy, String(""));
+        phi.normalize_pm_pi();
+        
+        if(
+           //If this condition is true, then phi.value*K is an integer multiple of one degree. I use delta_phi to check this condition rather than phi itself, because delta_phi is not subject to rounding errors
+           fabs(K*delta_phi - round(K*delta_phi)) < epsilon_double){
+               //in this case, dummy (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+               s << phi.deg_to_string(String("NS"), display_precision);
+               
+           }else{
+               
+               //in this case, delta_phi  is not an integer multiple of a degree. However, dummy may still be or not be a multiple integer of a degree
+               if(fabs(dummy - ((double)round(dummy))) < delta_phi/2.0){
+                   //in this case, dummy coincides with an integer mulitple of a degree: I print out its arcdegree part only
+                   
+                   s << phi.deg_to_string(String("NS"), display_precision);
+                   
+               }else{
+                   //in this case, dummy deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                   
+                   //                s << phi.min_to_string(String("NS"), display_precision);
+                   
+                   if(ceil(((plot->phi_max).value))  - floor(((plot->phi_min).value)) != 1){
+                       //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                       
+                       s << phi.min_to_string(String("NS"), display_precision);
+                       
+                   }else{
+                       //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                       
+                       if(first_label){
+                           
+                           s << phi.to_string(String("NS"), display_precision, false);
+                           
+                       }else{
+                           
+                           s << phi.min_to_string(String("NS"), display_precision);
+                           
+                       }
+                   }
+                   
+                   
+               }
+               
+           }
+        
+        wx_string = wxString(s.str().c_str());
+        
+        dc.DrawRotatedText(
+                           wx_string,
+                           (position_plot_area.x) - (GetTextExtent(wx_string).GetWidth()) -
+                           //this is the border, to allow some empty space between the text and the axis
+                           ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+                           (position_plot_area.y) + height_plot_area - ((y_mercator(dummy)-y_min)/(y_max-y_min)*height_plot_area) - (GetTextExtent(wx_string).GetHeight())/2,
+                           0);
+        
+        first_label = false;
+        
+    }
+    
     
 }
 

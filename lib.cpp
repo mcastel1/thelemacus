@@ -8407,9 +8407,9 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
             }else{
                 //in this case, ((temp.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                 
-//                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+                //                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
                 if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
-                  //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
                     s << (temp.phi).min_to_string(mode, display_precision);
                     
@@ -8776,7 +8776,7 @@ void DrawPanel::Draw_Mercator(void){
     label_lambda.resize(0);
     for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
     label_phi.resize(0);
-
+    
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
@@ -8983,7 +8983,7 @@ void DrawPanel::Draw_Mercator(void){
             
         }
     
-   
+    
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String(""), String("c"), String(""));
@@ -9038,17 +9038,18 @@ void DrawPanel::Draw_Mercator(void){
         ){
         
         PutLabel(q, plot->phi_min, plot->phi_max, &label_phi, String("NS"));
-        PutLabel(q,
-                 Angle(min(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
-                 Angle(max(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
-                 &label_lambda,
-                 String("EW")
-                 );
-
-       
+        
+        
+        
         
     }
     
+    //    PutLabel(q,
+    //               Angle(min(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
+    //               Angle(max(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
+    //               &label_lambda,
+    //               String("EW")
+    //               );
     
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument

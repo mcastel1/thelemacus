@@ -9190,6 +9190,7 @@ void DrawPanel::Draw_Mercator(void){
                 (route.type).set(String(""), String("o"), String(""));
                 (route.alpha).set(String(""), M_PI/2.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                ((route.reference_position).lambda) = (plot->lambda_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(

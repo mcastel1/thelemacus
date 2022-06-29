@@ -8208,7 +8208,6 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     stringstream s;
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
-    bool first_label;
     int i,  /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
     
     wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
@@ -13553,7 +13552,7 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
     
     item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     listcontrol_positions->DeleteItem(item);
-    plot->remove_position(item, String(""));
+    plot->remove_position(((unsigned int)item), String(""));
     
     
     event.Skip(true);
@@ -13562,7 +13561,7 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
-    int i_route_to_remove = (listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+    int i_route_to_remove = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //the id of the route to removed is the one of the route selected in listcontrol_routes: I write it in delete_route_and_related_route and in delete_route
     (delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;

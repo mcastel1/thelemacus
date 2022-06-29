@@ -8372,8 +8372,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
 }
 
-//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi
-void DrawPanel::DrawParallelLabel(const Position& q){
+//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi. min and max are the minimal and maximal latitudes that are covered in the drawing process
+void DrawPanel::DrawParallelLabel(const Position& q, Angle min, Angle max){
     
     wxPoint p;
     
@@ -8406,8 +8406,9 @@ void DrawPanel::DrawParallelLabel(const Position& q){
             }else{
                 //in this case, ((temp.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                 
-                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
-                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+//                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+                if(ceil((K*(max.value)))  - floor((K*(min.value))) != 1){
+                  //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
                     s << (temp.phi).min_to_string(String("NS"), display_precision);
                     
@@ -9033,7 +9034,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        DrawParallelLabel(q);
+        DrawParallelLabel(q, plot->phi_min, plot->phi_max);
         
     }
     

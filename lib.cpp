@@ -8796,7 +8796,7 @@ void DrawPanel::TabulateRoutes(void){
 
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){
-    
+     
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Projection temp, delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;

@@ -8372,8 +8372,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
 }
 
-//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi. min and max are the minimal and maximal latitudes that are covered in the drawing process
-void DrawPanel::DrawParallelLabel(const Position& q, Angle min, Angle max){
+//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi, and the labels are wxStaticText objects which are stored into *labels. min and max are the minimal and maximal latitudes that are covered in the drawing process
+void DrawPanel::DrawParallelLabel(const Position& q, Angle min, Angle max, vector<wxStaticText*>* labels){
     
     wxPoint p;
     
@@ -8439,8 +8439,8 @@ void DrawPanel::DrawParallelLabel(const Position& q, Angle min, Angle max){
         
         //        dc.DrawRotatedText(wx_string, p, 0);
         
-        y_label.resize((y_label.size())+1);
-        (y_label.back()) = new wxStaticText(this, wxID_ANY, wx_string, p, wxDefaultSize, 0, wxT(""));
+        (*labels).resize(((*labels).size())+1);
+        ((*labels).back()) = new wxStaticText(this, wxID_ANY, wx_string, p, wxDefaultSize, 0, wxT(""));
         
         first_label = false;
         
@@ -9034,7 +9034,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        DrawParallelLabel(q, plot->phi_min, plot->phi_max);
+        DrawParallelLabel(q, plot->phi_min, plot->phi_max, &y_label);
         
     }
     

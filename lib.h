@@ -1461,7 +1461,7 @@ public:
     
     void Render_Mercator(wxDC&);
     void Render_3D(wxDC&);
-    void DrawParallelLabel(const Position&, Angle, Angle);
+    void DrawParallelLabel(const Position&, Angle, Angle, vector< wxStaticText* >*);
 
     bool GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);

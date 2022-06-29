@@ -8381,48 +8381,62 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
     if(/* convert temp to draw_panel coordinates p*/(this->*GeoToDrawPanel)(q, &p)){
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
         
-        Position temp;
         wxString wx_string;
+        //a pointer to the angle which will be used to draw the label
+        Angle angle_label;
+        double delta;
         stringstream s;
         
         
         s.str("");
-        //stores q in a temporary position temp, which will be modifie by the functiosn which act on it in the following lines. In this way, q will not be modified and stay intact
-        temp = q;
-        (temp.phi).normalize_pm_pi();
-        
-        if(/*If this condition is true, then (temp.phi).value*K is an integer multiple of one degree*/fabs(K*((temp.phi).value)-round(K*((temp.phi).value))) < epsilon_double){
-            //in this case, ((temp.phi).value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+
+        if(mode == String("NS")){
+            //if I am drawing latitude labels, I set the angle relative to the label to q.phi, and delta to delta_phi
             
-            s << (temp.phi).deg_to_string(mode, display_precision);
+            angle_label = (q.phi);
+            delta = delta_phi;
+            
+        }else{
+            //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda
+            
+            angle_label = (q.lambda);
+            delta = delta_lambda;
+            
+        }
+        
+        
+        if(/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(K*(angle_label.value)-round(K*(angle_label.value))) < epsilon_double){
+            //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+            
+            s << angle_label.deg_to_string(mode, display_precision);
             
         }else{
             
-            //in this case, delta_phi  is not an integer multiple of a degree. However, ((temp.phi).value) may still be or not be a multiple integer of a degree
-            if(k*fabs(K*((temp.phi).value) - ((double)round(K*((temp.phi).value)))) < delta_phi/2.0){
-                //in this case, ((temp.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+            //in this case, delta  is not an integer multiple of a degree. However, (angle_label.value) may still be or not be a multiple integer of a degree
+            if(k*fabs(K*(angle_label.value) - ((double)round(K*(angle_label.value)))) < delta/2.0){
+                //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                 
-                s << (temp.phi).deg_to_string(mode, display_precision);
+                s << angle_label.deg_to_string(mode, display_precision);
                 
             }else{
-                //in this case, ((temp.phi).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+                //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                 
                 //                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
                 if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
                     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
-                    s << (temp.phi).min_to_string(mode, display_precision);
+                    s << angle_label.min_to_string(mode, display_precision);
                     
                 }else{
                     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                     
                     if(first_label){
                         
-                        s << (temp.phi).to_string(mode, display_precision, false);
+                        s << angle_label.to_string(mode, display_precision, false);
                         
                     }else{
                         
-                        s << (temp.phi).min_to_string(mode, display_precision);
+                        s << angle_label.min_to_string(mode, display_precision);
                         
                     }
                     
@@ -8446,8 +8460,6 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
         first_label = false;
         
     }
-    
-    
     
 }
 
@@ -9044,20 +9056,22 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
-    //draw labels on meridians
+
+    
+    
     for(first_label = true,
         ((q.lambda).value) = (lambda_start.value),
         (q.phi) = (plot->phi_min);
         ((q.lambda).value) < (lambda_end.value);
         ((q.lambda).value) += delta_lambda
         ){
-    
+        
         PutLabel(q,
-                   Angle(min(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
-                   Angle(max(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
-                   &label_lambda,
-                   String("EW")
-                   );
+                 plot->lambda_max,
+                 plot->lambda_min,
+                 &label_lambda,
+                 String("EW")
+                 );
         
     }
     

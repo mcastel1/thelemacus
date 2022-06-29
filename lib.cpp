@@ -8074,7 +8074,7 @@ void ChartFrame::AllOk(void){
 
 DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
-    int i, j;
+    int i;
     String prefix;
     
     prefix = String("");
@@ -8106,6 +8106,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     //specify that circle_observer is a circle of equal altitude
     circle_observer.type = String("c");
+    
+    //clears the vector y_label because tehre are not y labels yet.
+    y_label.resize(0);
     
     //    rotation.print(String("initial rotation"), String(""), cout);
     
@@ -8374,7 +8377,6 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 void DrawPanel::DrawParallelLabel(const Position& q){
     
     wxPoint p;
-    wxStaticText* text_label;
     
     if(/* convert temp to draw_panel coordinates p*/(this->*GeoToDrawPanel)(q, &p)){
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -8437,7 +8439,8 @@ void DrawPanel::DrawParallelLabel(const Position& q){
         
         //        dc.DrawRotatedText(wx_string, p, 0);
         
-        text_label = new wxStaticText(this, wxID_ANY, wx_string, p, wxDefaultSize, 0, wxT(""));
+        y_label.resize((y_label.size())+1);
+        (y_label.back()) = new wxStaticText(this, wxID_ANY, wx_string, p, wxDefaultSize, 0, wxT(""));
         
         first_label = false;
         
@@ -8750,6 +8753,7 @@ void DrawPanel::TabulateRoutes(void){
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void){
     
+    int i;
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Projection temp, delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
@@ -8766,7 +8770,9 @@ void DrawPanel::Draw_Mercator(void){
     prefix = String("");
     new_prefix = prefix.append(String("\t"));
     
-    
+    //clears all labels previously drawn
+    for(i=0; i<y_label.size(); i++){(y_label[i])->Destroy();}
+    y_label.resize(0);
     
     
     //fetch the data on the region that I am about to plot from the data files.
@@ -11558,7 +11564,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
     }
     
     //I remove the sight and the related route from both the non-GUI object plot
-    (f->plot)->remove_sight(i_sight_to_remove, remove_related_route, String(""));
+    (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
     
     f->UpdateRelatedSightsAndRoutes();
     
@@ -11613,7 +11619,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     }
     
     //I remove the route and the related sight from both the non-GUI object plot
-    (f->plot)->remove_route(i_route_to_remove, remove_related_sight, String(""));
+    (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
     f->UpdateRelatedSightsAndRoutes();
     

@@ -9044,13 +9044,22 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
-    //    PutLabel(q,
-    //               Angle(min(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
-    //               Angle(max(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
-    //               &label_lambda,
-    //               String("EW")
-    //               );
+    //draw labels on meridians
+    for(first_label = true,
+        ((q.lambda).value) = (lambda_start.value),
+        (q.phi) = (plot->phi_min);
+        ((q.lambda).value) < (lambda_end.value);
+        ((q.lambda).value) += delta_lambda
+        ){
     
+        PutLabel(q,
+                   Angle(min(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
+                   Angle(max(((plot->lambda_min).normalize_pm_pi_ret()).value, ((plot->lambda_max).normalize_pm_pi_ret()).value)),
+                   &label_lambda,
+                   String("EW")
+                   );
+        
+    }
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
     (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);

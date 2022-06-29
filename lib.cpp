@@ -8201,7 +8201,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     wxPoint p;
     Projection temp;
     Position q;
-    double dummy, thickness;
+    double thickness;
     stringstream s;
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
@@ -8464,7 +8464,7 @@ void DrawPanel::DrawParallelLabel(const Position& q, wxDC&  dc){
         }else{
             
             //in this case, delta_phi  is not an integer multiple of a degree. However, ((temp.phi).value) may still be or not be a multiple integer of a degree
-            if(fabs(K*((temp.phi).value) - ((double)round(K*((temp.phi).value)))) < delta_phi/2.0){
+            if(k*fabs(K*((temp.phi).value) - ((double)round(K*((temp.phi).value)))) < delta_phi/2.0){
                 //in this case, ((temp.phi).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                 
                 s << (temp.phi).deg_to_string(String("NS"), display_precision);

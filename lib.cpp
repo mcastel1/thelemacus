@@ -8107,8 +8107,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     //specify that circle_observer is a circle of equal altitude
     circle_observer.type = String("c");
     
-    //clears the vector y_label because tehre are not y labels yet.
-    y_label.resize(0);
+    //clears the vector label_phi because tehre are not y labels yet.
+    label_phi.resize(0);
     
     //    rotation.print(String("initial rotation"), String(""), cout);
     
@@ -8365,7 +8365,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //        ((q.phi).value) += delta_phi
     //        ){
     //
-    //        DrawParallelLabel(q);
+    //        DrawLabel(q);
     //
     //    }
     
@@ -8373,7 +8373,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 }
 
 //This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi, and the labels are wxStaticText objects which are stored into *labels. min and max are the minimal and maximal latitudes that are covered in the drawing process
-void DrawPanel::DrawParallelLabel(const Position& q, Angle min, Angle max, vector<wxStaticText*>* labels){
+void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, vector<wxStaticText*>* labels){
     
     wxPoint p;
     
@@ -8622,7 +8622,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //            ((q.phi).value) += delta_phi
     //            ){
     //
-    //            DrawParallelLabel(q, dc);
+    //            DrawLabel(q, dc);
     //
     //        }
     //
@@ -8638,7 +8638,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //                ((q.phi).value) += delta_phi
     //                ){
     //
-    //                DrawParallelLabel(q, dc);
+    //                DrawLabel(q, dc);
     //
     //            }
     //
@@ -8654,7 +8654,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //                ((q.phi).value) -= delta_phi
     //                ){
     //
-    //                DrawParallelLabel(q, dc);
+    //                DrawLabel(q, dc);
     //
     //            }
     //
@@ -8771,8 +8771,8 @@ void DrawPanel::Draw_Mercator(void){
     new_prefix = prefix.append(String("\t"));
     
     //clears all labels previously drawn
-    for(i=0; i<y_label.size(); i++){(y_label[i])->Destroy();}
-    y_label.resize(0);
+    for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
+    label_phi.resize(0);
     
     
     //fetch the data on the region that I am about to plot from the data files.
@@ -9034,7 +9034,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        DrawParallelLabel(q, plot->phi_min, plot->phi_max, &y_label);
+        DrawLabel(q, plot->phi_min, plot->phi_max, &label_phi);
         
     }
     

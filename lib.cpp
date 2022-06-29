@@ -9053,6 +9053,7 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
+    //draw labels on meridians
     for(first_label = true,
         ((q.lambda).value) = (lambda_start.value),
         (q.phi) = (plot->phi_min) + epsilon_double;
@@ -9365,6 +9366,37 @@ void DrawPanel::Draw_3D(void){
     bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
     TabulateRoutes();
+    
+    
+    //draw labels on parallels
+    for(first_label = true,
+        ((q.phi).value) = (phi_start.value),
+        (q.lambda) = (plot->lambda_min) - epsilon_double;
+        ((q.phi).value) < (phi_end.value);
+        ((q.phi).value) += delta_phi
+        ){
+        
+        PutLabel(q, plot->phi_min, plot->phi_max, &label_phi, String("NS"));
+        
+    }
+    
+    //draw labels on meridians
+    for(first_label = true,
+        ((q.lambda).value) = (lambda_start.value),
+        (q.phi) = (plot->phi_min) + epsilon_double;
+        ((q.lambda).value) < (lambda_end.value);
+        ((q.lambda).value) += delta_lambda
+        ){
+        
+        PutLabel(q,
+                 plot->lambda_max,
+                 plot->lambda_min,
+                 &label_lambda,
+                 String("EW")
+                 );
+        
+    }
+    
     
     (parent->x).clear();
     (parent->y).clear();

@@ -1796,6 +1796,8 @@ public:
     void OnMouseOnListControlPositions(wxMouseEvent&);
     
     void DrawRoutes(void);
+    
+    void OnClose(wxCloseEvent&);
 
     
 };

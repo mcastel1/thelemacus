@@ -13074,7 +13074,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     GetAllCoastLineData();
     
-    
+    this->Bind(wxEVT_CLOSE_WINDOW, &ListFrame::OnClose, this);
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     rectangle_display = (display.GetClientArea());
@@ -13424,6 +13424,23 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
     
     
 }
+
+//when a ListFrame is closed, the function OnClose is called on all the ChartFrames which are his children, and *this is destroyed.
+void ListFrame::OnClose(wxCloseEvent& event){
+    
+    unsigned int i;
+    
+    for(i=0; i<chart_frames.size(); i++){
+        (chart_frames[i])->OnClose(event);
+    }
+    
+    Destroy();
+    
+    Close(true);
+
+    
+}
+
 
 //writes the ids of the related sights and route in the GUI fields in ListFrame -> this, by reading them from the non-GUI object Plot
 void ListFrame::UpdateRelatedSightsAndRoutes(void){

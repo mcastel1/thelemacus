@@ -9107,7 +9107,14 @@ void DrawPanel::Draw_3D(void){
     Position q;
     Projection temp;
     wxPoint p;
-    unsigned int n_intervals_ticks;
+    unsigned int i, n_intervals_ticks;
+    
+    //clears all labels previously drawn
+    for(i=0; i<label_lambda.size(); i++){(label_lambda[i])->Destroy();}
+    label_lambda.resize(0);
+    for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
+    label_phi.resize(0);
+
     
     parent->GetCoastLineData_3D();
     

@@ -60,7 +60,7 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit(){
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
-    display_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
+    display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
 
     unsigned int i;
     Int n_chart_frames;

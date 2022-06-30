@@ -754,10 +754,8 @@ public:
     void update_wxListCtrl(long, wxListCtrl*);
     void draw(unsigned int, int, int, DrawPanel*);
  
-    void Draw_Mercator(unsigned int, int, int, DrawPanel*, String);
-    void Draw_Mercator(unsigned int, DrawPanel*, vector<wxPoint>*, String);
-    void Draw_3D(unsigned int, int, int, DrawPanel*, String);
-    void Draw_3D(unsigned int, DrawPanel*, vector<wxPoint>*, String);
+    void Draw(unsigned int, int, int, DrawPanel*, String);
+    void Draw(unsigned int, DrawPanel*, vector<wxPoint>*, String);
     
     bool lambda_min_max(Angle*, Angle*, String);
     bool compute_l_ends(vector<Length>*, DrawPanel*, String);
@@ -1429,8 +1427,6 @@ public:
     bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
-    //this may point to either Rooute.Draw_Mercator or Route.Draw_3D
-    void (Route::*DrawRoute)(unsigned int, DrawPanel*, vector<wxPoint>*, String);
   
     
     void SetIdling(bool);

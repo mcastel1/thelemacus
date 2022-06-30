@@ -1412,7 +1412,7 @@ void Route::draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
 }
 
 
-//draws the Route *this into draw_panel, with the 3D projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
+//draws the Route *this into draw_panel, with any projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
 void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
     unsigned int i;
@@ -1512,7 +1512,7 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
 }
 
 
-//tabulate the points of Route *this in the 3D projection of draw_panel and writes them into v
+//tabulate the points of Route *this in any projection of draw_panel and writes them into v
 void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* v, String prefix){
     
     unsigned int i;
@@ -1521,7 +1521,6 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* 
     
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends(&s, draw_panel, prefix)){
-        //the Route this is an orthodrome
         
         //tabulate the Route points
         for(v->clear(), i=0; i<n_points; i++){

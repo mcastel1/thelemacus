@@ -1,8 +1,6 @@
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
-//this is the high precision used for storing data and making calculations with it
-#define data_precision 32
-//this is the low precision used for displaying data
-#define display_precision 4
+Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;
+
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
 //one arcminute in units of radians
@@ -74,3 +72,13 @@
 //for debug
 
 
+static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
+
+static const int days_per_month_common_temp[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_month_common_temp + sizeof(days_per_month_common_temp)/sizeof(days_per_month_common_temp[0]));
+
+
+//these are the color codes in kml file format for a few populat colors (red, etc...);
+string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
+string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};

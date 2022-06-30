@@ -125,7 +125,7 @@ void File::remove(String prefix){
 
 File::File(){
     
-    value.precision(data_precision);
+    value.precision((data_precision.value));
     
 }
 
@@ -1270,10 +1270,10 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i+1)));
     
     //update latitude column
-    listcontrol->SetItem(i, j++, wxString(phi.to_string(String("NS"), display_precision, true)));
+    listcontrol->SetItem(i, j++, wxString(phi.to_string(String("NS"), (display_precision.value), true)));
     
     //update longitude column
-    listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), display_precision, true)));
+    listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), (display_precision.value), true)));
     
     //update label column
     listcontrol->SetItem(i, j++, wxString(label.value));
@@ -1672,15 +1672,15 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
         
-        listcontrol->SetItem(i, j++, wxString(reference_position.to_string(display_precision)));
-        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), display_precision, true)));
+        listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), (display_precision.value), true)));
         
     }else{
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
         
-        listcontrol->SetItem(i, j++, wxString(reference_position.to_string(display_precision)));
-        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), display_precision, false)));
-        listcontrol->SetItem(i, j++, wxString(l.to_string(String("nm"), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), (display_precision.value), false)));
+        listcontrol->SetItem(i, j++, wxString(l.to_string(String("nm"), (display_precision.value))));
         
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
@@ -2647,7 +2647,7 @@ Route Position::transport(String prefix){
     
     route.compute_end(new_prefix);
     
-    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(String(""), display_precision, false) << ", l = " << (route.l).value << " nm";
+    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(String(""), (display_precision.value), false) << ", l = " << (route.l).value << " nm";
     (route.end.label).set(String(""), temp_label.str(), prefix);
     
     (*this) = route.end;
@@ -3880,7 +3880,7 @@ void Route::transport(String prefix){
         
         
         //append 'translated to ...' to the label of sight, and make this the new label of sight
-        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(String(""), display_precision, false) << ", l = " << transporting_route.l.value << " nm";
+        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(String(""), (display_precision.value), false) << ", l = " << transporting_route.l.value << " nm";
         label.set(String(""), temp_label.str(), prefix);
         //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set
         (related_sight.value) = -1;
@@ -3926,15 +3926,15 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString(artificial_horizon.value));
     
     //set sextant altitude column
-    listcontrol->SetItem(i, j++, wxString((H_s).to_string(String(""), display_precision, true)));
+    listcontrol->SetItem(i, j++, wxString((H_s).to_string(String(""), (display_precision.value), true)));
     
     //set index error
-    listcontrol->SetItem(i, j++, wxString((index_error).to_string(String(""), display_precision, true)));
+    listcontrol->SetItem(i, j++, wxString((index_error).to_string(String(""), (display_precision.value), true)));
     
     //set height of eye column
     if(artificial_horizon.value == 'n'){
         
-        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), display_precision)));
+        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), (display_precision.value))));
         
     }
     else{
@@ -3947,20 +3947,20 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     //I add to master_clock_date_and_hour the value stopwatch (if any): I write the result in time_UTC and I write in the GUI object  time_UTC
     time_UTC = master_clock_date_and_hour;
     //    if((use_stopwatch.value)=='y'){time_UTC += stopwatch;}
-    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string(display_precision)));
+    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string((display_precision.value))));
     
     //set use of stopwatch
     listcontrol->SetItem(i, j++, wxString((use_stopwatch.value)));
     
     //set stopwatch reading
     if((use_stopwatch.value) == 'y'){
-        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string(display_precision)));
+        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string((display_precision.value))));
     }else{
         listcontrol->SetItem(i, j++, wxString(""));
     }
     
     //set TAI-UTC
-    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string(display_precision)));
+    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value))));
     
     //set label
     listcontrol->SetItem(i, j++, wxString((label).value));
@@ -4968,8 +4968,8 @@ Plot::Plot(Catalog* cata, String prefix){
     catalog = cata;
     job_id = -1;
     
-    plot_command.precision(data_precision);
-    command.precision(data_precision);
+    plot_command.precision((data_precision.value));
+    command.precision((data_precision.value));
     
     file_init.set_name(String(path_file_init));
     file_id.set_name(String("job_id.txt"));
@@ -5891,7 +5891,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
     
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp <<  (*this).body.name.value << " " << (*this).time.to_string(display_precision) << " TAI, " << (*this).label.value;
+    temp <<  (*this).body.name.value << " " << (*this).time.to_string((display_precision.value)) << " TAI, " << (*this).label.value;
     ((*circle_of_equal_altitude).label).set(String(""), String(temp.str()), new_prefix);
     
     check &= compute_H_o(new_prefix);
@@ -7526,11 +7526,11 @@ void Chrono::print(String name, String prefix, ostream& ostr){
     
     unsigned int precision;
     
-    //if I am printing to terminal, I print with display_precision. Otherwise, I print with data_precision
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
     if(ostr.rdbuf() == cout.rdbuf()){
-        precision = display_precision;
+        precision = (display_precision.value);
     }else{
-        precision = data_precision;
+        precision = (data_precision.value);
     }
     
     ostr << prefix.value << "hour of " << name.value << " = " << to_string(precision) << "\n";
@@ -8293,14 +8293,14 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //
     //            if(/*If this condition is true, then lambda.value*K is an integer multiple of one degree. I use delta_lambda to check this condition rather tahn lambda itself, because delta_lambda is not subject to rounding errors */fabs(K*delta_lambda - round(K*delta_lambda)) < epsilon_double){
     //                //in this case, lambda = n degrees, with n integer: I write on the axis only the degree part of lambda
-    //                s << lambda.deg_to_string(String("EW"), display_precision);
+    //                s << lambda.deg_to_string(String("EW"), (display_precision.value));
     //            }else{
     //                //in this case, delta_lambda  is not an integer multiple of a degree. However, lambda_mercator(dummy) may still be or not be a multiple integer of a degree
     //
     //                if(fabs(K*(lambda.value) - ((double)round(K*(lambda.value)))) < K*delta_lambda/2.0){
     //                    //in this case, K*(lambda.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
     //
-    //                    s << lambda.deg_to_string(String("EW"), display_precision);
+    //                    s << lambda.deg_to_string(String("EW"), (display_precision.value));
     //
     //                }else{
     //                    //in this case, K*(lambda.value) deos not coincide with an integer mulitple of a degree.
@@ -8309,14 +8309,14 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //                    if(ceil((K*((plot->lambda_max).value)))  - floor((K*((plot->lambda_min).value))) != 1){
     //                        //in this case, the lambda interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
     //
-    //                        s << lambda.min_to_string(String("EW"), display_precision);
+    //                        s << lambda.min_to_string(String("EW"), (display_precision.value));
     //                    }else{
     //                        //in this case, the lambda interval which is plotted spans les than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
     //
     //                        if(first_label){
-    //                            s << lambda.to_string(String("EW"), display_precision, true);
+    //                            s << lambda.to_string(String("EW"), (display_precision.value), true);
     //                        }else{
-    //                            s << lambda.min_to_string(String("EW"), display_precision);
+    //                            s << lambda.min_to_string(String("EW"), (display_precision.value));
     //                        }
     //                    }
     //
@@ -8385,7 +8385,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
         if(/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(K*(angle_label.value)-round(K*(angle_label.value))) < epsilon_double){
             //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             
-            s << angle_label.deg_to_string(mode, display_precision);
+            s << angle_label.deg_to_string(mode, (display_precision.value));
             
         }else{
             
@@ -8393,7 +8393,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
             if(k*fabs(K*(angle_label.value) - ((double)round(K*(angle_label.value)))) < delta/2.0){
                 //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                 
-                s << angle_label.deg_to_string(mode, display_precision);
+                s << angle_label.deg_to_string(mode, (display_precision.value));
                 
             }else{
                 //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
@@ -8402,18 +8402,18 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
                 if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
                     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
-                    s << angle_label.min_to_string(mode, display_precision);
+                    s << angle_label.min_to_string(mode, (display_precision.value));
                     
                 }else{
                     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                     
                     if(first_label){
                         
-                        s << angle_label.to_string(mode, display_precision, false);
+                        s << angle_label.to_string(mode, (display_precision.value), false);
                         
                     }else{
                         
-                        s << angle_label.min_to_string(mode, display_precision);
+                        s << angle_label.min_to_string(mode, (display_precision.value));
                         
                     }
                     
@@ -8551,7 +8551,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //
     //            if(/*If this condition is true, then (temp.lambda).value*K is an integer multiple of one degree*/fabs(K*((temp.lambda).value)-round(K*((temp.lambda).value))) < epsilon_double){
     //                //in this case, ((temp.lambda).value) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-    //                s << (temp.lambda).deg_to_string(String("EW"), display_precision);
+    //                s << (temp.lambda).deg_to_string(String("EW"), (display_precision.value));
     //
     //            }else{
     //                //in this case, (temp.lambda).value*K is not an integer multiple of a degree. However, ((temp.phi).value) may still be or not be a multiple integer of a degree
@@ -8559,7 +8559,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //                if(fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0){
     //                    //in this case, ((temp.lambda).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
     //
-    //                    s << (temp.lambda).deg_to_string(String("EW"), display_precision);
+    //                    s << (temp.lambda).deg_to_string(String("EW"), (display_precision.value));
     //
     //                }else{
     //                    //in this case, ((temp.lambda).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
@@ -8567,15 +8567,15 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //                    if(ceil((K*(lambda_end.value)))  - floor((K*(lambda_start.value))) != 1){
     //                        //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
     //
-    //                        s << (temp.lambda).min_to_string(String("EW"), display_precision);
+    //                        s << (temp.lambda).min_to_string(String("EW"), (display_precision.value));
     //
     //                    }else{
     //                        //in this case, the lambda interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
     //
     //                        if(first_label){
-    //                            s << (temp.lambda).to_string(String("EW"), display_precision, false);
+    //                            s << (temp.lambda).to_string(String("EW"), (display_precision.value), false);
     //                        }else{
-    //                            s << (temp.lambda).min_to_string(String("EW"), display_precision);
+    //                            s << (temp.lambda).min_to_string(String("EW"), (display_precision.value));
     //                        }
     //
     //                    }
@@ -8843,7 +8843,7 @@ void DrawPanel::Draw_Mercator(void){
     dummy.from_sign_deg_min('+', 179, 59);
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    n_intervals_ticks_max = ((unsigned int)floor(((double)width_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), display_precision, false)))).GetWidth()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)width_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth()))));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
@@ -10708,14 +10708,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     s.str("");
     if(GetMouseGeoPosition(&p)){;
         //if the mouse has a screen position corresponding to a geographic position, I write it into s, otherwise s is left empty
-        s << (p.phi).to_string(String("NS"), display_precision, true) << " " << (p.lambda).to_string(String("EW"), display_precision, true);
+        s << (p.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p.lambda).to_string(String("EW"), (display_precision.value), true);
     }
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
     
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
         s.str("");
-        s << (p.phi).to_string(String("NS"), display_precision, true) << " " << (p.lambda).to_string(String("EW"), display_precision, true);
+        s << (p.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p.lambda).to_string(String("EW"), (display_precision.value), true);
         text_position_end->SetLabel(wxString(s.str().c_str()));
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         PaintNow();
@@ -11011,11 +11011,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         ScreenToMercator(position_start_selection, &start_selection);
         
         s.clear();
-        s << (p_start.phi).to_string(String("NS"), display_precision, true) << " " << (p_start.lambda).to_string(String("EW"), display_precision, true);
+        s << (p_start.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p_start.lambda).to_string(String("EW"), (display_precision.value), true);
         text_position_start->SetLabel(wxString(s.str().c_str()));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
-        //        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_start.phi).to_string(String("NS"), display_precision, false) << " }\n";
+        //        cout << "p_start = {" << (p_start.lambda).to_string(String("EW"), (display_precision.value), false) << " , " << (p_start.phi).to_string(String("NS"), (display_precision.value), false) << " }\n";
         
     }else{
         
@@ -11029,7 +11029,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
-            //            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), display_precision, false) << " , " << (p_end.phi).to_string(String("NS"), display_precision, false) << " }\n";
+            //            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), (display_precision.value), false) << " , " << (p_end.phi).to_string(String("NS"), (display_precision.value), false) << " }\n";
             
             //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
             delete chart;
@@ -11684,7 +11684,7 @@ template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(
         
         time_temp.set_current(String(""));
         //I write in the non-GUI object (p->string)
-        (*(p->string)) = String(time_temp.to_string(display_precision));
+        (*(p->string)) = String(time_temp.to_string((display_precision.value)));
         
         p->set();
         

@@ -45,7 +45,6 @@
 // #include "gsl_complex.h"
 // #include "gsl_complex_math.h"
 
-#include "constants.h"
 
 
 using namespace std;
@@ -109,22 +108,23 @@ class Atmosphere;
 class Answer;
 class Body;
 
+class Int{
+    
+public:
+    int value;
+    
+    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, String, String);
+    void enter(String, String);
+    void set(String, int, String);
+    void print(String, String, ostream&);
+    
+    bool operator==(const Int&), operator!=(const Int&);
+    
+};
 
+#include "constants.h"
 
-
-static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
-
-static const int days_per_month_common_temp[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_month_common_temp + sizeof(days_per_month_common_temp)/sizeof(days_per_month_common_temp[0]));
-
-
-//these are the color codes in kml file format for a few populat colors (red, etc...);
-string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
-string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
-
-
-//lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 
 inline double cot(double x){
     
@@ -448,29 +448,6 @@ void enter_double(double* x, bool check_interval, double min, double sup, String
     }while(!check);
     
 }
-
-
-
-
-
-
-class Int{
-    
-public:
-    int value;
-    
-    void read_from_file(String, File&, bool, String);
-    void read_from_file(String, String, String);
-    void enter(String, String);
-    void set(String, int, String);
-    void print(String, String, ostream&);
-    
-    bool operator==(const Int&), operator!=(const Int&);
-    
-};
-
-
-
 
 
 class Double{

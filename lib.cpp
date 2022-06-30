@@ -9371,7 +9371,7 @@ void DrawPanel::Draw_3D(void){
     //draw labels on parallels
     for(first_label = true,
         ((q.phi).value) = (phi_start.value),
-        (q.lambda) = (plot->lambda_min) - epsilon_double;
+        (q.lambda) = lambda_middle;
         ((q.phi).value) < (phi_end.value);
         ((q.phi).value) += delta_phi
         ){
@@ -9383,7 +9383,7 @@ void DrawPanel::Draw_3D(void){
     //draw labels on meridians
     for(first_label = true,
         ((q.lambda).value) = (lambda_start.value),
-        (q.phi) = (plot->phi_min) + epsilon_double;
+        (q.phi) = phi_middle;
         ((q.lambda).value) < (lambda_end.value);
         ((q.lambda).value) += delta_lambda
         ){

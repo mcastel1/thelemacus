@@ -8557,21 +8557,21 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     if(selection_rectangle){
         
-        Route(
+        (Route(
               String("l"),
               p_start,
               //change this by introducing if
               Angle(0.0),
-              Length( Re* ( (((p_end.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
-              ).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+              Length( Re* ( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
+              )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
         
-        Route(
+        (Route(
               String("l"),
               p_start,
               //change this by introducing if
               Angle(3.0*M_PI/2.0),
-              Length( Re*cos(p_start.phi) * ( (((p_end.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
-              ).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+              Length( Re*cos(p_start.phi) * ( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
+              )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
         
         
     }
@@ -10618,7 +10618,6 @@ bool DrawPanel::GetMouseGeoPosition(Position* p){
 
 void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
-    Position p;
     wxPoint q;
     stringstream s;
     int i, j, l;
@@ -10631,16 +10630,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //update the instantaneous position of the mouse on the chart
     s.str("");
-    if(GetMouseGeoPosition(&p)){;
+    if(GetMouseGeoPosition(&p_now)){;
         //if the mouse has a screen position corresponding to a geographic position, I write it into s, otherwise s is left empty
-        s << (p.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p.lambda).to_string(String("EW"), (display_precision.value), true);
+        s << (p_now.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p_now.lambda).to_string(String("EW"), (display_precision.value), true);
     }
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
     
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(selection_rectangle){
         s.str("");
-        s << (p.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p.lambda).to_string(String("EW"), (display_precision.value), true);
+        s << (p_now.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p_now.lambda).to_string(String("EW"), (display_precision.value), true);
         text_position_end->SetLabel(wxString(s.str().c_str()));
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         PaintNow();

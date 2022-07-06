@@ -3,6 +3,8 @@ artificial horizon = y
 plot coastline every = 10
 index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+max latitude coastline data = 83° 39.988386000000276'
+min latitude coastline data = -78° 43.74466799999993'
 #entire world
 minimal latitude = -77° 13.9'
 maximal latitude = 82° 53.2'

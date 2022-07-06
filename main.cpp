@@ -50,7 +50,8 @@
  - in DrawPanel::Draw_3D delta_lambda is used without being initialized (?)
  - check fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0 in  DrawPanel::Render_3D: it seems that this line has been written as if delta_lambda were expressed in degrees, while it is expressed in radians
  - it seems that DrawPanel::Draw_3D/Mercator  is called multiple times at the beginning of the code, and this is pointless -> check
- - take care of labels of parallels/meridians which overlap in the 3D projection 
+ - take care of labels of parallels/meridians which overlap in the 3D projection
+ - find out why the app takes a few seconds to close. 
  */
 
 

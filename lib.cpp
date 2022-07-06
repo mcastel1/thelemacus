@@ -8555,126 +8555,26 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
-    //
-    //    //draw labels of meridians
-    //    //starts for loop which draws the labels of meridians: labels will be drawn near Position q, and this loop is over the longitude of  q. (q.phi) is set to phi_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
-    //    for(first_label = true,
-    //        ((q.lambda).value) = (lambda_start.value),
-    //        (q.phi) = phi_middle;
-    //        ((q.lambda).value) < (lambda_end.value);
-    //        ((q.lambda).value) += delta_lambda
-    //        ){
-    //
-    //        if((this->*GeoToDrawPanel)(q, &p)){
-    //            //if Position q lies on the visible side of the Earth, I proceed and draw its label
-    //
-    //            //stores q in a temporary position temp, which will be modifie by the functiosn which act on it in the following lines. In this way, q will not be modified and stay intact
-    //            temp = q;
-    //
-    //            s.str("");
-    //            //            (q.lambda).normalize_pm_pi();
-    //
-    //            if(/*If this condition is true, then (temp.lambda).value*K is an integer multiple of one degree*/fabs(K*((temp.lambda).value)-round(K*((temp.lambda).value))) < epsilon_double){
-    //                //in this case, ((temp.lambda).value) = n degrees, with n integer: I write on the axis the value of phi  in degrees
-    //                s << (temp.lambda).deg_to_string(String("EW"), (display_precision.value));
-    //
-    //            }else{
-    //                //in this case, (temp.lambda).value*K is not an integer multiple of a degree. However, ((temp.phi).value) may still be or not be a multiple integer of a degree
-    //
-    //                if(fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0){
-    //                    //in this case, ((temp.lambda).value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
-    //
-    //                    s << (temp.lambda).deg_to_string(String("EW"), (display_precision.value));
-    //
-    //                }else{
-    //                    //in this case, ((temp.lambda).value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-    //
-    //                    if(ceil((K*(lambda_end.value)))  - floor((K*(lambda_start.value))) != 1){
-    //                        //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
-    //
-    //                        s << (temp.lambda).min_to_string(String("EW"), (display_precision.value));
-    //
-    //                    }else{
-    //                        //in this case, the lambda interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-    //
-    //                        if(first_label){
-    //                            s << (temp.lambda).to_string(String("EW"), (display_precision.value), false);
-    //                        }else{
-    //                            s << (temp.lambda).min_to_string(String("EW"), (display_precision.value));
-    //                        }
-    //
-    //                    }
-    //
-    //
-    //                }
-    //
-    //            }
-    //
-    //            wx_string = wxString(s.str().c_str());
-    //
-    //            //convert q to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
-    //            (this->*GeoToDrawPanel)(q, &p);
-    //            p -= wxPoint((GetTextExtent(wx_string).GetWidth())/2, (GetTextExtent(wx_string).GetHeight())+((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    //
-    //            dc.DrawRotatedText(wx_string, p, 0);
-    //
-    //            first_label = false;
-    //
-    //        }
-    //
-    //    }
-    //
-    //
-    //    //draw  labels of parallels
-    //    //starts for loop which draws the labels of parallels: labels will be drawn near Position q, and this loop is over the latitude of  q, which is increased. q.lambda is set to lambda_middle, in such a way that labels will be drawn in the middle of the visible side of the earth
-    //    if(((plot->phi_min) != 3.0*M_PI/2.0) && ((plot->phi_max) != M_PI/2.0)){
-    //        //circle_observer does not encicle either of the poles
-    //
-    //        for(first_label = true,
-    //            ((q.phi).value) = (phi_start.value),
-    //            (q.lambda).set(String(""), lambda_middle.value, String(""));
-    //            ((q.phi).value) < (phi_end.value);
-    //            ((q.phi).value) += delta_phi
-    //            ){
-    //
-    //            PutLabel(q, dc);
-    //
-    //        }
-    //
-    //    }else{
-    //
-    //        if((plot->phi_max) == M_PI/2.0){
-    //            //circle_observer encircles the N pole
-    //
-    //            for(first_label = true,
-    //                (q.lambda).set(String(""), lambda_middle.value, String("")),
-    //                ((q.phi).value) = (floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi);
-    //                ((q.phi).value) < ((((circle_observer.reference_position).phi).normalize_pm_pi_ret()).value) + ((circle_observer.omega).value);
-    //                ((q.phi).value) += delta_phi
-    //                ){
-    //
-    //                PutLabel(q, dc);
-    //
-    //            }
-    //
-    //        }
-    //
-    //        if((plot->phi_min) == 3.0*M_PI/2.0){
-    //            //circle_observer encircles the S pole
-    //
-    //            for(first_label = true,
-    //                (q.lambda).set(String(""), lambda_middle.value, String("")),
-    //                ((q.phi).value) = (ceil((((plot->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi);
-    //                ((q.phi).value) > ((((circle_observer.reference_position).phi).normalize_pm_pi_ret()).value) - ((circle_observer.omega).value);
-    //                ((q.phi).value) -= delta_phi
-    //                ){
-    //
-    //                PutLabel(q, dc);
-    //
-    //            }
-    //
-    //        }
-    //    }
+    if(selection_rectangle){
+        
+        Route(
+              String("l"),
+              p_start,
+              //change this by introducing if
+              Angle(0.0),
+              Length( Re* ( (((p_end.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
+              ).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+        
+        Route(
+              String("l"),
+              p_start,
+              //change this by introducing if
+              Angle(3.0*M_PI/2.0),
+              Length( Re*cos(p_start.phi) * ( (((p_end.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
+              ).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+        
+        
+    }
     
 }
 
@@ -8967,8 +8867,6 @@ void DrawPanel::Draw_Mercator(void){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            //replace this with Draw_3D adter you revised Draw_3D
-            //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
             if(gamma_lambda != 1.0){
@@ -10663,6 +10561,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         Draw = (&DrawPanel::Draw_Mercator);
         Render = (&DrawPanel::Render_Mercator);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
+        ScreenToProjection = (&DrawPanel::ScreenToMercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
@@ -10684,6 +10583,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
         Draw = (&DrawPanel::Draw_3D);
         Render = (&DrawPanel::Render_3D);
         GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
+        ScreenToProjection = (&DrawPanel::ScreenTo3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
@@ -11038,7 +10938,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&p_start);
         position_start_selection = position_screen_now;
         //stores the x at the beginning of the selection process, to compute the zoom factor later
-        ScreenToMercator(position_start_selection, &start_selection);
+        //        ScreenToMercator(position_start_selection, &start_selection);
+        (this->*ScreenToProjection)(position_start_selection, &start_selection);
+
         
         s.clear();
         s << (p_start.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p_start.lambda).to_string(String("EW"), (display_precision.value), true);
@@ -11054,8 +10956,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&p_end);
         position_end_selection = position_screen_now;
         //stores the x at the end of the selection process, to compute the zoom factor later
-        ScreenToMercator(position_end_selection, &end_selection);
-        
+//        ScreenToMercator(position_end_selection, &end_selection);
+        (this->*ScreenToProjection)(position_end_selection, &end_selection);
+
         if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             

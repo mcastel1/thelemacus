@@ -733,7 +733,7 @@ public:
     void draw(unsigned int, int, int, DrawPanel*);
  
     void Draw(unsigned int, int, int, DrawPanel*, String);
-    void Draw(unsigned int, DrawPanel*, vector<wxPoint>*, String);
+    void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     
     bool lambda_min_max(Angle*, Angle*, String);
     bool compute_l_ends(vector<Length>*, DrawPanel*, String);
@@ -1383,7 +1383,7 @@ public:
     
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points, with respect to the origin of DrawPanel, which represent the route_list[i] discretized
-    vector< vector< wxPoint > > points_route_list;
+    vector< vector< vector<wxPoint> > > points_route_list;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     unsigned int width_chart, height_chart, /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, width_plot_area, height_plot_area, tick_length;

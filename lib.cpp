@@ -1513,7 +1513,7 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
 
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
-void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* v, String prefix){
+void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, String prefix){
     
     unsigned int i;
     wxPoint p;
@@ -1522,13 +1522,29 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector<wxPoint>* 
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends(&s, draw_panel, prefix)){
         
+        bool end_connected;
+
+        
         //tabulate the Route points
-        for(v->clear(), i=0; i<n_points; i++){
+        for(v->clear(), /*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
             
             compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
             
             if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
-                (*v).push_back(p);
+                
+                if(end_connected){
+                    
+                    (*v).resize((*v).size() + 1);
+                    end_connected = false;
+                    
+                }
+                
+                ((*v)[(*v).size()-1]).push_back(p);
+                
+            }else{
+                
+                end_connected = true;
+                
             }
             
         }
@@ -8186,7 +8202,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     stringstream s;
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
-    int i,  /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
+    int i, j, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
     
     wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
@@ -8226,11 +8242,15 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
             
         }
         
-        
-        if((points_route_list[i]).size() > 1){
-            //I need to add this consdition to make sure that the index j below lies in a valid range
+        //run over all connected chunks of routes
+        for(j=0; j<(points_route_list[i]).size(); j++){
             
-            dc.DrawSpline((int)((points_route_list[i]).size()), (points_route_list[i]).data());
+            if((points_route_list[i][j]).size() > 1){
+                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
+                
+                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
+                
+            }
             
         }
         
@@ -8443,7 +8463,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC&  dc){
     
-    int i, color_id;
+    int i, j, color_id;
     double thickness;
     Angle lambda;
     stringstream s;
@@ -8497,10 +8517,15 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         
         //draw the route points
-        if((points_route_list[i]).size() > 1){
-            //I need to add this consdition to make sure that the index j below lies in a valid range
+        //run over all connected chunks of routes
+        for(j=0; j<(points_route_list[i]).size(); j++){
             
-            dc.DrawSpline((int)((points_route_list[i]).size()), (points_route_list[i]).data());
+            if((points_route_list[i][j]).size() > 1){
+                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
+                
+                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
+                
+            }
             
         }
         
@@ -8729,7 +8754,7 @@ void DrawPanel::TabulateRoutes(void){
     }
     
     //tabulate the points of routes
-    for((plot->route_list).resize((plot->route_list).size()), i=0; i<(plot->route_list).size(); i++){
+    for(i=0; i<(plot->route_list).size(); i++){
         
         ((plot->route_list)[i]).Draw((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
         
@@ -10696,7 +10721,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     Position p;
     wxPoint q;
     stringstream s;
-    int i, l;
+    int i, j, l;
     
     //    cout << "\nMouse moved";
     
@@ -10739,48 +10764,53 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             
             
             
-            for(l=0; l<((int)((points_route_list[i]).size()))-1; l++){
+            for(j=0; j<(points_route_list[i]).size(); j++){
                 
-                //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
-                
-                if(/*to recognize that the mouse is hivering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ ( ((points_route_list[i][l]).x) != ((points_route_list[i][l+1]).x) )
-                   
-                   &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
-                   
-                   ( ((((points_route_list[i][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][l+1]).x))) ||
+                for(l=0; l<((int)((points_route_list[i][j]).size()))-1; l++){
                     
-                    ((((points_route_list[i][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][l]).x))) )
-                   
-                   &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
-                   
-                   (
-                    fabs(
-                         (position_draw_panel_now.y) -
-                         (((points_route_list[i][l]).y) + ((double)(((points_route_list[i][l+1]).y) - ((points_route_list[i][l]).y))) / ((double)(((points_route_list[i][l+1]).x) - ((points_route_list[i][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][l]).x))))
-                         )
+                    //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
                     
-                    <= (thickness_route_selection_over_length_screen.value)*((double)(((parent->parent)->rectangle_display).GetWidth()))/2.0
-                    )
-                   ){
-                    
-                    //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][l]).y))) <
-                    //                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
-                    
-                    //sets the highlighted route to i, so as to use highlighted_route in other functions
-                    ((parent->parent)->highlighted_route) = i;
-                    
-                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                    ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
-                    if((((plot->route_list)[i]).related_sight).value != -1){
-                        ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
+                    if(/*to recognize that the mouse is hivering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ ( ((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l+1]).x) )
+                       
+                       &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
+                       
+                       ( ((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l+1]).x))) ||
+                        
+                        ((((points_route_list[i][j][l+1]).x) <= (position_draw_panel_now.x) ) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))) )
+                       
+                       &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
+                       
+                       (
+                        fabs(
+                             (position_draw_panel_now.y) -
+                             (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
+                             )
+                        
+                        <= (thickness_route_selection_over_length_screen.value)*((double)(((parent->parent)->rectangle_display).GetWidth()))/2.0
+                        )
+                       ){
+                        
+                        //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
+                        //                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
+                        
+                        //sets the highlighted route to i, so as to use highlighted_route in other functions
+                        ((parent->parent)->highlighted_route) = i;
+                        
+                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
+                        if((((plot->route_list)[i]).related_sight).value != -1){
+                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
+                        }
+                        
+                        // quit the loops over l ad j
+                        break;
+                        break;
+                        
                     }
                     
-                    // quit the loops over l
-                    break;
-                    
                 }
-                
-            }
+            
+        }
             
             
             

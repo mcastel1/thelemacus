@@ -13402,16 +13402,14 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
 
 //when a ListFrame is closed, the function OnClose is called on all the ChartFrames which are his children, and *this is destroyed.
 void ListFrame::OnClose(wxCloseEvent& event){
-    
-    unsigned int i;
-    
-    for(i=0; i<chart_frames.size(); i++){
-        (chart_frames[i])->OnClose(event);
+        
+    for(; 0<chart_frames.size(); ){
+        (chart_frames[0])->OnClose(event);
     }
     
     Destroy();
     
-    Close(true);
+//    Close(true);
 
     
 }

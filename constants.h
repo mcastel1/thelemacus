@@ -1,5 +1,6 @@
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;
+Double /*the ratio between the width (height) of the plot area and the width (height) of the chart*/length_plot_area_over_length_chart, length_chart_over_length_chart_frame, /*this is the ratio between (the length of the borders drawn around the widgets) and (the length of the frame in which the widgets are located)*/length_border_over_length_frame;
 
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
@@ -49,13 +50,7 @@ Int /*this is the low precision used for displaying data*/ display_precision, /*
 #define ceil_min_lat (ceil(min_lat))
 //latitude span
 #define span_lat ((floor_max_lat-floor_min_lat+1)
-//the ratio between the width (height) of the plot area and the width (height) of the chart.
-#define length_plot_area_over_length_chart 0.8
-#define length_chart_over_length_chart_frame 0.8
-//this is the ratio between (the length of the borders drawn around the widgets) and (the length of the frame in which the widgets are located)
-#define length_border_over_length_frame 0.01
 #define outfile_precision 16
-//the maximum allowed value of the slider in ChartFrame
 //#define wxDEBUG_LEVEL 0
 
 

@@ -8163,11 +8163,11 @@ void DrawPanel::PaintNow(){
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
     parent->SetMinSize(wxSize(
-                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->GetSize()).GetWidth())*length_border_over_length_frame,
-                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame
+                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value),
+                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)
                               ));
     
-    //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*length_border_over_length_frame));
+    //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)));
     
     //    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
@@ -8328,7 +8328,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //                               wx_string,
     //                               (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
     //                               (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
-    //                               + ((parent->GetSize()).GetWidth())*length_border_over_length_frame,
+    //                               + ((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value),
     //                               0);
     //
     //            first_label = false;
@@ -8427,7 +8427,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
         wx_string = wxString(s.str().c_str());
         
         //shift p it in such a way that the label drawn at p  is diplayed nicely, and draw the label at  p
-        p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*length_border_over_length_frame);
+        p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value));
         
         //        dc.DrawRotatedText(wx_string, p, 0);
         
@@ -8589,7 +8589,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //
     //            //convert q to draw_panel coordinates p, shift it in such a way that it is diplayed nicely, and draw the label at location p
     //            (this->*GeoToDrawPanel)(q, &p);
-    //            p -= wxPoint((GetTextExtent(wx_string).GetWidth())/2, (GetTextExtent(wx_string).GetHeight())+((parent->GetSize()).GetWidth())*length_border_over_length_frame);
+    //            p -= wxPoint((GetTextExtent(wx_string).GetWidth())/2, (GetTextExtent(wx_string).GetHeight())+((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     //
     //            dc.DrawRotatedText(wx_string, p, 0);
     //
@@ -8810,7 +8810,7 @@ void DrawPanel::Draw_Mercator(void){
                         );
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        height_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
+        height_chart = (length_chart_over_length_chart_frame.value) * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
         width_chart = height_chart/((y_max-y_min)/x_span());
     }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
@@ -8819,11 +8819,11 @@ void DrawPanel::Draw_Mercator(void){
                         (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
                         );
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        width_chart = length_chart_over_length_chart_frame * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
+        width_chart = (length_chart_over_length_chart_frame.value) * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
         height_chart = width_chart*((y_max-y_min)/x_span());
     }
-    width_plot_area = width_chart*length_plot_area_over_length_chart;
-    height_plot_area = height_chart*length_plot_area_over_length_chart;
+    width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
+    height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     tick_length = ((parent->tick_length_over_width_plot_area).value)*width_plot_area;
     
     //draw coastlines
@@ -9103,12 +9103,12 @@ void DrawPanel::Draw_3D(void){
     height_chart = ((parent->GetSize()).GetHeight()) * 0.75;
     width_chart = height_chart;
     
-    width_plot_area = width_chart*length_plot_area_over_length_chart;
-    height_plot_area = height_chart*length_plot_area_over_length_chart;
+    width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
+    height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     
     chart = new XYChart(width_chart, height_chart);
-    chart->setPlotArea((int)(((double)width_chart)*(1.0-length_plot_area_over_length_chart)/2.0),
-                       (int)(((double)height_chart)*(1.0-length_plot_area_over_length_chart)/2.0),
+    chart->setPlotArea((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
+                       (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
                        width_plot_area,
                        height_plot_area,
                        Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
@@ -9579,17 +9579,17 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_buttons->Add(button_down);
     sizer_buttons->Add(empty_text_5);
     
-    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     projection->InsertIn<wxBoxSizer>(sizer_slider);
     
-    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
-    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*length_border_over_length_frame);
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     //    sizer_v->Fit(panel);
     
     Maximize(panel);

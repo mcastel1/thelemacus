@@ -123,6 +123,20 @@ public:
     
 };
 
+class Double{
+    
+public:
+    double value;
+    
+    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, String, String);
+    void set(String, double, String);
+    void print(String, String, ostream&);
+    Double operator+(const Double&);
+    
+};
+
+
 #include "constants.h"
 
 
@@ -449,19 +463,6 @@ void enter_double(double* x, bool check_interval, double min, double sup, String
     
 }
 
-
-class Double{
-    
-public:
-    double value;
-    
-    void read_from_file(String, File&, bool, String);
-    void read_from_file(String, String, String);
-    void set(String, double, String);
-    void print(String, String, ostream&);
-    Double operator+(const Double&);
-    
-};
 
 class File{
     

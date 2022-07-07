@@ -1511,6 +1511,18 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     
 }
 
+void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, String prefix){
+    
+    int i;
+    vector< vector<wxPoint> > v;
+    
+    Draw(n_points, draw_panel, &v, prefix);
+    
+    for(i=0; i<v.size(); i++){
+        dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
+    }
+    
+}
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
 void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, String prefix){
@@ -8541,20 +8553,28 @@ void DrawPanel::Render_3D(wxDC&  dc){
     if(selection_rectangle){
         
         (Route(
-               String("l"),
+               String("o"),
                p_start,
                //change this by introducing if
                Angle(0.0),
                Length( Re* ( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
-               )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+               )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
         
         (Route(
-               String("l"),
-               p_start,
+               String("o"),
+               p_now,
                //change this by introducing if
-               Angle(3.0*M_PI/2.0),
-               Length( Re*cos(p_start.phi) * ( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
-               )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+               Angle(M_PI),
+               Length( Re* ( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
+               )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
+        
+//        (Route(
+//               String("l"),
+//               p_start,
+//               //change this by introducing if
+//               Angle(3.0*M_PI/2.0),
+//               Length( Re*cos(p_start.phi) * fabs( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
+//               )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
         
         
     }

@@ -733,6 +733,7 @@ public:
     void draw(unsigned int, int, int, DrawPanel*);
  
     void Draw(unsigned int, int, int, DrawPanel*, String);
+    void Draw(unsigned int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     
     bool lambda_min_max(Angle*, Angle*, String);

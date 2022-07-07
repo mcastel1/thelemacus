@@ -8556,16 +8556,16 @@ void DrawPanel::Render_3D(wxDC&  dc){
                String("o"),
                p_start,
                //change this by introducing if
-               Angle(0.0),
-               Length( Re* ( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
+               Angle(M_PI*(1.0 - GSL_SIGN( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ))/2.0),
+               Length( Re* fabs( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
                )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
         
         (Route(
                String("o"),
                p_now,
                //change this by introducing if
-               Angle(M_PI),
-               Length( Re* ( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
+               Angle(M_PI*(1.0 + GSL_SIGN( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ))/2.0),
+               Length( Re* fabs( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
                )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
         
 //        (Route(

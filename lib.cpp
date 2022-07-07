@@ -1523,7 +1523,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     if(compute_l_ends(&s, draw_panel, prefix)){
         
         bool end_connected;
-
+        
         
         //tabulate the Route points
         for(v->clear(), /*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
@@ -8226,21 +8226,13 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
-        if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
-            //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
-            
-            if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).reference_position), &p)){
-                dc.DrawCircle(p, 4.0*thickness);
-            }
-            
-        }else{
-            //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
-            
-            if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).reference_position), &p)){
-                dc.DrawCircle(p, 4.0*thickness);
-            }
-            
+        
+        //draw the reference position
+        if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).reference_position), &p)){
+            dc.DrawCircle(p, 4.0*thickness);
         }
+        
+        
         
         //run over all connected chunks of routes
         for(j=0; j<(points_route_list[i]).size(); j++){
@@ -8386,7 +8378,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
         
         
         s.str("");
-
+        
         if(mode == String("NS")){
             //if I am drawing latitude labels, I set the angle relative to the label to q.phi, and delta to delta_phi
             
@@ -8499,22 +8491,12 @@ void DrawPanel::Render_3D(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         //draw the reference_position
-        if( ((((plot->route_list)[i]).type) == String("l")) || ((((plot->route_list)[i]).type) == String("o")) ){
-            //in this case, Route #i is either a loxodrome or an orthordrome, and thus I draw the starting point of route
-            
-            if(GeoToDrawPanel_3D((((plot->route_list)[i]).reference_position), &p)){
-                dc.DrawCircle(p, 4.0*thickness);
-            }
-            
-            
-        }else{
-            //in this case, Route #i is a circle of equal altitude, and thus I draw its ground position
-            
-            if(GeoToDrawPanel_3D((((plot->route_list)[i]).reference_position), &p)){
-                dc.DrawCircle(p, 4.0*thickness);
-            }
-            
+        if(GeoToDrawPanel_3D((((plot->route_list)[i]).reference_position), &p)){
+            dc.DrawCircle(p, 4.0*thickness);
         }
+        
+        
+        
         
         //draw the route points
         //run over all connected chunks of routes
@@ -8558,20 +8540,20 @@ void DrawPanel::Render_3D(wxDC&  dc){
     if(selection_rectangle){
         
         (Route(
-              String("l"),
-              p_start,
-              //change this by introducing if
-              Angle(0.0),
-              Length( Re* ( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
-              )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+               String("l"),
+               p_start,
+               //change this by introducing if
+               Angle(0.0),
+               Length( Re* ( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
+               )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
         
         (Route(
-              String("l"),
-              p_start,
-              //change this by introducing if
-              Angle(3.0*M_PI/2.0),
-              Length( Re*cos(p_start.phi) * ( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
-              )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+               String("l"),
+               p_start,
+               //change this by introducing if
+               Angle(3.0*M_PI/2.0),
+               Length( Re*cos(p_start.phi) * ( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
+               )).Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
         
         
     }
@@ -9014,7 +8996,7 @@ void DrawPanel::Draw_3D(void){
     label_lambda.resize(0);
     for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
     label_phi.resize(0);
-
+    
     
     parent->GetCoastLineData_3D();
     
@@ -9274,7 +9256,7 @@ void DrawPanel::Draw_3D(void){
     
     TabulateRoutes();
     
-     
+    
     //draw labels on parallels
     for(first_label = true,
         ((q.phi).value) = (phi_start.value),
@@ -10708,8 +10690,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                     }
                     
                 }
-            
-        }
+                
+            }
             
             
             
@@ -10939,7 +10921,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         //stores the x at the beginning of the selection process, to compute the zoom factor later
         //        ScreenToMercator(position_start_selection, &start_selection);
         (this->*ScreenToProjection)(position_start_selection, &start_selection);
-
+        
         
         s.clear();
         s << (p_start.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p_start.lambda).to_string(String("EW"), (display_precision.value), true);
@@ -10955,9 +10937,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&p_end);
         position_end_selection = position_screen_now;
         //stores the x at the end of the selection process, to compute the zoom factor later
-//        ScreenToMercator(position_end_selection, &end_selection);
+        //        ScreenToMercator(position_end_selection, &end_selection);
         (this->*ScreenToProjection)(position_end_selection, &end_selection);
-
+        
         if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
             //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
             
@@ -13335,15 +13317,15 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
 
 //when a ListFrame is closed, the function OnClose is called on all the ChartFrames which are his children, and *this is destroyed.
 void ListFrame::OnClose(wxCloseEvent& event){
-        
+    
     for(; 0<chart_frames.size(); ){
         (chart_frames[0])->OnClose(event);
     }
     
     Destroy();
     
-//    Close(true);
-
+    //    Close(true);
+    
     
 }
 
@@ -13630,7 +13612,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     MousePositionOnListControl(listcontrol_sights, &highlighted_sight);
     MousePositionOnListControl(listcontrol_positions, &highlighted_position);
     MousePositionOnListControl(listcontrol_routes, &highlighted_route);
-
+    
     if((highlighted_sight == wxNOT_FOUND) && (highlighted_position == wxNOT_FOUND) && (highlighted_route == wxNOT_FOUND)){
         //in this case, the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
         
@@ -13679,7 +13661,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
         if(highlighted_position != wxNOT_FOUND){
             //in this case, the mouse is hovering over an element of listcontrool_positions -> highlight it and the related position in listcontrol_positions, and set  a white background in all other leements in listcontrol_positions
-                        
+            
             for(i=0; i<(listcontrol_positions->GetItemCount()); i++){
                 
                 if(i==highlighted_position){
@@ -13691,7 +13673,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
                     listcontrol_positions->SetItemBackgroundColour(i, color_white);
-                                   
+                    
                 }
                 
             }
@@ -13729,7 +13711,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
         
         
-
+        
         
         
         

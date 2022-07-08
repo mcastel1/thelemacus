@@ -8126,14 +8126,16 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     rp_now_drag = gsl_vector_alloc(3);
     rp_end_drag = gsl_vector_alloc(3);
     
-    //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
-    ((parent->parent)->selection_rectangle) = false;
     mouse_dragging = false;
     
     parent = (parent_in->parent);
     plot = ((parent->parent)->plot);
     
     SetCursor(*wxCROSS_CURSOR);
+    
+    //when the DrawPanel is created there is no open selection rectangle and the mouse is not being dragged.
+    ((parent->parent)->selection_rectangle) = false;
+ 
     
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);

@@ -8586,30 +8586,40 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     if(selection_rectangle){
         
+        //right vertical edge of rectangle
         (Route(
                String("o"),
                p_start,
-               //change this by introducing if
                Angle(M_PI*(1.0 - GSL_SIGN( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re* fabs( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
                )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
         
+        //left vertical edge of rectangle
         (Route(
                String("o"),
                p_now,
-               //change this by introducing if
                Angle(M_PI*(1.0 + GSL_SIGN( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re* fabs( (((p_now.phi).normalize_pm_pi_ret()).value) - (((p_start.phi).normalize_pm_pi_ret()).value) ) )
                )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
         
-//        (Route(
-//               String("l"),
-//               p_start,
-//               //change this by introducing if
-//               Angle(3.0*M_PI/2.0),
-//               Length( Re*cos(p_start.phi) * fabs( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
-//               )).Draw(((plot->n_points_routes).value), &dc, this, String(""));
-        
+        //bottom horizontal edge of rectangle
+        (Route(
+               String("l"),
+               p_start,
+               //change this by introducing if
+               Angle(M_PI/2.0 + M_PI*(1.0 + GSL_SIGN( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ))/2.0),
+               Length( Re*cos(p_start.phi) * fabs( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
+               )).DrawOld(((plot->n_points_routes).value), &dc, this, String(""));
+   
+        //top horizontal edge of rectangle
+        (Route(
+               String("l"),
+               p_now,
+               //change this by introducing if
+               Angle(M_PI/2.0 + M_PI*(1.0 - GSL_SIGN( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ))/2.0),
+               Length( Re*cos(p_now.phi) * fabs( (((p_now.lambda).normalize_pm_pi_ret()).value) - (((p_start.lambda).normalize_pm_pi_ret()).value) ) )
+               )).DrawOld(((plot->n_points_routes).value), &dc, this, String(""));
+
         
     }
     

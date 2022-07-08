@@ -730,7 +730,7 @@ public:
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
-    void draw(unsigned int, int, int, DrawPanel*);
+    void DrawOld(unsigned int, int, int, DrawPanel*);
  
     void Draw(unsigned int, int, int, DrawPanel*, String);
     void Draw(unsigned int, wxDC*, DrawPanel*, String);

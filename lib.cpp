@@ -4577,7 +4577,7 @@ void Plot::menu(String prefix){
                 
                 print_sights(new_prefix, cout);
                 
-                enter_unsigned_int(&i, true, 1, sight_list.size()+1, String("# of sight that you want to modify"), new_prefix);
+                enter_unsigned_int(&i, true, 1, ((unsigned int)(sight_list.size()))+1, String("# of sight that you want to modify"), new_prefix);
                 i--;
                 
                 modify_sight(i, new_prefix);
@@ -8053,7 +8053,7 @@ void ListFrame::GetAllCoastLineData(void){
             
             
             //count how many datapoints are in data
-            n = count(data.begin(), data.end(), ',');
+            n = ((unsigned int)count(data.begin(), data.end(), ','));
             
             l=0;
             pos_beg = 0;

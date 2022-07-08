@@ -52,7 +52,8 @@
  - it seems that DrawPanel::Draw_3D/Mercator  is called multiple times at the beginning of the code, and this is pointless -> check
  - take care of labels of parallels/meridians which overlap in the 3D projection
  - find out why the app takes a few seconds to close.
- - if two entries in file_init have a common word, make sure that they are read correctly by the functions which read from file. 
+ - if two entries in file_init have a common word, make sure that they are read correctly by the functions which read from file.
+ - add check on zoom factor in OnMouseRightDown for the 3D projections
  */
 
 

@@ -10075,6 +10075,7 @@ bool ChartFrame::ZoomFactor_Mercator(double delta_x){
     
 }
 
+//returns true if zoom_factor is valid, false otherwise
 bool ChartFrame::ZoomFactor_3D(void){
     
     bool output;
@@ -11003,60 +11004,88 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         //        ScreenToMercator(position_end_selection, &end_selection);
         (this->*ScreenToProjection)(position_end_selection, &end_selection);
         
-        if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
-            //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
+        
+        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
             
-            //            cout << "p_end = {" << (p_end.lambda).to_string(String("EW"), (display_precision.value), false) << " , " << (p_end.phi).to_string(String("NS"), (display_precision.value), false) << " }\n";
-            
-            //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
-            delete chart;
-            //I convert all the angles to the format between -pi and pi, so I can sort them numerically
-            (p_start.phi).normalize_pm_pi();
-            (p_start.lambda).normalize_pm_pi();
-            (p_end.phi).normalize_pm_pi();
-            (p_end.lambda).normalize_pm_pi();
-            //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
-            if((p_start.lambda)>(p_end.lambda)){
-                (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
-                (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
+            if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
+                //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
+                
+                //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
+                delete chart;
+                //I convert all the angles to the format between -pi and pi, so I can sort them numerically
+                (p_start.phi).normalize_pm_pi();
+                (p_start.lambda).normalize_pm_pi();
+                (p_end.phi).normalize_pm_pi();
+                (p_end.lambda).normalize_pm_pi();
+                //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of p_start.lambda, ... p_end.phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
+                if((p_start.lambda)>(p_end.lambda)){
+                    (((parent->parent)->plot)->lambda_min) = (p_start.lambda);
+                    (((parent->parent)->plot)->lambda_max) = (p_end.lambda);
+                }else{
+                    (((parent->parent)->plot)->lambda_min) = (p_end.lambda);
+                    (((parent->parent)->plot)->lambda_max) = (p_start.lambda);
+                }
+                if((p_start.phi)>(p_end.phi)){
+                    (((parent->parent)->plot)->phi_max) = (p_start.phi);
+                    (((parent->parent)->plot)->phi_min) = (p_end.phi);
+                }else{
+                    (((parent->parent)->plot)->phi_min) = (p_start.phi);
+                    (((parent->parent)->plot)->phi_max) = (p_end.phi);
+                }
+                //I normalize lambda_min, ..., phi_max for future use.
+                (((parent->parent)->plot)->lambda_min).normalize();
+                (((parent->parent)->plot)->lambda_max).normalize();
+                (((parent->parent)->plot)->phi_min).normalize();
+                (((parent->parent)->plot)->phi_max).normalize();
+                
+                (p_start.phi).normalize();
+                (p_start.lambda).normalize();
+                (p_end.phi).normalize();
+                (p_end.lambda).normalize();
+                
+                (this->*Draw)();
+                PaintNow();
+                
+                parent->UpdateSlider();
+                
             }else{
-                (((parent->parent)->plot)->lambda_min) = (p_end.lambda);
-                (((parent->parent)->plot)->lambda_max) = (p_start.lambda);
+                //if the zoom factor is not valid, then I print an error message
+                
+                s.str("");
+                s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
+                
+                //set the title and message for the functor print_error_message, and then call the functor
+                (print_error_message->control) = NULL;
+                (print_error_message->title) = String("Zoom level exceeded its maximal value!");
+                (print_error_message->message) = String(s.str().c_str());
+                (*print_error_message)();
+                
             }
-            if((p_start.phi)>(p_end.phi)){
-                (((parent->parent)->plot)->phi_max) = (p_start.phi);
-                (((parent->parent)->plot)->phi_min) = (p_end.phi);
-            }else{
-                (((parent->parent)->plot)->phi_min) = (p_start.phi);
-                (((parent->parent)->plot)->phi_max) = (p_end.phi);
-            }
-            //I normalize lambda_min, ..., phi_max for future use.
-            (((parent->parent)->plot)->lambda_min).normalize();
-            (((parent->parent)->plot)->lambda_max).normalize();
-            (((parent->parent)->plot)->phi_min).normalize();
-            (((parent->parent)->plot)->phi_max).normalize();
-            
-            (this->*Draw)();
-            PaintNow();
-            
-            parent->UpdateSlider();
-            
-        }else{
-            //if the zoom factor is not valid, then I print an error message
-            
-            s.str("");
-            s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
-            
-            //set the title and message for the functor print_error_message, and then call the functor
-            (print_error_message->control) = NULL;
-            (print_error_message->title) = String("Zoom level exceeded its maximal value!");
-            (print_error_message->message) = String(s.str().c_str());
-            (*print_error_message)();
             
         }
         
-        
-        
+        if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+            
+            /*
+             Length l1, l2;
+             
+             //add check on zoom factor here
+             
+             //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
+             circle_observer.reference_position = Position(
+             Angle((p_start.phi.normalize_pm_pi_ret() + p_end.phi.normalize_pm_pi_ret())/2.0),
+             Angle((p_start.lambda.normalize_pm_pi_ret() + p_end.lambda.normalize_pm_pi_ret())/2.0)
+             );
+             
+             
+             (circle_observer.reference_position).distance(p_start, &l1, String(""), String(""));
+             (circle_observer.reference_position).distance(Position(p_start.lambda, p_end.phi), &l2, String(""), String(""));
+             
+             circle_observer.omega.set(String(""), max(l1, l2).value/Re, String(""));
+             */
+            
+        }
+                
         //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));

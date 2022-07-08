@@ -8127,7 +8127,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     rp_end_drag = gsl_vector_alloc(3);
     
     //when the DrawPan is created there is no open selection rectangle and the mouse is not being dragged.
-    selection_rectangle = false;
+    ((parent->parent)->selection_rectangle) = false;
     mouse_dragging = false;
     
     parent = (parent_in->parent);
@@ -8322,7 +8322,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
     
-    if(selection_rectangle){
+    if(((parent->parent)->selection_rectangle)){
         dc.DrawRectangle(
                          position_start_selection.x - (position_draw_panel.x),
                          position_start_selection.y - (position_draw_panel.y),
@@ -8584,7 +8584,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
     
-    if(selection_rectangle){
+    if(((parent->parent)->selection_rectangle)){
         
         //right vertical edge of rectangle
         (Route(
@@ -10685,7 +10685,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
     
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
-    if(selection_rectangle){
+    if(((parent->parent)->selection_rectangle)){
         s.str("");
         s << (p_now.phi).to_string(String("NS"), (display_precision.value), true) << " " << (p_now.lambda).to_string(String("EW"), (display_precision.value), true);
         text_position_end->SetLabel(wxString(s.str().c_str()));
@@ -10693,7 +10693,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         PaintNow();
     }
     
-    if((!mouse_dragging) && (!selection_rectangle)){
+    if((!mouse_dragging) && (!((parent->parent)->selection_rectangle))){
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
@@ -10974,9 +10974,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     stringstream s;
     
     //changes the 'sign' of selection rectangle
-    selection_rectangle = (!selection_rectangle);
+    ((parent->parent)->selection_rectangle) = (!((parent->parent)->selection_rectangle));
     
-    if(selection_rectangle){
+    if(((parent->parent)->selection_rectangle)){
         
         stringstream s;
         

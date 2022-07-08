@@ -109,7 +109,7 @@ bool MyApp::OnInit(){
                                                        wxDefaultSize,
                                                        String("")
                                                        );
-        (list_frame->chart_frames)[i]->Show(true);
+        ((list_frame->chart_frames)[i])->Show(true);
         
     }
     

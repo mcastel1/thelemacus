@@ -1344,6 +1344,40 @@ void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 }
 
 
+void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> > *v, String prefix){
+    
+    wxPoint p;
+    bool end_connected;
+    unsigned int i;
+
+    
+    //tabulate the Route points
+    for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i=0; i<n_points; i++){
+        
+        compute_end(Length((l.value)*((double)i)/((double)(n_points-1))), String(""));
+        
+        if((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p)){
+            
+            if(end_connected){
+                
+                v->resize(v->size() + 1);
+                end_connected = false;
+                
+            }
+            
+            ((*v)[v->size()-1]).push_back(p);
+            
+        }else{
+            
+            end_connected = true;
+            
+        }
+        
+    }
+    
+}
+
+
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
 void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw_panel){
     
@@ -1395,6 +1429,19 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
         
     }
     
+    
+}
+
+void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, String prefix){
+    
+    int i;
+    vector< vector<wxPoint> > v;
+    
+    DrawOld(n_points, draw_panel, &v, prefix);
+    
+    for(i=0; i<v.size(); i++){
+        dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
+    }
     
 }
 

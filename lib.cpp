@@ -8131,9 +8131,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     SetCursor(*wxCROSS_CURSOR);
     
-    //when the DrawPanel is created there is no open selection rectangle and the mouse is not being dragged.
-    ((parent->parent)->selection_rectangle) = false;
- 
+   
     
     d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
@@ -13068,6 +13066,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     color_list.resize(count((s.value).begin(), (s.value).end(), '('));
     
+    //when the ListFrame is created there is no open selection rectangle in any ChartFrame
+    selection_rectangle = false;
+
     
     for(i=0; i<color_list.size(); i++){
         

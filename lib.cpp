@@ -4636,7 +4636,7 @@ void Plot::menu(String prefix){
                 
                 print_positions(new_prefix, cout);
                 
-                enter_unsigned_int(&i, true, 1, position_list.size()+1, String("# of position that you want to modify"), new_prefix);
+                enter_unsigned_int(&i, true, 1, ((unsigned int)(position_list.size()))+1, String("# of position that you want to modify"), new_prefix);
                 i--;
                 
                 (position_list[i]).modify(new_prefix);

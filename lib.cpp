@@ -962,6 +962,96 @@ Rotation::Rotation(Position p, Position q){
 
 }
 
+/*
+ 
+ //generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection. start and end are converted into cartesian coordiantes in the x'y'z' reference frame, then the rotation axis is build as their cross product, and the relative Rotation is returned.
+ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
+     
+     //the rotation angle
+     double cos_rotation_angle;
+     Position geo_start, geo_end;
+     gsl_vector* rp_start, *rp_end;
+     Angle rotation_angle;
+     
+     if(start != end){
+         
+         rp_start = gsl_vector_alloc(3);
+         rp_end = gsl_vector_alloc(3);
+         
+         //I call ScreenToGeo to compute rp_start and rp_end only
+         ScreenToGeo_3D(start, &geo_start);
+         gsl_vector_memcpy(rp_start, rp);
+         
+         ScreenToGeo_3D(end, &geo_end);
+         gsl_vector_memcpy(rp_end, rp);
+         
+         
+         //compute the dot product between rp_start and rp_end and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+         gsl_blas_ddot(rp_start, rp_end, &cos_rotation_angle);
+         //I  set rotation_angle to 0 if cos_rotation_angle is slightly larger than 1 because of numerical rounding
+         //    if(cos_rotation_angle < 1.0){
+         rotation_angle.set(String(""), acos(cos_rotation_angle), String("\t"));
+         //    }else{
+         //        rotation_angle.set(String("rotation angle"), 0.0, String("\t"));
+         //    }
+         
+         //compute the cross product  rp_start x rp_end store it into rp and normalize it
+         gsl_vector_set(rp, 0, gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 2) - gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 1));
+         gsl_vector_set(rp, 1, gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 0) - gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 2));
+         gsl_vector_set(rp, 2, gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 1) - gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 0));
+         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
+         
+         
+         
+         //        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+         //        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
+         //        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
+         //        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+         
+         rotation_axis.set_cartesian(String(""), rp, String(""));
+         
+         
+         
+         //        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
+         //        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
+         //        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
+         //        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
+         
+         //        geo_end_drag.print(String("geo now drag"), String("\t"), cout);
+         //    rotation.print(String("rotation"), String("\t"), cout);
+         
+         
+         
+         gsl_vector_free(rp_start);
+         gsl_vector_free(rp_end);
+         
+         return (Rotation(
+                          Angle(String(""), 0.0, String("")),
+                          Angle(String(""), M_PI/2.0-(((rotation_axis).phi).value), String("")),
+                          Angle(String(""), -((((rotation_axis).lambda).value) + M_PI/2.0), String(""))
+                          )
+                 * Rotation(
+                            Angle(String(""), (((rotation_axis).lambda).value) + M_PI/2.0, String("")),
+                            Angle(String(""), -(M_PI/2.0-(((rotation_axis).phi).value)), String("")),
+                            Angle(String(""), rotation_angle.value, String(""))
+                            ));
+         
+         
+     }else{
+         //if start = end, I return the identity as rotation
+         
+         return (Rotation(
+                          Angle(String(""), 0.0, String("")),
+                          Angle(String(""), 0.0, String("")),
+                          Angle(String(""), 0.0, String(""))
+                          ));
+         
+     }
+     
+ }
+ 
+ */
+
 
 //returns the inverse of the rotation (*this)
 Rotation Rotation::inverse(void){
@@ -10038,14 +10128,23 @@ bool DrawPanel::check(Projection p){
 //generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection.
 Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     
-    Position geo_start, geo_end;
+    Position temp;
+    Position p_start, p_end;
 
-    ScreenToGeo_3D(start, &geo_start);
-    ScreenToGeo_3D(end, &geo_end);
+    //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_start
+    ScreenToGeo_3D(start, &temp);
+    p_start.set_cartesian(String(""), rp, String(""));
 
-    return Rotation(geo_start, geo_end);
+    //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_end
+    ScreenToGeo_3D(end, &temp);
+    p_end.set_cartesian(String(""), rp, String(""));
+
+    //construct a Rotation between p_start and p_end by calling the overloaded constructor of the Rotation class
+    return(Rotation(p_start, p_end));
     
 }
+
+
 
 //updates the text in text_slider by writing in it the current value of the zoom factor, rounded to an integer for clarity
 void ChartFrame::UpdateSliderLabel_Mercator(void){

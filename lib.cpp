@@ -18,6 +18,12 @@ inline double cos(Angle x){
     
 }
 
+inline double tan(Angle x){
+    
+    return tan(x.value);
+    
+}
+
 inline double acos(Double x){
     
     return acos(x.value);
@@ -11211,6 +11217,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
             
             circle_observer.omega.set(String(""), (max(l1, l2).value)/Re, String(""));
+            d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+            
+
             
             (this->*Draw)();
             PaintNow();

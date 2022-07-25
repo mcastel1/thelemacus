@@ -871,6 +871,14 @@ Rotation::Rotation(Angle a, Angle b, Angle c){
     
 }
 
+//constructor of a Rotation instance which sets the rotation matrix equal to the rotation from Position p to Position q
+Rotation::Rotation(Position p, Position q){
+    
+    
+    
+}
+
+
 //returns the inverse of the rotation (*this)
 Rotation Rotation::inverse(void){
     

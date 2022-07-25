@@ -611,6 +611,7 @@ public:
     
     Rotation();
     Rotation(Angle, Angle, Angle);
+    Rotation(Position, Position);
     Rotation operator *(const Rotation&);
     Rotation inverse(void);
     void set(Angle, Angle, Angle);

@@ -11210,7 +11210,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
             (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
             
-            circle_observer.omega.set(String(""), max(l1, l2).value/Re, String(""));
+            circle_observer.omega.set(String(""), (max(l1, l2).value)/Re, String(""));
             
             (this->*Draw)();
             PaintNow();

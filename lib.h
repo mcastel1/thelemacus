@@ -679,7 +679,8 @@ public:
     Position();
     Position(Angle, Angle);
     void enter(String, String);
-    void set_from_cartesian(String, gsl_vector*, String);
+    void set_cartesian(String, const gsl_vector*, String);
+    void get_cartesian(String, gsl_vector*, String);
     void modify(String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);

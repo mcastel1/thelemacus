@@ -25,19 +25,23 @@ inline double acos(Double x){
 }
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
-inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector *r){
+inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
     
     if(((a->size) == 3) && ((b->size) == 3)){
         
-        if(r != NULL){
-            gsl_vector_free(r);
+        if(((*r) != NULL) && (((*r)->size) != 0)){
+            
+            gsl_vector_free(*r);
+            
         }else{
-            r = gsl_vector_alloc(3);
+            
+            (*r) = gsl_vector_alloc(3);
+            
         }
         
-        gsl_vector_set(r, 0, gsl_vector_get(a, 1)*gsl_vector_get(b, 2) - gsl_vector_get(a, 2)*gsl_vector_get(b, 1));
-        gsl_vector_set(r, 1, gsl_vector_get(a, 2)*gsl_vector_get(b, 0) - gsl_vector_get(a, 0)*gsl_vector_get(b, 2));
-        gsl_vector_set(r, 2, gsl_vector_get(a, 0)*gsl_vector_get(b, 1) - gsl_vector_get(a, 1)*gsl_vector_get(b, 0));
+        gsl_vector_set(*r, 0, gsl_vector_get(a, 1)*gsl_vector_get(b, 2) - gsl_vector_get(a, 2)*gsl_vector_get(b, 1));
+        gsl_vector_set(*r, 1, gsl_vector_get(a, 2)*gsl_vector_get(b, 0) - gsl_vector_get(a, 0)*gsl_vector_get(b, 2));
+        gsl_vector_set(*r, 2, gsl_vector_get(a, 0)*gsl_vector_get(b, 1) - gsl_vector_get(a, 1)*gsl_vector_get(b, 0));
  
         
         return true;

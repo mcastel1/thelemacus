@@ -62,6 +62,24 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
+    //
+    gsl_vector *a, *b, *c;
+    a = gsl_vector_alloc(3);
+    b = gsl_vector_alloc(3);
+    
+    gsl_vector_set(a, 0, 3.43);
+    gsl_vector_set(a, 1, 2.43);
+    gsl_vector_set(a, 2, 43);
+    
+    gsl_vector_set(b, 0, 2.3);
+    gsl_vector_set(b, 1, .12);
+    gsl_vector_set(b, 2, .3);
+    
+    cross(a, b, &c);
+    
+    cout << "\t\t c = " << gsl_vector_get(c, 0) << " " << gsl_vector_get(c, 1) << " " << gsl_vector_get(c, 2) << "\n";    
+    //
+    
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));

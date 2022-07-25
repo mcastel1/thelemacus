@@ -2747,7 +2747,7 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
     //     cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
     //     cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
     
-    p->set(name, s, prefix);
+    p->set_from_cartesian(name, s, prefix);
     
     gsl_vector_free(u);
     gsl_vector_free(s);
@@ -7020,7 +7020,7 @@ void Position::enter(String name, String prefix){
 }
 
 //set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
-void Position::set(String name, gsl_vector* r, String prefix){
+void Position::set_from_cartesian(String name, gsl_vector* r, String prefix){
     
     String new_prefix, name_lambda, name_phi;
     
@@ -9834,7 +9834,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, rp, 0.0, r);
     
     //obtain the  geographic position of the center of the circle of equal altitude above
-    (circle_observer.reference_position).set(String(""), r, String(""));
+    (circle_observer.reference_position).set_from_cartesian(String(""), r, String(""));
     
     
     //set lambda_min/max from circle_observer
@@ -9986,7 +9986,7 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
         //        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
         //        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
         
-        rotation_axis.set(String(""), rp, String(""));
+        rotation_axis.set_from_cartesian(String(""), rp, String(""));
         
         
         
@@ -10396,7 +10396,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
             //r = (rotation.matrix)^T . rp
             gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
             
-            q->set(String(""), r, String(""));
+            q->set_from_cartesian(String(""), r, String(""));
             
         }
         

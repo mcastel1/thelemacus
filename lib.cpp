@@ -11190,23 +11190,33 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         
         if((((parent->projection)->name)->GetValue()) == wxString("3D")){
             
-            /*
-             Length l1, l2;
-             
-             //add check on zoom factor here
-             
-             //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
-             circle_observer.reference_position = Position(
-             Angle((((parent->parent)->p_start).phi.normalize_pm_pi_ret() + ((parent->parent)->p_end).phi.normalize_pm_pi_ret())/2.0),
-             Angle((((parent->parent)->p_start).lambda.normalize_pm_pi_ret() + ((parent->parent)->p_end).lambda.normalize_pm_pi_ret())/2.0)
-             );
-             
-             
-             (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
-             (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
-             
-             circle_observer.omega.set(String(""), max(l1, l2).value/Re, String(""));
-             */
+            Length l1, l2;
+            Position reference_position_old;
+            
+            //add check on zoom factor here
+            
+            reference_position_old = (circle_observer.reference_position);
+            
+            //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
+            circle_observer.reference_position = Position(
+                                                          Angle((((parent->parent)->p_start).phi.normalize_pm_pi_ret() + ((parent->parent)->p_end).phi.normalize_pm_pi_ret())/2.0),
+                                                          Angle((((parent->parent)->p_start).lambda.normalize_pm_pi_ret() + ((parent->parent)->p_end).lambda.normalize_pm_pi_ret())/2.0)
+                                                          );
+            
+            //the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+            rotation = ((Rotation(reference_position_old, circle_observer.reference_position)).inverse()) * rotation;
+            
+            
+            (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
+            (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
+            
+            circle_observer.omega.set(String(""), max(l1, l2).value/Re, String(""));
+            
+            (this->*Draw)();
+            PaintNow();
+            
+//            parent->UpdateSlider();
+      
             
         }
                 

@@ -902,10 +902,11 @@ Rotation::Rotation(Angle a, Angle b, Angle c){
     
 }
 
-//constructor of a Rotation instance which sets the rotation matrix equal to the rotation from Position p to Position q
+//constructor of a Rotation instance which sets the rotation matrix equal to the rotation which brings Position p to q
 Rotation::Rotation(Position p, Position q){
     
     if(p != q){
+        //if p!= q, I compute the rotation which brings Position p to Position q
         
         double cos_rotation_angle;
         Angle rotation_angle;

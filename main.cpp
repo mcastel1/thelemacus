@@ -62,7 +62,7 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
-    //
+    /*
     gsl_vector *a, *b, *c;
     a = gsl_vector_alloc(3);
     b = gsl_vector_alloc(3);
@@ -78,7 +78,7 @@ bool MyApp::OnInit(){
     cross(a, b, &c);
     
     cout << "\t\t c = " << gsl_vector_get(c, 0) << " " << gsl_vector_get(c, 1) << " " << gsl_vector_get(c, 2) << "\n";    
-    //
+    */
     
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));

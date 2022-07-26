@@ -30,6 +30,7 @@ maximal longitude = 185° 0.01'
 #minimal latitude = 48° 48'
 #maximal latitude = 48° 55'
 #paris
+#maximal and minimal latitude of the points in file path_file_coastlines
 minimal crossing angle between circles of equal altitude = 30° 2.15'
 maximal latitude coastline data = 83° 39.988386000000276'
 minimal latitude coastline data = 281° 16.25533199999836'

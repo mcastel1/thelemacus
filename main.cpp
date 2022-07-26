@@ -86,6 +86,9 @@ bool MyApp::OnInit(){
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
     
+    max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
+    min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
+
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
     length_border_over_length_frame.read_from_file(String("length of border over length of frame"), String(path_file_init), String(""));

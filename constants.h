@@ -1,6 +1,9 @@
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;
 Double /*the ratio between the width (height) of the plot area and the width (height) of the chart*/length_plot_area_over_length_chart, length_chart_over_length_chart_frame, /*this is the ratio between (the length of the borders drawn around the widgets) and (the length of the frame in which the widgets are located)*/length_border_over_length_frame;
+//maximal and minimal latitude of the points in file path_file_coastlines
+Angle max_lat, min_lat;
+
 
 #define k (2.0*M_PI/360.0)
 #define K (1.0/k)
@@ -38,16 +41,9 @@ Double /*the ratio between the width (height) of the plot area and the width (he
 #define path_file_recent "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/recent.txt"
 #define path_file_catalog "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/catalog.txt"
 #define path_file_temp "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/temp.txt"
-//maximal and minimal latitude of the points in file define path_file_coastlines
-#define max_lat (83.6664731)
-#define min_lat (-78.7290778)
-//for debug
-//#define max_lat (-69.5)
-//#define min_lat (-78.7290778)
-//for debug
-#define floor_min_lat (floor(min_lat))
-#define floor_max_lat (floor(max_lat))
-#define ceil_min_lat (ceil(min_lat))
+#define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
+#define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
+#define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))
 //latitude span
 #define span_lat ((floor_max_lat-floor_min_lat+1)
 #define outfile_precision 16

@@ -11615,7 +11615,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
         (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
         
         
-        if((((draw_panel->y_max) <= y_mercator(max_lat)) && ((draw_panel->y_min) >= y_mercator(min_lat)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
+        if((((draw_panel->y_max) <= y_mercator(K*(max_lat.value))) && ((draw_panel->y_min) >= y_mercator(K*(min_lat.value))) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
             (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
             //            ZoomFactor_Mercator((draw_panel->x_span));

@@ -94,7 +94,6 @@ class Position;
 
 class Catalog;
 class Limb;
-class Angle;
 class Length;
 class String;
 class Plot;
@@ -135,6 +134,37 @@ public:
     Double operator+(const Double&);
     
 };
+
+
+class Angle{
+    
+public:
+    
+    double value;
+    void normalize(void);
+    void normalize_pm_pi(void);
+    Angle normalize_pm_pi_ret(void);
+    void enter(String, String);
+    void set(String, double, String);
+    void print(String, String, ostream&);
+    void to_deg_min(unsigned int*, double*);
+    void from_sign_deg_min(char, unsigned int, double);
+    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, String, String);
+    void to_deg_min_string(stringstream, stringstream);
+    string to_string(String, unsigned int, bool);
+    string deg_to_string(String, unsigned int);
+    string min_to_string(String, unsigned int);
+
+    Angle();
+    Angle(double);
+    Angle(String, double, String);
+    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
+    Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
+    Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
+    
+};
+
 
 
 #include "constants.h"
@@ -570,36 +600,6 @@ public:
     
 };
 
-
-
-class Angle{
-    
-public:
-    
-    double value;
-    void normalize(void);
-    void normalize_pm_pi(void);
-    Angle normalize_pm_pi_ret(void);
-    void enter(String, String);
-    void set(String, double, String);
-    void print(String, String, ostream&);
-    void to_deg_min(unsigned int*, double*);
-    void from_sign_deg_min(char, unsigned int, double);
-    void read_from_file(String, File&, bool, String);
-    void read_from_file(String, String, String);
-    void to_deg_min_string(stringstream, stringstream);
-    string to_string(String, unsigned int, bool);
-    string deg_to_string(String, unsigned int);
-    string min_to_string(String, unsigned int);
-
-    Angle();
-    Angle(double);
-    Angle(String, double, String);
-    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
-    Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
-    Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
-    
-};
 
 //this class denotes a rigid rotation R_z(c).R_x(-b).R_z(a) with Euler angles a, b, c
 class Rotation{

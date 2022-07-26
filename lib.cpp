@@ -10101,6 +10101,11 @@ double DrawPanel::x_span(void){
 //this function computes x_min, ... y_max from d in the 3D projection
 void DrawPanel::Set_x_y_min_max_3D(void){
     
+    Double d;
+    
+    //set d
+    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    
     x_min = -((d.value)/sqrt(gsl_pow_2(((d).value)+1.0)-1.0));
     x_max = -x_min;
     y_min = x_min;
@@ -10513,8 +10518,12 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
         
         if(q!=NULL){
             
+            Double d;
+            
             //here I put the sign of (temp.x) in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for (temp.x)<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger (temp.x) -> I pick the solution with a positive sign in front of the square root through GSL_SIGN((temp.x))
             //set rp
+            d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+            
             gsl_vector_set(rp, 0, (-(temp.x)*sqrt(arg_sqrt) + (d.value)*((d.value) + 1.0)*(temp.x))/(gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)));
             gsl_vector_set(rp, 2,( -sqrt(arg_sqrt)*(temp.y) + (d.value)*((d.value) + 1.0)*(temp.y) ) / ( (gsl_sf_pow_int((d.value),2) + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) ));
             gsl_vector_set(rp, 1, - sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0))+gsl_pow_2(gsl_vector_get(rp, 2)))));

@@ -11223,10 +11223,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
             
             //the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-                  //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
-                  rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
-           
-
+            //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
+            rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
+            
+            
             
             (this->*Draw)();
             PaintNow();

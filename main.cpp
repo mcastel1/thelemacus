@@ -55,8 +55,7 @@
  - if two entries in file_init have a common word, make sure that they are read correctly by the functions which read from file.
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
- - scroll does not work
- - remove d, because it is related to omega by d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+- remove zoom_factor, because it is related to omega
  */
 
 

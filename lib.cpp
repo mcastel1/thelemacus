@@ -8325,8 +8325,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     SetCursor(*wxCROSS_CURSOR);
     
    
-    
-    d.read_from_file(String("d draw 3d"), String(path_file_init), prefix);
+    (circle_observer.omega).read_from_file(String("omega draw 3d"), String(path_file_init), prefix);
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
     
     rotation = Rotation(
@@ -9255,8 +9254,8 @@ void DrawPanel::Draw_3D(void){
     
     
     //set d, zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
-    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
-    (parent->zoom_factor).set(String(""), (d_0.value)/(d.value), String(""));
+    //    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    (parent->zoom_factor).set(String(""), ((circle_observer_0.omega).value)/((circle_observer.omega).value) ), String(""));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
 
@@ -9955,7 +9954,7 @@ template<class T> void ChartFrame::Reset(T& event){
     if(((projection->name)->GetValue()) == wxString("3D")){
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
         
-        (draw_panel->d_0).read_from_file(String("d draw 3d"), String(path_file_init), String(""));
+        ((draw_panel->circle_observer_0).omega).read_from_file(String("omega draw 3d"), String(path_file_init), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
         ZoomFactor_3D();
         
@@ -10015,7 +10014,7 @@ void DrawPanel::Set_lambda_phi_min_max_Mercator(void){
 void DrawPanel::Set_lambda_phi_min_max_3D(void){
     
     //compute circle_observer
-    (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
+//    (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
     
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
     gsl_vector_set(rp, 0, 0.0);
@@ -10173,7 +10172,7 @@ void ChartFrame::UpdateSliderLabel_3D(void){
     Length l;
     
     //d = 1 corresponds to one earth radsius, so the height of the observer is
-    l.set(String(""), ((draw_panel->d).value)*Re, String(""));
+    l.set(String(""), ( -1.0 + sqrt(1.0 + gsl_pow_2(tan((draw_panel->circle_observer).omega))) )*Re, String(""));
     
     if((l.value) > 1.0){
         //if the altitude is larger than 1 nm, I output it in units of nm
@@ -10217,7 +10216,7 @@ bool ChartFrame::ZoomFactor_3D(void){
     
     if(output){
         
-        (draw_panel->d).set(String(""), ((draw_panel->d_0).value)/(zoom_factor.value), String(""));
+        ((draw_panel->circle_observer).omega).set(String(""), (((draw_panel->circle_observer_0).omega).value)/(zoom_factor.value), String(""));
         
     }
     

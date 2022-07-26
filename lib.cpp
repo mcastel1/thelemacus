@@ -11532,9 +11532,7 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
 
 
 template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
-    
-    
-    
+
     /*
      n = value of slider,
      z = zoom factor,
@@ -11586,17 +11584,6 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
-        //     cout << "\n\n\n\ny_mercator_max = " << y_mercator(max_lat) << "\n";
-        //     cout << "y_max = " << (draw_panel->y_max) << "\n";
-        //     cout << "y_mercator_min = " << y_mercator(min_lat) << "\n";
-        //     cout << "y_min = " << (draw_panel->y_min) << "\n";
-        
-        //store the values of x_min ... y_max before the scrolling event into x_min_old .... y_max_old.
-        //        (draw_panel->x_min_old) = (draw_panel->x_min);
-        //        (draw_panel->x_max_old) = (draw_panel->x_max);
-        //        (draw_panel->y_min_old) = (draw_panel->y_min);
-        //        (draw_panel->y_max_old) = (draw_panel->y_max);
-        
         //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
         (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
         (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
@@ -11615,27 +11602,6 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
             
         }else{
             //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
-            
-            /*
-             (draw_panel->x_min) = (draw_panel->x_min_old);
-             (draw_panel->x_max) = (draw_panel->x_max_old);
-             (draw_panel->y_min) = (draw_panel->y_min_old);
-             (draw_panel->y_max) = (draw_panel->y_max_old);
-             
-             cout << "\nx_min_old = " << (draw_panel->x_min_old);
-             cout << "\nx_max_old = " << (draw_panel->x_max_old);
-             cout << "\ny_min_old = " << (draw_panel->y_min_old);
-             cout << "\ny_max_old = " << (draw_panel->y_max_old);
-             
-             //            draw_panel->Set_lambda_phi_min_max_Mercator();
-             ZoomFactor_Mercator((draw_panel->x_span()));
-             
-             //put the slider back to the value before the scroll
-             (draw_panel->*(draw_panel->Draw))();
-             draw_panel->PaintNow();
-             UpdateSlider();
-             UpdateSliderLabel_Mercator();
-             */
             
             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;
@@ -11919,9 +11885,7 @@ CheckDate::CheckDate(DateField* p_in){
     check_year = new CheckYear(p);
     check_month = new CheckMonth(p);
     check_day = new CheckDay(p);
-    
-    
-    
+
 }
 
 //this functor checks the whole date field by calling the check on its year, month and day parts
@@ -11973,21 +11937,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
         }else{
             
             (p->deg)->SetBackgroundColour(*wxWHITE);
-            
-            //            if((p->min_ok)){
-            //
-            //                double min_temp;
-            //
-            //                ((p->min)->GetValue()).ToDouble(&min_temp);
-            //
-            //                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
-            //
-            //            }
-            
             (p->deg_ok) = true;
-            
-            //            p->get(event);
-            
             
         }
         
@@ -12019,20 +11969,9 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             (p->min_ok) = false;
             
         }else{
-            (p->min)->SetBackgroundColour(*wxWHITE);
-            //            if((p->deg_ok)){
-            //
-            //                double min_temp;
-            //
-            //                ((p->min)->GetValue()).ToDouble(&min_temp);
-            //
-            //                (p->angle)->from_sign_deg_min(*((const char*)(((p->sign)->GetValue()).mb_str())) , wxAtoi((p->deg)->GetValue()), min_temp);
-            //
-            //
-            //            }
-            (p->min_ok) = true;
             
-            //            p->get(event);
+            (p->min)->SetBackgroundColour(*wxWHITE);
+            (p->min_ok) = true;
             
         }
         
@@ -12227,10 +12166,7 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
             message_frame ->Show(true);
             
         }
-        
-        //The temporary dialog window may have been closed, thus I set f->idling to false
-        //    f->SetIdling(false);
-        
+            
     }
     
 }
@@ -12273,9 +12209,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
-    
-    
-    
     sizer_grid_measurement = new wxFlexGridSizer(6, 2, 0, 0);
     sizer_grid_time = new wxFlexGridSizer(4, 2, 0, 0);
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
@@ -12290,7 +12223,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         (sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
         
     }
-    
     
     
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -12493,12 +12425,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if(sight_in != NULL){set();}
     
     Centre();
-    
-    
+
 }
-
-
-
 
 
 

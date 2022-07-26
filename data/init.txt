@@ -62,7 +62,7 @@ maximal zoom factor = 10000000
 data precision = 32
 display precision = 4
 relative displacement = 0.1
-omega draw 3d = 33° 32.157897987'
+omega draw 3d = 41° 32.157897987'
 default projection = 3D
 #the number of chart frames opened when the program starts
 number chart frames = 2

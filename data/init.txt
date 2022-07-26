@@ -58,7 +58,7 @@ color selected item = (51,153,255)
 color horizon = (0,191,255)
 #the exponent which sets the relation between zoom factor and value of slider
 exponent zoom = 2.0
-maximal zoom factor = 10000000
+maximal zoom factor = 100000
 data precision = 32
 display precision = 4
 relative displacement = 0.1

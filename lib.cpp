@@ -11109,6 +11109,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     ((parent->parent)->selection_rectangle) = (!((parent->parent)->selection_rectangle));
     
     if(((parent->parent)->selection_rectangle)){
+        //start drawing a selection rectangle
         
         stringstream s;
         
@@ -11127,8 +11128,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         //        cout << "((parent->parent)->p_start) = {" << (((parent->parent)->p_start).lambda).to_string(String("EW"), (display_precision.value), false) << " , " << (((parent->parent)->p_start).phi).to_string(String("NS"), (display_precision.value), false) << " }\n";
         
     }else{
-        
-        //        cout << "You ended drawing\n";
+        //finish drawing a selection rectangle
         
         GetMouseGeoPosition(&((parent->parent)->p_end));
         position_end_selection = position_screen_now;
@@ -11201,8 +11201,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             Length l1, l2;
             Position reference_position_old;
             
-            //add check on zoom factor here
-            
+            //store the current ground position of circle_observer into reference_position_old
             reference_position_old = (circle_observer.reference_position);
             
             //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
@@ -11215,26 +11214,20 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                                                                   )
                                                             );
             
-      
-            
+            //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
             (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
             (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
             (circle_observer.omega).set(String(""), (max(l1, l2).value)/Re, String(""));
             
             
-     
-            
-            //the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+            //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
             //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
             rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
             
             
-            
             (this->*Draw)();
             PaintNow();
-            
-//            parent->UpdateSlider();
-      
+            parent->UpdateSlider();
             
         }
                 

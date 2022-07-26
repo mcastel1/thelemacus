@@ -11204,22 +11204,28 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             reference_position_old = (circle_observer.reference_position);
             
             //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
-            circle_observer.reference_position = Position(
-                                                          Angle((((parent->parent)->p_start).phi.normalize_pm_pi_ret() + ((parent->parent)->p_end).phi.normalize_pm_pi_ret())/2.0),
-                                                          Angle((((parent->parent)->p_start).lambda.normalize_pm_pi_ret() + ((parent->parent)->p_end).lambda.normalize_pm_pi_ret())/2.0)
+            (circle_observer.reference_position) = Position(
+                                                          Angle(
+                                                                (((((parent->parent)->p_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).phi).normalize_pm_pi_ret().value))/2.0
+                                                                ),
+                                                          Angle(
+                                                                (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).lambda).normalize_pm_pi_ret().value))/2.0
+                                                                )
                                                           );
             
-            //the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-            //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
-            rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
-            
+      
             
             (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
             (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
+            (circle_observer.omega).set(String(""), (max(l1, l2).value)/Re, String(""));
             
-            circle_observer.omega.set(String(""), (max(l1, l2).value)/Re, String(""));
+            
             d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
             
+            //the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+                  //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
+                  rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
+           
 
             
             (this->*Draw)();

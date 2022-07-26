@@ -1785,7 +1785,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
         
     }else{
         
-        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
+//        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
         
     }
     

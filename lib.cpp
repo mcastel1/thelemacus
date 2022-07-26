@@ -9241,6 +9241,7 @@ void DrawPanel::Draw_3D(void){
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
     Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved, alpha_saved, lambda_in, lambda_out;
+    Double d;
     Position q;
     Projection temp;
     wxPoint p;
@@ -9253,8 +9254,9 @@ void DrawPanel::Draw_3D(void){
     label_phi.resize(0);
     
     
-    //set d, zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
+    //set d for the following, zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
     //    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     (parent->zoom_factor).set(String(""), ((circle_observer_0.omega).value)/((circle_observer.omega).value), String(""));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
@@ -10578,6 +10580,10 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
 bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     
     Projection temp;
+    Double d;
+    
+    //set d for the following
+    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
@@ -10610,6 +10616,11 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
 bool DrawPanel::GeoTo3D(Position p, Projection* q){
     
     bool check;
+    Double d;
+    
+    
+    //set d for the following
+    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     
     //set r according equal to the 3d vector corresponding to the geographic position p
     gsl_vector_set(r, 0, cos((p.lambda))*cos((p.phi)));

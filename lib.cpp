@@ -4233,7 +4233,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 
 void Sight::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol){
     
-    unsigned int i;
+    long i;
     wxListItem item;
     
     if(position_in_listcontrol == -1){
@@ -12894,10 +12894,8 @@ void RouteFrame::AllOk(void){
                        )
                       );
     
-    
-    
-    
 }
+
 
 //sets the values in all the GUI fields equal to the values in the respective non-GUI fields
 void RouteFrame::set(void){
@@ -13023,16 +13021,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     sizer_v->Fit(panel);
     panel->SetSizer(sizer_v);
     
-    //    SetSize(wxSize(100,100));
-    
-    //    CreateStatusBar();
-    //    SetStatusText( "Welcome to UnsetIdling's text editor!" );
-    
-    //SetSizerAndFit(sizer_v);
-    //Maximize();
-    
     CentreOnScreen();
-    
     
 }
 
@@ -13080,18 +13069,9 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
-    //  Maximize(panel);
     
     sizer_v->Fit(panel);
     panel->SetSizer(sizer_v);
-    
-    //    SetSize(wxSize(100,100));
-    
-    //    CreateStatusBar();
-    //    SetStatusText( "Welcome to UnsetIdling's text editor!" );
-    
-    //SetSizerAndFit(sizer_v);
-    //Maximize();
     
     CentreOnScreen();
     
@@ -13115,14 +13095,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     String s;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
-    
-    //image
-    //    wxBMPHandler *handler = new wxBMPHandler;
-    //    wxPNGHandler *handler_png = new wxPNGHandler;
-    //    wxImage::AddHandler(handler);
-    //    wxImage::AddHandler(handler_png);
-    
-    
     
     plot = new Plot(catalog, String(""));
     
@@ -13190,10 +13162,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     menu_item_mercator = new wxMenu;
     menu_item_3d = new wxMenu;
     
-    
-    //    menu_chart->Append(wxID_ANY, wxT("New chart"), wxT(""));
-    
-    
     menu_new_chart->Append(wxID_HIGHEST + 1, wxT("Mercator"), wxT(""));
     menu_new_chart->Append(wxID_HIGHEST + 2, wxT("3D"), wxT(""));
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New chart"), wxT(""));
@@ -13241,7 +13209,6 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     plot->read_from_file(file_sample_sight, String(""));
     plot->print(true, String(""), cout);
     //
-    
     
     
     //listcontrol_sights with sights
@@ -13422,7 +13389,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //
     
-    //resize uniformly all column
+    //resize uniformly all columns
     //    for(i=0; i<(listcontrol_sights->GetColumnCount()); ++i){
     //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
@@ -13651,7 +13618,9 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
-    int i_sight_to_remove = (listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+    int i_sight_to_remove;
+    
+    i_sight_to_remove = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //the id of the sight to removed is the one of the sight selected in listcontrol_sights: I write it in delete_sight_and_related_route and in delete_sight
     (delete_sight_and_related_route->i_sight_to_remove) = i_sight_to_remove;

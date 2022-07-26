@@ -11205,13 +11205,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             
             //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
             (circle_observer.reference_position) = Position(
-                                                          Angle(
-                                                                (((((parent->parent)->p_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).phi).normalize_pm_pi_ret().value))/2.0
-                                                                ),
-                                                          Angle(
-                                                                (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).lambda).normalize_pm_pi_ret().value))/2.0
-                                                                )
-                                                          );
+                                                            Angle(
+                                                                  (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).lambda).normalize_pm_pi_ret().value))/2.0
+                                                                  ),
+                                                            Angle(
+                                                                  (((((parent->parent)->p_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).phi).normalize_pm_pi_ret().value))/2.0
+                                                                  )
+                                                            );
             
       
             

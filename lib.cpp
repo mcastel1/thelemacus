@@ -4962,7 +4962,7 @@ void Plot::menu(String prefix){
                 
                 print_routes(true, new_prefix, cout);
                 
-                enter_unsigned_int(&i, true, 1, route_list.size()+1, String("# of route that you want to delete"), new_prefix);
+                enter_unsigned_int(&i, true, 1, ((unsigned int)(route_list.size()))+1, String("# of route that you want to delete"), new_prefix);
                 i--;
                 
                 //I commented this out because now remove_route has an additional argument

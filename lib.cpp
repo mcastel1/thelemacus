@@ -11574,10 +11574,15 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     
     //if the resulting value of zoom_factor is outside the boundaries I set it back to the rspective boundary
     if((zoom_factor.value) < 1.0){
+        
         (zoom_factor.value) = 1.0;
+        
     }
+    
     if((zoom_factor.value) > (zoom_factor_max.value)){
+        
         (zoom_factor.value) = (zoom_factor_max.value);
+        
     }
     
     
@@ -11618,12 +11623,10 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     }
     
     if(((projection->name)->GetValue()) == wxString("3D")){
-        
-        ZoomFactor_3D();
-        (draw_panel->*(draw_panel->Set_x_y_min_max))();
-        
+                
         (draw_panel->*(draw_panel->Draw))();
         draw_panel->PaintNow();
+        
         UpdateSlider();
         
     }

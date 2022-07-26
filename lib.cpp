@@ -9491,7 +9491,7 @@ void DrawPanel::Draw_3D(void){
     //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
     //set q
     (q.lambda).set(String(""), 0.0, String(""));
-    (q.phi).set(String(""),  asin(sqrt(gsl_pow_2(1.0+(d.value))-1.0)/((d.value)+1.0)) , String(""));
+    (q.phi) = (circle_observer.omega);
     
     //obtain the coordinates of q in the reference frame x'y'z'
     gsl_vector_set(rp, 0, 0.0);

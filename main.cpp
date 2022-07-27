@@ -43,7 +43,6 @@
  - in Route::draw_3D, code the part for loxodrome curves
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
- - when you draw routes in Render_Mercator and Render_3D, you should use the function draw_Mercator and draw_3D
  - check that phi_min, phi_max, lambda_min, lambda_max are always normalized throughout the code: change lines that alter the values of these angles, for example by replacing phi_min.normalize_pm_pi() with phi_min.normalize_pm_pi_ret()
  -                                 sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - revise Route::intersection so as to make it work also in the singular case where this->reference_position->phi = pi/2 and route.reference_position.phi = pi/2 etc

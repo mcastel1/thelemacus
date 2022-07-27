@@ -10371,18 +10371,24 @@ template<class T> void CheckLimb::operator()(T &event){
     if(!(f->idling)){
         
         
-        bool check;
         String s;
+        bool check;
         
         
         s = String(((p->name)->GetValue().ToStdString()));
         //I check whether the name in the GUI field body matches one of the valid limb names
-        check = (s == String("upper")) || (s == String("lower")) || (s == String("center"));
         
-        if(check){
+        check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
+        
+        
+        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (s == String("")))){
+            //p->name either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
+            //if check is true (false) -> set ok to true (false)
+            (p->ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetBackgroundColour(*wxWHITE);
-            (p->ok) = true;
+            
             
         }else{
             
@@ -14925,6 +14931,8 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
+    name->SetBackgroundColour(*wxWHITE);
+
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);

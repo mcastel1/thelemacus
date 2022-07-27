@@ -1452,12 +1452,9 @@ public:
     void OnMouseDrag(wxMouseEvent&);
     void OnMouseWheel(wxMouseEvent&);
     void OnChooseProjection(wxCommandEvent&);
-
-    
-    void KeyDown(wxKeyEvent&);
-    
     
     DECLARE_EVENT_TABLE()
+    
 };
 
 class ProjectionField{
@@ -1970,8 +1967,7 @@ public:
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;
     
-
-
+    void KeyDown(wxKeyEvent&);
     
 };
 

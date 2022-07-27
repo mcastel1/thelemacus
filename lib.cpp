@@ -12200,6 +12200,11 @@ template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(v
                 control->SetFocus();
                 control->SetBackgroundColour(*wxRED);
                 
+            }else{
+                //because in this case I don't print an error message frame, the code is no longer in idling mode
+                
+                (f->idling = false);
+                
             }
             
         }else{

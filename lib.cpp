@@ -9874,34 +9874,43 @@ template<class T> void ChartFrame::MoveLeft(T& event){
 
 void DrawPanel::ArrowDown(wxKeyEvent& event){
     
-    if ( (event.GetUnicodeKey()) == WXK_NONE ){
-        
-        // It's a special key, deal with all the known ones:
-        switch ( event.GetKeyCode() ){
-                
-            case WXK_UP:
-                
-                parent->MoveUp<wxKeyEvent>(event);
-                break;
-                
-            case WXK_DOWN:
-                
-                parent->MoveDown<wxKeyEvent>(event);
-                break;
-                
-            case WXK_LEFT:
-                
-                parent->MoveLeft<wxKeyEvent>(event);
-                break;
-                
-            case WXK_RIGHT:
-                
-                parent->MoveRight<wxKeyEvent>(event);
-                break;
-                
-        }
-        
+    //    if ( (event.GetUnicodeKey()) == WXK_NONE ){
+    
+    switch (event.GetKeyCode()){
+            
+        case WXK_UP:
+            
+            parent->MoveUp<wxKeyEvent>(event);
+            break;
+            
+        case WXK_DOWN:
+            
+            parent->MoveDown<wxKeyEvent>(event);
+            break;
+            
+        case WXK_LEFT:
+            
+            parent->MoveLeft<wxKeyEvent>(event);
+            break;
+            
+        case WXK_RIGHT:
+            
+            parent->MoveRight<wxKeyEvent>(event);
+            break;
+            
+        case WXK_ESCAPE:
+            
+            //If the user presses esc, I cancel the selection process with the rectangle and call PaintNow to re-draw the chart without the selection rectangle
+            ((parent->parent)->selection_rectangle) = false;
+            text_position_start->SetLabel(wxString(""));
+            text_position_end->SetLabel(wxString(""));
+            PaintNow();
+            
+            break;
+            
     }
+    
+    //    }
     
     //    event.Skip(true);
     

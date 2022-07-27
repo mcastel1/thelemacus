@@ -55,6 +55,7 @@
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
 - remove zoom_factor, because it is related to omega
+ - add night mode. 
  */
 
 

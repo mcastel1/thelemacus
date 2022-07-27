@@ -9872,6 +9872,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     
 }
 
+//if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event){
     
     //    if ( (event.GetUnicodeKey()) == WXK_NONE ){

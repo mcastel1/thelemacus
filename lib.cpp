@@ -11726,25 +11726,6 @@ template<class P> template <class T> void AngleField<P>::get(T &event){
     
 }
 
-//if all fields have the same background colour, it returns true and writes the colour in *colour. If not, it returns false and does not write into *colour
-template<class P> bool AngleField<P>::GetBackgroundColour(wxColour* colour){
- 
-    if(((sign->GetBackgroundColour()) == (deg->GetBackgroundColour())) && ((sign->GetBackgroundColour()) == (min->GetBackgroundColour()))){
-        //all subfields have the same background colour
-        
-        (*colour) = (sign->GetBackgroundColour());
-        
-        return true;
-        
-    }else{
-        //subfields have different backgrond colours
-        
-        return false;
-        
-    }
-    
-}
-
 
 //constructor of the struct, which initializes the Answer remove_related_route. If remove_related_route.value = 'y', then DeleteSight::operator() will delete both the sight and the related route. If remove_related_route.value = 'n', then it will remove the sight only.
 DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){

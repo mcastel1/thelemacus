@@ -1563,8 +1563,6 @@ public:
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     
-    bool GetBackgroundColour(wxColour*);
-    
 };
 
 //class for graphical object: a field to enter a length, composed of a box. P is the type of the parent which hosts the LengthField object

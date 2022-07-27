@@ -1454,7 +1454,7 @@ public:
     void OnChooseProjection(wxCommandEvent&);
 
     
-    void ArrowDown(wxKeyEvent&);
+    void KeyDown(wxKeyEvent&);
     
     
     DECLARE_EVENT_TABLE()

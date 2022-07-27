@@ -10450,7 +10450,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
         if((p->format) == String("")){
             //if the AngleField p has no sign, the check is ok
             
-            check=true;
+            check = true;
             
         }else{
             //if the AngleField p has a sign, I check it
@@ -10463,12 +10463,14 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }
         
-        if(check){
+           
+        if(check || ((((p->sign)->GetBackgroundColour()) == *wxWHITE) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))){
+            //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
+            //if check is true (false) -> set sign_ok to true (false)
+            (p->sign_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in sign
             (p->sign)->SetBackgroundColour(*wxWHITE);
-            (p->sign_ok) = true;
-            
-            //            p->get(event);
             
         }else{
             
@@ -15031,19 +15033,22 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     //here the allocation of sign is inserted in the code in such a way that if format = "+-" the sign is allocated before deg, text_deg, min, text_min: In this way, when the user tabs through the fields in PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if(format == String("+-")){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+        sign->SetBackgroundColour(*wxWHITE);
         AdjustWidth(sign);
         sign->Bind(wxEVT_KILL_FOCUS, (check_angle->check_sign));
     }
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
+    deg->SetBackgroundColour(*wxWHITE);
     AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, (check_angle->check_arc_degree));
-    
+
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
+    min->SetBackgroundColour(*wxWHITE);
     min->Bind(wxEVT_KILL_FOCUS, (check_angle->check_arc_minute));
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

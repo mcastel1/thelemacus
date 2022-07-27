@@ -15025,7 +15025,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         }
     }
     
-    
+     
     
     //initialize check and its objects
     check_angle = new CheckAngle<P>(this);

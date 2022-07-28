@@ -11964,9 +11964,18 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360)){
-            
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->deg), String("Entered value is not valid!\nArcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+        bool check;
+        
+        check = check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360);
+        
+        if(check || ((((p->deg)->GetBackgroundColour()) == *wxWHITE) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))){
+   
+            //if check is true (false) -> set deg_ok to true (false)
+            (p->deg_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in deg
+            (p->deg)->SetBackgroundColour(*wxWHITE);
+   
+        }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->deg);
@@ -11975,11 +11984,6 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             f->CallAfter(*(f->print_error_message));
             
             (p->deg_ok) = false;
-            
-        }else{
-            
-            (p->deg)->SetBackgroundColour(*wxWHITE);
-            (p->deg_ok) = true;
             
         }
         

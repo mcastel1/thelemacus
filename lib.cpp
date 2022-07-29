@@ -10295,53 +10295,60 @@ template<class T>void CheckBody::operator()(T& event){
         }
         i--;
         
-        if(check){
+        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
+            //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
-            if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
-                //in this case, the selected body is a body which has a limb -> I enable the limb field
+            if(check){
                 
-                ((f->limb)->name)->Enable(true);
-                
-            }else{
-                //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
-                
-                ((f->limb)->name)->Enable(false);
-                ((f->limb)->ok) = true;
-                
-            }
-            
-            (p->name)->SetBackgroundColour(*wxWHITE);
-            (p->ok) = true;
-            
-            //here you should insert the part where you write the recently selected item into file_recent
-            if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
-                //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
-                
-                unsigned int j;
-                stringstream ins;
-                String prefix, s;
-                
-                prefix = String("");
-                
-                (p->recent_items)[(p->recent_items).size()-1] = i;
-                rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
-                
-                for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
-                    ins << (p->recent_items)[j] << " ";
+                if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
+                    //in this case, the selected body is a body which has a limb -> I enable the limb field
+                    
+                    ((f->limb)->name)->Enable(true);
+                    
+                }else{
+                    //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
+                    
+                    ((f->limb)->name)->Enable(false);
+                    ((f->limb)->ok) = true;
+                    
                 }
-                s = String(ins.str());
                 
-                (p->file_recent).open(String("in"), prefix);
-                cout << prefix.value << YELLOW << "Writing recent items of body field to file " << (p->file_recent).name.value << " ...\n" << RESET;
-                s.write_to_file(String("body"), p->file_recent, String(""));
-                cout << prefix.value << YELLOW << "... done.\n" << RESET;
-                (p->file_recent).close(prefix);
+                if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
+                    //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+                    
+                    unsigned int j;
+                    stringstream ins;
+                    String prefix, s;
+                    
+                    prefix = String("");
+                    
+                    (p->recent_items)[(p->recent_items).size()-1] = i;
+                    rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
+                    
+                    for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
+                        ins << (p->recent_items)[j] << " ";
+                    }
+                    s = String(ins.str());
+                    
+                    (p->file_recent).open(String("in"), prefix);
+                    cout << prefix.value << YELLOW << "Writing recent items of body field to file " << (p->file_recent).name.value << " ...\n" << RESET;
+                    s.write_to_file(String("body"), p->file_recent, String(""));
+                    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+                    (p->file_recent).close(prefix);
+                    
+                    //I update p->bodies according to the content of file_recent
+                    p->read_recent_items();
+                    
+                }
                 
-                //I update p->bodies according to the content of file_recent
-                p->read_recent_items();
                 
             }
-            
+                       
+            //if check is true (false) -> set ok to true (false)
+            (p->ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in name
+            (p->name)->SetBackgroundColour(*wxWHITE);
+      
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -14714,7 +14721,8 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     check = new CheckBody(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
-    name->SetValue("");
+//    name->SetValue("");
+    name->SetBackgroundColour(*wxWHITE);
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
@@ -14726,7 +14734,6 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
-    
     
 }
 
@@ -15447,8 +15454,12 @@ void BodyField::read_recent_items(void){
     String prefix, s;
     size_t pos_end;
     bool is_present;
+    wxString temp;
     
     prefix = String("");
+    
+    //save the current value of name in temp
+    temp = name->GetValue();
     
     for(bodies_temp.Clear(), i=0; i<(catalog->list).size(); i++){
         bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
@@ -15511,6 +15522,8 @@ void BodyField::read_recent_items(void){
     
     name->Set(bodies);
     
+    //because name->Set(bodies clears the value of name, I set the value of name back to temp
+    name->SetValue(temp);
     
     //
     //    cout << "After: Bodies_temp = ";

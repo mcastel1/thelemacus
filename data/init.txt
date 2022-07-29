@@ -71,6 +71,6 @@ default projection = 3D
 number chart frames = 2
 #initial rotation with which the 3D projection is displayed
 rotation 0 =
-alpha = 268° 3.43879'
+alpha = 68° 3.43879'
 beta = 1° 3.5304'
 gamma = 3° 11.035789'

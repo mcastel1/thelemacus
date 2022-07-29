@@ -12002,10 +12002,20 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0)){
+        bool check;
+        
+        check = check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+        
+        if(check || ((((p->min)->GetBackgroundColour()) == *wxWHITE) && (String((((p->min)->GetValue()).ToStdString())) == String("")))){
+            //p->min either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->min, String("Entered value is not valid!\nArcminutes must be floating-point numbers >= 0' and < 60'"));
+            //if check is true (false) -> set min_ok to true (false)
+            (p->min_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in min
+            (p->min)->SetBackgroundColour(*wxWHITE);
             
+        }else{
+                        
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->min);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
@@ -12013,11 +12023,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             f->CallAfter(*(f->print_error_message));
             
             (p->min_ok) = false;
-            
-        }else{
-            
-            (p->min)->SetBackgroundColour(*wxWHITE);
-            (p->min_ok) = true;
+
             
         }
         

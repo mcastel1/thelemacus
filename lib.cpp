@@ -14126,11 +14126,10 @@ template<class T> void CheckYear::operator()(T&event){
             if(check && (p->month_ok)){
                 
                 tabulate_days(event);
-                (p->day)->Enable(true);
                 
             }
             
-            (p->day)->Enable(check);
+            (p->day)->Enable(check && (p->month_ok));
 
             
         }else{
@@ -14161,31 +14160,38 @@ template<class T> void CheckMonth::operator()(T&event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1)){
+        bool check;
+        
+        check = check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1);
+        
+        if(check || ((((p->month)->GetBackgroundColour()) == *wxWHITE) && (String((((p->month)->GetValue()).ToStdString())) == String("")))){
+            //p->month either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->month, String("Entered value is not valid!\nMonth must be an unsigned integer >= 1 and <= 12"));
+            //if check is true (false) -> set month_ok to true (false)
+            (p->month_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in month
+            (p->month)->SetBackgroundColour(*wxWHITE);
             
+            if(check && (p->year_ok)){
+                
+                tabulate_days(event);
+                
+            }
+
+            (p->day)->Enable(check && (p->year_ok));
+    
+        }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter     ((f->print_error_message)->control) = (p->month);
+            
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
             f->CallAfter(*(f->print_error_message));
             
             (p->month_ok) = false;
             (p->day)->Enable(false);
-            
-        }else{
-            
-            (p->month)->SetBackgroundColour(*wxWHITE);
-            (p->month_ok) = true;
-            
-            if(p->year_ok){
-                
-                tabulate_days(event);
-                (p->day)->Enable(true);
-                
-            }
-            
+      
         }
+        
         
         f->AllOk();
         
@@ -15265,13 +15271,14 @@ DateField::DateField(SightFrame* frame, Date* p){
     }
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+    year->SetBackgroundColour(*wxWHITE);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->Bind(wxEVT_KILL_FOCUS, *(check->check_year));
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-    //    month->SetInitialSize(month->GetSizeFromTextSize(month->GetTextExtent(wxS("00"))));
+    month->SetBackgroundColour(*wxWHITE);
     AdjustWidth(month);
     month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
     
@@ -15279,6 +15286,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
+    day->SetBackgroundColour(*wxWHITE);
     //I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
     for(days.Clear(), i=0; i<31; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));

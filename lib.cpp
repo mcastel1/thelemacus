@@ -14111,11 +14111,28 @@ template<class T> void CheckYear::operator()(T&event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0)){
+        bool check;
+
+        check = check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0);
+       
+        if(check || ((((p->year)->GetBackgroundColour()) == *wxWHITE) && (String((((p->year)->GetValue()).ToStdString())) == String("")))){
+            //p->year either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->year, String("Entered value is not valid!\nYear must be an unsigned integer"));
+            //if check is true (false) -> set year_ok to true (false)
+            (p->year_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in year
+            (p->year)->SetBackgroundColour(*wxWHITE);
             
+            if(check && (p->month_ok)){
+                
+                tabulate_days(event);
+                (p->day)->Enable(true);
+                
+            }
+            
+        }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            
             ((f->print_error_message)->control) = (p->year);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Year must be an unsigned integer");
@@ -14123,18 +14140,7 @@ template<class T> void CheckYear::operator()(T&event){
             
             (p->year_ok) = false;
             (p->day)->Enable(false);
-            
-            
-        }else{
-            
-            (p->year)->SetBackgroundColour(*wxWHITE);
-            (p->year_ok) = true;
-            
-            if(p->month_ok){
-                tabulate_days(event);
-                (p->day)->Enable(true);
-            }
-            
+    
         }
         
         f->AllOk();

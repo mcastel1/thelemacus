@@ -14354,7 +14354,7 @@ template<class T> void CheckHour::operator()(T &event){
         
         check = check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24);
         
-        if(!check && ((p->hour)->IsEnabled())){
+        if((!check) && ((p->hour)->IsEnabled())){
             
             if(!(p->just_enabled)){
                 //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message

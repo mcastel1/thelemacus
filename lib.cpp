@@ -14209,26 +14209,25 @@ template<class T> void CheckDay::operator()(T& event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        //this variable = true if the day field is formatted correctly
-        bool ok;
-        
-        
         //to check whether the p->day is formatted correctly, I first check whether p->year and p->month are formatted correctly, so I can extract a valid value of p->month. Then, I check whether p-> day is an unsigned int formatted correctly with check_unsigned_int, and whether this unsigned int lies in the correct interval relative to p->month
         if((p->year_ok) && (p->month_ok)){
+       
+            //this variable = true if the day field is formatted correctly
+            bool check;
             
             (p->date)->check_leap_year();
             
             if((p->date)->Y_is_leap_year){
                 
-                ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue()))-1]+1);
+                check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue()))-1]+1);
                 
             }else{
                 
-                ok = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue()))-1]+1);
+                check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue()))-1]+1);
                 
             }
             
-            if(ok){
+            if(check){
                 
                 (p->day)->Enable(true);
                 (p->day)->SetBackgroundColour(*wxWHITE);

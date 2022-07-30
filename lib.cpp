@@ -14130,6 +14130,9 @@ template<class T> void CheckYear::operator()(T&event){
                 
             }
             
+            (p->day)->Enable(check);
+
+            
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             

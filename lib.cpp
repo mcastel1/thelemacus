@@ -14209,49 +14209,39 @@ template<class T> void CheckDay::operator()(T& event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        //to check whether the p->day is formatted correctly, I first check whether p->year and p->month are formatted correctly, so I can extract a valid value of p->month. Then, I check whether p-> day is an unsigned int formatted correctly with check_unsigned_int, and whether this unsigned int lies in the correct interval relative to p->month
-        if((p->year_ok) && (p->month_ok)){
-       
-            //this variable = true if the day field is formatted correctly
-            bool check;
+        //this variable = true if the day field is formatted correctly
+        bool check;
+        
+        (p->date)->check_leap_year();
+        
+        if((p->date)->Y_is_leap_year){
             
-            (p->date)->check_leap_year();
-            
-            if((p->date)->Y_is_leap_year){
-                
-                check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue()))-1]+1);
-                
-            }else{
-                
-                check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue()))-1]+1);
-                
-            }
-            
-            if(check){
-                
-                (p->day)->Enable(true);
-                (p->day)->SetBackgroundColour(*wxWHITE);
-                (p->day_ok) = true;
-                
-            }else{
-                
-                //            f->CallAfter(&SightFrame::PrintErrorMessage, p->day, String("Entered value is not valid!\nDay must be an unsigned integer comprised between the days of the relative month"));
-                
-                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-                ((f->print_error_message)->control) = (p->day);
-                ((f->print_error_message)->title) = String("Entered value is not valid!");
-                ((f->print_error_message)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
-                f->CallAfter(*(f->print_error_message));
-                
-                (p->day)->Enable(true);
-                (p->day_ok) = false;
-                
-            }
-            
+            check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue()))-1]+1);
             
         }else{
             
-            (p->day)->Enable(false);
+            check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue()))-1]+1);
+            
+        }
+        
+        
+        if(check || ((((p->day)->GetBackgroundColour()) == *wxWHITE) && (String((((p->day)->GetValue()).ToStdString())) == String("")))){
+            
+            //if check is true (false) -> set day_ok to true (false)
+            (p->day_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in day
+            (p->day)->SetBackgroundColour(*wxWHITE);
+            
+            
+        }else{
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            
+            ((f->print_error_message)->control) = (p->day);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
+            f->CallAfter(*(f->print_error_message));
+            
+            (p->day_ok) = false;
             
         }
         

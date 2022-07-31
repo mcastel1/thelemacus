@@ -12337,7 +12337,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     
     //I initialize the GUI filed master_clock_chrono with the one written in sight_in.
+    if(sight_in != NULL){
     master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
+    }
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -14397,6 +14399,35 @@ template<class T> void CheckMinute::operator()(T &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
+        bool check;
+
+        check = check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60);
+        
+        if(check || ((((p->minute)->GetBackgroundColour()) == *wxWHITE) && (String((((p->minute)->GetValue()).ToStdString())) == String("")))){
+   
+            //if check is true (false) -> set minute_ok to true (false)
+            (p->minute_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in minute
+            (p->minute)->SetBackgroundColour(*wxWHITE);
+            
+        }else{
+            
+            if((p->minute)->IsEnabled()){
+                
+                ((f->print_error_message)->control) = (p->minute);
+                ((f->print_error_message)->title) = String("Entered value is not valid!");
+                ((f->print_error_message)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
+                f->CallAfter(*(f->print_error_message));
+                
+            }
+            
+            (p->minute_ok) = false;
+            
+            
+        }
+  
+        
+        /*
         if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60) && ((p->minute)->IsEnabled())){
             
             //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
@@ -14415,6 +14446,7 @@ template<class T> void CheckMinute::operator()(T &event){
             (p->minute_ok) = true;
             
         }
+        */
         
         f->AllOk();
         

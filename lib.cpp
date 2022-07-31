@@ -15320,6 +15320,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
+    hour->SetBackgroundColour(*wxWHITE);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
     hour->Bind(wxEVT_KILL_FOCUS, *(check->check_hour));
@@ -15327,6 +15328,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
+    minute->SetBackgroundColour(*wxWHITE);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->Bind(wxEVT_KILL_FOCUS, *(check->check_minute));
@@ -15334,6 +15336,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
+    second->SetBackgroundColour(*wxWHITE);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
     

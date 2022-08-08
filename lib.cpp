@@ -14469,12 +14469,20 @@ template<class T> void CheckSecond::operator()(T &event){
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
-        if(!check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0) && ((p->second)->IsEnabled())){
+        bool check;
+        
+        check = check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+        
+        if(check || ((((p->second)->GetBackgroundColour()) == *wxWHITE) && (String((((p->second)->GetValue()).ToStdString())) == String("")))){
             
+            //if check is true (false) -> set second_ok to true (false)
+            (p->second_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in deg
+            (p->second)->SetBackgroundColour(*wxWHITE);
             
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, p->second, String("Entered value is not valid!\nSeconds must be floating-point numbers >= 0.0 and < 60.0"));
-            
+        }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            
             ((f->print_error_message)->control) = (p->second);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
@@ -14482,14 +14490,7 @@ template<class T> void CheckSecond::operator()(T &event){
             
             (p->second_ok) = false;
             
-        }else{
-            
-            
-            (p->second)->SetBackgroundColour(*wxWHITE);
-            (p->second_ok) = true;
-            
         }
-        
         
         f->AllOk();
         

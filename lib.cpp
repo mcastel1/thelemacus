@@ -12337,9 +12337,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     
     //I initialize the GUI filed master_clock_chrono with the one written in sight_in.
-    if(sight_in != NULL){
+    //    if(sight_in != NULL){
     master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
-    }
+    //    }
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));

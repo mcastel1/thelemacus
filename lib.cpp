@@ -12050,6 +12050,31 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
         
+        bool check;
+        
+        check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+        
+        if(check || ((((p->value)->GetBackgroundColour()) == *wxWHITE) && (String((((p->value)->GetValue()).ToStdString())) == String("")))){
+            //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+            
+            //if check is true (false) -> set value_ok to true (false)
+            (p->value_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in value
+            (p->value)->SetBackgroundColour(*wxWHITE);
+            
+        }else{
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            
+            ((f->print_error_message)->control) = (p->value);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Lengths must be floating-point numbers >= 0 m");
+            f->CallAfter(*(f->print_error_message));
+            
+            (p->value_ok) = false;
+            
+        }
+        
+        /*
         if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX) && ((p->value)->IsEnabled())){
             
             if(!(p->just_enabled)){
@@ -12076,6 +12101,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             (p->value_ok) = true;
             
         }
+        */
         
         f->AllOk();
         

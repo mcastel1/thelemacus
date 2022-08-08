@@ -14304,7 +14304,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     if((((p->checkbox)->GetValue()) ^ (!(p->direct_reverse)))){
         (p->related_field)->Enable(true);
         //I write into the related_field by setting its variable just_enabled to true: this means that no error message will be prompted when the user sets its focus to the related field GUIs
-        ((p->related_field)->just_enabled) = true;
+        //        ((p->related_field)->just_enabled) = true;
     }else{
         (p->related_field)->Enable(false);
     }
@@ -14347,6 +14347,27 @@ template<class T> void CheckHour::operator()(T &event){
         
         check = check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24);
         
+        
+        if(check || ((((p->hour)->GetBackgroundColour()) == *wxWHITE) && (String((((p->hour)->GetValue()).ToStdString())) == String("")))){
+   
+            //if check is true (false) -> set hour_ok to true (false)
+            (p->hour_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in deg
+            (p->hour)->SetBackgroundColour(*wxWHITE);
+   
+        }else{
+            
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            ((f->print_error_message)->control) = (p->hour);
+            ((f->print_error_message)->title) = String("Entered value is not valid!");
+            ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+            f->CallAfter(*(f->print_error_message));
+            
+            (p->hour_ok) = false;
+            
+        }
+        
+        /*
         if((!check) && ((p->hour)->IsEnabled())){
             
             if(!(p->just_enabled)){
@@ -14377,6 +14398,7 @@ template<class T> void CheckHour::operator()(T &event){
             (p->hour_ok) = true;
             
         }
+        */
         
         f->AllOk();
         

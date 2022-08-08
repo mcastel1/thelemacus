@@ -1660,7 +1660,7 @@ public:
     //this points to a Date object, which contains the date written in the GUI fields of this
     Chrono* chrono;
     //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
-    bool hour_ok, minute_ok, second_ok, /*this variable = true if this has been just enabled, and false otherwise*/just_enabled;
+    bool hour_ok, minute_ok, second_ok;
     CheckChrono* check;
     
     ChronoField(SightFrame*, Chrono*);

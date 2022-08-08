@@ -15364,8 +15364,8 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
-    second->SetBackgroundColour(*wxWHITE);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
+    second->SetBackgroundColour(*wxWHITE);
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
     
     

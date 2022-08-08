@@ -14412,27 +14412,6 @@ template<class T> void CheckMinute::operator()(T &event){
             
         }else{
             
-            if((p->minute)->IsEnabled()){
-                
-                ((f->print_error_message)->control) = (p->minute);
-                ((f->print_error_message)->title) = String("Entered value is not valid!");
-                ((f->print_error_message)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-                f->CallAfter(*(f->print_error_message));
-                
-            }
-            
-            (p->minute_ok) = false;
-            
-            
-        }
-  
-        
-        /*
-        if(!check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60) && ((p->minute)->IsEnabled())){
-            
-            //        f->CallAfter(&SightFrame::PrintErrorMessage, (p->minute), String("Entered value is not valid!\nMinutes must be unsigned integer numbers >= 0 and < 60"));
-            
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->minute);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
@@ -14440,13 +14419,7 @@ template<class T> void CheckMinute::operator()(T &event){
             
             (p->minute_ok) = false;
             
-        }else{
-            
-            (p->minute)->SetBackgroundColour(*wxWHITE);
-            (p->minute_ok) = true;
-            
         }
-        */
         
         f->AllOk();
         

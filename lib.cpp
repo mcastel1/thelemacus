@@ -12130,15 +12130,17 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
         }
         i--;
         
-        if(check){
-            
-            
+        if(check || ((((p->box_unit)->GetBackgroundColour()) == *wxWHITE) && (String((((p->box_unit)->GetValue()).ToStdString())) == String("")))){
+        
+            //if check is true (false) -> set box_unit_ok to true (false)
+            (p->box_unit_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in deg
             (p->box_unit)->SetBackgroundColour(*wxWHITE);
-            (p->box_unit_ok) = true;
+   
             
         }else{
-            
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            
             ((f->print_error_message)->control) = (p->box_unit);
             ((f->print_error_message)->title) = String("Unit not found in list!");
             ((f->print_error_message)->message) = String("Unit must be in list.");

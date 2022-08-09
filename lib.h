@@ -1553,7 +1553,7 @@ public:
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool sign_ok, deg_ok, min_ok;
-    CheckAngle<P>* check_angle;
+    CheckAngle<P>* check;
     
     
     AngleField(P*, Angle*, String);

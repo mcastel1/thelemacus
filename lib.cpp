@@ -14085,8 +14085,8 @@ void SightFrame::AllOk(void){
      //I created a dummy event and call on it all check functors of the fields in *this-> this will write into the variables *ok of all fields
      (*(body->check))(dummy);
      (*(limb->check))(dummy);
-     (*(H_s->check_angle))(dummy);
-     (*(index_error->check_angle))(dummy);
+     (*(H_s->check))(dummy);
+     (*(index_error->check))(dummy);
      (*(artificial_horizon_check->check))(dummy);
      (*(height_of_eye->check))(dummy);
      (*(master_clock_date->check))(dummy);
@@ -15153,7 +15153,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
      
     
     //initialize check and its objects
-    check_angle = new CheckAngle<P>(this);
+    check = new CheckAngle<P>(this);
     
     //here the allocation of sign is inserted in the code in such a way that if format = "+-" the sign is allocated before deg, text_deg, min, text_min: In this way, when the user tabs through the fields in PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if(format == String("+-")){
@@ -15164,14 +15164,14 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     deg->SetBackgroundColour(*wxWHITE);
     AdjustWidth(deg);
-    deg->Bind(wxEVT_KILL_FOCUS, (check_angle->check_arc_degree));
+    deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
 
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
     min->SetBackgroundColour(*wxWHITE);
-    min->Bind(wxEVT_KILL_FOCUS, (check_angle->check_arc_minute));
+    min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -15182,7 +15182,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
 
     sign->SetBackgroundColour(*wxWHITE);
     AdjustWidth(sign);
-    sign->Bind(wxEVT_KILL_FOCUS, (check_angle->check_sign));
+    sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
 
     if(format != String("")){sign->SetValue(wxString(""));}
     deg->SetValue(wxString(""));

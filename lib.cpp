@@ -12158,15 +12158,38 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
         
         value->GetValue().ToDouble(&length_temp);
         
-        if(box_unit->GetValue() == wxString("nm")){
-            
-            length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
-            
-        }
-        if(box_unit->GetValue() == wxString("m")){
-            
-            length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
-            
+        
+        switch(((box_unit->GetValue()).ToStdString())[0]){
+                
+            case 'n':{
+                //box_unit = "nm"
+                
+                length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+                
+                break;
+                
+            }
+                
+                
+            case 'm':{
+                //box_unit = "m"
+                
+                length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp/(1e3*nm), String(""));
+                
+                break;
+                
+            }
+                
+                
+            case 'f':{
+                //box_unit = "ft"
+                
+                length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp/nm_ft, String(""));
+                
+                break;
+                
+            }
+                
         }
         
     }

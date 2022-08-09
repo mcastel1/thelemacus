@@ -14094,9 +14094,6 @@ void SightFrame::AllOk(void){
     (*(stopwatch_reading->check))(dummy);
     (*(TAI_minus_UTC->check))(dummy);
 
-
-
-    
     button_reduce->Enable(
                           (body->is_ok()) &&
                           ((!( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) )) || (limb->is_ok())) &&

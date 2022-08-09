@@ -11940,9 +11940,9 @@ CheckDate::CheckDate(DateField* p_in){
 //this functor checks the whole date field by calling the check on its year, month and day parts
 template <class T> void CheckDate::operator()(T& event){
     
-    check_year(event);
-    check_month(event);
-    check_day(event);
+    (*check_year)(event);
+    (*check_month)(event);
+    (*check_day)(event);
     
     event.Skip(true);
     
@@ -14079,6 +14079,23 @@ void SightFrame::SetIdling(bool b){
 //this function checks whether all the fields in SightFrame are ok, and if they are, it enables the button_reduce
 void SightFrame::AllOk(void){
     
+    wxCommandEvent dummy;
+    
+    //I created a dummy event and call on it all check functors of the fields in *this-> this will write into the variables *ok of all fields
+    (*(body->check))(dummy);
+    (limb->check)(dummy);
+    (*(H_s->check_angle))(dummy);
+    (*(index_error->check_angle))(dummy);
+    (artificial_horizon_check->check)(dummy);
+    (*(height_of_eye->check))(dummy);
+    (*(master_clock_date->check))(dummy);
+    (*(master_clock_chrono->check))(dummy);
+    (stopwatch_check->check)(dummy);
+    (*(stopwatch_reading->check))(dummy);
+    (*(TAI_minus_UTC->check))(dummy);
+
+
+
     
     button_reduce->Enable(
                           (body->is_ok()) &&

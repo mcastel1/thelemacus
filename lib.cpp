@@ -14084,7 +14084,7 @@ void SightFrame::AllOk(void){
      
      //I created a dummy event and call on it all check functors of the fields in *this-> this will write into the variables *ok of all fields
      (*(body->check))(dummy);
-     (limb->check)(dummy);
+     (*(limb->check))(dummy);
      (*(H_s->check_angle))(dummy);
      (*(index_error->check_angle))(dummy);
      (artificial_horizon_check->check)(dummy);

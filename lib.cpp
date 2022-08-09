@@ -15215,7 +15215,8 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     units.Clear();
     units.Add(wxT("nm"));
     units.Add(wxT("m"));
-    
+    units.Add(wxT("ft"));
+
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);

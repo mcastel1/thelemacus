@@ -1310,7 +1310,7 @@ public:
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* checkbox;
-    CheckCheck<T> check;
+    CheckCheck<T>* check;
     
     CheckField(SightFrame*, Answer*, T*, bool);
     

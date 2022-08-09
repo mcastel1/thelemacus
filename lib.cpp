@@ -14087,7 +14087,7 @@ void SightFrame::AllOk(void){
      (*(limb->check))(dummy);
      (*(H_s->check_angle))(dummy);
      (*(index_error->check_angle))(dummy);
-     (artificial_horizon_check->check)(dummy);
+     (*(artificial_horizon_check->check))(dummy);
      (*(height_of_eye->check))(dummy);
      (*(master_clock_date->check))(dummy);
      (*(master_clock_chrono->check))(dummy);
@@ -15090,10 +15090,10 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
     related_field = related_field_in;
     direct_reverse = direct_reverse_in;
     
-    (check.p) = this;
+    (check->p) = this;
     
     checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-    checkbox->Bind(wxEVT_CHECKBOX, check);
+    checkbox->Bind(wxEVT_CHECKBOX, (*check));
     
     checkbox->SetValue(false);
     

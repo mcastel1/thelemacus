@@ -12074,35 +12074,6 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             
         }
         
-        /*
-        if(!check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX) && ((p->value)->IsEnabled())){
-            
-            if(!(p->just_enabled)){
-                //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
-                
-                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-                ((f->print_error_message)->control) = (p->value);
-                ((f->print_error_message)->title) = String("Entered value is not valid!");
-                ((f->print_error_message)->message) = String("Lengths must be floating-point numbers >= 0 m");
-                f->CallAfter(*(f->print_error_message));
-                
-            }else{
-                //if the LengthField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
-                
-                (p->just_enabled) = false;
-                
-            }
-            
-            (p->value_ok) = false;
-            
-        }else{
-            
-            (p->value)->SetBackgroundColour(*wxWHITE);
-            (p->value_ok) = true;
-            
-        }
-        */
-        
         f->AllOk();
         
     }

@@ -14584,11 +14584,12 @@ template<class T>void CheckRouteType::operator()(T& event){
         }
         i--;
         
-        if(check){
+        
+        
+        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             
-            
+            //enable/disable the related fields in RouteFrame f
             enable = ((((p->types)[i]) == wxString("loxodrome")) || (((p->types)[i]) == wxString("orthodrome")));
-            
             
             (f->alpha)->Enable(enable);
             (f->start_phi)->Enable(enable);
@@ -14599,10 +14600,11 @@ template<class T>void CheckRouteType::operator()(T& event){
             (f->GP_lambda)->Enable(!enable);
             (f->omega)->Enable(!enable);
             
-            
+            //if check is true (false) -> set ok to true (false)
+            (p->ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetBackgroundColour(*wxWHITE);
-            (p->ok) = true;
-            
+   
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter

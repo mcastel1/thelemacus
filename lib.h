@@ -1139,7 +1139,7 @@ public:
     
     CheckLength(LengthField<P>*);
     
-    template <class T> void operator()(const T&);
+    template <class T> void operator()(T&);
     
 };
 

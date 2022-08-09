@@ -12166,7 +12166,7 @@ template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in){
 }
 
 //this functor checks the whole Length field by calling the check on its value and unit
-template<class P> template <class T> void CheckLength<P>::operator()(const T& event){
+template<class P> template <class T> void CheckLength<P>::operator()(T& event){
     
     check_length_value(event);
     check_length_unit(event);
@@ -14347,7 +14347,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     
     //    (artificial_horizon_check->related_field) = height_of_eye;
     //not woring
-//    (*((p->related_field)->check))(event);
+    (*((p->related_field)->check))(event);
     
     (p->parent_frame)->AllOk();
     
@@ -14549,9 +14549,9 @@ CheckChrono::CheckChrono(ChronoField* p_in){
 //this function writes into sight.stopwatch the value written into the respective GUI box
 template <class T> void CheckChrono::operator()(T& event){
     
-    check_hour(event);
-    check_minute(event);
-    check_second(event);
+    (*check_hour)(event);
+    (*check_minute)(event);
+    (*check_second)(event);
     
     event.Skip(true);
     

@@ -14347,8 +14347,6 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
         (p->related_field)->Enable(false);
     }
     
-    //    (artificial_horizon_check->related_field) = height_of_eye;
-    //not woring
     (*((p->related_field)->check))(event);
     
     (p->parent_frame)->AllOk();

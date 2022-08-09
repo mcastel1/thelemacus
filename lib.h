@@ -1520,7 +1520,7 @@ public:
     Limb* limb;
     wxBoxSizer *sizer_h, *sizer_v;
     bool ok;
-    CheckLimb check;
+    CheckLimb* check;
     
      
     LimbField(SightFrame*, Limb*);

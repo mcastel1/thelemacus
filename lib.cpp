@@ -15048,7 +15048,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     limb = p;
     
     //initialize check
-    (check.p) = this;
+    (check->p) = this;
     
     limbs.Clear();
     limbs.Add(wxT("upper"));
@@ -15063,7 +15063,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, check);
+    name->Bind(wxEVT_KILL_FOCUS, (*check));
     
     //    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
     

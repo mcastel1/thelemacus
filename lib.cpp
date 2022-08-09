@@ -14080,6 +14080,7 @@ void SightFrame::SetIdling(bool b){
 void SightFrame::AllOk(void){
     
     /*
+     //this does not work
      wxCommandEvent dummy;
      
      //I created a dummy event and call on it all check functors of the fields in *this-> this will write into the variables *ok of all fields
@@ -15091,6 +15092,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
     related_field = related_field_in;
     direct_reverse = direct_reverse_in;
     
+    check = new CheckCheck<T>;
     (check->p) = this;
     
     checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);

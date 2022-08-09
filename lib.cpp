@@ -12168,8 +12168,8 @@ template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in){
 //this functor checks the whole Length field by calling the check on its value and unit
 template<class P> template <class T> void CheckLength<P>::operator()(const T& event){
     
-    check_value(event);
-    check_unit(event);
+    check_length_value(event);
+    check_length_unit(event);
     
     event.Skip(true);
     

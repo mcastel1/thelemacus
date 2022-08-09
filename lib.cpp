@@ -14901,16 +14901,40 @@ template <class P> void AngleField<P>::set(void){
 //sets the value in the GUI object value equal to the value in the non-GUI  object length
 template<class P> void LengthField<P>::set(void){
     
-    if(unit == String("nm")){
-        
-        value->SetValue(wxString::Format(wxT("%f"), (length->value)));
-        box_unit->SetValue(wxString("nm"));
-        
-    }else{
-        
-        value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
-        box_unit->SetValue(wxString("m"));
-        
+    switch((unit.value)[0]){
+            
+        case 'n':{
+            //unit = String("nm")
+            
+            
+            value->SetValue(wxString::Format(wxT("%f"), (length->value)));
+            box_unit->SetValue(wxString("nm"));
+            break;
+            
+        }
+            
+            
+        case 'm':{
+            //unit = String("m")
+            
+            value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
+            box_unit->SetValue(wxString("m"));
+            
+            break;
+            
+        }
+            
+            
+        case 'f':{
+            //unit = String("ft")
+            
+            value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to feet*/(length->value)*nm_ft));
+            box_unit->SetValue(wxString("ft"));
+            
+            break;
+            
+        }
+            
     }
     
     value_ok = true;

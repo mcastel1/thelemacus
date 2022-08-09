@@ -22,6 +22,8 @@ Angle max_lat, min_lat;
 #define max_iter (1e3)
 //one nautical mile in kilometers
 #define nm 1.852
+//one nautical mile in feet
+#define nm_ft (nm*1e3*3937.0/1200.0)
 //earth radius in nautical miles
 #define Re (60.0*360.0/(2.0*M_PI))
 #define RED     "\033[1;31m"

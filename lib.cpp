@@ -12165,6 +12165,16 @@ template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in){
     
 }
 
+//this functor checks the whole Length field by calling the check on its value and unit
+template<class P> template <class T> void CheckLength<P>::operator()(const T& event){
+    
+    check_value(event);
+    check_unit(event);
+    
+    event.Skip(true);
+    
+}
+
 
 //writes the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T &event){
@@ -14337,7 +14347,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     
     //    (artificial_horizon_check->related_field) = height_of_eye;
     //not woring
-    (*((p->related_field)->check))(event);
+//    (*((p->related_field)->check))(event);
     
     (p->parent_frame)->AllOk();
     

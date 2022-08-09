@@ -14091,7 +14091,7 @@ void SightFrame::AllOk(void){
      (*(height_of_eye->check))(dummy);
      (*(master_clock_date->check))(dummy);
      (*(master_clock_chrono->check))(dummy);
-     (stopwatch_check->check)(dummy);
+     (*(stopwatch_check->check))(dummy);
      (*(stopwatch_reading->check))(dummy);
      (*(TAI_minus_UTC->check))(dummy);
      */

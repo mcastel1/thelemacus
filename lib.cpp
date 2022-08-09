@@ -15048,6 +15048,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     limb = p;
     
     //initialize check
+    check = new CheckLimb;
     (check->p) = this;
     
     limbs.Clear();

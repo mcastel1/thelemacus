@@ -59,6 +59,7 @@
  - fix bug: when one enters an invalid entry in month field, there is an error
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - change path_file_arrow_icon with an arrow image
+ - uncomment at '    //uncomment this at the end'
  */
 
 

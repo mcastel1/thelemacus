@@ -14303,7 +14303,6 @@ template<class T> void CheckDay::operator()(T& event){
 template<class T> void TabulateDays::operator()(T& event){
     
     unsigned int i;
-    long old, max;
     SightFrame* f = (p->parent_frame);
     
     if((p->year_ok) && (p->month_ok)){
@@ -14331,19 +14330,8 @@ template<class T> void TabulateDays::operator()(T& event){
             //
         }
         
-        //save the old value of p->day and write it into old
-        ((p->day)->GetValue()).ToLong(&old);
-        //set the new p->days into p->day
         (p->day)->Set((p->days));
-        //compute the maximal value of p->days and write it into max
-        ((p->days)[(p->days).GetCount()-1]).ToLong(&max);
-        if(old <= max){
-            //the old value of p->day is still good for the new p->days -> set p->day to old
-            (p->day)->SetValue(wxString::Format(wxT("%i"), old));
-        }else{
-            //the old value of p->days is not good for the new p->days -> set p->day to empty value
-            (p->day)->SetValue(wxString("1"));
-        }
+        (p->day)->SetValue(wxString("1"));
         (p->day)->Enable(true);
         
     }else{

@@ -12204,6 +12204,7 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 template<class T> void OnSelectInListControlSights::operator()(T& event){
     
     (f->button_modify_sight)->Enable(true);
+    (f->button_transport_sight)->Enable(true);
     (f->button_delete_sight)->Enable(true);
     
     event.Skip(true);
@@ -13409,11 +13410,16 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     
     //buttons
-    //image for buttons
-    wxImage::AddHandler(new wxPNGHandler);
+    //image for button_modify_sight
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
     my_image.Rescale(20,20);
+ 
+    //image for button_transport_sight
+    wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
+    wxImage my_image_tranposrt_sight = my_bitmap_transport_sight.ConvertToImage();
+    my_image_tranposrt_sight.Rescale(20,20);
+
     
     //button to add a sight
     button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
@@ -13432,6 +13438,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
     button_modify_sight->Enable(false);
+
+    //button to transport a sight
+    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt_sight), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
+    button_transport_sight->Enable(false);
+
     
     //button to modify a position
     button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
@@ -13462,6 +13474,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
+    sizer_buttons_sight->Add(button_transport_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_delete_sight, 0, wxALIGN_CENTER);
     sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, margin_v);
     
@@ -13654,6 +13667,15 @@ void ListFrame::OnModifySight(wxCommandEvent& event){
     event.Skip(true);
     
 }
+
+void ListFrame::OnTransportSight(wxCommandEvent& event){
+    
+ 
+    
+    event.Skip(true);
+    
+}
+
 
 void ListFrame::OnModifyPosition(wxCommandEvent& event){
     

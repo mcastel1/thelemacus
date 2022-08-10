@@ -58,6 +58,7 @@
  - add night mode.
  - fix bug: when one enters an invalid entry in month field, there is an error
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
+ - change path_file_arrow_icon with an arrow image
  */
 
 
@@ -84,7 +85,8 @@ bool MyApp::OnInit(){
     cout << "\t\t c = " << gsl_vector_get(c, 0) << " " << gsl_vector_get(c, 1) << " " << gsl_vector_get(c, 2) << "\n";    
     */
     
-    
+    wxImage::AddHandler(new wxPNGHandler);
+
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
     

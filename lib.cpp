@@ -11801,6 +11801,17 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 void ModifyRoute::operator()(wxCommandEvent& event){
     
+    PrintErrorMessage<ListFrame, void >* print_error_message;
+ 
+    print_error_message = new PrintErrorMessage<ListFrame, void>(f, NULL);
+    
+    (print_error_message->control) = NULL;
+    (print_error_message->title) = String("Select the route which which you want to transport the sight");
+    (print_error_message->message) = String("");
+    (*print_error_message)();
+
+    
+    
     (f->OnModifyRoute)(event);
 
     
@@ -13218,6 +13229,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     String s;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
+    
+    idling = false;
     
     plot = new Plot(catalog, String(""));
     

@@ -1772,7 +1772,9 @@ public:
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     ModifyRoute *modify_route;
     CreateRoute *create_route;
-    bool selection_rectangle;
+    bool selection_rectangle,   /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/
+     idling;
+
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<float> > > data_x, data_y;

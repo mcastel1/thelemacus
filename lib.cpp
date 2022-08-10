@@ -8213,7 +8213,8 @@ void ListFrame::GetAllCoastLineData(void){
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     
-    
+    //uncomment this at the end
+    /*
     i=0;
     while(!(file_coastline_data_blocked.value.eof())){
         
@@ -8283,6 +8284,7 @@ void ListFrame::GetAllCoastLineData(void){
         i++;
         
     }
+     */
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();

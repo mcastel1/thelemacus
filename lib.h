@@ -1789,6 +1789,9 @@ public:
     //this referrs to the init file
     File file_init;
     
+    UnsetIdling<ListFrame>* unset_idling;
+    PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >* print_error_message;
+
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);
     

@@ -11801,14 +11801,14 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 void ModifyRoute::operator()(wxCommandEvent& event){
     
-    PrintErrorMessage<ListFrame, void >* print_error_message;
- 
-    print_error_message = new PrintErrorMessage<ListFrame, void>(f, NULL);
+//    PrintErrorMessage<ListFrame,  UnsetIdling<DrawPanel>>* print_error_message;
+//
+//    print_error_message = new PrintErrorMessage<ListFrame, void>(f, NULL);
     
-    (print_error_message->control) = NULL;
-    (print_error_message->title) = String("Select the route which which you want to transport the sight");
-    (print_error_message->message) = String("");
-    (*print_error_message)();
+    (f->print_error_message->control) = NULL;
+    (f->print_error_message->title) = String("");
+    (f->print_error_message->message) = String("Select the route which which you want to transport the sight");
+    (*(f->print_error_message))();
 
     
     
@@ -13231,6 +13231,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     size_t pos_end;
     
     idling = false;
+    unset_idling = new UnsetIdling<ListFrame>(this);
+    print_error_message = new PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+
     
     plot = new Plot(catalog, String(""));
     

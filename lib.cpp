@@ -11799,7 +11799,8 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 void ModifyRoute::operator()(wxCommandEvent& event){
     
-  
+    (f->OnModifyRoute)(event);
+
     
     event.Skip(true);
     
@@ -11807,7 +11808,7 @@ void ModifyRoute::operator()(wxCommandEvent& event){
 
 void CreateRoute::operator()(wxCommandEvent& event){
     
-  
+    (f->OnAddRoute)(event);
     
     event.Skip(true);
     
@@ -15249,11 +15250,16 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     if((format == String("NS")) || (format == String("EW"))){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     }
-
-    sign->SetBackgroundColour(*wxWHITE);
-    AdjustWidth(sign);
-    sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
-
+    
+    if(format != String("")){
+        //if the AngleField format is either NS, EW or +-, the sign field is used -> I set its background colour, width and bind it to check->check_sign
+        
+        sign->SetBackgroundColour(*wxWHITE);
+        AdjustWidth(sign);
+        sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
+        
+    }
+    
     if(format != String("")){sign->SetValue(wxString(""));}
     deg->SetValue(wxString(""));
     min->SetValue(wxString(""));

@@ -11744,6 +11744,19 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
+ModifyRoute::ModifyRoute(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+CreateRoute::CreateRoute(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+
 template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in){
     
     parent = parent_in;
@@ -13276,6 +13289,10 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //initialize delete_route_and_related_sight, which defines the functor to delete the route and its related sight (it is called when the user answers 'y' to QuestionFrame)
     delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
     
+    //initialized modify_route and delete_route, which define the functors to modify / create a Route
+    modify_route = new ModifyRoute(this);
+    create_route = new CreateRoute(this);
+
     catalog = new Catalog(String(path_file_catalog), String(""));
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));

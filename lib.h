@@ -1247,6 +1247,36 @@ public:
     
 };
 
+//this class defines a functor () used to modify an existing Route
+class ModifyRoute{
+    
+public:
+    
+    ModifyRoute(ListFrame*);
+    
+    //the frame which called this struct
+    ListFrame* f;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
+
+//this class defines a functor () used to create a new Route
+class CreateRoute{
+    
+public:
+    
+    CreateRoute(ListFrame*);
+    
+    //the frame which called this struct
+    ListFrame* f;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
+
 //this functor sets idling -> false in the parent of parent
 template<class P> class UnsetIdling{
     
@@ -1740,6 +1770,8 @@ public:
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
+    ModifyRoute *modify_route;
+    CreateRoute *create_route;
     bool selection_rectangle;
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked

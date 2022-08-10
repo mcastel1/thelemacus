@@ -13445,13 +13445,11 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //buttons
     //image for button_modify_sight
-    wxImage::AddHandler(new wxPNGHandler);
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
     my_image.Rescale(20,20);
  
     //image for button_transport_sight
-    wxImage::AddHandler(new wxPNGHandler);
     wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_tranposrt_sight = my_bitmap_transport_sight.ConvertToImage();
     my_image_tranposrt_sight.Rescale(20,20);

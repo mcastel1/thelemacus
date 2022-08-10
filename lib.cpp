@@ -11797,6 +11797,23 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
 }
 
+void ModifyRoute::operator()(wxCommandEvent& event){
+    
+  
+    
+    event.Skip(true);
+    
+}
+
+void CreateRoute::operator()(wxCommandEvent& event){
+    
+  
+    
+    event.Skip(true);
+    
+}
+
+
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
     //do something

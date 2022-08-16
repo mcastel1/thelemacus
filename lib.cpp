@@ -11845,22 +11845,34 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
 
 
 void SelectRoute::operator()(wxCommandEvent& event){
-        
+    
     (parent->idling) = true;
-
+    
     //temporarily unbind listcontrol_routes from on_select_listcontrol_routes
     (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes));
-
- 
+    
+    
     
     //brings parent to front
     parent->Raise();
     
-
-    //re-bind listcontrol_routes to on_select_listcontrol_routes
-    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes));
-
+    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED,
+                                       
+                                       [](wxCommandEvent&) {
+        
+        cout << "\n\nDo something here as the user has selected the Route with which he wants to translate the Sight";
+    }
+                                       );
     
+    
+    //    long item;
+    //    item = (parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    //
+//    //re-bind listcontrol_routes to on_select_listcontrol_routes
+//    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes));
+//
+//    (parent->idling) = false;
+//
     event.Skip(true);
     
 }

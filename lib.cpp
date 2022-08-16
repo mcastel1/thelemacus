@@ -13232,7 +13232,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     idling = false;
     unset_idling = new UnsetIdling<ListFrame>(this);
+    select_route = new UnsetIdling<ListFrame>(this);
     print_error_message = new PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+    print_info_message = new PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >(this, select_route);
 
     
     plot = new Plot(catalog, String(""));

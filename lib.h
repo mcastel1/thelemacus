@@ -1789,8 +1789,12 @@ public:
     //this referrs to the init file
     File file_init;
     
+    //a functor to unset idling mode in *this
     UnsetIdling<ListFrame>* unset_idling;
+    //a functor to let the user select a Route in listcontrol_routes
+    UnsetIdling<ListFrame>* select_route;
     PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >* print_error_message;
+    PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >* print_info_message;
 
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);

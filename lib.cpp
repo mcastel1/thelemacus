@@ -11848,8 +11848,18 @@ void SelectRoute::operator()(wxCommandEvent& event){
         
     (parent->idling) = true;
 
+    //temporarily unbind listcontrol_routes from on_select_listcontrol_routes
+    (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes));
+
+ 
+    
     //brings parent to front
     parent->Raise();
+    
+
+    //re-bind listcontrol_routes to on_select_listcontrol_routes
+    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes));
+
     
     event.Skip(true);
     
@@ -13239,9 +13249,6 @@ template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = 5, red, green, blue;
-    OnSelectInListControlSights* on_select_in_listcontrol_sights;
-    OnSelectInListControlPositions* on_select_in_listcontrol_positions;
-    OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     wxListItem column, item;
     String s;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.

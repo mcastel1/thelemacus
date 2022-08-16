@@ -1291,6 +1291,21 @@ public:
     
 };
 
+//this functor allows the user to select a Route in *parent frame
+class SelectRoute{
+    
+public:
+    
+    SelectRoute(ListFrame*);
+    
+    //the ListFrame which called this struct
+    ListFrame* parent;
+
+    void operator()(wxCommandEvent&);
+    
+};
+
+
 
 //this class defines the functor () used to ...
 template<class P> class FunctionOnPressOk{
@@ -1792,9 +1807,9 @@ public:
     //a functor to unset idling mode in *this
     UnsetIdling<ListFrame>* unset_idling;
     //a functor to let the user select a Route in listcontrol_routes
-    UnsetIdling<ListFrame>* select_route;
+    SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_error_message;
-    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_info_message;
+    PrintMessage<ListFrame, SelectRoute >* print_info_message;
 
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);

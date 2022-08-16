@@ -11765,6 +11765,13 @@ template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in){
     
 }
 
+SelectRoute::SelectRoute(ListFrame* parent_in){
+    
+    parent = parent_in;
+    
+}
+
+
 template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
     
     parent = parent_in;
@@ -11805,10 +11812,10 @@ void ModifyRoute::operator()(wxCommandEvent& event){
 //
 //    print_error_message = new PrintMessage<ListFrame, void>(f, NULL);
     
-    (f->print_error_message->control) = NULL;
-    (f->print_error_message->title) = String("");
-    (f->print_error_message->message) = String("Select the route which which you want to transport the sight");
-    (*(f->print_error_message))();
+    (f->print_info_message->control) = NULL;
+    (f->print_info_message->title) = String("");
+    (f->print_info_message->message) = String("Select the route which which you want to transport the sight");
+    (*(f->print_info_message))();
 
     
     
@@ -11829,10 +11836,19 @@ void CreateRoute::operator()(wxCommandEvent& event){
  
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
-    
-    //do something
-    
+        
     (parent->idling) = false;
+    
+    event.Skip(true);
+    
+}
+
+
+void SelectRoute::operator()(wxCommandEvent& event){
+        
+    (parent->idling) = true;
+
+    
     
     event.Skip(true);
     
@@ -13232,9 +13248,9 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     idling = false;
     unset_idling = new UnsetIdling<ListFrame>(this);
-    select_route = new UnsetIdling<ListFrame>(this);
+    select_route = new SelectRoute(this);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, select_route);
+    print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
 
     
     plot = new Plot(catalog, String(""));

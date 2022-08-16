@@ -11848,7 +11848,8 @@ void SelectRoute::operator()(wxCommandEvent& event){
         
     (parent->idling) = true;
 
-    
+    //brings parent to front
+    parent->Raise();
     
     event.Skip(true);
     

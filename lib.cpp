@@ -11812,7 +11812,7 @@ void ModifyRoute::operator()(wxCommandEvent& event){
 
     
     
-    (f->OnModifyRoute)(event);
+//    (f->OnModifyRoute)(event);
 
     
     event.Skip(true);

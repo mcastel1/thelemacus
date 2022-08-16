@@ -89,7 +89,7 @@ class Position;
 //template<class P> struct CheckString;
 //template<class P> struct SetStringToCurrentTime;
 //struct TabulateDays;
-//template<class T> class PrintErrorMessage;
+//template<class T> class PrintMessage;
 //struct OnSelectInListBox;
 
 class Catalog;
@@ -1352,7 +1352,7 @@ public:
 };
 
 //this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
-template<class T, typename FF_OK> class PrintErrorMessage{
+template<class T, typename FF_OK> class PrintMessage{
     
 public:
     
@@ -1364,7 +1364,7 @@ public:
     
 //    FunctionOnPressOk<T> * function_on_press_ok;
     
-    PrintErrorMessage(T*, FF_OK*);
+    PrintMessage(T*, FF_OK*);
     
     void operator()(void);
     
@@ -1391,7 +1391,7 @@ public:
     
     DrawPanel(ChartPanel*);
     ChartFrame* parent;
-    PrintErrorMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
+    PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
     XYChart *chart;
     //a ChartDirector layer to draw splines on chart
     SplineLayer *spline_layer;
@@ -1793,8 +1793,8 @@ public:
     UnsetIdling<ListFrame>* unset_idling;
     //a functor to let the user select a Route in listcontrol_routes
     UnsetIdling<ListFrame>* select_route;
-    PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >* print_error_message;
-    PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >* print_info_message;
+    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_error_message;
+    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_info_message;
 
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);
@@ -1844,7 +1844,7 @@ public:
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     UnsetIdling<SightFrame>* unset_idling;
-    PrintErrorMessage<SightFrame, UnsetIdling<SightFrame> >* print_error_message;
+    PrintMessage<SightFrame, UnsetIdling<SightFrame> >* print_error_message;
     
     BodyField* body;
     LimbField* limb;
@@ -1891,7 +1891,7 @@ public:
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
     UnsetIdling<PositionFrame>* unset_idling;
-    PrintErrorMessage<PositionFrame, UnsetIdling<PositionFrame> >* print_error_message;
+    PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >* print_error_message;
     
     AngleField<PositionFrame>* lat, *lon;
     StringField<PositionFrame> *label;
@@ -1929,7 +1929,7 @@ public:
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
     UnsetIdling<RouteFrame> * unset_idling;
-    PrintErrorMessage<RouteFrame, UnsetIdling<RouteFrame> >* print_error_message;
+    PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >* print_error_message;
     
     RouteTypeField *type;
     AngleField<RouteFrame> *alpha, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
@@ -1974,7 +1974,7 @@ public:
     //the color of the horizon circle for the 3D projection
     Color color_horizon;
     ProjectionField* projection;
-    PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
+    PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     //pointer used to shorten the reference to parent->plot
     Plot* plot;
     //in these vectors, I store the 2d coordindates of the Mercator projection and of the 3D rendering, respectively

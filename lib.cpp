@@ -8353,7 +8353,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     idling = false;
     unset_idling = new UnsetIdling<DrawPanel>(this);
-    print_error_message = new PrintErrorMessage<DrawPanel, UnsetIdling<DrawPanel> >(this, unset_idling);
+    print_error_message = new PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >(this, unset_idling);
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
@@ -9635,7 +9635,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
-    print_error_message = new PrintErrorMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
+    print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
     
     //    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *unset_idling);
     
@@ -11801,9 +11801,9 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 void ModifyRoute::operator()(wxCommandEvent& event){
     
-//    PrintErrorMessage<ListFrame,  UnsetIdling<DrawPanel>>* print_error_message;
+//    PrintMessage<ListFrame,  UnsetIdling<DrawPanel>>* print_error_message;
 //
-//    print_error_message = new PrintErrorMessage<ListFrame, void>(f, NULL);
+//    print_error_message = new PrintMessage<ListFrame, void>(f, NULL);
     
     (f->print_error_message->control) = NULL;
     (f->print_error_message->title) = String("");
@@ -12276,7 +12276,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 }
 
 
-template<class T, typename FF_OK> void PrintErrorMessage<T, FF_OK>::operator()(void){
+template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
     
     
     if(!(f->idling)){
@@ -12331,7 +12331,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     idling = false;
     unset_idling = new UnsetIdling<SightFrame>(this);
-    print_error_message = new PrintErrorMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
+    print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
     
     file_init.set_name(String(path_file_init));
     check &= (file_init.open(String("in"), prefix));
@@ -12580,7 +12580,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     idling = false;
     unset_idling = new UnsetIdling<PositionFrame>(this);
-    print_error_message = new PrintErrorMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
+    print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
     //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set position_in_listcontrol_positions to a 'NULL' value (position_in_listcontrol_positions = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set position_in_listcontrol_positions to position_in_listcontrol_positions_in.
     if(position_in != NULL){
@@ -12704,7 +12704,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     idling = false;
     unset_idling = new UnsetIdling<RouteFrame>(this);
-    print_error_message = new PrintErrorMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
+    print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
     
     //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
     if(route_in != NULL){
@@ -13211,7 +13211,7 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     
 }
 
-template<class T, typename FF_OK> PrintErrorMessage<T, FF_OK>::PrintErrorMessage(T* f_in, FF_OK* f_ok_in){
+template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, FF_OK* f_ok_in){
     
     f = f_in;
     f_ok = f_ok_in;
@@ -13233,8 +13233,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     idling = false;
     unset_idling = new UnsetIdling<ListFrame>(this);
     select_route = new UnsetIdling<ListFrame>(this);
-    print_error_message = new PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_info_message = new PrintErrorMessage<ListFrame, UnsetIdling<ListFrame> >(this, select_route);
+    print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, select_route);
 
     
     plot = new Plot(catalog, String(""));
@@ -13327,7 +13327,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //initialize delete_route_and_related_sight, which defines the functor to delete the route and its related sight (it is called when the user answers 'y' to QuestionFrame)
     delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
     
-    //initialized modify_route and delete_route, which define the functors to modify / create a Route
+    //initialized modify_route and create_route, which define the functors to modify / create a Route
     modify_route = new ModifyRoute(this);
     create_route = new CreateRoute(this);
 

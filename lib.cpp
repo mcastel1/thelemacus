@@ -12307,8 +12307,13 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& event){
     
     
-    //    (parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    long i_route, i_sight;
+    
+    i_route = (f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    i_sight = (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
+    
+    
     
     
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));

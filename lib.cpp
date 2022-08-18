@@ -12356,11 +12356,17 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
     
     
     
-    (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));
-    //re-bind listcontrol_routes to on_select_listcontrol_routes
+     //re-bind listcontrol_routes to on_select_listcontrol_routes
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes));
 
+    
+
     (f->idling) = false;
+    
+    (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));
+    
+
+    
     
     event.Skip(true);
     

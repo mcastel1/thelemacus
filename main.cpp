@@ -142,6 +142,9 @@ bool MyApp::OnInit(){
         
     }
     
+    list_frame->Raise();
+
+    
     return true;
     
 }

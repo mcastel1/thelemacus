@@ -12346,6 +12346,13 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
     i_sight = (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
     
+    ((((f->plot)->route_list)[ (((((f->plot)->sight_list)[i_sight]).related_route).value) ]).reference_position).transport(
+                                                                                                                           
+                                                                                                                           ((f->plot)->route_list)[i_route],
+                                                                                                                           String("")
+                                                                  
+                                                                                                                           );
+    
     
     
     

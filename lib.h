@@ -1877,6 +1877,7 @@ public:
     OnSelectInListControlSights* on_select_in_listcontrol_sights;
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
+    OnSelectInListControlRoutesForTransport* on_select_in_listcontrol_routes_for_transport;
 
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);

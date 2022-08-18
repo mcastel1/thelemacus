@@ -11856,23 +11856,12 @@ void SelectRoute::operator()(wxCommandEvent& event){
     //brings parent to front
     parent->Raise();
     
-    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED,
-                                       
-                                       [](wxCommandEvent&){
-        
-        cout << "\n\nDo something here as the user has selected the Route with which he wants to translate the Sight";
-    }
-                                       );
+    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes_for_transport));
     
     
-    //    long item;
-    //    item = (parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    //
-//    //re-bind listcontrol_routes to on_select_listcontrol_routes
-//    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes));
-//
-//    (parent->idling) = false;
-//
+
+    
+  
     event.Skip(true);
     
 }
@@ -12317,6 +12306,16 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 //if an item in listcontrol_routes is selected, I transport the sight under consideration with such Route
 template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& event){
     
+    
+    //    (parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+
+    
+    
+    (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));
+    //re-bind listcontrol_routes to on_select_listcontrol_routes
+    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes));
+
+    (f->idling) = false;
     
     event.Skip(true);
     
@@ -13361,7 +13360,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
-    
+    on_select_in_listcontrol_routes_for_transport = new OnSelectInListControlRoutesForTransport(this);
+
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
     //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)

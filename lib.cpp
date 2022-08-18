@@ -11858,7 +11858,7 @@ void SelectRoute::operator()(wxCommandEvent& event){
     
     (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED,
                                        
-                                       [](wxCommandEvent&) {
+                                       [](wxCommandEvent&){
         
         cout << "\n\nDo something here as the user has selected the Route with which he wants to translate the Sight";
     }
@@ -12313,6 +12313,15 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
     event.Skip(true);
     
 }
+
+//if an item in listcontrol_routes is selected, I transport the sight under consideration with such Route
+template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& event){
+    
+    
+    event.Skip(true);
+    
+}
+
 
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
@@ -15883,6 +15892,13 @@ OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
     f = f_in;
     
 }
+
+OnSelectInListControlRoutesForTransport::OnSelectInListControlRoutesForTransport(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
 
 ListControl::ListControl(wxWindow* parent_in, const wxPoint& pos, const wxSize& size) : wxListCtrl(parent_in, wxID_ANY, pos, size, wxLC_REPORT){
     

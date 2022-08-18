@@ -1805,6 +1805,23 @@ public:
     
 };
 
+//this class is to define the functor template<class T> void operator()(T&), which is called when the user selects a route with which he wants to transport a sight
+class OnSelectInListControlRoutesForTransport{
+    
+public:
+    
+    //parent frame
+    ListFrame* f;
+    
+    //constructor, which sets the parent frame
+    OnSelectInListControlRoutesForTransport(ListFrame*);
+    
+    template<class T> void operator()(T&);
+    
+    
+};
+
+
 
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...

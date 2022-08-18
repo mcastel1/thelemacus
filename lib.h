@@ -684,7 +684,7 @@ public:
     void modify(String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);
-    //this function transports the position and returns the Route with which it has been transported
+    bool transport(Route, String);
     Route transport(String);
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);

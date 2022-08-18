@@ -2849,6 +2849,39 @@ void Time:: to_MJD(void)
 }
 
 
+//transport the Position *this with the Route route
+bool Position::transport(Route route, String prefix){
+    
+    String new_prefix;
+
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+  
+    
+    if((route.type) != String("c")){
+        //route.type = 'l' or 'o' -> I can transport *this
+        
+        Route temp;
+        
+        temp = route;
+        (temp.reference_position) = (*this);
+        temp.compute_end(new_prefix);
+        (*this) = temp.end;
+
+        return true;
+        
+    }else{
+        //route.type = 'c' -> I cannot transport *this
+        
+        cout << prefix.value << RED << "Cannot transport a position with a circle of equal altitude!\n" << RESET;
+        
+        return false;
+        
+    }
+    
+    
+}
+
 //transport a Position with a Route entered from keyboard and return the existing Route
 Route Position::transport(String prefix){
     

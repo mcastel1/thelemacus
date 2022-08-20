@@ -13034,13 +13034,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     
     position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
     
-    //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-    for(i=0; i<(parent->chart_frames).size(); i++){
-        
-        ((((parent->chart_frames)[i])->draw_panel)->*((((parent->chart_frames)[i])->draw_panel)->Draw))();
-        (((parent->chart_frames)[i])->draw_panel)->PaintNow();
-        
-    }
+    parent->DrawAll();
     
     event.Skip(true);
     
@@ -13081,15 +13075,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
     
-    //    parent->plot->print(true, String(""), cout);
     
-    for(i=0; i<(parent->chart_frames).size(); i++){
-        
-        //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-        ((((parent->chart_frames)[i])->draw_panel)->*((((parent->chart_frames)[i])->draw_panel)->Draw))();
-        (((parent->chart_frames)[i])->draw_panel)->PaintNow();
-        
-    }
+    parent->DrawAll();
     
     //
     Angle lambda_min, lambda_max;
@@ -14933,13 +14920,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     parent->plot->print(true, String(""), cout);
     
     
-    for(i=0; i<(parent->chart_frames).size(); i++){
-        
-        //I call PaintNow() because the positions have changed, so I need to re-draw the chart
-        ((((parent->chart_frames)[i])->draw_panel)->*((((parent->chart_frames)[i])->draw_panel)->Draw))();
-        (((parent->chart_frames)[i])->draw_panel)->PaintNow();
-        
-    }
+parent->DrawAll();
+    
     
     event.Skip(true);
     

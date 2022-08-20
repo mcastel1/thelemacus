@@ -61,6 +61,7 @@
  - change path_file_arrow_icon with an arrow image
  - uncomment at '    //uncomment this at the end'
  - integate idling variable in everything that concerns ListFrame
+ - when I click on modify a sight, don't modify any number and presse modify -> the plot of the sight changes. 
  */
 
 

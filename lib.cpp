@@ -11346,15 +11346,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                                                          (parent->parent)->highlighted_route
                                                          );
                             
-                            
-                            //print an info message
-                            
-                            ((parent->print_error_message)->control) = NULL;
-                            ((parent->print_error_message)->title) = String("The route which is being dragged was related to a sight!");
-                            ((parent->print_error_message)->message) = String("Disconnecting the route from the sight.");
-                            parent->CallAfter(*(parent->print_error_message));
-                            
-                            
                         }
                         
                         
@@ -12347,7 +12338,7 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
     f->Disconnect((((f->plot)->route_list)[i_route_to_transport]).related_sight.value, i_route_to_transport);
     
     //update the Route information in f, and re-draw everything
-    (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_transporting_route, f->listcontrol_routes);
+    (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_route_to_transport, f->listcontrol_routes);
     f->DrawAll();
     
      //re-bind listcontrol_routes to on_select_listcontrol_routes
@@ -13986,6 +13977,14 @@ void ListFrame::Disconnect(int i_sight, int i_route){
     
     //set the background color of the related sight to white
     (listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
+    
+    
+    //print an info message
+    (print_error_message->control) = NULL;
+    (print_error_message->title) = String("The route which is being dragged was related to a sight!");
+    (print_error_message->message) = String("Disconnecting the route from the sight.");
+    CallAfter(*print_error_message);
+
     
 }
 

@@ -12342,10 +12342,11 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
     
     long i_route, i_sight;
     
-    i_route = (f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    //the ids of the sight whose Route will be transported, and of the Route which will transported
     i_sight = (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    i_route = (f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
-    
+    //tranport the Route
     ((((f->plot)->route_list)[ (((((f->plot)->sight_list)[i_sight]).related_route).value) ]).reference_position).transport(
                                                                                                                            
                                                                                                                            ((f->plot)->route_list)[i_route],
@@ -12359,15 +12360,10 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
      //re-bind listcontrol_routes to on_select_listcontrol_routes
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes));
 
-    
-
+    //set arameters back to their original value
     (f->idling) = false;
-    
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));
-    
 
-    
-    
     event.Skip(true);
     
 }

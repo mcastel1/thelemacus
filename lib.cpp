@@ -11346,16 +11346,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             i_route = ((parent->parent)->highlighted_route);
                             i_sight = ((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value);
                             
-                            //disconnect route and sight
-                            (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
-                            (((plot->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
-                            
-                            //update the related wxListCtrls in ListFrame
-                            ((plot->sight_list)[i_sight]).update_wxListCtrl(i_sight, parent->parent->listcontrol_sights);
-                            ((plot->route_list)[i_route]).update_wxListCtrl(i_route, parent->parent->listcontrol_routes);
-                            
-                            //set the background color of the related sight to white
-                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
+                            (parent->parent)->Disconnect(i_sight, i_route);
                             
                             
                             //print an info message
@@ -13981,7 +13972,21 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
 }
 
-
+//disconnects sight i_sight from route i_route
+void ListFrame::Disconnect(int i_sight, int i_route){
+    
+    //disconnect route and sight
+    (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
+    (((plot->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
+    
+    //update the related wxListCtrls in ListFrame
+    ((plot->sight_list)[i_sight]).update_wxListCtrl(i_sight, listcontrol_sights);
+    ((plot->route_list)[i_route]).update_wxListCtrl(i_route, listcontrol_routes);
+    
+    //set the background color of the related sight to white
+    (listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
+    
+}
 
 //when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
 void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){

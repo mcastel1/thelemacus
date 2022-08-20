@@ -6174,7 +6174,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
     
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp <<  (*this).body.name.value << " " << (*this).time.to_string((display_precision.value)) << " TAI, " << (*this).label.value;
+    temp <<  (*this).body.name.value << " " << time.to_string((display_precision.value)) << " TAI, " << (*this).label.value;
     (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
     
     check &= compute_H_o(new_prefix);

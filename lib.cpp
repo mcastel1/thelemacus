@@ -11906,6 +11906,9 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
     //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
     f->Disconnect((((f->plot)->route_list)[i_route_to_transport]).related_sight.value, i_route_to_transport);
     
+    //change the label of Route #i_route_to_transport by appending to it 'translated with [label of the translating Route]'
+    ((((f->plot)->route_list)[i_route_to_transport]).label) = ((((f->plot)->route_list)[i_route_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+    
     //update the Route information in f, and re-draw everything
     (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_route_to_transport, f->listcontrol_routes);
     f->DrawAll();

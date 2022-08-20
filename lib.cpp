@@ -13381,7 +13381,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
                                                                                                           String("Modify an existing route"),
                                                                                                           create_route, String("Create a new route"),
                                                                                                           "",
-                                                                                                          "Do you want to transport the sight with an existing route or create a new one?",
+                                                                                                          "What route do you want to transport the sight with?",
                                                                                                           wxDefaultPosition,
                                                                                                           wxDefaultSize,
                                                                                                           String(""));

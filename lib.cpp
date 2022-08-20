@@ -12361,7 +12361,7 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
      //re-bind listcontrol_routes to on_select_listcontrol_routes
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes));
 
-    //set arameters back to their original value
+    //set parameters back to their original value
     (f->idling) = false;
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));
 

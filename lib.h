@@ -262,7 +262,7 @@ public:
 template<typename F_YES, typename F_NO> class QuestionFrame: public wxFrame{
     
 public:
-    QuestionFrame(wxWindow*, F_YES*, F_NO*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    QuestionFrame(wxWindow*, F_YES*, String, F_NO*, String, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     //the non-GUI object connected to the GUI object MessageFrame
     wxPanel *panel;
@@ -276,6 +276,7 @@ public:
     F_YES* f_yes;
     //pointer to the struct containing the functor which will be called when the button no is pressed
     F_NO* f_no;
+    String string_yes, string_no;
 
 };
 

@@ -12796,13 +12796,15 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
 }
 
-template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFrame(wxWindow* parent, F_YES* f_yes_in, F_NO* f_no_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFrame(wxWindow* parent, F_YES* f_yes_in, String string_yes_in, F_NO* f_no_in, String string_no_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxRect rectangle;
     
     f_yes = f_yes_in;
+    string_yes = string_yes_in;
     f_no = f_no_in;
+    string_no = string_no_in;
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< QuestionFrame<F_YES, F_NO> >(this);
@@ -12822,10 +12824,10 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //buttons
-    button_yes = new wxButton(panel, wxID_ANY, "Yes", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_yes = new wxButton(panel, wxID_ANY, string_yes.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_yes->Bind(wxEVT_BUTTON, *f_yes);
     button_yes->Bind(wxEVT_BUTTON, *close_frame);
-    button_no = new wxButton(panel, wxID_ANY, "No", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_no = new wxButton(panel, wxID_ANY, string_no.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_no->Bind(wxEVT_BUTTON, *f_no);
     button_no->Bind(wxEVT_BUTTON, *close_frame);
     
@@ -13376,7 +13378,8 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     QuestionFrame<ModifyRoute, CreateRoute>* question_frame = new QuestionFrame<ModifyRoute, CreateRoute>(NULL,
                                                                                                           modify_route,
-                                                                                                          create_route,
+                                                                                                          String("Modify an existing route"),
+                                                                                                          create_route, String("Create a new route"),
                                                                                                           "",
                                                                                                           "Do you want to transport the sight with an existing route or create a new one?",
                                                                                                           wxDefaultPosition,
@@ -13461,8 +13464,8 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
         //remove the sight from the non-GUI object plot
         //ask the user whether he/she wants to remove the related route as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_route. If no, it calls the functor delete_sight.
         QuestionFrame<DeleteSight, DeleteSight>* question_frame = new QuestionFrame<DeleteSight, DeleteSight>(NULL,
-                                                                                                              delete_sight_and_related_route,
-                                                                                                              delete_sight,
+                                                                                                              delete_sight_and_related_route, String("Yes"),
+                                                                                                              delete_sight, String("No"),
                                                                                                               "",
                                                                                                               "Do you want to remove the route related to this sight?",
                                                                                                               wxDefaultPosition,
@@ -13513,8 +13516,8 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
         //remove the route from the non-GUI object plot
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
         QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
-                                                                                                              delete_route_and_related_sight,
-                                                                                                              delete_route,
+                                                                                                              delete_route_and_related_sight, String("Yes"),
+                                                                                                              delete_route, String("No"),
                                                                                                               "",
                                                                                                               "Do you want to remove the sight related to this route?",
                                                                                                               wxDefaultPosition,

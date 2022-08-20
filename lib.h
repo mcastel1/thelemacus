@@ -1681,7 +1681,7 @@ public:
     CheckDate *check;
     
     DateField(SightFrame*, Date*);
-    void set(void);
+    void set(Date);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);

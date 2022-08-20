@@ -11341,12 +11341,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         if(((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1){
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
-                            int i_sight, i_route;
-                            
-                            i_route = ((parent->parent)->highlighted_route);
-                            i_sight = ((((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value);
-                            
-                            (parent->parent)->Disconnect(i_sight, i_route);
+                            (parent->parent)->Disconnect(
+                                                         (((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value,
+                                                         (parent->parent)->highlighted_route
+                                                         );
                             
                             
                             //print an info message

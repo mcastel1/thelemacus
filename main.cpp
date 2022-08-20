@@ -62,7 +62,8 @@
  - uncomment at '    //uncomment this at the end'
  - integate idling variable in everything that concerns ListFrame
  - loxodromes are not drawn (only their starting point)
- - make sure that if the user enters a field a value wihch is correct modulo upper/lower case, it is recognized 
+ - make sure that if the user enters a field a value wihch is correct modulo upper/lower case, it is recognized
+ - include transport for Positions and Routes which are not derived from a Sight
  */
 
 

@@ -70,28 +70,6 @@ class RouteFrame;
 class DrawPanel;
 class Position;
 
-//class CheckBody;
-//struct CheckLimb;
-//template<class T> struct CheckCheck;
-//struct CheckChrono;
-//template<class P> class CheckAngle;
-//template<class P> struct CheckSign;
-//template<class P> struct CheckArcDegree;
-//template<class P> struct CheckArcMinute;
-//struct CheckLengthValue;
-//class CheckDate;
-//class CheckYear;
-//class CheckMonth;
-//class CheckDay;
-//struct CheckHour;
-//struct CheckMinute;
-//struct CheckSecond;
-//template<class P> struct CheckString;
-//template<class P> struct SetStringToCurrentTime;
-//struct TabulateDays;
-//template<class T> class PrintMessage;
-//struct OnSelectInListBox;
-
 class Catalog;
 class Limb;
 class Length;

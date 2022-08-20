@@ -12329,11 +12329,11 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& event){
     
     
-    long i_route_to_transport, i_transporting_route;
+    int i_route_to_transport, i_transporting_route;
     
     //the ids of the sight whose Route will be transported, and of the Route which will transported
     i_route_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
-    i_transporting_route = (f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    i_transporting_route = ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
 
     //tranport the Route
     ((((f->plot)->route_list)[ i_route_to_transport ]).reference_position).transport(
@@ -12342,6 +12342,9 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
                                                                                                                            String("")
                                                                   
                                                                                                                            );
+    
+    //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
+    f->Disconnect((((f->plot)->route_list)[i_route_to_transport]).related_sight.value, i_route_to_transport);
     
     //update the Route information in f, and re-draw everything
     (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_transporting_route, f->listcontrol_routes);

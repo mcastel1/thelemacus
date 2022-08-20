@@ -12340,22 +12340,23 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& event){
     
     
-    long i_route, i_sight;
+    long i_route_to_transport, i_transporting_route;
     
     //the ids of the sight whose Route will be transported, and of the Route which will transported
-    i_sight = (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    i_route = (f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    i_route_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+    i_transporting_route = (f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
     //tranport the Route
-    ((((f->plot)->route_list)[ (((((f->plot)->sight_list)[i_sight]).related_route).value) ]).reference_position).transport(
+    ((((f->plot)->route_list)[ i_route_to_transport ]).reference_position).transport(
                                                                                                                            
-                                                                                                                           ((f->plot)->route_list)[i_route],
+                                                                                                                           ((f->plot)->route_list)[i_transporting_route],
                                                                                                                            String("")
                                                                   
                                                                                                                            );
     
-    
-    
+    //update the Route information in f, and re-draw everything
+    (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_transporting_route, f->listcontrol_routes);
+    f->DrawAll();
     
      //re-bind listcontrol_routes to on_select_listcontrol_routes
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes));
@@ -13713,6 +13714,19 @@ void ListFrame::OnClose(wxCloseEvent& event){
     
 }
 
+//calls Draw and PaintNow in all che ChartFrames which are children of *this
+void ListFrame::DrawAll(void){
+        
+    for(long i=0; i<(chart_frames.size()); i++){
+        
+        //I call PaintNow() because the positions have changed, so I need to re-draw the chart
+        (((chart_frames[i])->draw_panel)->*(((chart_frames[i])->draw_panel)->Draw))();
+        ((chart_frames[i])->draw_panel)->PaintNow();
+        
+    }
+    
+}
+
 
 //writes the ids of the related sights and route in the GUI fields in ListFrame -> this, by reading them from the non-GUI object Plot
 void ListFrame::UpdateRelatedSightsAndRoutes(void){
@@ -13981,12 +13995,6 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
 }
 
 
-//draw the routes stored in this->plot->list_routes
-void ListFrame::DrawRoutes(void){
-    
-    
-    
-}
 
 //when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
 void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){

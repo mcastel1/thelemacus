@@ -1878,6 +1878,8 @@ public:
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     OnSelectInListControlRoutesForTransport* on_select_in_listcontrol_routes_for_transport;
+    
+    void DrawAll(void);
 
     void GetAllCoastLineData(void);
     void UpdateRelatedSightsAndRoutes(void);
@@ -1900,11 +1902,8 @@ public:
     void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseOnListControlPositions(wxMouseEvent&);
-    
-    void DrawRoutes(void);
-    
+        
     void OnClose(wxCloseEvent&);
-
     
 };
 

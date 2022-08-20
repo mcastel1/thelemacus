@@ -45,7 +45,7 @@
             use of stopwatch = y
             stopwatch reading = 10:19:58
             hour of TAI - UTC at time of master-clock synchronization with UTC = 00:01:37
-            label = Let us insert a star sight too!
+            label = A simple star sight
             Routes in the plot:
         Route #1:
             type = o
@@ -54,10 +54,20 @@
                 longitude = 55° 18.4353'
                 label = My favorite british author
             starting heading = 64° 14.7477'
-            length = 8111.345 nm
-            label = Forno
+            length = 1021.345 nm
+            label = A beating leg
             Positions in the plot:
-		Position #1:
+        Route #1:
+            type = l
+            start position:
+                latitude = 41° 20.1005'
+                longitude = 155° 18.4353'
+                label = A reaching leg
+            starting heading = 204° 14.7477'
+            length = 2021.345 nm
+            label = A reaching leg
+    Positions in the plot:
+        Position #1:
 			latitude = 48° 51.179385474737415506751858629286'
 			longitude = 57° 35.178159790311838150955736637115'
 			label = Centre Sportif Maryse Hilsz (MH) sopra e sotto non si sa come

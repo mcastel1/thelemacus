@@ -56,8 +56,7 @@
             starting heading = 64° 14.7477'
             length = 1021.345 nm
             label = A beating leg
-            Positions in the plot:
-        Route #1:
+        Route #2:
             type = l
             start position:
                 latitude = 41° 20.1005'

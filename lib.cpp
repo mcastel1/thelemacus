@@ -11333,7 +11333,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 
                 if(((parent->parent)->highlighted_route) != -1){
                     //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
-                    
+          
                     if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
                         route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position);

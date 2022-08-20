@@ -3353,35 +3353,6 @@ bool Sight::modify(Catalog catalog, String prefix){
         }
             break;
             
-            
-            //the # of related route cannot be modified because it is automatically assigned.
-            /*
-             case 9:{
-             //in this case I modify the # of related route
-             
-             Int old_related_route;
-             
-             old_related_route = related_route;
-             
-             related_route.print(String("old # of related route"), new_new_prefix, cout);
-             related_route.enter(String("new # of related route"), new_new_prefix);
-             
-             if(old_related_route != related_route){
-             
-             cout << new_prefix.value << "# of related route modified\n" << new_prefix.value << YELLOW << "Beware: route # " << related_route.value << " has not been automatically pointed to this sight!\n" << RESET;
-             
-             }else{
-             
-             check &= false;
-             cout << new_new_prefix.value << YELLOW << "New # of related route is equal to old one!\n" << RESET;
-             
-             }
-             
-             }
-             break;
-             */
-            
-            
     }
     
     if(check){
@@ -3437,7 +3408,6 @@ void Route::print(String name, String prefix, ostream& ostr){
         
     }
     
-    
 }
 
 
@@ -3485,7 +3455,6 @@ void Route::enter(String name, String prefix){
     (related_sight.value) = -1;
     
 }
-
 
 
 
@@ -3559,10 +3528,6 @@ bool Chrono::read_from_file(String name, File& file, bool search_entire_file, St
     return check;
     
 }
-
-
-
-
 
 
 
@@ -4054,8 +4019,6 @@ void Answer::print(String name, String prefix, ostream& ostr){
 }
 
 
-
-
 //this function transports the Route (*this) with the Route transporting route
 void Route::transport(String prefix){
     
@@ -4343,7 +4306,6 @@ void Sight::print(String name, String prefix, ostream& ostr){
      }
      cout << RESET << "\n";
      */
-    
     
 }
 
@@ -4812,7 +4774,7 @@ void Plot::menu(String prefix){
                 
                 print_positions(new_prefix, cout);
                 
-                enter_unsigned_int(&i, true, 1, position_list.size()+1, String("# of position that you want to delete"), new_prefix);
+                enter_unsigned_int(&i, true, 1, (unsigned int)(position_list.size()+1), String("# of position that you want to delete"), new_prefix);
                 i--;
                 
                 remove_position(i, new_prefix);
@@ -5214,14 +5176,7 @@ Plot::Plot(Catalog* cata, String prefix){
     
 }
 
-/*
- Plot::~Plot(){
- 
- //file_gnuplot.remove();
- file_id.remove();
- 
- }
- */
+
 
 void Plot::compute_crossings(String prefix){
     
@@ -5655,10 +5610,7 @@ void Plot::remove_route(unsigned int i, Answer remove_related_sight, String pref
         
         remove_sight(i_related_sight.value, Answer('n', prefix), prefix);
         
-        
-        
     }
-    
     
 }
 
@@ -5716,275 +5668,7 @@ void Plot::transport_position(unsigned int i, String prefix){
     
 }
 
-// if zoom_out = true, then I delete boundary.txt and make a fresh plot with the boundaries in init file
-//void Plot::show(bool zoom_out, String prefix){
-//
-//    stringstream line_ins, /*plot_style contains the chunk of the gnuplot command line containing the style (dashtype, line type, color, ...) of the Routes and Position to be plotted*/plot_style, /*plot_title contains the gnuplot title of the Route to be plotted*/ plot_title;
-//    string line;
-//    unsigned int i;
 
-
-//    gsl_function F;
-//    const gsl_root_fsolver_type *T;
-//    gsl_root_fsolver *s;
-
-//append \t to prefix
-
-
-
-//        T = gsl_root_fsolver_brent;
-//        s = gsl_root_fsolver_alloc(T);
-//
-
-
-
-
-
-//
-//    //    //plot routes
-//
-//    for(i=0; i<(route_list.size()); i++){
-//
-//
-//
-//        switch(((route_list[i]).type.value)[0]){
-//
-//            case 'l':
-//                //plot a loxodrome
-//            {
-//
-//
-//                break;
-//            }
-//
-//            case 'o':
-//                //plot an orthodrome
-//            {
-//
-//
-//                break;
-//            }
-//
-//
-//            case 'c':
-//                //plot a circle of equal altitude
-//            {
-//
-//
-//                //if abs(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))) < 1.0, then there exists a value of t = t_{max} (t_{min}) such that (route_list[i]).reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and see whether the interval [(route_list[i]).reference_position.lambda_{t = t_{min}} and (route_list[i]).reference_position.lambda_{t = t_{max}}] embraces lambda = \pi. If it does, I modify the gnuplot command so as to avoid the horizontal line in the graph output.
-//                if(abs(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))) < 1.0){
-//
-//                    //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
-//                    t_max.set(String(""), acos(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
-//                    t_min.set(String(""), 2.0*M_PI - acos(-tan((route_list[i]).reference_position.phi.value)*tan(((route_list[i]).omega.value))), new_prefix);
-//
-//                    //p_max =  circle of equal altitude computed at t_max
-//                    ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_max.value);
-//                    (route_list[i]).compute_end(new_prefix);
-//                    p_max = ((route_list[i]).end);
-//
-//                    ((route_list[i]).l.value) = Re * sin(((route_list[i]).omega.value)) * (t_min.value);
-//                    (route_list[i]).compute_end(new_prefix);
-//                    p_min = ((route_list[i]).end);
-//                    //p_min =  circle of equal altitude computed at t_min
-//
-//                    /* p_max.print(String("p_max"), new_prefix, cout); */
-//                    /* p_min.print(String("p_min"), new_prefix, cout); */
-//
-//                    if((p_max.lambda.value < M_PI) && (p_min.lambda.value > M_PI)){
-//                        cout << prefix.value << YELLOW << "Circle of equal altitude is cut!\n" << RESET;
-//                        //in this case, the circle of equal altitude is cut through the meridian lambda = M_PI
-//
-//                        if((route_list[i]).reference_position.lambda.value > M_PI){
-//                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [0,M_PI]
-//
-//                            cout << prefix.value << "Case I:\n";
-//
-//                            // interval where I know that there will be t_p
-//                            x_lo_p = (t_max.value);
-//                            x_hi_p = M_PI;
-//
-//                            //interval where I know that there will be t_m
-//                            x_lo_m = 0.0;
-//                            x_hi_m = (t_max.value);
-//
-//                        }else{
-//                            //in this case, the two values of t, t_p and t_m, at which the circle of equal altitude intersects the meridian lambda = M_PI, lie in the interval [M_PI,2*M_PI]
-//                            //here I select an interval where I know that there will be t_m
-//
-//                            cout << prefix.value << "Case II:\n";
-//
-//                            // interval where I know that there will be t_p
-//                            x_lo_p = (t_min.value);
-//                            x_hi_p = 2.0*M_PI;
-//
-//                            //interval where I know that there will be t_m
-//                            x_lo_m = M_PI;
-//                            x_hi_m = (t_min.value);
-//
-//                        }
-//
-//                        (route_list[i]).temp_prefix = prefix;
-//                        F.params = &(route_list[i]);
-//                        F.function = &((route_list[i]).lambda_minus_pi);
-//
-//
-//
-//                        //solve for t_p
-//
-//                        gsl_root_fsolver_set(s, &F, x_lo_p, x_hi_p);
-//
-//                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_p) << " " << GSL_FN_EVAL(&F,x_hi_p) << "\n";
-//
-//                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-//                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-//
-//                        iter = 0;
-//                        do{
-//
-//                            iter++;
-//                            status = gsl_root_fsolver_iterate(s);
-//
-//                            x = gsl_root_fsolver_root(s);
-//                            x_lo_p = gsl_root_fsolver_x_lower(s);
-//                            x_hi_p = gsl_root_fsolver_x_upper(s);
-//                            status = gsl_root_test_interval(x_lo_p, x_hi_p, 0.0, epsrel);
-//                            if(status == GSL_SUCCESS){
-//                                cout << new_prefix.value << "Converged:\n";
-//                            }
-//                            cout << new_prefix.value << iter << " [" << x_lo_p << ", " << x_hi_p << "] " << x << " " << x_hi_p-x_lo_p << "\n";
-//                        }
-//                        while((status == GSL_CONTINUE) && (iter < max_iter));
-//
-//                        t_p.value = (x_lo_p+x_hi_p)/2.0;
-//                        t_p.print(String("t_+"), new_prefix, cout);
-//
-//
-//
-//
-//
-//                        //solve for t_m
-//
-//                        gsl_root_fsolver_set(s, &F, x_lo_m, x_hi_m);
-//
-//                        cout << prefix.value << "Extreme values = " << GSL_FN_EVAL(&F,x_lo_m) << " " << GSL_FN_EVAL(&F,x_hi_m) << "\n";
-//
-//                        cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-//                        cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-//
-//                        iter = 0;
-//                        do{
-//
-//                            iter++;
-//                            status = gsl_root_fsolver_iterate(s);
-//
-//                            x = gsl_root_fsolver_root(s);
-//                            x_lo_m = gsl_root_fsolver_x_lower(s);
-//                            x_hi_m = gsl_root_fsolver_x_upper(s);
-//                            status = gsl_root_test_interval(x_lo_m, x_hi_m, 0.0, epsrel);
-//                            if(status == GSL_SUCCESS){
-//                                cout << new_prefix.value << "Converged:\n";
-//                            }
-//                            cout << new_prefix.value << iter << " [" << x_lo_m << ", " << x_hi_m << "] " << x << " " << x_hi_m-x_lo_m << "\n";
-//                        }
-//                        while((status == GSL_CONTINUE) && (iter < max_iter));
-//
-//                        t_m.value = (x_lo_m+x_hi_m)/2.0;
-//                        t_m.print(String("t_-"), new_prefix, cout);
-//
-//                        //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-//
-//                        plot_command << "[0.:" << t_m.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << ",\\\\\\\n";
-//                        //maybe wrong
-//                        plot_command << "[" << t_m.value << " + epsilon:" << t_p.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti,\\\\\\\n";
-//                        //maybe wrong
-//                        plot_command << "[" << t_p.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
-//
-//                    }else{
-//                        //in this case, the circle of equal altitude is not cut through the meridian lambda = M_PI, and I make a single plot
-//
-//                        plot_command << "[0.:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str();
-//
-//                    }
-//
-//                }else{
-//                    //in this case (route_list[i]).reference_position.lambda.value is a monotonically increasing function of t: I find the value of t = t_s such that (route_list[i]).reference_position.lambda.value = M_PI and split the gnuplot plot  in two plots so as to avoid the horizontal line
-//
-//                    // interval where I know that there will be t_s
-//                    if((-sin(((route_list[i]).omega.value))/cos(((route_list[i]).reference_position.phi.value) - (((route_list[i]).omega.value)))) > 0.0){
-//                        //in this case lambda'(t = 0) > 0.0 -> lambda'(t) > 0.0  for all t
-//                        if((route_list[i]).reference_position.lambda.value < M_PI){
-//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-//                            x_lo_s = 0.0;
-//                            x_hi_s = M_PI;
-//                        }else{
-//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-//                            x_lo_s = M_PI;
-//                            x_hi_s = 2.0*M_PI;
-//                        }
-//                    }else{
-//                        //in this case lambda'(t = 0) < 0.0 -> lambda'(t) < 0.0  for all t
-//                        if((route_list[i]).reference_position.lambda.value < M_PI){
-//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to M_PI <= t< 2*M_PI
-//                            x_lo_s = M_PI;
-//                            x_hi_s = 2.0*M_PI;
-//                        }else{
-//                            //in this case, it is easy to show that the interval of t which embraces t_s such that lambda(t_s) = M_PI is equal to 0.0 <= t< M_PI
-//                            x_lo_s = 0.0;
-//                            x_hi_s = M_PI;
-//                        }
-//
-//                    }
-//
-//                    (route_list[i]).temp_prefix = prefix;
-//                    F.params = &(route_list[i]);
-//                    F.function = &((route_list[i]).lambda_minus_pi);
-//
-//                    //solve for t_s
-//
-//                    gsl_root_fsolver_set(s, &F, x_lo_s, x_hi_s);
-//
-//                    cout << prefix.value << "Using " << gsl_root_fsolver_name(s) << " method\n";
-//                    cout << new_prefix.value << "iter" <<  " [lower" <<  ", upper] " <<  "root " << "err(est)\n";
-//
-//                    iter = 0;
-//                    do{
-//
-//                        iter++;
-//                        status = gsl_root_fsolver_iterate(s);
-//
-//                        x = gsl_root_fsolver_root(s);
-//                        x_lo_s = gsl_root_fsolver_x_lower(s);
-//                        x_hi_s = gsl_root_fsolver_x_upper(s);
-//                        status = gsl_root_test_interval(x_lo_s, x_hi_s, 0.0, epsrel);
-//                        if(status == GSL_SUCCESS){
-//                            cout << new_prefix.value << "Converged:\n";
-//                        }
-//                        cout << new_prefix.value << iter << " [" << x_lo_s << ", " << x_hi_s << "] " << x << " " << x_hi_s-x_lo_s << "\n";
-//                    }
-//                    while((status == GSL_CONTINUE) && (iter < max_iter));
-//
-//                    t_s.value = (x_lo_s+x_hi_s)/2.0;
-//                    t_s.print(String("t_*"), new_prefix, cout);
-//
-//
-//                    //                        //the  - epsilon is added because in plot_dummy.plt lambda_min = 180.0 - epsilon. If one does not include this - epsilon, then the last part of the curve goest to the other edge of the plot and a horizontal line appears. Similarly for the - and + epsilon below
-//                    //
-//                    //                        plot_command << "[0.:" << t_s.value << " - epsilon] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << plot_title.str() << " ,\\\\\\\n";
-//                    //
-//                    //                        plot_command << "[" << t_s.value << " + epsilon:2.*pi] \"+\" u (xe(K*lambda_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) : (ye(K*phi_cea(t, " << (route_list[i]).reference_position.phi.value << ", " << (route_list[i]).reference_position.lambda.value << ", " << ((route_list[i]).omega.value) << "))) " << plot_style.str()  << " noti";
-//                    //
-//                }
-//
-//            }
-//
-//        }
-//
-//
-//
-//    }
-//
-//}
 
 bool Sight::enter(Catalog catalog, String name, String prefix){
     
@@ -6329,39 +6013,14 @@ double Atmosphere::n(Length z){
         
     }
     
-    
-    /* for(i=0, check=true; (i<4) && check; i++){ */
-    /*   if((z>=h[i]) && (z<h[i+1])){check=false;} */
-    /* } */
-    /* i--; */
-    
-    /* switch(i){ */
-    
-    /* case 0: x = pow(1.0+alpha*z/T0, -B/alpha); */
-    /*   break; */
-    
-    /* case 1: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(z-h[1])/(T0+alpha*h[1])); */
-    /*   break; */
-    
-    /* case 2: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow(1.0+beta/(T0+alpha*h[1])*(z-h[2]), -B/beta); */
-    /*   break; */
-    
-    /* case 3: x = pow((T0+alpha*h[1])/T0, -B/alpha) * exp(-B*(h[2]-h[1])/(T0+alpha*h[1])) * pow((T0+alpha*h[1] + beta*(h[3]-h[2]))/(T0+alpha*h[1]), -B/beta) */
-    /*     * pow(1.0+gamma/(T0+alpha*h[1] + beta*(h[3]-h[2]))*(z-h[3]), -B/gamma); */
-    /*   break; */
-    
-    /* } */
-    
     return (A*P_dry_0/T(z)*exp(x)/(1e6)+1.0);
     
     
 }
 
 double Atmosphere::dndz(Length z){
-    
-    
+        
     return (-1.0/T(z)*dTdz(z)*(n(z)-1.0) - (n(z)-1.0)*B/T(z));
-    
     
 }
 

@@ -2973,8 +2973,8 @@ void Route::compute_end(String prefix){
             
             (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin(reference_position.phi)-cos(reference_position.phi)* cos((t.value)) *sin((omega.value))), prefix);
             
-            (end.lambda).set(String(""), -(atan((-sin((reference_position.lambda.value)) *(cos(reference_position.phi) *cos((omega.value)) + cos((t.value)) *sin(reference_position.phi)* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos(reference_position.phi)*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin(reference_position.phi) + sin((reference_position.lambda.value))*sin((t.value)))))), prefix);
-            if(cos(reference_position.phi)*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin(reference_position.phi) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){
+            (end.lambda).set(String(""), -(atan((-sin(reference_position.lambda) *(cos(reference_position.phi) *cos((omega.value)) + cos((t.value)) *sin(reference_position.phi)* sin((omega.value))) +  cos(reference_position.lambda)*sin((omega.value))*sin((t.value)))/( cos(reference_position.phi)*cos(reference_position.lambda)*cos((omega.value)) + sin((omega.value))*(cos(reference_position.lambda)*cos((t.value))*sin(reference_position.phi) + sin(reference_position.lambda)*sin((t.value)))))), prefix);
+            if(cos(reference_position.phi)*cos(reference_position.lambda)*cos((omega.value)) + sin((omega.value))*(cos(reference_position.lambda)*cos((t.value))*sin(reference_position.phi) + sin(reference_position.lambda)*sin((t.value))) <= 0.0){
                 (end.lambda) -= M_PI;
             }
             

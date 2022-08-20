@@ -1384,7 +1384,6 @@ Route::Route(void){
     
     related_sight.set(String(""), -1, String(""));
     
-    
 }
 
 
@@ -1890,32 +1889,32 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
         t_1.set(String(""),
                 
                 
-                atan((cos((reference_position.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((reference_position.phi.value)) - cos((reference_position.phi.value))*sin((q.phi.value)))/
-                     sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.phi.value)),2) +
-                          gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
-                          2*cos((reference_position.phi.value))*cos((reference_position.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((reference_position.phi.value))*sin((q.phi.value)) +
-                          gsl_pow_int(cos((reference_position.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
-                     (cos((q.phi.value))*sin((reference_position.lambda.value) - (q.lambda.value)))/
-                     sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.phi.value)),2) +
-                          gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
-                          2*cos((reference_position.phi.value))*cos((reference_position.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((reference_position.phi.value))*sin((q.phi.value)) +
-                          gsl_pow_int(cos((reference_position.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)))
+                atan((cos((reference_position.lambda.value) - (q.lambda.value))*cos(q.phi)*sin(reference_position.phi) - cos(reference_position.phi)*sin(q.phi))/
+                     sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin(reference_position.phi),2) +
+                          gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
+                          2*cos(reference_position.phi)*cos((reference_position.lambda.value) - (q.lambda.value))*cos(q.phi)*sin(reference_position.phi)*sin(q.phi) +
+                          gsl_pow_int(cos(reference_position.phi),2)*gsl_pow_int(sin(q.phi),2)),
+                     (cos(q.phi)*sin((reference_position.lambda.value) - (q.lambda.value)))/
+                     sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin(reference_position.phi),2) +
+                          gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
+                          2*cos(reference_position.phi)*cos((reference_position.lambda.value) - (q.lambda.value))*cos(q.phi)*sin(reference_position.phi)*sin(q.phi) +
+                          gsl_pow_int(cos(reference_position.phi),2)*gsl_pow_int(sin(q.phi),2)))
                 
                 , new_prefix);
         
         
         t_2.set(String(""),
                 
-                atan((-(cos((reference_position.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((reference_position.phi.value))) + cos((reference_position.phi.value))*sin((q.phi.value)))/
-                     sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.phi.value)),2) +
-                          gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
-                          2*cos((reference_position.phi.value))*cos((reference_position.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((reference_position.phi.value))*sin((q.phi.value)) +
-                          gsl_pow_int(cos((reference_position.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2)),
-                     -((cos((q.phi.value))*sin((reference_position.lambda.value) - (q.lambda.value)))/
-                       sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.phi.value)),2) +
-                            gsl_pow_int(cos((q.phi.value)),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
-                            2*cos((reference_position.phi.value))*cos((reference_position.lambda.value) - (q.lambda.value))*cos((q.phi.value))*sin((reference_position.phi.value))*sin((q.phi.value)) +
-                            gsl_pow_int(cos((reference_position.phi.value)),2)*gsl_pow_int(sin((q.phi.value)),2))))
+                atan((-(cos((reference_position.lambda.value) - (q.lambda.value))*cos(q.phi)*sin(reference_position.phi)) + cos(reference_position.phi)*sin(q.phi))/
+                     sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin(reference_position.phi),2) +
+                          gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
+                          2*cos(reference_position.phi)*cos((reference_position.lambda.value) - (q.lambda.value))*cos(q.phi)*sin(reference_position.phi)*sin(q.phi) +
+                          gsl_pow_int(cos(reference_position.phi),2)*gsl_pow_int(sin(q.phi),2)),
+                     -((cos(q.phi)*sin((reference_position.lambda.value) - (q.lambda.value)))/
+                       sqrt(gsl_pow_int(cos((reference_position.lambda.value) - (q.lambda.value)),2)*gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin(reference_position.phi),2) +
+                            gsl_pow_int(cos(q.phi),2)*gsl_pow_int(sin((reference_position.lambda.value) - (q.lambda.value)),2) -
+                            2*cos(reference_position.phi)*cos((reference_position.lambda.value) - (q.lambda.value))*cos(q.phi)*sin(reference_position.phi)*sin(q.phi) +
+                            gsl_pow_int(cos(reference_position.phi),2)*gsl_pow_int(sin(q.phi),2))))
                 
                 , new_prefix);
         
@@ -2972,10 +2971,10 @@ void Route::compute_end(String prefix){
             t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
             
             
-            (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin((reference_position.phi.value))-cos((reference_position.phi.value))* cos((t.value)) *sin((omega.value))), prefix);
+            (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin(reference_position.phi)-cos(reference_position.phi)* cos((t.value)) *sin((omega.value))), prefix);
             
-            (end.lambda).set(String(""), -(atan((-sin((reference_position.lambda.value)) *(cos((reference_position.phi.value)) *cos((omega.value)) + cos((t.value)) *sin((reference_position.phi.value))* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value)))))), prefix);
-            if(cos((reference_position.phi.value))*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin((reference_position.phi.value)) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){
+            (end.lambda).set(String(""), -(atan((-sin((reference_position.lambda.value)) *(cos(reference_position.phi) *cos((omega.value)) + cos((t.value)) *sin(reference_position.phi)* sin((omega.value))) +  cos((reference_position.lambda.value))*sin((omega.value))*sin((t.value)))/( cos(reference_position.phi)*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin(reference_position.phi) + sin((reference_position.lambda.value))*sin((t.value)))))), prefix);
+            if(cos(reference_position.phi)*cos((reference_position.lambda.value))*cos((omega.value)) + sin((omega.value))*(cos((reference_position.lambda.value))*cos((t.value))*sin(reference_position.phi) + sin((reference_position.lambda.value))*sin((t.value))) <= 0.0){
                 (end.lambda) -= M_PI;
             }
             

@@ -60,7 +60,7 @@ class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
 template<class F> class CloseFrame;
-template<class F_YES, class F_NO> class QuestionFrame;
+template<class F_A, class F_B> class QuestionFrame;
 class ListFrame;
 class SightFrame;
 class ChartFrame;
@@ -258,25 +258,25 @@ public:
 
 };
 
-//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_YES is the type of the functor struct which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_NO.
-template<typename F_YES, typename F_NO> class QuestionFrame: public wxFrame{
+//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor struct which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B.
+template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{
     
 public:
-    QuestionFrame(wxWindow*, F_YES*, String, F_NO*, String, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     //the non-GUI object connected to the GUI object MessageFrame
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
-    wxButton* button_yes, *button_no;
+    wxButton* button_a, *button_b;
     wxStaticBitmap* image;
-    //initialize the functor to close thie QuestionFrame when button_yes or button_no will be pressed
+    //initialize the functor to close thie QuestionFrame when button_a or button_b will be pressed
     CloseFrame<QuestionFrame>* close_frame;
     //pointer to the struct containing the functor which will be called when the button yes is pressed
-    F_YES* f_yes;
+    F_A* f_a;
     //pointer to the struct containing the functor which will be called when the button no is pressed
-    F_NO* f_no;
-    String string_yes, string_no;
+    F_B* f_b;
+    String string_a, string_b;
 
 };
 

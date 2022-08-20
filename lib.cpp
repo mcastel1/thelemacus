@@ -12796,18 +12796,18 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
 }
 
-template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFrame(wxWindow* parent, F_YES* f_yes_in, String string_yes_in, F_NO* f_no_in, String string_no_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxRect rectangle;
     
-    f_yes = f_yes_in;
-    string_yes = string_yes_in;
-    f_no = f_no_in;
-    string_no = string_no_in;
+    f_a = f_a_in;
+    string_a = string_a_in;
+    f_b = f_b_in;
+    string_b = string_b_in;
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< QuestionFrame<F_YES, F_NO> >(this);
+    close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);
     
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -12824,20 +12824,20 @@ template<typename F_YES, typename F_NO> QuestionFrame<F_YES, F_NO>::QuestionFram
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     //buttons
-    button_yes = new wxButton(panel, wxID_ANY, string_yes.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_yes->Bind(wxEVT_BUTTON, *f_yes);
-    button_yes->Bind(wxEVT_BUTTON, *close_frame);
-    button_no = new wxButton(panel, wxID_ANY, string_no.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_no->Bind(wxEVT_BUTTON, *f_no);
-    button_no->Bind(wxEVT_BUTTON, *close_frame);
+    button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_a->Bind(wxEVT_BUTTON, *f_a);
+    button_a->Bind(wxEVT_BUTTON, *close_frame);
+    button_b = new wxButton(panel, wxID_ANY, string_b.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_b->Bind(wxEVT_BUTTON, *f_b);
+    button_b->Bind(wxEVT_BUTTON, *close_frame);
     
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
     sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    sizer_buttons->Add(button_yes, 0, wxALIGN_CENTER);
-    sizer_buttons->Add(button_no, 0, wxALIGN_CENTER);
+    sizer_buttons->Add(button_a, 0, wxALIGN_CENTER);
+    sizer_buttons->Add(button_b, 0, wxALIGN_CENTER);
     sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
     
     sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);

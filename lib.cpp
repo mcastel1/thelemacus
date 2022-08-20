@@ -40,15 +40,15 @@ inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
             gsl_vector_free(*r);
             
         }
-            
+        
         (*r) = gsl_vector_alloc(3);
-            
+        
         
         
         gsl_vector_set(*r, 0, gsl_vector_get(a, 1)*gsl_vector_get(b, 2) - gsl_vector_get(a, 2)*gsl_vector_get(b, 1));
         gsl_vector_set(*r, 1, gsl_vector_get(a, 2)*gsl_vector_get(b, 0) - gsl_vector_get(a, 0)*gsl_vector_get(b, 2));
         gsl_vector_set(*r, 2, gsl_vector_get(a, 0)*gsl_vector_get(b, 1) - gsl_vector_get(a, 1)*gsl_vector_get(b, 0));
- 
+        
         
         return true;
         
@@ -964,96 +964,96 @@ Rotation::Rotation(Position p, Position q){
                             ));
         
     }
-
-
+    
+    
 }
 
 /*
  
  //generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection. start and end are converted into cartesian coordiantes in the x'y'z' reference frame, then the rotation axis is build as their cross product, and the relative Rotation is returned.
  Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
-     
-     //the rotation angle
-     double cos_rotation_angle;
-     Position geo_start, geo_end;
-     gsl_vector* rp_start, *rp_end;
-     Angle rotation_angle;
-     
-     if(start != end){
-         
-         rp_start = gsl_vector_alloc(3);
-         rp_end = gsl_vector_alloc(3);
-         
-         //I call ScreenToGeo to compute rp_start and rp_end only
-         ScreenToGeo_3D(start, &geo_start);
-         gsl_vector_memcpy(rp_start, rp);
-         
-         ScreenToGeo_3D(end, &geo_end);
-         gsl_vector_memcpy(rp_end, rp);
-         
-         
-         //compute the dot product between rp_start and rp_end and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
-         gsl_blas_ddot(rp_start, rp_end, &cos_rotation_angle);
-         //I  set rotation_angle to 0 if cos_rotation_angle is slightly larger than 1 because of numerical rounding
-         //    if(cos_rotation_angle < 1.0){
-         rotation_angle.set(String(""), acos(cos_rotation_angle), String("\t"));
-         //    }else{
-         //        rotation_angle.set(String("rotation angle"), 0.0, String("\t"));
-         //    }
-         
-         //compute the cross product  rp_start x rp_end store it into rp and normalize it
-         gsl_vector_set(rp, 0, gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 2) - gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 1));
-         gsl_vector_set(rp, 1, gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 0) - gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 2));
-         gsl_vector_set(rp, 2, gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 1) - gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 0));
-         gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
-         
-         
-         
-         //        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
-         //        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
-         //        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
-         //        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
-         
-         rotation_axis.set_cartesian(String(""), rp, String(""));
-         
-         
-         
-         //        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
-         //        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
-         //        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
-         //        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
-         
-         //        geo_end_drag.print(String("geo now drag"), String("\t"), cout);
-         //    rotation.print(String("rotation"), String("\t"), cout);
-         
-         
-         
-         gsl_vector_free(rp_start);
-         gsl_vector_free(rp_end);
-         
-         return (Rotation(
-                          Angle(String(""), 0.0, String("")),
-                          Angle(String(""), M_PI/2.0-(((rotation_axis).phi).value), String("")),
-                          Angle(String(""), -((((rotation_axis).lambda).value) + M_PI/2.0), String(""))
-                          )
-                 * Rotation(
-                            Angle(String(""), (((rotation_axis).lambda).value) + M_PI/2.0, String("")),
-                            Angle(String(""), -(M_PI/2.0-(((rotation_axis).phi).value)), String("")),
-                            Angle(String(""), rotation_angle.value, String(""))
-                            ));
-         
-         
-     }else{
-         //if start = end, I return the identity as rotation
-         
-         return (Rotation(
-                          Angle(String(""), 0.0, String("")),
-                          Angle(String(""), 0.0, String("")),
-                          Angle(String(""), 0.0, String(""))
-                          ));
-         
-     }
-     
+ 
+ //the rotation angle
+ double cos_rotation_angle;
+ Position geo_start, geo_end;
+ gsl_vector* rp_start, *rp_end;
+ Angle rotation_angle;
+ 
+ if(start != end){
+ 
+ rp_start = gsl_vector_alloc(3);
+ rp_end = gsl_vector_alloc(3);
+ 
+ //I call ScreenToGeo to compute rp_start and rp_end only
+ ScreenToGeo_3D(start, &geo_start);
+ gsl_vector_memcpy(rp_start, rp);
+ 
+ ScreenToGeo_3D(end, &geo_end);
+ gsl_vector_memcpy(rp_end, rp);
+ 
+ 
+ //compute the dot product between rp_start and rp_end and store it into cos_rotation_angle and set the rotation angle equal to acos(cos_rotation_angle)
+ gsl_blas_ddot(rp_start, rp_end, &cos_rotation_angle);
+ //I  set rotation_angle to 0 if cos_rotation_angle is slightly larger than 1 because of numerical rounding
+ //    if(cos_rotation_angle < 1.0){
+ rotation_angle.set(String(""), acos(cos_rotation_angle), String("\t"));
+ //    }else{
+ //        rotation_angle.set(String("rotation angle"), 0.0, String("\t"));
+ //    }
+ 
+ //compute the cross product  rp_start x rp_end store it into rp and normalize it
+ gsl_vector_set(rp, 0, gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 2) - gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 1));
+ gsl_vector_set(rp, 1, gsl_vector_get(rp_start, 2)*gsl_vector_get(rp_end, 0) - gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 2));
+ gsl_vector_set(rp, 2, gsl_vector_get(rp_start, 0)*gsl_vector_get(rp_end, 1) - gsl_vector_get(rp_start, 1)*gsl_vector_get(rp_end, 0));
+ gsl_vector_scale(rp, 1.0/fabs(sin(rotation_angle)));
+ 
+ 
+ 
+ //        cout << "\tNorm of rotation axis = " << gsl_blas_dnrm2(rp) << "\n";
+ //        cout << "\trp_start = {" << gsl_vector_get(rp_start, 0) << " , " << gsl_vector_get(rp_start, 1) << " , " << gsl_vector_get(rp_start, 2) << " }\n";
+ //        cout << "\trp_end = {" << gsl_vector_get(rp_end, 0) << " , " << gsl_vector_get(rp_end, 1) << " , " << gsl_vector_get(rp_end, 2) << " }\n";
+ //        cout << "\trotation axis = {" << gsl_vector_get(rp, 0) << " , " << gsl_vector_get(rp, 1) << " , " << gsl_vector_get(rp, 2) << " }\n";
+ 
+ rotation_axis.set_cartesian(String(""), rp, String(""));
+ 
+ 
+ 
+ //        cout << "\targ sqrt  = " << (gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value))) << "\n";
+ //        cout << "\targ acos = " << ((cos((geo_start_drag.phi))*cos((geo_end_drag.phi))*sin((geo_start_drag.lambda) - (geo_end_drag.lambda)))/sqrt(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.phi)),2) + gsl_pow_int(cos((geo_start_drag.phi)),2)*(gsl_pow_int(cos((geo_end_drag.phi)),2)*gsl_pow_int(sin((geo_start_drag.lambda) - (geo_end_drag.lambda)),2) + gsl_pow_int(sin((geo_end_drag.phi)),2)) - cos((geo_start_drag.lambda) - (geo_end_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_start_drag.phi))*sin(2*((geo_end_drag.phi).value)))) << "\n";
+ //        cout << "\tx = " << cos((geo_end_drag.phi))*sin((geo_end_drag.lambda))*sin((geo_start_drag.phi)) - cos((geo_start_drag.phi))*sin((geo_start_drag.lambda))*sin((geo_end_drag.phi)) << "\n";
+ //        cout << "\ty = " << cos((geo_end_drag.lambda))*cos((geo_end_drag.phi))*sin((geo_start_drag.phi)) - cos((geo_start_drag.lambda))*cos((geo_start_drag.phi))*sin((geo_end_drag.phi)) << "\n";
+ 
+ //        geo_end_drag.print(String("geo now drag"), String("\t"), cout);
+ //    rotation.print(String("rotation"), String("\t"), cout);
+ 
+ 
+ 
+ gsl_vector_free(rp_start);
+ gsl_vector_free(rp_end);
+ 
+ return (Rotation(
+ Angle(String(""), 0.0, String("")),
+ Angle(String(""), M_PI/2.0-(((rotation_axis).phi).value), String("")),
+ Angle(String(""), -((((rotation_axis).lambda).value) + M_PI/2.0), String(""))
+ )
+ * Rotation(
+ Angle(String(""), (((rotation_axis).lambda).value) + M_PI/2.0, String("")),
+ Angle(String(""), -(M_PI/2.0-(((rotation_axis).phi).value)), String("")),
+ Angle(String(""), rotation_angle.value, String(""))
+ ));
+ 
+ 
+ }else{
+ //if start = end, I return the identity as rotation
+ 
+ return (Rotation(
+ Angle(String(""), 0.0, String("")),
+ Angle(String(""), 0.0, String("")),
+ Angle(String(""), 0.0, String(""))
+ ));
+ 
+ }
+ 
  }
  
  */
@@ -1537,7 +1537,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
     wxPoint p;
     bool end_connected;
     unsigned int i;
-
+    
     
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i=0; i<n_points; i++){
@@ -1574,7 +1574,7 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
     Projection temp;
     bool end_connected;
     unsigned int i;
-
+    
     
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
@@ -1785,7 +1785,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
         
     }else{
         
-//        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
+        //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
         
     }
     
@@ -2853,10 +2853,10 @@ void Time:: to_MJD(void)
 bool Position::transport(Route route, String prefix){
     
     String new_prefix;
-
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-  
+    
     
     if((route.type) != String("c")){
         //route.type = 'l' or 'o' -> I can transport *this
@@ -2867,7 +2867,7 @@ bool Position::transport(Route route, String prefix){
         (temp.reference_position) = (*this);
         temp.compute_end(new_prefix);
         (*this) = temp.end;
-
+        
         return true;
         
     }else{
@@ -7263,7 +7263,7 @@ void Position::get_cartesian(String name, gsl_vector* r, String prefix){
     gsl_vector_set(r, 0, cos(phi)*cos(lambda));
     gsl_vector_set(r, 1, -cos(phi)*sin(lambda));
     gsl_vector_set(r, 2, sin(phi));
-
+    
 }
 
 void Position::print(String name, String prefix, ostream& ostr){
@@ -8248,75 +8248,75 @@ void ListFrame::GetAllCoastLineData(void){
     
     //uncomment this at the end
     /*
-    i=0;
-    while(!(file_coastline_data_blocked.value.eof())){
-        
-        
-        data_x.resize(i+1);
-        data_y.resize(i+1);
-        
-        data_3d.resize(i+1);
-        
-        
-        (data_x[i]).resize(360);
-        (data_y[i]).resize(360);
-        
-        (data_3d[i]).resize(360);
-        
-        for(j=0; j<360; j++){
-            
-            // read data as a block:
-            file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
-            
-            l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
-            if(buffer != NULL){delete [] buffer;}
-            buffer = new char [l];
-            
-            (file_coastline_data_blocked.value).read(buffer, l);
-            string data(buffer, l);
-            
-            
-            
-            //count how many datapoints are in data
-            n = ((unsigned int)count(data.begin(), data.end(), ','));
-            
-            l=0;
-            pos_beg = 0;
-            pos_end = data.find(" ", pos_beg);
-            while(pos_end != (string::npos)){
-                
-                line.clear();
-                line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-                
-                replace(line.begin(), line.end(), ' ', '\n');
-                replace(line.begin(), line.end(), ',', ' ');
-                
-                ins.clear();
-                ins << line;
-                ins >> phi_temp >> lambda_temp;
-                
-                (data_x[i][j]).push_back(x_mercator(lambda_temp));
-                (data_y[i][j]).push_back(y_mercator(phi_temp));
-                
-                (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
-                (p_temp.phi).set(String(""), k*phi_temp, String(""));
-                
-                (data_3d[i][j]).push_back(p_temp);
-                
-                pos_beg = pos_end+1;
-                pos_end = data.find(" ", pos_beg);
-                
-                l++;
-                
-            };
-            
-            data.clear();
-            
-        }
-        
-        i++;
-        
-    }
+     i=0;
+     while(!(file_coastline_data_blocked.value.eof())){
+     
+     
+     data_x.resize(i+1);
+     data_y.resize(i+1);
+     
+     data_3d.resize(i+1);
+     
+     
+     (data_x[i]).resize(360);
+     (data_y[i]).resize(360);
+     
+     (data_3d[i]).resize(360);
+     
+     for(j=0; j<360; j++){
+     
+     // read data as a block:
+     file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
+     
+     l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
+     if(buffer != NULL){delete [] buffer;}
+     buffer = new char [l];
+     
+     (file_coastline_data_blocked.value).read(buffer, l);
+     string data(buffer, l);
+     
+     
+     
+     //count how many datapoints are in data
+     n = ((unsigned int)count(data.begin(), data.end(), ','));
+     
+     l=0;
+     pos_beg = 0;
+     pos_end = data.find(" ", pos_beg);
+     while(pos_end != (string::npos)){
+     
+     line.clear();
+     line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+     
+     replace(line.begin(), line.end(), ' ', '\n');
+     replace(line.begin(), line.end(), ',', ' ');
+     
+     ins.clear();
+     ins << line;
+     ins >> phi_temp >> lambda_temp;
+     
+     (data_x[i][j]).push_back(x_mercator(lambda_temp));
+     (data_y[i][j]).push_back(y_mercator(phi_temp));
+     
+     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
+     (p_temp.phi).set(String(""), k*phi_temp, String(""));
+     
+     (data_3d[i][j]).push_back(p_temp);
+     
+     pos_beg = pos_end+1;
+     pos_end = data.find(" ", pos_beg);
+     
+     l++;
+     
+     };
+     
+     data.clear();
+     
+     }
+     
+     i++;
+     
+     }
      */
     
     file_coastline_data_blocked.close(String(""));
@@ -8359,7 +8359,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
     
     SetCursor(*wxCROSS_CURSOR);
     
-   
+    
     (circle_observer.omega).read_from_file(String("omega draw 3d"), String(path_file_init), prefix);
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
     
@@ -8835,7 +8835,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                Angle(M_PI/2.0 + M_PI*(1.0 + GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re*cos(((parent->parent)->p_start).phi) * fabs( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ) )
                )).DrawOld(((plot->n_points_routes).value), &dc, this, String(""));
-   
+        
         //top horizontal edge of rectangle
         (Route(
                String("l"),
@@ -8844,7 +8844,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                Angle(M_PI/2.0 + M_PI*(1.0 - GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re*cos(((parent->parent)->p_now).phi) * fabs( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ) )
                )).DrawOld(((plot->n_points_routes).value), &dc, this, String(""));
-
+        
         
     }
     
@@ -10060,7 +10060,7 @@ void DrawPanel::Set_lambda_phi_min_max_Mercator(void){
 void DrawPanel::Set_lambda_phi_min_max_3D(void){
     
     //compute circle_observer
-//    (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
+    //    (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
     
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
     gsl_vector_set(rp, 0, 0.0);
@@ -10189,15 +10189,15 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     
     Position temp;
     Position p_start, p_end;
-
+    
     //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_start
     ScreenToGeo_3D(start, &temp);
     p_start.set_cartesian(String(""), rp, String(""));
-
+    
     //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_end
     ScreenToGeo_3D(end, &temp);
     p_end.set_cartesian(String(""), rp, String(""));
-
+    
     //construct a Rotation between p_start and p_end by calling the overloaded constructor of the Rotation class
     return(Rotation(p_start, p_end));
     
@@ -10378,12 +10378,12 @@ template<class T>void CheckBody::operator()(T& event){
                 
                 
             }
-                       
+            
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetBackgroundColour(*wxWHITE);
-      
+            
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -10505,7 +10505,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }
         
-           
+        
         if(check || ((((p->sign)->GetBackgroundColour()) == *wxWHITE) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))){
             //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
@@ -10909,7 +10909,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = position_screen_now - position_draw_panel;
         
-            
+        
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -11309,7 +11309,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             parent->UpdateSlider();
             
         }
-                
+        
         //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
         text_position_start->SetLabel(wxString(""));
         text_position_end->SetLabel(wxString(""));
@@ -11333,7 +11333,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 
                 if(((parent->parent)->highlighted_route) != -1){
                     //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
-          
+                    
                     if((((plot->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
                         route_position_start_drag = (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position);
@@ -11591,7 +11591,7 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
 
 
 template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
-
+    
     /*
      n = value of slider,
      z = zoom factor,
@@ -11683,7 +11683,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     if(((projection->name)->GetValue()) == wxString("3D")){
         
         ((draw_panel->circle_observer).omega) = (((draw_panel->circle_observer_0).omega)/(zoom_factor.value));
-                
+        
         (draw_panel->*(draw_panel->Draw))();
         draw_panel->PaintNow();
         
@@ -11821,19 +11821,19 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 void ModifyRoute::operator()(wxCommandEvent& event){
     
-//    PrintMessage<ListFrame,  UnsetIdling<DrawPanel>>* print_error_message;
-//
-//    print_error_message = new PrintMessage<ListFrame, void>(f, NULL);
+    //    PrintMessage<ListFrame,  UnsetIdling<DrawPanel>>* print_error_message;
+    //
+    //    print_error_message = new PrintMessage<ListFrame, void>(f, NULL);
     
     (f->print_info_message->control) = NULL;
     (f->print_info_message->title) = String("");
     (f->print_info_message->message) = String("Select the route which which you want to transport the sight");
     (*(f->print_info_message))();
-
     
     
-//    (f->OnModifyRoute)(event);
-
+    
+    //    (f->OnModifyRoute)(event);
+    
     
     event.Skip(true);
     
@@ -11846,10 +11846,10 @@ void CreateRoute::operator()(wxCommandEvent& event){
     event.Skip(true);
     
 }
- 
+
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
-        
+    
     (parent->idling) = false;
     
     event.Skip(true);
@@ -11872,9 +11872,9 @@ void SelectRoute::operator()(wxCommandEvent& event){
     (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes_for_transport));
     
     
-
     
-  
+    
+    
     event.Skip(true);
     
 }
@@ -12019,7 +12019,7 @@ CheckDate::CheckDate(DateField* p_in){
     check_year = new CheckYear(p);
     check_month = new CheckMonth(p);
     check_day = new CheckDay(p);
-
+    
 }
 
 //this functor checks the whole date field by calling the check on its year, month and day parts
@@ -12061,12 +12061,12 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
         check = check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360);
         
         if(check || ((((p->deg)->GetBackgroundColour()) == *wxWHITE) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))){
-   
+            
             //if check is true (false) -> set deg_ok to true (false)
             (p->deg_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             (p->deg)->SetBackgroundColour(*wxWHITE);
-   
+            
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -12107,7 +12107,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             (p->min)->SetBackgroundColour(*wxWHITE);
             
         }else{
-                        
+            
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             ((f->print_error_message)->control) = (p->min);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
@@ -12115,7 +12115,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             f->CallAfter(*(f->print_error_message));
             
             (p->min_ok) = false;
-
+            
             
         }
         
@@ -12187,12 +12187,12 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
         i--;
         
         if(check || ((((p->box_unit)->GetBackgroundColour()) == *wxWHITE) && (String((((p->box_unit)->GetValue()).ToStdString())) == String("")))){
-        
+            
             //if check is true (false) -> set box_unit_ok to true (false)
             (p->box_unit_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             (p->box_unit)->SetBackgroundColour(*wxWHITE);
-   
+            
             
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -12325,14 +12325,14 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
     //the ids of the sight whose Route will be transported, and of the Route which will transported
     i_route_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
     i_transporting_route = ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-
+    
     //tranport the Route
     ((((f->plot)->route_list)[ i_route_to_transport ]).reference_position).transport(
-                                                                                                                           
-                                                                                                                           ((f->plot)->route_list)[i_transporting_route],
-                                                                                                                           String("")
-                                                                  
-                                                                                                                           );
+                                                                                     
+                                                                                     ((f->plot)->route_list)[i_transporting_route],
+                                                                                     String("")
+                                                                                     
+                                                                                     );
     
     //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
     f->Disconnect((((f->plot)->route_list)[i_route_to_transport]).related_sight.value, i_route_to_transport);
@@ -12341,13 +12341,13 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
     (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_route_to_transport, f->listcontrol_routes);
     f->DrawAll();
     
-     //re-bind listcontrol_routes to on_select_listcontrol_routes
+    //re-bind listcontrol_routes to on_select_listcontrol_routes
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes));
-
+    
     //set parameters back to their original value
     (f->idling) = false;
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));
-
+    
     event.Skip(true);
     
 }
@@ -12385,7 +12385,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
             message_frame ->Show(true);
             
         }
-            
+        
     }
     
 }
@@ -12485,7 +12485,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     }
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
-    master_clock_date->set();
+    master_clock_date->set((sight->master_clock_date_and_hour).date);
     
     //master-clock chrono
     wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -12637,7 +12637,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if(sight_in != NULL){set();}
     
     Centre();
-
+    
 }
 
 
@@ -13297,7 +13297,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     select_route = new SelectRoute(this);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
-
+    
     
     plot = new Plot(catalog, String(""));
     
@@ -13318,7 +13318,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //when the ListFrame is created there is no open selection rectangle in any ChartFrame
     selection_rectangle = false;
-
+    
     
     for(i=0; i<color_list.size(); i++){
         
@@ -13379,7 +13379,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_in_listcontrol_routes_for_transport = new OnSelectInListControlRoutesForTransport(this);
-
+    
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
     //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
@@ -13393,7 +13393,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //initialized modify_route and create_route, which define the functors to modify / create a Route
     modify_route = new ModifyRoute(this);
     create_route = new CreateRoute(this);
-
+    
     catalog = new Catalog(String(path_file_catalog), String(""));
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -13532,12 +13532,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
     my_image.Rescale(20,20);
- 
+    
     //image for button_transport_sight
     wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_tranposrt_sight = my_bitmap_transport_sight.ConvertToImage();
     my_image_tranposrt_sight.Rescale(20,20);
-
+    
     
     //button to add a sight
     button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
@@ -13556,12 +13556,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
     button_modify_sight->Enable(false);
-
+    
     //button to transport a sight
     button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt_sight), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
     button_transport_sight->Enable(false);
-
+    
     
     //button to modify a position
     button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
@@ -13686,7 +13686,7 @@ void ListFrame::OnClose(wxCloseEvent& event){
 
 //calls Draw and PaintNow in all che ChartFrames which are children of *this
 void ListFrame::DrawAll(void){
-        
+    
     for(long i=0; i<(chart_frames.size()); i++){
         
         //I call PaintNow() because the positions have changed, so I need to re-draw the chart
@@ -13984,7 +13984,7 @@ void ListFrame::Disconnect(int i_sight, int i_route){
     (print_error_message->title) = String("The route which is being dragged was related to a sight!");
     (print_error_message->message) = String("Disconnecting the route from the sight.");
     CallAfter(*print_error_message);
-
+    
     
 }
 
@@ -14197,7 +14197,7 @@ template<class T> void SightFrame::get(T& event){
 //set all the GUI fields in this equal to those in the non-GUI object this->sight
 void SightFrame::set(void){
     
-    Time time_UTC;
+    //    Time temp;
     
     body->set();
     
@@ -14225,12 +14225,13 @@ void SightFrame::set(void){
         height_of_eye->Enable(false);
     }
     
-    master_clock_date->set();
-    
     //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
-    time_UTC = (sight->time);
-    time_UTC -= (sight->TAI_minus_UTC);
-    master_clock_chrono->set(time_UTC.chrono);
+    //    temp = (sight->master_clock_date_and_hour);
+    //    temp += (sight->TAI_minus_UTC);
+    
+    
+    master_clock_date->set((sight->master_clock_date_and_hour).date);
+    master_clock_chrono->set((sight->master_clock_date_and_hour).chrono);
     
     stopwatch_check->set();
     
@@ -14334,9 +14335,9 @@ template<class T> void CheckYear::operator()(T&event){
     if(!(f->idling)){
         
         bool check;
-
+        
         check = check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0);
-       
+        
         if(check || ((((p->year)->GetBackgroundColour()) == *wxWHITE) && (String((((p->year)->GetValue()).ToStdString())) == String("")))){
             //p->year either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
@@ -14352,7 +14353,7 @@ template<class T> void CheckYear::operator()(T&event){
             }
             
             (p->day)->Enable(check && (p->month_ok));
-
+            
             
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -14364,7 +14365,7 @@ template<class T> void CheckYear::operator()(T&event){
             
             (p->year_ok) = false;
             (p->day)->Enable(false);
-    
+            
         }
         
         f->AllOk();
@@ -14399,9 +14400,9 @@ template<class T> void CheckMonth::operator()(T&event){
                 tabulate_days(event);
                 
             }
-
+            
             (p->day)->Enable(check && (p->year_ok));
-    
+            
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter     ((f->print_error_message)->control) = (p->month);
             
@@ -14411,7 +14412,7 @@ template<class T> void CheckMonth::operator()(T&event){
             
             (p->month_ok) = false;
             (p->day)->Enable(false);
-      
+            
         }
         
         
@@ -14580,12 +14581,12 @@ template<class T> void CheckHour::operator()(T &event){
         
         
         if(check || ((((p->hour)->GetBackgroundColour()) == *wxWHITE) && (String((((p->hour)->GetValue()).ToStdString())) == String("")))){
-   
+            
             //if check is true (false) -> set hour_ok to true (false)
             (p->hour_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             (p->hour)->SetBackgroundColour(*wxWHITE);
-   
+            
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -14599,37 +14600,37 @@ template<class T> void CheckHour::operator()(T &event){
         }
         
         /*
-        if((!check) && ((p->hour)->IsEnabled())){
-            
-            if(!(p->just_enabled)){
-                //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
-                
-                
-                //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-                ((f->print_error_message)->control) = (p->hour);
-                ((f->print_error_message)->title) = String("Entered value is not valid!");
-                ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-                f->CallAfter(*(f->print_error_message));
-                
-            }else{
-                //if the ChronoField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
-                
-                
-                (p->just_enabled) = false;
-                
-                
-            }
-            
-            
-            (p->hour_ok) = false;
-            
-        }else{
-            
-            (p->hour)->SetBackgroundColour(*wxWHITE);
-            (p->hour_ok) = true;
-            
-        }
-        */
+         if((!check) && ((p->hour)->IsEnabled())){
+         
+         if(!(p->just_enabled)){
+         //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
+         
+         
+         //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+         ((f->print_error_message)->control) = (p->hour);
+         ((f->print_error_message)->title) = String("Entered value is not valid!");
+         ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
+         f->CallAfter(*(f->print_error_message));
+         
+         }else{
+         //if the ChronoField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
+         
+         
+         (p->just_enabled) = false;
+         
+         
+         }
+         
+         
+         (p->hour_ok) = false;
+         
+         }else{
+         
+         (p->hour)->SetBackgroundColour(*wxWHITE);
+         (p->hour_ok) = true;
+         
+         }
+         */
         
         f->AllOk();
         
@@ -14653,11 +14654,11 @@ template<class T> void CheckMinute::operator()(T &event){
     if(!(f->idling)){
         
         bool check;
-
+        
         check = check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60);
         
         if(check || ((((p->minute)->GetBackgroundColour()) == *wxWHITE) && (String((((p->minute)->GetValue()).ToStdString())) == String("")))){
-   
+            
             //if check is true (false) -> set minute_ok to true (false)
             (p->minute_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in minute
@@ -14795,7 +14796,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetBackgroundColour(*wxWHITE);
-   
+            
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -14925,7 +14926,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     parent->plot->print(true, String(""), cout);
     
     
-parent->DrawAll();
+    parent->DrawAll();
     
     
     event.Skip(true);
@@ -14976,7 +14977,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     check = new CheckBody(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
-//    name->SetValue("");
+    //    name->SetValue("");
     name->SetBackgroundColour(*wxWHITE);
     read_recent_items();
     AdjustWidth(name);
@@ -15160,11 +15161,11 @@ template<class P> void LengthField<P>::set(void){
 //sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date_in
 void DateField::set(Date date_in){
     
-//    Time time_UTC;
-//
-//    //((parent_frame->sight)->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
-//    time_UTC = ((parent_frame->sight)->time);
-//    time_UTC -= ((parent_frame->sight)->TAI_minus_UTC);
+    //    Time time_UTC;
+    //
+    //    //((parent_frame->sight)->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+    //    time_UTC = ((parent_frame->sight)->time);
+    //    time_UTC -= ((parent_frame->sight)->TAI_minus_UTC);
     
     year->SetValue(wxString::Format(wxT("%i"), date_in.Y));
     month->SetValue(wxString::Format(wxT("%i"), date_in.M));
@@ -15236,7 +15237,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     name->SetBackgroundColour(*wxWHITE);
-
+    
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
@@ -15328,7 +15329,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         }
     }
     
-     
+    
     
     //initialize check and its objects
     check = new CheckAngle<P>(this);
@@ -15343,7 +15344,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->SetBackgroundColour(*wxWHITE);
     AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
-
+    
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
@@ -15432,7 +15433,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     units.Add(wxT("nm"));
     units.Add(wxT("m"));
     units.Add(wxT("ft"));
-
+    
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);

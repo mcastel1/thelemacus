@@ -45,8 +45,25 @@
             use of stopwatch = y
             stopwatch reading = 10:19:58
             hour of TAI - UTC at time of master-clock synchronization with UTC = 00:01:37
-            label = A simple star sight
-            Routes in the plot:
+            label = Sirius sight 1
+        Sight #4:
+            body:
+                Type = star
+                Name = sirius
+                right ascension = 101° 17.31245999999970308635965920984745025634765625'
+                    declination = 343° 17.211419999999861829564906656742095947265625'
+            sextant altitude = 73° 8.14000000000000341060513164848089'
+            index error = 0° 1.8999999999999996891375531049562'
+            artificial horizon = n
+            height of eye = 33.4235890 m
+            master-clock date and hour of sight:
+                master-clock date and hour of sight = 2021-01-12
+                hour of master-clock date and hour of sight = 01:09:08
+            use of stopwatch = y
+            stopwatch reading = 02:39:58
+            hour of TAI - UTC at time of master-clock synchronization with UTC = 00:01:37
+            label = Sirius sight 2
+    Routes in the plot:
         Route #1:
             type = o
             start position:

@@ -11885,9 +11885,9 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
     
 }
 
+
 //if an item in listcontrol_routes is selected, I transport the sight under consideration with such Route
 template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& event){
-    
     
     int i_route_to_transport, i_transporting_route;
     
@@ -11925,6 +11925,40 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
 }
 
 
+//if a new item listcontrol_routes is created, I transport the sight under consideration with such Route
+template<class T> void OnCreateInListControlRoutesForTransport::operator()(T& event){
+    
+    int i_route_to_transport, i_transporting_route;
+    
+    //the ids of the sight whose Route will be transported, and of the Route which will transported. i_transporting_route is the last item in listcontrol_route, because it is the item of the newly added Route
+    i_route_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+    i_transporting_route = ((f->listcontrol_routes)->GetItemCount())-1;
+    
+    //tranport the Route
+    ((((f->plot)->route_list)[ i_route_to_transport ]).reference_position).transport(
+                                                                                     
+                                                                                     ((f->plot)->route_list)[i_transporting_route],
+                                                                                     String("")
+                                                                                     
+                                                                                     );
+    
+    //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
+    f->Disconnect((((f->plot)->route_list)[i_route_to_transport]).related_sight.value, i_route_to_transport);
+    
+    //change the label of Route #i_route_to_transport by appending to it 'translated with [label of the translating Route]'
+    ((((f->plot)->route_list)[i_route_to_transport]).label) = ((((f->plot)->route_list)[i_route_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+    
+    //update the Route information in f, and re-draw everything
+    (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_route_to_transport, f->listcontrol_routes);
+    f->DrawAll();
+    
+     
+    //set parameters back to their original value
+    (f->idling) = false;
+    
+    event.Skip(true);
+    
+}
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
     
@@ -12953,7 +12987,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_in_listcontrol_routes_for_transport = new OnSelectInListControlRoutesForTransport(this);
-    
+    on_create_in_listcontrol_routes_for_transport = new OnCreateInListControlRoutesForTransport(this);
+
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
     //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
@@ -15512,6 +15547,12 @@ OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
 }
 
 OnSelectInListControlRoutesForTransport::OnSelectInListControlRoutesForTransport(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+OnCreateInListControlRoutesForTransport::OnCreateInListControlRoutesForTransport(ListFrame* f_in){
     
     f = f_in;
     

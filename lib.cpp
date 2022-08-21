@@ -11861,8 +11861,17 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 //if an item in listcontrol_sights is selected, then the modify_sight and delete_sight buttons are enabled
 template<class T> void OnSelectInListControlSights::operator()(T& event){
     
+    
+    
     (f->button_modify_sight)->Enable(true);
-    (f->button_transport_sight)->Enable(true);
+
+    //button_transport_sight is enabled/disabled if the selected Sight is related/unrelated to a Route
+    (f->button_transport_sight)->Enable(
+                                        
+                                        ((((f->plot)->sight_list)[((f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_route).value != -1
+                                        
+                                        );
+    
     (f->button_delete_sight)->Enable(true);
     
     event.Skip(true);
@@ -13581,6 +13590,8 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
 //disconnects sight i_sight from route i_route
 void ListFrame::Disconnect(int i_sight, int i_route){
     
+
+    
     //disconnect route and sight
     (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
     (((plot->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
@@ -13591,6 +13602,16 @@ void ListFrame::Disconnect(int i_sight, int i_route){
     
     //set the background color of the related sight to white
     (listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
+    
+    //if an item is selected in listcontrol_sights, enable /disable button_transport_sight if the selected sight is related / unrelated to a Route
+    if((listcontrol_sights->GetSelectedItemCount()) != 0){
+        
+        button_transport_sight->Enable(
+                                       (((plot->sight_list)[listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value != -1
+                                       );
+        
+    }
+
     
     
     //print an info message

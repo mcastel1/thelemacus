@@ -11413,7 +11413,7 @@ void CreateRoute::operator()(wxCommandEvent& event){
     (f->OnAddRoute)(event);
     
     
-    ((f->route_frame)->button_ok)->Bind(wxEVT_BUTTON, *(f->on_create_in_listcontrol_routes_for_transport));
+    ((f->route_frame)->button_ok)->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
 
     
     event.Skip(true);
@@ -13000,7 +13000,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
-    on_create_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
+    on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
 
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));

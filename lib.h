@@ -1873,7 +1873,7 @@ public:
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
-    OnNewRouteInListControlRoutesForTransport* on_create_in_listcontrol_routes_for_transport;
+    OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
     
     void DrawAll(void);
 

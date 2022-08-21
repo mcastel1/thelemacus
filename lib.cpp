@@ -11442,7 +11442,7 @@ void SelectRoute::operator()(wxCommandEvent& event){
     //brings parent to front
     parent->Raise();
     
-    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes_for_transport));
+    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
     
     
     
@@ -11931,7 +11931,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     //set parameters back to their original value
     (f->idling) = false;
-    (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes_for_transport));
+    (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
     
     event.Skip(true);
     
@@ -12999,7 +12999,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
-    on_select_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
+    on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_create_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
 
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)

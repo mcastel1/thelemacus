@@ -11410,11 +11410,11 @@ void ModifyRoute::operator()(wxCommandEvent& event){
 
 void CreateRoute::operator()(wxCommandEvent& event){
     
+    //call OnAddRoute to add a new Route
     (f->OnAddRoute)(event);
     
-    
-    ((f->route_frame)->button_ok)->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
-
+    //when the frame with which the new Route will be closed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+    (f->route_frame)->Bind(wxEVT_CLOSE_WINDOW, *(f->on_new_route_in_listcontrol_routes_for_transport));
     
     event.Skip(true);
     
@@ -11965,9 +11965,10 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_route_to_transport, f->listcontrol_routes);
     f->DrawAll();
     
-     
-    //set parameters back to their original value
+    //set parameters back to their original value and unbing the closing of route_frame from on_new_route_in_listcontrol_routes_for_transport
     (f->idling) = false;
+    (f->route_frame)->Unbind(wxEVT_CLOSE_WINDOW, *(f->on_new_route_in_listcontrol_routes_for_transport));
+
     
     event.Skip(true);
     
@@ -12679,13 +12680,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     
     parent->DrawAll();
-    
-    //
-    Angle lambda_min, lambda_max;
-    route->lambda_min_max(&lambda_min, &lambda_max, String(""));
-    
-    //
-    
+        
     event.Skip(true);
     
     Close(TRUE);

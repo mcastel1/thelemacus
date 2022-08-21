@@ -11412,6 +11412,10 @@ void CreateRoute::operator()(wxCommandEvent& event){
     
     (f->OnAddRoute)(event);
     
+    
+    ((f->route_frame)->button_ok)->Bind(wxEVT_BUTTON, *(f->on_create_in_listcontrol_routes_for_transport));
+
+    
     event.Skip(true);
     
 }
@@ -13375,7 +13379,7 @@ void ListFrame::OnAddPosition(wxCommandEvent& event){
 
 void ListFrame::OnAddRoute(wxCommandEvent& event){
     
-    RouteFrame *route_frame = new RouteFrame(this, NULL, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
+    route_frame = new RouteFrame(this, NULL, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
     route_frame->Show(true);
     
     event.Skip(true);

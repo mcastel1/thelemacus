@@ -1785,7 +1785,7 @@ public:
 };
 
 //this class is to define the functor template<class T> void operator()(T&), which is called when the user selects a route with which he wants to transport a sight
-class OnSelectInListControlRoutesForTransport{
+class OnSelectRouteInListControlRoutesForTransport{
     
 public:
     
@@ -1793,7 +1793,7 @@ public:
     ListFrame* f;
     
     //constructor, which sets the parent frame
-    OnSelectInListControlRoutesForTransport(ListFrame*);
+    OnSelectRouteInListControlRoutesForTransport(ListFrame*);
     
     template<class T> void operator()(T&);
     
@@ -1801,7 +1801,7 @@ public:
 };
 
 //this class is to define the functor template<class T> void operator()(T&), which is called when the user crates a new route with which he wants to transport a sight
-class OnCreateInListControlRoutesForTransport{
+class OnNewRouteInListControlRoutesForTransport{
     
 public:
     
@@ -1809,7 +1809,7 @@ public:
     ListFrame* f;
     
     //constructor, which sets the parent frame
-    OnCreateInListControlRoutesForTransport(ListFrame*);
+    OnNewRouteInListControlRoutesForTransport(ListFrame*);
     
     template<class T> void operator()(T&);
     
@@ -1835,7 +1835,7 @@ public:
     wxMenu *menu_chart, *menu_new_chart, *menu_item_mercator, *menu_item_3d;
     ListControl *listcontrol_sights, *listcontrol_routes, *listcontrol_positions;
     wxPanel *panel;
-    //a dummy RouteFrame which will be used for various purposes 
+    //a dummy RouteFrame which will be used for various purposes
     RouteFrame* route_frame;
     wxButton *button_add_sight, *button_delete_sight, *button_add_position, *button_delete_position, *button_add_route, *button_delete_route;
     wxBitmapButton *button_modify_sight, *button_transport_sight, *button_modify_position, *button_modify_route;
@@ -1872,8 +1872,8 @@ public:
     OnSelectInListControlSights* on_select_in_listcontrol_sights;
     OnSelectInListControlPositions* on_select_in_listcontrol_positions;
     OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
-    OnSelectInListControlRoutesForTransport* on_select_in_listcontrol_routes_for_transport;
-    OnCreateInListControlRoutesForTransport* on_create_in_listcontrol_routes_for_transport;
+    OnSelectRouteInListControlRoutesForTransport* on_select_in_listcontrol_routes_for_transport;
+    OnNewRouteInListControlRoutesForTransport* on_create_in_listcontrol_routes_for_transport;
     
     void DrawAll(void);
 

@@ -11900,7 +11900,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 
 
 //if an item in listcontrol_routes is selected, I transport the sight under consideration with such Route
-template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& event){
+template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
     int i_route_to_transport, i_transporting_route;
     
@@ -11939,7 +11939,7 @@ template<class T> void OnSelectInListControlRoutesForTransport::operator()(T& ev
 
 
 //if a new item listcontrol_routes is created, I transport the sight under consideration with such Route
-template<class T> void OnCreateInListControlRoutesForTransport::operator()(T& event){
+template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event){
     
     int i_route_to_transport, i_transporting_route;
     
@@ -12999,8 +12999,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
-    on_select_in_listcontrol_routes_for_transport = new OnSelectInListControlRoutesForTransport(this);
-    on_create_in_listcontrol_routes_for_transport = new OnCreateInListControlRoutesForTransport(this);
+    on_select_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
+    on_create_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
 
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
@@ -15571,13 +15571,13 @@ OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
     
 }
 
-OnSelectInListControlRoutesForTransport::OnSelectInListControlRoutesForTransport(ListFrame* f_in){
+OnSelectRouteInListControlRoutesForTransport::OnSelectRouteInListControlRoutesForTransport(ListFrame* f_in){
     
     f = f_in;
     
 }
 
-OnCreateInListControlRoutesForTransport::OnCreateInListControlRoutesForTransport(ListFrame* f_in){
+OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTransport(ListFrame* f_in){
     
     f = f_in;
     

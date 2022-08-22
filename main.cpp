@@ -58,10 +58,8 @@
  - add night mode.
  - fix bug: when one enters an invalid entry in month field, there is an error
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - change path_file_arrow_icon with an arrow image
  - uncomment at '    //uncomment this at the end'
  - integate idling variable in everything that concerns ListFrame
- - loxodromes are not drawn (only their starting point)
  - make sure that if the user enters a field a value wihch is correct modulo upper/lower case, it is recognized
  - include transport for Positions and Routes which are not derived from a Sight
  */

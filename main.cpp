@@ -17,7 +17,6 @@
  - add lambert projection and 3D sphere with no projection
  - Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
  - set up a proper output to a log file
- - turn gamma_lambda into an unsigned int
  - add margins in chart in such a way that ylabels are not cut
  - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
  - add separator between recent items and non-recent items in BodyField->name

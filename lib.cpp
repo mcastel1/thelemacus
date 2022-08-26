@@ -8677,24 +8677,24 @@ void DrawPanel::Draw_Mercator(void){
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > k){
         //in this case, phi_span is larger than one degree
-        gamma_phi = 1.0;
+        gamma_phi = 1;
         delta_phi_minor = -1.0;
     }else{
         if(phi_span > 10.0*arcmin_radians){
             //in this case, one arcdegree > phi_span > 10 arcminutes
-            gamma_phi = 60.0;
+            gamma_phi = 60;
             delta_phi_minor = arcmin_radians;
         }else{
             //in this case, 10 arcminutes > phi_span
-            gamma_phi = 600.0;
+            gamma_phi = 60 * 10;
             delta_phi_minor = tenth_arcmin_radians;
         }
     }
     
-    delta_phi=k/gamma_phi;
+    delta_phi=k/((double)gamma_phi);
     while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
-        if(delta_phi == k/gamma_phi){delta_phi += k*4.0/gamma_phi;}
-        else{delta_phi += k*5.0/gamma_phi;}
+        if(delta_phi == k/((double)gamma_phi)){delta_phi += k*4.0/((double)gamma_phi);}
+        else{delta_phi += k*5.0/((double)gamma_phi);}
     }
     
     //set phi_start/end and phi_middle
@@ -8763,7 +8763,7 @@ void DrawPanel::Draw_Mercator(void){
             
             route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            if(gamma_phi != 1.0){
+            if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
                 (route.type).set(String(""), String("o"), String(""));
@@ -8976,24 +8976,24 @@ void DrawPanel::Draw_3D(void){
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > k){
         //in this case, phi_span is larger than one degree
-        gamma_phi = 1.0;
+        gamma_phi = 1;
         delta_phi_minor = -1.0;
     }else{
         if(phi_span > 10.0*arcmin_radians){
             //in this case, one arcdegree > phi_span > 10 arcminutes
-            gamma_phi = 60.0;
+            gamma_phi = 60;
             delta_phi_minor = arcmin_radians;
         }else{
             //in this case, 10 arcminutes > phi_span
-            gamma_phi = 600.0;
+            gamma_phi = 60 * 10;
             delta_phi_minor = tenth_arcmin_radians;
         }
     }
     
-    delta_phi=k/gamma_phi;
+    delta_phi=k/((double)gamma_phi);
     while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
-        if(delta_phi == k/gamma_phi){delta_phi += k*4.0/gamma_phi;}
-        else{delta_phi += k*5.0/gamma_phi;}
+        if(delta_phi == k/((double)gamma_phi)){delta_phi += k*4.0/((double)gamma_phi);}
+        else{delta_phi += k*5.0/((double)gamma_phi);}
     }
     
     //set phi_start/end and phi_middle
@@ -9073,7 +9073,7 @@ void DrawPanel::Draw_3D(void){
             
             route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            if(gamma_phi != 1.0){
+            if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
                 (route.type).set(String(""), String("o"), String(""));

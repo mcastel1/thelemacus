@@ -56,7 +56,6 @@
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
 - remove zoom_factor, because it is related to omega
  - add night mode.
- - fix bug: when one enters an invalid entry in month field, there is an error
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - uncomment at '    //uncomment this at the end'
  - integate idling variable in everything that concerns ListFrame

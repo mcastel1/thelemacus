@@ -14043,6 +14043,7 @@ template<class T> void CheckMonth::operator()(T&event){
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter     ((f->print_error_message)->control) = (p->month);
             
+            ((f->print_error_message)->control) = (p->month);
             ((f->print_error_message)->title) = String("Entered value is not valid!");
             ((f->print_error_message)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
             f->CallAfter(*(f->print_error_message));

@@ -15,7 +15,6 @@
  - revise Angle::to_string in such a way that all angles take the same space when printed out to string
  - all quantities in pixels must be relative to screen size, not absolute pixel size.
  - add lambert projection and 3D sphere with no projection
- - change the initialization of structs (such as     (check.p) = this;) by transforming the structs into classes, creating their constructor, transforming check into a pointer and replacing     (check.p) = this; with check = new Check(this); do this for all objects
  - fix issue that related sight is not properly deleted when a route is deleted
  - Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
  - set up a proper output to a log file

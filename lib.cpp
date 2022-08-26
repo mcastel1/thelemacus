@@ -8638,24 +8638,24 @@ void DrawPanel::Draw_Mercator(void){
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(lambda_span > k){
         //in this case, lambda_span is larger than one degree
-        gamma_lambda = 1.0;
+        gamma_lambda = 1;
         delta_lambda_minor = -1.0;
     }else{
         if(lambda_span > 10.0*arcmin_radians){
             //in this case, one arcdegree > lambda_span > 10 arcminutes
-            gamma_lambda = 60.0;
+            gamma_lambda = 60;
             delta_lambda_minor = arcmin_radians;
         }else{
             //in this case, 10 arcminutes > lambda_span
-            gamma_lambda = 600.0;
+            gamma_lambda = 60 * 10;
             delta_lambda_minor = tenth_arcmin_radians;
         }
     }
     
-    delta_lambda=k/gamma_lambda;
+    delta_lambda=k/((double)gamma_lambda);
     while(n_intervals_ticks*delta_lambda<lambda_span){
-        if(delta_lambda == k/gamma_lambda){delta_lambda += k*4.0/gamma_lambda;}
-        else{delta_lambda += k*5.0/gamma_lambda;}
+        if(delta_lambda == k/((double)gamma_lambda)){delta_lambda += k*4.0/((double)gamma_lambda);}
+        else{delta_lambda += k*5.0/((double)gamma_lambda);}
     }
     
     
@@ -8717,7 +8717,7 @@ void DrawPanel::Draw_Mercator(void){
             
             route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            if(gamma_lambda != 1.0){
+            if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
@@ -8948,24 +8948,24 @@ void DrawPanel::Draw_3D(void){
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(lambda_span > k){
         //in this case, lambda_span is larger than one degree
-        gamma_lambda = 1.0;
+        gamma_lambda = 1;
         delta_lambda_minor = -1.0;
     }else{
         if(lambda_span > 10.0*arcmin_radians){
             //in this case, one arcdegree > lambda_span > 10 arcminutes
-            gamma_lambda = 60.0;
+            gamma_lambda = 60;
             delta_lambda_minor = arcmin_radians;
         }else{
             //in this case, 10 arcminutes > lambda_span
-            gamma_lambda = 600.0;
+            gamma_lambda = 60 * 10;
             delta_lambda_minor = tenth_arcmin_radians;
         }
     }
     
-    delta_lambda=k/gamma_lambda;
+    delta_lambda=k/((double)gamma_lambda);
     while(n_intervals_ticks*delta_lambda<lambda_span){
-        if(delta_lambda == k/gamma_lambda){delta_lambda += k*4.0/gamma_lambda;}
-        else{delta_lambda += k*5.0/gamma_lambda;}
+        if(delta_lambda == k/((double)gamma_lambda)){delta_lambda += k*4.0/((double)gamma_lambda);}
+        else{delta_lambda += k*5.0/((double)gamma_lambda);}
     }
     
     
@@ -9024,7 +9024,7 @@ void DrawPanel::Draw_3D(void){
             //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
-            if(gamma_lambda != 1.0){
+            if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);

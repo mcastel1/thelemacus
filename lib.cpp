@@ -14622,9 +14622,9 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
-    //as a key is pressend and then lifted in name, call OnType
-    name->Bind(wxEVT_KEY_UP, &BodyField::OnType, this);
-
+    //as a key is pressend and then lifted in name, call OnChangeText
+    name->Bind(wxEVT_TEXT, &BodyField::OnChangeText, this);
+    
     
     ok = false;
     
@@ -14885,8 +14885,8 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetValue("");
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, (*check));
-    //as a key is pressend and then lifted in name, call OnType
-    name->Bind(wxEVT_KEY_UP, &LimbField::OnType, this);
+    //as a key is pressend and then lifted in name, call OnChangeText
+    name->Bind(wxEVT_KEY_UP, &LimbField::OnChangeText, this);
         
     name->SetValue(wxString(""));
     ok = false;
@@ -15358,7 +15358,7 @@ bool BodyField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
-void BodyField::OnType(wxKeyEvent& event){
+void BodyField::OnChangeText(wxCommandEvent& event){
     
     unsigned int i;
     bool check;
@@ -15376,25 +15376,17 @@ void BodyField::OnType(wxKeyEvent& event){
     if(check){
         //the text entered in name is valid
         
-        if(((catalog->list)[i].name == String("sun")) || ((catalog->list)[i].name == String("moon"))){
-            //in this case, the selected body is a body which has a limb -> I enable the limb field
-            
-            ((parent_frame->limb)->name)->Enable(true);
-            
-        }else{
-            //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
-            
-            ((parent_frame->limb)->name)->Enable(false);
-            ((parent_frame->limb)->ok) = true;
-            
-        }
-        
+        //I enable the limb field if and only if the selected body allows for a field
+        ((parent_frame->limb)->name)->Enable(((catalog->list)[i].name == String("sun")) || ((catalog->list)[i].name == String("moon")));
+
     }else{
         //the text entered in name is not valid: disable parent_frame->limb
         
         ((parent_frame->limb)->name)->Enable(false);
         
     }
+    
+    (*((parent_frame->limb)->check))(event);
     
     //ok is true/false is the text enteres is valid/invalid
     ok = check;
@@ -15412,7 +15404,7 @@ bool LimbField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
-void LimbField::OnType(wxKeyEvent& event){
+void LimbField::OnChangeText(wxKeyEvent& event){
     
     String s;
     bool check;

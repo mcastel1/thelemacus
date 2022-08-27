@@ -14989,7 +14989,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
     //as text is changed in deg, call OnChangeText
-    deg->Bind(wxEVT_TEXT, &AngleField::OnChangeText, this);
+//    deg->Bind(wxEVT_TEXT, &AngleField::OnChangeTextArcDegree, this);
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -14998,7 +14998,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min->SetBackgroundColour(*wxWHITE);
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
     //as text is changed min, call OnChangeText
-    min->Bind(wxEVT_TEXT, &AngleField::OnChangeText, this);
+//    min->Bind(wxEVT_TEXT, &AngleField::OnChangeTextArcMinute, this);
 
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -15015,7 +15015,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         AdjustWidth(sign);
         sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
         //as text is changed sign, call OnChangeText
-        sign->Bind(wxEVT_TEXT, &AngleField::OnChangeText, this);
+        sign->Bind(wxEVT_TEXT, &AngleField::OnChangeTextSign, this);
 
     }
     
@@ -15160,13 +15160,12 @@ template<class P> bool AngleField<P>::is_ok(void){
     
 }
 
-//this function is called every time a keyboard button is lifted in this->sign, deg or min: it checks whether the text entered so far in name is valid and runs AllOk
-template<class P> void AngleField<P>::OnChangeText(wxCommandEvent& event){
+//this function is called every time a keyboard button is lifted in this->sign: it checks whether the text entered so far in name is valid and runs AllOk
+template<class P> void AngleField<P>::OnChangeTextSign(wxCommandEvent& event){
     
     unsigned int i;
     bool check;
     
-    //take care of the sign part
     for(check = false, i=0; (i<(signs.GetCount())) && (!check); i++){
         if((sign->GetValue()) == signs[i]){
             check = true;
@@ -15182,13 +15181,6 @@ template<class P> void AngleField<P>::OnChangeText(wxCommandEvent& event){
 
     //sign_ok is true/false is the text entered in sign is valid/invalid
     sign_ok = check;
-    
-    //take care of the arcdegree part
-
-    
-    //take care of the arcminute part
-
-    
     
     //tries to enable button_reduce
     parent_frame->AllOk();

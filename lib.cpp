@@ -14988,6 +14988,8 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->SetBackgroundColour(*wxWHITE);
     AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
+    //as text is changed in deg, call OnChangeText
+    deg->Bind(wxEVT_TEXT, &AngleField::OnChangeText, this);
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -14995,6 +14997,9 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
     min->SetBackgroundColour(*wxWHITE);
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
+    //as text is changed min, call OnChangeText
+    min->Bind(wxEVT_TEXT, &AngleField::OnChangeText, this);
+
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -15009,7 +15014,9 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         sign->SetBackgroundColour(*wxWHITE);
         AdjustWidth(sign);
         sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
-        
+        //as text is changed sign, call OnChangeText
+        sign->Bind(wxEVT_TEXT, &AngleField::OnChangeText, this);
+
     }
     
     if(format != String("")){sign->SetValue(wxString(""));}
@@ -15152,6 +15159,44 @@ template<class P> bool AngleField<P>::is_ok(void){
     return(output);
     
 }
+
+//this function is called every time a keyboard button is lifted in this->sign, deg or min: it checks whether the text entered so far in name is valid and runs AllOk
+template<class P> void AngleField<P>::OnChangeText(wxCommandEvent& event){
+    
+    unsigned int i;
+    bool check;
+    
+    //take care of the sign part
+    for(check = false, i=0; (i<(signs.GetCount())) && (!check); i++){
+        if((sign->GetValue()) == signs[i]){
+            check = true;
+        }
+    }
+    
+    if(check){
+        
+        //because the text in sign is valid, I set the background color of sign to white
+        sign->SetBackgroundColour(*wxWHITE);
+        
+    }
+
+    //sign_ok is true/false is the text entered in sign is valid/invalid
+    sign_ok = check;
+    
+    //take care of the arcdegree part
+
+    
+    //take care of the arcminute part
+
+    
+    
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+
+}
+
 
 template<class P> bool LengthField<P>::is_ok(void){
     

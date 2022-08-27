@@ -15376,17 +15376,18 @@ void BodyField::OnChangeText(wxCommandEvent& event){
     if(check){
         //the text entered in name is valid
         
-        //I enable the limb field if and only if the selected body allows for a field
+        //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
         ((parent_frame->limb)->name)->Enable(((catalog->list)[i].name == String("sun")) || ((catalog->list)[i].name == String("moon")));
+        (*((parent_frame->limb)->check))(event);
 
     }else{
-        //the text entered in name is not valid: disable parent_frame->limb
+        //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
         
         ((parent_frame->limb)->name)->Enable(false);
+        ((parent_frame->limb)->ok) = false;
         
     }
     
-    (*((parent_frame->limb)->check))(event);
     
     //ok is true/false is the text enteres is valid/invalid
     ok = check;

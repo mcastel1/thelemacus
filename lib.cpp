@@ -12077,6 +12077,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     limb = new LimbField(this, &(sight->limb));
+    (limb->name)->Enable(false);
     
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -14620,8 +14621,8 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
-    
-    name->Bind(wxEVT_KEY_DOWN, &BodyField::try_enable, this);
+    //as a key is pressend and then lifted in name, call OnType
+    name->Bind(wxEVT_KEY_UP, &BodyField::OnType, this);
 
     
     ok = false;
@@ -15356,17 +15357,16 @@ bool BodyField::is_ok(void){
     
 }
 
-void BodyField::try_enable(wxKeyEvent& event){
+//this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
+void BodyField::OnType(wxKeyEvent& event){
     
     unsigned int i;
     bool check;
-    String s;
+
     
     //I check whether the name in the GUI field body matches one of the body names in catalog
     for(check = false, i=0; (i<(catalog->list).size()) && (!check); i++){
-        s = String((name->GetValue().ToStdString()));
-        
-        if(s == (((catalog->list)[i]).name)){
+        if(String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)){
             check = true;
         }
     }
@@ -15374,6 +15374,7 @@ void BodyField::try_enable(wxKeyEvent& event){
     
     
     if(check){
+        //the text entered in name is valid
         
         if(((catalog->list)[i].name == String("sun")) || ((catalog->list)[i].name == String("moon"))){
             //in this case, the selected body is a body which has a limb -> I enable the limb field
@@ -15388,9 +15389,16 @@ void BodyField::try_enable(wxKeyEvent& event){
             
         }
         
+    }else{
+        //the text entered in name is not valid: disable parent_frame->limb
+        
+        ((parent_frame->limb)->name)->Enable(false);
+        
     }
     
+    //ok is true/false is the text enteres is valid/invalid
     ok = check;
+    //tries to enable button_reduce
     parent_frame->AllOk();
     
     event.Skip(true);

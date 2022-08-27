@@ -13842,6 +13842,7 @@ void SightFrame::set(void){
     if(((body->name)->GetValue() == wxString("sun") || (body->name)->GetValue() == wxString("moon"))){
         //if  body is sun or moon, then I write the value in the non-GUI field Limb into the GUI LimbField
         
+        limb->Enable(true);
         limb->set();
         
     }else{
@@ -14884,10 +14885,9 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetValue("");
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, (*check));
-    
-    //    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-    
-    
+    //as a key is pressend and then lifted in name, call OnType
+    name->Bind(wxEVT_KEY_UP, &LimbField::OnType, this);
+        
     name->SetValue(wxString(""));
     ok = false;
     
@@ -15409,6 +15409,26 @@ bool LimbField::is_ok(void){
     
     return(ok);
     
+}
+
+//this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
+void LimbField::OnType(wxKeyEvent& event){
+    
+    String s;
+    bool check;
+
+    s = String(name->GetValue().ToStdString());
+    //I check whether the name in the GUI field body matches one of the valid limb names
+
+    check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
+    
+    //ok is true/false is the text enteres is valid/invalid
+    ok = check;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+
 }
 
 bool DateField::is_ok(void){

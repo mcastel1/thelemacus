@@ -12063,6 +12063,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     sizer = new wxBoxSizer(wxVERTICAL);
     
+    //allocate buttons
+    button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_reduce = new wxButton(panel, wxID_ANY, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+
+    
     //First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
     if(sight_in==NULL){
         
@@ -12149,11 +12154,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     label = new StringField<SightFrame>(this, &(sight->label));
     
     
-    //buttons
-    button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel->Bind(wxEVT_BUTTON, &SightFrame::OnPressCancel, this);
     
-    button_reduce = new wxButton(panel, wxID_ANY, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
     button_reduce->Bind(wxEVT_BUTTON, &SightFrame::OnPressReduce, this);
     button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);

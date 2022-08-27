@@ -14621,6 +14621,9 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
     
+    name->Bind(wxEVT_KEY_DOWN, &BodyField::try_enable, this);
+
+    
     ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -15351,6 +15354,47 @@ bool BodyField::is_ok(void){
     
     return(ok);
     
+}
+
+void BodyField::try_enable(wxKeyEvent& event){
+    
+    unsigned int i;
+    bool check;
+    String s;
+    
+    //I check whether the name in the GUI field body matches one of the body names in catalog
+    for(check = false, i=0; (i<(catalog->list).size()) && (!check); i++){
+        s = String((name->GetValue().ToStdString()));
+        
+        if(s == (((catalog->list)[i]).name)){
+            check = true;
+        }
+    }
+    i--;
+    
+    
+    if(check){
+        
+        if(((catalog->list)[i].name == String("sun")) || ((catalog->list)[i].name == String("moon"))){
+            //in this case, the selected body is a body which has a limb -> I enable the limb field
+            
+            ((parent_frame->limb)->name)->Enable(true);
+            
+        }else{
+            //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
+            
+            ((parent_frame->limb)->name)->Enable(false);
+            ((parent_frame->limb)->ok) = true;
+            
+        }
+        
+    }
+    
+    ok = check;
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+
 }
 
 bool LimbField::is_ok(void){

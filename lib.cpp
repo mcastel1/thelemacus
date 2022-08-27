@@ -14622,7 +14622,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
-    //as a key is pressend and then lifted in name, call OnChangeText
+    //as text is changed name, call OnChangeText
     name->Bind(wxEVT_TEXT, &BodyField::OnChangeText, this);
     
     
@@ -14885,9 +14885,9 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetValue("");
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, (*check));
-    //as a key is pressend and then lifted in name, call OnChangeText
-    name->Bind(wxEVT_KEY_UP, &LimbField::OnChangeText, this);
-        
+    //as text is changed name, call OnChangeText
+    name->Bind(wxEVT_TEXT, &LimbField::OnChangeText, this);
+
     name->SetValue(wxString(""));
     ok = false;
     
@@ -15405,7 +15405,7 @@ bool LimbField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
-void LimbField::OnChangeText(wxKeyEvent& event){
+void LimbField::OnChangeText(wxCommandEvent& event){
     
     String s;
     bool check;

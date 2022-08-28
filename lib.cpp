@@ -14762,7 +14762,7 @@ template <class P> void AngleField<P>::set(void){
 //sets the value in the GUI object value equal to the value in the non-GUI  object length
 template<class P> void LengthField<P>::set(void){
     
-    switch((unit.value)[0]){
+    switch((unit_value.value)[0]){
             
         case 'n':{
             //unit = String("nm")
@@ -15068,11 +15068,11 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
 }
 
 //constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_in){
+template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_value_in){
     
     parent_frame = frame;
     length = p;
-    unit = unit_in;
+    unit_value = unit_value_in;
     
     //    ((parent_frame->check_height_of_eye).p) = this;
     
@@ -15104,7 +15104,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     value->SetValue(wxString(""));
     value_ok = false;
     //I set the value of box_unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
-    box_unit->SetValue(unit.value);
+    box_unit->SetValue(unit_value.value);
     box_unit_ok = true;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);

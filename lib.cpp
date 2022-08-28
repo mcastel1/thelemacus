@@ -14123,6 +14123,11 @@ template<class T> void TabulateDays::operator()(T& event){
     
     if((p->year_ok) && (p->month_ok)){
         
+        wxString temp;
+        
+        //save the old value of p->day into temp
+        temp = ((p->day)->GetValue());
+        
         //read the year
         ((((f->sight)->master_clock_date_and_hour).date).Y) = ((unsigned int)wxAtoi((p->year)->GetValue()));
         (((f->sight)->master_clock_date_and_hour).date).check_leap_year();
@@ -14147,7 +14152,18 @@ template<class T> void TabulateDays::operator()(T& event){
         }
         
         (p->day)->Set(p->days);
-        (p->day)->SetValue(wxString("1"));
+
+        if(!(wxAtoi(temp) <= wxAtoi((p->days)[(p->days).GetCount()-1]))){
+            //if the value in p->day is does not lie between the boundaries of the newly set days list (list of days of the month, then I reset it by setting it to 1
+            
+            (p->day)->SetValue(wxString("1"));
+            
+        }else{
+            
+            (p->day)->SetValue(temp);
+            
+        }
+        
         (p->day)->Enable(true);
         
     }else{
@@ -15609,7 +15625,7 @@ void DateField::OnEditYear(wxCommandEvent& event){
     //year_ok is true/false is the text enteres is valid/invalid
     year_ok = check;
   
-    day->Enable(check && month_ok);
+    ((this->check)->check_month)->tabulate_days(event);
 
     //tries to enable button_reduce
     parent_frame->AllOk();
@@ -15634,10 +15650,7 @@ void DateField::OnEditMonth(wxCommandEvent& event){
     //month_ok is true/false is the text enteres is valid/invalid
     month_ok = check;
     
-    
     ((this->check)->check_month)->tabulate_days(event);
-    
-    
     
     //tries to enable button_reduce
     parent_frame->AllOk();

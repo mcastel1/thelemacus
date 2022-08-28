@@ -14124,8 +14124,8 @@ template<class T> void TabulateDays::operator()(T& event){
     if((p->year_ok) && (p->month_ok)){
         
         //read the year
-        ((f->sight)->master_clock_date_and_hour).date.Y = ((unsigned int)wxAtoi((p->year)->GetValue()));
-        ((f->sight)->master_clock_date_and_hour).date.check_leap_year();
+        ((((f->sight)->master_clock_date_and_hour).date).Y) = ((unsigned int)wxAtoi((p->year)->GetValue()));
+        (((f->sight)->master_clock_date_and_hour).date).check_leap_year();
         
         //read the month
         ((f->sight)->master_clock_date_and_hour).date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));

@@ -1671,7 +1671,10 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    
+    void OnEditYear(wxCommandEvent&);
+    void OnEditMonth(wxCommandEvent&);
+    void OnEditDay(wxCommandEvent&);
+
 };
 
 

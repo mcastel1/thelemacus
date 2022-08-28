@@ -15585,6 +15585,87 @@ bool DateField::is_ok(void){
     
 }
 
+//this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
+void DateField::OnEditYear(wxCommandEvent& event){
+    
+    bool check;
+    
+    check = check_unsigned_int((year->GetValue()).ToStdString(), NULL, false, 0, 0);
+    
+    if(check){
+        
+        year->SetBackgroundColour(*wxWHITE);
+        
+    }
+  
+    //year_ok is true/false is the text enteres is valid/invalid
+    year_ok = check;
+  
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+//this function is called every time a keyboard button is lifted in this->month: it checks whether the text entered so far in month is valid and runs AllOk
+void DateField::OnEditMonth(wxCommandEvent& event){
+    
+    bool check;
+    
+    check = check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1);
+    
+    if(check){
+        
+        month->SetBackgroundColour(*wxWHITE);
+        
+    }
+  
+    //month_ok is true/false is the text enteres is valid/invalid
+    month_ok = check;
+  
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+//this function is called every time a keyboard button is lifted in this->day: it checks whether the text entered so far in day is valid and runs AllOk
+void DateField::OnEditDay(wxCommandEvent& event){
+    
+    bool check;
+    
+    date->check_leap_year();
+    
+    if(date->Y_is_leap_year){
+        
+        check = check_unsigned_int((day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi(month->GetValue()))-1]+1);
+        
+    }else{
+        
+        check = check_unsigned_int((day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi(month->GetValue()))-1]+1);
+        
+    }
+    
+    if(check){
+        
+        day->SetBackgroundColour(*wxWHITE);
+        
+    }
+  
+    //day_ok is true/false is the text enteres is valid/invalid
+    day_ok = check;
+  
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+
+
 bool RouteTypeField::is_ok(void){
     
     return(ok);

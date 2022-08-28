@@ -6019,7 +6019,7 @@ double Atmosphere::n(Length z){
 }
 
 double Atmosphere::dndz(Length z){
-        
+    
     return (-1.0/T(z)*dTdz(z)*(n(z)-1.0) - (n(z)-1.0)*B/T(z));
     
 }
@@ -8507,7 +8507,7 @@ void DrawPanel::TabulateRoutes(void){
             ((plot->route_list)[i]).DrawOld((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
             
         }
-                
+        
     }
     
 }
@@ -11871,7 +11871,7 @@ template<class T> void OnSelectInListControlSights::operator()(T& event){
     
     
     (f->button_modify_sight)->Enable(true);
-
+    
     //button_transport_sight is enabled/disabled if the selected Sight is related/unrelated to a Route
     (f->button_transport_sight)->Enable(
                                         
@@ -11975,7 +11975,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     //set parameters back to their original value and unbing the closing of route_frame from on_new_route_in_listcontrol_routes_for_transport
     (f->idling) = false;
     (f->route_frame)->Unbind(wxEVT_CLOSE_WINDOW, *(f->on_new_route_in_listcontrol_routes_for_transport));
-
+    
     
     event.Skip(true);
     
@@ -12066,7 +12066,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //allocate buttons
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_reduce = new wxButton(panel, wxID_ANY, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-
+    
     
     //First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
     if(sight_in==NULL){
@@ -12690,7 +12690,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     
     parent->DrawAll();
-        
+    
     event.Skip(true);
     
     Close(TRUE);
@@ -13006,7 +13006,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
-
+    
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
     //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
@@ -13595,7 +13595,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
 //disconnects sight i_sight from route i_route
 void ListFrame::Disconnect(int i_sight, int i_route){
     
-
+    
     
     //disconnect route and sight
     (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
@@ -13616,7 +13616,7 @@ void ListFrame::Disconnect(int i_sight, int i_route){
                                        );
         
     }
-
+    
     
     
     //print an info message
@@ -14624,8 +14624,8 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
-    //as text is changed name, call OnChangeText
-    name->Bind(wxEVT_TEXT, &BodyField::OnChangeText, this);
+    //as text is changed name, call OnEdit
+    name->Bind(wxEVT_TEXT, &BodyField::OnEdit, this);
     
     
     ok = false;
@@ -14887,9 +14887,9 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetValue("");
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, (*check));
-    //as text is changed name, call OnChangeText
-    name->Bind(wxEVT_TEXT, &LimbField::OnChangeText, this);
-
+    //as text is changed name, call OnEdit
+    name->Bind(wxEVT_TEXT, &LimbField::OnEdit, this);
+    
     name->SetValue(wxString(""));
     ok = false;
     
@@ -14988,8 +14988,8 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->SetBackgroundColour(*wxWHITE);
     AdjustWidth(deg);
     deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
-    //as text is changed in deg, call OnChangeText
-//    deg->Bind(wxEVT_TEXT, &AngleField::OnChangeTextArcDegree, this);
+    //as text is changed in deg, call OnEdit
+    deg->Bind(wxEVT_TEXT, &AngleField::OnEditArcDegree, this);
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -14997,9 +14997,9 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
     min->SetBackgroundColour(*wxWHITE);
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
-    //as text is changed min, call OnChangeText
-//    min->Bind(wxEVT_TEXT, &AngleField::OnChangeTextArcMinute, this);
-
+    //as text is changed min, call OnEdit
+    min->Bind(wxEVT_TEXT, &AngleField::OnEditArcMinute, this);
+    
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -15014,9 +15014,9 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         sign->SetBackgroundColour(*wxWHITE);
         AdjustWidth(sign);
         sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
-        //as text is changed sign, call OnChangeText
-        sign->Bind(wxEVT_TEXT, &AngleField::OnChangeTextSign, this);
-
+        //as text is changed sign, call OnEdit
+        sign->Bind(wxEVT_TEXT, &AngleField::OnEditSign, this);
+        
     }
     
     if(format != String("")){sign->SetValue(wxString(""));}
@@ -15160,8 +15160,8 @@ template<class P> bool AngleField<P>::is_ok(void){
     
 }
 
-//this function is called every time a keyboard button is lifted in this->sign: it checks whether the text entered so far in name is valid and runs AllOk
-template<class P> void AngleField<P>::OnChangeTextSign(wxCommandEvent& event){
+//this function is called every time a keyboard button is lifted in this->sign: it checks whether the text entered so far in this->sign is valid and runs AllOk
+template<class P> void AngleField<P>::OnEditSign(wxCommandEvent& event){
     
     unsigned int i;
     bool check;
@@ -15178,7 +15178,7 @@ template<class P> void AngleField<P>::OnChangeTextSign(wxCommandEvent& event){
         sign->SetBackgroundColour(*wxWHITE);
         
     }
-
+    
     //sign_ok is true/false is the text entered in sign is valid/invalid
     sign_ok = check;
     
@@ -15186,8 +15186,59 @@ template<class P> void AngleField<P>::OnChangeTextSign(wxCommandEvent& event){
     parent_frame->AllOk();
     
     event.Skip(true);
-
+    
 }
+
+
+//this function is called every time a keyboard button is lifted in this->deg: it checks whether the text entered so far in deg is valid and runs AllOk
+template<class P> void AngleField<P>::OnEditArcDegree(wxCommandEvent& event){
+    
+    bool check;
+    
+    check = check_unsigned_int((deg->GetValue()).ToStdString(), NULL, true, 0, 360);
+    
+    if(check){
+        
+        //because the text in sign is valid, I set the background color of deg to white
+        deg->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    //sign_ok is true/false is the text entered in sign is valid/invalid
+    deg_ok = check;
+    
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+
+//this function is called every time a keyboard button is lifted in this->min: it checks whether the text entered so far in min is valid and runs AllOk
+template<class P> void AngleField<P>::OnEditArcMinute(wxCommandEvent& event){
+    
+    bool check;
+    
+    check = check_double((min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+    
+    if(check){
+        
+        //because the text in sign is valid, I set the background color of min to white
+        min->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    //min_ok is true/false is the text entered in min is valid/invalid
+    min_ok = check;
+    
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
 
 
 template<class P> bool LengthField<P>::is_ok(void){
@@ -15397,11 +15448,11 @@ bool BodyField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
-void BodyField::OnChangeText(wxCommandEvent& event){
+void BodyField::OnEdit(wxCommandEvent& event){
     
     unsigned int i;
     bool check;
-
+    
     
     //I check whether the name in the GUI field body matches one of the body names in catalog
     for(check = false, i=0; (i<(catalog->list).size()) && (!check); i++){
@@ -15421,7 +15472,7 @@ void BodyField::OnChangeText(wxCommandEvent& event){
         
         //because the text in name is valid, I set the background color of name to white
         name->SetBackgroundColour(*wxWHITE);
-
+        
     }else{
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
         
@@ -15437,7 +15488,7 @@ void BodyField::OnChangeText(wxCommandEvent& event){
     parent_frame->AllOk();
     
     event.Skip(true);
-
+    
 }
 
 bool LimbField::is_ok(void){
@@ -15447,14 +15498,14 @@ bool LimbField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
-void LimbField::OnChangeText(wxCommandEvent& event){
+void LimbField::OnEdit(wxCommandEvent& event){
     
     String s;
     bool check;
-
+    
     s = String(name->GetValue().ToStdString());
     //I check whether the name in the GUI field body matches one of the valid limb names
-
+    
     check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
     
     //ok is true/false is the text enteres is valid/invalid
@@ -15470,7 +15521,7 @@ void LimbField::OnChangeText(wxCommandEvent& event){
     parent_frame->AllOk();
     
     event.Skip(true);
-
+    
 }
 
 bool DateField::is_ok(void){

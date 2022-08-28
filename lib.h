@@ -1526,7 +1526,7 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnChangeText(wxCommandEvent&);
+    void OnEdit(wxCommandEvent&);
     
     
 };
@@ -1554,7 +1554,7 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnChangeText(wxCommandEvent&);
+    void OnEdit(wxCommandEvent&);
     
     
 };
@@ -1588,8 +1588,10 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnChangeTextSign(wxCommandEvent&);
-    
+    void OnEditSign(wxCommandEvent&);
+    void OnEditArcDegree(wxCommandEvent&);
+    void OnEditArcMinute(wxCommandEvent&);
+
 };
 
 //class for graphical object: a field to enter a length, composed of a box. P is the type of the parent which hosts the LengthField object

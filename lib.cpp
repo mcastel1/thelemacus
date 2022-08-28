@@ -14128,7 +14128,7 @@ template<class T> void TabulateDays::operator()(T& event){
         (((f->sight)->master_clock_date_and_hour).date).check_leap_year();
         
         //read the month
-        ((f->sight)->master_clock_date_and_hour).date.M = ((unsigned int)wxAtoi((p->month)->GetValue()));
+        ((((f->sight)->master_clock_date_and_hour).date).M) = ((unsigned int)wxAtoi((p->month)->GetValue()));
         
         if(((f->sight)->master_clock_date_and_hour).date.Y_is_leap_year){
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap

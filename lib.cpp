@@ -15333,6 +15333,9 @@ DateField::DateField(SightFrame* frame, Date* p){
     year->SetBackgroundColour(*wxWHITE);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->Bind(wxEVT_KILL_FOCUS, *(check->check_year));
+    //as text is changed year, call OnEditYear
+    year->Bind(wxEVT_TEXT, &DateField::OnEditYear, this);
+  
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -15340,7 +15343,9 @@ DateField::DateField(SightFrame* frame, Date* p){
     month->SetBackgroundColour(*wxWHITE);
     AdjustWidth(month);
     month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
-    
+    //as text is changed month, call OnEditMonth
+    month->Bind(wxEVT_TEXT, &DateField::OnEditMonth, this);
+ 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     
@@ -15354,6 +15359,9 @@ DateField::DateField(SightFrame* frame, Date* p){
     AdjustWidth(day);
     days.Clear();
     day->Bind(wxEVT_KILL_FOCUS, *(check->check_day));
+    //as text is changed day, call OnEditDay
+    day->Bind(wxEVT_TEXT, &DateField::OnEditDay, this);
+ 
     
     
     year->SetValue(wxString(""));
@@ -15601,6 +15609,8 @@ void DateField::OnEditYear(wxCommandEvent& event){
     //year_ok is true/false is the text enteres is valid/invalid
     year_ok = check;
   
+    day->Enable(check && month_ok);
+
     //tries to enable button_reduce
     parent_frame->AllOk();
     
@@ -15623,7 +15633,12 @@ void DateField::OnEditMonth(wxCommandEvent& event){
   
     //month_ok is true/false is the text enteres is valid/invalid
     month_ok = check;
-  
+    
+    
+    ((this->check)->check_month)->tabulate_days(event);
+    
+    
+    
     //tries to enable button_reduce
     parent_frame->AllOk();
     

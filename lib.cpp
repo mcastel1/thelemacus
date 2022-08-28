@@ -14962,8 +14962,10 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     deg->SetBackgroundColour(*wxWHITE);
     AdjustWidth(deg);
+    deg->SetValue(wxString(""));
+    deg_ok = false;
     deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
-    //as text is changed in deg, call OnEdit
+    //as text is changed in deg, call OnEditArcDegree
     deg->Bind(wxEVT_TEXT, &AngleField::OnEditArcDegree, this);
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -14971,8 +14973,10 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
     min->SetBackgroundColour(*wxWHITE);
+    min->SetValue(wxString(""));
+    min_ok = false;
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
-    //as text is changed min, call OnEdit
+    //as text is changed min, call OnEditArcMinute
     min->Bind(wxEVT_TEXT, &AngleField::OnEditArcMinute, this);
     
     
@@ -14988,19 +14992,15 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         
         sign->SetBackgroundColour(*wxWHITE);
         AdjustWidth(sign);
+        sign->SetValue(wxString(""));
+        sign_ok = false;
         sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
-        //as text is changed sign, call OnEdit
+        //as text is changed sign, call OnEditSign
         sign->Bind(wxEVT_TEXT, &AngleField::OnEditSign, this);
         
     }
     
-    if(format != String("")){sign->SetValue(wxString(""));}
-    deg->SetValue(wxString(""));
-    min->SetValue(wxString(""));
-    sign_ok = false;
-    deg_ok = false;
-    min_ok = false;
-    
+     
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15524,13 +15524,16 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     
     check = new CheckRouteType(this);
     
+
+    
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, *check);
-    
-    name->SetValue("");
     ok = false;
-    
+    name->SetValue("");
+    name->Bind(wxEVT_KILL_FOCUS, *check);
+    //as text is changed in name, call OnEdit
+    name->Bind(wxEVT_TEXT, &RouteTypeField::OnEdit, this);
+        
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -15747,6 +15750,56 @@ bool RouteTypeField::is_ok(void){
     return(ok);
     
 }
+
+//this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
+void RouteTypeField::OnEdit(wxCommandEvent& event){
+    
+    unsigned int i;
+    bool check, enable;
+
+    
+    //I check whether the name in the GUI field body matches one of the body names in catalog
+    for(check = false, i=0; (i<(types.size())) && (!check); i++){
+        if((name->GetValue()) == (types[i])){
+            check = true;
+        }
+    }
+    i--;
+    
+    
+    
+    if(check){
+        //the text entered in name is valid
+        
+  
+        //enable/disable the related fields in RouteFrame f
+        enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
+        
+        (parent_frame->alpha)->Enable(enable);
+        (parent_frame->start_phi)->Enable(enable);
+        (parent_frame->start_lambda)->Enable(enable);
+        (parent_frame->l)->Enable(enable);
+        
+        (parent_frame->GP_phi)->Enable(!enable);
+        (parent_frame->GP_lambda)->Enable(!enable);
+        (parent_frame->omega)->Enable(!enable);
+        
+        //because the text in name is valid, I set the background color of name to white
+        name->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    
+    //ok is true/false is the text entered is valid/invalid
+    ok = check;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+
 template<class T> void BodyField::InsertIn(T* host){
     
     host->Add(sizer_v);

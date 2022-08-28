@@ -59,7 +59,7 @@
  - include transport for Positions and Routes which are not derived from a Sight
  - in lengthfield remove String unit and rename box_unit -> unit
  - when I press modify button for a Route connected  to a sight, I should prompt the message 'disconnecting route from sight'
- - when a position is modified/created, there is a segmentation fault
+- make sure that every time you bind to OnEdit... the SetValue("") has been done *before* the binding to avoid seg faults
  */
 
 

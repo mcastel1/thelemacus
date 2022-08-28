@@ -1730,7 +1730,7 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    
+    void OnEdit(wxCommandEvent&);
     
 };
 

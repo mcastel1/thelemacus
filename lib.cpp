@@ -15613,7 +15613,7 @@ void DateField::OnEditMonth(wxCommandEvent& event){
     
     bool check;
     
-    check = check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1);
+    check = check_unsigned_int((month->GetValue()).ToStdString(), NULL, true, 1, 12+1);
     
     if(check){
         

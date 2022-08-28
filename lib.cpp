@@ -14393,9 +14393,7 @@ template<class T>void CheckRouteType::operator()(T& event){
         }
         i--;
         
-        
-        
-        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
+        if(check){
             
             //enable/disable the related fields in RouteFrame f
             enable = ((((p->types)[i]) == wxString("loxodrome")) || (((p->types)[i]) == wxString("orthodrome")));
@@ -14408,6 +14406,21 @@ template<class T>void CheckRouteType::operator()(T& event){
             (f->GP_phi)->Enable(!enable);
             (f->GP_lambda)->Enable(!enable);
             (f->omega)->Enable(!enable);
+            
+        }else{
+            
+            (f->alpha)->Enable(false);
+            (f->start_phi)->Enable(false);
+            (f->start_lambda)->Enable(false);
+            (f->l)->Enable(false);
+            (f->GP_phi)->Enable(false);
+            (f->GP_lambda)->Enable(false);
+            (f->omega)->Enable(false);
+    
+        }
+        
+        
+        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
@@ -15770,7 +15783,6 @@ void RouteTypeField::OnEdit(wxCommandEvent& event){
     
     if(check){
         //the text entered in name is valid
-        
   
         //enable/disable the related fields in RouteFrame f
         enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
@@ -15787,6 +15799,16 @@ void RouteTypeField::OnEdit(wxCommandEvent& event){
         //because the text in name is valid, I set the background color of name to white
         name->SetBackgroundColour(*wxWHITE);
         
+    }else{
+        
+        (parent_frame->alpha)->Enable(false);
+        (parent_frame->start_phi)->Enable(false);
+        (parent_frame->start_lambda)->Enable(false);
+        (parent_frame->l)->Enable(false);
+        (parent_frame->GP_phi)->Enable(false);
+        (parent_frame->GP_lambda)->Enable(false);
+        (parent_frame->omega)->Enable(false);
+
     }
     
     

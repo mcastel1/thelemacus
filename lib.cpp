@@ -14146,7 +14146,7 @@ template<class T> void TabulateDays::operator()(T& event){
             //
         }
         
-        (p->day)->Set((p->days));
+        (p->day)->Set(p->days);
         (p->day)->SetValue(wxString("1"));
         (p->day)->Enable(true);
         

@@ -11779,7 +11779,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             
             ((f->print_error_message)->control) = (p->box_unit);
             ((f->print_error_message)->title) = String("Unit not found in list!");
-            ((f->print_error_message)->message) = String("Unit must be in list.");
+            ((f->print_error_message)->message) = String("Unit must be nm, m or ft.");
             f->CallAfter(*(f->print_error_message));
             
             (p->box_unit_ok) = false;

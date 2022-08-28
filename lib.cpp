@@ -12287,6 +12287,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
+    
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
@@ -14250,39 +14251,6 @@ template<class T> void CheckHour::operator()(T &event){
             
         }
         
-        /*
-         if((!check) && ((p->hour)->IsEnabled())){
-         
-         if(!(p->just_enabled)){
-         //if the content of the GUI field p is invalid and p has not been just enabled, then I am authorized to prompt an error message
-         
-         
-         //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-         ((f->print_error_message)->control) = (p->hour);
-         ((f->print_error_message)->title) = String("Entered value is not valid!");
-         ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-         f->CallAfter(*(f->print_error_message));
-         
-         }else{
-         //if the ChronoField p has just been enabled, I do not print any error message even if the content of p is invalid: this is because I want to give the opportunity to the user to enter the content of the GUI field before complaining that the content of the GUI field is invalid. However, I set just_enabled to false, because p is no longer just enabled.
-         
-         
-         (p->just_enabled) = false;
-         
-         
-         }
-         
-         
-         (p->hour_ok) = false;
-         
-         }else{
-         
-         (p->hour)->SetBackgroundColour(*wxWHITE);
-         (p->hour_ok) = true;
-         
-         }
-         */
-        
         f->AllOk();
         
     }
@@ -15267,6 +15235,79 @@ bool ChronoField::is_ok(void){
     
 }
 
+//this function is called every time a keyboard button is lifted in this->hour: it checks whether the text entered so far in value is valid and runs AllOk
+void ChronoField::OnEditHour(wxCommandEvent& event){
+    
+    bool check;
+    
+    check = check_unsigned_int((hour->GetValue()).ToStdString(), NULL, true, 0, 24);
+  
+    if(check){
+        
+        //because the text in value is valid, I set the background color of value to white
+        hour->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    
+    //hour_ok is true/false is the text entered is valid/invalid
+    hour_ok = check;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+//this function is called every time a keyboard button is lifted in this->minute: it checks whether the text entered so far in value is valid and runs AllOk
+void ChronoField::OnEditMinute(wxCommandEvent& event){
+    
+    bool check;
+    
+    check = check_unsigned_int((minute->GetValue()).ToStdString(), NULL, true, 0, 60);
+
+    if(check){
+        
+        //because the text in value is valid, I set the background color of value to white
+        minute->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    
+    //minute_ok is true/false is the text entered is valid/invalid
+    minute_ok = check;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+//this function is called every time a keyboard button is lifted in this->second: it checks whether the text entered so far in value is valid and runs AllOk
+void ChronoField::OnEditSecond(wxCommandEvent& event){
+    
+    bool check;
+    
+    check = check_double((second->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+
+    if(check){
+        
+        //because the text in value is valid, I set the background color of value to white
+        second->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    
+    //second_ok is true/false is the text entered is valid/invalid
+    second_ok = check;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> void LengthField<P>::OnEditValue(wxCommandEvent& event){
@@ -15423,6 +15464,9 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
     hour->Bind(wxEVT_KILL_FOCUS, *(check->check_hour));
+    //as text is changed in hour, call OnEditHour
+    hour->Bind(wxEVT_TEXT, &ChronoField::OnEditHour, this);
+ 
     
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
@@ -15431,6 +15475,9 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->Bind(wxEVT_KILL_FOCUS, *(check->check_minute));
+    //as text is changed in minute, call OnEditHour
+    minute->Bind(wxEVT_TEXT, &ChronoField::OnEditMinute, this);
+ 
     
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
@@ -15438,6 +15485,9 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
     second->SetBackgroundColour(*wxWHITE);
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
+    //as text is changed in second, call OnEditSecond
+    second->Bind(wxEVT_TEXT, &ChronoField::OnEditSecond, this);
+ 
     
     
     hour->SetValue(wxString(""));

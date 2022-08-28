@@ -1703,7 +1703,10 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    
+    void OnEditHour(wxCommandEvent&);
+    void OnEditMinute(wxCommandEvent&);
+    void OnEditSecond(wxCommandEvent&);
+
 };
 
 class RouteTypeField{

@@ -57,6 +57,7 @@
  - integate idling variable in everything that concerns ListFrame
  - make sure that if the user enters a field a value wihch is correct modulo upper/lower case, it is recognized
  - include transport for Positions and Routes which are not derived from a Sight
+ - in lengthfield remove String unit and rename box_unit -> unit
  */
 
 

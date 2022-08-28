@@ -1620,7 +1620,9 @@ public:
     void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    
+    void OnEditValue(wxCommandEvent&);
+    void OnEditUnit(wxCommandEvent&);
+
 };
 
 //class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted

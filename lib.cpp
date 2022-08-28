@@ -15090,11 +15090,16 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_i
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->Bind(wxEVT_KILL_FOCUS, check->check_length_value);
+    //as text is changed in value, call OnEditValue
+    value->Bind(wxEVT_TEXT, &LengthField::OnEditValue, this);
     
+
     box_unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
     AdjustWidth(box_unit);
     box_unit->Bind(wxEVT_KILL_FOCUS, check->check_length_unit);
-    
+    //as text is changed in box_unit, call OnEditUnit
+    box_unit->Bind(wxEVT_TEXT, &LengthField::OnEditUnit, this);
+
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
     value_ok = false;
@@ -15252,6 +15257,63 @@ bool ChronoField::is_ok(void){
     return(hour_ok && minute_ok && second_ok);
     
 }
+
+
+//this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
+template<class P> void LengthField<P>::OnEditValue(wxCommandEvent& event){
+    
+    bool check;
+    
+   check = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+    
+    if(check){
+        
+        //because the text in value is valid, I set the background color of value to white
+        value->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    
+    //value_ok is true/false is the text entered is valid/invalid
+    value_ok = check;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
+
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
+template<class P> void LengthField<P>::OnEditUnit(wxCommandEvent& event){
+    
+    unsigned int i;
+    bool check;
+    
+    //I check whether the name in the GUI field unit matches one of the unit names in units
+    for(check = false, i=0; (i<units.size()) && (!check); i++){
+        if((box_unit->GetValue()) == units[i]){
+            check = true;
+        }
+    }
+
+    if(check){
+        
+        //because the text in value is valid, I set the background color of box_unit to white
+        box_unit->SetBackgroundColour(*wxWHITE);
+        
+    }
+    
+    
+    //value_ok is true/false is the text entered is valid/invalid
+    box_unit_ok = check;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+    
+    event.Skip(true);
+    
+}
+
 
 //constructor of a DateField object, based on the parent frame frame
 DateField::DateField(SightFrame* frame, Date* p){

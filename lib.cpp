@@ -12411,6 +12411,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
+    
     unset_idling = new UnsetIdling<RouteFrame>(this);
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
     
@@ -12424,9 +12425,19 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     }
     
     
-    
+    //if I am adding a brand new route, I name button_ok 'Add'. Otherwise I name it "Modify"
+    if(route_in == NULL){
+        label_button_ok.set(String(""), String("Add"), String(""));
+    }else{
+        label_button_ok.set(String(""), String("Modify"), String(""));
+    }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    
+    //allocate buttons
+    button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value , wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+
     
     sizer_grid_type = new wxFlexGridSizer(1, 2, 0, 0);
     sizer_grid_alpha = new wxFlexGridSizer(1, 2, 0, 0);
@@ -12478,27 +12489,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     label = new StringField<RouteFrame>(this, &(route->label));
-    
-    
-    //buttons
-    button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    button_cancel->Bind(wxEVT_BUTTON, &RouteFrame::OnPressCancel, this);
-    
-    //if I am adding a brand new route, I name button_ok 'Add'. Otherwise I name it "Modify"
-    if(route_in == NULL){
-        label_button_ok.set(String(""), String("Add"), String(""));
-    }else{
-        label_button_ok.set(String(""), String("Modify"), String(""));
-    }
-    button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value , wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-    //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-    //    button_add->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
-    
-    //If I press reduce, I want all the fields in this RouteFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, alpha);
-    //    button_add->Bind(wxEVT_BUTTON, &AngleField<RouteFrame>::get<wxCommandEvent>, omega);
-    //    button_add->Bind(wxEVT_BUTTON, &StringField<RouteFrame>::get<wxCommandEvent>, label);
-    button_ok->Bind(wxEVT_BUTTON, &RouteFrame::OnPressOk, this);
+
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
     if(route_in == NULL){
@@ -12513,9 +12504,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
         
     }
     
-    //I enable the add button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
+    //I enable the ok button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
+    button_ok->Bind(wxEVT_BUTTON, &RouteFrame::OnPressOk, this);
     button_ok->Enable((route_in != NULL));
-    
+    button_cancel->Bind(wxEVT_BUTTON, &RouteFrame::OnPressCancel, this);
+  
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
     type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
     

@@ -1603,7 +1603,7 @@ public:
     //degrees and minutes boxes
     wxTextCtrl *value;
     //units of measure of the length
-    wxComboBox* box_unit;
+    wxComboBox* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
     //an array containing all possible units of measure
@@ -1611,7 +1611,7 @@ public:
     //the units of measure of the length in this GUI field
     String unit_value;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool value_ok, box_unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
+    bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckLength<P>* check;
     
     LengthField(P*, Length*, String);

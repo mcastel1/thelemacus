@@ -16008,16 +16008,10 @@ template<class T> void ProjectionField::InsertIn(T* host){
 void ProjectionField::OnEdit(wxCommandEvent& event){
     
     String s;
-    unsigned int i;
     bool check;
     
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    for(check = false, i=0; (i<(types.size())) && (!check); i++){
-        if((name->GetValue()) == (types[i])){
-            check = true;
-        }
-    }
-    i--;
+    is_present(name->GetValue(), types, &check, NULL);
     
     //ok is true/false is the text enteres is valid/invalid
     ok = check;

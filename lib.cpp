@@ -15651,13 +15651,10 @@ bool LimbField::is_ok(void){
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
 void LimbField::OnEdit(wxCommandEvent& event){
     
-    String s;
     bool check;
     
-    s = String(name->GetValue().ToStdString());
     //I check whether the name in the GUI field body matches one of the valid limb names
-    
-    check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
+    is_present(name->GetValue(), limbs, &check, NULL);
     
     //ok is true/false is the text enteres is valid/invalid
     ok = check;

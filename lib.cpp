@@ -61,6 +61,25 @@ inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
     
 }
 
+//checks whether s is present into wxArrayString, and writes true/false into check if its present/absent. If i!=NULL: if it is present, it writes the position of s in v in *i, if it is not present, i is not touched
+inline void is_present(wxString s, wxArrayString v, bool* check, unsigned int* i){
+    
+    unsigned int j;
+    
+    for((*check) = false, j=0; (j<v.size()) && (!(*check)); j++){
+        
+        if(s == v[j]){
+            
+            (*check) = true;
+            
+        }
+        
+    }
+    
+    if(i!=NULL){(*i) = j-1;}
+    
+}
+
 
 bool String::operator==(const String& s){
     
@@ -7816,7 +7835,7 @@ void ListFrame::GetAllCoastLineData(void){
     file_coastline_data_blocked.open(String("in"), String(""));
     
     //uncomment this at the end
-    //
+    /*
     i=0;
     while(!(file_coastline_data_blocked.value.eof())){
         
@@ -7886,7 +7905,7 @@ void ListFrame::GetAllCoastLineData(void){
         i++;
         
     }
-    //
+    */
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();
@@ -15158,14 +15177,9 @@ template<class P> bool AngleField<P>::is_ok(void){
 //this function is called every time a keyboard button is lifted in this->sign: it checks whether the text entered so far in this->sign is valid and runs AllOk
 template<class P> void AngleField<P>::OnEditSign(wxCommandEvent& event){
     
-    unsigned int i;
     bool check;
     
-    for(check = false, i=0; (i<(signs.GetCount())) && (!check); i++){
-        if((sign->GetValue()) == signs[i]){
-            check = true;
-        }
-    }
+    is_present(sign->GetValue(), signs, &check, NULL);
     
     if(check){
         

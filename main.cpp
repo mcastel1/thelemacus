@@ -60,6 +60,7 @@
  - in lengthfield remove String unit and rename box_unit -> unit
  - when I press modify button for a Route connected  to a sight, I should prompt the message 'disconnecting route from sight'
 - make sure that every time you bind to OnEdit... the SetValue("") has been done *before* the binding to avoid seg faults
+- when I edit projectionfield there is a runtime error 
  */
 
 

@@ -1494,9 +1494,11 @@ public:
 
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
+    bool ok;
 
     ProjectionField(ChartFrame*);
     template<class T> void InsertIn(T*);
+    void OnEdit(wxCommandEvent&);
     
 };
 

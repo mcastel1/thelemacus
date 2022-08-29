@@ -16003,7 +16003,36 @@ template<class T> void ProjectionField::InsertIn(T* host){
     
 }
 
-
+//this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name
+void ProjectionField::OnEdit(wxCommandEvent& event){
+    
+    String s;
+    unsigned int i;
+    bool check;
+    
+    //I check whether the name in the GUI field body matches one of the body names in catalog
+    for(check = false, i=0; (i<(types.size())) && (!check); i++){
+        if((name->GetValue()) == (types[i])){
+            check = true;
+        }
+    }
+    i--;
+    
+    //ok is true/false is the text enteres is valid/invalid
+    ok = check;
+    
+    if(check){
+        
+        name->SetBackgroundColour(*wxWHITE);
+        //choses the projection entered in name button_reduce
+        (parent->draw_panel)->OnChooseProjection(event);
+        
+    }
+    
+       
+    event.Skip(true);
+    
+}
 
 OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
     

@@ -15401,6 +15401,8 @@ DateField::DateField(SightFrame* frame, Date* p){
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     year->SetBackgroundColour(*wxWHITE);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
+    year->SetValue(wxString(""));
+    year_ok = false;
     year->Bind(wxEVT_KILL_FOCUS, *(check->check_year));
     //as text is changed year, call OnEditYear
     year->Bind(wxEVT_TEXT, &DateField::OnEditYear, this);
@@ -15411,6 +15413,8 @@ DateField::DateField(SightFrame* frame, Date* p){
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     month->SetBackgroundColour(*wxWHITE);
     AdjustWidth(month);
+    month->SetValue(wxString(""));
+    month_ok = false;
     month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
     //as text is changed month, call OnEditMonth
     month->Bind(wxEVT_TEXT, &DateField::OnEditMonth, this);
@@ -15427,21 +15431,17 @@ DateField::DateField(SightFrame* frame, Date* p){
     day->Set(days);
     AdjustWidth(day);
     days.Clear();
+    day->SetValue(wxString(""));
+    day_ok = false;
     day->Bind(wxEVT_KILL_FOCUS, *(check->check_day));
     //as text is changed day, call OnEditDay
     day->Bind(wxEVT_TEXT, &DateField::OnEditDay, this);
  
     
     
-    year->SetValue(wxString(""));
-    year_ok = false;
-    
-    month->SetValue(wxString(""));
-    month_ok = false;
-    
-    day->SetValue(wxString(""));
-    day_ok = false;
-    
+     
+     
+       
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

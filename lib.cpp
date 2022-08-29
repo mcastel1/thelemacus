@@ -15078,6 +15078,9 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
+    value->SetValue(wxString(""));
+    value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, check->check_length_value);
     //as text is changed in value, call OnEditValue
     value->Bind(wxEVT_TEXT, &LengthField::OnEditValue, this);
@@ -15085,17 +15088,14 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
 
     unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
     AdjustWidth(unit);
+    //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
+    unit->SetValue(unit_value.value);
+    unit_ok = true;
     unit->Bind(wxEVT_KILL_FOCUS, check->check_length_unit);
     //as text is changed in unit, call OnEditUnit
     unit->Bind(wxEVT_TEXT, &LengthField::OnEditUnit, this);
 
-    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
-    value->SetValue(wxString(""));
-    value_ok = false;
-    //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
-    unit->SetValue(unit_value.value);
-    unit_ok = true;
-    
+     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

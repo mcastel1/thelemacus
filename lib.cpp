@@ -7816,77 +7816,77 @@ void ListFrame::GetAllCoastLineData(void){
     file_coastline_data_blocked.open(String("in"), String(""));
     
     //uncomment this at the end
-    /*
-     i=0;
-     while(!(file_coastline_data_blocked.value.eof())){
-     
-     
-     data_x.resize(i+1);
-     data_y.resize(i+1);
-     
-     data_3d.resize(i+1);
-     
-     
-     (data_x[i]).resize(360);
-     (data_y[i]).resize(360);
-     
-     (data_3d[i]).resize(360);
-     
-     for(j=0; j<360; j++){
-     
-     // read data as a block:
-     file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
-     
-     l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
-     if(buffer != NULL){delete [] buffer;}
-     buffer = new char [l];
-     
-     (file_coastline_data_blocked.value).read(buffer, l);
-     string data(buffer, l);
-     
-     
-     
-     //count how many datapoints are in data
-     n = ((unsigned int)count(data.begin(), data.end(), ','));
-     
-     l=0;
-     pos_beg = 0;
-     pos_end = data.find(" ", pos_beg);
-     while(pos_end != (string::npos)){
-     
-     line.clear();
-     line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-     
-     replace(line.begin(), line.end(), ' ', '\n');
-     replace(line.begin(), line.end(), ',', ' ');
-     
-     ins.clear();
-     ins << line;
-     ins >> phi_temp >> lambda_temp;
-     
-     (data_x[i][j]).push_back(x_mercator(lambda_temp));
-     (data_y[i][j]).push_back(y_mercator(phi_temp));
-     
-     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
-     (p_temp.phi).set(String(""), k*phi_temp, String(""));
-     
-     (data_3d[i][j]).push_back(p_temp);
-     
-     pos_beg = pos_end+1;
-     pos_end = data.find(" ", pos_beg);
-     
-     l++;
-     
-     };
-     
-     data.clear();
-     
-     }
-     
-     i++;
-     
-     }
-     */
+    //
+    i=0;
+    while(!(file_coastline_data_blocked.value.eof())){
+        
+        
+        data_x.resize(i+1);
+        data_y.resize(i+1);
+        
+        data_3d.resize(i+1);
+        
+        
+        (data_x[i]).resize(360);
+        (data_y[i]).resize(360);
+        
+        (data_3d[i]).resize(360);
+        
+        for(j=0; j<360; j++){
+            
+            // read data as a block:
+            file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
+            
+            l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
+            if(buffer != NULL){delete [] buffer;}
+            buffer = new char [l];
+            
+            (file_coastline_data_blocked.value).read(buffer, l);
+            string data(buffer, l);
+            
+            
+            
+            //count how many datapoints are in data
+            n = ((unsigned int)count(data.begin(), data.end(), ','));
+            
+            l=0;
+            pos_beg = 0;
+            pos_end = data.find(" ", pos_beg);
+            while(pos_end != (string::npos)){
+                
+                line.clear();
+                line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                
+                replace(line.begin(), line.end(), ' ', '\n');
+                replace(line.begin(), line.end(), ',', ' ');
+                
+                ins.clear();
+                ins << line;
+                ins >> phi_temp >> lambda_temp;
+                
+                (data_x[i][j]).push_back(x_mercator(lambda_temp));
+                (data_y[i][j]).push_back(y_mercator(phi_temp));
+                
+                (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
+                (p_temp.phi).set(String(""), k*phi_temp, String(""));
+                
+                (data_3d[i][j]).push_back(p_temp);
+                
+                pos_beg = pos_end+1;
+                pos_end = data.find(" ", pos_beg);
+                
+                l++;
+                
+            };
+            
+            data.clear();
+            
+        }
+        
+        i++;
+        
+    }
+    //
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();
@@ -12306,13 +12306,13 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     }else{
         label_button_ok.set(String(""), String("Modify"), String(""));
     }
- 
+    
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-   
+    
     button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-
+    
     sizer_grid_measurement = new wxFlexGridSizer(2, 2, 0, 0);
     sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
     sizer = new wxBoxSizer(wxVERTICAL);
@@ -12340,7 +12340,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_ok->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
     button_ok->Bind(wxEVT_BUTTON, &::PositionFrame::OnPressOk, this);
     button_cancel->Bind(wxEVT_BUTTON, &PositionFrame::OnPressCancel, this);
-
+    
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_ok->Enable((position_in != NULL));
     
@@ -12436,7 +12436,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //allocate buttons
     button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value , wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-
+    
     
     sizer_grid_type = new wxFlexGridSizer(1, 2, 0, 0);
     sizer_grid_alpha = new wxFlexGridSizer(1, 2, 0, 0);
@@ -12488,7 +12488,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     label = new StringField<RouteFrame>(this, &(route->label));
-
+    
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
     if(route_in == NULL){
@@ -12507,7 +12507,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     button_ok->Bind(wxEVT_BUTTON, &RouteFrame::OnPressOk, this);
     button_ok->Enable((route_in != NULL));
     button_cancel->Bind(wxEVT_BUTTON, &RouteFrame::OnPressCancel, this);
-  
+    
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
     type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
     
@@ -14151,7 +14151,7 @@ template<class T> void TabulateDays::operator()(T& event){
         }
         
         (p->day)->Set(p->days);
-
+        
         if(!(wxAtoi(temp) <= wxAtoi((p->days)[(p->days).GetCount()-1]))){
             //if the value in p->day is does not lie between the boundaries of the newly set days list (list of days of the month, then I reset it by setting it to 1
             
@@ -14416,7 +14416,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             (f->GP_phi)->Enable(false);
             (f->GP_lambda)->Enable(false);
             (f->omega)->Enable(false);
-    
+            
         }
         
         
@@ -14580,7 +14580,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     AdjustWidth(name);
     //as text is changed in name, call OnEdit
     name->Bind(wxEVT_TEXT, &ProjectionField::OnEdit, this);
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -14877,7 +14877,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     AdjustWidth(name);
     name->SetValue(wxString(""));
     ok = false;
-
+    
     name->Bind(wxEVT_KILL_FOCUS, (*check));
     //as text is changed name, call OnEdit
     name->Bind(wxEVT_TEXT, &LimbField::OnEdit, this);
@@ -15015,7 +15015,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         
     }
     
-     
+    
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15086,7 +15086,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     //as text is changed in value, call OnEditValue
     value->Bind(wxEVT_TEXT, &LengthField::OnEditValue, this);
     
-
+    
     unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
     AdjustWidth(unit);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
@@ -15095,8 +15095,8 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     unit->Bind(wxEVT_KILL_FOCUS, check->check_length_unit);
     //as text is changed in unit, call OnEditUnit
     unit->Bind(wxEVT_TEXT, &LengthField::OnEditUnit, this);
-
-     
+    
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -15254,7 +15254,7 @@ void ChronoField::OnEditHour(wxCommandEvent& event){
     bool check;
     
     check = check_unsigned_int((hour->GetValue()).ToStdString(), NULL, true, 0, 24);
-  
+    
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
@@ -15278,7 +15278,7 @@ void ChronoField::OnEditMinute(wxCommandEvent& event){
     bool check;
     
     check = check_unsigned_int((minute->GetValue()).ToStdString(), NULL, true, 0, 60);
-
+    
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
@@ -15302,7 +15302,7 @@ void ChronoField::OnEditSecond(wxCommandEvent& event){
     bool check;
     
     check = check_double((second->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
-
+    
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
@@ -15327,7 +15327,7 @@ template<class P> void LengthField<P>::OnEditValue(wxCommandEvent& event){
     
     bool check;
     
-   check = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+    check = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
     
     if(check){
         
@@ -15359,7 +15359,7 @@ template<class P> void LengthField<P>::OnEditUnit(wxCommandEvent& event){
             check = true;
         }
     }
-
+    
     if(check){
         
         //because the text in value is valid, I set the background color of unit to white
@@ -15407,7 +15407,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     year->Bind(wxEVT_KILL_FOCUS, *(check->check_year));
     //as text is changed year, call OnEditYear
     year->Bind(wxEVT_TEXT, &DateField::OnEditYear, this);
-  
+    
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -15419,7 +15419,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
     //as text is changed month, call OnEditMonth
     month->Bind(wxEVT_TEXT, &DateField::OnEditMonth, this);
- 
+    
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     
@@ -15437,12 +15437,12 @@ DateField::DateField(SightFrame* frame, Date* p){
     day->Bind(wxEVT_KILL_FOCUS, *(check->check_day));
     //as text is changed day, call OnEditDay
     day->Bind(wxEVT_TEXT, &DateField::OnEditDay, this);
- 
     
     
-     
-     
-       
+    
+    
+    
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -15481,7 +15481,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour->Bind(wxEVT_KILL_FOCUS, *(check->check_hour));
     //as text is changed in hour, call OnEditHour
     hour->Bind(wxEVT_TEXT, &ChronoField::OnEditHour, this);
- 
+    
     
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
@@ -15535,7 +15535,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     
     check = new CheckRouteType(this);
     
-
+    
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     AdjustWidth(name);
@@ -15544,7 +15544,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name, call OnEdit
     name->Bind(wxEVT_TEXT, &RouteTypeField::OnEdit, this);
-        
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -15683,12 +15683,12 @@ void DateField::OnEditYear(wxCommandEvent& event){
         year->SetBackgroundColour(*wxWHITE);
         
     }
-  
+    
     //year_ok is true/false is the text enteres is valid/invalid
     year_ok = check;
-  
+    
     ((this->check)->check_month)->tabulate_days(event);
-
+    
     //tries to enable button_reduce
     parent_frame->AllOk();
     
@@ -15708,7 +15708,7 @@ void DateField::OnEditMonth(wxCommandEvent& event){
         month->SetBackgroundColour(*wxWHITE);
         
     }
-  
+    
     //month_ok is true/false is the text enteres is valid/invalid
     month_ok = check;
     
@@ -15743,10 +15743,10 @@ void DateField::OnEditDay(wxCommandEvent& event){
         day->SetBackgroundColour(*wxWHITE);
         
     }
-  
+    
     //day_ok is true/false is the text enteres is valid/invalid
     day_ok = check;
-  
+    
     //tries to enable button_reduce
     parent_frame->AllOk();
     
@@ -15767,7 +15767,7 @@ void RouteTypeField::OnEdit(wxCommandEvent& event){
     
     unsigned int i;
     bool check, enable;
-
+    
     
     //I check whether the name in the GUI field body matches one of the body names in catalog
     for(check = false, i=0; (i<(types.size())) && (!check); i++){
@@ -15781,7 +15781,7 @@ void RouteTypeField::OnEdit(wxCommandEvent& event){
     
     if(check){
         //the text entered in name is valid
-  
+        
         //enable/disable the related fields in RouteFrame f
         enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
         
@@ -15806,7 +15806,7 @@ void RouteTypeField::OnEdit(wxCommandEvent& event){
         (parent_frame->GP_phi)->Enable(false);
         (parent_frame->GP_lambda)->Enable(false);
         (parent_frame->omega)->Enable(false);
-
+        
     }
     
     
@@ -16030,7 +16030,7 @@ void ProjectionField::OnEdit(wxCommandEvent& event){
         
     }
     
-       
+    
     event.Skip(true);
     
 }

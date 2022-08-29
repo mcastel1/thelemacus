@@ -57,10 +57,9 @@
  - integate idling variable in everything that concerns ListFrame
  - make sure that if the user enters a field a value wihch is correct modulo upper/lower case, it is recognized
  - include transport for Positions and Routes which are not derived from a Sight
- - in lengthfield remove String unit and rename box_unit -> unit
  - when I press modify button for a Route connected  to a sight, I should prompt the message 'disconnecting route from sight'
-- make sure that every time you bind to OnEdit... the SetValue("") has been done *before* the binding to avoid seg faults
 - when I edit projectionfield there is a runtime error because the Mercator projection does not work if the block 'uncommentthis ...' is commented out -> uncomment it and test edit projection field
+ - create overall function which checks if an item is ina wxstringarray
  */
 
 

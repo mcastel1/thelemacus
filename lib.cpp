@@ -15475,6 +15475,8 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour->SetBackgroundColour(*wxWHITE);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
+    hour->SetValue(wxString(""));
+    hour_ok = false;
     hour->Bind(wxEVT_KILL_FOCUS, *(check->check_hour));
     //as text is changed in hour, call OnEditHour
     hour->Bind(wxEVT_TEXT, &ChronoField::OnEditHour, this);
@@ -15486,30 +15488,24 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     minute->SetBackgroundColour(*wxWHITE);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
+    minute->SetValue(wxString(""));
+    minute_ok = false;
     minute->Bind(wxEVT_KILL_FOCUS, *(check->check_minute));
     //as text is changed in minute, call OnEditHour
     minute->Bind(wxEVT_TEXT, &ChronoField::OnEditMinute, this);
- 
+    
     
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
     second->SetBackgroundColour(*wxWHITE);
+    second->SetValue(wxString(""));
+    second_ok = false;
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
     //as text is changed in second, call OnEditSecond
     second->Bind(wxEVT_TEXT, &ChronoField::OnEditSecond, this);
- 
     
-    
-    hour->SetValue(wxString(""));
-    hour_ok = false;
-    
-    minute->SetValue(wxString(""));
-    minute_ok = false;
-    
-    second->SetValue(wxString(""));
-    second_ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

@@ -15364,15 +15364,11 @@ template<class P> void LengthField<P>::OnEditValue(wxCommandEvent& event){
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
 template<class P> void LengthField<P>::OnEditUnit(wxCommandEvent& event){
     
-    unsigned int i;
     bool check;
     
     //I check whether the name in the GUI field unit matches one of the unit names in units
-    for(check = false, i=0; (i<units.size()) && (!check); i++){
-        if((unit->GetValue()) == units[i]){
-            check = true;
-        }
-    }
+    is_present(unit->GetValue(), units, &check, NULL);
+    
     
     if(check){
         

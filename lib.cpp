@@ -15777,14 +15777,7 @@ void RouteTypeField::OnEdit(wxCommandEvent& event){
     
     
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    for(check = false, i=0; (i<(types.size())) && (!check); i++){
-        if((name->GetValue()) == (types[i])){
-            check = true;
-        }
-    }
-    i--;
-    
-    
+    is_present(name->GetValue(), types, &check, &i);
     
     if(check){
         //the text entered in name is valid

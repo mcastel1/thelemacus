@@ -14874,12 +14874,13 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
+    name->SetValue(wxString(""));
+    ok = false;
+
     name->Bind(wxEVT_KILL_FOCUS, (*check));
     //as text is changed name, call OnEdit
     name->Bind(wxEVT_TEXT, &LimbField::OnEdit, this);
     
-    name->SetValue(wxString(""));
-    ok = false;
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

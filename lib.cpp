@@ -14578,8 +14578,9 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     name->SetValue(types[0]);
     AdjustWidth(name);
-    //    name->Bind(wxEVT_KILL_FOCUS, *check);
-    
+    //as text is changed in name, call OnEdit
+    name->Bind(wxEVT_TEXT, &ProjectionField::OnEdit, this);
+
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

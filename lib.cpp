@@ -61,12 +61,12 @@ inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
     
 }
 
-//returns true if a and b are case-unsensitive equal, and false otherwise 
-inline bool char_case_insensitive_compare(char a, char b){
-    
-    return(toupper(a) == toupper(b));
-    
-}
+////returns true if a and b are case-unsensitive equal, and false otherwise 
+//inline bool char_case_insensitive_compare(char a, char b){
+//    
+//    return(toupper(a) == toupper(b));
+//    
+//}
 
 //checks whether s is present into wxArrayString, and writes true/false into check if its present/absent. If i!=NULL: if it is present, it writes the position of s in v in *i, if it is not present, i is not touched
 inline void is_present(wxString s, wxArrayString v, bool* check, unsigned int* i){

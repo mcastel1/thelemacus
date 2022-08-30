@@ -76,7 +76,7 @@ inline void is_present(wxString s, wxArrayString v, bool* check, unsigned int* i
     for((*check) = false, j=0; (j<v.size()) && (!(*check)); j++){
         
         if((bool)(boost::iequals(s.ToStdString(), (v[j]).ToStdString()))){
-            
+             
             (*check) = true;
             
         }

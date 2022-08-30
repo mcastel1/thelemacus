@@ -69,7 +69,7 @@ inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
 //}
 
 //checks whether s is present into wxArrayString, and writes true/false into check if its present/absent. If i!=NULL: if it is present, it writes the position of s in v in *i, if it is not present, i is not touched
-inline void is_present(wxComboBox* control, wxArrayString v, bool* check, unsigned int* i){
+inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, bool* check, unsigned int* i){
     
     unsigned int j;
     
@@ -15186,7 +15186,7 @@ template<class P> void AngleField<P>::OnEditSign(wxCommandEvent& event){
     
     bool check;
     
-    is_present(sign, signs, &check, NULL);
+    find_and_replace_case_insensitive(sign, signs, &check, NULL);
     
     if(check){
         
@@ -15374,7 +15374,7 @@ template<class P> void LengthField<P>::OnEditUnit(wxCommandEvent& event){
     bool check;
     
     //I check whether the name in the GUI field unit matches one of the unit names in units
-    is_present(unit, units, &check, NULL);
+    find_and_replace_case_insensitive(unit, units, &check, NULL);
     
     
     if(check){
@@ -15661,7 +15661,7 @@ void LimbField::OnEdit(wxCommandEvent& event){
     bool check;
     
     //I check whether the name in the GUI field body matches one of the valid limb names
-    is_present(name, limbs, &check, NULL);
+    find_and_replace_case_insensitive(name, limbs, &check, NULL);
     
     //ok is true/false is the text enteres is valid/invalid
     ok = check;
@@ -15784,7 +15784,7 @@ void RouteTypeField::OnEdit(wxCommandEvent& event){
     
     
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    is_present(name, types, &check, &i);
+    find_and_replace_case_insensitive(name, types, &check, &i);
     
     if(check){
         //the text entered in name is valid
@@ -16018,7 +16018,7 @@ void ProjectionField::OnEdit(wxCommandEvent& event){
     bool check;
     
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    is_present(name, types, &check, NULL);
+    find_and_replace_case_insensitive(name, types, &check, NULL);
     
     //ok is true/false is the text enteres is valid/invalid
     ok = check;

@@ -84,9 +84,16 @@ bool MyApp::OnInit(){
     cross(a, b, &c);
     
     cout << "\t\t c = " << gsl_vector_get(c, 0) << " " << gsl_vector_get(c, 1) << " " << gsl_vector_get(c, 2) << "\n";    
-    */
+     */
     
-
+    /*
+     string a = "ciao";
+     string b = "CiaOx";
+     
+     cout << "comparison = " << boost::iequals(a, b) << "\n";
+     
+     
+     */
     
     wxImage::AddHandler(new wxPNGHandler);
     

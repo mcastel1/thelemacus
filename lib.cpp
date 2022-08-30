@@ -78,6 +78,7 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
         if((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))){
              
             (*check) = true;
+            //here write in control
             
         }
         

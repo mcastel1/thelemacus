@@ -28,7 +28,7 @@
  - change Route -> alpha to Z
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
- - add margins in ChartFrame
+ - add margins in ChartFrame (why is the width of the frame evaluated to be 0??)
  - add ft unit for lengths
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification

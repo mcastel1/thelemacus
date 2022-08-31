@@ -78,7 +78,8 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
         if((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))){
              
             (*check) = true;
-            //here write in control
+            //I write in control the proper text value (i.e. with the correct upper/lower case, as taken from the list v)
+            control->SetValue(v[j]);
             
         }
         
@@ -14606,7 +14607,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     name->SetValue(types[0]);
     AdjustWidth(name);
     //as text is changed in name, call OnEdit
-    name->Bind(wxEVT_TEXT, &ProjectionField::OnEdit, this);
+    name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit, this);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -14641,7 +14642,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed name, call OnEdit
-    name->Bind(wxEVT_TEXT, &BodyField::OnEdit, this);
+    name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit, this);
     
     
     ok = false;
@@ -14906,8 +14907,8 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     ok = false;
     
     name->Bind(wxEVT_KILL_FOCUS, (*check));
-    //as text is changed name, call OnEdit
-    name->Bind(wxEVT_TEXT, &LimbField::OnEdit, this);
+    //as text is changed in name from the user, with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit, this);
     
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -15008,7 +15009,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg_ok = false;
     deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
     //as text is changed in deg, call OnEditArcDegree
-    deg->Bind(wxEVT_TEXT, &AngleField::OnEditArcDegree, this);
+    deg->Bind(wxEVT_COMBOBOX, &AngleField::OnEditArcDegree, this);
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -15038,7 +15039,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         sign_ok = false;
         sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
         //as text is changed sign, call OnEditSign
-        sign->Bind(wxEVT_TEXT, &AngleField::OnEditSign, this);
+        sign->Bind(wxEVT_COMBOBOX, &AngleField::OnEditSign, this);
         
     }
     
@@ -15121,7 +15122,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     unit_ok = true;
     unit->Bind(wxEVT_KILL_FOCUS, check->check_length_unit);
     //as text is changed in unit, call OnEditUnit
-    unit->Bind(wxEVT_TEXT, &LengthField::OnEditUnit, this);
+    unit->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit, this);
     
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -15436,7 +15437,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     month_ok = false;
     month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
     //as text is changed month, call OnEditMonth
-    month->Bind(wxEVT_TEXT, &DateField::OnEditMonth, this);
+    month->Bind(wxEVT_COMBOBOX, &DateField::OnEditMonth, this);
     
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -15454,7 +15455,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     day_ok = false;
     day->Bind(wxEVT_KILL_FOCUS, *(check->check_day));
     //as text is changed day, call OnEditDay
-    day->Bind(wxEVT_TEXT, &DateField::OnEditDay, this);
+    day->Bind(wxEVT_COMBOBOX, &DateField::OnEditDay, this);
     
     
     
@@ -15498,7 +15499,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour_ok = false;
     hour->Bind(wxEVT_KILL_FOCUS, *(check->check_hour));
     //as text is changed in hour, call OnEditHour
-    hour->Bind(wxEVT_TEXT, &ChronoField::OnEditHour, this);
+    hour->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditHour, this);
     
     
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
@@ -15511,7 +15512,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     minute_ok = false;
     minute->Bind(wxEVT_KILL_FOCUS, *(check->check_minute));
     //as text is changed in minute, call OnEditHour
-    minute->Bind(wxEVT_TEXT, &ChronoField::OnEditMinute, this);
+    minute->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditMinute, this);
     
     
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
@@ -15561,7 +15562,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     name->SetValue("");
     name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name, call OnEdit
-    name->Bind(wxEVT_TEXT, &RouteTypeField::OnEdit, this);
+    name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit, this);
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

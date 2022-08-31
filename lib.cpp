@@ -12685,12 +12685,26 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     
     if(position_in_listcontrol_routes==-1){
-        //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
+        //I am creating a new Route
         
-        ((this->parent)->plot)->add_route(route, String(""));
+        //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
+        (parent->plot)->add_route(route, String(""));
+        
+    }else{
+        //I am modifying an existing Route
+        
+        if((route->related_sight).value != -1){
+            //the Route that I am moidifying is related to a Sight
+            
+            //because I am modifying and thus altering the Route, I disconnect it from its related sight
+            parent->Disconnect((route->related_sight).value);
+            
+        }
         
     }
+
     
+  
     //if I am adding a new Route, I resize points_route_list to add a new element to it
     if(position_in_listcontrol_routes == -1){
         

@@ -56,8 +56,7 @@
  - uncomment at '    //uncomment this at the end'
  - integate idling variable in everything that concerns ListFrame
  - include transport for Positions and Routes which are not derived from a Sight
- - when I press modify button for a Route connected  to a sight, I should prompt the message 'disconnecting route from sight'
-- when I edit projectionfield there is a runtime error because the Mercator projection does not work if the block 'uncommentthis ...' is commented out -> uncomment it and test edit projection field
+ - when a Sight with a related Route is modified, you should update the related Route in listcontrol_routes and redraw it
  */
 
 

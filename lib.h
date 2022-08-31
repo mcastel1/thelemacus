@@ -1910,7 +1910,7 @@ public:
     void OnModifyRoute(wxCommandEvent& event);
     void OnPressDeleteRoute(wxCommandEvent& event);
     
-    void Disconnect(int, int);
+    void Disconnect(int);
 
     void OnAddChartFrame(wxCommandEvent& event);
 

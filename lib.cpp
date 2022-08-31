@@ -10946,8 +10946,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
                             (parent->parent)->Disconnect(
-                                                         (((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value,
-                                                         (parent->parent)->highlighted_route
+                                                         (((plot->route_list)[((parent->parent)->highlighted_route)]).related_sight).value
                                                          );
                             
                         }
@@ -11952,7 +11951,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                      );
     
     //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-    f->Disconnect((((f->plot)->route_list)[i_route_to_transport]).related_sight.value, i_route_to_transport);
+    f->Disconnect(((((f->plot)->route_list)[i_route_to_transport]).related_sight).value);
     
     //change the label of Route #i_route_to_transport by appending to it 'translated with [label of the translating Route]'
     ((((f->plot)->route_list)[i_route_to_transport]).label) = ((((f->plot)->route_list)[i_route_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
@@ -11991,7 +11990,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
                                                                                      );
     
     //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-    f->Disconnect((((f->plot)->route_list)[i_route_to_transport]).related_sight.value, i_route_to_transport);
+    f->Disconnect(((((f->plot)->route_list)[i_route_to_transport]).related_sight).value);
     
     //change the label of Route #i_route_to_transport by appending to it 'translated with [label of the translating Route]'
     ((((f->plot)->route_list)[i_route_to_transport]).label) = ((((f->plot)->route_list)[i_route_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
@@ -12688,12 +12687,26 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     
     if(position_in_listcontrol_routes==-1){
-        //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
+        //I am creating a new Route
         
-        ((this->parent)->plot)->add_route(route, String(""));
+        //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
+        (parent->plot)->add_route(route, String(""));
+        
+    }else{
+        //I am modifying an existing Route
+        
+        if((route->related_sight).value != -1){
+            //the Route that I am moidifying is related to a Sight
+            
+            //because I am modifying and thus altering the Route, I disconnect it from its related sight
+            parent->Disconnect((route->related_sight).value);
+            
+        }
         
     }
+
     
+  
     //if I am adding a new Route, I resize points_route_list to add a new element to it
     if(position_in_listcontrol_routes == -1){
         
@@ -13506,6 +13519,8 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
         s << "Route #" << item;
         
         RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);
+
         route_frame->Show(true);
         
     }
@@ -13612,10 +13627,12 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
 }
 
-//disconnects sight i_sight from route i_route
-void ListFrame::Disconnect(int i_sight, int i_route){
+//disconnects sight i_sight from its related Route
+void ListFrame::Disconnect(int i_sight){
     
+    int i_route;
     
+    i_route = (((plot->sight_list)[i_sight]).related_route).value;
     
     //disconnect route and sight
     (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));

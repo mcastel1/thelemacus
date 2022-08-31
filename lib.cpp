@@ -15445,8 +15445,8 @@ DateField::DateField(SightFrame* frame, Date* p){
     month_ok = false;
     month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    month->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEditMonth<wxCommandEvent>, this);
-    month->Bind(wxEVT_KEY_UP, &ProjectionField::OnEditMonth<wxKeyEvent>, this);
+    month->Bind(wxEVT_COMBOBOX, &DateField::OnEditMonth<wxCommandEvent>, this);
+    month->Bind(wxEVT_KEY_UP, &DateField::OnEditMonth<wxKeyEvent>, this);
 
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     

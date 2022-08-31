@@ -15192,7 +15192,7 @@ template<class P> bool AngleField<P>::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->sign: it checks whether the text entered so far in this->sign is valid and runs AllOk
-template<class P> void AngleField<P>::OnEditSign(wxCommandEvent& event){
+template<class P> template<class E> void AngleField<P>::OnEditSign(E& event){
     
     bool check;
     
@@ -15217,7 +15217,7 @@ template<class P> void AngleField<P>::OnEditSign(wxCommandEvent& event){
 
 
 //this function is called every time a keyboard button is lifted in this->deg: it checks whether the text entered so far in deg is valid and runs AllOk
-template<class P> void AngleField<P>::OnEditArcDegree(wxCommandEvent& event){
+template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event){
     
     bool check;
     
@@ -15242,7 +15242,7 @@ template<class P> void AngleField<P>::OnEditArcDegree(wxCommandEvent& event){
 
 
 //this function is called every time a keyboard button is lifted in this->min: it checks whether the text entered so far in min is valid and runs AllOk
-template<class P> void AngleField<P>::OnEditArcMinute(wxCommandEvent& event){
+template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event){
     
     bool check;
     
@@ -15280,7 +15280,7 @@ bool ChronoField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->hour: it checks whether the text entered so far in value is valid and runs AllOk
-void ChronoField::OnEditHour(wxCommandEvent& event){
+template<class E> void ChronoField::OnEditHour(E& event){
     
     bool check;
     
@@ -15304,7 +15304,7 @@ void ChronoField::OnEditHour(wxCommandEvent& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->minute: it checks whether the text entered so far in value is valid and runs AllOk
-void ChronoField::OnEditMinute(wxCommandEvent& event){
+template<class E> void ChronoField::OnEditMinute(E& event){
     
     bool check;
     
@@ -15328,7 +15328,7 @@ void ChronoField::OnEditMinute(wxCommandEvent& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->second: it checks whether the text entered so far in value is valid and runs AllOk
-void ChronoField::OnEditSecond(wxCommandEvent& event){
+template<class E> void ChronoField::OnEditSecond(E& event){
     
     bool check;
     
@@ -15354,7 +15354,7 @@ void ChronoField::OnEditSecond(wxCommandEvent& event){
 
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
-template<class P> void LengthField<P>::OnEditValue(wxCommandEvent& event){
+template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event){
     
     bool check;
     
@@ -15379,7 +15379,7 @@ template<class P> void LengthField<P>::OnEditValue(wxCommandEvent& event){
 
 
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
-template<class P> void LengthField<P>::OnEditUnit(wxCommandEvent& event){
+template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event){
     
     bool check;
     
@@ -15618,7 +15618,7 @@ bool BodyField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
-void BodyField::OnEdit(wxCommandEvent& event){
+template<class E> void BodyField::OnEdit(E& event){
     
     unsigned int i;
     bool check;
@@ -15698,7 +15698,7 @@ bool DateField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
-void DateField::OnEditYear(wxCommandEvent& event){
+template<class E> void DateField::OnEditYear(E& event){
     
     bool check;
     
@@ -15723,7 +15723,7 @@ void DateField::OnEditYear(wxCommandEvent& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->month: it checks whether the text entered so far in month is valid and runs AllOk
-void DateField::OnEditMonth(wxCommandEvent& event){
+template<class E> void DateField::OnEditMonth(E& event){
     
     bool check;
     
@@ -15748,7 +15748,7 @@ void DateField::OnEditMonth(wxCommandEvent& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->day: it checks whether the text entered so far in day is valid and runs AllOk
-void DateField::OnEditDay(wxCommandEvent& event){
+template<class E> void DateField::OnEditDay(E& event){
     
     bool check;
     
@@ -15789,7 +15789,7 @@ bool RouteTypeField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
-void RouteTypeField::OnEdit(wxCommandEvent& event){
+template<class E> void RouteTypeField::OnEdit(E& event){
     
     unsigned int i;
     bool check, enable;

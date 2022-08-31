@@ -3795,8 +3795,8 @@ void Length::read_from_file(String name, String filename, String prefix){
     size_t pos1, pos2;
     String unit;
     File file;
-
-
+    
+    
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
     
@@ -3838,7 +3838,7 @@ void Length::read_from_file(String name, String filename, String prefix){
         pos2 = line.find(" ft");
         unit = String("ft");
     }
-
+    
     
     
     value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
@@ -3848,7 +3848,7 @@ void Length::read_from_file(String name, String filename, String prefix){
     if(unit == String("ft")){
         value/=nm_ft;
     }
-
+    
     print(name, String("nm"), prefix, cout);
     
 }
@@ -11197,7 +11197,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 //                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
                 //                parent->CallAfter(*(parent->print_error_message));
                 //
-
+                
             }
             
         }
@@ -12214,7 +12214,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
         (sight->height_of_eye).read_from_file(String("default height of eye"), String(path_file_init), String(""));
         height_of_eye->set();
-
+        
     }
     //now that height_of_eye has been allocatd, I link artificial_horizon_check to height_of_eye
     (artificial_horizon_check->related_field) = height_of_eye;
@@ -12565,13 +12565,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     
-    sizer_grid_type = new wxFlexGridSizer(1, 2, 0, 0);
-    sizer_grid_alpha = new wxFlexGridSizer(1, 2, 0, 0);
-    sizer_grid_l = new wxFlexGridSizer(1, 2, 0, 0);
-    sizer_grid_start = new wxFlexGridSizer(2, 2, 0, 0);
-    sizer_grid_GP = new wxFlexGridSizer(2, 2, 0, 0);
-    sizer_grid_omega = new wxFlexGridSizer(1, 2, 0, 0);
-    sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
+    sizer_grid_type = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_grid_alpha = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_grid_l = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_grid_start = new wxFlexGridSizer(2, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_grid_GP = new wxFlexGridSizer(2, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_grid_omega = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_grid_label = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
     sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
     sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
@@ -12671,8 +12671,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     sizer_box_data->Add(sizer_box_GP);
     sizer_box_data->Add(sizer_grid_omega);
     
-    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM);
+    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM| wxALL, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), NULL);
+    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), NULL);
     
     
     
@@ -12804,9 +12804,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
         
     }
-
     
-  
+    
+    
     //if I am adding a new Route, I resize points_route_list to add a new element to it
     if(position_in_listcontrol_routes == -1){
         
@@ -13113,7 +13113,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //read color selected item from file
     color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
     
- 
+    
     
     //no positions nor routes are highlighted when ListFrame is constructed
     highlighted_route = -1;
@@ -13621,7 +13621,7 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
         
         RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);
-
+        
         route_frame->Show(true);
         
     }
@@ -15740,11 +15740,11 @@ template<class E> void BodyField::OnEdit(E& event){
     
     unsigned int i;
     bool check;
-  
+    
     
     //I check whether the name in the GUI field body matches one of the valid body names
     find_and_replace_case_insensitive(name, bodies, &check, &i);
-  
+    
     if(check){
         //the text entered in name is valid
         

@@ -56,6 +56,7 @@
  - uncomment at '    //uncomment this at the end'
  - integate idling variable in everything that concerns ListFrame
  - include transport for Positions and Routes which are not derived from a Sight
+ - when a Sight with a related Route is modified, you should update the related Route in listcontrol_routes and redraw it
  */
 
 

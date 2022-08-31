@@ -1500,7 +1500,7 @@ public:
 
     ProjectionField(ChartFrame*);
     template<class T> void InsertIn(T*);
-    void OnEdit(wxCommandEvent&);
+    template<class E> void OnEdit(E&);
     
 };
 
@@ -1558,7 +1558,7 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnEdit(wxCommandEvent&);
+    template<class E> void OnEdit(E&);
     
     
 };

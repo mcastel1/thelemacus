@@ -14607,8 +14607,9 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     name->SetValue(types[0]);
     AdjustWidth(name);
     //as text is changed in name, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit, this);
-    
+//    name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
+//    name->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ProjectionField::OnEdit), this);
+
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -14907,9 +14908,10 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     ok = false;
     
     name->Bind(wxEVT_KILL_FOCUS, (*check));
-    //as text is changed in name from the user, with either a keyboard button or a selection in the listbox, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit, this);
-    
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit<wxCommandEvent>, this);
+    name->Bind(wxEVT_KEY_UP, &LimbField::OnEdit<wxKeyEvent>, this);
+
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15658,7 +15660,7 @@ bool LimbField::is_ok(void){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
-void LimbField::OnEdit(wxCommandEvent& event){
+template<class E> void LimbField::OnEdit(E& event){
     
     bool check;
     
@@ -16014,7 +16016,7 @@ template<class T> void ProjectionField::InsertIn(T* host){
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name
-void ProjectionField::OnEdit(wxCommandEvent& event){
+template<class E> void ProjectionField::OnEdit(E& event){
     
     String s;
     bool check;

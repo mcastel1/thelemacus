@@ -12327,8 +12327,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
-    box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM);
+    box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM | wxALL,
+                     ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value),
+                     NULL);
+    box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM | wxALL,
+                     ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value),
+                     NULL);
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
     sizer_box_time = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");

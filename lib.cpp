@@ -16015,7 +16015,7 @@ template<class T> void ProjectionField::InsertIn(T* host){
     
 }
 
-//this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name
+//this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name
 template<class E> void ProjectionField::OnEdit(E& event){
     
     String s;

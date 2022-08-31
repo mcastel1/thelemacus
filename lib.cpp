@@ -13504,6 +13504,8 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
         s << "Route #" << item;
         
         RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);
+
         route_frame->Show(true);
         
     }

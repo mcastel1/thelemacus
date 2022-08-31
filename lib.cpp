@@ -15622,22 +15622,16 @@ template<class E> void BodyField::OnEdit(E& event){
     
     unsigned int i;
     bool check;
+  
     
-    
-    //I check whether the name in the GUI field body matches one of the body names in catalog
-    for(check = false, i=0; (i<(catalog->list).size()) && (!check); i++){
-        if(String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)){
-            check = true;
-        }
-    }
-    i--;
-    
-    
+    //I check whether the name in the GUI field body matches one of the valid body names
+    find_and_replace_case_insensitive(name, bodies, &check, &i);
+  
     if(check){
         //the text entered in name is valid
         
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
-        ((parent_frame->limb)->name)->Enable(((catalog->list)[i].name == String("sun")) || ((catalog->list)[i].name == String("moon")));
+        ((parent_frame->limb)->name)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
         (*((parent_frame->limb)->check))(event);
         
         //because the text in name is valid, I set the background color of name to white
@@ -15672,7 +15666,7 @@ template<class E> void LimbField::OnEdit(E& event){
     
     bool check;
     
-    //I check whether the name in the GUI field body matches one of the valid limb names
+    //I check whether the name in the GUI field name matches one of the valid limb names
     find_and_replace_case_insensitive(name, limbs, &check, NULL);
     
     //ok is true/false is the text enteres is valid/invalid

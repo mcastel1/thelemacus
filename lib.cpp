@@ -13534,7 +13534,7 @@ void ListFrame::OnModifySight(wxCommandEvent& event){
         stringstream s;
         
         s.str("");
-        s << "Sight #" << item;
+        s << "Sight #" << item+1;
         
         SightFrame *sight_frame = new SightFrame(this, &((plot->sight_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         //        (sight_frame->sight) = &((plot->sight_list)[item]);

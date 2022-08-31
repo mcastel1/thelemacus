@@ -15020,7 +15020,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min_ok = false;
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
     //as text is changed min, call OnEditArcMinute
-    min->Bind(wxEVT_TEXT, &AngleField::OnEditArcMinute, this);
+//    min->Bind(wxEVT_TEXT, &AngleField::OnEditArcMinute, this);
     
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -15112,7 +15112,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, check->check_length_value);
     //as text is changed in value, call OnEditValue
-    value->Bind(wxEVT_TEXT, &LengthField::OnEditValue, this);
+//    value->Bind(wxEVT_TEXT, &LengthField::OnEditValue, this);
     
     
     unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);

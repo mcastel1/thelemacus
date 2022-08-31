@@ -55,11 +55,9 @@
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - uncomment at '    //uncomment this at the end'
  - integate idling variable in everything that concerns ListFrame
- - make sure that if the user enters a field a value wihch is correct modulo upper/lower case, it is recognized
  - include transport for Positions and Routes which are not derived from a Sight
  - when I press modify button for a Route connected  to a sight, I should prompt the message 'disconnecting route from sight'
 - when I edit projectionfield there is a runtime error because the Mercator projection does not work if the block 'uncommentthis ...' is commented out -> uncomment it and test edit projection field
- - create overall function which checks if an item is ina wxstringarray
  */
 
 

@@ -1530,7 +1530,7 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnEdit(wxCommandEvent&);
+    template<class E> void OnEdit(E&);
     
     
 };
@@ -1592,9 +1592,9 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnEditSign(wxCommandEvent&);
-    void OnEditArcDegree(wxCommandEvent&);
-    void OnEditArcMinute(wxCommandEvent&);
+    template<class E> void OnEditSign(E&);
+    template<class E> void OnEditArcDegree(E&);
+    template<class E> void OnEditArcMinute(E&);
 
 };
 
@@ -1624,8 +1624,8 @@ public:
     void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnEditValue(wxCommandEvent&);
-    void OnEditUnit(wxCommandEvent&);
+    template<class E> void OnEditValue(E&);
+    template<class E> void OnEditUnit(E&);
 
 };
 
@@ -1675,9 +1675,9 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnEditYear(wxCommandEvent&);
-    void OnEditMonth(wxCommandEvent&);
-    void OnEditDay(wxCommandEvent&);
+    template<class E> void OnEditYear(E&);
+    template<class E> void OnEditMonth(E&);
+    template<class E> void OnEditDay(E&);
 
 };
 
@@ -1707,9 +1707,9 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnEditHour(wxCommandEvent&);
-    void OnEditMinute(wxCommandEvent&);
-    void OnEditSecond(wxCommandEvent&);
+    template<class E> void OnEditHour(E&);
+    template<class E> void OnEditMinute(E&);
+    template<class E> void OnEditSecond(E&);
 
 };
 
@@ -1734,7 +1734,7 @@ public:
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
-    void OnEdit(wxCommandEvent&);
+    template<class E> void OnEdit(E&);
     
 };
 

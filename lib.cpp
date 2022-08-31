@@ -12151,9 +12151,18 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
-    sizer_grid_measurement = new wxFlexGridSizer(6, 2, 0, 0);
-    sizer_grid_time = new wxFlexGridSizer(4, 2, 0, 0);
-    sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
+    sizer_grid_measurement = new wxFlexGridSizer(6, 2,
+                                                 ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                                                 ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                                 );
+    sizer_grid_time = new wxFlexGridSizer(4, 2,
+                                          ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                                          ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                          );
+    sizer_grid_label = new wxFlexGridSizer(1, 2,
+                                           ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                                           ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                           );
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_4 = new wxBoxSizer(wxHORIZONTAL);

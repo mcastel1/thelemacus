@@ -3732,6 +3732,7 @@ bool Length::check_valid(String name, String prefix){
     
 }
 
+//reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
 void Length::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     
     string line;
@@ -3786,6 +3787,71 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, St
     
 }
 
+//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
+void Length::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    stringstream new_prefix;
+    size_t pos1, pos2;
+    String unit;
+    File file;
+
+
+    //prepend \t to prefix
+    new_prefix << "\t" << prefix.value;
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+    
+    
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+    
+    
+    pos1 = line.find(" = ");
+    pos2 = line.find(" nm");
+    
+    if(line.find(" nm") != (string::npos)){
+        //in this case the units of the length read is nm
+        cout << prefix.value << "Unit is in nm\n";
+        pos2 = line.find(" nm");
+        unit = String("nm");
+    }
+    if(line.find(" m") != (string::npos)){
+        //in this case the units of the length read is m
+        cout << prefix.value << "Unit is in m\n";
+        pos2 = line.find(" m");
+        unit = String("m");
+    }
+    if(line.find(" ft") != (string::npos)){
+        //in this case the units of the length read is ft
+        cout << prefix.value << "Unit is in ft\n";
+        pos2 = line.find(" ft");
+        unit = String("ft");
+    }
+
+    
+    
+    value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
+    if(unit == String("m")){
+        value/=(1e3*nm);
+    }
+    if(unit == String("ft")){
+        value/=nm_ft;
+    }
+
+    print(name, String("nm"), prefix, cout);
+    
+}
 
 
 Angle Angle::operator+ (const Angle& angle){
@@ -12135,6 +12201,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye), String("m"));
+    if(sight_in == NULL){
+        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
+        (sight->height_of_eye).read_from_file(String("default height of eye"), String(path_file_init), String(""));
+        height_of_eye->set();
+
+    }
     //now that height_of_eye has been allocatd, I link artificial_horizon_check to height_of_eye
     (artificial_horizon_check->related_field) = height_of_eye;
     
@@ -13016,6 +13088,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     //read color selected item from file
     color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
     
+ 
     
     //no positions nor routes are highlighted when ListFrame is constructed
     highlighted_route = -1;

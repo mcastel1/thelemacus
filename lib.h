@@ -541,6 +541,7 @@ public:
     void enter(String, String, String);
     void print(String, String, String, ostream&);
     void read_from_file(String, File&, bool, String);
+    void read_from_file(String, String, String);
     bool check_valid(String, String);
     string to_string(String, unsigned int);
     bool operator> (const Length&), operator<= (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
@@ -1873,7 +1874,7 @@ public:
     vector<Color> color_list;
     //the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area
     Color color_selected_item;
-    //the rectangle used to measure the size of the display
+     //the rectangle used to measure the size of the display
     wxDisplay display;
     wxRect rectangle_display;
     //this referrs to the init file

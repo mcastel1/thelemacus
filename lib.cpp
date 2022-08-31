@@ -76,7 +76,7 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
     for((*check) = false, j=0; (j<v.size()) && (!(*check)); j++){
         
         if((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))){
-             
+            
             (*check) = true;
             //I write in control the proper text value (i.e. with the correct upper/lower case, as taken from the list v)
             control->SetValue(v[j]);
@@ -7844,77 +7844,77 @@ void ListFrame::GetAllCoastLineData(void){
     file_coastline_data_blocked.open(String("in"), String(""));
     
     //uncomment this at the end
-    //
-    i=0;
-    while(!(file_coastline_data_blocked.value.eof())){
-        
-        
-        data_x.resize(i+1);
-        data_y.resize(i+1);
-        
-        data_3d.resize(i+1);
-        
-        
-        (data_x[i]).resize(360);
-        (data_y[i]).resize(360);
-        
-        (data_3d[i]).resize(360);
-        
-        for(j=0; j<360; j++){
-            
-            // read data as a block:
-            file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
-            
-            l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
-            if(buffer != NULL){delete [] buffer;}
-            buffer = new char [l];
-            
-            (file_coastline_data_blocked.value).read(buffer, l);
-            string data(buffer, l);
-            
-            
-            
-            //count how many datapoints are in data
-            n = ((unsigned int)count(data.begin(), data.end(), ','));
-            
-            l=0;
-            pos_beg = 0;
-            pos_end = data.find(" ", pos_beg);
-            while(pos_end != (string::npos)){
-                
-                line.clear();
-                line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-                
-                replace(line.begin(), line.end(), ' ', '\n');
-                replace(line.begin(), line.end(), ',', ' ');
-                
-                ins.clear();
-                ins << line;
-                ins >> phi_temp >> lambda_temp;
-                
-                (data_x[i][j]).push_back(x_mercator(lambda_temp));
-                (data_y[i][j]).push_back(y_mercator(phi_temp));
-                
-                (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
-                (p_temp.phi).set(String(""), k*phi_temp, String(""));
-                
-                (data_3d[i][j]).push_back(p_temp);
-                
-                pos_beg = pos_end+1;
-                pos_end = data.find(" ", pos_beg);
-                
-                l++;
-                
-            };
-            
-            data.clear();
-            
-        }
-        
-        i++;
-        
-    }
-    //
+    /*
+     i=0;
+     while(!(file_coastline_data_blocked.value.eof())){
+     
+     
+     data_x.resize(i+1);
+     data_y.resize(i+1);
+     
+     data_3d.resize(i+1);
+     
+     
+     (data_x[i]).resize(360);
+     (data_y[i]).resize(360);
+     
+     (data_3d[i]).resize(360);
+     
+     for(j=0; j<360; j++){
+     
+     // read data as a block:
+     file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
+     
+     l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
+     if(buffer != NULL){delete [] buffer;}
+     buffer = new char [l];
+     
+     (file_coastline_data_blocked.value).read(buffer, l);
+     string data(buffer, l);
+     
+     
+     
+     //count how many datapoints are in data
+     n = ((unsigned int)count(data.begin(), data.end(), ','));
+     
+     l=0;
+     pos_beg = 0;
+     pos_end = data.find(" ", pos_beg);
+     while(pos_end != (string::npos)){
+     
+     line.clear();
+     line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+     
+     replace(line.begin(), line.end(), ' ', '\n');
+     replace(line.begin(), line.end(), ',', ' ');
+     
+     ins.clear();
+     ins << line;
+     ins >> phi_temp >> lambda_temp;
+     
+     (data_x[i][j]).push_back(x_mercator(lambda_temp));
+     (data_y[i][j]).push_back(y_mercator(phi_temp));
+     
+     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
+     (p_temp.phi).set(String(""), k*phi_temp, String(""));
+     
+     (data_3d[i][j]).push_back(p_temp);
+     
+     pos_beg = pos_end+1;
+     pos_end = data.find(" ", pos_beg);
+     
+     l++;
+     
+     };
+     
+     data.clear();
+     
+     }
+     
+     i++;
+     
+     }
+     */
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();
@@ -14609,7 +14609,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
     name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
@@ -14645,7 +14645,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
     name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
-
+    
     
     ok = false;
     
@@ -14912,7 +14912,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit<wxCommandEvent>, this);
     name->Bind(wxEVT_KEY_UP, &LimbField::OnEdit<wxKeyEvent>, this);
-
+    
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15014,7 +15014,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     //as text is changed in deg from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     deg->Bind(wxEVT_COMBOBOX, &AngleField::OnEditArcDegree<wxCommandEvent>, this);
     deg->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcDegree<wxKeyEvent>, this);
-
+    
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -15046,7 +15046,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEditSign
         sign->Bind(wxEVT_COMBOBOX, &AngleField::OnEditSign<wxCommandEvent>, this);
         sign->Bind(wxEVT_KEY_UP, &AngleField::OnEditSign<wxKeyEvent>, this);
-
+        
         
     }
     
@@ -15131,7 +15131,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
-
+    
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15434,7 +15434,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     year->Bind(wxEVT_KILL_FOCUS, *(check->check_year));
     //as text is changed year by the user with the keyboard, call OnEditYear
     year->Bind(wxEVT_KEY_UP, &DateField::OnEditYear<wxKeyEvent>, this);
-
+    
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -15447,7 +15447,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     month->Bind(wxEVT_COMBOBOX, &DateField::OnEditMonth<wxCommandEvent>, this);
     month->Bind(wxEVT_KEY_UP, &DateField::OnEditMonth<wxKeyEvent>, this);
-
+    
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     
@@ -15534,7 +15534,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
     //as text is changed in second from the user with either a keyboard button, call OnEditSecond
     second->Bind(wxEVT_KEY_UP, &ChronoField::OnEditSecond<wxKeyEvent>, this);
-
+    
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15573,7 +15573,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit<wxCommandEvent>, this);
     name->Bind(wxEVT_KEY_UP, &RouteTypeField::OnEdit<wxKeyEvent>, this);
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

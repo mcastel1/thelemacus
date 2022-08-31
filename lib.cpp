@@ -12428,8 +12428,14 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
-    sizer_grid_measurement = new wxFlexGridSizer(2, 2, 0, 0);
-    sizer_grid_label = new wxFlexGridSizer(1, 2, 0, 0);
+    sizer_grid_measurement = new wxFlexGridSizer(2, 2,
+                                                 ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                                                 ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                                 );
+    sizer_grid_label = new wxFlexGridSizer(1, 2,
+                                           ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                                           ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                           );
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     
@@ -12468,8 +12474,14 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     sizer_grid_label->Add(text_label, 0, wxALIGN_CENTER_VERTICAL);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
-    box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM);
-    box_sizer_2->Add(button_ok, 0, wxALIGN_BOTTOM);
+    box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM |  wxALL,
+                     ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                     NULL
+                     );
+    box_sizer_2->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL,
+                     ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                     NULL
+                     );
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Coordinates");
     

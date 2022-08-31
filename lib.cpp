@@ -13593,7 +13593,7 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
         stringstream s;
         
         s.str("");
-        s << "Position #" << item;
+        s << "Position #" << item+1;
         
         PositionFrame *position_frame = new PositionFrame(this, &((plot->position_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         position_frame->Show(true);
@@ -13617,7 +13617,7 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
         stringstream s;
         
         s.str("");
-        s << "Route #" << item;
+        s << "Route #" << item+1;
         
         RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);

@@ -14642,9 +14642,10 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
-    //as text is changed name, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit, this);
-    
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
+    name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
+
     
     ok = false;
     
@@ -15010,8 +15011,10 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->SetValue(wxString(""));
     deg_ok = false;
     deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
-    //as text is changed in deg, call OnEditArcDegree
-    deg->Bind(wxEVT_COMBOBOX, &AngleField::OnEditArcDegree, this);
+    //as text is changed in deg from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    deg->Bind(wxEVT_COMBOBOX, &AngleField::OnEditArcDegree<wxCommandEvent>, this);
+    deg->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcDegree<wxKeyEvent>, this);
+
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     
@@ -15021,8 +15024,8 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min->SetValue(wxString(""));
     min_ok = false;
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
-    //as text is changed min, call OnEditArcMinute
-//    min->Bind(wxEVT_TEXT, &AngleField::OnEditArcMinute, this);
+    //as text is changed min by the user with the keyboard, call OnEditArcMinute
+    min->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcMinute<wxKeyEvent>, this);
     
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -15040,8 +15043,10 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
         sign->SetValue(wxString(""));
         sign_ok = false;
         sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
-        //as text is changed sign, call OnEditSign
-        sign->Bind(wxEVT_COMBOBOX, &AngleField::OnEditSign, this);
+        //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEditSign
+        sign->Bind(wxEVT_COMBOBOX, &AngleField::OnEditSign<wxCommandEvent>, this);
+        sign->Bind(wxEVT_KEY_UP, &AngleField::OnEditSign<wxKeyEvent>, this);
+
         
     }
     
@@ -15113,8 +15118,8 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     value->SetValue(wxString(""));
     value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, check->check_length_value);
-    //as text is changed in value, call OnEditValue
-//    value->Bind(wxEVT_TEXT, &LengthField::OnEditValue, this);
+    //as text is changed in value by the user with the keyboard, call OnEditValue
+    value->Bind(wxEVT_KEY_UP, &LengthField::OnEditValue<wxKeyEvent>, this);
     
     
     unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
@@ -15123,9 +15128,10 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     unit->SetValue(unit_value.value);
     unit_ok = true;
     unit->Bind(wxEVT_KILL_FOCUS, check->check_length_unit);
-    //as text is changed in unit, call OnEditUnit
-    unit->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit, this);
-    
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    unit->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
+    unit->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
+
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15426,9 +15432,9 @@ DateField::DateField(SightFrame* frame, Date* p){
     year->SetValue(wxString(""));
     year_ok = false;
     year->Bind(wxEVT_KILL_FOCUS, *(check->check_year));
-    //as text is changed year, call OnEditYear
-    year->Bind(wxEVT_TEXT, &DateField::OnEditYear, this);
-    
+    //as text is changed year by the user with the keyboard, call OnEditYear
+    year->Bind(wxEVT_KEY_UP, &DateField::OnEditYear<wxKeyEvent>, this);
+
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
@@ -15438,9 +15444,10 @@ DateField::DateField(SightFrame* frame, Date* p){
     month->SetValue(wxString(""));
     month_ok = false;
     month->Bind(wxEVT_KILL_FOCUS, *(check->check_month));
-    //as text is changed month, call OnEditMonth
-    month->Bind(wxEVT_COMBOBOX, &DateField::OnEditMonth, this);
-    
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    month->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEditMonth<wxCommandEvent>, this);
+    month->Bind(wxEVT_KEY_UP, &ProjectionField::OnEditMonth<wxKeyEvent>, this);
+
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     
@@ -15456,9 +15463,9 @@ DateField::DateField(SightFrame* frame, Date* p){
     day->SetValue(wxString(""));
     day_ok = false;
     day->Bind(wxEVT_KILL_FOCUS, *(check->check_day));
-    //as text is changed day, call OnEditDay
-    day->Bind(wxEVT_COMBOBOX, &DateField::OnEditDay, this);
-    
+    //as text is changed in day from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEditDay
+    day->Bind(wxEVT_COMBOBOX, &DateField::OnEditDay<wxCommandEvent>, this);
+    day->Bind(wxEVT_KEY_UP, &DateField::OnEditDay<wxKeyEvent>, this);
     
     
     
@@ -15500,9 +15507,9 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour->SetValue(wxString(""));
     hour_ok = false;
     hour->Bind(wxEVT_KILL_FOCUS, *(check->check_hour));
-    //as text is changed in hour, call OnEditHour
-    hour->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditHour, this);
-    
+    //as text is changed in hour from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    hour->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditHour<wxCommandEvent>, this);
+    hour->Bind(wxEVT_KEY_UP, &ChronoField::OnEditHour<wxKeyEvent>, this);
     
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
@@ -15513,9 +15520,9 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     minute->SetValue(wxString(""));
     minute_ok = false;
     minute->Bind(wxEVT_KILL_FOCUS, *(check->check_minute));
-    //as text is changed in minute, call OnEditHour
-    minute->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditMinute, this);
-    
+    //as text is changed in minute from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    minute->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditMinute<wxCommandEvent>, this);
+    minute->Bind(wxEVT_KEY_UP, &ChronoField::OnEditMinute<wxKeyEvent>, this);
     
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
@@ -15525,9 +15532,9 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     second->SetValue(wxString(""));
     second_ok = false;
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
-    //as text is changed in second, call OnEditSecond
-    second->Bind(wxEVT_TEXT, &ChronoField::OnEditSecond, this);
-    
+    //as text is changed in second from the user with either a keyboard button, call OnEditSecond
+    second->Bind(wxEVT_KEY_UP, &ChronoField::OnEditSecond<wxKeyEvent>, this);
+
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -15563,9 +15570,10 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     ok = false;
     name->SetValue("");
     name->Bind(wxEVT_KILL_FOCUS, *check);
-    //as text is changed in name, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit, this);
-    
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit<wxCommandEvent>, this);
+    name->Bind(wxEVT_KEY_UP, &RouteTypeField::OnEdit<wxKeyEvent>, this);
+
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

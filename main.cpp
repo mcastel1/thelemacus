@@ -13,7 +13,7 @@
  notes: set parents to constructors of all frames that you defined
  - add instrumental error
  - revise Angle::to_string in such a way that all angles take the same space when printed out to string
- - all quantities in pixels must be relative to screen size, not absolute pixel size.
+ - all quantities in pixels must be relative to screen size, not absolute pixel size (margin_v is one of them)
  - add lambert projection and 3D sphere with no projection
  - Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
  - set up a proper output to a log file

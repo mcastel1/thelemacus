@@ -1477,7 +1477,7 @@ public:
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
     void OnMouseWheel(wxMouseEvent&);
-    void OnChooseProjection(wxCommandEvent&);
+    template<class E> void OnChooseProjection(E&);
 
     
     void KeyDown(wxKeyEvent&);

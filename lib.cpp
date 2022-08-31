@@ -7844,7 +7844,7 @@ void ListFrame::GetAllCoastLineData(void){
     file_coastline_data_blocked.open(String("in"), String(""));
     
     //uncomment this at the end
-    /*
+    //
     i=0;
     while(!(file_coastline_data_blocked.value.eof())){
         
@@ -7914,7 +7914,7 @@ void ListFrame::GetAllCoastLineData(void){
         i++;
         
     }
-    */
+    //
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();
@@ -9314,7 +9314,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     projection = new ProjectionField(this);
-    (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection, draw_panel);
+    (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
     
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
@@ -10396,7 +10396,7 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 }
 
 
-void DrawPanel::OnChooseProjection(wxCommandEvent& event){
+template<class E> void DrawPanel::OnChooseProjection(E& event){
     
     stringstream s;
     String temp;
@@ -10463,7 +10463,7 @@ void DrawPanel::OnChooseProjection(wxCommandEvent& event){
     }
     
     //reset everything and draw
-    parent->Reset<wxCommandEvent>(event);
+    parent->Reset<E>(event);
     
     event.Skip(true);
     
@@ -14606,9 +14606,9 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     name->SetValue(types[0]);
     AdjustWidth(name);
-    //as text is changed in name, call OnEdit
-//    name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
-//    name->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ProjectionField::OnEdit), this);
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
+    name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

@@ -11981,10 +11981,11 @@ template<class T> void OnSelectInListControlSights::operator()(T& event){
     
 }
 
-//if an item in listcontrol_positions is selected, then the modify_position and delete_position buttons are enabled
+//if an item in listcontrol_positions is selected, then the modify_position, transport_position and delete_position buttons are enabled
 template<class T> void OnSelectInListControlPositions::operator()(T& event){
     
     (f->button_modify_position)->Enable(true);
+    (f->button_transport_position)->Enable(true);
     (f->button_delete_position)->Enable(true);
     
     event.Skip(true);
@@ -13364,6 +13365,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     sizer_buttons_position->Add(button_add_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_modify_position, 0, wxALIGN_CENTER);
+    sizer_buttons_position->Add(button_transport_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_delete_position, 0, wxALIGN_CENTER);
     sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, margin_v);
     

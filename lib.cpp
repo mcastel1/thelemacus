@@ -11437,7 +11437,7 @@ ModifyRoute::ModifyRoute(ListFrame* f_in){
     
 }
 
-CreateRoute::CreateRoute(ListFrame* f_in){
+NewRoute::NewRoute(ListFrame* f_in){
     
     f = f_in;
     
@@ -11511,7 +11511,7 @@ void ModifyRoute::operator()(wxCommandEvent& event){
     
 }
 
-void CreateRoute::operator()(wxCommandEvent& event){
+void NewRoute::operator()(wxCommandEvent& event){
     
     //call OnAddRoute to add a new Route
     (f->OnAddRoute)(event);
@@ -13153,7 +13153,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //initialized modify_route and create_route, which define the functors to modify / create a Route
     modify_route = new ModifyRoute(this);
-    create_route = new CreateRoute(this);
+    create_route = new NewRoute(this);
     
     catalog = new Catalog(String(path_file_catalog), String(""));
     
@@ -13570,7 +13570,7 @@ void ListFrame::OnModifySight(wxCommandEvent& event){
 void ListFrame::OnTransportSight(wxCommandEvent& event){
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-    QuestionFrame<ModifyRoute, CreateRoute>* question_frame = new QuestionFrame<ModifyRoute, CreateRoute>(NULL,
+    QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,
                                                                                                           modify_route,
                                                                                                           String("Existing route"),
                                                                                                           create_route, String("New route"),
@@ -13590,7 +13590,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
 void ListFrame::OnTransportPosition(wxCommandEvent& event){
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-    QuestionFrame<ModifyRoute, CreateRoute>* question_frame = new QuestionFrame<ModifyRoute, CreateRoute>(NULL,
+    QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,
                                                                                                           modify_route,
                                                                                                           String("Existing route"),
                                                                                                           create_route, String("New route"),

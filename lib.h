@@ -1245,11 +1245,11 @@ public:
 
 
 //this class defines a functor () used to create a new Route
-class CreateRoute{
+class NewRoute{
     
 public:
     
-    CreateRoute(ListFrame*);
+    NewRoute(ListFrame*);
     
     //the frame which called this struct
     ListFrame* f;
@@ -1862,7 +1862,7 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     ModifyRoute *modify_route;
-    CreateRoute *create_route;
+    NewRoute *create_route;
     bool selection_rectangle,   /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/
      idling;
 

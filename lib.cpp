@@ -12002,7 +12002,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 }
 
 
-//if an item in listcontrol_routes is selected, I transport the sight under consideration with such Route
+//if an item in listcontrol_sights is selected, I transport the sight under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
     int i_route_to_transport, i_transporting_route;

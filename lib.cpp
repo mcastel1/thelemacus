@@ -13585,6 +13585,27 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     
 }
 
+void ListFrame::OnTransportPosition(wxCommandEvent& event){
+    
+    //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
+    QuestionFrame<ModifyRoute, CreateRoute>* question_frame = new QuestionFrame<ModifyRoute, CreateRoute>(NULL,
+                                                                                                          modify_route,
+                                                                                                          String("Existing route"),
+                                                                                                          create_route, String("New route"),
+                                                                                                          "",
+                                                                                                          "With what route do you want to transport the sight?",
+                                                                                                          wxDefaultPosition,
+                                                                                                          wxDefaultSize,
+                                                                                                          String(""));
+    question_frame->Show(true);
+    
+    
+    
+    event.Skip(true);
+    
+}
+
+
 
 void ListFrame::OnModifyPosition(wxCommandEvent& event){
     

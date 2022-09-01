@@ -1905,6 +1905,7 @@ public:
     
     void OnAddPosition(wxCommandEvent& event);
     void OnModifyPosition(wxCommandEvent& event);
+    void OnTransportPosition(wxCommandEvent& event);
     void OnDeletePosition(wxCommandEvent& event);
 
     void OnAddRoute(wxCommandEvent& event);

@@ -12493,10 +12493,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     text_lon->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of 5 in all directions
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, 5);
+    //add the various elements to sizer, by inserting a border of ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value) in all directions
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     
     
     //panel->SetSizer(sizer);
@@ -12682,10 +12682,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     text_omega->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of 5 in all directions
-    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, 5);
+    //add the various elements to sizer, by inserting a border of ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value) in all directions
+    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     
     
     //panel->SetSizer(sizer);
@@ -13044,7 +13044,7 @@ template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, 
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = 5, red, green, blue;
+    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value), red, green, blue;
     wxListItem column, item;
     String s;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.

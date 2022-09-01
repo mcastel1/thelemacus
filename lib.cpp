@@ -12347,11 +12347,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     text_date->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of 5 in all directions
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, 5);
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, 5);
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     
     
     //panel->SetSizer(sizer);

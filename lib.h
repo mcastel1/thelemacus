@@ -1278,8 +1278,6 @@ class SelectRoute{
     
 public:
     
-    //a Route selection may be used to transport a Sight or a Position, and in this case object = "sight" or "position", respectively
-    String object;
     SelectRoute(ListFrame*);
     
     //the ListFrame which called this struct
@@ -1811,6 +1809,8 @@ public:
     
     //parent frame
     ListFrame* f;
+    //the object which is being transported : a "sight" or a "position"
+    String transported_object;
     
     //constructor, which sets the parent frame
     OnSelectRouteInListControlRoutesForTransport(ListFrame*);

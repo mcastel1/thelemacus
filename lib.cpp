@@ -8121,7 +8121,7 @@ void DrawPanel::PaintNow(){
     //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)));
     
     //    (parent->panel)->Fit();
-    parent->SetSizerAndFit(parent->sizer_v);
+    //    parent->SetSizerAndFit(parent->sizer_v);
     
     
 }
@@ -9442,30 +9442,30 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
     //
     
-    sizer_buttons->Add(empty_text_1);
-    sizer_buttons->Add(button_up);
-    sizer_buttons->Add(empty_text_2);
-    sizer_buttons->Add(button_left);
-    sizer_buttons->Add(empty_text_3);
-    sizer_buttons->Add(button_right);
-    sizer_buttons->Add(empty_text_4);
-    sizer_buttons->Add(button_down);
-    sizer_buttons->Add(empty_text_5);
+    sizer_buttons->Add(empty_text_1, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(button_up, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(empty_text_2, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(button_left, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(empty_text_3, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(button_right, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(empty_text_4, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(button_down, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(empty_text_5, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
     
-    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, 0);
+    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, 0);
+    sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
+    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, 0);
     projection->InsertIn<wxBoxSizer>(sizer_slider);
     
-    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, 0);
+    sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, 0);
     
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, 0);
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, 0);
     //    sizer_v->Fit(panel);
     
-    Maximize(panel);
+//    Maximize(panel);
     SetSizerAndFit(sizer_v);
     
     (draw_panel->*(draw_panel->Draw))();

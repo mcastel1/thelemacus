@@ -13295,8 +13295,8 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     
     //image for button_transport_sight
     wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
-    wxImage my_image_tranposrt_sight = my_bitmap_transport_sight.ConvertToImage();
-    my_image_tranposrt_sight.Rescale(20,20);
+    wxImage my_image_tranposrt = my_bitmap_transport_sight.ConvertToImage();
+    my_image_tranposrt.Rescale(20,20);
     
     
     //button to add a sight
@@ -13318,7 +13318,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify_sight->Enable(false);
     
     //button to transport a sight
-    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt_sight), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
     button_transport_sight->Enable(false);
     
@@ -13327,6 +13327,12 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
     button_modify_position->Enable(false);
+    
+    //button to transport a position
+    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
+    button_transport_position->Enable(false);
+
     
     //button to modify a route
     button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);

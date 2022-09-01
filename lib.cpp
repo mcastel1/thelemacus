@@ -13569,6 +13569,10 @@ void ListFrame::OnModifySight(wxCommandEvent& event){
 
 void ListFrame::OnTransportSight(wxCommandEvent& event){
     
+    //tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Route (related to a Sight)
+    (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+    (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+    
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,
                                                                                                           modify_route,
@@ -13588,6 +13592,10 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
 }
 
 void ListFrame::OnTransportPosition(wxCommandEvent& event){
+    
+    //tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Position
+    (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
+    (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,

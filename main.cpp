@@ -28,8 +28,7 @@
  - change Route -> alpha to Z
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
- - add margins in ChartFrame (why is the width of the frame evaluated to be 0??)
- - add ft unit for lengths
+ - remove excessive space between widgets in chartframe
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
@@ -53,10 +52,9 @@
 - remove zoom_factor, because it is related to omega
  - add night mode.
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - uncomment at '    //uncomment this at the end'
+ - uncomment at '//uncomment this at the end' to display coastlines at the end
  - integate idling variable in everything that concerns ListFrame
  - include transport for Positions and Routes which are not derived from a Sight
- - when a Sight with a related Route is modified, you should update the related Route in listcontrol_routes and redraw it
  */
 
 

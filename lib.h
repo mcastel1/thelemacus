@@ -1386,7 +1386,7 @@ class DrawPanel : public wxPanel{
     
 public:
     
-    DrawPanel(ChartPanel*);
+    DrawPanel(ChartPanel*, const wxPoint& position_in, const wxSize& size_in);
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
     XYChart *chart;

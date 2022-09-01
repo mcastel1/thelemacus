@@ -8001,7 +8001,7 @@ void ChartFrame::AllOk(void){
     
 }
 
-DrawPanel::DrawPanel(ChartPanel* parent_in) : wxPanel(parent_in){
+DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wxSize& size_in) : wxPanel(parent_in, wxID_ANY, position_in, size_in, wxTAB_TRAVERSAL, wxT("")){
     
     int i;
     String prefix;
@@ -9344,7 +9344,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
-    draw_panel = new DrawPanel(panel);
+    draw_panel = new DrawPanel(panel, wxDefaultPosition, wxDefaultSize);
     
     
     sizer_v = new wxBoxSizer(wxVERTICAL);

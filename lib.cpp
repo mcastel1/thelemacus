@@ -12008,13 +12008,13 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     int i_object_to_transport, i_transporting_route;
     
+    //the id of the Route which will transport
     i_transporting_route = ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     
     if(transported_object == String("route")){
         
-        
-        //the ids of the sight whose Route will be transported, and of the Route which will transported
+        //the id of the Route that will be transported,
         i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
         
         //tranport the Route
@@ -12039,6 +12039,23 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     if(transported_object == String("position")){
         
+        
+        //the id of the Position that will be transported,
+        i_object_to_transport = ((int)((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+  
+        //tranport the Position
+        (((f->plot)->position_list)[ i_object_to_transport ]).transport(
+                                                                                         
+                                                                                         ((f->plot)->route_list)[i_transporting_route],
+                                                                                         String("")
+                                                                                         
+                                                                                         );
+        
+        //change the label of Position #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
+        ((((f->plot)->position_list)[i_object_to_transport]).label) = ((((f->plot)->position_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        
+        //update the Position information in f, and re-draw everything
+        (((f->plot)->position_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_positions);
         
     }
 

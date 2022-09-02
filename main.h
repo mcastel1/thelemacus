@@ -105,6 +105,7 @@
 class MyApp: public wxApp{
 public:
 
+    //this rectangle contains the size of the display on which the *this is run
     wxRect rectangle_display;
 
     virtual bool OnInit();

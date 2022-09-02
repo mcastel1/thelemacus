@@ -9452,17 +9452,17 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_buttons->Add(button_down, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_buttons->Add(empty_text_5, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
-    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, 0);
-    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, 0);
+    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
-    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, 0);
+    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     projection->InsertIn<wxBoxSizer>(sizer_slider);
     
-    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, 0);
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, 0);
     
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, 0);
-    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, 0);
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     //    sizer_v->Fit(panel);
     
     //    Maximize(panel);

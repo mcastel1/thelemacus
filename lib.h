@@ -1846,6 +1846,8 @@ public:
     //this frame has no parent, because it is supposed to be the main frame of the appplication
     ListFrame(MyApp*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
+    //the MyApp that constructed *this
+    MyApp* parent;
     //this is a pointer to the non-GUI object Plot which is related to the GUI object this
     Plot* plot;
     //point to the child frame of this

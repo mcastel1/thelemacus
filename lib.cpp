@@ -8154,9 +8154,9 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     for(i=0; i<(plot->route_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
@@ -8189,9 +8189,9 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     for(i=0; i<(plot->position_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
@@ -8419,9 +8419,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
         //set the route thickness and pen
         if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
@@ -8454,9 +8454,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
         //set thickness and pen
         if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
@@ -8672,21 +8672,21 @@ void DrawPanel::Draw_Mercator(void){
     if((y_max-y_min) > x_span()){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/x_span()),
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
+                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/x_span()),
+                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())
                         );
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        height_chart = (length_chart_over_length_chart_frame.value) * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
+        height_chart = (length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight());
         width_chart = height_chart/((y_max-y_min)/x_span());
     }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()),
-                        (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
+                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()),
+                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
                         );
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        width_chart = (length_chart_over_length_chart_frame.value) * (((((parent->parent)->rectangle_display)).GetSize()).GetHeight());
+        width_chart = (length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight());
         height_chart = width_chart*((y_max-y_min)/x_span());
     }
     width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
@@ -8968,8 +8968,8 @@ void DrawPanel::Draw_3D(void){
     parent->GetCoastLineData_3D();
     
     parent->SetSize(
-                    (((((parent->parent)->rectangle_display)).GetSize()).GetHeight()),
-                    (((((parent->parent)->rectangle_display)).GetSize()).GetHeight())
+                    ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()),
+                    ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())
                     );
     
     height_chart = ((parent->GetSize()).GetHeight()) * 0.75;
@@ -10612,12 +10612,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                              (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
                              )
                         
-                        <= (thickness_route_selection_over_length_screen.value)*((double)(((parent->parent)->rectangle_display).GetWidth()))/2.0
+                        <= (thickness_route_selection_over_length_screen.value)*((double)((((parent->parent)->parent)->rectangle_display).GetWidth()))/2.0
                         )
                        ){
                         
                         //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                        //                       (((parent->standard_thickness_over_length_screen).value) * ((parent->parent)->rectangle_display).GetWidth())){
+                        //                       (((parent->standard_thickness_over_length_screen).value) * (((parent->parent)->parent)->rectangle_display).GetWidth())){
                         
                         //sets the highlighted route to i, so as to use highlighted_route in other functions
                         ((parent->parent)->highlighted_route) = i;
@@ -10652,7 +10652,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             GeoToScreen((plot->position_list)[i], &q);
             
             if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
-               4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * ((parent->parent)->rectangle_display).GetWidth())){
+               4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth())){
                 
                 //sets the highlighted position to i, so as to use highlighted_position in other functions
                 ((parent->parent)->highlighted_position) = i;
@@ -13127,7 +13127,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     this->Bind(wxEVT_CLOSE_WINDOW, &ListFrame::OnClose, this);
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    rectangle_display = (display.GetClientArea());
+    (parent->rectangle_display) = (display.GetClientArea());
     
     file_init.set_name(String(path_file_init));
     

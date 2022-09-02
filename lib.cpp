@@ -12008,7 +12008,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 }
 
 
-//if an item in listcontrol_sights is selected, I transport the sight under consideration with such Route
+//if an item in listcontrol_sights is selected, I transport the sight/position under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
     int i_object_to_transport, i_transporting_route;
@@ -12078,31 +12078,55 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 }
 
 
-//if a new item listcontrol_routes is created, I transport the sight under consideration with such Route
+//if a new item listcontrol_routes is created, I transport the sight/position under consideration with such Route
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event){
     
-    int i_route_to_transport, i_transporting_route;
+    int i_object_to_transport, i_transporting_route;
     
-    //the ids of the sight whose Route will be transported, and of the Route which will transported. i_transporting_route is the last item in listcontrol_route, because it is the item of the newly added Route
-    i_route_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+    //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
     i_transporting_route = ((f->listcontrol_routes)->GetItemCount())-1;
     
-    //tranport the Route
-    ((((f->plot)->route_list)[ i_route_to_transport ]).reference_position).transport(
-                                                                                     
-                                                                                     ((f->plot)->route_list)[i_transporting_route],
-                                                                                     String("")
-                                                                                     
-                                                                                     );
+    if(transported_object == String("route")){
+        
+        //the id of the Route or Position that will be transported
+        i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+        
+        //tranport the Route
+        ((((f->plot)->route_list)[ i_object_to_transport ]).reference_position).transport(
+                                                                                          
+                                                                                          ((f->plot)->route_list)[i_transporting_route],
+                                                                                          String("")
+                                                                                          
+                                                                                          );
+        
+        //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
+        f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
+        
+        //change the label of Route #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
+        ((((f->plot)->route_list)[i_object_to_transport]).label) = ((((f->plot)->route_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        
+        //update the Route information in f, and re-draw everything
+        (((f->plot)->route_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_routes);
+        
+        
+    }
     
-    //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-    f->Disconnect(((((f->plot)->route_list)[i_route_to_transport]).related_sight).value);
+    if(transported_object == String("position")){
+        
+        //the id of the Route or Position that will be transported
+        i_object_to_transport =  ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+        
+        //tranport the Position
+        (((f->plot)->position_list)[ i_object_to_transport ]).transport(((f->plot)->route_list)[i_transporting_route], String(""));
+        
+        //change the label of Position #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
+        ((((f->plot)->position_list)[i_object_to_transport]).label) = ((((f->plot)->position_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        
+        
+        //update the Route information in f, and re-draw everything
+        (((f->plot)->position_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_positions);
+    }
     
-    //change the label of Route #i_route_to_transport by appending to it 'translated with [label of the translating Route]'
-    ((((f->plot)->route_list)[i_route_to_transport]).label) = ((((f->plot)->route_list)[i_route_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
-    
-    //update the Route information in f, and re-draw everything
-    (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_route_to_transport, f->listcontrol_routes);
     f->DrawAll();
     
     //set parameters back to their original value and unbing the closing of route_frame from on_new_route_in_listcontrol_routes_for_transport

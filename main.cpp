@@ -100,7 +100,7 @@ bool MyApp::OnInit(){
 
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
-    length_border_over_length_screen.read_from_file(String("length of border over length of frame"), String(path_file_init), String(""));
+    length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
 
     unsigned int i;
     Int n_chart_frames;

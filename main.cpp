@@ -106,12 +106,12 @@ bool MyApp::OnInit(){
     Int n_chart_frames;
     stringstream s;
     String default_projection;
-    
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
-    wxRect rectangle = (display.GetClientArea());
-    rectangle.SetWidth((int)((double)rectangle.GetWidth())*0.75);
-    rectangle.SetHeight((int)((double)rectangle.GetHeight())*0.75);
+    
+    rectangle_display = (display.GetClientArea());
+    rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));
+    rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
     
     
     ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
@@ -135,8 +135,8 @@ bool MyApp::OnInit(){
                                                        s.str(),
                                                        /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
                                                        wxPoint(
-                                                               0 + i*(int)(((double)(rectangle.GetWidth()))/20.0),
-                                                               0 + i*(int)(((double)(rectangle.GetHeight()))/20.0)
+                                                               0 + (i+1)*(int)(((double)(rectangle_display.GetWidth()))/20.0),
+                                                               0 + (i+1)*(int)(((double)(rectangle_display.GetHeight()))/20.0)
                                                                ),
                                                        wxDefaultSize,
                                                        String("")

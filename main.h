@@ -104,6 +104,10 @@
 
 class MyApp: public wxApp{
 public:
+
+    wxRect rectangle_display;
+
     virtual bool OnInit();
+
 };
 

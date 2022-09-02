@@ -8121,7 +8121,7 @@ void DrawPanel::PaintNow(){
     //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)));
     
     //    (parent->panel)->Fit();
-    //    parent->SetSizerAndFit(parent->sizer_v);
+        parent->SetSizerAndFit(parent->sizer_v);
     
     
 }

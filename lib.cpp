@@ -11545,6 +11545,11 @@ void SelectRoute::operator()(wxCommandEvent& event){
     //brings parent to front
     parent->Raise();
     
+    //deselect all previously selected items in listcontrol_routes to allow the user to properly select an item
+    for(int i=0; i<(parent->listcontrol_routes)->GetItemCount(); i++){
+        (parent->listcontrol_routes)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
+    }
+    
     (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
     
     

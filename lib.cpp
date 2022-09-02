@@ -12006,7 +12006,7 @@ template<class T> void OnSelectInListControlRoutes::operator()(T& event){
 //if an item in listcontrol_sights is selected, I transport the sight under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
-    int i_route_to_transport, i_transporting_route;
+    int i_object_to_transport, i_transporting_route;
     
     if(transported_object == String("route")){
         
@@ -12019,11 +12019,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     }
 
     //the ids of the sight whose Route will be transported, and of the Route which will transported
-    i_route_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+    i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
     i_transporting_route = ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //tranport the Route
-    ((((f->plot)->route_list)[ i_route_to_transport ]).reference_position).transport(
+    ((((f->plot)->route_list)[ i_object_to_transport ]).reference_position).transport(
                                                                                      
                                                                                      ((f->plot)->route_list)[i_transporting_route],
                                                                                      String("")
@@ -12031,13 +12031,13 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                      );
     
     //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-    f->Disconnect(((((f->plot)->route_list)[i_route_to_transport]).related_sight).value);
+    f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
     
-    //change the label of Route #i_route_to_transport by appending to it 'translated with [label of the translating Route]'
-    ((((f->plot)->route_list)[i_route_to_transport]).label) = ((((f->plot)->route_list)[i_route_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+    //change the label of Route #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
+    ((((f->plot)->route_list)[i_object_to_transport]).label) = ((((f->plot)->route_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
     
     //update the Route information in f, and re-draw everything
-    (((f->plot)->route_list)[i_route_to_transport]).update_wxListCtrl(i_route_to_transport, f->listcontrol_routes);
+    (((f->plot)->route_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_routes);
     f->DrawAll();
     
     //re-bind listcontrol_routes to on_select_listcontrol_routes

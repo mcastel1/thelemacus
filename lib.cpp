@@ -8112,16 +8112,16 @@ void DrawPanel::PaintNow(){
     
     
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
-//    this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
-//    parent->SetMinSize(wxSize(
-//                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value),
-//                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)
-//                              ));
+    //    this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
+    //    parent->SetMinSize(wxSize(
+    //                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value),
+    //                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+    //                              ));
     
     //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)));
     
     //    (parent->panel)->Fit();
-        parent->SetSizerAndFit(parent->sizer_v);
+    parent->SetSizerAndFit(parent->sizer_v);
     
     
 }
@@ -9465,7 +9465,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, 0);
     //    sizer_v->Fit(panel);
     
-//    Maximize(panel);
+    //    Maximize(panel);
     SetSizerAndFit(sizer_v);
     
     (draw_panel->*(draw_panel->Draw))();
@@ -12024,11 +12024,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         //tranport the Route
         ((((f->plot)->route_list)[ i_object_to_transport ]).reference_position).transport(
-                                                                                         
-                                                                                         ((f->plot)->route_list)[i_transporting_route],
-                                                                                         String("")
-                                                                                         
-                                                                                         );
+                                                                                          
+                                                                                          ((f->plot)->route_list)[i_transporting_route],
+                                                                                          String("")
+                                                                                          
+                                                                                          );
         
         //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
         f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
@@ -12041,20 +12041,20 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         
     }
-
+    
     if(transported_object == String("position")){
         
         
         //the id of the Position that will be transported,
         i_object_to_transport = ((int)((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-  
+        
         //tranport the Position
         (((f->plot)->position_list)[ i_object_to_transport ]).transport(
-                                                                                         
-                                                                                         ((f->plot)->route_list)[i_transporting_route],
-                                                                                         String("")
-                                                                                         
-                                                                                         );
+                                                                        
+                                                                        ((f->plot)->route_list)[i_transporting_route],
+                                                                        String("")
+                                                                        
+                                                                        );
         
         //change the label of Position #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
         ((((f->plot)->position_list)[i_object_to_transport]).label) = ((((f->plot)->position_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
@@ -12063,7 +12063,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         (((f->plot)->position_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_positions);
         
     }
-
+    
     f->DrawAll();
     
     //re-bind listcontrol_routes to on_select_listcontrol_routes
@@ -13393,7 +13393,7 @@ ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoi
     button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
-
+    
     
     //button to modify a route
     button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
@@ -13635,14 +13635,14 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,
-                                                                                                          modify_route,
-                                                                                                          String("Existing route"),
-                                                                                                          create_route, String("New route"),
-                                                                                                          "",
-                                                                                                          "With what route do you want to transport the sight?",
-                                                                                                          wxDefaultPosition,
-                                                                                                          wxDefaultSize,
-                                                                                                          String(""));
+                                                                                                    modify_route,
+                                                                                                    String("Existing route"),
+                                                                                                    create_route, String("New route"),
+                                                                                                    "",
+                                                                                                    "With what route do you want to transport the sight?",
+                                                                                                    wxDefaultPosition,
+                                                                                                    wxDefaultSize,
+                                                                                                    String(""));
     question_frame->Show(true);
     
     
@@ -13659,14 +13659,14 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,
-                                                                                                          modify_route,
-                                                                                                          String("Existing route"),
-                                                                                                          create_route, String("New route"),
-                                                                                                          "",
-                                                                                                          "With what route do you want to transport the sight?",
-                                                                                                          wxDefaultPosition,
-                                                                                                          wxDefaultSize,
-                                                                                                          String(""));
+                                                                                                    modify_route,
+                                                                                                    String("Existing route"),
+                                                                                                    create_route, String("New route"),
+                                                                                                    "",
+                                                                                                    "With what route do you want to transport the sight?",
+                                                                                                    wxDefaultPosition,
+                                                                                                    wxDefaultSize,
+                                                                                                    String(""));
     question_frame->Show(true);
     
     

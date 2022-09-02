@@ -12008,6 +12008,16 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     int i_route_to_transport, i_transporting_route;
     
+    if(transported_object == String("route")){
+        
+        
+    }
+
+    if(transported_object == String("position")){
+        
+        
+    }
+
     //the ids of the sight whose Route will be transported, and of the Route which will transported
     i_route_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
     i_transporting_route = ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));

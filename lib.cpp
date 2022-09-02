@@ -13103,13 +13103,15 @@ template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, 
 }
 
 
-ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value), red, green, blue;
     wxListItem column, item;
     String s;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
+    
+    parent = parent_in;
     
     idling = false;
     unset_idling = new UnsetIdling<ListFrame>(this);

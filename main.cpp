@@ -114,7 +114,7 @@ bool MyApp::OnInit(){
     rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
     
     
-    ListFrame *list_frame = new ListFrame("List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
+    ListFrame *list_frame = new ListFrame(this, "List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
     

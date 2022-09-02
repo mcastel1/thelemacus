@@ -1844,7 +1844,7 @@ class ListFrame: public wxFrame{
     
 public:
     //this frame has no parent, because it is supposed to be the main frame of the appplication
-    ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix);
+    ListFrame(MyApp*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     //this is a pointer to the non-GUI object Plot which is related to the GUI object this
     Plot* plot;
@@ -1880,7 +1880,6 @@ public:
     Color color_selected_item;
      //the rectangle used to measure the size of the display
     wxDisplay display;
-    wxRect rectangle_display;
     //this referrs to the init file
     File file_init;
     

@@ -8114,11 +8114,11 @@ void DrawPanel::PaintNow(){
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
     parent->SetMinSize(wxSize(
-                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value),
-                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_screen.value)
                               ));
     
-    //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value)));
+    //    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 6*((parent->GetSize()).GetWidth())*(length_border_over_length_screen.value)));
     
     //    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
@@ -8275,7 +8275,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //                               wx_string,
     //                               (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area - (GetTextExtent(wx_string).GetWidth())/2,
     //                               (position_plot_area.y) + height_plot_area /*this is the border, to allow some empty space between the text and the axis*/
-    //                               + ((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value),
+    //                               + ((parent->GetSize()).GetWidth())*(length_border_over_length_screen.value),
     //                               0);
     //
     //            first_label = false;
@@ -8374,7 +8374,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
         wx_string = wxString(s.str().c_str());
         
         //shift p it in such a way that the label drawn at p  is diplayed nicely, and draw the label at  p
-        p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+        p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->GetSize()).GetWidth())*(length_border_over_length_screen.value));
         
         //        dc.DrawRotatedText(wx_string, p, 0);
         
@@ -9442,15 +9442,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
     //
     
-    sizer_buttons->Add(empty_text_1, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(button_up, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(empty_text_2, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(button_left, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(empty_text_3, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(button_right, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(empty_text_4, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(button_down, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_buttons->Add(empty_text_5, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_buttons->Add(empty_text_1, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_up, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_2, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_left, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_3, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_right, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_4, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_down, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_5, 0, wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, 0);
@@ -12213,16 +12213,16 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     
     sizer_grid_measurement = new wxFlexGridSizer(6, 2,
-                                                 ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
-                                                 ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                                 ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value),
+                                                 ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                                  );
     sizer_grid_time = new wxFlexGridSizer(4, 2,
-                                          ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
-                                          ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                          ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value),
+                                          ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                           );
     sizer_grid_label = new wxFlexGridSizer(1, 2,
-                                           ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
-                                           ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                           ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value),
+                                           ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                            );
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
@@ -12389,10 +12389,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM | wxALL,
-                     ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value),
+                     ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM | wxALL,
-                     ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value),
+                     ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL);
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
@@ -12408,10 +12408,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     text_date->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -12489,12 +12489,12 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     sizer_grid_measurement = new wxFlexGridSizer(2, 2,
-                                                 ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
-                                                 ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                                 ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value),
+                                                 ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                                  );
     sizer_grid_label = new wxFlexGridSizer(1, 2,
-                                           ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
-                                           ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value)
+                                           ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value),
+                                           ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                            );
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
@@ -12535,11 +12535,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM |  wxALL,
-                     ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                     ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value),
                      NULL
                      );
     box_sizer_2->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL,
-                     ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value),
+                     ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value),
                      NULL
                      );
     
@@ -12554,10 +12554,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     text_lon->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value) in all directions
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    //add the various elements to sizer, by inserting a border of ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -12625,13 +12625,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     
-    sizer_grid_type = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_grid_alpha = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_grid_l = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_grid_start = new wxFlexGridSizer(2, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_grid_GP = new wxFlexGridSizer(2, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_grid_omega = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer_grid_label = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    sizer_grid_type = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_alpha = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_l = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_start = new wxFlexGridSizer(2, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_GP = new wxFlexGridSizer(2, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_omega = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_label = new wxFlexGridSizer(1, 2, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
     sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
     sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
@@ -12731,8 +12731,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     sizer_box_data->Add(sizer_box_GP);
     sizer_box_data->Add(sizer_grid_omega);
     
-    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM| wxALL, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), NULL);
-    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, ((this->GetSize()).GetHeight())*(length_border_over_length_frame.value), NULL);
+    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM| wxALL, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), NULL);
+    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, ((this->GetSize()).GetHeight())*(length_border_over_length_screen.value), NULL);
     
     
     
@@ -12743,10 +12743,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     text_omega->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value) in all directions
-    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
-    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value));
+    //add the various elements to sizer, by inserting a border of ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
+    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -13105,7 +13105,7 @@ template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, 
 
 ListFrame::ListFrame(const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = ((this->GetSize()).GetWidth())*(length_border_over_length_frame.value), red, green, blue;
+    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v = ((this->GetSize()).GetWidth())*(length_border_over_length_screen.value), red, green, blue;
     wxListItem column, item;
     String s;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.

@@ -1373,6 +1373,9 @@ class ListControl : public wxListCtrl{
   
 public:
     
+    //the wxButtons to add, delete and modify items in *this
+    wxButton* button_add, *button_delete, *button_modify;
+    
     ListControl(wxWindow*, const wxPoint&, const wxSize&);
     
     void PushBackColumn(wxString);

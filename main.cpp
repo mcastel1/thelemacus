@@ -48,6 +48,7 @@
  - uncomment at '//uncomment this at the end' to display coastlines at the end
  - integate idling variable in everything that concerns ListFrame
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
+ - in 3d projection, code up earth roation if the drag takes place oustide the earth boundaries
  */
 
 

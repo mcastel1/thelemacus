@@ -10646,7 +10646,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
         
     }
 
-    //if, when the left button of the mouse is down, the mouse was hovering over a position, then this position is selectd in listcontrol_positions
+    //if, when the left button of the mouse is down, the mouse was hovering over a position, then this position is selectd in listcontrol_positions and highlighted in color
     if(((parent->parent)->highlighted_position) != -1){
         
         //deselect any previously selected item in listcontrol_positions, if any
@@ -10654,9 +10654,15 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
             ((parent->parent)->listcontrol_positions)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
         }
         
-        //select the highlighted position
+        parent->parent->Raise();  // bring the ListFrame to front
+        parent->parent->SetFocus();  // focus on the ListFrame
+        
+        //select the highlighted position in ListFrame
         ((parent->parent)->listcontrol_positions)->SetItemState((parent->parent)->highlighted_position, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-
+        
+        //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
+        ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour((parent->parent)->highlighted_position,  wxSystemSettings::GetColour    (wxSYS_COLOUR_HIGHLIGHT));
+        
     }
     
     event.Skip(true);

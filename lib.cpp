@@ -13249,7 +13249,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_positions = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
-    
+    listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControlPositions, this);
+
     listcontrol_positions->PushBackColumn(wxString("Number"));
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
@@ -13743,6 +13744,17 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
     
     event.Skip(true);
     
+}
+
+//if an item is deselected in listcontrol_positions, disable button_modify_position, button_transport_position and button_delete_position
+void ListFrame::OnDeselectInListControlPositions(wxCommandEvent& event){
+    
+    button_modify_position->Enable(listcontrol_positions->GetSelectedItemCount() != 0);
+    button_transport_position->Enable(listcontrol_positions->GetSelectedItemCount() != 0);
+    button_delete_position->Enable(listcontrol_positions->GetSelectedItemCount() != 0);
+    
+    event.Skip(true);
+
 }
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){

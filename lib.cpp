@@ -8843,8 +8843,9 @@ void DrawPanel::Draw_Mercator(void){
     
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-    (route.type).set(String(""), String("c"), String(""));
-    ((route.reference_position).lambda) = 0.0;
+    (route.type).set(String(""), String("l"), String(""));
+    (route.alpha).set(String(""), M_PI/2.0, String(""));
+    ((route.reference_position).lambda) = (plot->lambda_min);
     
     //this loop runs over the latitude of the parallel, which we call phi
     for(
@@ -8854,19 +8855,19 @@ void DrawPanel::Draw_Mercator(void){
         ){
             
             //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-            (route.omega).set(String(""), M_PI/2.0 - fabs(phi.value), String(""));
-            (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
-            ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI/2.0, String(""));
+            ((route.reference_position).phi) = phi;
+            (route.l).set(String(""), Re*cos(phi)*((plot->lambda_min.value) + 2.0*M_PI - (plot->lambda_max.value)), String(""));
             
-            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+//            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
-                (route.type).set(String(""), String("o"), String(""));
-                (route.alpha).set(String(""), M_PI/2.0, String(""));
+//                (route.type).set(String(""), String("o"), String(""));
+//                (route.alpha).set(String(""), M_PI/2.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                ((route.reference_position).lambda) = (plot->lambda_min);
+//                ((route.reference_position).lambda) = (plot->lambda_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(
@@ -8879,7 +8880,7 @@ void DrawPanel::Draw_Mercator(void){
                         
                     }
                 
-                (route.type).set(String(""), String("c"), String(""));
+//                (route.type).set(String(""), String("c"), String(""));
                 
             }
             

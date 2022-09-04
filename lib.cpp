@@ -7819,6 +7819,8 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
+    //uncomment this at the end
+    /*
     x.clear();
     y.clear();
     for(i=i_min; i<i_max; i++){
@@ -7863,7 +7865,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
         }
         
     }
-    
+    */
     
     
 }

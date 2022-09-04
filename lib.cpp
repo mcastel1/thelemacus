@@ -7821,51 +7821,51 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     //uncomment this at the end
     /*
-    x.clear();
-    y.clear();
-    for(i=i_min; i<i_max; i++){
-        
-        //        cout << "\n i = " << i;
-        
-        for(j=j_min; j<j_max; j++){
-            
-            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-            //            flush(cout);
-            
-            //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-            n = ((unsigned int)(((parent->data_x)[i - floor_min_lat][j % 360]).size()));
-            
-            every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
-            if(every == 0){every = 1;}
-            
-            //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-            for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
-                
-                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
-                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
-                
-                //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                //                if((l % every) == 0){
-                
-                if((draw_panel->check(temp))){
-                    
-                    if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
-                        (temp.x) += 2.0*M_PI;
-                    }
-                    x.push_back((temp.x));
-                    y.push_back((temp.y));
-                    
-                }
-                
-                //                }
-                
-                
-            }
-            
-        }
-        
-    }
-    */
+     x.clear();
+     y.clear();
+     for(i=i_min; i<i_max; i++){
+     
+     //        cout << "\n i = " << i;
+     
+     for(j=j_min; j<j_max; j++){
+     
+     //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+     //            flush(cout);
+     
+     //count how many datapoints are in data_x[i][j] and in data_y[i][j]
+     n = ((unsigned int)(((parent->data_x)[i - floor_min_lat][j % 360]).size()));
+     
+     every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+     if(every == 0){every = 1;}
+     
+     //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+     for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
+     
+     (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
+     (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+     
+     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+     //                if((l % every) == 0){
+     
+     if((draw_panel->check(temp))){
+     
+     if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
+     (temp.x) += 2.0*M_PI;
+     }
+     x.push_back((temp.x));
+     y.push_back((temp.y));
+     
+     }
+     
+     //                }
+     
+     
+     }
+     
+     }
+     
+     }
+     */
     
     
 }
@@ -8811,17 +8811,17 @@ void DrawPanel::Draw_Mercator(void){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-//            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
-//                phi_saved = ((route.reference_position).phi);
+                //                phi_saved = ((route.reference_position).phi);
                 
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-//                ((route.reference_position).phi) = (plot->phi_min);
+                //                ((route.reference_position).phi) = (plot->phi_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((((route.reference_position).lambda).value) = (lambda_saved.value);
@@ -8834,7 +8834,7 @@ void DrawPanel::Draw_Mercator(void){
                 
                 (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
-//                ((route.reference_position).phi) = phi_saved;
+                //                ((route.reference_position).phi) = phi_saved;
                 
             }
             
@@ -8856,18 +8856,19 @@ void DrawPanel::Draw_Mercator(void){
             
             //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
             ((route.reference_position).phi) = phi;
-            (route.l).set(String(""), Re*cos(phi)*((plot->lambda_min.value) + 2.0*M_PI - (plot->lambda_max.value)), String(""));
+            (route.l).set(String(""), Re*cos(phi)*lambda_span, String(""));
             
-//            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            //here I use DrawOld because Draw cannot handle loxodromes
             route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
-//                (route.type).set(String(""), String("o"), String(""));
-//                (route.alpha).set(String(""), M_PI/2.0, String(""));
+                //                (route.type).set(String(""), String("o"), String(""));
+                //                (route.alpha).set(String(""), M_PI/2.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-//                ((route.reference_position).lambda) = (plot->lambda_min);
+                //                ((route.reference_position).lambda) = (plot->lambda_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(
@@ -8876,11 +8877,13 @@ void DrawPanel::Draw_Mercator(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        //                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        //here I use DrawOld because Draw cannot handle loxodromes
+                        route.DrawOld((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
                         
                     }
                 
-//                (route.type).set(String(""), String("c"), String(""));
+                //                (route.type).set(String(""), String("c"), String(""));
                 
             }
             

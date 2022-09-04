@@ -9329,7 +9329,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
     draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
-    draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUpOnDrawPanel), draw_panel);
+    draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
     draw_panel->Bind(wxEVT_MOUSEWHEEL, wxMouseEventHandler(DrawPanel::OnMouseWheel), draw_panel);
     
@@ -10649,7 +10649,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
 }
 
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
-void DrawPanel::OnMouseLeftUpOnDrawPanel(wxMouseEvent &event){
+void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     
     SetCursor(*wxCROSS_CURSOR);
     

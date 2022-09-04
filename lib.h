@@ -1474,7 +1474,7 @@ public:
     bool GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseLeftDown(wxMouseEvent&);
-    void OnMouseLeftUpOnDrawPanel(wxMouseEvent&);
+    void OnMouseLeftUp(wxMouseEvent&);
     void OnMouseRightDown(wxMouseEvent&);
     void OnMouseDrag(wxMouseEvent&);
     void OnMouseWheel(wxMouseEvent&);

@@ -8811,16 +8811,17 @@ void DrawPanel::Draw_Mercator(void){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+//            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
-                phi_saved = ((route.reference_position).phi);
+//                phi_saved = ((route.reference_position).phi);
                 
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
-                ((route.reference_position).phi) = (plot->phi_min);
+//                ((route.reference_position).phi) = (plot->phi_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((((route.reference_position).lambda).value) = (lambda_saved.value);
@@ -8833,7 +8834,7 @@ void DrawPanel::Draw_Mercator(void){
                 
                 (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
-                ((route.reference_position).phi) = phi_saved;
+//                ((route.reference_position).phi) = phi_saved;
                 
             }
             

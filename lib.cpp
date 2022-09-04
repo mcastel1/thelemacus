@@ -10620,6 +10620,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
     
+    unsigned int i;
+    
     position_start_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     
@@ -10642,6 +10644,19 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
         geo_start_drag.print(String("position start drag"), String(""), cout);
         rotation_start_drag.print(String("rotation start drag"), String(""), cout);
         
+    }
+
+    //if, when the left button of the mouse is down, the mouse was hovering over a position, then this position is selectd in listcontrol_positions
+    if(((parent->parent)->highlighted_position) != -1){
+        
+        //deselect any previously selected item in listcontrol_positions, if any
+        for(i=0; i<((parent->parent)->listcontrol_positions)->GetItemCount(); i++){
+            ((parent->parent)->listcontrol_positions)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
+        }
+        
+        //select the highlighted position
+        ((parent->parent)->listcontrol_positions)->SetItemState((parent->parent)->highlighted_position, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+
     }
     
     event.Skip(true);

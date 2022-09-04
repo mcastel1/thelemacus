@@ -1469,7 +1469,7 @@ public:
     
     void Render_Mercator(wxDC&);
     void Render_3D(wxDC&);
-    void PutLabel(const Position&, Angle, Angle, vector< wxStaticText* >*, String);
+    void PutLabel(const Position&, Angle, Angle, String);
 
     bool GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);

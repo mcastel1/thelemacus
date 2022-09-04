@@ -8224,10 +8224,11 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
 }
 
-//This function draws into *this the text label for a parallel of latitude, by placing it near the Positoin q. The latitude in the text label is q.phi, and the labels are wxStaticText objects which are stored into *labels. min and max are the minimal and maximal latitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
-void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStaticText*>* labels, String mode){
+//This function draws into *this the text label for a parallel or a meridian, by placing it near the Positian q. The latitude/longitude in the text label is q.phi/q.lambda, and the labels are wxStaticText objects which are stored in label_phi/label_lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
+void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
     
     wxPoint p;
+    vector<wxStaticText*>* labels;
     
     if(/* convert temp to draw_panel coordinates p*/(this->*GeoToDrawPanel)(q, &p)){
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -8242,16 +8243,18 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, vector<wxStati
         s.str("");
         
         if(mode == String("NS")){
-            //if I am drawing latitude labels, I set the angle relative to the label to q.phi, and delta to delta_phi
+            //if I am drawing latitude labels, I set the angle relative to the label to q.phi, and delta to delta_phi, and I let labels point to label_phi
             
             angle_label = (q.phi);
             delta = delta_phi;
+            labels = &label_phi;
             
         }else{
-            //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda
+            //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda, and I let labels point to label_lambda
             
             angle_label = (q.lambda);
             delta = delta_lambda;
+            labels = &label_lambda;
             
         }
         
@@ -8824,7 +8827,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, plot->phi_min, plot->phi_max, &label_phi, String("NS"));
+        PutLabel(q, plot->phi_min, plot->phi_max, String("NS"));
         
     }
     
@@ -8836,12 +8839,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q,
-                 plot->lambda_max,
-                 plot->lambda_min,
-                 &label_lambda,
-                 String("EW")
-                 );
+        PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"));
         
     }
     
@@ -9166,7 +9164,7 @@ void DrawPanel::Draw_3D(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, plot->phi_min, plot->phi_max, &label_phi, String("NS"));
+        PutLabel(q, plot->phi_min, plot->phi_max, String("NS"));
         
     }
     
@@ -9178,12 +9176,7 @@ void DrawPanel::Draw_3D(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q,
-                 plot->lambda_max,
-                 plot->lambda_min,
-                 &label_lambda,
-                 String("EW")
-                 );
+        PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"));
         
     }
     

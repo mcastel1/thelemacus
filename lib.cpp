@@ -8812,6 +8812,7 @@ void DrawPanel::Draw_Mercator(void){
         (((route.reference_position).lambda).value) += delta_lambda){
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
             route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
             
             if(gamma_lambda != 1){

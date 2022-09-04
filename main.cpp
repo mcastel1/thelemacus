@@ -20,7 +20,6 @@
  - replace 'lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
  phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));' with a function
  - when I translate an orthodrome with mouse drag, its reference_position assumes nan coordinates
- - change Route -> alpha to Z
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color

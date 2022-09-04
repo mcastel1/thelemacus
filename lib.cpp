@@ -1416,11 +1416,11 @@ Route::Route(void){
 
 
 //constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet.
-Route::Route(String type_in, Position reference_position_in, Angle alpha_in, Length l_in){
+Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length l_in){
     
     type = type_in;
     reference_position = reference_position_in;
-    alpha = alpha_in;
+    Z = Z_in;
     l = l_in;
     
     related_sight.set(String(""), -1, String(""));
@@ -1867,7 +1867,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
         
         listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
-        listcontrol->SetItem(i, j++, wxString(alpha.to_string(String(""), (display_precision.value), false)));
+        listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         listcontrol->SetItem(i, j++, wxString(l.to_string(String("nm"), (display_precision.value))));
         
         listcontrol->SetItem(i, j++, wxString(""));
@@ -2154,7 +2154,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             end.distance(route.reference_position, (s.data())+1, String(""), prefix);
             
             cos_ts.set(String(""),
-                       (cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)))/sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda)) - cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) + cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),2) + gsl_sf_pow_int(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)),2)),
+                       (cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)))/sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi))*sin(Z)*sin((reference_position.lambda) - ((route.reference_position).lambda)) - cos(Z)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) + cos(Z)*cos((reference_position.phi))*sin(((route.reference_position).phi)),2) + gsl_sf_pow_int(cos((reference_position.lambda) - ((route.reference_position).lambda))*cos((reference_position.phi))*cos(((route.reference_position).phi)) + sin((reference_position.phi))*sin(((route.reference_position).phi)),2)),
                        prefix
                        );
             
@@ -2189,7 +2189,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                       prefix);
                 
                 b.set(String(""),
-                      -(cos(((route.reference_position).phi))*sin(alpha)*sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(alpha)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) - cos(alpha)*cos((reference_position.phi))*sin(((route.reference_position).phi)),
+                      -(cos(((route.reference_position).phi))*sin(Z)*sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(Z)*cos((reference_position.lambda) - ((route.reference_position).lambda))*cos(((route.reference_position).phi))*sin((reference_position.phi)) - cos(Z)*cos((reference_position.phi))*sin(((route.reference_position).phi)),
                       prefix);
                 
                 
@@ -2385,7 +2385,7 @@ void Route::read_from_file(File& file, String prefix){
         
         reference_position.read_from_file(file, new_prefix);
         
-        alpha.read_from_file(String("starting heading"), file, false, new_prefix);
+        Z.read_from_file(String("starting heading"), file, false, new_prefix);
         l.read_from_file(String("length"), file, false, new_prefix);
         
     }
@@ -2845,7 +2845,7 @@ Route Position::transport(String prefix){
         }
     }while(!check);
     route.reference_position = (*this);
-    route.alpha.enter(String("Course Over Ground"), new_prefix);
+    route.Z.enter(String("Course Over Ground"), new_prefix);
     
     do{
         
@@ -2868,7 +2868,7 @@ Route Position::transport(String prefix){
     
     route.compute_end(new_prefix);
     
-    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.alpha.to_string(String(""), (display_precision.value), false) << ", l = " << (route.l).value << " nm";
+    temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.Z.to_string(String(""), (display_precision.value), false) << ", l = " << (route.l).value << " nm";
     (route.end.label).set(String(""), temp_label.str(), prefix);
     
     (*this) = route.end;
@@ -2933,11 +2933,11 @@ void Route::compute_end(String prefix){
             
             t.set(String(""), (l.value)/Re, prefix);
             
-            (end.phi).set(String(""), asin(cos(alpha) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
+            (end.phi).set(String(""), asin(cos(Z) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
             (end.lambda).set(String(""),
-                             -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) +  sin(t) * (sin(alpha) * sin(reference_position.lambda) -  cos(alpha) * cos(reference_position.lambda) * sin(reference_position.phi))
+                             -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) +  sin(t) * (sin(Z) * sin(reference_position.lambda) -  cos(Z) * cos(reference_position.lambda) * sin(reference_position.phi))
                                    ,
-                                   (cos(reference_position.lambda) * sin(t) * sin(alpha) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) +  cos(alpha) * sin(t) * sin(reference_position.phi)))),
+                                   (cos(reference_position.lambda) * sin(t) * sin(Z) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) +  cos(Z) * sin(t) * sin(reference_position.phi)))),
                              prefix);
             
             break;
@@ -2956,26 +2956,26 @@ void Route::compute_end(String prefix){
             eta = sqrt((1.0-sin(reference_position.phi.value))/(1.0+sin(reference_position.phi.value)));
             
             //tau = +-_{notes}
-            if(( (0.0 <= (alpha.value)) && ((alpha.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (alpha.value)) && ((alpha.value) < 2.0*M_PI) )){tau = +1;}
+            if(( (0.0 <= (Z.value)) && ((Z.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (Z.value)) && ((Z.value) < 2.0*M_PI) )){tau = +1;}
             else{tau = -1;}
             
-            if((0.0 <= (alpha.value)) && ((alpha.value) < M_PI)){sigma = -1;}
+            if((0.0 <= (Z.value)) && ((Z.value) < M_PI)){sigma = -1;}
             else{sigma = +1;}
             
-            C = gsl_pow_2(cos(alpha));
+            C = gsl_pow_2(cos(Z));
             
             /* cout << "sigma = " << sigma << "\n"; */
             /* cout << "tau = " << tau << "\n"; */
             /* cout << "C = " << C << "\n"; */
             
-            if(((alpha.value) != M_PI/2.0) && ((alpha.value) != 3.0*M_PI/2.0)){
-                //this is the general expression of t vs l for alpha != pi/2
+            if(((Z.value) != M_PI/2.0) && ((Z.value) != 3.0*M_PI/2.0)){
+                //this is the general expression of t vs l for Z != pi/2
                 
                 (t.value) = -tau*sqrt((1.0-C)/C)
                 * log( 1.0/eta * tan( -tau*sqrt(C)*(l.value)/(2.0*Re) + atan(sqrt((1.0-sin(reference_position.phi.value))/(1.0+sin(reference_position.phi.value)))) ) );
                 
             }else{
-                //this is the limit of the expression above in the case alpha -> pi/2
+                //this is the limit of the expression above in the case Z -> pi/2
                 
                 (t.value) = (l.value)*(1.0+gsl_pow_2(eta))/(2.0*Re*eta);
                 
@@ -3417,7 +3417,7 @@ void Route::print(String name, String prefix, ostream& ostr){
     if((type == String("l")) || (type == String("o"))){
         
         reference_position.print(String("start position"), new_prefix, ostr);
-        alpha.print(String("starting heading"), new_prefix, ostr);
+        Z.print(String("starting heading"), new_prefix, ostr);
         l.print(String("length"), String("nm"), new_prefix, ostr);
         
     }else{
@@ -3462,12 +3462,12 @@ void Route::enter(String name, String prefix){
         //if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
         
         reference_position.enter(String("starting position"), new_prefix);
-        alpha.enter(String("starting heading"), new_prefix);
+        Z.enter(String("starting heading"), new_prefix);
         l.enter(String("length"), String("nm"), new_prefix);
         
         
     }else{
-        //if the route is a circle of equal altitude, I enter its ground position and its aperture angle (alpha remains unused) ...
+        //if the route is a circle of equal altitude, I enter its ground position and its aperture angle (Z remains unused) ...
         reference_position.enter(String("ground position"), new_prefix);
         omega.enter(String("aperture angle"), new_prefix);
         l.set(String("length"), 2.0*M_PI*Re*sin(omega), new_prefix);
@@ -4130,7 +4130,7 @@ void Route::transport(String prefix){
         
         
         //append 'translated to ...' to the label of sight, and make this the new label of sight
-        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.alpha.to_string(String(""), (display_precision.value), false) << ", l = " << transporting_route.l.value << " nm";
+        temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.Z.to_string(String(""), (display_precision.value), false) << ", l = " << transporting_route.l.value << " nm";
         label.set(String(""), temp_label.str(), prefix);
         //given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set
         (related_sight.value) = -1;
@@ -5059,7 +5059,7 @@ void Plot::menu(String prefix){
                 Route route;
                 route.type = String("l");
                 route.reference_position = p;
-                route.alpha = Z;
+                route.Z = Z;
                 route.l.value = 100.0;
                 route.label = String("LOP");
                 ((route.related_sight).value) = -1;
@@ -8554,7 +8554,7 @@ void DrawPanel::Draw_Mercator(void){
     Projection temp, delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
-    Angle dummy, phi, lambda_saved, alpha_saved, phi_saved;
+    Angle dummy, phi, lambda_saved, Z_saved, phi_saved;
     Route route;
     Length r, s;
     Position q;
@@ -8738,7 +8738,7 @@ void DrawPanel::Draw_Mercator(void){
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
-    (route.alpha).set(String(""), 0.0, String(""));
+    (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = (plot->phi_min);
     (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
     
@@ -8782,7 +8782,7 @@ void DrawPanel::Draw_Mercator(void){
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String(""), String("l"), String(""));
-    (route.alpha).set(String(""), M_PI/2.0, String(""));
+    (route.Z).set(String(""), M_PI/2.0, String(""));
     ((route.reference_position).lambda) = (plot->lambda_min);
     
     //this loop runs over the latitude of the parallel, which we call phi
@@ -8804,7 +8804,7 @@ void DrawPanel::Draw_Mercator(void){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
                 //                (route.type).set(String(""), String("o"), String(""));
-                //                (route.alpha).set(String(""), M_PI/2.0, String(""));
+                //                (route.Z).set(String(""), M_PI/2.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 //                ((route.reference_position).lambda) = (plot->lambda_min);
                 
@@ -8885,7 +8885,7 @@ void DrawPanel::Draw_3D(void){
     
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Route route;
-    Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved, alpha_saved, lambda_in, lambda_out;
+    Angle /*phi is an auxiliary variable used in the loop which draws parallels*/phi, lambda_saved, phi_saved, Z_saved, lambda_in, lambda_out;
     Double d;
     Position q;
     Projection temp;
@@ -9046,7 +9046,7 @@ void DrawPanel::Draw_3D(void){
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
     (route.l).set(String(""), Re*M_PI, String(""));
-    (route.alpha).set(String(""), 0.0, String(""));
+    (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = -M_PI/2.0;
     
     for(
@@ -9063,9 +9063,9 @@ void DrawPanel::Draw_3D(void){
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
                 phi_saved = ((route.reference_position).phi);
-                alpha_saved = (route.alpha);
+                Z_saved = (route.Z);
                 
-                (route.alpha).set(String(""), 0.0, String(""));
+                (route.Z).set(String(""), 0.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 ((route.reference_position).phi) = phi_middle;
                 
@@ -9079,7 +9079,7 @@ void DrawPanel::Draw_3D(void){
                 }
                 
                 (route.l).set(String(""), Re*M_PI, String(""));
-                (route.alpha) = alpha_saved;
+                (route.Z) = Z_saved;
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
                 ((route.reference_position).phi) = phi_saved;
                 
@@ -9111,7 +9111,7 @@ void DrawPanel::Draw_3D(void){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
                 (route.type).set(String(""), String("o"), String(""));
-                (route.alpha).set(String(""), M_PI/2.0, String(""));
+                (route.Z).set(String(""), M_PI/2.0, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -12564,7 +12564,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     
     sizer_grid_type = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_alpha = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_Z = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_grid_l = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_grid_start = new wxFlexGridSizer(2, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_grid_GP = new wxFlexGridSizer(2, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
@@ -12581,9 +12581,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     wxStaticText* text_type = new wxStaticText(panel, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     type = new RouteTypeField(this, &(route->type));
     
-    //alpha
-    wxStaticText* text_alpha = new wxStaticText(panel, wxID_ANY, wxT("Alpha"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    alpha = new AngleField<RouteFrame>(this, &(route->alpha), String(""));
+    //Z
+    wxStaticText* text_Z = new wxStaticText(panel, wxID_ANY, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    Z = new AngleField<RouteFrame>(this, &(route->Z), String(""));
     
     //l
     wxStaticText* text_l = new wxStaticText(panel, wxID_ANY, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
@@ -12618,7 +12618,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
     if(route_in == NULL){
         
-        alpha->Enable(false);
+        Z->Enable(false);
         l->Enable(false);
         start_phi->Enable(false);
         start_lambda->Enable(false);
@@ -12636,8 +12636,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
     type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
     
-    sizer_grid_alpha->Add(text_alpha, 0, wxALIGN_CENTER_VERTICAL);
-    alpha->InsertIn<wxFlexGridSizer>(sizer_grid_alpha);
+    sizer_grid_Z->Add(text_Z, 0, wxALIGN_CENTER_VERTICAL);
+    Z->InsertIn<wxFlexGridSizer>(sizer_grid_Z);
     
     sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
     l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
@@ -12663,7 +12663,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     sizer_box_data->Add(sizer_grid_type);
-    sizer_box_data->Add(sizer_grid_alpha);
+    sizer_box_data->Add(sizer_grid_Z);
     sizer_box_data->Add(sizer_grid_l);
     sizer_box_data->Add(sizer_box_start);
     sizer_box_data->Add(sizer_box_GP);
@@ -12677,7 +12677,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
     common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
-    text_alpha->SetMinSize(wxSize(common_width,-1));
+    text_Z->SetMinSize(wxSize(common_width,-1));
     text_omega->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
@@ -12841,7 +12841,7 @@ void RouteFrame::AllOk(void){
     button_ok->Enable((type->is_ok()) &&
                       (
                        ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
-                        ((alpha->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
+                        ((Z->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
                        ||
                        ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
                         ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
@@ -12859,7 +12859,7 @@ void RouteFrame::set(void){
     if(((type->name)->GetValue()) == wxString("circle of equal altitude")){
         //I disable the GUI fields which do not define a circle of equal altitude and set the others
         
-        alpha->Enable(false);
+        Z->Enable(false);
         start_phi->Enable(false);
         start_lambda->Enable(false);
         l->Enable(false);
@@ -12871,7 +12871,7 @@ void RouteFrame::set(void){
     }else{
         //I disable the GUI fields which do not define a loxodrome or orthodrome and set the others
         
-        alpha->set();
+        Z->set();
         start_phi->set();
         start_lambda->set();
         l->set();
@@ -12900,7 +12900,7 @@ template<class T> void RouteFrame::get(T& event){
         
     }else{
         
-        alpha->get(event);
+        Z->get(event);
         start_phi->get(event);
         start_lambda->get(event);
         l->get(event);
@@ -13265,9 +13265,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_routes->PushBackColumn(wxString("Number"));
     listcontrol_routes->PushBackColumn(wxString("Type"));
     listcontrol_routes->PushBackColumn(wxString("Start"));
-    listcontrol_routes->PushBackColumn(wxString("Alpha"));
+    listcontrol_routes->PushBackColumn(wxString("Z"));
     listcontrol_routes->PushBackColumn(wxString("Length"));
-    listcontrol_routes->PushBackColumn(wxString("GroundPosition"));
+    listcontrol_routes->PushBackColumn(wxString("Ground Position"));
     listcontrol_routes->PushBackColumn(wxString("Omega"));
     listcontrol_routes->PushBackColumn(wxString("Label"));
     listcontrol_routes->PushBackColumn(wxString("Related Sight"));
@@ -14556,7 +14556,7 @@ CheckRouteType::CheckRouteType(RouteTypeField* p_in){
     
 }
 
-//this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, alpha and start fields in RouteFrame. If it is equal to circle of equal altitude, it enables only the GP and omege fields.
+//this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, Z and start fields in RouteFrame. If it is equal to circle of equal altitude, it enables only the GP and omege fields.
 template<class T>void CheckRouteType::operator()(T& event){
     
     RouteFrame* f = (p->parent_frame);
@@ -14581,7 +14581,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             //enable/disable the related fields in RouteFrame f
             enable = ((((p->types)[i]) == wxString("loxodrome")) || (((p->types)[i]) == wxString("orthodrome")));
             
-            (f->alpha)->Enable(enable);
+            (f->Z)->Enable(enable);
             (f->start_phi)->Enable(enable);
             (f->start_lambda)->Enable(enable);
             (f->l)->Enable(enable);
@@ -14592,7 +14592,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             
         }else{
             
-            (f->alpha)->Enable(false);
+            (f->Z)->Enable(false);
             (f->start_phi)->Enable(false);
             (f->start_lambda)->Enable(false);
             (f->l)->Enable(false);
@@ -15953,7 +15953,7 @@ template<class E> void RouteTypeField::OnEdit(E& event){
         //enable/disable the related fields in RouteFrame f
         enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
         
-        (parent_frame->alpha)->Enable(enable);
+        (parent_frame->Z)->Enable(enable);
         (parent_frame->start_phi)->Enable(enable);
         (parent_frame->start_lambda)->Enable(enable);
         (parent_frame->l)->Enable(enable);
@@ -15967,7 +15967,7 @@ template<class E> void RouteTypeField::OnEdit(E& event){
         
     }else{
         
-        (parent_frame->alpha)->Enable(false);
+        (parent_frame->Z)->Enable(false);
         (parent_frame->start_phi)->Enable(false);
         (parent_frame->start_lambda)->Enable(false);
         (parent_frame->l)->Enable(false);

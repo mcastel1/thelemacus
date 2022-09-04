@@ -689,7 +689,7 @@ public:
     //if type = l or o -> reference_position = start position, if type = c -> reference_position = ground position
     Position reference_position, end;
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
-    Angle alpha, omega;
+    Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, omega;
     //the length of the route
     Length l;
     Speed sog;
@@ -2036,11 +2036,11 @@ public:
     PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >* print_error_message;
     
     RouteTypeField *type;
-    AngleField<RouteFrame> *alpha, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
+    AngleField<RouteFrame> *Z, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
     LengthField<RouteFrame> *l;
     StringField<RouteFrame> *label;
     
-    wxFlexGridSizer *sizer_grid_type, *sizer_grid_alpha, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
+    wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;
     wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
     

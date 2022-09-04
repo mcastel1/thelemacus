@@ -13457,12 +13457,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //    for(i=0; i<(listcontrol_sights->GetColumnCount()); ++i){
     //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
+
     sizer_v->Add(sizer_box_sight, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_position, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_route, 0,  wxALL, margin_v);
-    //    sizer_v->Add(button_modify_sight, 0,  wxALIGN_LEFT | wxALL, 5);
-    //    sizer_v->Add(button_delete_sight, 0, wxALIGN_LEFT | wxALL, 5);
-    //    sizer_h->Add(listcontrol_sights, 0, wxALIGN_TOP);
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);

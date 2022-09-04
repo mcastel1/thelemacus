@@ -8248,14 +8248,14 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
             angle_label = (q.phi);
             delta = delta_phi;
             labels = &label_phi;
-            
+                    
         }else{
             //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda, and I let labels point to label_lambda
             
             angle_label = (q.lambda);
             delta = delta_lambda;
             labels = &label_lambda;
-            
+                    
         }
         
         
@@ -8304,7 +8304,16 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         wx_string = wxString(s.str().c_str());
         
         //shift p it in such a way that the label drawn at p  is diplayed nicely, and draw the label at  p
-        p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+        if(mode == String("NS")){
+            
+            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())-((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value), -(GetTextExtent(wx_string).GetHeight())/2);
+
+        }else{
+            
+            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+            
+        }
+        
         
         //        dc.DrawRotatedText(wx_string, p, 0);
         

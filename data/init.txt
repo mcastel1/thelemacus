@@ -5,7 +5,7 @@ index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 length of plot area over length of chart = 0.8
 length of chart over length of chart frame = 0.8
-length of border over length of screen = 0.002
+length of border over length of screen = 0.003
 #entire world
 minimal latitude = -77° 13.9'
 maximal latitude = 82° 53.2'

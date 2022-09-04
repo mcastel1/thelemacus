@@ -16,23 +16,19 @@
  - add lambert projection and 3D sphere with no projection
  - Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
  - set up a proper output to a log file
- - the number of points with which routes are plotted should be adapted dynamically to the zooming factor
  - add separator between recent items and non-recent items in BodyField->name
- - fill the cases in Route::draw_3D for l and o
- - check why body field gets empty after you entered body name and kill focus
  - replace 'lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));
  phi_rotation_axis.set(String("phi rotation axis"), asin(gsl_vector_get(rp, 2)), String(""));' with a function
  - when I translate an orthodrome with mouse drag, its reference_position assumes nan coordinates
  - change Route -> alpha to Z
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
- - remove excessive space between widgets in chartframe
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
  - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
- - transforms all remaining exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
+ - transforms all  exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
  - delete Route::draw after replacing it with Route::draw_3D everywhere
  - in Route::draw_3D, code the part for loxodrome curves
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
@@ -43,7 +39,6 @@
  - in DrawPanel::Draw_3D delta_lambda is used without being initialized (?)
  - check fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0 in  DrawPanel::Render_3D: it seems that this line has been written as if delta_lambda were expressed in degrees, while it is expressed in radians
  - it seems that DrawPanel::Draw_3D/Mercator  is called multiple times at the beginning of the code, and this is pointless -> check
- - take care of labels of parallels/meridians which overlap in the 3D projection
  - if two entries in file_init have a common word, make sure that they are read correctly by the functions which read from file.
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary

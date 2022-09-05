@@ -10619,9 +10619,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
-    
-    unsigned int i;
-    
+        
     position_start_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     
@@ -10645,25 +10643,6 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
         rotation_start_drag.print(String("rotation start drag"), String(""), cout);
         
     }
-
-    //if, when the left button of the mouse is down, the mouse was hovering over a position, then this position is selectd in listcontrol_positions and highlighted in color
-    if(((parent->parent)->highlighted_position) != -1){
-        
-        //deselect any previously selected item in listcontrol_positions, if any
-        for(i=0; i<((parent->parent)->listcontrol_positions)->GetItemCount(); i++){
-            ((parent->parent)->listcontrol_positions)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
-        }
-        
-        parent->parent->Raise();  // bring the ListFrame to front
-        parent->parent->SetFocus();  // focus on the ListFrame
-        
-        //select the highlighted position in ListFrame
-        ((parent->parent)->listcontrol_positions)->SetItemState((parent->parent)->highlighted_position, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-        
-        //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
-        ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour((parent->parent)->highlighted_position,  wxSystemSettings::GetColour    (wxSYS_COLOUR_HIGHLIGHT));
-        
-    }
     
     event.Skip(true);
     
@@ -10675,104 +10654,136 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
     SetCursor(*wxCROSS_CURSOR);
     
     //if the mouse left button was previously down because of a dragging event, then the dragging event is now over, and I set mouse_dragging = false;
-    if(mouse_dragging){mouse_dragging = false;}
-    
-    position_end_drag = wxGetMousePosition();
-    (this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
-    
-    
-    if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
-        //in this case, I am dragging the chart (not a route or position)
+    if(mouse_dragging){
+        //the left button of the mouse has been lifted at the end of a drag
         
-        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+        mouse_dragging = false;
+        
+        position_end_drag = wxGetMousePosition();
+        (this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
+        
+        
+        if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
+            //in this case, I am dragging the chart (not a route or position)
             
-            double delta_x, delta_y;
-            
-            delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
-            delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
-            
-            if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
-                //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset x_min , .... , y_max to their original values
+            if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                 
-                x_min = x_min_start_drag;
-                x_max = x_max_start_drag;
-                y_min = y_min_start_drag;
-                y_max = y_max_start_drag;
+                double delta_x, delta_y;
                 
-                (this->*Set_lambda_phi_min_max)();
+                delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
+                delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
                 
-                
-                //re-draw the chart
-                (this->*Draw)();
-                PaintNow();
-                
-                //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                //uncomment this if you want to print an error message
-                /*
-                 (print_error_message->control) = NULL;
-                 (print_error_message->title) = String("Chart outside boundaries!");
-                 (print_error_message->message) = String("The chart must lie within the boundaries.");
-                 (*print_error_message)();
-                 */
+                if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
+                    //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset x_min , .... , y_max to their original values
+                    
+                    x_min = x_min_start_drag;
+                    x_max = x_max_start_drag;
+                    y_min = y_min_start_drag;
+                    y_max = y_max_start_drag;
+                    
+                    (this->*Set_lambda_phi_min_max)();
+                    
+                    
+                    //re-draw the chart
+                    (this->*Draw)();
+                    PaintNow();
+                    
+                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                    //uncomment this if you want to print an error message
+                    /*
+                     (print_error_message->control) = NULL;
+                     (print_error_message->title) = String("Chart outside boundaries!");
+                     (print_error_message->message) = String("The chart must lie within the boundaries.");
+                     (*print_error_message)();
+                     */
+                    
+                }
                 
             }
             
-        }
-        
-        if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+            if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+                
+                gsl_vector_memcpy(rp_end_drag, rp);
+                rotation_end_drag = rotation;
+                geo_end_drag.print(String("position end drag"), String(""), cout);
+                rotation_end_drag.print(String("rotation end drag"), String(""), cout);
+                
+            }
             
-            gsl_vector_memcpy(rp_end_drag, rp);
-            rotation_end_drag = rotation;
-            geo_end_drag.print(String("position end drag"), String(""), cout);
-            rotation_end_drag.print(String("rotation end drag"), String(""), cout);
+        }else{
+            //in this case, I am dragging a route or position
+            
+            if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
+                  ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )))){
+                //in this case, drag_end_position lies out the plot area
+                
+                if(((parent->parent)->highlighted_route) != -1){
+                    //in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
+                    
+                    (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
+                    
+                    TabulateRoutes();
+                    PaintNow();
+                    
+                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
+                    (print_error_message->control) = NULL;
+                    (print_error_message->title) = String("Route ground or start position outside plot area!");
+                    (print_error_message->message) = String("Route start or start position must lie within the plot area.");
+                    (*print_error_message)();
+                    
+                }
+                
+                if((((parent->parent)->highlighted_position) != -1)){
+                    //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
+                    
+                    //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
+                    (this->*ScreenToGeo)(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
+                    
+                    
+                    //update the coordinates of the Position under consideration in listcontrol_positions
+                    ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                    
+                    //given that the position under consideration has changed, I re-pain the chart
+                    PaintNow();
+                    
+                    //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+                    (print_error_message->control) = NULL;
+                    (print_error_message->title) = String("Position outside plot area!");
+                    (print_error_message->message) = String("The position must lie within the plot area.");
+                    (*print_error_message)();
+                    
+                }
+                
+            }
             
         }
         
     }else{
-        //in this case, I am dragging a route or position
+        //the left button of the mouse has not been lifted at the end of a drag
+
+        unsigned int i;
         
-        if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
-              ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )))){
-            //in this case, drag_end_position lies out the plot area
+        //if, when the left button of the mouse was down, the mouse was hovering over a position, then this position is selectd in listcontrol_positions and highlighted in color
+        if(((parent->parent)->highlighted_position) != -1){
             
-            if(((parent->parent)->highlighted_route) != -1){
-                //in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
+            //deselect any previously selected item in listcontrol_positions, if any
+            for(i=0; i<((parent->parent)->listcontrol_positions)->GetItemCount(); i++){
                 
-                (((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
-                
-                TabulateRoutes();
-                PaintNow();
-                
-                //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Route ground or start position outside plot area!");
-                (print_error_message->message) = String("Route start or start position must lie within the plot area.");
-                (*print_error_message)();
+                ((parent->parent)->listcontrol_positions)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
                 
             }
             
-            if((((parent->parent)->highlighted_position) != -1)){
-                //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
-                
-                //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                (this->*ScreenToGeo)(position_start_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                
-                
-                //update the coordinates of the Position under consideration in listcontrol_positions
-                ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
-                
-                //given that the position under consideration has changed, I re-pain the chart
-                PaintNow();
-                
-                //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-                (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Position outside plot area!");
-                (print_error_message->message) = String("The position must lie within the plot area.");
-                (*print_error_message)();
-                
-            }
+            parent->parent->Raise();  // bring the ListFrame to front
+            parent->parent->SetFocus();  // focus on the ListFrame
+            
+            //select the highlighted position in ListFrame
+            ((parent->parent)->listcontrol_positions)->SetItemState((parent->parent)->highlighted_position, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+            
+            //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
+            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour((parent->parent)->highlighted_position,  wxSystemSettings::GetColour    (wxSYS_COLOUR_HIGHLIGHT));
             
         }
+        
         
     }
     

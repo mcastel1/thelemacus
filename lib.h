@@ -1373,6 +1373,9 @@ class ListControl : public wxListCtrl{
   
 public:
     
+    //the wxButtons to add, delete and modify items in *this
+    wxButton* button_add, *button_delete, *button_modify;
+    
     ListControl(wxWindow*, const wxPoint&, const wxSize&);
     
     void PushBackColumn(wxString);
@@ -1912,7 +1915,7 @@ public:
     void OnModifyPosition(wxCommandEvent& event);
     void OnTransportPosition(wxCommandEvent& event);
     void OnDeletePosition(wxCommandEvent& event);
-    void OnDeselectInListControlPositions(wxCommandEvent&);
+    void OnDeselectInListControl(wxCommandEvent&);
 
     void OnAddRoute(wxCommandEvent& event);
     void OnModifyRoute(wxCommandEvent& event);

@@ -13079,6 +13079,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     unsigned int i, total_column_width /*, margin_h = 10*/, margin_v, red, green, blue;
     wxListItem column, item;
     String s;
+    vector<wxButton*> disableable_buttons;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
     
@@ -13216,8 +13217,60 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //
     
     
+    //image for button_modify_sight
+    wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
+    wxImage my_image = my_bitmap.ConvertToImage();
+    my_image.Rescale(20,20);
+    
+    //image for button_transport_sight
+    wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
+    wxImage my_image_tranposrt = my_bitmap_transport_sight.ConvertToImage();
+    my_image_tranposrt.Rescale(20,20);
+    
+    //button to modify a sight
+    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
+    button_modify_sight->Enable(false);
+    
+    //button to transport a sight
+    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
+    button_transport_sight->Enable(false);
+    
+    //button to modify a position
+    button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
+    button_modify_position->Enable(false);
+    
+    //button to transport a position
+    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
+    button_transport_position->Enable(false);
+    
+    //button to modify a route
+    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute, this);
+    button_modify_route->Enable(false);
+    
+    //button to delete a sight
+    button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight, this);
+    button_delete_sight->Enable(false);
+    
+    //button to delete a position
+    button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnDeletePosition, this);
+    button_delete_position->Enable(false);
+    
+    //button to delete a route
+    button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
+    button_delete_route->Enable(false);
+  
+    
     //listcontrol_sights with sights
-    listcontrol_sights = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    disableable_buttons = {button_modify_sight, button_transport_sight, button_delete_sight};
+    listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, this);
 //    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
@@ -13259,7 +13312,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     //listcontrol_positions with positions
-    listcontrol_positions = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    disableable_buttons = {button_modify_position, button_transport_position, button_delete_position};
+    listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
 //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, this);
@@ -13289,7 +13343,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     //listcontrol routes with routes
-    listcontrol_routes = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    disableable_buttons = {button_modify_route, /*button_transport_route,*/ button_delete_route};
+    listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, this);
     //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
@@ -13327,16 +13382,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol routes with routes
     
     
-    //buttons
-    //image for button_modify_sight
-    wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
-    wxImage my_image = my_bitmap.ConvertToImage();
-    my_image.Rescale(20,20);
-    
-    //image for button_transport_sight
-    wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
-    wxImage my_image_tranposrt = my_bitmap_transport_sight.ConvertToImage();
-    my_image_tranposrt.Rescale(20,20);
     
     
     //button to add a sight
@@ -13350,50 +13395,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //button to add a route
     button_add_route = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
-    
-    
-    //button to modify a sight
-    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
-    button_modify_sight->Enable(false);
-    
-    //button to transport a sight
-    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
-    button_transport_sight->Enable(false);
-    
-    
-    //button to modify a position
-    button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
-    button_modify_position->Enable(false);
-    
-    //button to transport a position
-    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
-    button_transport_position->Enable(false);
-    
-    
-    //button to modify a route
-    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
-    button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute, this);
-    button_modify_route->Enable(false);
-    
-    
-    //button to delete a sight
-    button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight, this);
-    button_delete_sight->Enable(false);
-    
-    //button to delete a position
-    button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnDeletePosition, this);
-    button_delete_position->Enable(false);
-    
-    //button to delete a route
-    button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
-    button_delete_route->Enable(false);
     
     
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
@@ -13763,13 +13764,18 @@ void ListFrame::OnDeletePosition(wxCommandEvent& event){
 //if an item is deselected in listcontrol_positions, disable button_modify_position, button_transport_position and button_delete_position
 void ListFrame::OnDeselectInListControl(wxCommandEvent& event){
     
-    wxListCtrl* listcontrol;
+    unsigned int i;
+    ListControl* caller;
     
-    listcontrol = (wxListCtrl *)event.GetEventObject();
+    caller = ((ListControl*)event.GetEventObject());
     
-    button_modify_position->Enable(listcontrol->GetSelectedItemCount() != 0);
-    button_transport_position->Enable(listcontrol->GetSelectedItemCount() != 0);
-    button_delete_position->Enable(listcontrol->GetSelectedItemCount() != 0);
+    for(i=0; i<(caller->disableable_buttons).size(); i++){
+        (caller->disableable_buttons)[i]->Enable(caller->GetSelectedItemCount() != 0);
+    }
+    
+    //    button_modify_position->Enable(caller->GetSelectedItemCount() != 0);
+    //    button_transport_position->Enable(caller->GetSelectedItemCount() != 0);
+    //    button_delete_position->Enable(caller->GetSelectedItemCount() != 0);
     
     event.Skip(true);
 
@@ -16281,8 +16287,9 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
 }
 
 
-ListControl::ListControl(wxWindow* parent_in, const wxPoint& pos, const wxSize& size) : wxListCtrl(parent_in, wxID_ANY, pos, size, wxLC_REPORT){
+ListControl::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size) : wxListCtrl(parent_in, wxID_ANY, pos, size, wxLC_REPORT){
     
+    disableable_buttons = disableable_buttons_in;
     
 }
 

@@ -1373,10 +1373,10 @@ class ListControl : public wxListCtrl{
   
 public:
     
-    //a vector containing pointers to the buttons of *this (add button, modify button, etc ...)
-    vector<wxButton*> buttons;
+    //a vector containing pointers to the buttons of *this (modify button, etc ...) which may be disabled if some event occurs
+    vector<wxButton*> disableable_buttons;
     
-    ListControl(wxWindow*, const wxPoint&, const wxSize&);
+    ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&);
     
     void PushBackColumn(wxString);
     

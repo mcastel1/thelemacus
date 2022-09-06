@@ -11508,9 +11508,10 @@ void SelectRoute::operator()(wxCommandEvent& event){
     
     (parent->idling) = true;
     
-    //temporarily unbind listcontrol_routes from on_select_listcontrol_routes
-    (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_in_listcontrol_routes));
-    
+    //temporarily unbind listcontrol_routes from &ListFrame::OnDeselectInListControl
+    (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnDeselectInListControl, parent);
+    (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, parent);
+
     
     
     //brings parent to front
@@ -11936,47 +11937,47 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 }
 
 
+//
+////if an item in listcontrol_sights is selected, then the modify_sight and delete_sight buttons are enabled
+//template<class T> void OnSelectInListControlSights::operator()(T& event){
+//
+//
+//
+//    (f->button_modify_sight)->Enable(true);
+//
+//    //button_transport_sight is enabled/disabled if the selected Sight is related/unrelated to a Route
+//    (f->button_transport_sight)->Enable(
+//
+//                                        ((((f->plot)->sight_list)[((f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_route).value != -1
+//
+//                                        );
+//
+//    (f->button_delete_sight)->Enable(true);
+//
+//    event.Skip(true);
+//
+//}
 
-//if an item in listcontrol_sights is selected, then the modify_sight and delete_sight buttons are enabled
-template<class T> void OnSelectInListControlSights::operator()(T& event){
-    
-    
-    
-    (f->button_modify_sight)->Enable(true);
-    
-    //button_transport_sight is enabled/disabled if the selected Sight is related/unrelated to a Route
-    (f->button_transport_sight)->Enable(
-                                        
-                                        ((((f->plot)->sight_list)[((f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_route).value != -1
-                                        
-                                        );
-    
-    (f->button_delete_sight)->Enable(true);
-    
-    event.Skip(true);
-    
-}
-
-//if an item in listcontrol_positions is selected, then the modify_position, transport_position and delete_position buttons are enabled
-template<class T> void OnSelectInListControlPositions::operator()(T& event){
-    
-    (f->button_modify_position)->Enable(true);
-    (f->button_transport_position)->Enable(true);
-    (f->button_delete_position)->Enable(true);
-    
-    event.Skip(true);
-    
-}
+////if an item in listcontrol_positions is selected, then the modify_position, transport_position and delete_position buttons are enabled
+//template<class T> void OnSelectInListControlPositions::operator()(T& event){
+//
+//    (f->button_modify_position)->Enable(true);
+//    (f->button_transport_position)->Enable(true);
+//    (f->button_delete_position)->Enable(true);
+//
+//    event.Skip(true);
+//
+//}
 
 //if an item in listcontrol_routes is selected, then the modify_route and delete_route buttons are enabled
-template<class T> void OnSelectInListControlRoutes::operator()(T& event){
-    
-    (f->button_modify_route)->Enable(true);
-    (f->button_delete_route)->Enable(true);
-    
-    event.Skip(true);
-    
-}
+//template<class T> void OnSelectInListControlRoutes::operator()(T& event){
+//
+//    (f->button_modify_route)->Enable(true);
+//    (f->button_delete_route)->Enable(true);
+//
+//    event.Skip(true);
+//
+//}
 
 
 //if an item in listcontrol_sights is selected, I transport the sight/position under consideration with such Route
@@ -12037,9 +12038,10 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     f->DrawAll();
     
-    //re-bind listcontrol_routes to on_select_listcontrol_routes
-    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_in_listcontrol_routes));
-    
+    //re-bind listcontrol_routes to &ListFrame::OnDeselectInListControl
+    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnDeselectInListControl, f);
+    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, f);
+
     //set parameters back to their original value
     (f->idling) = false;
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
@@ -13172,9 +13174,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
     
     
-    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
-    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
-    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
+//    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
+//    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
+//    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
     
@@ -13271,7 +13273,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol_sights with sights
     disableable_buttons = {button_modify_sight, button_transport_sight, button_delete_sight};
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
+//    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
+    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnDeselectInListControl, this);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, this);
 //    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
     
@@ -13314,9 +13317,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol_positions with positions
     disableable_buttons = {button_modify_position, button_transport_position, button_delete_position};
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
-//    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
+//    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
+    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnDeselectInListControl, this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, this);
+//    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
 
     listcontrol_positions->PushBackColumn(wxString("Number"));
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
@@ -13345,7 +13349,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol routes with routes
     disableable_buttons = {button_modify_route, /*button_transport_route,*/ button_delete_route};
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+//    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnDeselectInListControl, this);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, this);
     //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
     listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
@@ -16256,23 +16261,23 @@ template<class E> void ProjectionField::OnEdit(E& event){
     
 }
 
-OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
-    
-    f = f_in;
-    
-}
+//OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
+//    
+//    f = f_in;
+//    
+//}
 
-OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
-    
-    f = f_in;
-    
-}
-
-OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
-    
-    f = f_in;
-    
-}
+//OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
+//    
+//    f = f_in;
+//    
+//}
+//
+//OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
+//    
+//    f = f_in;
+//    
+//}
 
 OnSelectRouteInListControlRoutesForTransport::OnSelectRouteInListControlRoutesForTransport(ListFrame* f_in){
     

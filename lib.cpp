@@ -13219,7 +13219,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol_sights with sights
     listcontrol_sights = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
-    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
+//    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
     
     i=0;
     
@@ -13260,7 +13260,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol_positions with positions
     listcontrol_positions = new ListControl(panel, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
-    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
+//    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnDeselectInListControl, this);
 
     listcontrol_positions->PushBackColumn(wxString("Number"));
@@ -13852,6 +13852,7 @@ void ListFrame::Disconnect(int i_sight){
     
 }
 
+/*
 //when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
 void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
     
@@ -13871,7 +13872,7 @@ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
     event.Skip(true);
     
 }
-
+*/
 
 //when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route, and the same for the relaetd sight in listcontrol_sights.
 void ListFrame::OnMouseMovement(wxMouseEvent& event){
@@ -13997,6 +13998,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
 }
 
+/*
 //when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
 void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     
@@ -14013,7 +14015,7 @@ void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
     event.Skip(true);
     
 }
-
+*/
 
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){

@@ -1925,9 +1925,9 @@ public:
 
     void OnAddChartFrame(wxCommandEvent& event);
 
-    void OnMouseOnListControlSights(wxMouseEvent&);
+//    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
-    void OnMouseOnListControlPositions(wxMouseEvent&);
+//    void OnMouseOnListControlPositions(wxMouseEvent&);
         
     void OnClose(wxCloseEvent&);
     

@@ -1373,8 +1373,8 @@ class ListControl : public wxListCtrl{
   
 public:
     
-    //the wxButtons to add, delete and modify items in *this
-    wxButton* button_add, *button_delete, *button_modify;
+    //a vector containing pointers to the buttons of *this (add button, modify button, etc ...)
+    vector<wxButton*> buttons;
     
     ListControl(wxWindow*, const wxPoint&, const wxSize&);
     

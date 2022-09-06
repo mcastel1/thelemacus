@@ -1916,7 +1916,7 @@ public:
     void OnModifyPosition(wxCommandEvent& event);
     void OnTransportPosition(wxCommandEvent& event);
     void OnDeletePosition(wxCommandEvent& event);
-    void OnDeselectInListControl(wxCommandEvent&);
+    void OnChangeSelectionInListControl(wxCommandEvent&);
 
     void OnAddRoute(wxCommandEvent& event);
     void OnModifyRoute(wxCommandEvent& event);

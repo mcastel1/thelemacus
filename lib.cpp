@@ -8532,8 +8532,9 @@ void DrawPanel::TabulateRoutes(void){
         
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if(((plot->route_list)[i]).type != String("l")){
-            
-            ((plot->route_list)[i]).Draw((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
+  
+            //when Draw will handle o and c curves properly, replace DrawOld->Draw in the next line
+            ((plot->route_list)[i]).DrawOld((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
             
         }else{
             

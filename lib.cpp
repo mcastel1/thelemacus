@@ -13903,7 +13903,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         if(highlighted_sight != wxNOT_FOUND){
             //in this case, the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
             
-            j = ((((plot->sight_list)[highlighted_sight]).related_route).value);
+            highlighted_route = ((((plot->sight_list)[highlighted_sight]).related_route).value);
             
             for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
                 
@@ -13911,8 +13911,8 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                     
                     //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
                     listcontrol_sights->SetItemBackgroundColour(i, color_selected_item);
-                    if(j != -1){
-                        listcontrol_routes->SetItemBackgroundColour(j, color_selected_item);
+                    if(highlighted_route != -1){
+                        listcontrol_routes->SetItemBackgroundColour(highlighted_route, color_selected_item);
                     }
                     
                 }else{

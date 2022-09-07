@@ -1379,6 +1379,7 @@ public:
     ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&);
     
     void PushBackColumn(wxString);
+    void DeselectAll(void);
     
 };
 

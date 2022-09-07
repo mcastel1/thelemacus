@@ -16352,3 +16352,18 @@ void ListControl::PushBackColumn(wxString name){
     InsertColumn(GetColumnCount(), column);
     
 }
+
+
+//deselect all items in *this
+void ListControl::DeselectAll(void){
+    
+    unsigned int i;
+    
+    for(i=0; i<(this->GetItemCount()); i++){
+        
+        SetItemState(i, 0, wxLIST_STATE_SELECTED);
+        
+    }
+   
+}
+

@@ -10176,12 +10176,13 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
 
 
 
-//converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p is a valid point which corresponds to a geographic position, and false otherwise.
+//converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p lies within the circle denoting the boundaries of the earth, and false otherwise. If false is returned, q is the geographic position on the earth defined as follows: it lies on the intersection between the Earth and the x'z' plane and on the line between the center of the Earth and the vector rp corresponding to p (such vector rp lies on the x'z' plane)
 bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
     Projection temp;
     
     if(ScreenTo3D(p, &temp)){
+        //p lies within the circle of the earth
         
         if(q!=NULL){
             
@@ -10205,6 +10206,22 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
         return true;
         
     }else{
+        //p does not lie within the circle of the earth
+        
+        Double d;
+        
+        d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+
+        //from projection, compute the relative point on the x'z' plane, which has y'=0
+        gsl_vector_set(rp, 0, ((d.value)+1.0)/(d.value)*(temp.x));
+        gsl_vector_set(rp, 2, ((d.value)+1.0)/(d.value)*(temp.y));
+        gsl_vector_set(rp, 1, 0.0);
+        
+        //r = (rotation.matrix)^T . rp
+        gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
+   
+        q->set_cartesian(String(""), r, String(""));
+
         
         return false;
         
@@ -10241,7 +10258,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
 }
 
 
-//converts the point p on the screen (which is supposed to lie in the plot area), to the  3D projection (x,y)
+//converts the point p on the screen (which is supposed to lie in the plot area), to the  3D projection (x,y), which is written in q if q!=NULL. If p lies within /outside the circle of the earth, it returns true/false.
 bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     
     Projection temp;
@@ -10259,13 +10276,15 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     //I pulled out a factor (temp.x)^2 from arg_sqrt for clarity
     arg_sqrt = -((gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) + 2*(d.value)*(gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) ));
     
+    //if q!=NULL, I write in it the result. I do this even if p lies outside the sphere of the earth
+    if(q){
+        
+        (*q) = temp;
+        
+    }
     
     if(arg_sqrt >= 0.0){
-        
-        if(q){
-            (*q) = temp;
-        }
-        
+         
         return true;
         
     }else{
@@ -11209,11 +11228,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     }
                         
                     case '3':{
-                        //I am using the 3d projection: even if the position is invalid, the mouse may be pointing outside the circle delimiting the earth, and thus be a valid position for a drag which rotates the earth about the axis connecting the observer and the center of the earth
+                        //I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
+                        
+                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                        rotation =
+                        rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
                         
                         
+                        //re-draw the chart
+                        (this->*Draw)();
+                        PaintNow();
+
+
                         
-                              
                         break;
                         
                     }

@@ -10764,7 +10764,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
 
         unsigned int i;
         
-        //if, when the left button of the mouse was down, the mouse was hovering over a position, then this position is selectd in listcontrol_positions and highlighted in color
+        //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
         if(((parent->parent)->highlighted_position) != -1){
             
             //deselect any previously selected item in listcontrol_positions, if any
@@ -10782,6 +10782,48 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             
             //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
             ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour((parent->parent)->highlighted_position,  wxSystemSettings::GetColour    (wxSYS_COLOUR_HIGHLIGHT));
+            
+        }
+        
+        //if, when the left button of the mouse was down, the mouse was hovering over a Route, then this Route and the related Sight (if any) is selectd in listcontrol_routes and listcontrol_sights, respectively, and highlighted in color
+        if(((parent->parent)->highlighted_route) != -1){
+            
+            //deselect any previously selected item in listcontrol_routes, if any
+            for(i=0; i<((parent->parent)->listcontrol_routes)->GetItemCount(); i++){
+                
+                ((parent->parent)->listcontrol_routes)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
+                
+            }
+            
+            //deselect any previously selected item in listcontrol_sights, if any, to clear up things for the user and show only the selected Route in ListFrames
+            for(i=0; i<((parent->parent)->listcontrol_sights)->GetItemCount(); i++){
+                
+                ((parent->parent)->listcontrol_sights)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
+                
+            }
+            
+            
+            parent->parent->Raise();  // bring the ListFrame to front
+            parent->parent->SetFocus();  // focus on the ListFrame
+            
+            //select the highlighted Route in ListFrame
+            ((parent->parent)->listcontrol_routes)->SetItemState((parent->parent)->highlighted_route, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+            
+            //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
+            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour((parent->parent)->highlighted_route,  wxSystemSettings::GetColour    (wxSYS_COLOUR_HIGHLIGHT));
+            
+            if((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value != -1){
+                //the selected Route is related to a Sight
+                
+                
+   
+                //select the related Sight in ListFrame
+                ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                
+                //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value,  wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                                
+            }
             
         }
         

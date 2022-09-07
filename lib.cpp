@@ -10208,20 +10208,23 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     }else{
         //p does not lie within the circle of the earth
         
-        Double d;
-        
-        d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
-
-        //from projection, compute the relative point on the x'z' plane, which has y'=0
-        gsl_vector_set(rp, 0, ((d.value)+1.0)/(d.value)*(temp.x));
-        gsl_vector_set(rp, 2, ((d.value)+1.0)/(d.value)*(temp.y));
-        gsl_vector_set(rp, 1, 0.0);
-        
-        //r = (rotation.matrix)^T . rp
-        gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
-   
-        q->set_cartesian(String(""), r, String(""));
-
+        if(q!=NULL){
+            
+            Double d;
+            
+            d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+            
+            //from projection, compute the relative point on the x'z' plane, which has y'=0
+            gsl_vector_set(rp, 0, ((d.value)+1.0)/(d.value)*(temp.x));
+            gsl_vector_set(rp, 2, ((d.value)+1.0)/(d.value)*(temp.y));
+            gsl_vector_set(rp, 1, 0.0);
+            
+            //r = (rotation.matrix)^T . rp
+            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
+            
+            q->set_cartesian(String(""), r, String(""));
+            
+        }
         
         return false;
         

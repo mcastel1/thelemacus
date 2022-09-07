@@ -11189,15 +11189,40 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             }else{
                 //in this case, position_drag_now is not a valid position
                 
-                //uncomment this if you want an info message to be pribted
-                //
-                //print an info message
-                //
-                //                ((parent->print_error_message)->control) = NULL;
-                //                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
-                //                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
-                //                parent->CallAfter(*(parent->print_error_message));
-                //
+                switch(((((parent->projection)->name)->GetValue()).ToStdString())[0]){
+
+                    case 'm':{
+                        //I am using the mercator projection: then the position is invalid and I may print an error message
+                        
+                        //uncomment this if you want an info message to be pribted
+                        //
+                        //print an info message
+                        //
+                        //                ((parent->print_error_message)->control) = NULL;
+                        //                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
+                        //                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
+                        //                parent->CallAfter(*(parent->print_error_message));
+
+                              
+                        break;
+                        
+                    }
+                        
+                    case '3':{
+                        //I am using the 3d projection: even if the position is invalid, the mouse may be pointing outside the circle delimiting the earth, and thus be a valid position for a drag which rotates the earth about the axis connecting the observer and the center of the earth
+                        
+                        
+                        
+                              
+                        break;
+                        
+                    }
+                        
+                        
+                }
+                
+                
+                
                 
             }
             

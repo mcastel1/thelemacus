@@ -10768,11 +10768,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         if(((parent->parent)->highlighted_position) != -1){
             
             //deselect any previously selected item in listcontrol_positions, if any
-            for(i=0; i<((parent->parent)->listcontrol_positions)->GetItemCount(); i++){
-                
-                ((parent->parent)->listcontrol_positions)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
-                
-            }
+            ((parent->parent)->listcontrol_positions)->DeselectAll();
             
             parent->parent->Raise();  // bring the ListFrame to front
             parent->parent->SetFocus();  // focus on the ListFrame
@@ -10789,18 +10785,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         if(((parent->parent)->highlighted_route) != -1){
             
             //deselect any previously selected item in listcontrol_routes, if any
-            for(i=0; i<((parent->parent)->listcontrol_routes)->GetItemCount(); i++){
-                
-                ((parent->parent)->listcontrol_routes)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
-                
-            }
+            ((parent->parent)->listcontrol_routes)->DeselectAll();
             
             //deselect any previously selected item in listcontrol_sights, if any, to clear up things for the user and show only the selected Route in ListFrames
-            for(i=0; i<((parent->parent)->listcontrol_sights)->GetItemCount(); i++){
-                
-                ((parent->parent)->listcontrol_sights)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
-                
-            }
+            ((parent->parent)->listcontrol_sights)->DeselectAll();
             
             
             parent->parent->Raise();  // bring the ListFrame to front
@@ -11560,9 +11548,8 @@ void SelectRoute::operator()(wxCommandEvent& event){
     parent->Raise();
     
     //deselect all previously selected items in listcontrol_routes to allow the user to properly select an item
-    for(int i=0; i<(parent->listcontrol_routes)->GetItemCount(); i++){
-        (parent->listcontrol_routes)->SetItemState(i, 0, wxLIST_STATE_SELECTED);
-    }
+    (parent->listcontrol_routes)->DeselectAll();
+
     
     (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
     

@@ -679,6 +679,15 @@ public:
     
 };
 
+//this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_1, p_2 in the Mercator projection
+class Rectangle{
+    
+    //thw two Positions which constitute the vertices of the rectangle
+    Position p, q;
+    
+    Rectangle(Position, Position);
+    
+};
 
 
 //if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.

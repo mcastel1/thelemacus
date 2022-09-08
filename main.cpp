@@ -132,8 +132,10 @@ bool MyApp::OnInit(){
         
     }
     
-    list_frame->Raise();
-
+    //bring either of these wxFrames to front
+    //    list_frame->Raise();
+    ((list_frame->chart_frames)[0])->Raise();
+    
     
     return true;
     

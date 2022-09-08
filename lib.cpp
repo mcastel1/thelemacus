@@ -1407,6 +1407,15 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     
 }
 
+
+//constructor which assigns the values p_in, q_in to p and q, respectively 
+Rectangle::Rectangle(Position p_in, Position q_in){
+    
+    p = p_in;
+    q = q_in;
+    
+}
+
 //constructs a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet
 Route::Route(void){
     

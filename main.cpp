@@ -15,7 +15,6 @@
  - add lambert projection and 3D sphere with no projection
  - set up a proper output to a log file
  - add separator between recent items and non-recent items in BodyField->name
- - when I translate an orthodrome with mouse drag, its reference_position assumes nan coordinates
  - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
@@ -41,9 +40,7 @@
  - add night mode.
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - uncomment at '//uncomment this at the end' to display coastlines at the end
- - integate idling variable in everything that concerns ListFrame
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
- - in 3d projection, code up earth roation if the drag takes place oustide the earth boundaries
  - take care of 'when Draw will handle o and c curves properly, replace DrawOld->Draw in the next line'
  */
 

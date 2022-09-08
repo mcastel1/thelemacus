@@ -10140,37 +10140,33 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
     
 }
 
-//converts the point p on the screen (which is supposed to lie in the plot area): if p is in the plot area, it returns true and, if q!=NULL, writes the result in q. If not, it retuns false.
+//converts the point p on the screen (which is supposed to lie in the plot area) into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
 bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
     Projection temp;
+    bool output;
     
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    if(ScreenToMercator(p, &temp)){
+    
+    output = ScreenToMercator(p, &temp);
+    
+    if(q!= NULL){
         
-        if(q!= NULL){
-            
-            (q->lambda).set(String(""), k*lambda_mercator(temp.x), String(""));
-            (q->phi).set(String(""), k*phi_mercator(temp.y), String(""));
-            
-        }
-        
-        return true;
-        
-    }else{
-        
-        return false;
+        (q->lambda).set(String(""), k*lambda_mercator(temp.x), String(""));
+        (q->phi).set(String(""), k*phi_mercator(temp.y), String(""));
         
     }
     
+    return output;
+
 }
 
-//converts the point p on the screen (which is supposed to lie on the earth sphere), to the relative geographic position q. Note that this function is the same fot the Mercator and 3D projection
+//converts the point p on the screen to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
 bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
     
-    return (this->*ScreenToGeo)(p + position_draw_panel, q);
+    return(this->*ScreenToGeo)(p + position_draw_panel, q);
     
 }
 

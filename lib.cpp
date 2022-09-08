@@ -1984,15 +1984,15 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     
 }
 
-//If route is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and a part of *this is included into the circle of route, it returns true, and false other wise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects route and, if *this lies within route and t!=NULL, it returns 0, 0 in t.
-bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
+//If circle is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and a part of *this is included into the circle of circle, it returns true, and false other wise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
+bool Route::is_included_in(Route circle, vector<Angle> *t, String prefix){
     
     String new_prefix;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    if(((route.type) == String("c"))){
+    if(((circle.type) == String("c"))){
         
         switch((((*this).type).value)[0]){
                 
@@ -2000,7 +2000,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                 
                 //*this is a loxodrome
                 
-                cout << prefix.value << RED << "Cannot determine whether *this is included in route, because *this is a loxodrome!\n" << RESET;
+                cout << prefix.value << RED << "Cannot determine whether *this is included in circle, because *this is a loxodrome!\n" << RESET;
                 
                 break;
                 
@@ -2009,11 +2009,11 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
             case 'o':{
                 //*this is an orthodrome
                 
-                if(!(intersection(route, t, new_prefix))){
-                    //*this and route do not intersect: check whether *this is fully included into route
+                if(!(intersection(circle, t, new_prefix))){
+                    //*this and circle do not intersect: check whether *this is fully included into circle
                     
-                    if(reference_position.is_in(route, prefix)){
-                        //reference_position is included into the circle of route, thus *this is included into route
+                    if(reference_position.is_in(circle, prefix)){
+                        //reference_position is included into the circle of circle, thus *this is included into circle
                         
                         if(t){
                             
@@ -2026,14 +2026,14 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                         return true;
                         
                     }else{
-                        //reference_position is not included into the circle of route, thus *this is not included into route
+                        //reference_position is not included into the circle of circle, thus *this is not included into circle
                         
                         return false;
                         
                     }
                     
                 }else{
-                    //*this and route intersect
+                    //*this and circle intersect
                     
                     if(t){
                         
@@ -2042,13 +2042,13 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                             case 1:{
                                 //there is one intersection point
                                 
-                                if(reference_position.is_in(route, prefix)){
-                                    //this->reference position is included into the circle of route -> the part of *this comprised into route is the one with 0 <= t <= (*t)[0]
+                                if(reference_position.is_in(circle, prefix)){
+                                    //this->reference position is included into the circle of circle -> the part of *this comprised into circle is the one with 0 <= t <= (*t)[0]
                                     
                                     t->insert(t->begin(), Angle(String(""), 0.0, new_prefix));
                                     
                                 }else{
-                                    //this->reference position is not included into the circle of route -> this->end must be included into the circle of route -> the part of *this comprised into route is the one with  (*t)[0] <= t <= (l.value)/Re
+                                    //this->reference position is not included into the circle of circle -> this->end must be included into the circle of circle -> the part of *this comprised into circle is the one with  (*t)[0] <= t <= (l.value)/Re
                                     
                                     t->push_back(Angle(String(""), (l.value)/Re, new_prefix));
                                     
@@ -2059,7 +2059,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                             }
                                 
                             case 2:{
-                                //there are two intersection points -> the part of *this comprised into route is the one with (*t)[0] < t <(*t)[1] -> all I need to do is sort t
+                                //there are two intersection points -> the part of *this comprised into circle is the one with (*t)[0] < t <(*t)[1] -> all I need to do is sort t
                                 
                                 sort(t->begin(), t->end());
                                 
@@ -2084,13 +2084,13 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                 
                 Length d;
                 
-                reference_position.distance(route.reference_position, &d, String(""), new_prefix);
+                reference_position.distance(circle.reference_position, &d, String(""), new_prefix);
                 
-                if(d < (Re*((omega+(route.omega)).value))){
-                    //the routes have a common area
+                if(d < (Re*((omega+(circle.omega)).value))){
+                    //the circles have a common area
                     
-                    if((t!=NULL) && (!(intersection(route, t, new_prefix)))){
-                        //the routes do no intersect: I write 0, 0 into t
+                    if((t!=NULL) && (!(intersection(circle, t, new_prefix)))){
+                        //the circles do no intersect: I write 0, 0 into t
                         
                         t->resize(2);
                         ((*t)[0]).set(String(""), 0.0, new_prefix);
@@ -2101,7 +2101,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
                     return true;
                     
                 }else{
-                    //the routes don't have a common area
+                    //the circles don't have a common area
                     
                     return false;
                     
@@ -2118,7 +2118,7 @@ bool Route::is_included_in(Route route, vector<Angle> *t, String prefix){
         
     }else{
         
-        cout << prefix.value << RED << "Cannot determine whether *this is included in route, because route is not a circle of equal altitude!\n" << RESET;
+        cout << prefix.value << RED << "Cannot determine whether *this is included in circle, because circle is not a circle of equal altitude!\n" << RESET;
         
         return false;
         

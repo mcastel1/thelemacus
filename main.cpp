@@ -13,7 +13,6 @@
  notes: set parents to constructors of all frames that you defined
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
- - Now the slider in log scale works, but there is a problem when i de-zoom back to 1:1
  - set up a proper output to a log file
  - add separator between recent items and non-recent items in BodyField->name
  - replace 'lambda_rotation_axis.set(String("lambda rotation axis"), -atan(gsl_vector_get(rp, 0), gsl_vector_get(rp, 1)), String(""));

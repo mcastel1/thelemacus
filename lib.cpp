@@ -11395,11 +11395,14 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
         }else{
             //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
             
+            //uncomment this if you want to print an error message
+            /*
             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
             (print_error_message->message) = String("The chart must lie within the boundaries.");
             (*print_error_message)();
+             */
             
             //I reset the chart to its original configuration
             Reset<T>(event);

@@ -10232,7 +10232,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position *q){
     
 }
 
-//converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection (x,y) of the relative geographic position
+//converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
 bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     
     Projection temp;
@@ -10243,20 +10243,12 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     (temp.x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span();
     (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
     
-    if(check(temp)){
-        
-        if(q){
-            (q->x) = (temp.x);
-            (q->y) = (temp.y);
-        }
-        
-        return true;
-        
-    }else{
-        
-        return false;
-        
+    if(q){
+        (q->x) = (temp.x);
+        (q->y) = (temp.y);
     }
+    
+     return check(temp);
     
 }
 

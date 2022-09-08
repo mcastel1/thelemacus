@@ -13165,7 +13165,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     idling = false;
     unset_idling = new UnsetIdling<ListFrame>(this);
     select_route = new SelectRoute(this);
-    print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+    print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
     
     
@@ -13932,10 +13932,10 @@ void ListFrame::Disconnect(int i_sight){
     
     
     //print an info message
-    (print_error_message->control) = NULL;
-    (print_error_message->title) = String("The route which is being dragged was related to a sight!");
-    (print_error_message->message) = String("Disconnecting the route from the sight.");
-    CallAfter(*print_error_message);
+    (print_warning_message->control) = NULL;
+    (print_warning_message->title) = String("The route which is being dragged was related to a sight!");
+    (print_warning_message->message) = String("Disconnecting the route from the sight.");
+    CallAfter(*print_warning_message);
     
     
 }

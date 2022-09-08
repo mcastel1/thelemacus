@@ -1894,7 +1894,7 @@ public:
     UnsetIdling<ListFrame>* unset_idling;
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
-    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_error_message;
+    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message;
     PrintMessage<ListFrame, SelectRoute >* print_info_message;
     
 //    OnSelectInListControlSights* on_select_in_listcontrol_sights;

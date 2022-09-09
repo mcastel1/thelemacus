@@ -1408,7 +1408,7 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 }
 
 
-//constructor which assigns the values p_in, q_in to p and q, respectively 
+//constructor which assigns the values p_in, q_in to p and q, respectively
 Rectangle::Rectangle(Position p_in, Position q_in){
     
     p = p_in;
@@ -1993,7 +1993,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
     
 }
 
-//If circle is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and a part of *this is included into the circle of circle, it returns true, and false other wise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
+//If circle is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and a part of *this is included into the circle of circle, it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
 bool Route::is_included_in(Route circle, vector<Angle> *t, String prefix){
     
     String new_prefix;
@@ -2135,6 +2135,49 @@ bool Route::is_included_in(Route circle, vector<Angle> *t, String prefix){
     }
     
 }
+
+
+//If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
+bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix){
+    
+    switch((((*this).type).value)[0]){
+            
+        case 'l':{
+            
+            //*this is a loxodrome
+            
+            cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
+            
+            break;
+            
+        }
+            
+            
+        case 'o':{
+            
+            //*this is an orthodrome
+            
+            cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is an orthodrome!\n" << RESET;
+            
+            break;
+            
+        }
+            
+        case 'c':{
+            
+            //*this is a circle of equal altitude
+            
+            //do stuff
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+}
+
 
 //If route is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates t and it writes in t the  values of the parametric angles t of (*this), at which (*this) crosses route. If *this and route do not intersect, it returns false and does nothing with t.
 bool Route::intersection(Route route, vector<Angle> *t, String prefix){

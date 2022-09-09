@@ -689,6 +689,7 @@ public:
     //thw two Positions which constitute the vertices of the rectangle: p is the NW vertex, p_SE is the SE vertex
     Position p_NW, p_SE;
     
+    Rectangle();
     Rectangle(Position, Position);
     
 };

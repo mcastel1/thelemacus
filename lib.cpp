@@ -1408,6 +1408,11 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 }
 
 
+Rectangle::Rectangle(void){
+    
+    
+}
+
 //constructor which assigns the values p_NW_in, p_SE_in to p_NW and p_SE, respectively
 Rectangle::Rectangle(Position p_NW_in, Position p_SE_in){
     

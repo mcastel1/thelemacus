@@ -83,6 +83,20 @@ bool MyApp::OnInit(){
      
      */
     
+    //
+    Route cape_horn;
+    Rectangle ice;
+    vector<Angle> t;
+    
+    
+    cape_horn = Route(String("c"), Position(Angle(1.24), Angle(-4.434)), Angle(1.12));
+    ice = Rectangle(Position(Angle(-1.24), Angle(-1.434)), Position(Angle(0.424), Angle(-.334)));
+    
+    cape_horn.is_included_in(ice, &t, String(""));
+    
+    
+    //
+    
     wxImage::AddHandler(new wxPNGHandler);
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));

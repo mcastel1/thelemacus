@@ -681,13 +681,13 @@ public:
     
 };
 
-//this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_1, p_2 in the Mercator projection
+//this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_NW, p_SE in the Mercator projection
 class Rectangle{
     
 public:
     
-    //thw two Positions which constitute the vertices of the rectangle: p is the NE vertex, q is the SW vertex
-    Position p, q;
+    //thw two Positions which constitute the vertices of the rectangle: p is the NW vertex, q is the SE vertex
+    Position p_NW, q;
     
     Rectangle(Position, Position);
     

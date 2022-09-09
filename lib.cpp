@@ -1408,10 +1408,10 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 }
 
 
-//constructor which assigns the values p_in, q_in to p and q, respectively
-Rectangle::Rectangle(Position p_in, Position q_in){
+//constructor which assigns the values p_NW_in, q_in to p_NW and q, respectively
+Rectangle::Rectangle(Position p_NW_in, Position q_in){
     
-    p = p_in;
+    p_NW = p_NW_in;
     q = q_in;
     
 }
@@ -2170,15 +2170,15 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             //the longitude and latitude span of rectangle
             Angle lambda_span, phi_span;
             
-            lambda_span = ((rectangle.p).lambda).span((rectangle.q).lambda);
-            phi_span = ((rectangle.p).phi).span((rectangle.q).phi);
+            lambda_span = ((rectangle.p_NW).lambda).span((rectangle.q).lambda);
+            phi_span = ((rectangle.p_NW).phi).span((rectangle.q).phi);
 
             //the Route repreenting the N side of rectangle
             Route(
                   String("l"),
-                  rectangle.p,
+                  rectangle.p_NW,
                   Angle(M_PI_2),
-                  Length(Re*cos((rectangle.p).phi) * (lambda_span.value))
+                  Length(Re*cos((rectangle.p_NW).phi) * (lambda_span.value))
                   );
             
             //the Route repreenting the S side of rectangle
@@ -2192,7 +2192,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             //the Route repreenting the E side of rectangle
             Route(
                   String("l"),
-                  rectangle.p,
+                  rectangle.p_NW,
                   Angle(M_PI),
                   Length(Re * (phi_span.value))
                   );

@@ -126,6 +126,7 @@ public:
     Angle(double);
     Angle(String, double, String);
     void normalize(void);
+    Angle normalize_ret(void);
     void normalize_pm_pi(void);
     Angle normalize_pm_pi_ret(void);
     Angle span(Angle);

@@ -1413,15 +1413,22 @@ Rectangle::Rectangle(void){
     
 }
 
-//constructor which assigns the values p_NW_in, p_SE_in to p_NW and p_SE, respectively
-Rectangle::Rectangle(Position p_NW_in, Position p_SE_in){
+//constructor which constructs p_NW and p_SE from a and b
+Rectangle::Rectangle(Position a, Position b){
     
-    max(1., 2.);
+    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
     
-    max((p_NW_in.lambda).normalize_pm_pi_ret(), (p_SE_in.lambda).normalize_pm_pi_ret());
+    p_NW = Position(
+                    max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret()).normalize_ret(),
+                    max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret()).normalize_ret()
+                    );
     
-    p_NW = p_NW_in;
-    p_SE = p_SE_in;
+    
+    p_SE = Position(
+                    min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret()).normalize_ret(),
+                    min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret()).normalize_ret()
+                    );
+    
     
 }
 

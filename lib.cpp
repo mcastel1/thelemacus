@@ -2191,7 +2191,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             
             //the Route repreenting the E side of rectangle
             Route(
-                  String("l"),
+                  String("o"),
                   rectangle.p_NW,
                   Angle(M_PI),
                   Length(Re * (phi_span.value))
@@ -2199,7 +2199,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             
             //the Route repreenting the W side of rectangle
             Route(
-                  String("l"),
+                  String("o"),
                   rectangle.p_SE,
                   Angle(0.0),
                   Length(Re * (phi_span.value))

@@ -2167,15 +2167,17 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             
             //*this is a circle of equal altitude
             
-            //the longitude span rectangle
-            Angle delta_lambda;
+            //the longitude span of rectangle
+            Angle lambda_span;
             
-            (plot->lambda_min)
+            lambda_span = ((rectangle.p).lambda).span((rectangle.q).lambda);
+            
+            //the Route repreenting the N side of rectangle
             Route(
                   String("l"),
                   rectangle.p,
                   Angle(M_PI_2),
-                  Length(Re*cos((rectangle.p).phi) * delta_lambda)
+                  Length(Re*cos((rectangle.p).phi) * (lambda_span.value))
                   );
             
             

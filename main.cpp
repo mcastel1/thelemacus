@@ -11,7 +11,7 @@
 
 /*
  notes:
- - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again. 
+ - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - set parents to constructors of all frames that you defined
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
@@ -44,6 +44,10 @@
  - uncomment at '//uncomment this at the end' to display coastlines at the end
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
  - take care of 'when Draw will handle o and c curves properly, replace DrawOld->Draw in the next line'
+ - transform all the instances where you compute the span between two angles with Angle::span
+ 
+}
+ 
  */
 
 

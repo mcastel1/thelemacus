@@ -121,9 +121,14 @@ class Angle{
 public:
     
     double value;
+    
+    Angle();
+    Angle(double);
+    Angle(String, double, String);
     void normalize(void);
     void normalize_pm_pi(void);
     Angle normalize_pm_pi_ret(void);
+    Angle span(Angle);
     void enter(String, String);
     void set(String, double, String);
     void print(String, String, ostream&);
@@ -136,10 +141,7 @@ public:
     string deg_to_string(String, unsigned int);
     string min_to_string(String, unsigned int);
 
-    Angle();
-    Angle(double);
-    Angle(String, double, String);
-    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
+     bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
     Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
     
@@ -682,7 +684,9 @@ public:
 //this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_1, p_2 in the Mercator projection
 class Rectangle{
     
-    //thw two Positions which constitute the vertices of the rectangle
+public:
+    
+    //thw two Positions which constitute the vertices of the rectangle: p is the NE vertex, q is the SW vertex
     Position p, q;
     
     Rectangle(Position, Position);

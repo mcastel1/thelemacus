@@ -967,12 +967,12 @@ Rotation::Rotation(Position p, Position q){
         
         (*this) =  (Rotation(
                              Angle(String(""), 0.0, String("")),
-                             Angle(String(""), M_PI/2.0-(((rotation_axis).phi).value), String("")),
-                             Angle(String(""), -((((rotation_axis).lambda).value) + M_PI/2.0), String(""))
+                             Angle(String(""), M_PI_2-(((rotation_axis).phi).value), String("")),
+                             Angle(String(""), -((((rotation_axis).lambda).value) + M_PI_2), String(""))
                              )
                     * Rotation(
-                               Angle(String(""), (((rotation_axis).lambda).value) + M_PI/2.0, String("")),
-                               Angle(String(""), -(M_PI/2.0-(((rotation_axis).phi).value)), String("")),
+                               Angle(String(""), (((rotation_axis).lambda).value) + M_PI_2, String("")),
+                               Angle(String(""), -(M_PI_2-(((rotation_axis).phi).value)), String("")),
                                rotation_angle
                                ));
         
@@ -2167,7 +2167,17 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             
             //*this is a circle of equal altitude
             
-            //do stuff
+            //the longitude span rectangle
+            Angle delta_lambda;
+            
+            (plot->lambda_min)
+            Route(
+                  String("l"),
+                  rectangle.p,
+                  Angle(M_PI_2),
+                  Length(Re*cos((rectangle.p).phi) * delta_lambda)
+                  );
+            
             
             break;
             
@@ -3008,7 +3018,7 @@ void Route::compute_end(String prefix){
             eta = sqrt((1.0-sin(reference_position.phi.value))/(1.0+sin(reference_position.phi.value)));
             
             //tau = +-_{notes}
-            if(( (0.0 <= (Z.value)) && ((Z.value) < M_PI/2.0) ) || ( (3.0*M_PI/2.0 <= (Z.value)) && ((Z.value) < 2.0*M_PI) )){tau = +1;}
+            if(( (0.0 <= (Z.value)) && ((Z.value) < M_PI_2) ) || ( (3.0*M_PI_2 <= (Z.value)) && ((Z.value) < 2.0*M_PI) )){tau = +1;}
             else{tau = -1;}
             
             if((0.0 <= (Z.value)) && ((Z.value) < M_PI)){sigma = -1;}
@@ -3020,7 +3030,7 @@ void Route::compute_end(String prefix){
             /* cout << "tau = " << tau << "\n"; */
             /* cout << "C = " << C << "\n"; */
             
-            if(((Z.value) != M_PI/2.0) && ((Z.value) != 3.0*M_PI/2.0)){
+            if(((Z.value) != M_PI_2) && ((Z.value) != 3.0*M_PI_2)){
                 //this is the general expression of t vs l for Z != pi/2
                 
                 (t.value) = -tau*sqrt((1.0-C)/C)
@@ -3051,7 +3061,7 @@ void Route::compute_end(String prefix){
             t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
             
             
-            (end.phi).set(String(""), M_PI/2.0-acos(cos((omega.value))* sin(reference_position.phi)-cos(reference_position.phi)* cos((t.value)) *sin((omega.value))), prefix);
+            (end.phi).set(String(""), M_PI_2-acos(cos((omega.value))* sin(reference_position.phi)-cos(reference_position.phi)* cos((t.value)) *sin((omega.value))), prefix);
             
             (end.lambda).set(String(""), -(atan((-sin(reference_position.lambda) *(cos(reference_position.phi) *cos((omega.value)) + cos((t.value)) *sin(reference_position.phi)* sin((omega.value))) +  cos(reference_position.lambda)*sin((omega.value))*sin((t.value)))/( cos(reference_position.phi)*cos(reference_position.lambda)*cos((omega.value)) + sin((omega.value))*(cos(reference_position.lambda)*cos((t.value))*sin(reference_position.phi) + sin(reference_position.lambda)*sin((t.value)))))), prefix);
             if(cos(reference_position.phi)*cos(reference_position.lambda)*cos((omega.value)) + sin((omega.value))*(cos(reference_position.lambda)*cos((t.value))*sin(reference_position.phi) + sin(reference_position.lambda)*sin((t.value))) <= 0.0){
@@ -5918,7 +5928,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
     (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
     
     check &= compute_H_o(new_prefix);
-    (circle_of_equal_altitude->omega).set(String(""),  M_PI/2.0 - (H_o.value), String(""));
+    (circle_of_equal_altitude->omega).set(String(""),  M_PI_2 - (H_o.value), String(""));
     (circle_of_equal_altitude->l).set(String(""), 2.0*M_PI*Re*sin(circle_of_equal_altitude->omega), new_prefix);
     
     if(!check){
@@ -6934,7 +6944,7 @@ void Position::enter(String name, String prefix){
     
     do{
         phi.enter(String("latitude"), new_prefix);
-        if(!(((0.0 <= phi.value) && (M_PI/2.0 >= phi.value)) || ((3.0*M_PI/2.0 <= phi.value) && (2.0*M_PI >= phi.value)))){
+        if(!(((0.0 <= phi.value) && (M_PI_2 >= phi.value)) || ((3.0*M_PI_2 <= phi.value) && (2.0*M_PI >= phi.value)))){
             cout << new_prefix.value << RED << "Entered value is not valid!\n" << RESET;
             check = true;
         }else{
@@ -7010,6 +7020,25 @@ void Angle::normalize_pm_pi(void){
     normalize();
     if(value > M_PI){value-=2.0*M_PI;}
     
+}
+
+//returns the angular span between *this and x, where it must be (*this).value < x.value, by taking into account the periodicity of *this and x with respect to 2 pi
+Angle Angle::span(Angle x){
+    
+    Angle delta;
+    
+    if(((*this) < M_PI) && (x > M_PI)){
+        
+        delta.set(String(""), (((*this).value) + (2.0*M_PI)) - (x.value), String(""));
+        
+    }else{
+        
+        delta.set(String(""), ((*this).value) - (x.value), String(""));
+        
+    }
+    
+    return delta;
+
 }
 
 //puts the angle in the interval [-pi, pi), it does not alter *this and returns the result
@@ -7151,7 +7180,7 @@ string Angle::deg_to_string(String mode, unsigned int precision){
                 
                 if(value < M_PI){
                     
-                    if(value < M_PI/2.0){
+                    if(value < M_PI_2){
                         
                         output << round(fabs(K*value)) << "° N";
                         
@@ -7163,7 +7192,7 @@ string Angle::deg_to_string(String mode, unsigned int precision){
                     
                 }else{
                     
-                    if(value < 3.0*M_PI/2.0){
+                    if(value < 3.0*M_PI_2){
                         
                         output << round(fabs(K*(-M_PI+value))) << "° S";
                         
@@ -8081,7 +8110,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
     
     rotation = Rotation(
-                        Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
+                        Angle(String("Euler angle alpha"), -M_PI_2, String("")),
                         Angle(String("Euler angle beta"), 0.0, String("")),
                         Angle(String("Euler angle gamma"), 0.0, String(""))
                         );
@@ -8486,7 +8515,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                String("l"),
                ((parent->parent)->p_start),
                //change this by introducing if
-               Angle(M_PI/2.0 + M_PI*(1.0 + GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
+               Angle(M_PI_2 + M_PI*(1.0 + GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re*cos(((parent->parent)->p_start).phi) * fabs( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ) )
                )).DrawOld(((plot->n_points_routes).value), &dc, this, String(""));
         
@@ -8495,7 +8524,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                String("l"),
                ((parent->parent)->p_now),
                //change this by introducing if
-               Angle(M_PI/2.0 + M_PI*(1.0 - GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
+               Angle(M_PI_2 + M_PI*(1.0 - GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re*cos(((parent->parent)->p_now).phi) * fabs( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ) )
                )).DrawOld(((plot->n_points_routes).value), &dc, this, String(""));
         
@@ -8835,7 +8864,7 @@ void DrawPanel::Draw_Mercator(void){
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String(""), String("l"), String(""));
-    (route.Z).set(String(""), M_PI/2.0, String(""));
+    (route.Z).set(String(""), M_PI_2, String(""));
     ((route.reference_position).lambda) = (plot->lambda_min);
     
     //this loop runs over the latitude of the parallel, which we call phi
@@ -8857,7 +8886,7 @@ void DrawPanel::Draw_Mercator(void){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
                 //                (route.type).set(String(""), String("o"), String(""));
-                //                (route.Z).set(String(""), M_PI/2.0, String(""));
+                //                (route.Z).set(String(""), M_PI_2, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 //                ((route.reference_position).lambda) = (plot->lambda_min);
                 
@@ -9089,7 +9118,7 @@ void DrawPanel::Draw_3D(void){
     
     phi_middle.set(String(""), round((((circle_observer.reference_position).phi).value)/delta_phi) * delta_phi, String(""));
     //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd ->
-    if((fabs((phi_middle.value)-M_PI/2.0) < epsilon_double) || (fabs((phi_middle.value)- (3.0*M_PI/2.0)) < epsilon_double)){
+    if((fabs((phi_middle.value)-M_PI_2) < epsilon_double) || (fabs((phi_middle.value)- (3.0*M_PI_2)) < epsilon_double)){
         (phi_middle.value) -= GSL_SIGN((phi_middle.normalize_pm_pi_ret()).value) * delta_phi;
     }
     
@@ -9100,7 +9129,7 @@ void DrawPanel::Draw_3D(void){
     (route.type).set(String(""), String("o"), String(""));
     (route.l).set(String(""), Re*M_PI, String(""));
     (route.Z).set(String(""), 0.0, String(""));
-    ((route.reference_position).phi) = -M_PI/2.0;
+    ((route.reference_position).phi) = -M_PI_2;
     
     for(
         (((route.reference_position).lambda).value) = (lambda_start.value);
@@ -9154,9 +9183,9 @@ void DrawPanel::Draw_3D(void){
         ){
             
             //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-            (route.omega).set(String(""), M_PI/2.0 - fabs(phi.value), String(""));
+            (route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
             (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
-            ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI/2.0, String(""));
+            ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI_2, String(""));
             
             route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             
@@ -9164,7 +9193,7 @@ void DrawPanel::Draw_3D(void){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
                 (route.type).set(String(""), String("o"), String(""));
-                (route.Z).set(String(""), M_PI/2.0, String(""));
+                (route.Z).set(String(""), M_PI_2, String(""));
                 (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -9663,7 +9692,7 @@ template<class T> void ChartFrame::Reset(T& event){
         ZoomFactor_3D();
         
         //        (draw_panel->rotation_0) = Rotation(
-        //                                            Angle(String("Euler angle alpha"), -M_PI/2.0, String("")),
+        //                                            Angle(String("Euler angle alpha"), -M_PI_2, String("")),
         //                                            Angle(String("Euler angle beta"), 0.0, String("")),
         //                                            Angle(String("Euler angle gamma"), 0.0, String(""))
         //                                            );
@@ -9739,8 +9768,8 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     //set phi_min/max
     ((circle_observer.reference_position).phi).normalize_pm_pi();
     
-    if(((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) < M_PI/2.0) &&
-       ((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) > -M_PI/2.0)){
+    if(((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) < M_PI_2) &&
+       ((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) > -M_PI_2)){
         //in this case, circle_observer does not encircle the N/S pole
         
         (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
@@ -9748,18 +9777,18 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
         
     }else{
         
-        if((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) > M_PI/2.0){
+        if((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) > M_PI_2){
             //in this case, circle_observer encircles the N pole
             
             (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
-            (plot->phi_max).set(String(""), M_PI/2.0, String(""));
+            (plot->phi_max).set(String(""), M_PI_2, String(""));
             
         }
         
-        if((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) < -M_PI/2.0){
+        if((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) < -M_PI_2){
             //in this case, circle_observer encircles the S pole
             
-            (plot->phi_min).set(String(""), 3.0*M_PI/2.0, String(""));
+            (plot->phi_min).set(String(""), 3.0*M_PI_2, String(""));
             (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
             
         }

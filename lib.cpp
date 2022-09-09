@@ -2170,6 +2170,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             //the longitude and latitude span of rectangle
             Angle lambda_span, phi_span;
             Route side_N, side_S, side_E, side_W;
+            vector<Angle> t_E, t_W;
             
             lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
             phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
@@ -2206,6 +2207,10 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                   Length(Re * (phi_span.value))
                   );
             
+            
+            side_E.intersection(*this, &t_E, String(""));
+            side_W.intersection(*this, &t_W, String(""));
+
             
             break;
             

@@ -2198,28 +2198,29 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
             phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
 
-            //the Route repreenting the N side of rectangle
+            //the Route repreenting the N side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
             side_N = Route(
                            String("c"),
                            Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
                            Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
                            );
             
-            //the Route repreenting the S side of rectangle
+            //the Route repreenting the S side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
+
             side_S = Route(
                            String("c"),
                            Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
                            Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
                            );
 
-            //the Route repreenting the W side of rectangle
+            //the Route repreenting the W side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
             side_W = Route(
                            String("c"),
                            Position(((rectangle.p_NW).lambda)+M_PI_2, Angle(0.0)),
                            Angle(M_PI_2)
                            );
             
-            //the Route repreenting the E side of rectangle
+            //the Route repreenting the E side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
             side_E = Route(
                            String("c"),
                            Position(((rectangle.p_SE).lambda)+M_PI_2, Angle(0.0)),

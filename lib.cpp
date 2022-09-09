@@ -2169,12 +2169,13 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             
             //the longitude and latitude span of rectangle
             Angle lambda_span, phi_span;
+            Route side_N, side_S, side_E, side_W;
             
             lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
             phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
 
             //the Route repreenting the N side of rectangle
-            Route(
+            side_N = Route(
                   String("l"),
                   rectangle.p_NW,
                   Angle(M_PI_2),
@@ -2182,7 +2183,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                   );
             
             //the Route repreenting the S side of rectangle
-            Route(
+            side_S = Route(
                   String("l"),
                   rectangle.p_SE,
                   Angle(3.0*M_PI_2),
@@ -2190,7 +2191,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                   );
             
             //the Route repreenting the E side of rectangle
-            Route(
+            side_E = Route(
                   String("o"),
                   rectangle.p_NW,
                   Angle(M_PI),
@@ -2198,7 +2199,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                   );
             
             //the Route repreenting the W side of rectangle
-            Route(
+            side_W = Route(
                   String("o"),
                   rectangle.p_SE,
                   Angle(0.0),

@@ -1416,6 +1416,10 @@ Rectangle::Rectangle(void){
 //constructor which assigns the values p_NW_in, p_SE_in to p_NW and p_SE, respectively
 Rectangle::Rectangle(Position p_NW_in, Position p_SE_in){
     
+    max(1., 2.);
+    
+    max((p_NW_in.lambda).normalize_pm_pi_ret(), (p_SE_in.lambda).normalize_pm_pi_ret());
+    
     p_NW = p_NW_in;
     p_SE = p_SE_in;
     

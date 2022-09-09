@@ -2198,29 +2198,28 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
             phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
 
-            //the Route repreenting the N side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
+            //the parallel of latitude going through the North side of rectangle
             side_N = Route(
                            String("c"),
                            Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
                            Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
                            );
             
-            //the Route repreenting the S side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
-
+            //the parallel of latitude going through the S side of rectangle
             side_S = Route(
                            String("c"),
                            Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
                            Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
                            );
 
-            //the Route repreenting the W side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
+            //the meridian going through the W side of rectangle
             side_W = Route(
                            String("c"),
                            Position(((rectangle.p_NW).lambda)+M_PI_2, Angle(0.0)),
                            Angle(M_PI_2)
                            );
             
-            //the Route repreenting the E side of rectangle. This does not coincide with the N side of rectangle, only part of it does.
+            //the meridian going through the E side of rectangle
             side_E = Route(
                            String("c"),
                            Position(((rectangle.p_SE).lambda)+M_PI_2, Angle(0.0)),
@@ -2233,7 +2232,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             intersection(side_E, &t_E, String(""));
             intersection(side_W, &t_W, String(""));
 
-            
+            //write into t the value of
             if(t){
 
                 t->insert(t->end(), t_W.begin(), t_W.end());

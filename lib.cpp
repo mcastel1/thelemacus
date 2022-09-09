@@ -2193,7 +2193,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             //the longitude and latitude span of rectangle
             Angle lambda_span, phi_span;
             Route side_N, side_S, side_E, side_W;
-            vector<Angle> t_E, t_W;
+            vector<Angle> temp;
             
             lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
             phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
@@ -2228,19 +2228,34 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
 
 
             
-            //compute the intersections between *this and side_E/W, and writes in t_E/W the values of the parametric angle t of *this at which *this crosses side_E/W
-            intersection(side_E, &t_E, String(""));
-            intersection(side_W, &t_W, String(""));
 
             //write into t the value of
             if(t){
-
-                t->insert(t->end(), t_W.begin(), t_W.end());
-                t->insert(t->end(), t_E.begin(), t_E.end());
+                
+                //compute the intersections between *this and side_N/S/E/W, and writes in temp the values of the parametric angle t of *this at which *this crosses side_N/S/E/W: temps are then appended to t, which, at the end, will contain all intersections
+                intersection(side_N, &temp, String(""));
+                t->insert(t->end(), temp.begin(), temp.end());
+                temp.clear();
+                
+                intersection(side_S, &temp, String(""));
+                t->insert(t->end(), temp.begin(), temp.end());
+                temp.clear();
+                
+                intersection(side_E, &temp, String(""));
+                t->insert(t->end(), temp.begin(), temp.end());
+                temp.clear();
+                
+                intersection(side_W, &temp, String(""));
+                t->insert(t->end(), temp.begin(), temp.end());
+                
+                //add the trivial points 0 and 2 pi
+//                t->push_back(0.0);
+//                t->push_back(2.0*M_PI);
+//                
+                sort(t->begin(), t->end());
 
             }
 
-   
             
             break;
             

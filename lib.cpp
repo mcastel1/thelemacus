@@ -1415,19 +1415,26 @@ Rectangle::Rectangle(void){
 
 //constructor which constructs p_NW and p_SE from a and b
 Rectangle::Rectangle(Position a, Position b){
-    
+
+    Angle phi_N, phi_S, lambda_W, lambda_E;
+ 
     //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
+ 
+    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+    phi_N.normalize();
     
-    p_NW = Position(
-                    max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret()).normalize_ret(),
-                    max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret()).normalize_ret()
-                    );
+    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+    phi_S.normalize();
+    
+    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+    lambda_W.normalize();
+    
+    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+    lambda_E.normalize();
     
     
-    p_SE = Position(
-                    min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret()).normalize_ret(),
-                    min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret()).normalize_ret()
-                    );
+    p_NW = Position(lambda_W, phi_N);
+    p_SE = Position(lambda_E, phi_S);
     
     
 }
@@ -7061,6 +7068,14 @@ void Angle::normalize(void){
     
     value = value - 2.0*M_PI*floor(value/(2.0*M_PI));
     
+}
+
+Angle Angle::normalize_ret(void){
+    
+    Angle temp;
+    
+    temp.set(String(""), value - 2.0*M_PI*floor(value/(2.0*M_PI)), String(""));
+    return temp;
 }
 
 //puts the angle in the interval [-pi, pi) and writes the result in *this

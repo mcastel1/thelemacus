@@ -2167,7 +2167,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             
             //*this is a circle of equal altitude
             
-            //the longitude span of rectangle
+            //the longitude and latitude span of rectangle
             Angle lambda_span, phi_span;
             
             lambda_span = ((rectangle.p).lambda).span((rectangle.q).lambda);

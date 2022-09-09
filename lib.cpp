@@ -2234,12 +2234,13 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             intersection(side_W, &t_W, String(""));
 
             
-//            if(t){
-//
-//                t->insert(t->end(), t_E->begin(), t_E->end());
-//
-//            }
-//
+            if(t){
+
+                t->insert(t->end(), t_W->begin(), t_W->end());
+                t->insert(t->end(), t_E->begin(), t_E->end());
+
+            }
+
    
             
             break;

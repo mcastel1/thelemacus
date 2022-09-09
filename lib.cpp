@@ -2244,22 +2244,21 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             intersection(side_W, &temp, String(""));
             u.insert(u.end(), temp.begin(), temp.end());
             
-            //run over all intersections and find out whether some chunks of *this fall within rectangle 
+            sort(u.begin(), u.end());
+            
+            //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
             for(i=0; i<u.size(); i++){
-                (((u[i]).value) + ((u[(i+1) % (u.size())]).value))/2.0;
+                
+                //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
+                compute_end(Length(Re*sin(omega)*(((u[i]).value) + ((u[(i+1) % (u.size())]).value))/2.0), String(""));
+                
+                
             }
 
             //write into t the value of
             if(t){
                 
-
-                
-                //add the trivial points 0 and 2 pi
-//                t->push_back(0.0);
-//                t->push_back(2.0*M_PI);
-//                
-                sort(t->begin(), t->end());
-
+            
             }
 
             

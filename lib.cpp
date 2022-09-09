@@ -2200,36 +2200,33 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
 
             //the Route repreenting the N side of rectangle
             side_N = Route(
-                  String("l"),
-                  rectangle.p_NW,
-                  Angle(M_PI_2),
-                  Length(Re*cos((rectangle.p_NW).phi) * (lambda_span.value))
-                  );
+                           String("c"),
+                           Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
+                           Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
+                           );
             
             //the Route repreenting the S side of rectangle
             side_S = Route(
-                  String("l"),
-                  rectangle.p_SE,
-                  Angle(3.0*M_PI_2),
-                  Length(Re*cos((rectangle.p_SE).phi) * (lambda_span.value))
-                  );
+                           String("c"),
+                           Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
+                           Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
+                           );
+
+            //the Route repreenting the W side of rectangle
+            side_W = Route(
+                           String("c"),
+                           Position(((rectangle.p_NW).lambda)+M_PI_2, Angle(0.0)),
+                           Angle(M_PI_2)
+                           );
             
             //the Route repreenting the E side of rectangle
             side_E = Route(
-                  String("o"),
-                  rectangle.p_NW,
-                  Angle(M_PI),
-                  Length(Re * (phi_span.value))
-                  );
-            
-            //the Route repreenting the W side of rectangle
-            side_W = Route(
-                  String("o"),
-                  rectangle.p_SE,
-                  Angle(0.0),
-                  Length(Re * (phi_span.value))
-                  );
-            
+                           String("c"),
+                           Position(((rectangle.p_SE).lambda)+M_PI_2, Angle(0.0)),
+                           Angle(M_PI_2)
+                           );
+
+
             
             //compute the intersections between *this and side_E/W, and writes in t_E/W the values of the parametric angle t of *this at which *this crosses side_E/W
             intersection(side_E, &t_E, String(""));
@@ -2237,11 +2234,11 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
 
             
 //            if(t){
-//                
+//
 //                t->insert(t->end(), t_E->begin(), t_E->end());
 //
 //            }
-//            
+//
    
             
             break;

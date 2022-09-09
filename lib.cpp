@@ -2252,7 +2252,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                 //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
                 compute_end(Length(Re*sin(omega)*(((u[i]).value) + ((u[(i+1) % (u.size())]).value))/2.0), String(""));
                 
-                
+  
             }
 
             //write into t the value of

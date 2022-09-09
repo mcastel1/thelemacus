@@ -1408,11 +1408,11 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 }
 
 
-//constructor which assigns the values p_NW_in, q_in to p_NW and q, respectively
-Rectangle::Rectangle(Position p_NW_in, Position q_in){
+//constructor which assigns the values p_NW_in, p_SE_in to p_NW and p_SE, respectively
+Rectangle::Rectangle(Position p_NW_in, Position p_SE_in){
     
     p_NW = p_NW_in;
-    q = q_in;
+    p_SE = p_SE_in;
     
 }
 
@@ -2170,8 +2170,8 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             //the longitude and latitude span of rectangle
             Angle lambda_span, phi_span;
             
-            lambda_span = ((rectangle.p_NW).lambda).span((rectangle.q).lambda);
-            phi_span = ((rectangle.p_NW).phi).span((rectangle.q).phi);
+            lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
+            phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
 
             //the Route repreenting the N side of rectangle
             Route(
@@ -2184,9 +2184,9 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             //the Route repreenting the S side of rectangle
             Route(
                   String("l"),
-                  rectangle.q,
+                  rectangle.p_SE,
                   Angle(3.0*M_PI_2),
-                  Length(Re*cos((rectangle.q).phi) * (lambda_span.value))
+                  Length(Re*cos((rectangle.p_SE).phi) * (lambda_span.value))
                   );
             
             //the Route repreenting the E side of rectangle
@@ -2200,7 +2200,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             //the Route repreenting the W side of rectangle
             Route(
                   String("l"),
-                  rectangle.q,
+                  rectangle.p_SE,
                   Angle(0.0),
                   Length(Re * (phi_span.value))
                   );

@@ -692,6 +692,7 @@ public:
     
     Rectangle();
     Rectangle(Position, Position);
+    bool Contains(Position);
     
 };
 

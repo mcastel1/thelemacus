@@ -1439,6 +1439,16 @@ Rectangle::Rectangle(Position a, Position b){
     
 }
 
+//returns true/false if p is containted in *this
+bool Rectangle::Contains(Position p){
+    
+    return( ((p.lambda).normalize_pm_pi_ret() < ((p_NW.lambda).normalize_pm_pi_ret())) &&
+    ((p.lambda).normalize_pm_pi_ret() > ((p_SE.lambda).normalize_pm_pi_ret())) &&
+    ((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
+    ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret())) );
+    
+}
+
 //constructs a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet
 Route::Route(void){
     

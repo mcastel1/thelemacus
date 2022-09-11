@@ -90,8 +90,8 @@ bool MyApp::OnInit(){
     bool output;
     
     
-    cape_horn = Route(String("c"), Position(Angle(1.24), Angle(-4.434)), Angle(1.12));
-    ice = Rectangle(Position(Angle(-1.24), Angle(-1.434)), Position(Angle(0.424), Angle(-.334)));
+    cape_horn = Route(String("c"), Position(Angle(-1.2), Angle(-1.3)), Angle(0.5));
+    ice = Rectangle(Position(Angle(-1), Angle(-0.5)), Position(Angle(-1.2), Angle(-1.2)));
      
     output = cape_horn.is_included_in(ice, &t, String(""));
     

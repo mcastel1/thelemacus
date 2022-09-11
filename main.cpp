@@ -92,7 +92,7 @@ bool MyApp::OnInit(){
     
     cape_horn = Route(String("c"), Position(Angle(1.24), Angle(-4.434)), Angle(1.12));
     ice = Rectangle(Position(Angle(-1.24), Angle(-1.434)), Position(Angle(0.424), Angle(-.334)));
-    
+     
     output = cape_horn.is_included_in(ice, &t, String(""));
     
     

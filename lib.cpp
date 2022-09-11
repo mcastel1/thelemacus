@@ -2197,7 +2197,6 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
         }
             
         case 'c':{
-            
             //*this is a circle of equal altitude
             
             //the longitude and latitude span of rectangle
@@ -2205,6 +2204,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             Route side_N, side_S, side_E, side_W;
             vector<Angle> u, temp;
             unsigned int i;
+            bool output;
             
             lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
             phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
@@ -2254,21 +2254,34 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             intersection(side_W, &temp, String(""));
             u.insert(u.end(), temp.begin(), temp.end());
             
+            u.push_back(Angle(0.0));
+            
+            u.push_back(Angle(2.0*M_PI));
+            (*(u.end())).value = 2.0*M_PI;
+ 
             sort(u.begin(), u.end());
             
             //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
-            for(i=0; i<u.size(); i++){
+            for(output = false, i=0; i<u.size()-1; i++){
                 
                 //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
-                compute_end(Length(Re*sin(omega)*(((u[i]).value) + ((u[(i+1) % (u.size())]).value))/2.0), String(""));
+                compute_end(Length(Re*sin(omega)*(((u[i]).value) + ((u[i+1]).value))/2.0), String(""));
                 
+                if(rectangle.Contains(end)){
+                    //if rectangle contains the emidpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
+                    
+                    output = true;
+                    
+                    //If != NULL< write into t the value of the intersections which delimit the chunk of *this whic is included in rectangle
+                    if(t != NULL){
+                        
+                        t->push_back(u[i]);
+                        t->push_back(u[i+1]);
+                        
+                    }
+                    
+                }
   
-            }
-
-            //write into t the value of
-            if(t){
-                
-            
             }
 
             

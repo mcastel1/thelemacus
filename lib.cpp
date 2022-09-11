@@ -2257,7 +2257,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             u.push_back(Angle(0.0));
             
             u.push_back(Angle(2.0*M_PI));
-            (*(u.end())).value = 2.0*M_PI;
+            (u.back()).value = 2.0*M_PI;
  
             sort(u.begin(), u.end());
             

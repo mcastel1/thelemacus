@@ -1819,6 +1819,16 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 case 'M':{
                     //I am using the mercator projection
                     
+                    if(is_included_in(draw_panel->rectangle_observer, &t, String(""))){
+                        //*this is included in rectangle_observer
+
+                    }else{
+                        //*this is not included in rectangle_observer
+
+                        return false;
+                        
+                    }
+                    
                      
                     break;
                     

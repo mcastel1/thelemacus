@@ -2286,11 +2286,11 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
   
             }
             
-            if(output && (t.size() == 2)){
+            if(output && (t->size() == 2)){
                 //*this is fully included in rectangle and it does not intersect rectangle
                 
                 //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0
-                (t[1]).normalize();
+                ((*t)[1]).normalize();
                 
             }
             

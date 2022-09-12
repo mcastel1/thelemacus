@@ -1638,35 +1638,59 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
         case 'o':{
             //the Route this is an orthodrome
             
-            if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
-                
-                //tabulate the Route points
-                for(i=0; i<n_points; i++){
+            switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
                     
-                    compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                case 'M':{
+                    //I am using the mercator projection
                     
-                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                    
+                    break;
+                    
+                }
+                    
+                case '3':{
+                    //I am using the 3d projection
+                    
+                    if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
                         
-                        x.push_back(temp.x);
-                        y.push_back(temp.y);
+                        //tabulate the Route points
+                        for(i=0; i<n_points; i++){
+                            
+                            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                            
+                            if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                                
+                                x.push_back(temp.x);
+                                y.push_back(temp.y);
+                                
+                            }
+                            
+                        }
+                        
+                        //draw the Route in draw_panel
+                        (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+                        (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+                        if(width != -1){
+                            (draw_panel->spline_layer)->setLineWidth(width);
+                        }
+                        
+                        //free up memory
+                        x.clear();
+                        y.clear();
                         
                     }
                     
+                    
+                    
+                    break;
+                    
                 }
-                
-                //draw the Route in draw_panel
-                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
-                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-                if(width != -1){
-                    (draw_panel->spline_layer)->setLineWidth(width);
-                }
-                
-                //free up memory
-                x.clear();
-                y.clear();
-                
+                    
+                    
             }
+
             
+    
             break;
             
         }
@@ -1674,36 +1698,57 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
         case 'c':{
             //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
             
-            if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
-                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-                
-                //tabulate the Route points
-                for(i=0; i<n_points; i++){
+            switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
                     
-                    //set the temporarly length across the Route
-                    compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                case 'M':{
+                    //I am using the mercator projection
                     
-                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                    
+                    break;
+                    
+                }
+                    
+                case '3':{
+                    //I am using the 3d projection
+                    
+                    if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
+                        //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
                         
-                        x.push_back(temp.x);
-                        y.push_back(temp.y);
+                        //tabulate the Route points
+                        for(i=0; i<n_points; i++){
+                            
+                            //set the temporarly length across the Route
+                            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                            
+                            if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                                
+                                x.push_back(temp.x);
+                                y.push_back(temp.y);
+                                
+                            }
+                            
+                        }
+                        
+                        //draw the Route in draw_panel
+                        (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+                        (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+                        if(width != -1){
+                            (draw_panel->spline_layer)->setLineWidth(width);
+                        }
+                        
+                        //free up memory
+                        x.clear();
+                        y.clear();
                         
                     }
+                    break;
                     
                 }
-                
-                //draw the Route in draw_panel
-                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
-                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-                if(width != -1){
-                    (draw_panel->spline_layer)->setLineWidth(width);
-                }
-                
-                //free up memory
-                x.clear();
-                y.clear();
-                
+                    
+                    
             }
+
+       
             
             break;
             
@@ -1791,21 +1836,43 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
         case 'o':{
             //the Route this is an orthodrome
             
-            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
-                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-                
-                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
-                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
-                
-                t.clear();
-                
-                return true;
-                
-            }else{
-                
-                return false;
-                
+            switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
+                    
+                case 'M':{
+                    //I am using the mercator projection
+                    
+                    
+                    break;
+                    
+                }
+                    
+                case '3':{
+                    //I am using the 3d projection
+                    
+                    if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+                        //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
+                        
+                        ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
+                        ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
+                        
+                        t.clear();
+                        
+                        return true;
+                        
+                    }else{
+                        
+                        return false;
+                        
+                    }
+                    
+                    break;
+                    
+                }
+                    
+                    
             }
+            
+            
             
             break;
             
@@ -8840,8 +8907,8 @@ void DrawPanel::Draw_Mercator(void){
                                                   );
     (circle_observer.omega).set(String(""), ((max(r,s)).value)/Re, prefix);
     
-    
-    
+    //set rectangle_obseerver
+    rectangle_observer = Rectangle(Position(plot->lambda_min, plot->phi_min), Position(plot->lambda_max, plot->phi_max));
     
     
     

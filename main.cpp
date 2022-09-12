@@ -45,7 +45,7 @@
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
  - take care of 'when Draw will handle o and c curves properly, replace DrawOld->Draw in the next line'
  - transform all the instances where you compute the span between two angles with Angle::span
- - in DrawPanel::Draw_Mercator, delete the setting  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
+ - in DrawPanel::Draw_Mercator, delete the setting and any use  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
  
 }
  

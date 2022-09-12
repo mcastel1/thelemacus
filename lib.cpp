@@ -8854,7 +8854,7 @@ void DrawPanel::TabulateRoutes(void){
         if(((plot->route_list)[i]).type != String("l")){
   
             //when Draw will handle o and c curves properly, replace DrawOld->Draw in the next line
-            ((plot->route_list)[i]).DrawOld((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
+            ((plot->route_list)[i]).Draw((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
             
         }else{
             

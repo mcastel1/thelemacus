@@ -1814,59 +1814,80 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
         case 'c':{
             //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
             
-            if(is_included_in(draw_panel->circle_observer, &t, String(""))){
-                //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-                
-                if((t[0] == 0.0) && (t[1] == 0.0)){
-                    //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+            switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
                     
-                    ((*s)[0]).set(String(""), 0.0, String(""));
-                    ((*s)[1]).set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
+                case 'M':{
+                    //I am using the mercator projection
                     
-                }else{
-                    //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
+                     
+                    break;
                     
-                    Length l1, l2;
+                }
+
+                case '3':{
+                    //I am using the 3d projection
                     
-                    //here I decide whether the chunk with average t t[0]+t[1]/2 or the chunk with average t t[0]+t[1]/2+pi is the one included in circle_observer 
-                    //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
-                    compute_end(
-                                Length(
-                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0)).value) * (Re*sin(omega))
-                                       ),
-                                String(""));
-                    ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
-                    
-                    compute_end(
-                                Length(
-                                       ((Angle(((((t[0]).value)+((t[1]).value)))/2.0+M_PI)).value) * (Re*sin(omega))
-                                       ),
-                                String(""));
-                    ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
-                    
-                    if(l2>l1){
+                    if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+                        //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
                         
-                        ((*s)[0]).set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
-                        ((*s)[1]).set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                        if((t[0] == 0.0) && (t[1] == 0.0)){
+                            //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+                            
+                            ((*s)[0]).set(String(""), 0.0, String(""));
+                            ((*s)[1]).set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
+                            
+                        }else{
+                            //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
+                            
+                            Length l1, l2;
+                            
+                            //here I decide whether the chunk with average t t[0]+t[1]/2 or the chunk with average t t[0]+t[1]/2+pi is the one included in circle_observer
+                            //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
+                            compute_end(
+                                        Length(
+                                               ((Angle(((((t[0]).value)+((t[1]).value)))/2.0)).value) * (Re*sin(omega))
+                                               ),
+                                        String(""));
+                            ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+                            
+                            compute_end(
+                                        Length(
+                                               ((Angle(((((t[0]).value)+((t[1]).value)))/2.0+M_PI)).value) * (Re*sin(omega))
+                                               ),
+                                        String(""));
+                            ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+                            
+                            if(l2>l1){
+                                
+                                ((*s)[0]).set(String(""), ((t[0]).value)*(Re*sin(omega)), String(""));
+                                ((*s)[1]).set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                                
+                            }else{
+                                
+                                ((*s)[0]).set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
+                                ((*s)[1]).set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
+                                
+                            }
+                            
+                        }
+                        
+                        t.clear();
+                        
+                        return true;
                         
                     }else{
                         
-                        ((*s)[0]).set(String(""), ((t[1]).value)*(Re*sin(omega)), String(""));
-                        ((*s)[1]).set(String(""), (2.0*M_PI + ((t[0]).value))*(Re*sin(omega)), String(""));
+                        return false;
                         
                     }
+                     
+                    break;
                     
                 }
-                
-                t.clear();
-                
-                return true;
-                
-            }else{
-                
-                return false;
-                
+                    
             }
+            
+   
             
             break;
             
@@ -11409,7 +11430,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 
                 switch(((((parent->projection)->name)->GetValue()).ToStdString())[0]){
 
-                    case 'm':{
+                    case 'M':{
                         //I am using the mercator projection: then the position is invalid and I may print an error message
                         
                         //uncomment this if you want an info message to be pribted

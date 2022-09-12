@@ -2321,7 +2321,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             Route side_N, side_S, side_E, side_W;
             vector<Angle> u, temp;
             unsigned int i;
-            bool output;
+            bool output, /*this is true if the entire Route *this is included in rectangle, and false otherwise*/is_fully_included;
             
             lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
             phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
@@ -2379,7 +2379,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             sort(u.begin(), u.end());
             
             //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
-            for(output = false, i=0; i<u.size()-1; i++){
+            for(output = false, is_fully_included = true, i=0; i<u.size()-1; i++){
                 
                 //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
                 compute_end(Length(Re*sin(omega)*(((u[i]).value) + ((u[i+1]).value))/2.0), String(""));
@@ -2396,6 +2396,10 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                         
                     }
                     
+                }else{
+                    
+                    is_fully_included = false;
+                    
                 }
   
             }
@@ -2404,7 +2408,7 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             t->push_back(u.back());
 
             
-            if(output && (t->size() == 2)){
+            if(is_fully_included && (t->size() == 2)){
                 //*this is fully included in rectangle and it does not intersect rectangle
                 
                 //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0

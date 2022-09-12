@@ -2176,10 +2176,11 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
     switch((((*this).type).value)[0]){
             
         case 'l':{
-            
             //*this is a loxodrome
             
             cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
+            
+            //add return value here
             
             break;
             
@@ -2187,10 +2188,11 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
             
             
         case 'o':{
-            
             //*this is an orthodrome
             
             cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is an orthodrome!\n" << RESET;
+            
+            //add return value here
             
             break;
             
@@ -2284,7 +2286,15 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
   
             }
             
-            return output; 
+            if(output && (t.size() == 2)){
+                //*this is fully included in rectangle and it does not intersect rectangle
+                
+                //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0
+                (t[1]).normalize();
+                
+            }
+            
+            return output;
 
             
             break;

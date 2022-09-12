@@ -1902,6 +1902,8 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                             }
                             
                         }
+                        
+                        return true;
 
                     }else{
                         //*this is not included in rectangle_observer

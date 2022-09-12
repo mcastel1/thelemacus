@@ -1620,10 +1620,10 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     unsigned int i;
     vector<double> x, y;
     Projection temp;
-    vector<Length>* s;
+    vector<Length> s;
     
     //comoute the end values of l and writes them in s
-    compute_l_ends(s, draw_panel, prefix);
+    compute_l_ends(&s, draw_panel, prefix);
     
     switch((type.value)[0]){
             
@@ -1656,7 +1656,7 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                         //tabulate the Route points
                         for(i=0; i<n_points; i++){
                             
-                            compute_end(Length((((*s)[0]).value) + ((((*s)[1])-((*s)[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
                             
                             if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                                 
@@ -1718,7 +1718,7 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                         for(i=0; i<n_points; i++){
                             
                             //set the temporarly length across the Route
-                            compute_end(Length((((*s)[0]).value) + ((((*s)[1])-((*s)[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
                             
                             if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                                 
@@ -1776,10 +1776,10 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     
     unsigned int i;
     wxPoint p;
-    vector<Length>* s;
+    vector<Length> s;
     
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
-    if(compute_l_ends(s, draw_panel, prefix)){
+    if(compute_l_ends(&s, draw_panel, prefix)){
         
         bool end_connected;
         
@@ -1787,7 +1787,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
         //tabulate the Route points
         for(v->clear(), /*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
             
-            compute_end(Length((((*s)[0]).value) + ((((*s)[1])-((*s)[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
             
             if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
                 

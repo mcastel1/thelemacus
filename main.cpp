@@ -84,7 +84,7 @@ bool MyApp::OnInit(){
      
      */
     
-    //
+    /*
     Route cape_horn;
     Rectangle ice;
     vector<Angle> t;
@@ -97,7 +97,7 @@ bool MyApp::OnInit(){
     output = cape_horn.is_included_in(ice, &t, String(""));
     
     
-    //
+    */
     
     wxImage::AddHandler(new wxPNGHandler);
     

@@ -2391,13 +2391,16 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                     if(t != NULL){
                         
                         t->push_back(u[i]);
-                        t->push_back(u[i+1]);
                         
                     }
                     
                 }
   
             }
+            
+            //I push back into to the last value of u (2 pi), which has not been pushed back by the loop above
+            t->push_back(u.back());
+
             
             if(output && (t->size() == 2)){
                 //*this is fully included in rectangle and it does not intersect rectangle

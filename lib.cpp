@@ -1774,40 +1774,32 @@ void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, String 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
 void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, String prefix){
     
-    unsigned int i;
+    unsigned int i, j;
     wxPoint p;
     vector<Length> s;
     
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends(&s, draw_panel, prefix)){
         
-        bool end_connected;
-        
-        
-        //tabulate the Route points
-        for(v->clear(), /*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
+        //run over all chunks of *this which are visible
+        v->resize((s.size())-1);
+        for(j=0; j<v->size(); j++){
             
-            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
-            
-            if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
+            //tabulate the Route points of the jth component
+            for(i=0; i<n_points; i++){
                 
-                if(end_connected){
+                compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
+                
+                if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
                     
-                    (*v).resize((*v).size() + 1);
-                    end_connected = false;
+                    ((*v)[j]).push_back(p);
                     
                 }
                 
-                ((*v)[(*v).size()-1]).push_back(p);
-                
-            }else{
-                
-                end_connected = true;
-                
             }
-            
+
         }
-        
+       
     }else{
         
         //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;

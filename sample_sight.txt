@@ -15,4 +15,17 @@
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Moon 12
     Routes in the plot:
+        Route #1:
+            type = o
+            start position:
+                latitude = 342° 20.1005'
+                longitude = 55° 18.4353'
+                label = My favorite british author
+            starting heading = 64° 14.7477'
+            length = 1021.345 nm
+            label = A beating leg
     Positions in the plot:
+        Position #1:
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 57° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH) sopra e sotto non si sa come

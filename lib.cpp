@@ -1816,7 +1816,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     
 }
 
-//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle_observer, and writes them in *s. For (*s)[0] < l < (*s)[1], the Route *this lies within draw_panel -> circle_observer, and it is thus visible. It returns true if the values of the length above could be computed succesfully, and false otherwise. 
+//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. It returns true if the values of the length above could be computed succesfully, and false otherwise. 
 bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
     
     vector<Angle> t;
@@ -1888,6 +1888,26 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     
                     if(is_included_in(draw_panel->rectangle_observer, &t, String(""))){
                         //*this is included in rectangle_observer
+                                                
+                        if((t[0] == 0.0) && (t[1] == 0.0)){
+                            //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+                            
+                            ((*s)[0]).set(String(""), 0.0, String(""));
+                            ((*s)[1]).set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
+                            
+                        }else{
+                            
+                            unsigned int i;
+                            
+                            //*this is partially included into rectangle_observer and it interscets rectangle_observer-> I write in s the values of the parametric length of *this at which these intersections occur
+                            
+                            for(i=0; i<(t.size()); i++) {
+                                
+                                ((*s)[i]).set(String(""), ((t[i]).value)*Re*sin(omega), String(""));
+                                
+                            }
+                            
+                        }
 
                     }else{
                         //*this is not included in rectangle_observer

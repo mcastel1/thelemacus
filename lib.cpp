@@ -1828,6 +1828,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     
                     Length l1, l2;
                     
+                    //here I decide whether the chunk with average t t[0]+t[1]/2 or the chunk with average t t[0]+t[1]/2+pi is the one included in circle_observer 
                     //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
                     compute_end(
                                 Length(

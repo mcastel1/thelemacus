@@ -1620,10 +1620,10 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     unsigned int i;
     vector<double> x, y;
     Projection temp;
-    vector<Length> s(2);
+    vector<Length>* s;
     
     //comoute the end values of l and writes them in s
-    compute_l_ends(&s, draw_panel, prefix);
+    compute_l_ends(s, draw_panel, prefix);
     
     switch((type.value)[0]){
             
@@ -1656,7 +1656,7 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                         //tabulate the Route points
                         for(i=0; i<n_points; i++){
                             
-                            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                            compute_end(Length((((*s)[0]).value) + ((((*s)[1])-((*s)[0])).value)*((double)i)/((double)(n_points-1))), String(""));
                             
                             if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                                 
@@ -1718,7 +1718,7 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                         for(i=0; i<n_points; i++){
                             
                             //set the temporarly length across the Route
-                            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                            compute_end(Length((((*s)[0]).value) + ((((*s)[1])-((*s)[0])).value)*((double)i)/((double)(n_points-1))), String(""));
                             
                             if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
                                 
@@ -1776,10 +1776,10 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     
     unsigned int i;
     wxPoint p;
-    vector<Length> s(2);
+    vector<Length>* s;
     
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
-    if(compute_l_ends(&s, draw_panel, prefix)){
+    if(compute_l_ends(s, draw_panel, prefix)){
         
         bool end_connected;
         
@@ -1787,7 +1787,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
         //tabulate the Route points
         for(v->clear(), /*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
             
-            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+            compute_end(Length((((*s)[0]).value) + ((((*s)[1])-((*s)[0])).value)*((double)i)/((double)(n_points-1))), String(""));
             
             if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p))){
                 
@@ -1816,7 +1816,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     
 }
 
-//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. It returns true if the values of the length above could be computed succesfully, and false otherwise. 
+//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. It returns true if the values of the length above could be computed succesfully, and false otherwise.
 bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
     
     vector<Angle> t;
@@ -1852,6 +1852,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     if(is_included_in(draw_panel->circle_observer, &t, String(""))){
                         //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
                         
+                        s->resize(2);
                         ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
                         ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
                         
@@ -1892,6 +1893,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                         if((t[0] == 0.0) && (t[1] == 0.0)){
                             //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
+                            s->resize(2);
                             ((*s)[0]).set(String(""), 0.0, String(""));
                             ((*s)[1]).set(String(""), 2.0*M_PI*Re*sin(omega), String(""));
                             
@@ -1901,7 +1903,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                             
                             //*this is partially included into rectangle_observer and it interscets rectangle_observer-> I write in s the values of the parametric length of *this at which these intersections occur
                             
-                            for(i=0; i<(t.size()); i++) {
+                            for(s->resize(t.size()), i=0; i<(t.size()); i++) {
                                 
                                 ((*s)[i]).set(String(""), ((t[i]).value)*Re*sin(omega), String(""));
                                 
@@ -1926,6 +1928,8 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     
                     if(is_included_in(draw_panel->circle_observer, &t, String(""))){
                         //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
+                        
+                        s->resize(2);
                         
                         if((t[0] == 0.0) && (t[1] == 0.0)){
                             //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
@@ -1983,8 +1987,6 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 }
                     
             }
-            
-   
             
             break;
             

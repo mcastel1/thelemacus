@@ -9407,7 +9407,6 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            //replace this with Draw_3D adter you revised Draw_3D
             //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
             route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             

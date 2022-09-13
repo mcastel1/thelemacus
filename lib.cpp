@@ -1671,6 +1671,10 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                     
                     if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
                         
+                        //clear up vectors where I am about to write
+                        x.clear();
+                        y.clear();
+                        
                         //tabulate the Route points
                         for(i=0; i<n_points; i++){
                             

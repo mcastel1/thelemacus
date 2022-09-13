@@ -2234,142 +2234,132 @@ bool Route::is_included_in(Route circle, vector<Angle> *t, String prefix){
 //If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
 bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix){
     
-    switch((((*this).type).value)[0]){
-            
-        case 'l':{
-            //*this is a loxodrome
-            
-            cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
-            
-            //add return value here
-            
-            break;
-            
+    
+    if(type == String("l")){
+        //*this is a loxodrome
+
+        cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
+        
+    }else{
+        //the longitude and latitude span of rectangle
+        
+        Angle lambda_span, phi_span;
+        Route side_N, side_S, side_E, side_W;
+        vector<Angle> u, temp;
+        bool output, /*this is true if the entire Route *this is included in rectangle, and false otherwise*/is_fully_included;
+        unsigned int i;
+        
+        
+        lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
+        phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
+
+        //the parallel of latitude going through the North side of rectangle
+        side_N = Route(
+                       String("c"),
+                       Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
+                       Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
+                       );
+        
+        //the parallel of latitude going through the S side of rectangle
+        side_S = Route(
+                       String("c"),
+                       Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
+                       Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
+                       );
+
+        //the meridian going through the W side of rectangle
+        side_W = Route(
+                       String("c"),
+                       Position(((rectangle.p_NW).lambda)+M_PI_2, Angle(0.0)),
+                       Angle(M_PI_2)
+                       );
+        
+        //the meridian going through the E side of rectangle
+        side_E = Route(
+                       String("c"),
+                       Position(((rectangle.p_SE).lambda)+M_PI_2, Angle(0.0)),
+                       Angle(M_PI_2)
+                       );
+        
+        
+        //compute the intersections between *this and side_N/S/E/W, and writes in temp the values of the parametric angle t of *this at which *this crosses side_N/S/E/W: temps are then appended to u, which, at the end, will contain all intersections
+        intersection(side_N, &temp, String(""));
+        u.insert(u.end(), temp.begin(), temp.end());
+        temp.clear();
+        
+        intersection(side_S, &temp, String(""));
+        u.insert(u.end(), temp.begin(), temp.end());
+        temp.clear();
+        
+        intersection(side_E, &temp, String(""));
+        u.insert(u.end(), temp.begin(), temp.end());
+        temp.clear();
+        
+        intersection(side_W, &temp, String(""));
+        u.insert(u.end(), temp.begin(), temp.end());
+        
+        u.push_back(Angle(0.0));
+     
+        
+        //push back into u the angle which corresponds to the endpoint of Route *this
+        if(type == String("o")){
+            u.push_back(Angle((l.value)/Re));
         }
-            
-            
-        case 'o':{
-            //*this is an orthodrome
-            
-            cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is an orthodrome!\n" << RESET;
-            
-            //add return value here
-            
-            break;
-            
-        }
-            
-        case 'c':{
-            //*this is a circle of equal altitude
-            
-            //the longitude and latitude span of rectangle
-            Angle lambda_span, phi_span;
-            Route side_N, side_S, side_E, side_W;
-            vector<Angle> u, temp;
-            unsigned int i;
-            bool output, /*this is true if the entire Route *this is included in rectangle, and false otherwise*/is_fully_included;
-            
-            lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
-            phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
-
-            //the parallel of latitude going through the North side of rectangle
-            side_N = Route(
-                           String("c"),
-                           Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
-                           Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
-                           );
-            
-            //the parallel of latitude going through the S side of rectangle
-            side_S = Route(
-                           String("c"),
-                           Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
-                           Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
-                           );
-
-            //the meridian going through the W side of rectangle
-            side_W = Route(
-                           String("c"),
-                           Position(((rectangle.p_NW).lambda)+M_PI_2, Angle(0.0)),
-                           Angle(M_PI_2)
-                           );
-            
-            //the meridian going through the E side of rectangle
-            side_E = Route(
-                           String("c"),
-                           Position(((rectangle.p_SE).lambda)+M_PI_2, Angle(0.0)),
-                           Angle(M_PI_2)
-                           );
-
-
-            //compute the intersections between *this and side_N/S/E/W, and writes in temp the values of the parametric angle t of *this at which *this crosses side_N/S/E/W: temps are then appended to u, which, at the end, will contain all intersections
-            intersection(side_N, &temp, String(""));
-            u.insert(u.end(), temp.begin(), temp.end());
-            temp.clear();
-            
-            intersection(side_S, &temp, String(""));
-            u.insert(u.end(), temp.begin(), temp.end());
-            temp.clear();
-            
-            intersection(side_E, &temp, String(""));
-            u.insert(u.end(), temp.begin(), temp.end());
-            temp.clear();
-            
-            intersection(side_W, &temp, String(""));
-            u.insert(u.end(), temp.begin(), temp.end());
-            
-            u.push_back(Angle(0.0));
-            
+        
+        //push back into u the angle which corresponds to the endpoint of Route *this
+        if(type == String("c")){
             u.push_back(Angle(2.0*M_PI));
             (u.back()).value = 2.0*M_PI;
- 
-            sort(u.begin(), u.end());
+        }
+        
+        sort(u.begin(), u.end());
+
+        
+        //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
+        for(output = false, is_fully_included = true, i=0; i<(u.size())-1; i++){
             
-            //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
-            for(output = false, is_fully_included = true, i=0; i<u.size()-1; i++){
-                
-                //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
+            //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
+            if(type == String("o")){
+                compute_end(Length(Re*(((u[i]).value) + ((u[i+1]).value))/2.0), String(""));
+            }
+            if(type == String("c")){
                 compute_end(Length(Re*sin(omega)*(((u[i]).value) + ((u[i+1]).value))/2.0), String(""));
+            }
+            
+            if(rectangle.Contains(end)){
+                //if rectangle contains the emidpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
                 
-                if(rectangle.Contains(end)){
-                    //if rectangle contains the emidpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
+                output = true;
+                
+                //If != NULL< write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
+                if(t != NULL){
                     
-                    output = true;
-                    
-                    //If != NULL< write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
-                    if(t != NULL){
-                        
-                        t->push_back(u[i]);
-                        t->push_back(u[i+1]);
+                    t->push_back(u[i]);
+                    t->push_back(u[i+1]);
 
-                    }
-                    
-                }else{
-                    
-                    is_fully_included = false;
-                    
                 }
-  
-            }
-            
-            //I push back into to the last value of u (2 pi), which has not been pushed back by the loop above
-            t->push_back(u.back());
-
-            
-            if(is_fully_included && (t->size() == 2)){
-                //*this is fully included in rectangle and it does not intersect rectangle
                 
-                //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0
-                ((*t)[1]).normalize();
+            }else{
+                
+                is_fully_included = false;
                 
             }
-            
-            return output;
 
+        }
+        
+        //I push back into to the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
+        t->push_back(u.back());
+        
+        if((type == String("c")) && is_fully_included && (t->size() == 2)){
+            //*this is  of type 'c', its fully included in rectangle and it does not intersect rectangle
             
-            break;
+            //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0
+            ((*t)[1]).normalize();
             
         }
-            
+        
+        return output;
+
     }
     
     

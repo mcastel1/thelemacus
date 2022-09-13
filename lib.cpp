@@ -2386,7 +2386,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     if((route.type) == String("c")){
         //route is a circle of equal altitude
         
-        if((((*this).type == String("o")))){
+        if(type == String("o")){
             //*this is an orthodrome -> I check whether route and *this intersect: I compute the minimal distance between a point on *this and the GP (reference position) of route. I do this by checking the distance at the two extrema (at the beginning and at the end of *this), and by looking for an extremum in the middle of *this
             
             vector<Length> s(2);
@@ -2511,7 +2511,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
             
         }
         
-        if((((*this).type == String("c")))){
+        if(type == String("c")){
             //*this is a circle of equal altitude -> I check check whetehr *this and route intersect
             
             reference_position.distance(route.reference_position, &d, String(""), new_prefix);

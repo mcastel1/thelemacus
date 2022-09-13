@@ -1646,7 +1646,7 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
     if(type == String("l")){
         //*this is a loxodrome
         
-        cout << prefix.value << RED << "Cannot execute Draw_3D: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
+        cout << prefix.value << RED << "Cannot execute Draw: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
         
     }else{
         //*this is an orthodrome/circle of equal altitude

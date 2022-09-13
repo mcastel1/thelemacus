@@ -24,6 +24,24 @@ inline double tan(Angle x){
     
 }
 
+inline double csc(Angle x){
+    
+    return csc(x.value);
+    
+}
+
+inline double sec(Angle x){
+    
+    return sec(x.value);
+    
+}
+
+inline double cot(Angle x){
+    
+    return cot(x.value);
+    
+}
+
 inline double acos(Double x){
     
     return acos(x.value);
@@ -2629,7 +2647,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         //the special case where  route.reference_position.phi = +- pi/2
                         
                         t_a.set(String(""), acos(-GSL_SIGN(((route.reference_position).phi).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
-                        t_b.set(String(""), -acos(-GSL*SIGN(((route.reference_position).phi).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
+                        t_b.set(String(""), -acos(-GSL_SIGN(((route.reference_position).phi).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
 
                         
                     }

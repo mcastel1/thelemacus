@@ -2660,7 +2660,7 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
     
     check = true;
     
-    if(!(((*this).type == String("c")) && (route.type == String("c")))){
+    if(!((type == String("c")) && (route.type == String("c")))){
         
         cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
         check &= false;

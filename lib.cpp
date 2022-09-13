@@ -2685,11 +2685,11 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
             route.intersection((*this), &u, new_prefix);
             
             (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), new_prefix);
-            (*p)[0] = ((*this).end);
+            (*p)[0] = end;
             ((*p)[0]).label.set(String(""), String("crossing"), prefix);
             
             (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[1]).value)), new_prefix);
-            (*p)[1] = ((*this).end);
+            (*p)[1] = end;
             ((*p)[1]).label.set(String(""), String("crossing"), prefix);
             
             route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
@@ -2710,7 +2710,7 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
                 }
                 
                 (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), prefix);
-                ((*this).end).print(String("position of intersection 1 for Route 1"), prefix, cout);
+                end.print(String("position of intersection 1 for Route 1"), prefix, cout);
                 
                 route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
                 (route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);

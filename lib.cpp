@@ -2581,6 +2581,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     (*t).resize(2);
                     
                     if(((route.reference_position.phi) != M_PI_2) && ((route.reference_position.phi) != 3.0*M_PI_2)){
+                        //theg general case where route.reference_position.phi != +-pi/2
                         
                         t_a.value = atan((8*cos((route.reference_position).phi)*((cos((route.reference_position).phi)*cos((reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(((reference_position).phi)) - cos(((reference_position).phi))*sin((route.reference_position).phi))*(cos(((reference_position).phi))*cos((route.reference_position).phi)*cos((reference_position.lambda.value) - (route.reference_position.lambda.value))*cot((omega.value)) - cos((route.omega.value))*csc((omega.value)) + cot((omega.value))*sin(((reference_position).phi))*sin((route.reference_position).phi)) +
                                                                                  abs(sin((reference_position.lambda.value) - (route.reference_position.lambda.value)))*cos((route.reference_position).phi)*sqrt(-(gsl_sf_pow_int(cos((route.omega.value)),2)*gsl_sf_pow_int(csc((omega.value)),2)) + gsl_sf_pow_int(cos((route.reference_position).phi),2)*gsl_sf_pow_int(cos((reference_position).lambda),2)*gsl_sf_pow_int(cos((route.reference_position).lambda),2)*gsl_sf_pow_int(sin(((reference_position).phi)),2) +
@@ -2625,9 +2626,10 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                                           4*cos((reference_position.lambda.value) - (route.reference_position.lambda.value))*sin(2*(reference_position.phi.value))*sin(2*(route.reference_position.phi.value))));
                         
                     }else{
+                        //the special case where  route.reference_position.phi = +- pi/2
                         
-                        t_a.set(String(""), ArcCos(-GSL_SIGN(d2)*(Cos(H2)*Csc(H1)*Sec(d1)) + Cot(H1)*Tan(d1)), String(""));
-                        t_b.set(String(""), -ArcCos(-GSL*SIGN(d2)*(Cos(H2)*Csc(H1)*Sec(d1)) + Cot(H1)*Tan(d1)), String(""));
+                        t_a.set(String(""), acos(-GSL_SIGN(((route.reference_position).phi).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
+                        t_b.set(String(""), -acos(-GSL*SIGN(((route.reference_position).phi).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
 
                         
                     }

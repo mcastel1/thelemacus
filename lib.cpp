@@ -1658,66 +1658,48 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
             
             //the following code holds for all projections
             
-            bool /*if *this is included in rectangle_observer (mercator projection) or circle_observer (3d projection), this variable is set equal to true, and false otherwise*/this_is_included;
-            
-            switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
-                    
-                case 'M':{
-                    //I am using the mercator projection
-                    
-                    this_is_included = is_included_in(draw_panel->rectangle_observer, NULL, String(""))
-                    
-                    break;
-                    
-                }
-                    
-                case '3':{
-                    //I am using the 3d projection
-                    
-                    this_is_included = is_included_in(draw_panel->circle_observer, NULL, String(""));
-                    
-                    break;
-                    
-                }
-
-            }
-            
-        
-            if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
+            vector<Length> s;
+    
+            if(compute_l_ends(&s, draw_panel, prefix)){
+                //*this is included in the area of the chart visible by the observer
                 
-                //clear up vectors where I am about to write
-                x.clear();
-                y.clear();
+                unsigned int j;
                 
-                //tabulate the Route points
-                for(i=0; i<n_points; i++){
+                for(j=0; j<(s.size())-1; j++){
+                
+                    //clear up vectors where I am about to write
+                    x.clear();
+                    y.clear();
                     
-                    compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
-                    
-                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                    //tabulate the Route points
+                    for(i=0; i<n_points; i++){
                         
-                        x.push_back(temp.x);
-                        y.push_back(temp.y);
+                        compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
+                        
+                        if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                            
+                            x.push_back(temp.x);
+                            y.push_back(temp.y);
+                            
+                        }
                         
                     }
                     
+                    //draw the Route in draw_panel
+                    (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+                    (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+                    if(width != -1){
+                        (draw_panel->spline_layer)->setLineWidth(width);
+                    }
+                    
+                    //free up memory
+                    x.clear();
+                    y.clear();
+                    
                 }
-                
-                //draw the Route in draw_panel
-                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
-                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-                if(width != -1){
-                    (draw_panel->spline_layer)->setLineWidth(width);
-                }
-                
-                //free up memory
-                x.clear();
-                y.clear();
                 
             }
-            
-            
-            
+                     
             
             break;
             

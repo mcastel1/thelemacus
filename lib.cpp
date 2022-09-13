@@ -2626,6 +2626,9 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         
                     }else{
                         
+                        t_a.set(String(""), ArcCos(-GSL_SIGN(d2)*(Cos(H2)*Csc(H1)*Sec(d1)) + Cot(H1)*Tan(d1)), String(""));
+                        t_b.set(String(""), -ArcCos(-GSL*SIGN(d2)*(Cos(H2)*Csc(H1)*Sec(d1)) + Cot(H1)*Tan(d1)), String(""));
+
                         
                     }
                     

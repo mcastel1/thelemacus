@@ -1656,11 +1656,16 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
         case 'o':{
             //the Route this is an orthodrome
             
+            //the following code holds for all projections
+            
+            bool /*if *this is included in rectangle_observer (mercator projection) or circle_observer (3d projection), this variable is set equal to true, and false otherwise*/this_is_included;
+            
             switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
                     
                 case 'M':{
                     //I am using the mercator projection
                     
+                    this_is_included = is_included_in(draw_panel->rectangle_observer, NULL, String(""))
                     
                     break;
                     
@@ -1669,50 +1674,51 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                 case '3':{
                     //I am using the 3d projection
                     
-                    if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
-                        
-                        //clear up vectors where I am about to write
-                        x.clear();
-                        y.clear();
-                        
-                        //tabulate the Route points
-                        for(i=0; i<n_points; i++){
-                            
-                            compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
-                            
-                            if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
-                                
-                                x.push_back(temp.x);
-                                y.push_back(temp.y);
-                                
-                            }
-                            
-                        }
-                        
-                        //draw the Route in draw_panel
-                        (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
-                        (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-                        if(width != -1){
-                            (draw_panel->spline_layer)->setLineWidth(width);
-                        }
-                        
-                        //free up memory
-                        x.clear();
-                        y.clear();
-                        
-                    }
-                    
-                    
+                    this_is_included = is_included_in(draw_panel->circle_observer, NULL, String(""));
                     
                     break;
                     
                 }
-                    
-                    
-            }
 
+            }
             
-    
+        
+            if(is_included_in(draw_panel->circle_observer, NULL, String(""))){
+                
+                //clear up vectors where I am about to write
+                x.clear();
+                y.clear();
+                
+                //tabulate the Route points
+                for(i=0; i<n_points; i++){
+                    
+                    compute_end(Length(((s[0]).value) + (((s[1])-(s[0])).value)*((double)i)/((double)(n_points-1))), String(""));
+                    
+                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                        
+                        x.push_back(temp.x);
+                        y.push_back(temp.y);
+                        
+                    }
+                    
+                }
+                
+                //draw the Route in draw_panel
+                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
+                if(width != -1){
+                    (draw_panel->spline_layer)->setLineWidth(width);
+                }
+                
+                //free up memory
+                x.clear();
+                y.clear();
+                
+            }
+            
+            
+            
+            
             break;
             
         }

@@ -725,8 +725,8 @@ public:
     bool crossing(Route, vector<Position>*, double*, String);
     void transport(String);
     static double lambda_minus_pi(double, void*);
-    bool is_included_in(Route, vector<Angle>*, String);
-    bool is_included_in(Rectangle, vector<Angle>*, String);
+    bool inclusion(Route, vector<Angle>*, String);
+    bool inclusion(Rectangle, vector<Angle>*, String);
     bool intersection(Route, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);

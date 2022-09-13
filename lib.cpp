@@ -1777,7 +1777,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 case 'M':{
                     //I am using the mercator projection
              
-                    check = is_included_in(draw_panel->rectangle_observer, &t, String(""));
+                    check = inclusion(draw_panel->rectangle_observer, &t, String(""));
 
                     break;
                 }
@@ -1785,7 +1785,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 case '3':{
                     //I am using the 3d projection
                     
-                    check = is_included_in(draw_panel->circle_observer, &t, String(""));
+                    check = inclusion(draw_panel->circle_observer, &t, String(""));
 
                     break;
                     
@@ -1825,7 +1825,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 case 'M':{
                     //I am using the mercator projection
                     
-                    if(is_included_in(draw_panel->rectangle_observer, &t, String(""))){
+                    if(inclusion(draw_panel->rectangle_observer, &t, String(""))){
                         //*this is included in rectangle_observer
                                                 
                         if((t[0] == 0.0) && (t[1] == 0.0)){
@@ -1866,7 +1866,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 case '3':{
                     //I am using the 3d projection
                     
-                    if(is_included_in(draw_panel->circle_observer, &t, String(""))){
+                    if(inclusion(draw_panel->circle_observer, &t, String(""))){
                         //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
                         
                         s->resize(2);
@@ -2088,7 +2088,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
 }
 
 //If circle is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and a part of *this is included into the circle of circle, it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
-bool Route::is_included_in(Route circle, vector<Angle> *t, String prefix){
+bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
     
     String new_prefix;
     
@@ -2232,7 +2232,7 @@ bool Route::is_included_in(Route circle, vector<Angle> *t, String prefix){
 
 
 //If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
-bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix){
+bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
     
     
     if(type == String("l")){

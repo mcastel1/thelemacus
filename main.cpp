@@ -47,8 +47,8 @@
  - transform all the instances where you compute the span between two angles with Angle::span
  - in DrawPanel::Draw_Mercator, delete the setting and any use  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
  - code up missing part case 'M': ... in Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix)
-}
- 
+ - live mouse position is gone on bottom left of screen is gone
+
  */
 
 

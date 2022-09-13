@@ -1770,45 +1770,49 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
         case 'o':{
             //the Route this is an orthodrome
             
+            bool check;
+            
             switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
-                    
+
                 case 'M':{
                     //I am using the mercator projection
-                    
-                    
+             
+                    check = is_included_in(draw_panel->rectangle_observer, &t, String(""));
+
                     break;
-                    
                 }
                     
                 case '3':{
                     //I am using the 3d projection
                     
-                    if(is_included_in(draw_panel->circle_observer, &t, String(""))){
-                        //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-                        
-                        s->resize(2);
-                        ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
-                        ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
-                        
-                        t.clear();
-                        
-                        return true;
-                        
-                    }else{
-                        
-                        return false;
-                        
-                    }
-                    
+                    check = is_included_in(draw_panel->circle_observer, &t, String(""));
+
                     break;
                     
                 }
-                    
-                    
+
             }
             
             
+            if(check){
+                //there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
+                
+                s->resize(2);
+                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
+                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
+                
+                t.clear();
+                
+                return true;
+                
+            }else{
+                //no part of this is included in circle/rectagle observer -> no part of this lies on the visible part of the earth
+                
+                return false;
+                
+            }
             
+         
             break;
             
         }

@@ -32,7 +32,7 @@ inline double csc(Angle x){
 
 inline double sec(Angle x){
     
-    return sec(x.value);
+    return (1.0/cos(x));
     
 }
 
@@ -2646,8 +2646,8 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                     }else{
                         //the special case where  route.reference_position.phi = +- pi/2
                         
-                        t_a.set(String(""), acos(-GSL_SIGN(((route.reference_position).phi).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
-                        t_b.set(String(""), -acos(-GSL_SIGN(((route.reference_position).phi).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
+                        t_a.set(String(""), acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
+                        t_b.set(String(""), -acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
 
                         
                     }

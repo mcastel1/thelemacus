@@ -2407,11 +2407,12 @@ bool Route::is_included_in(Rectangle rectangle, vector<Angle> *t, String prefix)
                     
                     output = true;
                     
-                    //If != NULL< write into t the value of the intersections which delimit the chunk of *this whic is included in rectangle
+                    //If != NULL< write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
                     if(t != NULL){
                         
                         t->push_back(u[i]);
-                        
+                        t->push_back(u[i+1]);
+
                     }
                     
                 }else{

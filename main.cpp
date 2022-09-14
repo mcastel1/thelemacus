@@ -17,7 +17,6 @@
  - add lambert projection and 3D sphere with no projection
  - set up a proper output to a log file
  - add separator between recent items and non-recent items in BodyField->name
- - fix issue that when you scroll and reach the chart boundaries, tons of error dialog windows are shown (maybe remove skip?)
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
@@ -25,11 +24,9 @@
  - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
  - transforms all  exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
- - delete Route::draw after replacing it with Route::draw_3D everywhere
  - in Route::draw_3D, code the part for loxodrome curves
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
- - check that phi_min, phi_max, lambda_min, lambda_max are always normalized throughout the code: change lines that alter the values of these angles, for example by replacing phi_min.normalize_pm_pi() with phi_min.normalize_pm_pi_ret()
  -                                 sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - revise Route::intersection so as to make it work also in the singular case where this->reference_position->phi = pi/2 and route.reference_position.phi = pi/2 etc
  - in DrawPanel::Draw_3D delta_lambda is used without being initialized (?)

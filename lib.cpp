@@ -13612,7 +13612,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //button to delete a position
     button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
-    button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnDeletePosition, this);
+    button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition, this);
     button_delete_position->Enable(false);
     
     //button to delete a route
@@ -14104,7 +14104,7 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
 }
 
-void ListFrame::OnDeletePosition(wxCommandEvent& event){
+void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
     
     long item;
     

@@ -1343,14 +1343,13 @@ class DeletePosition{
     
 public:
     
-    DeletePosition(ListFrame*, Answer);
+    DeletePosition(ListFrame*);
     
     //the frame which called this struct
     ListFrame* f;
     //the id of the Position to be removed
     long i_position_to_remove;
-    //this is equal to 'y' if the Position should be removed, and 'n' otherwise
-    Answer remove;
+ 
     
     void operator()(wxCommandEvent&);
     
@@ -1909,6 +1908,7 @@ public:
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
+    DeletePosition *delete_position;
     ModifyRoute *modify_route;
     NewRoute *create_route;
     bool selection_rectangle,   /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/

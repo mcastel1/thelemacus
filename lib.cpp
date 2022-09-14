@@ -11926,10 +11926,9 @@ void DeleteRoute::operator()(wxCommandEvent& event){
 }
 
 
-DeletePosition::DeletePosition(ListFrame* f_in, Answer remove_in){
+DeletePosition::DeletePosition(ListFrame* f_in){
     
     f = f_in;
-    remove = remove_in;
     
 }
 
@@ -11938,7 +11937,7 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
     long i;
 
-    i = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    i = (f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     (f->listcontrol_positions)->DeleteItem(i);
     (f->plot)->remove_position(((unsigned int)i), String(""));
     
@@ -13559,6 +13558,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     delete_route = new DeleteRoute(this, Answer('n', String("")));
     //initialize delete_route_and_related_sight, which defines the functor to delete the route and its related sight (it is called when the user answers 'y' to QuestionFrame)
     delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
+    
+    //initialize delete_position, which defines the functor to delete a Position
+//    delete_position = new DeletePositi
+
     
     //initialized modify_route and create_route, which define the functors to modify / create a Route
     modify_route = new ModifyRoute(this);

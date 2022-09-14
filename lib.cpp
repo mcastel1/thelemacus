@@ -13560,7 +13560,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
     
     //initialize delete_position, which defines the functor to delete a Position
-//    delete_position = new DeletePositi
+    delete_position = new DeletePosition(this);
 
     
     //initialized modify_route and create_route, which define the functors to modify / create a Route
@@ -14127,6 +14127,13 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
 }
 
 void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
+    
+    
+    int i_position_to_remove = ((int)(listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+
+    
+    (delete_route->i_route_to_remove) = i_position_to_remove;
+
     
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no,
     QuestionFrame<DeletePosition, DeletePosition>* question_frame = new QuestionFrame<DeletePosition, DeletePosition>(NULL,

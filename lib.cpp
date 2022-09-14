@@ -11920,13 +11920,32 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
     f->UpdateRelatedSightsAndRoutes();
-    
-    f->plot->print(true, String("--------- "), cout);
-    
+        
     event.Skip(true);
     
 }
 
+
+DeletePosition::DeletePosition(ListFrame* f_in, Answer remove_in){
+    
+    f = f_in;
+    remove = remove_in;
+    
+}
+
+//delete a position in the GUI object f->listcontrol_position and in the non-GUI object f->plot
+void DeletePosition::operator()(wxCommandEvent& event){
+    
+    long i;
+
+    i = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    (f->listcontrol_positions)->DeleteItem(i);
+    (f->plot)->remove_position(((unsigned int)i), String(""));
+    
+    
+    event.Skip(true);
+    
+}
 
 
 
@@ -14105,15 +14124,6 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
 }
 
 void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
-    
-    
-    
-//    long item;
-//
-//    item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-//    listcontrol_positions->DeleteItem(item);
-//    plot->remove_position(((unsigned int)item), String(""));
-    
     
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no,
     QuestionFrame<DeletePosition, DeletePosition>* question_frame = new QuestionFrame<DeletePosition, DeletePosition>(NULL,

@@ -1320,7 +1320,7 @@ public:
     
 };
 
-//this class defines the functor () used to remove a route from the non-GUI object plot
+//this class defines the functor () used to remove a Route from the non-GUI object plot
 class DeleteRoute{
     
 public:
@@ -1333,6 +1333,24 @@ public:
     long i_route_to_remove;
     //this is equal to 'y' if the sight related to the removed route has to be removed too, and 'n' otherwise
     Answer remove_related_sight;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
+//this class defines the functor () used to remove a Position from the non-GUI object plot
+class DeletePosition{
+    
+public:
+    
+    DeletePosition(ListFrame*, Answer);
+    
+    //the frame which called this struct
+    ListFrame* f;
+    //the id of the Position to be removed
+    long i_position_to_remove;
+    //this is equal to 'y' if the Position should be removed, and 'n' otherwise
+    Answer remove;
     
     void operator()(wxCommandEvent&);
     

@@ -14106,11 +14106,26 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
 
 void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
     
-    long item;
     
-    item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    listcontrol_positions->DeleteItem(item);
-    plot->remove_position(((unsigned int)item), String(""));
+    
+//    long item;
+//
+//    item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+//    listcontrol_positions->DeleteItem(item);
+//    plot->remove_position(((unsigned int)item), String(""));
+    
+    
+    //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no,
+    QuestionFrame<DeletePosition, DeletePosition>* question_frame = new QuestionFrame<DeletePosition, DeletePosition>(NULL,
+                                                                                                          delete_position, String("Yes"),
+                                                                                                          NULL, String("No"),
+                                                                                                          "",
+                                                                                                          "Do you really want to remove this position?",
+                                                                                                          wxDefaultPosition,
+                                                                                                          wxDefaultSize,
+                                                                                                          String(""));
+    
+    question_frame->Show(true);
     
     
     event.Skip(true);

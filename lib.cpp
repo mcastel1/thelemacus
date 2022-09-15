@@ -2779,6 +2779,21 @@ bool Chrono::operator!=(const Chrono& chrono){
     
 }
 
+bool Chrono::operator<(const Chrono& chrono){
+    
+    return(
+           (((double)h)/24.0 + ((double)m)/60.0/24.0 + s/60.0/60.0/24.0) <  (((double)(chrono.h))/24.0 + ((double)(chrono.m))/60.0/24.0 + (chrono.s)/60.0/60.0/24.0)
+           );
+    
+}
+
+bool Chrono::operator>(const Chrono& chrono){
+    
+    return(
+           (((double)h)/24.0 + ((double)m)/60.0/24.0 + s/60.0/60.0/24.0) <  (((double)(chrono.h))/24.0 + ((double)(chrono.m))/60.0/24.0 + (chrono.s)/60.0/60.0/24.0)
+           );
+    
+}
 
 //sets the Chrono object to the time x, which is expressed in hours
 bool Chrono::set(String name, double x, String prefix){
@@ -13481,7 +13496,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     selection_rectangle = false;
     
     //sets the backgorund color of *this to background_color
-    SetBackgroundColour((wxGetApp()).day_background_color);
+    SetBackgroundColour((wxGetApp()).background_color);
     //    SetBackgroundColour((wxGetApp()).night_background_color);
     
     for(i=0; i<color_list.size(); i++){

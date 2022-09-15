@@ -94,6 +94,16 @@ bool MyApp::OnInit(){
     
     */
     
+    unsigned int i;
+    Int n_chart_frames;
+    stringstream s;
+    String default_projection;
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    wxDisplay display;
+    //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
+    Chrono current_time, dawn, dusk;
+
+    
     wxImage::AddHandler(new wxPNGHandler);
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
@@ -106,18 +116,22 @@ bool MyApp::OnInit(){
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
     
-    //read the background color of all frames from file init
-    day_background_color.read_from_file(String("day background color"), String(path_file_init), String(""));
-    night_background_color.read_from_file(String("night background color"), String(path_file_init), String(""));
     
+    //read the time, and set the background color to either the day or night background color, which are read from file
     current_time.set_current(String(""));
+    if((current_time < dawn) && (current_time > dusk)){
+        //we are at night -> set background color to night mode
+        
+        background_color.read_from_file(String("night background color"), String(path_file_init), String(""));
 
-    unsigned int i;
-    Int n_chart_frames;
-    stringstream s;
-    String default_projection;
-    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    wxDisplay display;
+    }else{
+        //we are at day -> set background color ot day mode
+        
+        background_color.read_from_file(String("day background color"), String(path_file_init), String(""));
+        
+    }
+
+
     
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));

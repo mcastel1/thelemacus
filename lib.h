@@ -98,7 +98,7 @@ public:
     bool read_from_file(String, File&, bool, String);
     string to_string(unsigned int);
     
-    bool operator==(const Chrono&), operator!=(const Chrono&);
+    bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);
     
 };
 

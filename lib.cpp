@@ -8483,11 +8483,11 @@ void DrawPanel::PaintNow(){
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
     parent->SetMinSize(wxSize(
-                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value),
-                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value)
+                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
+                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
                               ));
     
-    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 4*((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value)));
+    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)));
     
     //    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
@@ -8673,11 +8673,11 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         //shift p it in such a way that the label drawn at p  is diplayed nicely, and draw the label at  p
         if(mode == String("NS")){
             
-            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())-((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value), -(GetTextExtent(wx_string).GetHeight())/2);
+            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())-((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), -(GetTextExtent(wx_string).GetHeight())/2);
 
         }else{
             
-            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
             
         }
         
@@ -9746,27 +9746,27 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
     //
     
-    sizer_buttons->Add(empty_text_1, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_up, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_2, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_left, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_3, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_right, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_4, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_down, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_5, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_1, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_up, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_2, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_left, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_3, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_right, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_4, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_down, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_5, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
-    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
-    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     projection->InsertIn<wxBoxSizer>(sizer_slider);
     
-    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, 0);
     
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     //    sizer_v->Fit(panel);
     
     //    Maximize(panel);
@@ -12649,16 +12649,16 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     
     sizer_grid_measurement = new wxFlexGridSizer(6, 2,
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                                  );
     sizer_grid_time = new wxFlexGridSizer(4, 2,
-                                          ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                          ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                          (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                          (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                           );
     sizer_grid_label = new wxFlexGridSizer(1, 2,
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                            );
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
@@ -12825,10 +12825,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM | wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM | wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL);
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
@@ -12844,10 +12844,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     text_date->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -12928,12 +12928,12 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     sizer_grid_measurement = new wxFlexGridSizer(2, 2,
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                                  );
     sizer_grid_label = new wxFlexGridSizer(1, 2,
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                            );
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
@@ -12974,11 +12974,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM |  wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL
                      );
     box_sizer_2->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL
                      );
     
@@ -12993,10 +12993,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     text_lon->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    //add the various elements to sizer, by inserting a border of (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -13068,13 +13068,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     
-    sizer_grid_type = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_Z = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_l = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_start = new wxFlexGridSizer(2, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_GP = new wxFlexGridSizer(2, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_omega = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_label = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_type = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_Z = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_start = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_GP = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_omega = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_label = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
     sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
     sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
@@ -13174,8 +13174,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     sizer_box_data->Add(sizer_box_GP);
     sizer_box_data->Add(sizer_grid_omega);
     
-    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM| wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
-    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
+    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM| wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
+    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
     
     
     
@@ -13186,10 +13186,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     text_omega->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
-    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    //add the various elements to sizer, by inserting a border of (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
+    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);

@@ -107,7 +107,7 @@ bool MyApp::OnInit(){
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
     
     //read the background color of all frames from file init
-    background_color.read_from_file(String("background color"), String(path_file_init), String(""));
+    night_background_color.read_from_file(String("night background color"), String(path_file_init), String(""));
 
     unsigned int i;
     Int n_chart_frames;

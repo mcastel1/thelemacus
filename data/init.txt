@@ -75,4 +75,4 @@ rotation 0 =
 alpha = 68° 3.43879'
 beta = 1° 3.5304'
 gamma = 3° 11.035789'
-background color = (40,40,43)
+night background color = (40,40,43)

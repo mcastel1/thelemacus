@@ -3821,6 +3821,72 @@ bool Chrono::read_from_file(String name, File& file, bool search_entire_file, St
     
 }
 
+bool Chrono::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    stringstream new_prefix;
+    bool check = true;
+    size_t pos;
+    File file;
+
+    
+    //prepend \t to prefix
+    new_prefix << "\t" << prefix.value;
+    
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+    
+    
+    
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+    }while((line.find(name.value)) == (string::npos));
+    
+    pos = line.find(" = ");
+    
+    //read hours
+    h = stoi(line.substr(pos+3, 2).c_str(), NULL, 10);
+    if(!((0 <= h) && (h < 24))){
+        
+        check &= false;
+        cout << prefix.value << RED << "\tValue of hh is not valid!\n" << RESET;
+        
+    }
+    
+    //read minutes
+    m = stoi(line.substr(pos+3+3, 2).c_str(), NULL, 10);
+    if(!((0 <= m) && (m < 60))){
+        
+        check &= false;
+        cout << prefix.value << RED << "\tValue of mm is not valid!\n" << RESET;
+        
+    }
+    
+    //read seconds
+    s = stod(line.substr(pos+3+3+3, line.size() - (pos+3+3+3)).c_str());
+    if(!((0.0 <= s) && (s < 60.0))){
+        
+        check &= false;
+        cout << prefix.value << RED << "\tValue of mm is not valid!\n" << RESET;
+        
+    }
+    
+    if(check){
+        print(name, prefix, cout);
+    }
+    
+    return check;
+    
+}
 
 
 //this function returns true if the date read is consistent, false if it is not

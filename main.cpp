@@ -118,8 +118,12 @@ bool MyApp::OnInit(){
     
     
     //read the time, and set the background color to either the day or night background color, which are read from file
+    dawn.read_from_file(String("dawn"), String(path_file_init), String(""));
+    dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
     current_time.set_current(String(""));
-    if((current_time < dawn) && (current_time > dusk)){
+    
+
+    if((current_time < dawn) || (current_time > dusk)){
         //we are at night -> set background color to night mode
         
         background_color.read_from_file(String("night background color"), String(path_file_init), String(""));

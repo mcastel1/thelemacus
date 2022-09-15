@@ -96,6 +96,7 @@ public:
     bool set_current(String);
     void enter(String, String);
     bool read_from_file(String, File&, bool, String);
+    bool read_from_file(String, String, String);
     string to_string(unsigned int);
     
     bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);

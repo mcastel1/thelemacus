@@ -75,9 +75,9 @@ rotation 0 =
 alpha = 68° 3.43879'
 beta = 1° 3.5304'
 gamma = 3° 11.035789'
-day background color = (255,255,255)
+day background color = (119,136,153)
 night background color = (40,40,43)
 #the threshold hour between night and day
 dawn = 06:10:27
 #the threshold hour between day and night
-dusk = 20:10:18
+dusk = 18:58:01

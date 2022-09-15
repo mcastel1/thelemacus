@@ -11941,7 +11941,6 @@ void DeletePosition::operator()(wxCommandEvent& event){
     (f->listcontrol_positions)->DeleteItem(i);
     (f->plot)->remove_position(((unsigned int)i), String(""));
     
-    
     event.Skip(true);
     
 }
@@ -14128,28 +14127,20 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
 
 void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
     
-    
-    int i_position_to_remove = ((int)(listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-
-    
-    (delete_route->i_route_to_remove) = i_position_to_remove;
-
+    (delete_position->i_position_to_remove) = ((int)(listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no,
     QuestionFrame<DeletePosition, DeletePosition>* question_frame = new QuestionFrame<DeletePosition, DeletePosition>(NULL,
-                                                                                                          delete_position, String("Yes"),
-                                                                                                          NULL, String("No"),
+                                                                                                          delete_position, String("Yes"), NULL, String("No"),
                                                                                                           "",
                                                                                                           "Do you really want to remove this position?",
                                                                                                           wxDefaultPosition,
                                                                                                           wxDefaultSize,
                                                                                                           String(""));
-    
     question_frame->Show(true);
     
-    
     event.Skip(true);
-    
+
 }
 
 //if an item is deselected in listcontrol_positions, disable button_modify_position, button_transport_position and button_delete_position

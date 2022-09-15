@@ -109,6 +109,8 @@ bool MyApp::OnInit(){
     //read the background color of all frames from file init
     day_background_color.read_from_file(String("day background color"), String(path_file_init), String(""));
     night_background_color.read_from_file(String("night background color"), String(path_file_init), String(""));
+    
+    current_time.set_current(String(""));
 
     unsigned int i;
     Int n_chart_frames;

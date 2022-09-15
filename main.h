@@ -61,8 +61,8 @@ public:
     wxRect rectangle_display;
     //the background color for day/night vision of the app of all frames in *this
     Color day_background_color, night_background_color;
-    //this contains the date and time 
-    Chrono current_time;
+    //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
+    Chrono current_time, dawn, dusk;
 
     virtual bool OnInit();
 

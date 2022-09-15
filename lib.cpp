@@ -13687,8 +13687,15 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin_v);
     
     
-    //listcontrol_positions with positions
-    disableable_buttons = {button_modify_position, button_transport_position, button_delete_position};
+    //listcontrol_positions with positions    
+    disableable_buttons.clear();
+    disableable_buttons.push_back(button_modify_position);
+    disableable_buttons.push_back(button_transport_position);
+    disableable_buttons.push_back(button_delete_position);
+
+    
+    
+    
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
 //    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);

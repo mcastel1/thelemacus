@@ -7664,6 +7664,7 @@ bool Chrono::set_current(Int time_zone, String prefix){
     size_t pos;
     String new_prefix;
     bool check;
+    //the sign argument to prepend to the time zone
     string sign;
     
     //append \t to prefix
@@ -7678,9 +7679,12 @@ bool Chrono::set_current(Int time_zone, String prefix){
     
     line_ins.str("");
     if((time_zone.value) > 0){sign = "+";}
-    else{sign = "-";}
+    else{sign = "";}
     //run the command to get the current time with time zone specified by time_zone
-    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value << "\"H +%H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    
+    string temp = line_ins.str().c_str();
+    
     
     //execute the date command in the terminal and writes the UTC date to file_utc_time
     system(line_ins.str().c_str());

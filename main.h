@@ -59,8 +59,8 @@ public:
 
     //this rectangle contains the size of the display on which the *this is run
     wxRect rectangle_display;
-    //the background color for day/night vision of the app of all frames in *this
-    Color background_color;
+    //the fore/background color for day/night vision of the app of all frames in *this
+    Color foreground_color, background_color;
     Int time_zone;
 
     virtual bool OnInit();

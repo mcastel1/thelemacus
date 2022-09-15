@@ -61,6 +61,7 @@ public:
     wxRect rectangle_display;
     //the background color for day/night vision of the app of all frames in *this
     Color background_color;
+    Int time_zone;
 
     virtual bool OnInit();
 

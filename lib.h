@@ -85,24 +85,6 @@ public:
     
 };
 
-class Chrono{
-    
-public:
-    unsigned int h, m;
-    double s;
-    
-    void print(String, String, ostream&);
-    bool set(String, double, String);
-    bool set_current(String);
-    void enter(String, String);
-    bool read_from_file(String, File&, bool, String);
-    bool read_from_file(String, String, String);
-    string to_string(unsigned int);
-    
-    bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);
-    
-};
-
 
 class Int{
     
@@ -118,6 +100,26 @@ public:
     bool operator==(const Int&), operator!=(const Int&);
     
 };
+
+class Chrono{
+    
+public:
+    unsigned int h, m;
+    double s;
+    
+    void print(String, String, ostream&);
+    bool set(String, double, String);
+    bool set_current(Int, String);
+    void enter(String, String);
+    bool read_from_file(String, File&, bool, String);
+    bool read_from_file(String, String, String);
+    string to_string(unsigned int);
+    
+    bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);
+    
+};
+
+
 
 class Double{
     

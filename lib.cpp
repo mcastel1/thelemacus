@@ -7589,7 +7589,7 @@ bool Time::set_current(String prefix){
     check=true;
     
     check &= (date.set_current(new_prefix));
-    check &= (chrono.set_current(new_prefix));
+    check &= (chrono.set_current((wxGetApp()).time_zone, new_prefix));
     
     return check;
     
@@ -7655,8 +7655,8 @@ bool Date::set_current(String prefix){
     
 }
 
-//this function sets (*this) to the current UTC time
-bool Chrono::set_current(String prefix){
+//this function sets (*this) to the current UTC time +- time_zone
+bool Chrono::set_current(Int time_zone, String prefix){
     
     stringstream line_ins;
     string input;
@@ -7664,6 +7664,7 @@ bool Chrono::set_current(String prefix){
     size_t pos;
     String new_prefix;
     bool check;
+    string sign;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -7673,8 +7674,13 @@ bool Chrono::set_current(String prefix){
     file_utc_time.set_name(String(path_file_utc_date_and_time));
     file_utc_time.remove(prefix);
     
+//    date -u -v+1H +%H:%M:%S
+    
     line_ins.str("");
-    line_ins << "date -u \"+%H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    if((time_zone.value) > 0){sign = "+";}
+    else{sign = "-";}
+    //run the command to get the current time with time zone specified by time_zone
+    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value << "\"H +%H:%M:%S\"  >> " << path_file_utc_date_and_time;
     
     //execute the date command in the terminal and writes the UTC date to file_utc_time
     system(line_ins.str().c_str());
@@ -12702,9 +12708,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
     if(sight_in == NULL){
         (sight->master_clock_date_and_hour).date.set_current(prefix);
-        (sight->master_clock_date_and_hour).chrono.set_current(prefix);
+        (sight->master_clock_date_and_hour).chrono.set_current((wxGetApp()).time_zone, prefix);
         (sight->time).date.set_current(prefix);
-        (sight->time).chrono.set_current(prefix);
+        (sight->time).chrono.set_current((wxGetApp()).time_zone, prefix);
     }
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));

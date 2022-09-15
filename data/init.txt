@@ -65,6 +65,8 @@ exponent zoom = 2.0
 maximal zoom factor = 100000
 data precision = 32
 display precision = 4
+#the time zone where the computer on which the app runs is located, it is a signed integer corresponding to UTC+ ... 
+time zone = -2
 relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
 default projection = 3D

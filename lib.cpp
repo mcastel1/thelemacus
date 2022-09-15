@@ -1291,15 +1291,15 @@ bool Position::distance(Position p, Length* l, String name, String prefix){
     bool check;
     check = true;
     
-    ((*l).value) = Re * acos( cos((lambda.value) - (p.lambda.value))*cos((phi.value))*cos((p.phi.value)) + sin((phi.value))*sin((p.phi.value)) );
+    (l->value) = Re * acos( cos((lambda.value) - (p.lambda.value))*cos(phi)*cos(p.phi) + sin(phi)*sin(p.phi) );
     
-    check &= !isnan((*l).value);
+    check &= !isnan(l->value);
     
     if(check){
         
         Angle a;
-        a.set(String(""), ((*l).value)/Re, prefix);
-        (*l).print(name, String("nm"), prefix, cout);
+        a.set(String(""), (l->value)/Re, prefix);
+        l->print(name, String("nm"), prefix, cout);
         
     }else{
         

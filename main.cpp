@@ -41,6 +41,7 @@
  - uncomment at '//uncomment this at the end' to display coastlines at the end
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
  - transform all the instances where you compute the span between two angles with Angle::span
+ - when you delete a Position, make sure that buttons that modify and delete a position are disabled 
  - in DrawPanel::Draw_Mercator, delete the setting and any use  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
  */
 

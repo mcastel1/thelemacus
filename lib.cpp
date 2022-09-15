@@ -13573,7 +13573,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //sets the backgorund color of *this to background_color
     SetBackgroundColour((wxGetApp()).background_color);
-    //    SetBackgroundColour((wxGetApp()).night_background_color);
     
     for(i=0; i<color_list.size(); i++){
         

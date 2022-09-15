@@ -1431,11 +1431,11 @@ Rectangle::Rectangle(void){
 
 //constructor which constructs p_NW and p_SE from a and b
 Rectangle::Rectangle(Position a, Position b){
-
+    
     Angle phi_N, phi_S, lambda_W, lambda_E;
- 
+    
     //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
- 
+    
     phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
     phi_N.normalize();
     
@@ -1459,9 +1459,9 @@ Rectangle::Rectangle(Position a, Position b){
 bool Rectangle::Contains(Position p){
     
     return( ((p.lambda).normalize_pm_pi_ret() < ((p_NW.lambda).normalize_pm_pi_ret())) &&
-    ((p.lambda).normalize_pm_pi_ret() > ((p_SE.lambda).normalize_pm_pi_ret())) &&
-    ((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
-    ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret())) );
+           ((p.lambda).normalize_pm_pi_ret() > ((p_SE.lambda).normalize_pm_pi_ret())) &&
+           ((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
+           ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret())) );
     
 }
 
@@ -1737,9 +1737,9 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                 }
                 
             }
-
+            
         }
-       
+        
     }else{
         
         //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
@@ -1771,12 +1771,12 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
             bool check;
             
             switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
-
+                    
                 case 'M':{
                     //I am using the mercator projection
-             
+                    
                     check = inclusion(draw_panel->rectangle_observer, &t, String(""));
-
+                    
                     break;
                 }
                     
@@ -1784,11 +1784,11 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     //I am using the 3d projection
                     
                     check = inclusion(draw_panel->circle_observer, &t, String(""));
-
+                    
                     break;
                     
                 }
-
+                    
             }
             
             
@@ -1810,7 +1810,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 
             }
             
-         
+            
             break;
             
         }
@@ -1825,7 +1825,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     
                     if(inclusion(draw_panel->rectangle_observer, &t, String(""))){
                         //*this is included in rectangle_observer
-                                                
+                        
                         if((t[0] == 0.0) && (t[1] == 0.0)){
                             //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
@@ -1848,19 +1848,19 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                         }
                         
                         return true;
-
+                        
                     }else{
                         //*this is not included in rectangle_observer
-
+                        
                         return false;
                         
                     }
                     
-                     
+                    
                     break;
                     
                 }
-
+                    
                 case '3':{
                     //I am using the 3d projection
                     
@@ -1919,7 +1919,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                         return false;
                         
                     }
-                     
+                    
                     break;
                     
                 }
@@ -2235,7 +2235,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
     
     if(type == String("l")){
         //*this is a loxodrome
-
+        
         cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
         
     }else{
@@ -2250,7 +2250,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         
         lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
         phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
-
+        
         //the parallel of latitude going through the North side of rectangle
         side_N = Route(
                        String("c"),
@@ -2264,7 +2264,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
                        Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
                        Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
                        );
-
+        
         //the meridian going through the W side of rectangle
         side_W = Route(
                        String("c"),
@@ -2297,7 +2297,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         u.insert(u.end(), temp.begin(), temp.end());
         
         u.push_back(Angle(0.0));
-     
+        
         
         //push back into u the angle which corresponds to the endpoint of Route *this
         if(type == String("o")){
@@ -2311,7 +2311,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         }
         
         sort(u.begin(), u.end());
-
+        
         
         //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
         for(output = false, is_fully_included = true, i=0; i<(u.size())-1; i++){
@@ -2334,7 +2334,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
                     
                     t->push_back(u[i]);
                     t->push_back(u[i+1]);
-
+                    
                 }
                 
             }else{
@@ -2342,7 +2342,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
                 is_fully_included = false;
                 
             }
-
+            
         }
         
         //I push back into to the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
@@ -2357,7 +2357,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         }
         
         return output;
-
+        
     }
     
     
@@ -2565,7 +2565,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         
                         t_a.set(String(""), acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
                         t_b.set(String(""), -acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
-
+                        
                         
                     }
                     
@@ -3828,7 +3828,7 @@ bool Chrono::read_from_file(String name, String filename, String prefix){
     bool check = true;
     size_t pos;
     File file;
-
+    
     
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
@@ -7314,7 +7314,7 @@ Angle Angle::span(Angle x){
     }
     
     return delta;
-
+    
 }
 
 //puts the angle in the interval [-pi, pi), it does not alter *this and returns the result
@@ -7675,7 +7675,7 @@ bool Chrono::set_current(Int time_zone, String prefix){
     file_utc_time.set_name(String(path_file_utc_date_and_time));
     file_utc_time.remove(prefix);
     
-//    date -u -v+1H +%H:%M:%S
+    //    date -u -v+1H +%H:%M:%S
     
     line_ins.str("");
     if((time_zone.value) > 0){sign = "+";}
@@ -8588,7 +8588,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
                          );
         
     }
-        
+    
 }
 
 //This function draws into *this the text label for a parallel or a meridian, by placing it near the Positian q. The latitude/longitude in the text label is q.phi/q.lambda, and the labels are wxStaticText objects which are stored in label_phi/label_lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
@@ -8615,14 +8615,14 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
             angle_label = (q.phi);
             delta = delta_phi;
             labels = &label_phi;
-                    
+            
         }else{
             //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda, and I let labels point to label_lambda
             
             angle_label = (q.lambda);
             delta = delta_lambda;
             labels = &label_lambda;
-                    
+            
         }
         
         
@@ -8674,7 +8674,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         if(mode == String("NS")){
             
             p += wxPoint(-(GetTextExtent(wx_string).GetWidth())-((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), -(GetTextExtent(wx_string).GetHeight())/2);
-
+            
         }else{
             
             p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
@@ -8899,7 +8899,7 @@ void DrawPanel::TabulateRoutes(void){
         
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if(((plot->route_list)[i]).type != String("l")){
-  
+            
             ((plot->route_list)[i]).Draw((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
             
         }else{
@@ -9637,8 +9637,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
     //sets the backgorund color of *this to background_color
+    SetForegroundColour((wxGetApp()).foreground_color);
     SetBackgroundColour((wxGetApp()).background_color);
- 
+    
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
@@ -10528,7 +10529,7 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     }
     
     return output;
-
+    
 }
 
 //converts the point p on the screen to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
@@ -10612,7 +10613,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
         (q->y) = (temp.y);
     }
     
-     return check(temp);
+    return check(temp);
     
 }
 
@@ -10643,7 +10644,7 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     }
     
     if(arg_sqrt >= 0.0){
-         
+        
         return true;
         
     }else{
@@ -10998,7 +10999,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
-        
+    
     position_start_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     
@@ -11180,13 +11181,13 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 //the selected Route is related to a Sight
                 
                 
-   
+                
                 //select the related Sight in ListFrame
                 ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
                 ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value,  wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-                                
+                
             }
             
         }
@@ -11566,7 +11567,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 //in this case, position_drag_now is not a valid position
                 
                 switch(((((parent->projection)->name)->GetValue()).ToStdString())[0]){
-
+                        
                     case 'M':{
                         //I am using the mercator projection: then the position is invalid and I may print an error message
                         
@@ -11578,8 +11579,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
                         //                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
                         //                parent->CallAfter(*(parent->print_error_message));
-
-                              
+                        
+                        
                         break;
                         
                     }
@@ -11595,8 +11596,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //re-draw the chart
                         (this->*Draw)();
                         PaintNow();
-
-
+                        
+                        
                         
                         break;
                         
@@ -11751,11 +11752,11 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
             
             //uncomment this if you want to print an error message
             /*
-            //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-            (print_error_message->control) = NULL;
-            (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
-            (print_error_message->message) = String("The chart must lie within the boundaries.");
-            (*print_error_message)();
+             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+             (print_error_message->control) = NULL;
+             (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
+             (print_error_message->message) = String("The chart must lie within the boundaries.");
+             (*print_error_message)();
              */
             
             //I reset the chart to its original configuration
@@ -11953,7 +11954,7 @@ void SelectRoute::operator()(wxCommandEvent& event){
     //temporarily unbind listcontrol_routes from &ListFrame::OnChangeSelectionInListControl
     (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, parent);
     (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, parent);
-
+    
     
     
     //brings parent to front
@@ -11961,7 +11962,7 @@ void SelectRoute::operator()(wxCommandEvent& event){
     
     //deselect all previously selected items in listcontrol_routes to allow the user to properly select an item
     (parent->listcontrol_routes)->DeselectAll();
-
+    
     
     (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
     
@@ -12010,7 +12011,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
     f->UpdateRelatedSightsAndRoutes();
-        
+    
     event.Skip(true);
     
 }
@@ -12026,7 +12027,7 @@ DeletePosition::DeletePosition(ListFrame* f_in){
 void DeletePosition::operator()(wxCommandEvent& event){
     
     long i;
-
+    
     i = (f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     (f->listcontrol_positions)->DeleteItem(i);
     (f->plot)->remove_position(((unsigned int)i), String(""));
@@ -12499,7 +12500,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, f);
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, f);
-
+    
     //set parameters back to their original value
     (f->idling) = false;
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
@@ -12625,8 +12626,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     idling = false;
     
     //sets the backgorund color of *this to background_color
+    SetForegroundColour((wxGetApp()).foreground_color);
     SetBackgroundColour((wxGetApp()).background_color);
- 
+    
     
     unset_idling = new UnsetIdling<SightFrame>(this);
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
@@ -12900,8 +12902,9 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     idling = false;
     
     //sets the backgorund color of *this to background_color
+    SetForegroundColour((wxGetApp()).foreground_color);
     SetBackgroundColour((wxGetApp()).background_color);
- 
+    
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
@@ -13038,8 +13041,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     idling = false;
     
     //sets the backgorund color of *this to background_color
+    SetForegroundColour((wxGetApp()).foreground_color);
     SetBackgroundColour((wxGetApp()).background_color);
- 
+    
     
     unset_idling = new UnsetIdling<RouteFrame>(this);
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
@@ -13440,6 +13444,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     f_ok = f_ok_in;
     
     //sets the backgorund color of *this to background_color
+    SetForegroundColour((wxGetApp()).foreground_color);
     SetBackgroundColour((wxGetApp()).background_color);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
@@ -13497,7 +13502,8 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     string_b = string_b_in;
     
     //sets the backgorund color of *this to background_color
-    SetBackgroundColour((wxGetApp()).background_color); 
+    SetForegroundColour((wxGetApp()).foreground_color);
+    SetBackgroundColour((wxGetApp()).background_color);
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);
@@ -13593,6 +13599,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     selection_rectangle = false;
     
     //sets the backgorund color of *this to background_color
+    SetForegroundColour((wxGetApp()).foreground_color);
     SetBackgroundColour((wxGetApp()).background_color);
     
     for(i=0; i<color_list.size(); i++){
@@ -13651,9 +13658,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
     
     
-//    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
-//    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
-//    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
+    //    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
+    //    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
+    //    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
     
@@ -13669,7 +13676,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //initialize delete_position, which defines the functor to delete a Position
     delete_position = new DeletePosition(this);
-
+    
     
     //initialized modify_route and create_route, which define the functors to modify / create a Route
     modify_route = new ModifyRoute(this);
@@ -13749,21 +13756,21 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
     button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
     button_delete_route->Enable(false);
-  
+    
     
     //listcontrol_sights with sights
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_sight);
     disableable_buttons.push_back(button_transport_sight);
     disableable_buttons.push_back(button_delete_sight);
-
+    
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_sights->SetForegroundColour(wxGetApp().foreground_color);
     listcontrol_sights->SetBackgroundColour(wxGetApp().background_color);
-//    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
+    //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
-//    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
+    //    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
     
     i=0;
     
@@ -13806,18 +13813,18 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_modify_position);
     disableable_buttons.push_back(button_transport_position);
     disableable_buttons.push_back(button_delete_position);
-
+    
     
     
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_positions->SetForegroundColour(wxGetApp().foreground_color);
     listcontrol_positions->SetBackgroundColour(wxGetApp().background_color);
-//    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
+    //    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
-//    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
-
+    //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
+    
     listcontrol_positions->PushBackColumn(wxString("Number"));
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
@@ -13845,9 +13852,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol routes with routes    
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
-//    disableable_buttons.push_back(button_transport_route);
+    //    disableable_buttons.push_back(button_transport_route);
     disableable_buttons.push_back(button_delete_route);
-
+    
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     listcontrol_routes->SetForegroundColour(wxGetApp().foreground_color);
@@ -13929,7 +13936,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //    for(i=0; i<(listcontrol_sights->GetColumnCount()); ++i){
     //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
-
+    
     sizer_v->Add(sizer_box_sight, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_position, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_route, 0,  wxALL, margin_v);
@@ -14262,16 +14269,16 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
     
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<DeletePosition, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<DeletePosition, UnsetIdling<ListFrame> >(NULL,
-                                                                                                          delete_position, String("Yes"), unset_idling, String("No"),
-                                                                                                          "",
-                                                                                                          "Do you really want to remove this position?",
-                                                                                                          wxDefaultPosition,
-                                                                                                          wxDefaultSize,
-                                                                                                          String(""));
+                                                                                                                                        delete_position, String("Yes"), unset_idling, String("No"),
+                                                                                                                                        "",
+                                                                                                                                        "Do you really want to remove this position?",
+                                                                                                                                        wxDefaultPosition,
+                                                                                                                                        wxDefaultSize,
+                                                                                                                                        String(""));
     question_frame->Show(true);
     
     event.Skip(true);
-
+    
 }
 
 //if an item is deselected in listcontrol_positions, disable button_modify_position, button_transport_position and button_delete_position
@@ -14291,7 +14298,7 @@ void ListFrame::OnChangeSelectionInListControl(wxCommandEvent& event){
     //    button_delete_position->Enable(caller->GetSelectedItemCount() != 0);
     
     event.Skip(true);
-
+    
 }
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
@@ -14374,26 +14381,26 @@ void ListFrame::Disconnect(int i_sight){
 }
 
 /*
-//when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
-void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
-    
-    int i;
-    
-    MousePositionOnListControl(listcontrol_sights, &i);
-    
-    highlighted_route = ((((plot->sight_list)[i]).related_route).value);
-    
-    
-    for(i=0; i<chart_frames.size(); i++){
-        
-        ((chart_frames[i])->draw_panel)->PaintNow();
-        
-    }
-    
-    event.Skip(true);
-    
-}
-*/
+ //when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
+ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
+ 
+ int i;
+ 
+ MousePositionOnListControl(listcontrol_sights, &i);
+ 
+ highlighted_route = ((((plot->sight_list)[i]).related_route).value);
+ 
+ 
+ for(i=0; i<chart_frames.size(); i++){
+ 
+ ((chart_frames[i])->draw_panel)->PaintNow();
+ 
+ }
+ 
+ event.Skip(true);
+ 
+ }
+ */
 
 //when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route, and the same for the relaetd sight in listcontrol_sights.
 void ListFrame::OnMouseMovement(wxMouseEvent& event){
@@ -14520,23 +14527,23 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 }
 
 /*
-//when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
-void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
-    
-    unsigned int i;
-    
-    MousePositionOnListControl(listcontrol_positions, &highlighted_position);
-    
-    for(i=0; i<chart_frames.size(); i++){
-        
-        ((chart_frames[i])->draw_panel)->PaintNow();
-        
-    }
-    
-    event.Skip(true);
-    
-}
-*/
+ //when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
+ void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
+ 
+ unsigned int i;
+ 
+ MousePositionOnListControl(listcontrol_positions, &highlighted_position);
+ 
+ for(i=0; i<chart_frames.size(); i++){
+ 
+ ((chart_frames[i])->draw_panel)->PaintNow();
+ 
+ }
+ 
+ event.Skip(true);
+ 
+ }
+ */
 
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){
@@ -16830,6 +16837,6 @@ void ListControl::DeselectAll(void){
         SetItemState(i, 0, wxLIST_STATE_SELECTED);
         
     }
-   
+    
 }
 

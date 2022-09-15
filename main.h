@@ -9,6 +9,7 @@
 //
 //#ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/app.h"
 //#endif
 
 //#include "chartdir.h"
@@ -104,3 +105,5 @@ public:
 
 };
 
+wxDECLARE_APP(MyApp);
+wxIMPLEMENT_APP(MyApp);

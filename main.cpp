@@ -6,6 +6,8 @@
 //uncomment this to test the code at higher speed
 //#define wxDEBUG_LEVEL 0
 
+
+
 #include "main.h"
 #include "lib.cpp"
 
@@ -47,7 +49,6 @@
 
 
 
-wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     

@@ -13640,7 +13640,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
   
     
     //listcontrol_sights with sights
-    disableable_buttons = {button_modify_sight, button_transport_sight, button_delete_sight};
+    disableable_buttons.clear();
+    disableable_buttons.push_back(button_modify_sight);
+    disableable_buttons.push_back(button_transport_sight);
+    disableable_buttons.push_back(button_delete_sight);
+
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
 //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);

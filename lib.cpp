@@ -11047,8 +11047,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         
     }else{
         //the left button of the mouse has not been lifted at the end of a drag
-
-        unsigned int i;
         
         //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
         if(((parent->parent)->highlighted_position) != -1){
@@ -13152,7 +13150,6 @@ void PositionFrame::OnPressCancel(wxCommandEvent& event){
 //this function is triggered when button_ok is pressed
 void PositionFrame::OnPressOk(wxCommandEvent& event){
     
-    unsigned int i;
     stringstream s;
     
     //writes the values of the GUI fields in the non-GUI fields

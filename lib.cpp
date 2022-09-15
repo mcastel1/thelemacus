@@ -13849,7 +13849,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     
-    //listcontrol routes with routes    
+    //listcontrol routes with routes
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
     //    disableable_buttons.push_back(button_transport_route);
@@ -15372,6 +15372,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //    name->SetValue("");
+    name->SetForegroundColour(wxGetApp().foreground_color);
     name->SetBackgroundColour(wxGetApp().background_color);
     read_recent_items();
     AdjustWidth(name);
@@ -15634,7 +15635,8 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    name->SetBackgroundColour(wxGetApp().background_color);
+    name->SetForegroundColour(wxGetApp().foreground_color);
+name->SetBackgroundColour(wxGetApp().background_color);
     
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");

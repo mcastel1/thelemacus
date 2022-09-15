@@ -9636,6 +9636,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //read tick length over width plot area from file_init
     tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
+    //sets the backgorund color of *this to background_color
+    SetBackgroundColour((wxGetApp()).background_color);
+ 
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
@@ -12620,6 +12623,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
+    
+    //sets the backgorund color of *this to background_color
+    SetBackgroundColour((wxGetApp()).background_color);
+ 
+    
     unset_idling = new UnsetIdling<SightFrame>(this);
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
     
@@ -12891,6 +12899,9 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     idling = false;
     
+    //sets the backgorund color of *this to background_color
+    SetBackgroundColour((wxGetApp()).background_color);
+ 
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
@@ -13025,6 +13036,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
+    
+    //sets the backgorund color of *this to background_color
+    SetBackgroundColour((wxGetApp()).background_color);
+ 
     
     unset_idling = new UnsetIdling<RouteFrame>(this);
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
@@ -13424,6 +13439,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     f_ok = f_ok_in;
     
+    //sets the backgorund color of *this to background_color
+    SetBackgroundColour((wxGetApp()).background_color);
+    
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
     
@@ -13477,6 +13495,9 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     string_a = string_a_in;
     f_b = f_b_in;
     string_b = string_b_in;
+    
+    //sets the backgorund color of *this to background_color
+    SetBackgroundColour((wxGetApp()).background_color); 
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);

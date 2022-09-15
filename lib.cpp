@@ -2790,7 +2790,7 @@ bool Chrono::operator<(const Chrono& chrono){
 bool Chrono::operator>(const Chrono& chrono){
     
     return(
-           (((double)h)/24.0 + ((double)m)/60.0/24.0 + s/60.0/60.0/24.0) <  (((double)(chrono.h))/24.0 + ((double)(chrono.m))/60.0/24.0 + (chrono.s)/60.0/60.0/24.0)
+           (((double)h)/24.0 + ((double)m)/60.0/24.0 + s/60.0/60.0/24.0) >  (((double)(chrono.h))/24.0 + ((double)(chrono.m))/60.0/24.0 + (chrono.s)/60.0/60.0/24.0)
            );
     
 }

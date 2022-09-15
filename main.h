@@ -43,70 +43,61 @@
 // #include "gsl_complex.h"
 // #include "gsl_complex_math.h"
 
+class BodyField;
+class LimbField;
+template<class T> class CheckField;
+template<class P> class AngleField;
+template<class P> class LengthField;
+class DateField;
+class ChronoField;
+class RouteTypeField;
+template<class P> class StringField;
+class MyApp;
+template<class F> class CloseFrame;
+template<class F_A, class F_B> class QuestionFrame;
+class ListFrame;
+class SightFrame;
+class ChartFrame;
+class PlotFrame;
+class ChartPanel;
+class RouteFrame;
+class DrawPanel;
+class Position;
+
+class Catalog;
+class Limb;
+class Length;
+class Plot;
+class File;
+class Time;
+class Date;
+class Chrono;
+class Route;
+class Sight;
+class Atmosphere;
+class Answer;
+class Body;
+class String;
 
 
-//using namespace std;
+//a class for color objects
+class Color: public wxColour{
+    
+public:
+    Color();
+    Color(unsigned char, unsigned char, unsigned char);
+    Color(unsigned char, unsigned char, unsigned char, unsigned char);
+    
+    void read_from_file(String, String, String);
 
-//class BodyField;
-//class LimbField;
-//template<class T> class CheckField;
-//template<class P> class AngleField;
-//class LengthField;
-//class DateField;
-//class ChronoField;
-//template<class P> class StringField;
-//class MyApp;
-//class MessageFrame;
-//template<class F_YES, class F_NO> class QuestionFrame;
-//class ListFrame;
-//class SightFrame;
-//class ChartFrame;
-//class PlotFrame;
-//class ChartPanel;
-
-//struct CheckBody;
-//struct CheckLimb;
-//template<class T> struct CheckCheck;
-//struct CheckChrono;
-//template<class P> class CheckAngle;
-//template<class P> struct CheckSign;
-//template<class P> struct CheckArcDegree;
-//template<class P> struct CheckArcMinute;
-//struct CheckLength;
-//class CheckDate;
-//class CheckYear;
-//class CheckMonth;
-//class CheckDay;
-//struct CheckHour;
-//struct CheckMinute;
-//struct CheckSecond;
-//template<class P> struct CheckString;
-//template<class P> struct SetStringToCurrentTime;
-//struct TabulateDays;
-//template<class T> class PrintErrorMessage;
-//struct OnSelectInListBox;
-
-//class Catalog;
-//class Limb;
-//class Angle;
-//class Length;
-//class String;
-//class Plot;
-//class File;
-//class Time;
-//class Date;
-//class Chrono;
-//class Route;
-//class Sight;
-//class Atmosphere;
-//class Answer;
-//class Body;
+};
 
 class MyApp: public wxApp{
 public:
 
     //this rectangle contains the size of the display on which the *this is run
     wxRect rectangle_display;
+    Color background_color;
 
     virtual bool OnInit();
 

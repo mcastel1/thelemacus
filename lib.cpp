@@ -13482,6 +13482,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //when the ListFrame is created there is no open selection rectangle in any ChartFrame
     selection_rectangle = false;
     
+//    SetBackgroundColour(Color(12, 12, 12));
     
     for(i=0; i<color_list.size(); i++){
         

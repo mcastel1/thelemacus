@@ -51,41 +51,7 @@
 
 using namespace std;
 
-class BodyField;
-class LimbField;
-template<class T> class CheckField;
-template<class P> class AngleField;
-template<class P> class LengthField;
-class DateField;
-class ChronoField;
-class RouteTypeField;
-template<class P> class StringField;
-class MyApp;
-template<class F> class CloseFrame;
-template<class F_A, class F_B> class QuestionFrame;
-class ListFrame;
-class SightFrame;
-class ChartFrame;
-class PlotFrame;
-class ChartPanel;
-class RouteFrame;
-class DrawPanel;
-class Position;
 
-class Catalog;
-class Limb;
-class Length;
-class String;
-class Plot;
-class File;
-class Time;
-class Date;
-class Chrono;
-class Route;
-class Sight;
-class Atmosphere;
-class Answer;
-class Body;
 
 class Int{
     
@@ -1784,17 +1750,7 @@ public:
 
 
 
-//a class for color objects
-class Color: public wxColour{
-    
-public:
-    Color();
-    Color(unsigned char, unsigned char, unsigned char);
-    Color(unsigned char, unsigned char, unsigned char, unsigned char);
-    
-    void read_from_file(String, String, String);
 
-};
 
 
 //class OnSelectInListControlSights{

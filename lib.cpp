@@ -10356,7 +10356,7 @@ template<class T>void CheckBody::operator()(T& event){
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->name)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -10403,7 +10403,7 @@ template<class T> void CheckLimb::operator()(T &event){
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->name)->SetBackgroundColour(wxGetApp().background_color);
             
             
         }else{
@@ -10486,7 +10486,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             //if check is true (false) -> set sign_ok to true (false)
             (p->sign_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in sign
-            (p->sign)->SetBackgroundColour(*wxWHITE);
+            (p->sign)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -12176,7 +12176,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             //if check is true (false) -> set deg_ok to true (false)
             (p->deg_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->deg)->SetBackgroundColour(*wxWHITE);
+            (p->deg)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -12215,7 +12215,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             //if check is true (false) -> set min_ok to true (false)
             (p->min_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in min
-            (p->min)->SetBackgroundColour(*wxWHITE);
+            (p->min)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -12256,7 +12256,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             //if check is true (false) -> set value_ok to true (false)
             (p->value_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in value
-            (p->value)->SetBackgroundColour(*wxWHITE);
+            (p->value)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -12302,7 +12302,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             //if check is true (false) -> set unit_ok to true (false)
             (p->unit_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->unit)->SetBackgroundColour(*wxWHITE);
+            (p->unit)->SetBackgroundColour(wxGetApp().background_color);
             
             
         }else{
@@ -14732,7 +14732,7 @@ template<class T> void CheckYear::operator()(T&event){
             //if check is true (false) -> set year_ok to true (false)
             (p->year_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in year
-            (p->year)->SetBackgroundColour(*wxWHITE);
+            (p->year)->SetBackgroundColour(wxGetApp().background_color);
             
             if(check && (p->month_ok)){
                 
@@ -14781,7 +14781,7 @@ template<class T> void CheckMonth::operator()(T&event){
             //if check is true (false) -> set month_ok to true (false)
             (p->month_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in month
-            (p->month)->SetBackgroundColour(*wxWHITE);
+            (p->month)->SetBackgroundColour(wxGetApp().background_color);
             
             if(check && (p->year_ok)){
                 
@@ -14842,7 +14842,7 @@ template<class T> void CheckDay::operator()(T& event){
             //if check is true (false) -> set day_ok to true (false)
             (p->day_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in day
-            (p->day)->SetBackgroundColour(*wxWHITE);
+            (p->day)->SetBackgroundColour(wxGetApp().background_color);
             
             
         }else{
@@ -14990,7 +14990,7 @@ template<class T> void CheckHour::operator()(T &event){
             //if check is true (false) -> set hour_ok to true (false)
             (p->hour_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->hour)->SetBackgroundColour(*wxWHITE);
+            (p->hour)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -15034,7 +15034,7 @@ template<class T> void CheckMinute::operator()(T &event){
             //if check is true (false) -> set minute_ok to true (false)
             (p->minute_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in minute
-            (p->minute)->SetBackgroundColour(*wxWHITE);
+            (p->minute)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -15077,7 +15077,7 @@ template<class T> void CheckSecond::operator()(T &event){
             //if check is true (false) -> set second_ok to true (false)
             (p->second_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->second)->SetBackgroundColour(*wxWHITE);
+            (p->second)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -15180,7 +15180,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->name)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -15365,7 +15365,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //    name->SetValue("");
-    name->SetBackgroundColour(*wxWHITE);
+    name->SetBackgroundColour(wxGetApp().background_color);
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
@@ -15627,7 +15627,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    name->SetBackgroundColour(*wxWHITE);
+    name->SetBackgroundColour(wxGetApp().background_color);
     
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
@@ -15733,7 +15733,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
-    deg->SetBackgroundColour(*wxWHITE);
+    deg->SetBackgroundColour(wxGetApp().background_color);
     AdjustWidth(deg);
     deg->SetValue(wxString(""));
     deg_ok = false;
@@ -15747,7 +15747,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
-    min->SetBackgroundColour(*wxWHITE);
+    min->SetBackgroundColour(wxGetApp().background_color);
     min->SetValue(wxString(""));
     min_ok = false;
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
@@ -15765,7 +15765,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     if(format != String("")){
         //if the AngleField format is either NS, EW or +-, the sign field is used -> I set its background colour, width and bind it to check->check_sign
         
-        sign->SetBackgroundColour(*wxWHITE);
+        sign->SetBackgroundColour(wxGetApp().background_color);
         AdjustWidth(sign);
         sign->SetValue(wxString(""));
         sign_ok = false;
@@ -15928,7 +15928,7 @@ template<class P> template<class E> void AngleField<P>::OnEditSign(E& event){
     if(check){
         
         //because the text in sign is valid, I set the background color of sign to white
-        sign->SetBackgroundColour(*wxWHITE);
+        sign->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15953,7 +15953,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event
     if(check){
         
         //because the text in sign is valid, I set the background color of deg to white
-        deg->SetBackgroundColour(*wxWHITE);
+        deg->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15978,7 +15978,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event
     if(check){
         
         //because the text in sign is valid, I set the background color of min to white
-        min->SetBackgroundColour(*wxWHITE);
+        min->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16016,7 +16016,7 @@ template<class E> void ChronoField::OnEditHour(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        hour->SetBackgroundColour(*wxWHITE);
+        hour->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16040,7 +16040,7 @@ template<class E> void ChronoField::OnEditMinute(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        minute->SetBackgroundColour(*wxWHITE);
+        minute->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16064,7 +16064,7 @@ template<class E> void ChronoField::OnEditSecond(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        second->SetBackgroundColour(*wxWHITE);
+        second->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16090,7 +16090,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        value->SetBackgroundColour(*wxWHITE);
+        value->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16117,7 +16117,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of unit to white
-        unit->SetBackgroundColour(*wxWHITE);
+        unit->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16154,7 +16154,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     }
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-    year->SetBackgroundColour(*wxWHITE);
+    year->SetBackgroundColour(wxGetApp().background_color);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->SetValue(wxString(""));
     year_ok = false;
@@ -16166,7 +16166,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-    month->SetBackgroundColour(*wxWHITE);
+    month->SetBackgroundColour(wxGetApp().background_color);
     AdjustWidth(month);
     month->SetValue(wxString(""));
     month_ok = false;
@@ -16179,7 +16179,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-    day->SetBackgroundColour(*wxWHITE);
+    day->SetBackgroundColour(wxGetApp().background_color);
     //I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
     for(days.Clear(), i=0; i<31; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));
@@ -16228,7 +16228,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-    hour->SetBackgroundColour(*wxWHITE);
+    hour->SetBackgroundColour(wxGetApp().background_color);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
     hour->SetValue(wxString(""));
@@ -16241,7 +16241,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    minute->SetBackgroundColour(*wxWHITE);
+    minute->SetBackgroundColour(wxGetApp().background_color);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->SetValue(wxString(""));
@@ -16255,7 +16255,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
-    second->SetBackgroundColour(*wxWHITE);
+    second->SetBackgroundColour(wxGetApp().background_color);
     second->SetValue(wxString(""));
     second_ok = false;
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
@@ -16362,7 +16362,7 @@ template<class E> void BodyField::OnEdit(E& event){
         (*((parent_frame->limb)->check))(event);
         
         //because the text in name is valid, I set the background color of name to white
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         
     }else{
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
@@ -16401,7 +16401,7 @@ template<class E> void LimbField::OnEdit(E& event){
     
     if(check){
         
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16427,7 +16427,7 @@ template<class E> void DateField::OnEditYear(E& event){
     
     if(check){
         
-        year->SetBackgroundColour(*wxWHITE);
+        year->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16452,7 +16452,7 @@ template<class E> void DateField::OnEditMonth(E& event){
     
     if(check){
         
-        month->SetBackgroundColour(*wxWHITE);
+        month->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16487,7 +16487,7 @@ template<class E> void DateField::OnEditDay(E& event){
     
     if(check){
         
-        day->SetBackgroundColour(*wxWHITE);
+        day->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16535,7 +16535,7 @@ template<class E> void RouteTypeField::OnEdit(E& event){
         (parent_frame->omega)->Enable(!enable);
         
         //because the text in name is valid, I set the background color of name to white
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         
     }else{
         
@@ -16758,7 +16758,7 @@ template<class E> void ProjectionField::OnEdit(E& event){
     
     if(check){
         
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         //choses the projection entered in name button_reduce
         (parent->draw_panel)->OnChooseProjection(event);
         

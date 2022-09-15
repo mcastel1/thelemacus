@@ -10897,9 +10897,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, color_white);
+            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
             if((((plot->route_list)[i]).related_sight).value != -1){
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, color_white);
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
             
             
@@ -10976,7 +10976,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
             }else{
                 
-                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, color_white);
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
                 
             }
             
@@ -13758,6 +13758,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_delete_sight);
 
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    listcontrol_sights->SetForegroundColour(wxGetApp().foreground_color);
+    listcontrol_sights->SetBackgroundColour(wxGetApp().background_color);
 //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -13809,6 +13811,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    listcontrol_positions->SetForegroundColour(wxGetApp().foreground_color);
+    listcontrol_positions->SetBackgroundColour(wxGetApp().background_color);
 //    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -13846,7 +13850,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
 
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-//    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+    listcontrol_routes->SetForegroundColour(wxGetApp().foreground_color);
+    listcontrol_routes->SetBackgroundColour(wxGetApp().background_color);
+    //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
@@ -14345,7 +14351,7 @@ void ListFrame::Disconnect(int i_sight){
     ((plot->route_list)[i_route]).update_wxListCtrl(i_route, listcontrol_routes);
     
     //set the background color of the related sight to white
-    (listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
+    (listcontrol_sights)->SetItemBackgroundColour(i_sight, wxGetApp().background_color);
     
     //if an item is selected in listcontrol_sights, enable /disable button_transport_sight if the selected sight is related / unrelated to a Route
     if((listcontrol_sights->GetSelectedItemCount()) != 0){
@@ -14404,13 +14410,13 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
         //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
         for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
-            listcontrol_sights->SetItemBackgroundColour(i, color_white);
+            listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
         }
         for(i=0; i<(listcontrol_positions->GetItemCount()); i++){
-            listcontrol_positions->SetItemBackgroundColour(i, color_white);
+            listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
         }
         for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
-            listcontrol_routes->SetItemBackgroundColour(i, color_white);
+            listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
         }
         
     }else{
@@ -14433,9 +14439,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 }else{
                     
                     //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
-                    listcontrol_sights->SetItemBackgroundColour(i, color_white);
+                    listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
                     if(((((plot->sight_list)[i]).related_route).value) != -1){
-                        listcontrol_routes->SetItemBackgroundColour(((((plot->sight_list)[i]).related_route).value), color_white);
+                        listcontrol_routes->SetItemBackgroundColour(((((plot->sight_list)[i]).related_route).value), wxGetApp().background_color);
                     }
                     
                 }
@@ -14458,7 +14464,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 }else{
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                    listcontrol_positions->SetItemBackgroundColour(i, color_white);
+                    listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
                     
                 }
                 
@@ -14484,9 +14490,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 }else{
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                    listcontrol_routes->SetItemBackgroundColour(i, color_white);
+                    listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
                     if(((((plot->route_list)[i]).related_sight).value) != -1){
-                        listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), color_white);
+                        listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), wxGetApp().background_color);
                     }
                     
                 }

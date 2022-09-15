@@ -1,5 +1,3 @@
-#include "lib.h"
-
 inline double sin(Angle x){
     
     return sin(x.value);

@@ -16,41 +16,91 @@
 #include "chartdir.h"
 
 
-#include <iostream>
-#include <cstdio>
-#include <cmath>
-#include <vector>
-#include <fstream>
-#include <strstream>
-#include <string.h>
-#include <sstream>
-#include <algorithm>
-#include <list>
-#include <stdio.h>
+class BodyField;
+class LimbField;
+template<class T> class CheckField;
+template<class P> class AngleField;
+template<class P> class LengthField;
+class DateField;
+class ChronoField;
+class RouteTypeField;
+template<class P> class StringField;
+class MyApp;
+template<class F> class CloseFrame;
+template<class F_A, class F_B> class QuestionFrame;
+class ListFrame;
+class SightFrame;
+class ChartFrame;
+class PlotFrame;
+class ChartPanel;
+class RouteFrame;
+class DrawPanel;
+class Position;
+
+class Catalog;
+class Limb;
+class Length;
+class Plot;
+class File;
+class Time;
+class Date;
+class Chrono;
+class Route;
+class Sight;
+class Atmosphere;
+class Answer;
+class Body;
+class String;
 
 
-#include "gsl_rng.h"
-// #include "gsl_randist.h"
-// #include "gsl_vector.h"
-// #include "gsl_matrix.h"
-// #include "gsl_eigen.h"
-#include "gsl_blas.h"
-#include "gsl_sf_pow_int.h"
-#include "gsl_sf_exp.h"
-#include "gsl_errno.h"
-#include "gsl_math.h"
-#include "gsl_spline.h"
-#include "gsl_integration.h"
-#include "gsl_roots.h"
-// #include "gsl_complex.h"
-// #include "gsl_complex_math.h"
+//a class for color objects
+class Color: public wxColour{
+    
+public:
+    Color();
+    Color(unsigned char, unsigned char, unsigned char);
+    Color(unsigned char, unsigned char, unsigned char, unsigned char);
+    
+    void read_from_file(String, String, String);
 
-#include <boost/algorithm/string.hpp>
+};
 
+class String{
+    
+public:
+    string value;
+    
+    String();
+    String(string);
+    void enter(String, String);
+    void print(String, String, ostream&);
+    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, String, String);
+    void write_to_file(String, File&, String);
+    void set(String, String, String);
+    String append(String);
+    String prepend(String);
+    
+    bool operator==(const String&), operator!=(const String&);
+    
+};
 
-
-using namespace std;
-
+class Chrono{
+    
+public:
+    unsigned int h, m;
+    double s;
+    
+    void print(String, String, ostream&);
+    bool set(String, double, String);
+    bool set_current(String);
+    void enter(String, String);
+    bool read_from_file(String, File&, bool, String);
+    string to_string(unsigned int);
+    
+    bool operator==(const Chrono&), operator!=(const Chrono&);
+    
+};
 
 
 class Int{
@@ -187,25 +237,7 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
     
 }
 
-class String{
-    
-public:
-    string value;
-    
-    String();
-    String(string);
-    void enter(String, String);
-    void print(String, String, ostream&);
-    void read_from_file(String, File&, bool, String);
-    void read_from_file(String, String, String);
-    void write_to_file(String, File&, String);
-    void set(String, String, String);
-    String append(String);
-    String prepend(String);
-    
-    bool operator==(const String&), operator!=(const String&);
-    
-};
+
 
 //this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor struct which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
 template<typename FF_OK> class MessageFrame: public wxFrame{
@@ -727,22 +759,6 @@ public:
     
 };
 
-class Chrono{
-    
-public:
-    unsigned int h, m;
-    double s;
-    
-    void print(String, String, ostream&);
-    bool set(String, double, String);
-    bool set_current(String);
-    void enter(String, String);
-    bool read_from_file(String, File&, bool, String);
-    string to_string(unsigned int);
-    
-    bool operator==(const Chrono&), operator!=(const Chrono&);
-    
-};
 
 
 

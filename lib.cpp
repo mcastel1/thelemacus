@@ -15659,6 +15659,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
     (check->p) = this;
     
     checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+    SetColor(checkbox);
     checkbox->Bind(wxEVT_CHECKBOX, (*check));
     
     checkbox->SetValue(false);
@@ -15835,6 +15836,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
@@ -15877,6 +15879,7 @@ template<class P> StringField<P>::StringField(P* parent_in, String* p){
     (set_string_to_current_time.p) = this;
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, check);
@@ -16288,6 +16291,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+    SetColor(name);
     AdjustWidth(name);
     ok = false;
     name->SetValue("");

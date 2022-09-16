@@ -15728,7 +15728,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
-    deg->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(deg);
     AdjustWidth(deg);
     deg->SetValue(wxString(""));
     deg_ok = false;
@@ -15742,7 +15742,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
-    min->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(min);
     min->SetValue(wxString(""));
     min_ok = false;
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
@@ -15760,7 +15760,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     if(format != String("")){
         //if the AngleField format is either NS, EW or +-, the sign field is used -> I set its background colour, width and bind it to check->check_sign
         
-        sign->SetBackgroundColour(wxGetApp().background_color);
+        SetColor(sign);
         AdjustWidth(sign);
         sign->SetValue(wxString(""));
         sign_ok = false;
@@ -16149,7 +16149,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     }
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-    year->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(year);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->SetValue(wxString(""));
     year_ok = false;
@@ -16161,7 +16161,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-    month->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(month);
     AdjustWidth(month);
     month->SetValue(wxString(""));
     month_ok = false;
@@ -16174,7 +16174,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-    day->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(day);
     //I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
     for(days.Clear(), i=0; i<31; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));
@@ -16223,7 +16223,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-    hour->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(hour);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
     hour->SetValue(wxString(""));
@@ -16236,7 +16236,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    minute->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(minute);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->SetValue(wxString(""));
@@ -16250,7 +16250,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
-    second->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(second);
     second->SetValue(wxString(""));
     second_ok = false;
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));

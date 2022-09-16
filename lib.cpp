@@ -7444,7 +7444,7 @@ string Angle::deg_to_string(String mode, unsigned int precision){
     
     stringstream output;
     
-    output.precision(precision);
+//    output.precision(precision);
     
     normalize();
     

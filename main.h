@@ -59,7 +59,7 @@ public:
 
     //this rectangle contains the size of the display on which the *this is run
     wxRect rectangle_display;
-    //the fore/background color for day/night vision of the app of all frames in *this
+    //The default fore/background color for day/night vision of the app of all frames in *this. background_color also represents the default, plain background color of fields, such as BodyFields, and it is thus conceptally equivalent to 'white' color
     Color foreground_color, background_color;
     Int time_zone;
 

@@ -110,7 +110,7 @@ template<class T> void SetColor(T* object){
     
     object->SetForegroundColour((wxGetApp()).foreground_color);
     object->SetBackgroundColour((wxGetApp()).background_color);
-
+    
 }
 
 
@@ -9644,9 +9644,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //read tick length over width plot area from file_init
     tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
-    //sets the backgorund color of *this to background_color
-    SetForegroundColour((wxGetApp()).foreground_color);
-    SetBackgroundColour((wxGetApp()).background_color);
+    SetColor(this);
     
     
     idling = false;
@@ -12633,10 +12631,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     idling = false;
     
-    //sets the backgorund color of *this to background_color
-    SetForegroundColour((wxGetApp()).foreground_color);
-    SetBackgroundColour((wxGetApp()).background_color);
-    
+    SetColor(this);
     
     unset_idling = new UnsetIdling<SightFrame>(this);
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
@@ -12909,9 +12904,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     idling = false;
     
-    //sets the backgorund color of *this to background_color
-    SetForegroundColour((wxGetApp()).foreground_color);
-    SetBackgroundColour((wxGetApp()).background_color);
+    SetColor(this);
     
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
@@ -13048,10 +13041,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     idling = false;
     
-    //sets the backgorund color of *this to background_color
-    SetForegroundColour((wxGetApp()).foreground_color);
-    SetBackgroundColour((wxGetApp()).background_color);
-    
+    SetColor(this);
     
     unset_idling = new UnsetIdling<RouteFrame>(this);
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
@@ -13451,10 +13441,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     f_ok = f_ok_in;
     
-    //sets the backgorund color of *this to background_color
-    SetForegroundColour((wxGetApp()).foreground_color);
-    SetBackgroundColour((wxGetApp()).background_color);
-    
+    SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
     
@@ -13472,9 +13459,8 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    text->SetForegroundColour((wxGetApp()).foreground_color);
-    text->SetBackgroundColour((wxGetApp()).background_color);
-
+    SetColor(text);
+    
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
@@ -13511,10 +13497,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     f_b = f_b_in;
     string_b = string_b_in;
     
-    //sets the backgorund color of *this to background_color
-    SetForegroundColour((wxGetApp()).foreground_color);
-    SetBackgroundColour((wxGetApp()).background_color);
-    
+    SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);
     
@@ -13608,9 +13591,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //when the ListFrame is created there is no open selection rectangle in any ChartFrame
     selection_rectangle = false;
     
-    //sets the backgorund color of *this to background_color
-    SetForegroundColour((wxGetApp()).foreground_color);
-    SetBackgroundColour((wxGetApp()).background_color);
+    SetColor(this);
     
     for(i=0; i<color_list.size(); i++){
         
@@ -13775,8 +13756,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_delete_sight);
     
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    listcontrol_sights->SetForegroundColour(wxGetApp().foreground_color);
-    listcontrol_sights->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(listcontrol_sights);
     //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -13828,8 +13808,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    listcontrol_positions->SetForegroundColour(wxGetApp().foreground_color);
-    listcontrol_positions->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(listcontrol_positions);
     //    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -13867,8 +13846,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    listcontrol_routes->SetForegroundColour(wxGetApp().foreground_color);
-    listcontrol_routes->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(listcontrol_routes);
     //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -15382,8 +15360,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //    name->SetValue("");
-    name->SetForegroundColour(wxGetApp().foreground_color);
-    name->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(name);
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
@@ -15645,8 +15622,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    name->SetForegroundColour(wxGetApp().foreground_color);
-name->SetBackgroundColour(wxGetApp().background_color);
+    SetColor(name);
     
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");

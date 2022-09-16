@@ -13464,7 +13464,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     
     wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
+    text->SetForegroundColour((wxGetApp()).foreground_color);
+    text->SetBackgroundColour((wxGetApp()).background_color);
+
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);

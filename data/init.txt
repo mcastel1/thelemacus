@@ -64,7 +64,7 @@ default height of eye = 7 ft
 exponent zoom = 2.0
 maximal zoom factor = 100000
 data precision = 32
-display precision = 4
+display precision = 2
 #the time zone where the computer on which the app runs is located, it is a signed integer corresponding to UTC+ ... 
 time zone = +2
 relative displacement = 0.1

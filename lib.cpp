@@ -12684,19 +12684,22 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     
     wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_combo_body);
     body = new BodyField(this, &(sight->body), catalog);
     
     wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
+    SetColor(text_limb);
     limb = new LimbField(this, &(sight->limb));
     (limb->name)->Enable(false);
     
     //sextant altitude
     wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_H_s);
     H_s = new AngleField<SightFrame>(this, &(sight->H_s), String("+-"));
     
     //index error
     wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_index_error);
     //If sight_in = NULL, read index error from init file
     if(sight_in == NULL){
         (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
@@ -12707,10 +12710,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_artificial_horizon_check);
     artificial_horizon_check = new CheckField< LengthField<SightFrame> >(this, &(sight->artificial_horizon), NULL, false);
     
     //height of eye
     wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_height_of_eye);
     height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye), String("m"));
     if(sight_in == NULL){
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
@@ -12730,6 +12735,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         (sight->time).chrono.set_current((wxGetApp()).time_zone, prefix);
     }
     wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_date);
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
     
@@ -12744,10 +12750,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_stopwatch_check);
     stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
     
     //stopwatch reading
     wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_stopwatch_reading);
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
@@ -12759,11 +12767,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_reading->Enable(false);
     
     wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_TAI_minus_UTC);
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_label);
     label = new StringField<SightFrame>(this, &(sight->label));
     
     

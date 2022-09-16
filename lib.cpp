@@ -9444,7 +9444,7 @@ void DrawPanel::Draw_3D(void){
     
     //draw labels on parallels
     for(first_label = true,
-        ((q.phi).value) = circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value,
+        ((q.phi).value) = floor((circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value)/delta_phi)*delta_phi,
         (q.lambda) = lambda_middle;
         ((q.phi).value) < circle_observer.reference_position.phi.normalize_pm_pi_ret().value + circle_observer.omega.value;
         ((q.phi).value) += delta_phi

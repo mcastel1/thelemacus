@@ -105,6 +105,14 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
     
 }
 
+//sets fore/background colors to a generic object of type T
+template<class T> void SetColor(T* object){
+    
+    object->SetForegroundColour((wxGetApp()).foreground_color);
+    object->SetBackgroundColour((wxGetApp()).background_color);
+
+}
+
 
 bool String::operator==(const String& s){
     

@@ -13637,6 +13637,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //read color selected item from file
     color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
     
+    size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
     
     
     //no positions nor routes are highlighted when ListFrame is constructed
@@ -13898,7 +13899,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     //button to add a sight
-    button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
     
     //button to add a position

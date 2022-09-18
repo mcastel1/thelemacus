@@ -9015,7 +9015,7 @@ void DrawPanel::Draw_Mercator(void){
     chart->setPlotArea(width_chart*0.15, height_chart*0.1,
                        width_plot_area,
                        height_plot_area,
-                       -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+                       /*revise this and understand how to make the correct color conersion */(wxGetApp().background_color).GetRGBA(), -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());

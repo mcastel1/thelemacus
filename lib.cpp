@@ -9593,11 +9593,20 @@ Color::Color(unsigned char red, unsigned char green, unsigned char blue, unsigne
     
 }
 
-//converts *this to ARGB format
-int Color::ToARGB(void){
+//converts *this to RGB format
+int Color::ToRGB(void){
     
+    int i, output;
+        
+    //convert this to BRG format which the wxWidgets function GetRGB() and then shift its bits so as to convert it to RGB format
+    for(output = 0, i=0; i<3; i++){
+        
+        output ^= ((((this->GetRGB()) >> 8*i) & hexadecimal_mask) << 8*(3-(i+1)));
+        
+    }
     
-    
+    return output;
+
 }
 
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){

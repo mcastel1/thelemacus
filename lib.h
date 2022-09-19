@@ -62,7 +62,7 @@ public:
     Color(unsigned char, unsigned char, unsigned char, unsigned char);
     
     void read_from_file(String, String, String);
-    int ToARGB(void);
+    int ToRGB(void);
     
 };
 

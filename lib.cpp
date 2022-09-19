@@ -8194,8 +8194,8 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
-    //uncomment this at the end
-    /*
+    /*un-comment
+    
      x.clear();
      y.clear();
      for(i=i_min; i<i_max; i++){
@@ -8240,7 +8240,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
      }
      
      }
-     */
+     un-comment*/
     
     
 }
@@ -8286,8 +8286,8 @@ void ListFrame::GetAllCoastLineData(void){
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     
-    //uncomment this at the end
-    /*
+    /*un-comment
+    
      i=0;
      while(!(file_coastline_data_blocked.value.eof())){
      
@@ -8357,7 +8357,8 @@ void ListFrame::GetAllCoastLineData(void){
      i++;
      
      }
-     */
+     
+     un-comment*/
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();

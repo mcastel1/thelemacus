@@ -38,7 +38,7 @@
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
 - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - uncomment at '//uncomment this at the end' to display coastlines at the end
+ - uncomment at 'un-comment' and 'un-comment' to display coastlines at the end
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
  - transform all the instances where you compute the span between two angles with Angle::span
  - when you delete a Position, make sure that buttons that modify and delete a position are disabled 

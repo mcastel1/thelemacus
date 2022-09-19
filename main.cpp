@@ -14,6 +14,9 @@
 /*
  notes:
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
+ - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
+ 
+ 
  - set parents to constructors of all frames that you defined
  - add instrumental error
  - add lambert projection and 3D sphere with no projection

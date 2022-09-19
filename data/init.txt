@@ -85,4 +85,4 @@ night background color = (40,40,43)
 #the threshold hour between night and day
 dawn = 06:10:27
 #the threshold hour between day and night
-dusk = 19:35:41
+dusk = 10:35:41

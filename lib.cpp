@@ -9144,7 +9144,7 @@ void DrawPanel::Draw_Mercator(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    route.Draw((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
                     
                 }
                 
@@ -9195,7 +9195,7 @@ void DrawPanel::Draw_Mercator(void){
                         
                         //                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                         //here I use DrawOld because Draw cannot handle loxodromes
-                        route.DrawOld((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+                        route.DrawOld((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this);
                         
                     }
                 
@@ -9463,7 +9463,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    route.Draw((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
                     
                 }
                 

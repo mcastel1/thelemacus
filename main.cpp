@@ -95,11 +95,11 @@ bool MyApp::OnInit(){
     
     */
     
-    //
+    /*
     Color my_color(232,23,13);
     int j = my_color.ToRGB();
+    */
     
-    //
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

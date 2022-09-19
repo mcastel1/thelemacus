@@ -9236,8 +9236,15 @@ void DrawPanel::Draw_Mercator(void){
     chart->xAxis()->setWidth(2);
     chart->yAxis()->setWidth(2);
     
-    // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    chart->addScatterLayer(DoubleArray((parent->x).data(), (int)((parent->x).size())), DoubleArray((parent->y).data(), (int)((parent->y).size())), "", Chart::CircleSymbol, 1, 000000);
+    // Add a scatter chart layer, using 13 pixel diamonds as symbols
+    chart->addScatterLayer(
+                           DoubleArray((parent->x).data(), (int)((parent->x).size())),
+                           DoubleArray((parent->y).data(), (int)((parent->y).size())),
+                           "",
+                           Chart::CircleSymbol,
+                           (wxGetApp().foreground_color).ToRGB(),
+                           (wxGetApp().foreground_color).ToRGB()
+                           );
     
     //    chart->makeChart(path_file_chart);
     mem_block = (chart->makeChart(Chart::BMP));
@@ -9316,7 +9323,11 @@ void DrawPanel::Draw_3D(void){
     chart->addScatterLayer(
                            DoubleArray((parent->x_3d).data(), (int)(parent->x_3d).size()),
                            DoubleArray((parent->y_3d).data(), (int)(parent->y_3d).size()),
-                           "", Chart::CircleSymbol, 1, 000000);
+                           "",
+                           Chart::CircleSymbol,
+                           (wxGetApp().foreground_color).ToRGB(),
+                           (wxGetApp().foreground_color).ToRGB()
+                           );
     
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis

@@ -8695,6 +8695,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         
         (*labels).resize(((*labels).size())+1);
         ((*labels).back()) = new wxStaticText(this, wxID_ANY, wx_string, p, wxDefaultSize, 0, wxT(""));
+        SetColor((*labels).back());
         
         first_label = false;
         

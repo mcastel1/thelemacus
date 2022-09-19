@@ -9593,7 +9593,12 @@ Color::Color(unsigned char red, unsigned char green, unsigned char blue, unsigne
     
 }
 
-
+//converts *this to ARGB format
+int Color::ToARGB(void){
+    
+    
+    
+}
 
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     

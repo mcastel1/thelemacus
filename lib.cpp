@@ -9011,6 +9011,7 @@ void DrawPanel::Draw_Mercator(void){
     
     // Create a XYChart object with the appropriate size
     chart = new XYChart(width_chart, height_chart);
+    chart->setBackground((wxGetApp().background_color).ToRGB());
     //create the plot area of c with the appropriate size
     chart->setPlotArea(width_chart*0.15, height_chart*0.1,
                        width_plot_area,
@@ -9294,6 +9295,7 @@ void DrawPanel::Draw_3D(void){
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     
     chart = new XYChart(width_chart, height_chart);
+    chart->setBackground((wxGetApp().background_color).ToRGB());
     chart->setPlotArea((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
                        (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
                        width_plot_area,

@@ -9175,7 +9175,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw cannot handle loxodromes
-            route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.DrawOld(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this);
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9444,7 +9444,7 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) += delta_lambda){
             
             //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.Draw(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9493,7 +9493,7 @@ void DrawPanel::Draw_3D(void){
             (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI_2, String(""));
             
-            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.Draw(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9509,7 +9509,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        route.Draw((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
                         
                     }
                 

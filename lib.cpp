@@ -9694,7 +9694,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
+    SetColor(text_position_now);
     
     //initialize the variable neededed for slider
     //    zoom_factor_old = 1 + epsilon_double;

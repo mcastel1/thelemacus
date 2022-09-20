@@ -15873,6 +15873,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     
     
     unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
+    SetColor(unit);
     AdjustWidth(unit);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
     unit->SetValue(unit_value.value);

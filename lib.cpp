@@ -12984,14 +12984,17 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //latitude
     wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_lat);
     lat = new AngleField<PositionFrame>(this, &(position->phi), String("NS"));
     
     //longitude
     wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_lon);
     lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
     
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_label);
     label = new StringField<PositionFrame>(this, &(position->label));
     
     
@@ -13126,38 +13129,47 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
     wxStaticText* text_type = new wxStaticText(panel, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
     type = new RouteTypeField(this, &(route->type));
+    SetColor(text_type);
     
     //Z
     wxStaticText* text_Z = new wxStaticText(panel, wxID_ANY, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_Z);
     Z = new AngleField<RouteFrame>(this, &(route->Z), String(""));
     
     //l
     wxStaticText* text_l = new wxStaticText(panel, wxID_ANY, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_l);
     l = new LengthField<RouteFrame>(this, &(route->l), String("nm"));
     
     
     //start
     //start_phi
     wxStaticText* text_start_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_start_phi);
     start_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
     //start_lambda
     wxStaticText* text_start_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_start_lambda);
     start_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
     
     //GP (ground position)
     //GP_phi
     wxStaticText* text_GP_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_GP_phi);
     GP_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
     //GP_lambda
     wxStaticText* text_GP_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_GP_lambda);
     GP_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
-    
+             
     //omega
     wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_omega);
     omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
     
     //label
     wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_label);
     label = new StringField<RouteFrame>(this, &(route->label));
     
     

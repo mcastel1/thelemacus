@@ -1388,6 +1388,18 @@ public:
     
 };
 
+//my own derived class of wxStaticText
+class StaticText : public wxStaticText{
+  
+public:
+    
+     
+    StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&);
+        
+};
+
+
+
 //my own derived class of wxListCtrl
 class ListControl : public wxListCtrl{
   

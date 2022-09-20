@@ -16862,6 +16862,16 @@ ListControl::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_butt
     
 }
 
+
+//construct a StaticText object from a wxStaticText object, and sets its color
+StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& pos, const wxSize& size) : wxStaticText(parent, wxID_ANY, label, pos, size, 0, wxT("")){
+    
+    SetColor(this);
+    
+}
+
+
+
 //this pushes back a column to ListControl
 void ListControl::PushBackColumn(wxString name){
     

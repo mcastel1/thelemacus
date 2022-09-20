@@ -9212,7 +9212,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, plot->phi_min, plot->phi_max, String("NS"));
+        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((plot->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, String("NS"));
         
     }
     

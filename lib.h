@@ -1701,7 +1701,7 @@ public:
     wxTextCtrl *year;
     wxComboBox *month, *day;
     //texts
-    wxStaticText* text_hyphen_1, *text_hyphen_2;
+    StaticText* text_hyphen_1, *text_hyphen_2;
     wxBoxSizer *sizer_h, *sizer_v;
     //this points to a Date object, which contains the date written in the GUI fields of this
     Date* date;
@@ -1732,7 +1732,7 @@ public:
     //second text control
     wxTextCtrl *second;
     //texts
-    wxStaticText* text_colon_1, *text_colon_2;
+    StaticText* text_colon_1, *text_colon_2;
     wxBoxSizer *sizer_h, *sizer_v;
     //this points to a Date object, which contains the date written in the GUI fields of this
     Chrono* chrono;
@@ -2100,7 +2100,7 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;
-    wxStaticText *text_position_now, *text_slider;
+    StaticText *text_position_now, *text_slider;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;

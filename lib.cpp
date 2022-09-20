@@ -9627,7 +9627,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     stringstream s;
     String new_prefix, default_projection, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
-    wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
+    StaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
     
     parent = parent_input;
@@ -9691,8 +9691,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_buttons = new wxGridSizer(3, 3, 0, 0);
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_position_now);
+    text_position_now = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //initialize the variable neededed for slider
     //    zoom_factor_old = 1 + epsilon_double;
@@ -9708,7 +9707,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //text field showing the current value of the zoom slider
     s.str("");
     s << "1:" << (zoom_factor.value);
-    text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize);
     
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -9740,11 +9739,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     slider->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
     slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
     
-    empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    empty_text_1 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_2 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_3 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_4 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_5 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     
     
@@ -12710,23 +12709,19 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     }
     
     
-    wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_combo_body);
+    StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize);
     body = new BodyField(this, &(sight->body), catalog);
     
-    wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_limb);
+    StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
     limb = new LimbField(this, &(sight->limb));
     (limb->name)->Enable(false);
     
     //sextant altitude
-    wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_H_s);
+    StaticText* text_H_s = new StaticText(panel, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize);
     H_s = new AngleField<SightFrame>(this, &(sight->H_s), String("+-"));
     
     //index error
-    wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_index_error);
+    StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize);
     //If sight_in = NULL, read index error from init file
     if(sight_in == NULL){
         (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
@@ -12736,13 +12731,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     index_error->set();
     
     //artificial horizon
-    wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_artificial_horizon_check);
+    StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField< LengthField<SightFrame> >(this, &(sight->artificial_horizon), NULL, false);
     
     //height of eye
-    wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_height_of_eye);
+    StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize);
     height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye), String("m"));
     if(sight_in == NULL){
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
@@ -12761,13 +12754,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         (sight->time).date.set_current(prefix);
         (sight->time).chrono.set_current((wxGetApp()).time_zone, prefix);
     }
-    wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_date);
+    StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
     
     //master-clock chrono
-    wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     
     //I initialize the GUI filed master_clock_chrono with the one written in sight_in.
@@ -12776,13 +12768,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //    }
     
     //check/uncheck stopwatch
-    wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_stopwatch_check);
+    StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
     stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
     
     //stopwatch reading
-    wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_stopwatch_reading);
+    StaticText* text_stopwatch_reading = new StaticText(panel, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize);
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
@@ -12793,14 +12783,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (stopwatch_check->checkbox)->SetValue(false);
     stopwatch_reading->Enable(false);
     
-    wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_TAI_minus_UTC);
+    StaticText* text_TAI_minus_UTC = new StaticText(panel,wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize);
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
     //label
-    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_label);
+    StaticText* text_label = new StaticText(panel,wxT("Label"), wxDefaultPosition, wxDefaultSize);
     label = new StringField<SightFrame>(this, &(sight->label));
     
     
@@ -12880,7 +12868,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     sizer_box_time->Add(sizer_grid_time);
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
-    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Master-clock UTC date and hour of sight"
+    //sets common_width to the width of the largest entry in the left column, in this case the StaticText containing "Master-clock UTC date and hour of sight"
     common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight   ")).GetWidth();
     text_combo_body->SetMinSize(wxSize(common_width,-1));
     text_date->SetMinSize(wxSize(common_width,-1));
@@ -12981,18 +12969,15 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     
     //latitude
-    wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_lat);
+    StaticText* text_lat = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
     lat = new AngleField<PositionFrame>(this, &(position->phi), String("NS"));
     
     //longitude
-    wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_lon);
+    StaticText* text_lon = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
     lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
     
     //label
-    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_label);
+    StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
     label = new StringField<PositionFrame>(this, &(position->label));
     
     
@@ -13031,7 +13016,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     sizer_box_measurement->Add(sizer_grid_measurement);
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
-    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
+    //sets common_width to the width of the largest entry in the left column, in this case the StaticText containing "Longitude"
     common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
     text_lat->SetMinSize(wxSize(common_width,-1));
     text_lon->SetMinSize(wxSize(common_width,-1));
@@ -13125,49 +13110,40 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
-    wxStaticText* text_type = new wxStaticText(panel, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize);
     type = new RouteTypeField(this, &(route->type));
-    SetColor(text_type);
     
     //Z
-    wxStaticText* text_Z = new wxStaticText(panel, wxID_ANY, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_Z);
+    StaticText* text_Z = new StaticText(panel, wxT("Z"), wxDefaultPosition, wxDefaultSize);
     Z = new AngleField<RouteFrame>(this, &(route->Z), String(""));
     
     //l
-    wxStaticText* text_l = new wxStaticText(panel, wxID_ANY, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_l);
+    StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize);
     l = new LengthField<RouteFrame>(this, &(route->l), String("nm"));
     
     
     //start
     //start_phi
-    wxStaticText* text_start_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_start_phi);
+    StaticText* text_start_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
     start_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
     //start_lambda
-    wxStaticText* text_start_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_start_lambda);
+    StaticText* text_start_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
     start_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
     
     //GP (ground position)
     //GP_phi
-    wxStaticText* text_GP_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_GP_phi);
+    StaticText* text_GP_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
     GP_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
     //GP_lambda
-    wxStaticText* text_GP_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_GP_lambda);
+    StaticText* text_GP_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
     GP_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
              
     //omega
-    wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_omega);
+    StaticText* text_omega = new StaticText(panel, wxT("Omega"), wxDefaultPosition, wxDefaultSize);
     omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
     
     //label
-    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_label);
+    StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
     label = new StringField<RouteFrame>(this, &(route->label));
     
     
@@ -13507,8 +13483,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
     
-    wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text);
+    StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
     
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -13562,7 +13537,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
-    wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
     
     //buttons
     button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -16212,8 +16187,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     year->Bind(wxEVT_KEY_UP, &DateField::OnEditYear<wxKeyEvent>, this);
     
     
-    text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
-    SetColor(text_hyphen_1);
+    text_hyphen_1 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize);
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     SetColor(month);
     AdjustWidth(month);
@@ -16224,8 +16198,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     month->Bind(wxEVT_COMBOBOX, &DateField::OnEditMonth<wxCommandEvent>, this);
     month->Bind(wxEVT_KEY_UP, &DateField::OnEditMonth<wxKeyEvent>, this);
     
-    text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
-    SetColor(text_hyphen_2);
+    text_hyphen_2 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
     SetColor(day);
@@ -16287,7 +16260,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditHour<wxCommandEvent>, this);
     hour->Bind(wxEVT_KEY_UP, &ChronoField::OnEditHour<wxKeyEvent>, this);
     
-    text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
+    text_colon_1 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
     SetColor(minute);
@@ -16300,8 +16273,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     minute->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditMinute<wxCommandEvent>, this);
     minute->Bind(wxEVT_KEY_UP, &ChronoField::OnEditMinute<wxKeyEvent>, this);
     
-    text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
-    SetColor(text_colon_2);
+    text_colon_2 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));

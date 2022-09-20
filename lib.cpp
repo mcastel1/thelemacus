@@ -8431,10 +8431,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
-    text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_position_start);
-    text_position_end = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_position_end);
+    text_position_start = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
+    text_position_end = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
     //

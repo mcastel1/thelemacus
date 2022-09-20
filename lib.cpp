@@ -8432,8 +8432,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_position_start);
     text_position_end = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
+    SetColor(text_position_end);
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
     //
@@ -15793,6 +15794,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     
     text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    SetColor(text_deg);
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
@@ -15805,7 +15807,8 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     
     text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
+    SetColor(text_min);
+
     //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if((format == String("NS")) || (format == String("EW"))){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
@@ -16215,7 +16218,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     
     text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
-    
+    SetColor(text_hyphen_1);
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
     SetColor(month);
     AdjustWidth(month);
@@ -16227,7 +16230,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     month->Bind(wxEVT_KEY_UP, &DateField::OnEditMonth<wxKeyEvent>, this);
     
     text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
-    
+    SetColor(text_hyphen_2);
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
     SetColor(day);
@@ -16303,6 +16306,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     minute->Bind(wxEVT_KEY_UP, &ChronoField::OnEditMinute<wxKeyEvent>, this);
     
     text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
+    SetColor(text_colon_2);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));

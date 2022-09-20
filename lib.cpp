@@ -8603,7 +8603,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
     
     wxPoint p;
-    vector<wxStaticText*>* labels;
+    vector<StaticText*>* labels;
     
     if(/* convert temp to draw_panel coordinates p*/(this->*GeoToDrawPanel)(q, &p)){
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -8693,8 +8693,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         //        dc.DrawRotatedText(wx_string, p, 0);
         
         (*labels).resize(((*labels).size())+1);
-        ((*labels).back()) = new wxStaticText(this, wxID_ANY, wx_string, p, wxDefaultSize, 0, wxT(""));
-        SetColor((*labels).back());
+        ((*labels).back()) = new StaticText(this, wx_string, p, wxDefaultSize);
         
         first_label = false;
         

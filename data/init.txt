@@ -63,9 +63,9 @@ color horizon = (0,191,255)
 default height of eye = 7 ft
 #the exponent which sets the relation between zoom factor and value of slider
 exponent zoom = 2.0
-maximal zoom factor = 100000
+maximal zoom factor = 10000
 data precision = 32
-display precision = 2
+display precision = 3
 #the time zone where the computer on which the app runs is located, it is a signed integer corresponding to UTC+ ... 
 time zone = +2
 relative displacement = 0.1
@@ -85,4 +85,4 @@ night background color = (40,40,43)
 #the threshold hour between night and day
 dawn = 06:10:27
 #the threshold hour between day and night
-dusk = 10:35:41
+dusk = 06:35:41

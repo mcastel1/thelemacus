@@ -15790,8 +15790,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcDegree<wxKeyEvent>, this);
     
     
-    text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_deg);
+    text_deg = new StaticText((parent_frame->panel), wxT("° "), wxDefaultPosition, wxDefaultSize);
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
@@ -15803,8 +15802,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcMinute<wxKeyEvent>, this);
     
     
-    text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    SetColor(text_min);
+    text_min = new StaticText((parent_frame->panel), wxT("' "), wxDefaultPosition, wxDefaultSize);
 
     //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if((format == String("NS")) || (format == String("EW"))){

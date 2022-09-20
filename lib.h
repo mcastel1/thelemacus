@@ -1617,7 +1617,7 @@ public:
     wxComboBox*sign, * deg;
     wxTextCtrl *min;
     //texts
-    wxStaticText* text_deg, *text_min;
+    StaticText* text_deg, *text_min;
     wxBoxSizer *sizer_h, *sizer_v;
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min

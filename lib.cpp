@@ -1608,14 +1608,6 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
         
         if(((p[i]).size()) > 1){
             
-            /*change this so you don't use chart
-            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), color, ""));
-            (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (int)(x[i]).size()));
-            if(width != -1){
-                (draw_panel->spline_layer)->setLineWidth(width);
-            }
-            */
-            
             (draw_panel->memory_dc).DrawSpline((int)((p[i]).size()), (p[i]).data());
             
         }
@@ -1685,19 +1677,8 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                     
                 }
                 
-                //draw the Route in draw_panel
-                /*change this so you don't use chart
-                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), color, ""));
-                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-                if(width != -1){
-                    (draw_panel->spline_layer)->setLineWidth(width);
-                }
-                */
-                
                 (draw_panel->memory_dc).DrawSpline((int)(p.size()), p.data());
 
-                
-                
                 //free up memory
                 p.clear();
                 
@@ -9021,17 +9002,6 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.SelectObject(*bitmap_image);
 
     
-    //draw coastlines
-    
-    // Create a XYChart object with the appropriate size
-//    chart = new XYChart(width_chart, height_chart);
-//    chart->setBackground((wxGetApp().background_color).ToRGB());
-    //create the plot area of c with the appropriate size
-//    chart->setPlotArea(width_chart*0.15, height_chart*0.1,
-//                       width_plot_area,
-//                       height_plot_area,
-//                       (wxGetApp().background_color).ToRGB(), -1, 0xc0c0c0, 0xc0c0c0, -1);
-    
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint(width_chart*0.15, height_chart*0.1);
     
@@ -9242,29 +9212,6 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
-    //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    //    (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
-    //    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
-    
-    // Set the axes line width to 3 pixels
-    //    chart->xAxis()->setWidth(2);
-    //    chart->yAxis()->setWidth(2);
-    
-    // Add a scatter chart layer, using 13 pixel diamonds as symbols
-    //    chart->addScatterLayer(
-    //                           DoubleArray((parent->x).data(), (int)((parent->x).size())),
-    //                           DoubleArray((parent->y).data(), (int)((parent->y).size())),
-    //                           "",
-    //                           Chart::CircleSymbol,
-    //                           (wxGetApp().foreground_color).ToRGB(),
-    //                           (wxGetApp().foreground_color).ToRGB()
-    //                           );
-    
-    //    chart->makeChart(path_file_chart);
-    //    mem_block = (chart->makeChart(Chart::BMP));
-    //    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
-    //    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
-    
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
     for(i=0; i<(parent->x).size(); i++){
@@ -9328,35 +9275,11 @@ void DrawPanel::Draw_3D(void){
     memory_dc.SelectObject(*bitmap_image);
 
     
-//    chart = new XYChart(width_chart, height_chart);
-//    chart->setBackground((wxGetApp().background_color).ToRGB());
-//    chart->setPlotArea((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
-//                       (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
-//                       width_plot_area,
-//                       height_plot_area,
-//                       (wxGetApp().background_color).ToRGB(), Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
-    
     position_plot_area = wxPoint((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
                                  (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0));
     
     
-    //set the interval of the x axis, and disables the xticks with the last NoValue argument
-//    (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
-//    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
-    
-    // Set the axes line width to 3 pixels
-//    (chart->xAxis())->setColors(Chart::Transparent);
-//    (chart->yAxis())->setColors(Chart::Transparent);
-    
-//    chart->addScatterLayer(
-//                           DoubleArray((parent->x_3d).data(), (int)(parent->x_3d).size()),
-//                           DoubleArray((parent->y_3d).data(), (int)(parent->y_3d).size()),
-//                           "",
-//                           Chart::CircleSymbol,
-//                           (wxGetApp().foreground_color).ToRGB(),
-//                           (wxGetApp().foreground_color).ToRGB()
-//                           );
-    
+        
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks = (unsigned int)((plot->n_intervals_ticks_preferred).value);
@@ -9562,22 +9485,6 @@ void DrawPanel::Draw_3D(void){
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
     
-    //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
-    /*change this so you don't use chart
-    (chart->getDrawArea())->circle(
-                                   (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
-                                   (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
-                                   (temp.y)/y_max * ((double)width_plot_area)/2.0,
-                                   (temp.y)/y_max * ((double)width_plot_area)/2.0,
-                                   (parent->color_horizon).ToRGB(),
-                                   Chart::Transparent
-                                   );
-    */
-     
-    
-//    mem_block = (chart->makeChart(Chart::BMP));
-//    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
-//    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc

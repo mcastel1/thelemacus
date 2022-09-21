@@ -9275,6 +9275,9 @@ void DrawPanel::Draw_Mercator(void){
     
     TabulateRoutes();
     
+    (parent->x).clear();
+    (parent->y).clear();
+
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();
@@ -9319,6 +9322,11 @@ void DrawPanel::Draw_3D(void){
     
     width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
+    
+    //allocate bitmap_image
+    bitmap_image = new wxBitmap(width_chart, height_chart);
+    memory_dc.SelectObject(*bitmap_image);
+
     
 //    chart = new XYChart(width_chart, height_chart);
 //    chart->setBackground((wxGetApp().background_color).ToRGB());
@@ -9570,6 +9578,14 @@ void DrawPanel::Draw_3D(void){
 //    mem_block = (chart->makeChart(Chart::BMP));
 //    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
 //    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
+    
+    //draw coastlines
+    //draw the coastline points into bitmap_image through memory_dc
+    for(i=0; i<(parent->x).size(); i++){
+        ProjectionToDrawPanel_3D(Projection((parent->x)[i], (parent->y)[i]), &p);
+        memory_dc.DrawPoint(p);
+    }
+    
     
     TabulateRoutes();
     

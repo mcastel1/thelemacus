@@ -8523,6 +8523,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
     //draw coastlines
     //    dc.DrawBitmap(*bitmap_image, 0, 0);
+    dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+
     for(i=0; i<(parent->x).size(); i++){
         
         ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);

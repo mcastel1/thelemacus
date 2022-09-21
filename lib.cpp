@@ -9581,8 +9581,8 @@ void DrawPanel::Draw_3D(void){
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
-    for(i=0; i<(parent->x).size(); i++){
-        ProjectionToDrawPanel_3D(Projection((parent->x)[i], (parent->y)[i]), &p);
+    for(i=0; i<(parent->x_3d).size(); i++){
+        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
         memory_dc.DrawPoint(p);
     }
     

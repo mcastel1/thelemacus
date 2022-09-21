@@ -102,6 +102,17 @@ bool MyApp::OnInit(){
     int j = my_color.ToRGB();
     */
     
+    /*
+    wxBitmap *michele;
+    wxMemoryDC dc;
+    
+    michele = new wxBitmap(100, 100);
+    dc.SelectObject(*michele);
+    dc.SetPen(wxPen(*wxRED, 1));
+    dc.DrawLine(0,0,10,10);
+
+    */
+    
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

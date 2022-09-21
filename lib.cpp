@@ -9016,6 +9016,11 @@ void DrawPanel::Draw_Mercator(void){
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     tick_length = ((parent->tick_length_over_width_plot_area).value)*width_plot_area;
     
+    //allocate bitmap_image
+    bitmap_image = new wxBitmap(width_chart, height_chart);
+    memory_dc.SelectObject(*bitmap_image);
+
+    
     //draw coastlines
     
     // Create a XYChart object with the appropriate size
@@ -9261,12 +9266,6 @@ void DrawPanel::Draw_Mercator(void){
     //    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
     //draw coastlines
-    
-    //allocate bitmap_image
-//    if(bitmap_image != NULL){delete [] bitmap_image;}
-    bitmap_image = new wxBitmap(width_chart, height_chart);
-    memory_dc.SelectObject(*bitmap_image);
-
     //draw the coastline points into bitmap_image through memory_dc
     for(i=0; i<(parent->x).size(); i++){
         ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);

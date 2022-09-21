@@ -8527,10 +8527,10 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
         ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
         dc.DrawPoint(p);
-
+        
     }
     
-   
+    
     
     color_id = 0;
     
@@ -9236,22 +9236,22 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-//    (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
-//    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
+    //    (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
+    //    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
     // Set the axes line width to 3 pixels
-//    chart->xAxis()->setWidth(2);
-//    chart->yAxis()->setWidth(2);
+    //    chart->xAxis()->setWidth(2);
+    //    chart->yAxis()->setWidth(2);
     
     // Add a scatter chart layer, using 13 pixel diamonds as symbols
-//    chart->addScatterLayer(
-//                           DoubleArray((parent->x).data(), (int)((parent->x).size())),
-//                           DoubleArray((parent->y).data(), (int)((parent->y).size())),
-//                           "",
-//                           Chart::CircleSymbol,
-//                           (wxGetApp().foreground_color).ToRGB(),
-//                           (wxGetApp().foreground_color).ToRGB()
-//                           );
+    //    chart->addScatterLayer(
+    //                           DoubleArray((parent->x).data(), (int)((parent->x).size())),
+    //                           DoubleArray((parent->y).data(), (int)((parent->y).size())),
+    //                           "",
+    //                           Chart::CircleSymbol,
+    //                           (wxGetApp().foreground_color).ToRGB(),
+    //                           (wxGetApp().foreground_color).ToRGB()
+    //                           );
     
     //    chart->makeChart(path_file_chart);
     //    mem_block = (chart->makeChart(Chart::BMP));

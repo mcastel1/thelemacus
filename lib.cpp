@@ -7444,7 +7444,7 @@ string Angle::deg_to_string(String mode, unsigned int precision){
     
     stringstream output;
     
-//    output.precision(precision);
+    //    output.precision(precision);
     
     normalize();
     
@@ -8194,53 +8194,53 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
-    /*un-comment
+    //un-comment
     
-     x.clear();
-     y.clear();
-     for(i=i_min; i<i_max; i++){
-     
-     //        cout << "\n i = " << i;
-     
-     for(j=j_min; j<j_max; j++){
-     
-     //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-     //            flush(cout);
-     
-     //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-     n = ((unsigned int)(((parent->data_x)[i - floor_min_lat][j % 360]).size()));
-     
-     every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
-     if(every == 0){every = 1;}
-     
-     //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-     for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
-     
-     (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
-     (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
-     
-     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-     //                if((l % every) == 0){
-     
-     if((draw_panel->check(temp))){
-     
-     if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
-     (temp.x) += 2.0*M_PI;
-     }
-     x.push_back((temp.x));
-     y.push_back((temp.y));
-     
-     }
-     
-     //                }
-     
-     
-     }
-     
-     }
-     
-     }
-     un-comment*/
+    x.clear();
+    y.clear();
+    for(i=i_min; i<i_max; i++){
+        
+        //        cout << "\n i = " << i;
+        
+        for(j=j_min; j<j_max; j++){
+            
+            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+            //            flush(cout);
+            
+            //count how many datapoints are in data_x[i][j] and in data_y[i][j]
+            n = ((unsigned int)(((parent->data_x)[i - floor_min_lat][j % 360]).size()));
+            
+            every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+            if(every == 0){every = 1;}
+            
+            //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+            for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
+                
+                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
+                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+                
+                //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                //                if((l % every) == 0){
+                
+                if((draw_panel->check(temp))){
+                    
+                    if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
+                        (temp.x) += 2.0*M_PI;
+                    }
+                    x.push_back((temp.x));
+                    y.push_back((temp.y));
+                    
+                }
+                
+                //                }
+                
+                
+            }
+            
+        }
+        
+    }
+    //un-comment
     
     
 }
@@ -8286,79 +8286,79 @@ void ListFrame::GetAllCoastLineData(void){
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     
-    /*un-comment
+    //un-comment
     
-     i=0;
-     while(!(file_coastline_data_blocked.value.eof())){
-     
-     
-     data_x.resize(i+1);
-     data_y.resize(i+1);
-     
-     data_3d.resize(i+1);
-     
-     
-     (data_x[i]).resize(360);
-     (data_y[i]).resize(360);
-     
-     (data_3d[i]).resize(360);
-     
-     for(j=0; j<360; j++){
-     
-     // read data as a block:
-     file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
-     
-     l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
-     if(buffer != NULL){delete [] buffer;}
-     buffer = new char [l];
-     
-     (file_coastline_data_blocked.value).read(buffer, l);
-     string data(buffer, l);
-     
-     
-     
-     //count how many datapoints are in data
-     n = ((unsigned int)count(data.begin(), data.end(), ','));
-     
-     l=0;
-     pos_beg = 0;
-     pos_end = data.find(" ", pos_beg);
-     while(pos_end != (string::npos)){
-     
-     line.clear();
-     line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-     
-     replace(line.begin(), line.end(), ' ', '\n');
-     replace(line.begin(), line.end(), ',', ' ');
-     
-     ins.clear();
-     ins << line;
-     ins >> phi_temp >> lambda_temp;
-     
-     (data_x[i][j]).push_back(x_mercator(lambda_temp));
-     (data_y[i][j]).push_back(y_mercator(phi_temp));
-     
-     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
-     (p_temp.phi).set(String(""), k*phi_temp, String(""));
-     
-     (data_3d[i][j]).push_back(p_temp);
-     
-     pos_beg = pos_end+1;
-     pos_end = data.find(" ", pos_beg);
-     
-     l++;
-     
-     };
-     
-     data.clear();
-     
-     }
-     
-     i++;
-     
-     }
-     
-     un-comment*/
+    i=0;
+    while(!(file_coastline_data_blocked.value.eof())){
+        
+        
+        data_x.resize(i+1);
+        data_y.resize(i+1);
+        
+        data_3d.resize(i+1);
+        
+        
+        (data_x[i]).resize(360);
+        (data_y[i]).resize(360);
+        
+        (data_3d[i]).resize(360);
+        
+        for(j=0; j<360; j++){
+            
+            // read data as a block:
+            file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
+            
+            l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
+            if(buffer != NULL){delete [] buffer;}
+            buffer = new char [l];
+            
+            (file_coastline_data_blocked.value).read(buffer, l);
+            string data(buffer, l);
+            
+            
+            
+            //count how many datapoints are in data
+            n = ((unsigned int)count(data.begin(), data.end(), ','));
+            
+            l=0;
+            pos_beg = 0;
+            pos_end = data.find(" ", pos_beg);
+            while(pos_end != (string::npos)){
+                
+                line.clear();
+                line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                
+                replace(line.begin(), line.end(), ' ', '\n');
+                replace(line.begin(), line.end(), ',', ' ');
+                
+                ins.clear();
+                ins << line;
+                ins >> phi_temp >> lambda_temp;
+                
+                (data_x[i][j]).push_back(x_mercator(lambda_temp));
+                (data_y[i][j]).push_back(y_mercator(phi_temp));
+                
+                (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
+                (p_temp.phi).set(String(""), k*phi_temp, String(""));
+                
+                (data_3d[i][j]).push_back(p_temp);
+                
+                pos_beg = pos_end+1;
+                pos_end = data.find(" ", pos_beg);
+                
+                l++;
+                
+            };
+            
+            data.clear();
+            
+        }
+        
+        i++;
+        
+    }
+    
+    //un-comment
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();
@@ -9610,7 +9610,7 @@ Color::Color(unsigned char red, unsigned char green, unsigned char blue, unsigne
 int Color::ToRGB(void){
     
     int i, output;
-        
+    
     //convert this to BRG format which the wxWidgets function GetRGB() and then shift its bits so as to convert it to RGB format
     for(output = 0, i=0; i<3; i++){
         
@@ -9619,7 +9619,7 @@ int Color::ToRGB(void){
     }
     
     return output;
-
+    
 }
 
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
@@ -13137,7 +13137,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //GP_lambda
     StaticText* text_GP_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
     GP_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
-             
+    
     //omega
     StaticText* text_omega = new StaticText(panel, wxT("Omega"), wxDefaultPosition, wxDefaultSize);
     omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
@@ -15778,7 +15778,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     
     text_min = new StaticText((parent_frame->panel), wxT("' "), wxDefaultPosition, wxDefaultSize);
-
+    
     //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if((format == String("NS")) || (format == String("EW"))){
         sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);

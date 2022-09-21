@@ -9259,7 +9259,7 @@ void DrawPanel::Draw_Mercator(void){
     //draw coastlines
     
     //allocate bitmap_image
-    if(bitmap_image){delete [] bitmap_image;}
+//    if(bitmap_image != NULL){delete [] bitmap_image;}
     bitmap_image = new wxBitmap(width_chart, height_chart);
     memory_dc.SelectObject(*bitmap_image);
 

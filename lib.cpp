@@ -9236,12 +9236,12 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
-    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
+//    (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
+//    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
     // Set the axes line width to 3 pixels
-    chart->xAxis()->setWidth(2);
-    chart->yAxis()->setWidth(2);
+//    chart->xAxis()->setWidth(2);
+//    chart->yAxis()->setWidth(2);
     
     // Add a scatter chart layer, using 13 pixel diamonds as symbols
 //    chart->addScatterLayer(
@@ -9253,28 +9253,13 @@ void DrawPanel::Draw_Mercator(void){
 //                           (wxGetApp().foreground_color).ToRGB()
 //                           );
     
-    wxClientDC dc(this);
-    wxPoint p;
-    for(i=0; i<(parent->x).size(); i++){
-        
-        ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
-        
-        dc.DrawPoint(p);
-        
-    }
-    
-    
-    
     //    chart->makeChart(path_file_chart);
-    mem_block = (chart->makeChart(Chart::BMP));
-    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
-    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
+    //    mem_block = (chart->makeChart(Chart::BMP));
+    //    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
+    //    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
     TabulateRoutes();
     
-    //free up resources
-    (parent->x).clear();
-    (parent->y).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();

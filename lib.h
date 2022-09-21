@@ -13,7 +13,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "chartdir.h"
+//#include "chartdir.h"
 
 
 class BodyField;
@@ -1458,7 +1458,6 @@ public:
     //this is true if the label which is being drawn is the first among the parallel/meridian labels, false otherwise
     bool first_label;
     Plot* plot;
-    MemBlock mem_block;
     wxMemoryInputStream * memory_input_stream;
     wxBitmap* bitmap_image; 
     UnsetIdling<DrawPanel>* unset_idling;
@@ -2106,7 +2105,6 @@ public:
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
-    TextBox* box;
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     //the color of the horizon circle for the 3D projection

@@ -9237,14 +9237,26 @@ void DrawPanel::Draw_Mercator(void){
     chart->yAxis()->setWidth(2);
     
     // Add a scatter chart layer, using 13 pixel diamonds as symbols
-    chart->addScatterLayer(
-                           DoubleArray((parent->x).data(), (int)((parent->x).size())),
-                           DoubleArray((parent->y).data(), (int)((parent->y).size())),
-                           "",
-                           Chart::CircleSymbol,
-                           (wxGetApp().foreground_color).ToRGB(),
-                           (wxGetApp().foreground_color).ToRGB()
-                           );
+//    chart->addScatterLayer(
+//                           DoubleArray((parent->x).data(), (int)((parent->x).size())),
+//                           DoubleArray((parent->y).data(), (int)((parent->y).size())),
+//                           "",
+//                           Chart::CircleSymbol,
+//                           (wxGetApp().foreground_color).ToRGB(),
+//                           (wxGetApp().foreground_color).ToRGB()
+//                           );
+    
+    wxClientDC dc(this);
+    wxPoint p;
+    for(i=0; i<(parent->x).size(); i++){
+        
+        ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
+        
+        dc.DrawPoint(p);
+        
+    }
+    
+    
     
     //    chart->makeChart(path_file_chart);
     mem_block = (chart->makeChart(Chart::BMP));

@@ -10814,8 +10814,10 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
         
         if(p){
             
-            (p->x) = (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area;
-            (p->y) = (position_plot_area.y) + height_plot_area - (((temp.y)-y_min)/(y_max-y_min)*height_plot_area);
+//            (p->x) = (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area;
+//            (p->y) = (position_plot_area.y) + height_plot_area - (((temp.y)-y_min)/(y_max-y_min)*height_plot_area);
+            
+            ProjectionToDrawPanel_Mercator(temp, p);
             
         }
         
@@ -10856,9 +10858,10 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     bool output;
     
     output = GeoTo3D(q, &temp);
+    ProjectionToDrawPanel_3D(temp, p);
     
-    (p->x) = ((double)(position_plot_area.x)) + (1.0+(temp.x)/x_max)*(((double)width_plot_area)/2.0);
-    (p->y) = ((double)(position_plot_area.y)) + (1.0-(temp.y)/y_max)*(((double)height_plot_area)/2.0);
+    //    (p->x) = ((double)(position_plot_area.x)) + (1.0+(temp.x)/x_max)*(((double)width_plot_area)/2.0);
+    //    (p->y) = ((double)(position_plot_area.y)) + (1.0-(temp.y)/y_max)*(((double)height_plot_area)/2.0);
     
     return output;
     

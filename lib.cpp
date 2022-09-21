@@ -1611,11 +1611,13 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
         
         if(((x[i]).size()) > 1){
             
-            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), /*0x808080*/color, ""));
+            /*change this so you don't use chart
+            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), color, ""));
             (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (int)(x[i]).size()));
             if(width != -1){
                 (draw_panel->spline_layer)->setLineWidth(width);
             }
+            */
             
         }
         
@@ -1687,11 +1689,13 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                 }
                 
                 //draw the Route in draw_panel
-                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
+                /*change this so you don't use chart
+                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), color, ""));
                 (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
                 if(width != -1){
                     (draw_panel->spline_layer)->setLineWidth(width);
                 }
+                */
                 
                 //free up memory
                 x.clear();

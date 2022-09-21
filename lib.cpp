@@ -1571,13 +1571,16 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 
 
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
-void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw_panel){
+void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* draw_panel){
     
     vector< vector<wxPoint> > p;
     wxPoint temp;
     bool end_connected;
     unsigned int i;
     
+    //sets color and width of memory_dc to the ones supported as arguments of Draw
+    (draw_panel->memory_dc).SetPen(wxPen(color, width));
+
     
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
@@ -1614,6 +1617,8 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
         
     }
     
+    //put back original parameters of memory_dc
+    (draw_panel->memory_dc).SetPen(wxPen(wxGetApp().foreground_color, 1));
     
 }
 
@@ -1632,13 +1637,16 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, Stri
 
 
 //draws the Route *this into draw_panel, with any projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
+void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_panel, String prefix){
     
     unsigned int i;
     vector<wxPoint> p;
     wxPoint temp;
     vector<Length> s;
     
+    //sets color and width of memory_dc to the ones supported as arguments of Draw
+    (draw_panel->memory_dc).SetPen(wxPen(color, width));
+
     //comoute the end values of l and writes them in s
     compute_l_ends(&s, draw_panel, prefix);
     
@@ -1688,6 +1696,9 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
         
     }
     
+    //put back original parameters of memory_dc
+    (draw_panel->memory_dc).SetPen(wxPen(wxGetApp().foreground_color, 1));
+
     
 }
 
@@ -9049,7 +9060,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-            route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9065,7 +9076,7 @@ void DrawPanel::Draw_Mercator(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
+                    route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
                     
                 }
                 
@@ -9097,7 +9108,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw cannot handle loxodromes
-            route.DrawOld(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this);
+            route.DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9116,7 +9127,7 @@ void DrawPanel::Draw_Mercator(void){
                         
                         //                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                         //here I use DrawOld because Draw cannot handle loxodromes
-                        route.DrawOld((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this);
+                        route.DrawOld((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this);
                         
                     }
                 
@@ -9127,7 +9138,7 @@ void DrawPanel::Draw_Mercator(void){
         }
     
     //bottom border of chart
-    Route(String("l"), Position(plot->phi_min, plot->lambda_min), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this);
+    Route(String("l"), Position(plot->phi_min, plot->lambda_min), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
     
     
     //draw labels on parallels
@@ -9336,7 +9347,7 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) += delta_lambda){
             
             //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            route.Draw(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
+            route.Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9354,7 +9365,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
+                    route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
                     
                 }
                 
@@ -9385,7 +9396,7 @@ void DrawPanel::Draw_3D(void){
             (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI_2, String(""));
             
-            route.Draw(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
+            route.Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9401,7 +9412,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.Draw((parent->n_points_minor_ticks).value, (wxGetApp().foreground_color).ToRGB(), -1, this, String(""));
+                        route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
                         
                     }
                 

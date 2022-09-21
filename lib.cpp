@@ -1573,9 +1573,8 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
 void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw_panel){
     
-    vector< vector<double> > x;
-    vector< vector<double> > y;
-    Projection temp;
+    vector< vector<wxPoint> > x;
+    wxPoint temp;
     bool end_connected;
     unsigned int i;
     
@@ -1585,18 +1584,16 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
         
         compute_end(Length((l.value)*((double)i)/((double)(n_points-1))), String(""));
         
-        if((draw_panel->*(draw_panel->GeoToProjection))(end, &temp)){
+        if((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp)){
             
             if(end_connected){
                 
                 x.resize(x.size() + 1);
-                y.resize(y.size() + 1);
                 end_connected = false;
                 
             }
             
-            (x[x.size()-1]).push_back(temp.x);
-            (y[y.size()-1]).push_back(temp.y);
+            (x[x.size()-1]).push_back(temp);
             
         }else{
             
@@ -1618,6 +1615,8 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
                 (draw_panel->spline_layer)->setLineWidth(width);
             }
             */
+            
+            (draw_panel->memory_dc).DrawSpline((int)((x[i]).size()), (x[i]).data());
             
         }
         

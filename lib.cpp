@@ -9126,6 +9126,9 @@ void DrawPanel::Draw_Mercator(void){
             
         }
     
+    //bottom border of chart
+    Route(String("l"), Position(plot->phi_min, plot->lambda_min), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), (wxGetApp().foreground_color).ToRGB(), -1, this);
+    
     
     //draw labels on parallels
     for(first_label = true,

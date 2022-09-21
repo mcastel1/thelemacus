@@ -10793,6 +10793,15 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
     
 }
 
+//this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
+void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint *p){
+    
+    (p->x) = (position_plot_area.x) + ((q.x)-x_min)/x_span()*width_plot_area;
+    (p->y) = (position_plot_area.y) + height_plot_area - (((q.y)-y_min)/(y_max-y_min)*height_plot_area);
+    
+}
+
+
 //this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel. It returs true if q lies on the visible side of the Earth, and false otherwise.
 bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     

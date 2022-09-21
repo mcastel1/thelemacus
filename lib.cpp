@@ -8433,6 +8433,11 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     text_position_start = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
     text_position_end = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
+
+    //sets the pen, and the color, for memory_dc, which will be used in the following 
+    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+
+    
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
     //
@@ -8934,7 +8939,7 @@ void DrawPanel::Draw_Mercator(void){
     Length r, s;
     Position q;
     String prefix, new_prefix;
-    
+    wxPoint p;
     
     
     //append \t to prefix
@@ -9252,17 +9257,16 @@ void DrawPanel::Draw_Mercator(void){
     //    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
     //draw coastlines
-    wxMemoryDC memory_dc;
-    wxPoint p;
+    
+    //allocate bitmap_image
+    if(bitmap_image){delete [] bitmap_image;}
     bitmap_image = new wxBitmap(width_chart, height_chart);
     memory_dc.SelectObject(*bitmap_image);
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
 
+    //draw the coastline points into bitmap_image through memory_dc
     for(i=0; i<(parent->x).size(); i++){
-        
         ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
         memory_dc.DrawPoint(p);
-        
     }
     
     

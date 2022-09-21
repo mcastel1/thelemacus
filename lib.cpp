@@ -8494,13 +8494,13 @@ void DrawPanel::PaintNow(){
     
     
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
-    this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
+    this->SetMinSize(wxSize(width_chart, height_chart));
     parent->SetMinSize(wxSize(
-                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
-                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
+                              width_chart + ((parent->slider)->GetSize().GetWidth()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
+                              height_chart + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
                               ));
     
-    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)));
+    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, height_chart + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)));
     
     //    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);

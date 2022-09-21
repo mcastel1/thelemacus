@@ -8522,16 +8522,16 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
     
     //draw coastlines
-    //    dc.DrawBitmap(*bitmap_image, 0, 0);
-    dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-
-    for(i=0; i<(parent->x).size(); i++){
-        
-        ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
-        dc.DrawPoint(p);
-        
-    }
-    
+    dc.DrawBitmap(*bitmap_image, 0, 0);
+//    dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+//
+//    for(i=0; i<(parent->x).size(); i++){
+//
+//        ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
+//        dc.DrawPoint(p);
+//
+//    }
+//
     
     
     color_id = 0;
@@ -9259,6 +9259,21 @@ void DrawPanel::Draw_Mercator(void){
     //    mem_block = (chart->makeChart(Chart::BMP));
     //    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
     //    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
+    
+    //draw coastlines
+    wxMemoryDC memory_dc;
+    wxPoint p;
+    bitmap_image = new wxBitmap(width_chart, height_chart);
+    memory_dc.SelectObject(*bitmap_image);
+    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+
+    for(i=0; i<(parent->x).size(); i++){
+        
+        ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
+        memory_dc.DrawPoint(p);
+        
+    }
+    
     
     TabulateRoutes();
     

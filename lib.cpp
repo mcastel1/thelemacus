@@ -9421,11 +9421,13 @@ void DrawPanel::Draw_3D(void){
     gsl_vector_set(rp, 2, sin((q.phi)));
     
     //draw horizon circle
+    /*this does not work 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
     //set the wxPen color for the horizon
     memory_dc.SetPen(wxPen(parent->color_horizon, 1));
+    memory_dc.SetBackground(wxGetApp().background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     memory_dc.DrawCircle(
                          (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
@@ -9434,7 +9436,7 @@ void DrawPanel::Draw_3D(void){
                          );
     //set back the wxPen color
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-    
+    */
     
     
     //draw coastlines

@@ -1573,7 +1573,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
 void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw_panel){
     
-    vector< vector<wxPoint> > x;
+    vector< vector<wxPoint> > p;
     wxPoint temp;
     bool end_connected;
     unsigned int i;
@@ -1588,12 +1588,12 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
             
             if(end_connected){
                 
-                x.resize(x.size() + 1);
+                p.resize(p.size() + 1);
                 end_connected = false;
                 
             }
             
-            (x[x.size()-1]).push_back(temp);
+            (p[p.size()-1]).push_back(temp);
             
         }else{
             
@@ -1604,9 +1604,9 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
     }
     
     //run all the connected components of the tabulated Route and draw each of them in draw_panel
-    for(i=0; i<x.size(); i++){
+    for(i=0; i<p.size(); i++){
         
-        if(((x[i]).size()) > 1){
+        if(((p[i]).size()) > 1){
             
             /*change this so you don't use chart
             (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), color, ""));
@@ -1616,7 +1616,7 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
             }
             */
             
-            (draw_panel->memory_dc).DrawSpline((int)((x[i]).size()), (x[i]).data());
+            (draw_panel->memory_dc).DrawSpline((int)((p[i]).size()), (p[i]).data());
             
         }
         

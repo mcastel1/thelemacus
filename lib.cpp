@@ -9320,33 +9320,34 @@ void DrawPanel::Draw_3D(void){
     width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     
-    chart = new XYChart(width_chart, height_chart);
-    chart->setBackground((wxGetApp().background_color).ToRGB());
-    chart->setPlotArea((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
-                       (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
-                       width_plot_area,
-                       height_plot_area,
-                       (wxGetApp().background_color).ToRGB(), Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
+//    chart = new XYChart(width_chart, height_chart);
+//    chart->setBackground((wxGetApp().background_color).ToRGB());
+//    chart->setPlotArea((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
+//                       (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
+//                       width_plot_area,
+//                       height_plot_area,
+//                       (wxGetApp().background_color).ToRGB(), Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
     
-    position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
+    position_plot_area = wxPoint((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
+                                 (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0));
     
     
     //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
-    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
+//    (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
+//    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
     
     // Set the axes line width to 3 pixels
-    (chart->xAxis())->setColors(Chart::Transparent);
-    (chart->yAxis())->setColors(Chart::Transparent);
+//    (chart->xAxis())->setColors(Chart::Transparent);
+//    (chart->yAxis())->setColors(Chart::Transparent);
     
-    chart->addScatterLayer(
-                           DoubleArray((parent->x_3d).data(), (int)(parent->x_3d).size()),
-                           DoubleArray((parent->y_3d).data(), (int)(parent->y_3d).size()),
-                           "",
-                           Chart::CircleSymbol,
-                           (wxGetApp().foreground_color).ToRGB(),
-                           (wxGetApp().foreground_color).ToRGB()
-                           );
+//    chart->addScatterLayer(
+//                           DoubleArray((parent->x_3d).data(), (int)(parent->x_3d).size()),
+//                           DoubleArray((parent->y_3d).data(), (int)(parent->y_3d).size()),
+//                           "",
+//                           Chart::CircleSymbol,
+//                           (wxGetApp().foreground_color).ToRGB(),
+//                           (wxGetApp().foreground_color).ToRGB()
+//                           );
     
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
@@ -9554,6 +9555,7 @@ void DrawPanel::Draw_3D(void){
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
     
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
+    /*change this so you don't use chart
     (chart->getDrawArea())->circle(
                                    (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
                                    (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
@@ -9562,11 +9564,12 @@ void DrawPanel::Draw_3D(void){
                                    (parent->color_horizon).ToRGB(),
                                    Chart::Transparent
                                    );
+    */
+     
     
-    
-    mem_block = (chart->makeChart(Chart::BMP));
-    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
-    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
+//    mem_block = (chart->makeChart(Chart::BMP));
+//    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
+//    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
     TabulateRoutes();
     
@@ -15302,7 +15305,6 @@ template <class T> void RouteTypeField::get(T &event){
 
 void SightFrame::OnPressReduce(wxCommandEvent& event){
     
-    unsigned int i;
     stringstream s;
     
     //writes the values of the GUI fields in the non-GUI fields

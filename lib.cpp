@@ -11329,8 +11329,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
                 //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
                 
-                //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
-                delete chart;
+                //sets the new values of lambda_min, lambda_max, phi_min and phi_max
+                //                delete chart;
                 //I convert all the angles to the format between -pi and pi, so I can sort them numerically
                 (((parent->parent)->p_start).phi).normalize_pm_pi();
                 (((parent->parent)->p_start).lambda).normalize_pm_pi();

@@ -8522,7 +8522,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
     
     //draw coastlines
-    dc.DrawBitmap(*bitmap_image, 0, 0);
+//    dc.DrawBitmap(*bitmap_image, 0, 0);
     
     
     color_id = 0;

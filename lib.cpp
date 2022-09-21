@@ -9015,16 +9015,16 @@ void DrawPanel::Draw_Mercator(void){
     //draw coastlines
     
     // Create a XYChart object with the appropriate size
-    chart = new XYChart(width_chart, height_chart);
-    chart->setBackground((wxGetApp().background_color).ToRGB());
+//    chart = new XYChart(width_chart, height_chart);
+//    chart->setBackground((wxGetApp().background_color).ToRGB());
     //create the plot area of c with the appropriate size
-    chart->setPlotArea(width_chart*0.15, height_chart*0.1,
-                       width_plot_area,
-                       height_plot_area,
-                       (wxGetApp().background_color).ToRGB(), -1, 0xc0c0c0, 0xc0c0c0, -1);
+//    chart->setPlotArea(width_chart*0.15, height_chart*0.1,
+//                       width_plot_area,
+//                       height_plot_area,
+//                       (wxGetApp().background_color).ToRGB(), -1, 0xc0c0c0, 0xc0c0c0, -1);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
+    position_plot_area = wxPoint(width_chart*0.15, height_chart*0.1);
     
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);

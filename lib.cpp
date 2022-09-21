@@ -1643,8 +1643,8 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, Stri
 void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
     
     unsigned int i;
-    vector<double> x, y;
-    Projection temp;
+    vector<wxPoint> p;
+    wxPoint temp;
     vector<Length> s;
     
     //comoute the end values of l and writes them in s
@@ -1670,18 +1670,16 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
             for(j=0; j<(s.size())-1; j++){
                 
                 //clear up vectors where I am about to write
-                x.clear();
-                y.clear();
+                p.clear();
                 
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
                     compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
                     
-                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                    if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp))){
                         
-                        x.push_back(temp.x);
-                        y.push_back(temp.y);
+                        p.push_back(temp);
                         
                     }
                     
@@ -1696,9 +1694,12 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
                 }
                 */
                 
+                (draw_panel->memory_dc).DrawSpline((int)(p.size()), p.data());
+
+                
+                
                 //free up memory
-                x.clear();
-                y.clear();
+                p.clear();
                 
             }
             

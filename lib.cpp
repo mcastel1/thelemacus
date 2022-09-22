@@ -13665,8 +13665,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //image for button_transport_sight
     wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
-    wxImage my_image_tranposrt = my_bitmap_transport_sight.ConvertToImage();
-    my_image_tranposrt.Rescale(20,20);
+    wxImage my_image_transport = my_bitmap_transport_sight.ConvertToImage();
+    my_image_transport.Rescale(20,20);
     
     //button to modify a sight
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
@@ -13674,7 +13674,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_modify_sight->Enable(false);
     
     //button to transport a sight
-    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
     button_transport_sight->Enable(false);
     
@@ -13684,7 +13684,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_modify_position->Enable(false);
     
     //button to transport a position
-    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
     

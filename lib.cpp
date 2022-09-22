@@ -1,5 +1,3 @@
-#include "lib.h"
-
 inline double sin(Angle x){
     
     return sin(x.value);
@@ -104,6 +102,14 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
     }
     
     if(i!=NULL){(*i) = j-1;}
+    
+}
+
+//sets fore/background colors to a generic object of type T
+template<class T> void SetColor(T* object){
+    
+    object->SetForegroundColour((wxGetApp()).foreground_color);
+    object->SetBackgroundColour((wxGetApp()).background_color);
     
 }
 
@@ -1433,11 +1439,11 @@ Rectangle::Rectangle(void){
 
 //constructor which constructs p_NW and p_SE from a and b
 Rectangle::Rectangle(Position a, Position b){
-
+    
     Angle phi_N, phi_S, lambda_W, lambda_E;
- 
+    
     //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
- 
+    
     phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
     phi_N.normalize();
     
@@ -1461,9 +1467,9 @@ Rectangle::Rectangle(Position a, Position b){
 bool Rectangle::Contains(Position p){
     
     return( ((p.lambda).normalize_pm_pi_ret() < ((p_NW.lambda).normalize_pm_pi_ret())) &&
-    ((p.lambda).normalize_pm_pi_ret() > ((p_SE.lambda).normalize_pm_pi_ret())) &&
-    ((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
-    ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret())) );
+           ((p.lambda).normalize_pm_pi_ret() > ((p_SE.lambda).normalize_pm_pi_ret())) &&
+           ((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
+           ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret())) );
     
 }
 
@@ -1565,32 +1571,32 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 
 
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
-void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw_panel){
+void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* draw_panel){
     
-    vector< vector<double> > x;
-    vector< vector<double> > y;
-    Projection temp;
+    vector< vector<wxPoint> > p;
+    wxPoint temp;
     bool end_connected;
     unsigned int i;
     
+    //sets color and width of memory_dc to the ones supported as arguments of Draw
+    (draw_panel->memory_dc).SetPen(wxPen(color, width));
+
     
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
         
         compute_end(Length((l.value)*((double)i)/((double)(n_points-1))), String(""));
         
-        if((draw_panel->*(draw_panel->GeoToProjection))(end, &temp)){
+        if((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp)){
             
             if(end_connected){
                 
-                x.resize(x.size() + 1);
-                y.resize(y.size() + 1);
+                p.resize(p.size() + 1);
                 end_connected = false;
                 
             }
             
-            (x[x.size()-1]).push_back(temp.x);
-            (y[y.size()-1]).push_back(temp.y);
+            (p[p.size()-1]).push_back(temp);
             
         }else{
             
@@ -1601,20 +1607,18 @@ void Route::DrawOld(unsigned int n_points, int color, int width, DrawPanel* draw
     }
     
     //run all the connected components of the tabulated Route and draw each of them in draw_panel
-    for(i=0; i<x.size(); i++){
+    for(i=0; i<p.size(); i++){
         
-        if(((x[i]).size()) > 1){
+        if(((p[i]).size()) > 1){
             
-            (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray((y[i]).data(), (int)(y[i]).size()), /*0x808080*/color, ""));
-            (draw_panel->spline_layer)->setXData(DoubleArray((x[i]).data(), (int)(x[i]).size()));
-            if(width != -1){
-                (draw_panel->spline_layer)->setLineWidth(width);
-            }
+            (draw_panel->memory_dc).DrawSpline((int)((p[i]).size()), (p[i]).data());
             
         }
         
     }
     
+    //put back original parameters of memory_dc
+    (draw_panel->memory_dc).SetPen(wxPen(wxGetApp().foreground_color, 1));
     
 }
 
@@ -1633,13 +1637,16 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, Stri
 
 
 //draws the Route *this into draw_panel, with any projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_panel, String prefix){
+void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_panel, String prefix){
     
     unsigned int i;
-    vector<double> x, y;
-    Projection temp;
+    vector<wxPoint> p;
+    wxPoint temp;
     vector<Length> s;
     
+    //sets color and width of memory_dc to the ones supported as arguments of Draw
+    (draw_panel->memory_dc).SetPen(wxPen(color, width));
+
     //comoute the end values of l and writes them in s
     compute_l_ends(&s, draw_panel, prefix);
     
@@ -1663,33 +1670,25 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
             for(j=0; j<(s.size())-1; j++){
                 
                 //clear up vectors where I am about to write
-                x.clear();
-                y.clear();
+                p.clear();
                 
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
                     compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
                     
-                    if(((draw_panel->*(draw_panel->GeoToProjection))(end, &temp))){
+                    if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp))){
                         
-                        x.push_back(temp.x);
-                        y.push_back(temp.y);
+                        p.push_back(temp);
                         
                     }
                     
                 }
                 
-                //draw the Route in draw_panel
-                (draw_panel->spline_layer) = ((draw_panel->chart)->addSplineLayer(DoubleArray(y.data(), (int)(y.size())), /*0x808080*/color, ""));
-                (draw_panel->spline_layer)->setXData(DoubleArray(x.data(), (int)(x.size())));
-                if(width != -1){
-                    (draw_panel->spline_layer)->setLineWidth(width);
-                }
-                
+                (draw_panel->memory_dc).DrawSpline((int)(p.size()), p.data());
+
                 //free up memory
-                x.clear();
-                y.clear();
+                p.clear();
                 
             }
             
@@ -1697,6 +1696,9 @@ void Route::Draw(unsigned int n_points, int color, int width, DrawPanel* draw_pa
         
     }
     
+    //put back original parameters of memory_dc
+    (draw_panel->memory_dc).SetPen(wxPen(wxGetApp().foreground_color, 1));
+
     
 }
 
@@ -1739,9 +1741,9 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                 }
                 
             }
-
+            
         }
-       
+        
     }else{
         
         //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
@@ -1773,12 +1775,12 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
             bool check;
             
             switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
-
+                    
                 case 'M':{
                     //I am using the mercator projection
-             
+                    
                     check = inclusion(draw_panel->rectangle_observer, &t, String(""));
-
+                    
                     break;
                 }
                     
@@ -1786,11 +1788,11 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     //I am using the 3d projection
                     
                     check = inclusion(draw_panel->circle_observer, &t, String(""));
-
+                    
                     break;
                     
                 }
-
+                    
             }
             
             
@@ -1812,7 +1814,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                 
             }
             
-         
+            
             break;
             
         }
@@ -1827,7 +1829,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                     
                     if(inclusion(draw_panel->rectangle_observer, &t, String(""))){
                         //*this is included in rectangle_observer
-                                                
+                        
                         if((t[0] == 0.0) && (t[1] == 0.0)){
                             //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
@@ -1850,19 +1852,19 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                         }
                         
                         return true;
-
+                        
                     }else{
                         //*this is not included in rectangle_observer
-
+                        
                         return false;
                         
                     }
                     
-                     
+                    
                     break;
                     
                 }
-
+                    
                 case '3':{
                     //I am using the 3d projection
                     
@@ -1921,7 +1923,7 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
                         return false;
                         
                     }
-                     
+                    
                     break;
                     
                 }
@@ -2237,7 +2239,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
     
     if(type == String("l")){
         //*this is a loxodrome
-
+        
         cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
         
     }else{
@@ -2252,7 +2254,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         
         lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
         phi_span = ((rectangle.p_NW).phi).span((rectangle.p_SE).phi);
-
+        
         //the parallel of latitude going through the North side of rectangle
         side_N = Route(
                        String("c"),
@@ -2266,7 +2268,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
                        Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)*M_PI_2)),
                        Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
                        );
-
+        
         //the meridian going through the W side of rectangle
         side_W = Route(
                        String("c"),
@@ -2299,7 +2301,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         u.insert(u.end(), temp.begin(), temp.end());
         
         u.push_back(Angle(0.0));
-     
+        
         
         //push back into u the angle which corresponds to the endpoint of Route *this
         if(type == String("o")){
@@ -2313,7 +2315,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         }
         
         sort(u.begin(), u.end());
-
+        
         
         //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
         for(output = false, is_fully_included = true, i=0; i<(u.size())-1; i++){
@@ -2336,7 +2338,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
                     
                     t->push_back(u[i]);
                     t->push_back(u[i+1]);
-
+                    
                 }
                 
             }else{
@@ -2344,7 +2346,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
                 is_fully_included = false;
                 
             }
-
+            
         }
         
         //I push back into to the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
@@ -2359,7 +2361,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
         }
         
         return output;
-
+        
     }
     
     
@@ -2567,7 +2569,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
                         
                         t_a.set(String(""), acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
                         t_b.set(String(""), -acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value)*(cos(route.omega)*csc(omega)*sec(reference_position.phi)) + cot(omega)*tan(reference_position.phi)), String(""));
-
+                        
                         
                     }
                     
@@ -2781,6 +2783,21 @@ bool Chrono::operator!=(const Chrono& chrono){
     
 }
 
+bool Chrono::operator<(const Chrono& chrono){
+    
+    return(
+           (((double)h)/24.0 + ((double)m)/60.0/24.0 + s/60.0/60.0/24.0) <  (((double)(chrono.h))/24.0 + ((double)(chrono.m))/60.0/24.0 + (chrono.s)/60.0/60.0/24.0)
+           );
+    
+}
+
+bool Chrono::operator>(const Chrono& chrono){
+    
+    return(
+           (((double)h)/24.0 + ((double)m)/60.0/24.0 + s/60.0/60.0/24.0) >  (((double)(chrono.h))/24.0 + ((double)(chrono.m))/60.0/24.0 + (chrono.s)/60.0/60.0/24.0)
+           );
+    
+}
 
 //sets the Chrono object to the time x, which is expressed in hours
 bool Chrono::set(String name, double x, String prefix){
@@ -3808,6 +3825,72 @@ bool Chrono::read_from_file(String name, File& file, bool search_entire_file, St
     
 }
 
+bool Chrono::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    stringstream new_prefix;
+    bool check = true;
+    size_t pos;
+    File file;
+    
+    
+    //prepend \t to prefix
+    new_prefix << "\t" << prefix.value;
+    
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+    
+    
+    
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+    }while((line.find(name.value)) == (string::npos));
+    
+    pos = line.find(" = ");
+    
+    //read hours
+    h = stoi(line.substr(pos+3, 2).c_str(), NULL, 10);
+    if(!((0 <= h) && (h < 24))){
+        
+        check &= false;
+        cout << prefix.value << RED << "\tValue of hh is not valid!\n" << RESET;
+        
+    }
+    
+    //read minutes
+    m = stoi(line.substr(pos+3+3, 2).c_str(), NULL, 10);
+    if(!((0 <= m) && (m < 60))){
+        
+        check &= false;
+        cout << prefix.value << RED << "\tValue of mm is not valid!\n" << RESET;
+        
+    }
+    
+    //read seconds
+    s = stod(line.substr(pos+3+3+3, line.size() - (pos+3+3+3)).c_str());
+    if(!((0.0 <= s) && (s < 60.0))){
+        
+        check &= false;
+        cout << prefix.value << RED << "\tValue of mm is not valid!\n" << RESET;
+        
+    }
+    
+    if(check){
+        print(name, prefix, cout);
+    }
+    
+    return check;
+    
+}
 
 
 //this function returns true if the date read is consistent, false if it is not
@@ -7235,7 +7318,7 @@ Angle Angle::span(Angle x){
     }
     
     return delta;
-
+    
 }
 
 //puts the angle in the interval [-pi, pi), it does not alter *this and returns the result
@@ -7357,7 +7440,7 @@ string Angle::deg_to_string(String mode, unsigned int precision){
     
     stringstream output;
     
-    output.precision(precision);
+    //    output.precision(precision);
     
     normalize();
     
@@ -7510,7 +7593,7 @@ bool Time::set_current(String prefix){
     check=true;
     
     check &= (date.set_current(new_prefix));
-    check &= (chrono.set_current(new_prefix));
+    check &= (chrono.set_current((wxGetApp()).time_zone, new_prefix));
     
     return check;
     
@@ -7576,8 +7659,8 @@ bool Date::set_current(String prefix){
     
 }
 
-//this function sets (*this) to the current UTC time
-bool Chrono::set_current(String prefix){
+//this function sets (*this) to the current UTC time +- time_zone
+bool Chrono::set_current(Int time_zone, String prefix){
     
     stringstream line_ins;
     string input;
@@ -7585,6 +7668,8 @@ bool Chrono::set_current(String prefix){
     size_t pos;
     String new_prefix;
     bool check;
+    //the sign argument to prepend to the time zone
+    string sign;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -7594,8 +7679,16 @@ bool Chrono::set_current(String prefix){
     file_utc_time.set_name(String(path_file_utc_date_and_time));
     file_utc_time.remove(prefix);
     
+    //    date -u -v+1H +%H:%M:%S
+    
     line_ins.str("");
-    line_ins << "date -u \"+%H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    if((time_zone.value) > 0){sign = "+";}
+    else{sign = "";}
+    //run the command to get the current time with time zone specified by time_zone
+    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    
+    string temp = line_ins.str().c_str();
+    
     
     //execute the date command in the terminal and writes the UTC date to file_utc_time
     system(line_ins.str().c_str());
@@ -8097,53 +8190,53 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
-    //uncomment this at the end
-    /*
-     x.clear();
-     y.clear();
-     for(i=i_min; i<i_max; i++){
-     
-     //        cout << "\n i = " << i;
-     
-     for(j=j_min; j<j_max; j++){
-     
-     //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-     //            flush(cout);
-     
-     //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-     n = ((unsigned int)(((parent->data_x)[i - floor_min_lat][j % 360]).size()));
-     
-     every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
-     if(every == 0){every = 1;}
-     
-     //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-     for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
-     
-     (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
-     (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
-     
-     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-     //                if((l % every) == 0){
-     
-     if((draw_panel->check(temp))){
-     
-     if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
-     (temp.x) += 2.0*M_PI;
-     }
-     x.push_back((temp.x));
-     y.push_back((temp.y));
-     
-     }
-     
-     //                }
-     
-     
-     }
-     
-     }
-     
-     }
-     */
+    /*un-comment
+    
+    x.clear();
+    y.clear();
+    for(i=i_min; i<i_max; i++){
+        
+        //        cout << "\n i = " << i;
+        
+        for(j=j_min; j<j_max; j++){
+            
+            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
+            //            flush(cout);
+            
+            //count how many datapoints are in data_x[i][j] and in data_y[i][j]
+            n = ((unsigned int)(((parent->data_x)[i - floor_min_lat][j % 360]).size()));
+            
+            every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+            if(every == 0){every = 1;}
+            
+            //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+            for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
+                
+                (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
+                (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+                
+                //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                //                if((l % every) == 0){
+                
+                if((draw_panel->check(temp))){
+                    
+                    if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
+                        (temp.x) += 2.0*M_PI;
+                    }
+                    x.push_back((temp.x));
+                    y.push_back((temp.y));
+                    
+                }
+                
+                //                }
+                
+                
+            }
+            
+        }
+        
+    }
+    un-comment*/
     
     
 }
@@ -8189,78 +8282,79 @@ void ListFrame::GetAllCoastLineData(void){
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
     file_coastline_data_blocked.open(String("in"), String(""));
     
-    //uncomment this at the end
-    /*
-     i=0;
-     while(!(file_coastline_data_blocked.value.eof())){
-     
-     
-     data_x.resize(i+1);
-     data_y.resize(i+1);
-     
-     data_3d.resize(i+1);
-     
-     
-     (data_x[i]).resize(360);
-     (data_y[i]).resize(360);
-     
-     (data_3d[i]).resize(360);
-     
-     for(j=0; j<360; j++){
-     
-     // read data as a block:
-     file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
-     
-     l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
-     if(buffer != NULL){delete [] buffer;}
-     buffer = new char [l];
-     
-     (file_coastline_data_blocked.value).read(buffer, l);
-     string data(buffer, l);
-     
-     
-     
-     //count how many datapoints are in data
-     n = ((unsigned int)count(data.begin(), data.end(), ','));
-     
-     l=0;
-     pos_beg = 0;
-     pos_end = data.find(" ", pos_beg);
-     while(pos_end != (string::npos)){
-     
-     line.clear();
-     line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-     
-     replace(line.begin(), line.end(), ' ', '\n');
-     replace(line.begin(), line.end(), ',', ' ');
-     
-     ins.clear();
-     ins << line;
-     ins >> phi_temp >> lambda_temp;
-     
-     (data_x[i][j]).push_back(x_mercator(lambda_temp));
-     (data_y[i][j]).push_back(y_mercator(phi_temp));
-     
-     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
-     (p_temp.phi).set(String(""), k*phi_temp, String(""));
-     
-     (data_3d[i][j]).push_back(p_temp);
-     
-     pos_beg = pos_end+1;
-     pos_end = data.find(" ", pos_beg);
-     
-     l++;
-     
-     };
-     
-     data.clear();
-     
-     }
-     
-     i++;
-     
-     }
-     */
+    /*un-comment
+    
+    i=0;
+    while(!(file_coastline_data_blocked.value.eof())){
+        
+        
+        data_x.resize(i+1);
+        data_y.resize(i+1);
+        
+        data_3d.resize(i+1);
+        
+        
+        (data_x[i]).resize(360);
+        (data_y[i]).resize(360);
+        
+        (data_3d[i]).resize(360);
+        
+        for(j=0; j<360; j++){
+            
+            // read data as a block:
+            file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
+            
+            l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
+            if(buffer != NULL){delete [] buffer;}
+            buffer = new char [l];
+            
+            (file_coastline_data_blocked.value).read(buffer, l);
+            string data(buffer, l);
+            
+            
+            
+            //count how many datapoints are in data
+            n = ((unsigned int)count(data.begin(), data.end(), ','));
+            
+            l=0;
+            pos_beg = 0;
+            pos_end = data.find(" ", pos_beg);
+            while(pos_end != (string::npos)){
+                
+                line.clear();
+                line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                
+                replace(line.begin(), line.end(), ' ', '\n');
+                replace(line.begin(), line.end(), ',', ' ');
+                
+                ins.clear();
+                ins << line;
+                ins >> phi_temp >> lambda_temp;
+                
+                (data_x[i][j]).push_back(x_mercator(lambda_temp));
+                (data_y[i][j]).push_back(y_mercator(phi_temp));
+                
+                (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
+                (p_temp.phi).set(String(""), k*phi_temp, String(""));
+                
+                (data_3d[i][j]).push_back(p_temp);
+                
+                pos_beg = pos_end+1;
+                pos_end = data.find(" ", pos_beg);
+                
+                l++;
+                
+            };
+            
+            data.clear();
+            
+        }
+        
+        i++;
+        
+    }
+    
+    un-comment*/
     
     file_coastline_data_blocked.close(String(""));
     n_line.clear();
@@ -8333,8 +8427,13 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
-    text_position_start = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    text_position_end = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_position_start = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
+    text_position_end = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
+
+    //sets the pen and the brush, for memory_dc, which will be used in the following 
+    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+    wxBrush brush(wxGetApp().background_color);
+    memory_dc.SetBrush(brush);
     
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
@@ -8392,13 +8491,13 @@ void DrawPanel::PaintNow(){
     
     
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
-    this->SetMinSize(wxSize(chart->getWidth(), chart->getHeight()));
+    this->SetMinSize(wxSize(width_chart, height_chart));
     parent->SetMinSize(wxSize(
-                              (chart->getWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value),
-                              (chart->getHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value)
+                              width_chart + ((parent->slider)->GetSize().GetWidth()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
+                              height_chart + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
                               ));
     
-    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (chart->getHeight()) + 4*((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value)));
+    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, height_chart + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)));
     
     //    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
@@ -8426,7 +8525,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
     //draw coastlines
     dc.DrawBitmap(*bitmap_image, 0, 0);
-    
+
     
     color_id = 0;
     
@@ -8499,14 +8598,14 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
                          );
         
     }
-        
+    
 }
 
 //This function draws into *this the text label for a parallel or a meridian, by placing it near the Positian q. The latitude/longitude in the text label is q.phi/q.lambda, and the labels are wxStaticText objects which are stored in label_phi/label_lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
 void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
     
     wxPoint p;
-    vector<wxStaticText*>* labels;
+    vector<StaticText*>* labels;
     
     if(/* convert temp to draw_panel coordinates p*/(this->*GeoToDrawPanel)(q, &p)){
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -8526,14 +8625,14 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
             angle_label = (q.phi);
             delta = delta_phi;
             labels = &label_phi;
-                    
+            
         }else{
             //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda, and I let labels point to label_lambda
             
             angle_label = (q.lambda);
             delta = delta_lambda;
             labels = &label_lambda;
-                    
+            
         }
         
         
@@ -8584,11 +8683,11 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         //shift p it in such a way that the label drawn at p  is diplayed nicely, and draw the label at  p
         if(mode == String("NS")){
             
-            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())-((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value), -(GetTextExtent(wx_string).GetHeight())/2);
-
+            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())-((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), -(GetTextExtent(wx_string).GetHeight())/2);
+            
         }else{
             
-            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((parent->parent->parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
             
         }
         
@@ -8596,7 +8695,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         //        dc.DrawRotatedText(wx_string, p, 0);
         
         (*labels).resize(((*labels).size())+1);
-        ((*labels).back()) = new wxStaticText(this, wxID_ANY, wx_string, p, wxDefaultSize, 0, wxT(""));
+        ((*labels).back()) = new StaticText(this, wx_string, p, wxDefaultSize);
         
         first_label = false;
         
@@ -8731,68 +8830,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
 }
 
 
-//
-////this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
-//void DrawPanel::TabulateRoutes_Mercator(void){
-//
-//    unsigned int i, l;
-//    Length l_tot;
-//    wxPoint p;
-//    bool end_connected;
-//
-//    //clear up points_route_list
-//    for(i=0; i<points_route_list.size(); i++){
-//        (points_route_list[i]).clear();
-//    }
-//
-//
-//    //compute the points of  routes
-//    //run over all routes
-//    for(i=0; i<(plot->route_list).size(); i++){
-//
-//        points_route_list.resize(points_route_list.size()+1);
-//
-//        if((((plot->route_list)[i]).type) == String("c")){
-//            //if the Route under consideration is a circle of equal altitde, its total length is the length of the circle itself, which reads:
-//
-//            l_tot.set(String(""), 2.0*M_PI*(Re*sin((((plot->route_list)[i]).omega.value))), String(""));
-//
-//        }else{
-//            //otherwise, the total length is simply written in the l object
-//
-//            l_tot.set(String(""), (((plot->route_list)[i]).l).value, String(""));
-//
-//        }
-//
-//        //compute points of l-th chunk of route #i
-//        for(/*this is true if at the preceeding step in the loop over l, I encountered a point which does not lie in the rectangle x_min , ...., y_max, and thus terminated a connectd component of route #i*/end_connected = true, l=0; l<(unsigned int)((plot->n_points_routes).value); l++){
-//
-//            //I consider a Length which spans between 0 and  l_tot
-//            //I compute the coordinate of the endpoint of (plot->route_list)[i] for the length above
-//            ((plot->route_list)[i]).compute_end(Length((l_tot.value)*((double)l)/((double)(((plot->n_points_routes).value)-1))), String(""));
-//
-//            if(GeoToDrawPanel_Mercator(((plot->route_list)[i]).end, &p)){
-//
-//                if(end_connected){
-//
-//                    (points_route_list[i]).resize((points_route_list[i]).size() + 1);
-//                    end_connected = false;
-//
-//                }
-//
-//                (points_route_list[i]).push_back(p);
-//
-//            }else{
-//
-//                end_connected = true;
-//
-//            }
-//
-//        }
-//
-//    }
-//
-//}
+
 
 //this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
 void DrawPanel::TabulateRoutes(void){
@@ -8810,7 +8848,7 @@ void DrawPanel::TabulateRoutes(void){
         
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if(((plot->route_list)[i]).type != String("l")){
-  
+            
             ((plot->route_list)[i]).Draw((unsigned int)((plot->n_points_routes).value), this, (points_route_list.data())+i, String(""));
             
         }else{
@@ -8837,7 +8875,7 @@ void DrawPanel::Draw_Mercator(void){
     Length r, s;
     Position q;
     String prefix, new_prefix;
-    
+    wxPoint p;
     
     
     //append \t to prefix
@@ -8910,18 +8948,15 @@ void DrawPanel::Draw_Mercator(void){
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     tick_length = ((parent->tick_length_over_width_plot_area).value)*width_plot_area;
     
-    //draw coastlines
-    
-    // Create a XYChart object with the appropriate size
-    chart = new XYChart(width_chart, height_chart);
-    //create the plot area of c with the appropriate size
-    chart->setPlotArea(width_chart*0.15, height_chart*0.1,
-                       width_plot_area,
-                       height_plot_area,
-                       -1, -1, 0xc0c0c0, 0xc0c0c0, -1);
+    //allocate bitmap_image
+    bitmap_image = new wxBitmap(width_chart, height_chart);
+    memory_dc.SelectObject(*bitmap_image);
+    //draws a rectangle filled with color wxGetApp().background_color on bitmap_image, so bitmap_image will have the right background color
+    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
+
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
+    position_plot_area = wxPoint(width_chart*0.15, height_chart*0.1);
     
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);
@@ -9028,7 +9063,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-            route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9044,7 +9079,7 @@ void DrawPanel::Draw_Mercator(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
                     
                 }
                 
@@ -9076,7 +9111,7 @@ void DrawPanel::Draw_Mercator(void){
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw cannot handle loxodromes
-            route.DrawOld(((plot->n_points_routes).value), 0x808080, -1, this);
+            route.DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9095,7 +9130,7 @@ void DrawPanel::Draw_Mercator(void){
                         
                         //                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
                         //here I use DrawOld because Draw cannot handle loxodromes
-                        route.DrawOld((parent->n_points_minor_ticks).value, 0x0000ff, -1, this);
+                        route.DrawOld((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this);
                         
                     }
                 
@@ -9105,6 +9140,15 @@ void DrawPanel::Draw_Mercator(void){
             
         }
     
+    //bottom border of chart
+    Route(String("l"), Position(plot->lambda_min, Angle(plot->phi_min + epsilon_double)), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
+    //upper border of chart
+    Route(String("l"), Position(plot->lambda_min, Angle(plot->phi_max - epsilon_double)), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
+    //left border of chart
+    Route(String("o"), Position(plot->lambda_min - epsilon_double, Angle(plot->phi_min)), Angle(0.0), Length(Re*((plot->phi_max).normalize_pm_pi_ret().value - (plot->phi_min).normalize_pm_pi_ret().value))).Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
+    //right border of chart
+    Route(String("o"), Position(plot->lambda_max + epsilon_double, Angle(plot->phi_min)), Angle(0.0), Length(Re*((plot->phi_max).normalize_pm_pi_ret().value - (plot->phi_min).normalize_pm_pi_ret().value))).Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
+
     
     //draw labels on parallels
     for(first_label = true,
@@ -9114,7 +9158,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, plot->phi_min, plot->phi_max, String("NS"));
+        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((plot->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, String("NS"));
         
     }
     
@@ -9130,27 +9174,19 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
-    //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart->xAxis())->setLinearScale(x_min, x_min+x_span(), 1.7E+308);
-    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
+    //draw coastlines
+    //draw the coastline points into bitmap_image through memory_dc
+    for(i=0; i<(parent->x).size(); i++){
+        ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
+        memory_dc.DrawPoint(p);
+    }
     
-    // Set the axes line width to 3 pixels
-    chart->xAxis()->setWidth(2);
-    chart->yAxis()->setWidth(2);
-    
-    // Add an orange (0xff9933) scatter chart layer, using 13 pixel diamonds as symbols
-    chart->addScatterLayer(DoubleArray((parent->x).data(), (int)((parent->x).size())), DoubleArray((parent->y).data(), (int)((parent->y).size())), "", Chart::CircleSymbol, 1, 000000);
-    
-    //    chart->makeChart(path_file_chart);
-    mem_block = (chart->makeChart(Chart::BMP));
-    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
-    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
     
     TabulateRoutes();
     
-    //free up resources
     (parent->x).clear();
     (parent->y).clear();
+
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();
@@ -9196,29 +9232,18 @@ void DrawPanel::Draw_3D(void){
     width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     
-    chart = new XYChart(width_chart, height_chart);
-    chart->setPlotArea((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
-                       (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
-                       width_plot_area,
-                       height_plot_area,
-                       Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent, Chart::Transparent);
+    //allocate bitmap_image
+    bitmap_image = new wxBitmap(width_chart, height_chart);
+    memory_dc.SelectObject(*bitmap_image);
+    //draws a rectangle filled with color wxGetApp().background_color on bitmap_image, so bitmap_image will have the right background color
+    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
+
     
-    position_plot_area = wxPoint((chart->getPlotArea())->getLeftX(), (chart->getPlotArea())->getTopY());
+    position_plot_area = wxPoint((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
+                                 (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0));
     
     
-    //set the interval of the x axis, and disables the xticks with the last NoValue argument
-    (chart->xAxis())->setLinearScale(x_min, x_max, 1.7E+308);
-    (chart->yAxis())->setLinearScale(y_min, y_max, 1.7E+308);
-    
-    // Set the axes line width to 3 pixels
-    (chart->xAxis())->setColors(Chart::Transparent);
-    (chart->yAxis())->setColors(Chart::Transparent);
-    
-    chart->addScatterLayer(
-                           DoubleArray((parent->x_3d).data(), (int)(parent->x_3d).size()),
-                           DoubleArray((parent->y_3d).data(), (int)(parent->y_3d).size()),
-                           "", Chart::CircleSymbol, 1, 000000);
-    
+        
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks = (unsigned int)((plot->n_intervals_ticks_preferred).value);
@@ -9333,7 +9358,7 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) += delta_lambda){
             
             //            route.draw(((plot->n_points_routes).value), 0x808080, -1, this);
-            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9351,7 +9376,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                    route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
                     
                 }
                 
@@ -9382,7 +9407,7 @@ void DrawPanel::Draw_3D(void){
             (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI_2, String(""));
             
-            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
+            route.Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9398,7 +9423,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
                         
                     }
                 
@@ -9420,24 +9445,33 @@ void DrawPanel::Draw_3D(void){
     gsl_vector_set(rp, 1, -cos(q.phi));
     gsl_vector_set(rp, 2, sin((q.phi)));
     
+    //draw horizon circle
+    /*
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
-    
+    //set the wxPen color for the horizon
+    memory_dc.SetPen(wxPen(parent->color_horizon, 1));
+    memory_dc.SetBackground(wxGetApp().background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
-    (chart->getDrawArea())->circle(
-                                   (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
-                                   (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
-                                   (temp.y)/y_max * ((double)width_plot_area)/2.0,
-                                   (temp.y)/y_max * ((double)width_plot_area)/2.0,
-                                   (parent->color_horizon).GetRGBA(),
-                                   Chart::Transparent
-                                   );
+    memory_dc.DrawCircle(
+                         (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
+                         (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
+                         (temp.y)/y_max * ((double)width_plot_area)/2.0
+                         );
+    //set back the wxPen color
+    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+     */
     
     
-    mem_block = (chart->makeChart(Chart::BMP));
-    memory_input_stream = new wxMemoryInputStream(mem_block.data, mem_block.len);
-    bitmap_image = new wxBitmap(wxImage(*memory_input_stream, wxBITMAP_TYPE_BMP));
+    
+    //draw coastlines
+    //draw the coastline points into bitmap_image through memory_dc
+    for(i=0; i<(parent->x_3d).size(); i++){
+        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
+        memory_dc.DrawPoint(p);
+    }
+    
     
     TabulateRoutes();
     
@@ -9496,14 +9530,28 @@ Color::Color(unsigned char red, unsigned char green, unsigned char blue, unsigne
     
 }
 
-
+//converts *this to RGB format
+int Color::ToRGB(void){
+    
+    int i, output;
+    
+    //convert this to BRG format which the wxWidgets function GetRGB() and then shift its bits so as to convert it to RGB format
+    for(output = 0, i=0; i<3; i++){
+        
+        output ^= ((((this->GetRGB()) >> 8*i) & hexadecimal_mask) << 8*(3-(i+1)));
+        
+    }
+    
+    return output;
+    
+}
 
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;
     String new_prefix, default_projection, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
-    wxStaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
+    StaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
     
     parent = parent_input;
@@ -9547,6 +9595,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //read tick length over width plot area from file_init
     tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
+    SetColor(this);
+    
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
@@ -9565,8 +9615,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_buttons = new wxGridSizer(3, 3, 0, 0);
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    text_position_now = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    
+    text_position_now = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //initialize the variable neededed for slider
     //    zoom_factor_old = 1 + epsilon_double;
@@ -9582,7 +9631,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //text field showing the current value of the zoom slider
     s.str("");
     s << "1:" << (zoom_factor.value);
-    text_slider = new wxStaticText(panel, wxID_ANY, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize);
     
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -9614,11 +9663,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     slider->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
     slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
     
-    empty_text_1 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_2 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_3 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_4 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    empty_text_5 = new wxStaticText(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    empty_text_1 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_2 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_3 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_4 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    empty_text_5 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     
     
@@ -9654,27 +9703,27 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
     //
     
-    sizer_buttons->Add(empty_text_1, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_up, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_2, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_left, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_3, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_right, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_4, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(button_down, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_buttons->Add(empty_text_5, 0, wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_1, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_up, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_2, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_left, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_3, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_right, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_4, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(button_down, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_buttons->Add(empty_text_5, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
-    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
-    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     projection->InsertIn<wxBoxSizer>(sizer_slider);
     
-    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL, 0);
     
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     //    sizer_v->Fit(panel);
     
     //    Maximize(panel);
@@ -10212,7 +10261,7 @@ template<class T>void CheckBody::operator()(T& event){
         }
         i--;
         
-        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->name)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             if(check){
@@ -10264,7 +10313,7 @@ template<class T>void CheckBody::operator()(T& event){
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->name)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -10305,13 +10354,13 @@ template<class T> void CheckLimb::operator()(T &event){
         check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
         
         
-        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (s == String("")))){
+        if(check || ((((p->name)->GetBackgroundColour()) == (wxGetApp().background_color)) && (s == String("")))){
             //p->name either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->name)->SetBackgroundColour(wxGetApp().background_color);
             
             
         }else{
@@ -10388,13 +10437,13 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
         }
         
         
-        if(check || ((((p->sign)->GetBackgroundColour()) == *wxWHITE) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->sign)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))){
             //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set sign_ok to true (false)
             (p->sign_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in sign
-            (p->sign)->SetBackgroundColour(*wxWHITE);
+            (p->sign)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -10436,7 +10485,7 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     }
     
     return output;
-
+    
 }
 
 //converts the point p on the screen to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
@@ -10520,7 +10569,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
         (q->y) = (temp.y);
     }
     
-     return check(temp);
+    return check(temp);
     
 }
 
@@ -10551,7 +10600,7 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     }
     
     if(arg_sqrt >= 0.0){
-         
+        
         return true;
         
     }else{
@@ -10650,10 +10699,7 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
     if(GeoToMercator(q, &temp)){
         
         if(p){
-            
-            (p->x) = (position_plot_area.x) + ((temp.x)-x_min)/x_span()*width_plot_area;
-            (p->y) = (position_plot_area.y) + height_plot_area - (((temp.y)-y_min)/(y_max-y_min)*height_plot_area);
-            
+            ProjectionToDrawPanel_Mercator(temp, p);
         }
         
         return true;
@@ -10664,9 +10710,25 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
         
     }
     
+}
+
+//this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
+void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint *p){
     
+    (p->x) = (position_plot_area.x) + ((q.x)-x_min)/x_span()*width_plot_area;
+    (p->y) = (position_plot_area.y) + height_plot_area - (((q.y)-y_min)/(y_max-y_min)*height_plot_area);
     
 }
+
+//this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
+void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint *p){
+    
+    (p->x) = ((double)(position_plot_area.x)) + (1.0+(q.x)/x_max)*(((double)width_plot_area)/2.0);
+    (p->y) = ((double)(position_plot_area.y)) + (1.0-(q.y)/y_max)*(((double)height_plot_area)/2.0);
+ 
+}
+
+
 
 //this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel. It returs true if q lies on the visible side of the Earth, and false otherwise.
 bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
@@ -10675,9 +10737,7 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     bool output;
     
     output = GeoTo3D(q, &temp);
-    
-    (p->x) = ((double)(position_plot_area.x)) + (1.0+(temp.x)/x_max)*(((double)width_plot_area)/2.0);
-    (p->y) = ((double)(position_plot_area.y)) + (1.0-(temp.y)/y_max)*(((double)height_plot_area)/2.0);
+    ProjectionToDrawPanel_3D(temp, p);
     
     return output;
     
@@ -10805,9 +10865,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(plot->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, color_white);
+            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
             if((((plot->route_list)[i]).related_sight).value != -1){
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, color_white);
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
             
             
@@ -10884,7 +10944,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
             }else{
                 
-                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, color_white);
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
                 
             }
             
@@ -10906,7 +10966,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftDown(wxMouseEvent &event){
-        
+    
     position_start_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
     
@@ -11088,13 +11148,13 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 //the selected Route is related to a Sight
                 
                 
-   
+                
                 //select the related Sight in ListFrame
                 ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
                 ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value,  wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-                                
+                
             }
             
         }
@@ -11176,8 +11236,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
                 //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
                 
-                //reinitialize c and sets the new values of lambda_min, lambda_max, phi_min and phi_max
-                delete chart;
+                //sets the new values of lambda_min, lambda_max, phi_min and phi_max
+                //                delete chart;
                 //I convert all the angles to the format between -pi and pi, so I can sort them numerically
                 (((parent->parent)->p_start).phi).normalize_pm_pi();
                 (((parent->parent)->p_start).lambda).normalize_pm_pi();
@@ -11474,7 +11534,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 //in this case, position_drag_now is not a valid position
                 
                 switch(((((parent->projection)->name)->GetValue()).ToStdString())[0]){
-
+                        
                     case 'M':{
                         //I am using the mercator projection: then the position is invalid and I may print an error message
                         
@@ -11486,8 +11546,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
                         //                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
                         //                parent->CallAfter(*(parent->print_error_message));
-
-                              
+                        
+                        
                         break;
                         
                     }
@@ -11503,8 +11563,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //re-draw the chart
                         (this->*Draw)();
                         PaintNow();
-
-
+                        
+                        
                         
                         break;
                         
@@ -11659,11 +11719,11 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
             
             //uncomment this if you want to print an error message
             /*
-            //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-            (print_error_message->control) = NULL;
-            (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
-            (print_error_message->message) = String("The chart must lie within the boundaries.");
-            (*print_error_message)();
+             //        set the wxControl, title and message for the functor print_error_message, and then call the functor
+             (print_error_message->control) = NULL;
+             (print_error_message->title) = String("You moved the slider: Chart outside  boundaries!");
+             (print_error_message->message) = String("The chart must lie within the boundaries.");
+             (*print_error_message)();
              */
             
             //I reset the chart to its original configuration
@@ -11861,7 +11921,7 @@ void SelectRoute::operator()(wxCommandEvent& event){
     //temporarily unbind listcontrol_routes from &ListFrame::OnChangeSelectionInListControl
     (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, parent);
     (parent->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, parent);
-
+    
     
     
     //brings parent to front
@@ -11869,7 +11929,7 @@ void SelectRoute::operator()(wxCommandEvent& event){
     
     //deselect all previously selected items in listcontrol_routes to allow the user to properly select an item
     (parent->listcontrol_routes)->DeselectAll();
-
+    
     
     (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
     
@@ -11918,7 +11978,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
     f->UpdateRelatedSightsAndRoutes();
-        
+    
     event.Skip(true);
     
 }
@@ -11934,7 +11994,7 @@ DeletePosition::DeletePosition(ListFrame* f_in){
 void DeletePosition::operator()(wxCommandEvent& event){
     
     long i;
-
+    
     i = (f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     (f->listcontrol_positions)->DeleteItem(i);
     (f->plot)->remove_position(((unsigned int)i), String(""));
@@ -12079,12 +12139,12 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
         
         check = check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360);
         
-        if(check || ((((p->deg)->GetBackgroundColour()) == *wxWHITE) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->deg)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set deg_ok to true (false)
             (p->deg_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->deg)->SetBackgroundColour(*wxWHITE);
+            (p->deg)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -12117,13 +12177,13 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
         
         check = check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
         
-        if(check || ((((p->min)->GetBackgroundColour()) == *wxWHITE) && (String((((p->min)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->min)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->min)->GetValue()).ToStdString())) == String("")))){
             //p->min either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set min_ok to true (false)
             (p->min_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in min
-            (p->min)->SetBackgroundColour(*wxWHITE);
+            (p->min)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -12158,13 +12218,13 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
         
         check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
         
-        if(check || ((((p->value)->GetBackgroundColour()) == *wxWHITE) && (String((((p->value)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->value)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))){
             //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set value_ok to true (false)
             (p->value_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in value
-            (p->value)->SetBackgroundColour(*wxWHITE);
+            (p->value)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -12205,12 +12265,12 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
         }
         i--;
         
-        if(check || ((((p->unit)->GetBackgroundColour()) == *wxWHITE) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->unit)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set unit_ok to true (false)
             (p->unit_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->unit)->SetBackgroundColour(*wxWHITE);
+            (p->unit)->SetBackgroundColour(wxGetApp().background_color);
             
             
         }else{
@@ -12407,7 +12467,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, f);
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, f);
-
+    
     //set parameters back to their original value
     (f->idling) = false;
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
@@ -12531,6 +12591,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     new_prefix = prefix.append(String("\t"));
     
     idling = false;
+    
+    SetColor(this);
+    
     unset_idling = new UnsetIdling<SightFrame>(this);
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
     
@@ -12552,16 +12615,16 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     
     sizer_grid_measurement = new wxFlexGridSizer(6, 2,
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                                  );
     sizer_grid_time = new wxFlexGridSizer(4, 2,
-                                          ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                          ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                          (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                          (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                           );
     sizer_grid_label = new wxFlexGridSizer(1, 2,
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                            );
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     box_sizer_3 = new wxBoxSizer(wxHORIZONTAL);
@@ -12581,20 +12644,19 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     }
     
     
-    wxStaticText* text_combo_body = new wxStaticText(panel, wxID_ANY, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize);
     body = new BodyField(this, &(sight->body), catalog);
     
-    wxStaticText* text_limb = new wxStaticText(panel, wxID_ANY, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
-    //    combo_limb = new wxComboBox(panel, ID_combo_limb, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
+    StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
     limb = new LimbField(this, &(sight->limb));
     (limb->name)->Enable(false);
     
     //sextant altitude
-    wxStaticText* text_H_s = new wxStaticText(panel, wxID_ANY, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_H_s = new StaticText(panel, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize);
     H_s = new AngleField<SightFrame>(this, &(sight->H_s), String("+-"));
     
     //index error
-    wxStaticText* text_index_error = new wxStaticText(panel, wxID_ANY, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize);
     //If sight_in = NULL, read index error from init file
     if(sight_in == NULL){
         (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
@@ -12604,11 +12666,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     index_error->set();
     
     //artificial horizon
-    wxStaticText* text_artificial_horizon_check = new wxStaticText(panel, wxID_ANY, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize);
     artificial_horizon_check = new CheckField< LengthField<SightFrame> >(this, &(sight->artificial_horizon), NULL, false);
     
     //height of eye
-    wxStaticText* text_height_of_eye = new wxStaticText(panel, wxID_ANY, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize);
     height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye), String("m"));
     if(sight_in == NULL){
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
@@ -12623,16 +12685,16 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
     if(sight_in == NULL){
         (sight->master_clock_date_and_hour).date.set_current(prefix);
-        (sight->master_clock_date_and_hour).chrono.set_current(prefix);
+        (sight->master_clock_date_and_hour).chrono.set_current((wxGetApp()).time_zone, prefix);
         (sight->time).date.set_current(prefix);
-        (sight->time).chrono.set_current(prefix);
+        (sight->time).chrono.set_current((wxGetApp()).time_zone, prefix);
     }
-    wxStaticText* text_date = new wxStaticText(panel, wxID_ANY, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
     
     //master-clock chrono
-    wxStaticText* text_space_1 = new wxStaticText(panel, wxID_ANY, wxT("\t"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     
     //I initialize the GUI filed master_clock_chrono with the one written in sight_in.
@@ -12641,11 +12703,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //    }
     
     //check/uncheck stopwatch
-    wxStaticText* text_stopwatch_check = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
     stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
     
     //stopwatch reading
-    wxStaticText* text_stopwatch_reading = new wxStaticText(panel, wxID_ANY, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_stopwatch_reading = new StaticText(panel, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize);
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
     stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
@@ -12656,12 +12718,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (stopwatch_check->checkbox)->SetValue(false);
     stopwatch_reading->Enable(false);
     
-    wxStaticText* text_TAI_minus_UTC = new wxStaticText(panel, wxID_ANY, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_TAI_minus_UTC = new StaticText(panel,wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize);
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
     //label
-    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_label = new StaticText(panel,wxT("Label"), wxDefaultPosition, wxDefaultSize);
     label = new StringField<SightFrame>(this, &(sight->label));
     
     
@@ -12728,10 +12790,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM | wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL);
     box_sizer_2->Add(button_reduce, 0, wxALIGN_BOTTOM | wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL);
     
     sizer_box_measurement = new wxStaticBoxSizer(wxVERTICAL, panel, "Measurement");
@@ -12741,16 +12803,16 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     sizer_box_time->Add(sizer_grid_time);
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
-    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Master-clock UTC date and hour of sight"
+    //sets common_width to the width of the largest entry in the left column, in this case the StaticText containing "Master-clock UTC date and hour of sight"
     common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight   ")).GetWidth();
     text_combo_body->SetMinSize(wxSize(common_width,-1));
     text_date->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -12802,6 +12864,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     idling = false;
     
+    SetColor(this);
+    
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
@@ -12828,27 +12892,27 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     sizer_grid_measurement = new wxFlexGridSizer(2, 2,
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                                 ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                                 (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                                  );
     sizer_grid_label = new wxFlexGridSizer(1, 2,
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
-                                           ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value)
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                            );
     sizer = new wxBoxSizer(wxVERTICAL);
     box_sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     
     
     //latitude
-    wxStaticText* text_lat = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_lat = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
     lat = new AngleField<PositionFrame>(this, &(position->phi), String("NS"));
     
     //longitude
-    wxStaticText* text_lon = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_lon = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
     lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
     
     //label
-    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
     label = new StringField<PositionFrame>(this, &(position->label));
     
     
@@ -12874,11 +12938,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
     
     box_sizer_2->Add(button_cancel, 0, wxALIGN_BOTTOM |  wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL
                      );
     box_sizer_2->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL,
-                     ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value),
+                     (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                      NULL
                      );
     
@@ -12887,16 +12951,16 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     sizer_box_measurement->Add(sizer_grid_measurement);
     
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
-    //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
+    //sets common_width to the width of the largest entry in the left column, in this case the StaticText containing "Longitude"
     common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
     text_lat->SetMinSize(wxSize(common_width,-1));
     text_lon->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
-    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    //add the various elements to sizer, by inserting a border of (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
+    sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -12937,6 +13001,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     idling = false;
     
+    SetColor(this);
+    
     unset_idling = new UnsetIdling<RouteFrame>(this);
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
     
@@ -12964,13 +13030,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
     
     
-    sizer_grid_type = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_Z = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_l = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_start = new wxFlexGridSizer(2, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_GP = new wxFlexGridSizer(2, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_omega = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_grid_label = new wxFlexGridSizer(1, 2, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_type = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_Z = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_start = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_GP = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_omega = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid_label = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
     sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
     sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
@@ -12979,40 +13045,40 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
-    wxStaticText* text_type = new wxStaticText(panel, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize);
     type = new RouteTypeField(this, &(route->type));
     
     //Z
-    wxStaticText* text_Z = new wxStaticText(panel, wxID_ANY, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_Z = new StaticText(panel, wxT("Z"), wxDefaultPosition, wxDefaultSize);
     Z = new AngleField<RouteFrame>(this, &(route->Z), String(""));
     
     //l
-    wxStaticText* text_l = new wxStaticText(panel, wxID_ANY, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize);
     l = new LengthField<RouteFrame>(this, &(route->l), String("nm"));
     
     
     //start
     //start_phi
-    wxStaticText* text_start_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_start_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
     start_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
     //start_lambda
-    wxStaticText* text_start_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_start_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
     start_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
     
     //GP (ground position)
     //GP_phi
-    wxStaticText* text_GP_phi = new wxStaticText(panel, wxID_ANY, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_GP_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
     GP_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
     //GP_lambda
-    wxStaticText* text_GP_lambda = new wxStaticText(panel, wxID_ANY, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_GP_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
     GP_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
     
     //omega
-    wxStaticText* text_omega = new wxStaticText(panel, wxID_ANY, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_omega = new StaticText(panel, wxT("Omega"), wxDefaultPosition, wxDefaultSize);
     omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
     
     //label
-    wxStaticText* text_label = new wxStaticText(panel, wxID_ANY, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
     label = new StringField<RouteFrame>(this, &(route->label));
     
     
@@ -13070,8 +13136,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     sizer_box_data->Add(sizer_box_GP);
     sizer_box_data->Add(sizer_grid_omega);
     
-    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM| wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
-    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
+    box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM| wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
+    box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value), NULL);
     
     
     
@@ -13082,10 +13148,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     text_omega->SetMinSize(wxSize(common_width,-1));
     text_label->SetMinSize(wxSize(common_width,-1));
     
-    //add the various elements to sizer, by inserting a border of ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
-    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, ((parent->parent->rectangle_display.GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    //add the various elements to sizer, by inserting a border of (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
+    sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     //panel->SetSizer(sizer);
@@ -13335,6 +13401,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     f_ok = f_ok_in;
     
+    SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
     
@@ -13351,7 +13418,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
     
-    wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
     
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -13389,6 +13456,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     f_b = f_b_in;
     string_b = string_b_in;
     
+    SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);
     
@@ -13404,7 +13472,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
     sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
-    wxStaticText* text = new wxStaticText(panel, wxID_ANY, message, wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
     
     //buttons
     button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -13482,6 +13550,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //when the ListFrame is created there is no open selection rectangle in any ChartFrame
     selection_rectangle = false;
     
+    SetColor(this);
     
     for(i=0; i<color_list.size(); i++){
         
@@ -13517,6 +13586,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //read color selected item from file
     color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
     
+    size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
     
     
     //no positions nor routes are highlighted when ListFrame is constructed
@@ -13539,9 +13609,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
     
     
-//    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
-//    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
-//    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
+    //    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
+    //    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
+    //    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
     
@@ -13557,7 +13627,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //initialize delete_position, which defines the functor to delete a Position
     delete_position = new DeletePosition(this);
-
+    
     
     //initialized modify_route and create_route, which define the functors to modify / create a Route
     modify_route = new ModifyRoute(this);
@@ -13599,57 +13669,58 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     my_image_tranposrt.Rescale(20,20);
     
     //button to modify a sight
-    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
     button_modify_sight->Enable(false);
     
     //button to transport a sight
-    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
     button_transport_sight->Enable(false);
     
     //button to modify a position
-    button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
     button_modify_position->Enable(false);
     
     //button to transport a position
-    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_tranposrt), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
     
     //button to modify a route
-    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT   | wxBORDER_NONE);
+    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute, this);
     button_modify_route->Enable(false);
     
     //button to delete a sight
-    button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_sight = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight, this);
     button_delete_sight->Enable(false);
     
     //button to delete a position
-    button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition, this);
     button_delete_position->Enable(false);
     
     //button to delete a route
-    button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
     button_delete_route->Enable(false);
-  
+    
     
     //listcontrol_sights with sights
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_sight);
     disableable_buttons.push_back(button_transport_sight);
     disableable_buttons.push_back(button_delete_sight);
-
+    
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-//    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
+    SetColor(listcontrol_sights);
+    //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
-//    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
+    //    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
     
     i=0;
     
@@ -13692,16 +13763,17 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_modify_position);
     disableable_buttons.push_back(button_transport_position);
     disableable_buttons.push_back(button_delete_position);
-
+    
     
     
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-//    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
+    SetColor(listcontrol_positions);
+    //    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
-//    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
-
+    //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
+    
     listcontrol_positions->PushBackColumn(wxString("Number"));
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
@@ -13726,15 +13798,16 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     
-    //listcontrol routes with routes    
+    //listcontrol routes with routes
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
-//    disableable_buttons.push_back(button_transport_route);
+    //    disableable_buttons.push_back(button_transport_route);
     disableable_buttons.push_back(button_delete_route);
-
+    
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-//    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+    SetColor(listcontrol_routes);
+    //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
@@ -13775,15 +13848,15 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     //button to add a sight
-    button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
     
     //button to add a position
-    button_add_position = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_add_position = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
     
     //button to add a route
-    button_add_route = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(20,20), wxBU_EXACTFIT);
+    button_add_route = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
     
     
@@ -13811,7 +13884,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //    for(i=0; i<(listcontrol_sights->GetColumnCount()); ++i){
     //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
-
+    
     sizer_v->Add(sizer_box_sight, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_position, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_route, 0,  wxALL, margin_v);
@@ -14144,16 +14217,16 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
     
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<DeletePosition, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<DeletePosition, UnsetIdling<ListFrame> >(NULL,
-                                                                                                          delete_position, String("Yes"), unset_idling, String("No"),
-                                                                                                          "",
-                                                                                                          "Do you really want to remove this position?",
-                                                                                                          wxDefaultPosition,
-                                                                                                          wxDefaultSize,
-                                                                                                          String(""));
+                                                                                                                                        delete_position, String("Yes"), unset_idling, String("No"),
+                                                                                                                                        "",
+                                                                                                                                        "Do you really want to remove this position?",
+                                                                                                                                        wxDefaultPosition,
+                                                                                                                                        wxDefaultSize,
+                                                                                                                                        String(""));
     question_frame->Show(true);
     
     event.Skip(true);
-
+    
 }
 
 //if an item is deselected in listcontrol_positions, disable button_modify_position, button_transport_position and button_delete_position
@@ -14173,7 +14246,7 @@ void ListFrame::OnChangeSelectionInListControl(wxCommandEvent& event){
     //    button_delete_position->Enable(caller->GetSelectedItemCount() != 0);
     
     event.Skip(true);
-
+    
 }
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
@@ -14233,7 +14306,7 @@ void ListFrame::Disconnect(int i_sight){
     ((plot->route_list)[i_route]).update_wxListCtrl(i_route, listcontrol_routes);
     
     //set the background color of the related sight to white
-    (listcontrol_sights)->SetItemBackgroundColour(i_sight, color_white);
+    (listcontrol_sights)->SetItemBackgroundColour(i_sight, wxGetApp().background_color);
     
     //if an item is selected in listcontrol_sights, enable /disable button_transport_sight if the selected sight is related / unrelated to a Route
     if((listcontrol_sights->GetSelectedItemCount()) != 0){
@@ -14256,26 +14329,26 @@ void ListFrame::Disconnect(int i_sight){
 }
 
 /*
-//when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
-void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
-    
-    int i;
-    
-    MousePositionOnListControl(listcontrol_sights, &i);
-    
-    highlighted_route = ((((plot->sight_list)[i]).related_route).value);
-    
-    
-    for(i=0; i<chart_frames.size(); i++){
-        
-        ((chart_frames[i])->draw_panel)->PaintNow();
-        
-    }
-    
-    event.Skip(true);
-    
-}
-*/
+ //when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
+ void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
+ 
+ int i;
+ 
+ MousePositionOnListControl(listcontrol_sights, &i);
+ 
+ highlighted_route = ((((plot->sight_list)[i]).related_route).value);
+ 
+ 
+ for(i=0; i<chart_frames.size(); i++){
+ 
+ ((chart_frames[i])->draw_panel)->PaintNow();
+ 
+ }
+ 
+ event.Skip(true);
+ 
+ }
+ */
 
 //when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route, and the same for the relaetd sight in listcontrol_sights.
 void ListFrame::OnMouseMovement(wxMouseEvent& event){
@@ -14292,13 +14365,13 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
         //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
         for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
-            listcontrol_sights->SetItemBackgroundColour(i, color_white);
+            listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
         }
         for(i=0; i<(listcontrol_positions->GetItemCount()); i++){
-            listcontrol_positions->SetItemBackgroundColour(i, color_white);
+            listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
         }
         for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
-            listcontrol_routes->SetItemBackgroundColour(i, color_white);
+            listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
         }
         
     }else{
@@ -14321,9 +14394,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 }else{
                     
                     //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
-                    listcontrol_sights->SetItemBackgroundColour(i, color_white);
+                    listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
                     if(((((plot->sight_list)[i]).related_route).value) != -1){
-                        listcontrol_routes->SetItemBackgroundColour(((((plot->sight_list)[i]).related_route).value), color_white);
+                        listcontrol_routes->SetItemBackgroundColour(((((plot->sight_list)[i]).related_route).value), wxGetApp().background_color);
                     }
                     
                 }
@@ -14346,7 +14419,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 }else{
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                    listcontrol_positions->SetItemBackgroundColour(i, color_white);
+                    listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
                     
                 }
                 
@@ -14372,9 +14445,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 }else{
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                    listcontrol_routes->SetItemBackgroundColour(i, color_white);
+                    listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
                     if(((((plot->route_list)[i]).related_sight).value) != -1){
-                        listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), color_white);
+                        listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), wxGetApp().background_color);
                     }
                     
                 }
@@ -14402,23 +14475,23 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 }
 
 /*
-//when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
-void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
-    
-    unsigned int i;
-    
-    MousePositionOnListControl(listcontrol_positions, &highlighted_position);
-    
-    for(i=0; i<chart_frames.size(); i++){
-        
-        ((chart_frames[i])->draw_panel)->PaintNow();
-        
-    }
-    
-    event.Skip(true);
-    
-}
-*/
+ //when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
+ void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
+ 
+ unsigned int i;
+ 
+ MousePositionOnListControl(listcontrol_positions, &highlighted_position);
+ 
+ for(i=0; i<chart_frames.size(); i++){
+ 
+ ((chart_frames[i])->draw_panel)->PaintNow();
+ 
+ }
+ 
+ event.Skip(true);
+ 
+ }
+ */
 
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){
@@ -14608,13 +14681,13 @@ template<class T> void CheckYear::operator()(T&event){
         
         check = check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0);
         
-        if(check || ((((p->year)->GetBackgroundColour()) == *wxWHITE) && (String((((p->year)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->year)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->year)->GetValue()).ToStdString())) == String("")))){
             //p->year either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set year_ok to true (false)
             (p->year_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in year
-            (p->year)->SetBackgroundColour(*wxWHITE);
+            (p->year)->SetBackgroundColour(wxGetApp().background_color);
             
             if(check && (p->month_ok)){
                 
@@ -14657,13 +14730,13 @@ template<class T> void CheckMonth::operator()(T&event){
         
         check = check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1);
         
-        if(check || ((((p->month)->GetBackgroundColour()) == *wxWHITE) && (String((((p->month)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->month)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->month)->GetValue()).ToStdString())) == String("")))){
             //p->month either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set month_ok to true (false)
             (p->month_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in month
-            (p->month)->SetBackgroundColour(*wxWHITE);
+            (p->month)->SetBackgroundColour(wxGetApp().background_color);
             
             if(check && (p->year_ok)){
                 
@@ -14719,12 +14792,12 @@ template<class T> void CheckDay::operator()(T& event){
         }
         
         
-        if(check || ((((p->day)->GetBackgroundColour()) == *wxWHITE) && (String((((p->day)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->day)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->day)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set day_ok to true (false)
             (p->day_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in day
-            (p->day)->SetBackgroundColour(*wxWHITE);
+            (p->day)->SetBackgroundColour(wxGetApp().background_color);
             
             
         }else{
@@ -14867,12 +14940,12 @@ template<class T> void CheckHour::operator()(T &event){
         check = check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24);
         
         
-        if(check || ((((p->hour)->GetBackgroundColour()) == *wxWHITE) && (String((((p->hour)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->hour)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->hour)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set hour_ok to true (false)
             (p->hour_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->hour)->SetBackgroundColour(*wxWHITE);
+            (p->hour)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -14911,12 +14984,12 @@ template<class T> void CheckMinute::operator()(T &event){
         
         check = check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60);
         
-        if(check || ((((p->minute)->GetBackgroundColour()) == *wxWHITE) && (String((((p->minute)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->minute)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->minute)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set minute_ok to true (false)
             (p->minute_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in minute
-            (p->minute)->SetBackgroundColour(*wxWHITE);
+            (p->minute)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -14954,12 +15027,12 @@ template<class T> void CheckSecond::operator()(T &event){
         
         check = check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
         
-        if(check || ((((p->second)->GetBackgroundColour()) == *wxWHITE) && (String((((p->second)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->second)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->second)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set second_ok to true (false)
             (p->second_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->second)->SetBackgroundColour(*wxWHITE);
+            (p->second)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
@@ -15057,12 +15130,12 @@ template<class T>void CheckRouteType::operator()(T& event){
         }
         
         
-        if(check || ((((p->name)->GetBackgroundColour()) == *wxWHITE) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->name)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetBackgroundColour(*wxWHITE);
+            (p->name)->SetBackgroundColour(wxGetApp().background_color);
             
         }else{
             
@@ -15136,7 +15209,6 @@ template <class T> void RouteTypeField::get(T &event){
 
 void SightFrame::OnPressReduce(wxCommandEvent& event){
     
-    unsigned int i;
     stringstream s;
     
     //writes the values of the GUI fields in the non-GUI fields
@@ -15213,6 +15285,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     //    types.Add(wxT("Lambert"));
     
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+    SetColor(name);
     name->SetValue(types[0]);
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -15247,7 +15320,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //    name->SetValue("");
-    name->SetBackgroundColour(*wxWHITE);
+    SetColor(name);
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
@@ -15378,7 +15451,7 @@ template <class P> void AngleField<P>::set(void){
     
     //all the cases above must share these lines, so I put them here
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
-    min->SetValue(wxString::Format(wxT("%f"), min_temp));
+    min->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, min_temp));
     
     sign_ok = true;
     deg_ok = true;
@@ -15396,7 +15469,7 @@ template<class P> void LengthField<P>::set(void){
             //unit = String("nm")
             
             
-            value->SetValue(wxString::Format(wxT("%f"), (length->value)));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (length->value)));
             unit->SetValue(wxString("nm"));
             break;
             
@@ -15406,7 +15479,7 @@ template<class P> void LengthField<P>::set(void){
         case 'm':{
             //unit = String("m")
             
-            value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
             unit->SetValue(wxString("m"));
             
             break;
@@ -15417,7 +15490,7 @@ template<class P> void LengthField<P>::set(void){
         case 'f':{
             //unit = String("ft")
             
-            value->SetValue(wxString::Format(wxT("%f"), /*I convert the lenght from nm to feet*/(length->value)*nm_ft));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(length->value)*nm_ft));
             unit->SetValue(wxString("ft"));
             
             break;
@@ -15455,7 +15528,7 @@ void ChronoField::set(Chrono chrono_in){
     
     hour->SetValue(wxString::Format(wxT("%i"), chrono_in.h));
     minute->SetValue(wxString::Format(wxT("%i"), chrono_in.m));
-    second->SetValue(wxString::Format(wxT("%f"), chrono_in.s));
+    second->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, chrono_in.s));
     
     hour_ok = true;
     minute_ok = true;
@@ -15509,7 +15582,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    name->SetBackgroundColour(*wxWHITE);
+    SetColor(name);
     
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
@@ -15546,6 +15619,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
     (check->p) = this;
     
     checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+    SetColor(checkbox);
     checkbox->Bind(wxEVT_CHECKBOX, (*check));
     
     checkbox->SetValue(false);
@@ -15615,7 +15689,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
-    deg->SetBackgroundColour(*wxWHITE);
+    SetColor(deg);
     AdjustWidth(deg);
     deg->SetValue(wxString(""));
     deg_ok = false;
@@ -15625,11 +15699,11 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     deg->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcDegree<wxKeyEvent>, this);
     
     
-    text_deg = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("° "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_deg = new StaticText((parent_frame->panel), wxT("° "), wxDefaultPosition, wxDefaultSize);
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
-    min->SetBackgroundColour(*wxWHITE);
+    SetColor(min);
     min->SetValue(wxString(""));
     min_ok = false;
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
@@ -15637,7 +15711,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     min->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcMinute<wxKeyEvent>, this);
     
     
-    text_min = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("' "), wxDefaultPosition, wxDefaultSize, 0, wxT(""));
+    text_min = new StaticText((parent_frame->panel), wxT("' "), wxDefaultPosition, wxDefaultSize);
     
     //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if((format == String("NS")) || (format == String("EW"))){
@@ -15647,7 +15721,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     if(format != String("")){
         //if the AngleField format is either NS, EW or +-, the sign field is used -> I set its background colour, width and bind it to check->check_sign
         
-        sign->SetBackgroundColour(*wxWHITE);
+        SetColor(sign);
         AdjustWidth(sign);
         sign->SetValue(wxString(""));
         sign_ok = false;
@@ -15722,6 +15796,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
@@ -15732,6 +15807,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     
     
     unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
+    SetColor(unit);
     AdjustWidth(unit);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
     unit->SetValue(unit_value.value);
@@ -15764,6 +15840,7 @@ template<class P> StringField<P>::StringField(P* parent_in, String* p){
     (set_string_to_current_time.p) = this;
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, check);
@@ -15810,7 +15887,7 @@ template<class P> template<class E> void AngleField<P>::OnEditSign(E& event){
     if(check){
         
         //because the text in sign is valid, I set the background color of sign to white
-        sign->SetBackgroundColour(*wxWHITE);
+        sign->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15835,7 +15912,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event
     if(check){
         
         //because the text in sign is valid, I set the background color of deg to white
-        deg->SetBackgroundColour(*wxWHITE);
+        deg->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15860,7 +15937,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event
     if(check){
         
         //because the text in sign is valid, I set the background color of min to white
-        min->SetBackgroundColour(*wxWHITE);
+        min->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15898,7 +15975,7 @@ template<class E> void ChronoField::OnEditHour(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        hour->SetBackgroundColour(*wxWHITE);
+        hour->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15922,7 +15999,7 @@ template<class E> void ChronoField::OnEditMinute(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        minute->SetBackgroundColour(*wxWHITE);
+        minute->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15946,7 +16023,7 @@ template<class E> void ChronoField::OnEditSecond(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        second->SetBackgroundColour(*wxWHITE);
+        second->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15972,7 +16049,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        value->SetBackgroundColour(*wxWHITE);
+        value->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -15999,7 +16076,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of unit to white
-        unit->SetBackgroundColour(*wxWHITE);
+        unit->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16036,7 +16113,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     }
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-    year->SetBackgroundColour(*wxWHITE);
+    SetColor(year);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->SetValue(wxString(""));
     year_ok = false;
@@ -16045,10 +16122,9 @@ DateField::DateField(SightFrame* frame, Date* p){
     year->Bind(wxEVT_KEY_UP, &DateField::OnEditYear<wxKeyEvent>, this);
     
     
-    text_hyphen_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
-    
+    text_hyphen_1 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize);
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-    month->SetBackgroundColour(*wxWHITE);
+    SetColor(month);
     AdjustWidth(month);
     month->SetValue(wxString(""));
     month_ok = false;
@@ -16057,11 +16133,10 @@ DateField::DateField(SightFrame* frame, Date* p){
     month->Bind(wxEVT_COMBOBOX, &DateField::OnEditMonth<wxCommandEvent>, this);
     month->Bind(wxEVT_KEY_UP, &DateField::OnEditMonth<wxKeyEvent>, this);
     
-    text_hyphen_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT("-"), wxDefaultPosition, wxDefaultSize);
-    
+    text_hyphen_2 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-    day->SetBackgroundColour(*wxWHITE);
+    SetColor(day);
     //I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
     for(days.Clear(), i=0; i<31; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));
@@ -16110,7 +16185,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-    hour->SetBackgroundColour(*wxWHITE);
+    SetColor(hour);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
     hour->SetValue(wxString(""));
@@ -16120,10 +16195,10 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     hour->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditHour<wxCommandEvent>, this);
     hour->Bind(wxEVT_KEY_UP, &ChronoField::OnEditHour<wxKeyEvent>, this);
     
-    text_colon_1 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
+    text_colon_1 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    minute->SetBackgroundColour(*wxWHITE);
+    SetColor(minute);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->SetValue(wxString(""));
@@ -16133,11 +16208,11 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     minute->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditMinute<wxCommandEvent>, this);
     minute->Bind(wxEVT_KEY_UP, &ChronoField::OnEditMinute<wxKeyEvent>, this);
     
-    text_colon_2 = new wxStaticText((parent_frame->panel), wxID_ANY, wxT(":"), wxDefaultPosition, wxDefaultSize);
+    text_colon_2 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
-    second->SetBackgroundColour(*wxWHITE);
+    SetColor(second);
     second->SetValue(wxString(""));
     second_ok = false;
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
@@ -16175,6 +16250,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+    SetColor(name);
     AdjustWidth(name);
     ok = false;
     name->SetValue("");
@@ -16244,7 +16320,7 @@ template<class E> void BodyField::OnEdit(E& event){
         (*((parent_frame->limb)->check))(event);
         
         //because the text in name is valid, I set the background color of name to white
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         
     }else{
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
@@ -16283,7 +16359,7 @@ template<class E> void LimbField::OnEdit(E& event){
     
     if(check){
         
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16309,7 +16385,7 @@ template<class E> void DateField::OnEditYear(E& event){
     
     if(check){
         
-        year->SetBackgroundColour(*wxWHITE);
+        year->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16334,7 +16410,7 @@ template<class E> void DateField::OnEditMonth(E& event){
     
     if(check){
         
-        month->SetBackgroundColour(*wxWHITE);
+        month->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16369,7 +16445,7 @@ template<class E> void DateField::OnEditDay(E& event){
     
     if(check){
         
-        day->SetBackgroundColour(*wxWHITE);
+        day->SetBackgroundColour(wxGetApp().background_color);
         
     }
     
@@ -16417,7 +16493,7 @@ template<class E> void RouteTypeField::OnEdit(E& event){
         (parent_frame->omega)->Enable(!enable);
         
         //because the text in name is valid, I set the background color of name to white
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         
     }else{
         
@@ -16640,7 +16716,7 @@ template<class E> void ProjectionField::OnEdit(E& event){
     
     if(check){
         
-        name->SetBackgroundColour(*wxWHITE);
+        name->SetBackgroundColour(wxGetApp().background_color);
         //choses the projection entered in name button_reduce
         (parent->draw_panel)->OnChooseProjection(event);
         
@@ -16688,6 +16764,16 @@ ListControl::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_butt
     
 }
 
+
+//construct a StaticText object from a wxStaticText object, and sets its color
+StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& pos, const wxSize& size) : wxStaticText(parent, wxID_ANY, label, pos, size, 0, wxT("")){
+    
+    SetColor(this);
+    
+}
+
+
+
 //this pushes back a column to ListControl
 void ListControl::PushBackColumn(wxString name){
     
@@ -16712,6 +16798,6 @@ void ListControl::DeselectAll(void){
         SetItemState(i, 0, wxLIST_STATE_SELECTED);
         
     }
-   
+    
 }
 

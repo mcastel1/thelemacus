@@ -13,43 +13,8 @@
 #include "wx/wx.h"
 #endif
 
-#include "chartdir.h"
+//#include "chartdir.h"
 
-
-#include <iostream>
-#include <cstdio>
-#include <cmath>
-#include <vector>
-#include <fstream>
-#include <strstream>
-#include <string.h>
-#include <sstream>
-#include <algorithm>
-#include <list>
-#include <stdio.h>
-
-
-#include "gsl_rng.h"
-// #include "gsl_randist.h"
-// #include "gsl_vector.h"
-// #include "gsl_matrix.h"
-// #include "gsl_eigen.h"
-#include "gsl_blas.h"
-#include "gsl_sf_pow_int.h"
-#include "gsl_sf_exp.h"
-#include "gsl_errno.h"
-#include "gsl_math.h"
-#include "gsl_spline.h"
-#include "gsl_integration.h"
-#include "gsl_roots.h"
-// #include "gsl_complex.h"
-// #include "gsl_complex_math.h"
-
-#include <boost/algorithm/string.hpp>
-
-
-
-using namespace std;
 
 class BodyField;
 class LimbField;
@@ -75,7 +40,6 @@ class Position;
 class Catalog;
 class Limb;
 class Length;
-class String;
 class Plot;
 class File;
 class Time;
@@ -86,6 +50,42 @@ class Sight;
 class Atmosphere;
 class Answer;
 class Body;
+class String;
+
+
+//a class for color objects
+class Color: public wxColour{
+    
+public:
+    Color();
+    Color(unsigned char, unsigned char, unsigned char);
+    Color(unsigned char, unsigned char, unsigned char, unsigned char);
+    
+    void read_from_file(String, String, String);
+    int ToRGB(void);
+    
+};
+
+class String{
+    
+public:
+    string value;
+    
+    String();
+    String(string);
+    void enter(String, String);
+    void print(String, String, ostream&);
+    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, String, String);
+    void write_to_file(String, File&, String);
+    void set(String, String, String);
+    String append(String);
+    String prepend(String);
+    
+    bool operator==(const String&), operator!=(const String&);
+    
+};
+
 
 class Int{
     
@@ -101,6 +101,26 @@ public:
     bool operator==(const Int&), operator!=(const Int&);
     
 };
+
+class Chrono{
+    
+public:
+    unsigned int h, m;
+    double s;
+    
+    void print(String, String, ostream&);
+    bool set(String, double, String);
+    bool set_current(Int, String);
+    void enter(String, String);
+    bool read_from_file(String, File&, bool, String);
+    bool read_from_file(String, String, String);
+    string to_string(unsigned int);
+    
+    bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);
+    
+};
+
+
 
 class Double{
     
@@ -221,25 +241,7 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
     
 }
 
-class String{
-    
-public:
-    string value;
-    
-    String();
-    String(string);
-    void enter(String, String);
-    void print(String, String, ostream&);
-    void read_from_file(String, File&, bool, String);
-    void read_from_file(String, String, String);
-    void write_to_file(String, File&, String);
-    void set(String, String, String);
-    String append(String);
-    String prepend(String);
-    
-    bool operator==(const String&), operator!=(const String&);
-    
-};
+
 
 //this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor struct which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
 template<typename FF_OK> class MessageFrame: public wxFrame{
@@ -732,11 +734,11 @@ public:
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     
-    void DrawOld(unsigned int, int, int, DrawPanel*);
+    void DrawOld(unsigned int, Color, int, DrawPanel*);
     void DrawOld(unsigned int, wxDC*, DrawPanel*, String);
     void DrawOld(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
 
-    void Draw(unsigned int, int, int, DrawPanel*, String);
+    void Draw(unsigned int, Color, int, DrawPanel*, String);
     void Draw(unsigned int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     
@@ -761,22 +763,6 @@ public:
     
 };
 
-class Chrono{
-    
-public:
-    unsigned int h, m;
-    double s;
-    
-    void print(String, String, ostream&);
-    bool set(String, double, String);
-    bool set_current(String);
-    void enter(String, String);
-    bool read_from_file(String, File&, bool, String);
-    string to_string(unsigned int);
-    
-    bool operator==(const Chrono&), operator!=(const Chrono&);
-    
-};
 
 
 
@@ -1402,6 +1388,18 @@ public:
     
 };
 
+//my own derived class of wxStaticText
+class StaticText : public wxStaticText{
+  
+public:
+    
+     
+    StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&);
+        
+};
+
+
+
 //my own derived class of wxListCtrl
 class ListControl : public wxListCtrl{
   
@@ -1427,9 +1425,6 @@ public:
     DrawPanel(ChartPanel*, const wxPoint& position_in, const wxSize& size_in);
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
-    XYChart *chart;
-    //a ChartDirector layer to draw splines on chart
-    SplineLayer *spline_layer;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/position_screen_now, position_start_drag, position_end_drag, position_now_drag, position_draw_panel_now;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double /*min and max values of the Mercator or 3D projections x, y*/x_min, x_max, y_min, y_max, x_min_start_drag, x_max_start_drag, y_min_start_drag, y_max_start_drag, x_span_start_drag,
@@ -1443,7 +1438,7 @@ public:
     gsl_vector *r, /*vector position in the x'y'z' reference frame used for multiple purposes*/*rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;
     Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
     Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructedd, d_0,*/ /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
-    wxStaticText*text_position_start, *text_position_end;
+    StaticText *text_position_start, *text_position_end;
     bool /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling;
     Position /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis;
     Angle rotation_angle, /*an angle containing the middle longitude/latitude of the current 3D projection, rounded up to the closest value which is a multiple of delta_lambda/phi, used for drawing things in the middle of the projection*/lambda_middle, phi_middle, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/ lambda_start, lambda_end, phi_start, phi_end;
@@ -1463,11 +1458,13 @@ public:
     //this is true if the label which is being drawn is the first among the parallel/meridian labels, false otherwise
     bool first_label;
     Plot* plot;
-    MemBlock mem_block;
     wxMemoryInputStream * memory_input_stream;
     wxBitmap* bitmap_image; 
     UnsetIdling<DrawPanel>* unset_idling;
-    vector< wxStaticText* > label_lambda, label_phi;
+    vector< StaticText* > label_lambda, label_phi;
+    //this is used for drawing 
+    wxMemoryDC memory_dc;
+
 
  
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
@@ -1497,6 +1494,8 @@ public:
     bool ScreenToGeo_Mercator(wxPoint, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*);
+    void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);
+    void ProjectionToDrawPanel_3D(Projection, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
     void Set_lambda_phi_min_max_Mercator(void);
     void Set_lambda_phi_min_max_3D(void);
@@ -1619,7 +1618,7 @@ public:
     wxComboBox*sign, * deg;
     wxTextCtrl *min;
     //texts
-    wxStaticText* text_deg, *text_min;
+    StaticText* text_deg, *text_min;
     wxBoxSizer *sizer_h, *sizer_v;
     Angle* angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
@@ -1703,7 +1702,7 @@ public:
     wxTextCtrl *year;
     wxComboBox *month, *day;
     //texts
-    wxStaticText* text_hyphen_1, *text_hyphen_2;
+    StaticText* text_hyphen_1, *text_hyphen_2;
     wxBoxSizer *sizer_h, *sizer_v;
     //this points to a Date object, which contains the date written in the GUI fields of this
     Date* date;
@@ -1734,7 +1733,7 @@ public:
     //second text control
     wxTextCtrl *second;
     //texts
-    wxStaticText* text_colon_1, *text_colon_2;
+    StaticText* text_colon_1, *text_colon_2;
     wxBoxSizer *sizer_h, *sizer_v;
     //this points to a Date object, which contains the date written in the GUI fields of this
     Chrono* chrono;
@@ -1784,17 +1783,7 @@ public:
 
 
 
-//a class for color objects
-class Color: public wxColour{
-    
-public:
-    Color();
-    Color(unsigned char, unsigned char, unsigned char);
-    Color(unsigned char, unsigned char, unsigned char, unsigned char);
-    
-    void read_from_file(String, String, String);
 
-};
 
 
 //class OnSelectInListControlSights{
@@ -1916,6 +1905,7 @@ public:
 
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
+    Double size_small_button_over_width_screen;
     vector< vector< vector<float> > > data_x, data_y;
     vector< vector< vector<Position> > > data_3d;
     Position /*these are the positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_now, p_end;
@@ -2111,11 +2101,10 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;
-    wxStaticText *text_position_now, *text_slider;
+    StaticText *text_position_now, *text_slider;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
-    TextBox* box;
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     //the color of the horizon circle for the 3D projection

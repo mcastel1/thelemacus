@@ -9,106 +9,63 @@
 //
 //#ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/app.h"
+#include "wx/datetime.h"
 //#endif
 
-//#include "chartdir.h"
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <vector>
+#include <fstream>
+#include <strstream>
+#include <string.h>
+#include <sstream>
+#include <algorithm>
+#include <list>
+#include <stdio.h>
 
 
-//#include <iostream>
-//#include <cstdio>
-//#include <cmath>
-//#include <vector>
-//#include <fstream>
-//#include <strstream>
-//#include <string.h>
-//#include <sstream>
-//#include <algorithm>
-//#include <list>
-//#include <stdio.h>
-
-
-//#include "gsl_rng.h"
+#include "gsl_rng.h"
 // #include "gsl_randist.h"
 // #include "gsl_vector.h"
 // #include "gsl_matrix.h"
 // #include "gsl_eigen.h"
-//#include "gsl_blas.h"
-//#include "gsl_sf_pow_int.h"
-//#include "gsl_sf_exp.h"
-//#include "gsl_errno.h"
-//#include "gsl_math.h"
-//#include "gsl_spline.h"
-//#include "gsl_integration.h"
-//#include "gsl_roots.h"
+#include "gsl_blas.h"
+#include "gsl_sf_pow_int.h"
+#include "gsl_sf_exp.h"
+#include "gsl_errno.h"
+#include "gsl_math.h"
+#include "gsl_spline.h"
+#include "gsl_integration.h"
+#include "gsl_roots.h"
 // #include "gsl_complex.h"
 // #include "gsl_complex_math.h"
 
+#include <boost/algorithm/string.hpp>
 
 
-//using namespace std;
 
-//class BodyField;
-//class LimbField;
-//template<class T> class CheckField;
-//template<class P> class AngleField;
-//class LengthField;
-//class DateField;
-//class ChronoField;
-//template<class P> class StringField;
-//class MyApp;
-//class MessageFrame;
-//template<class F_YES, class F_NO> class QuestionFrame;
-//class ListFrame;
-//class SightFrame;
-//class ChartFrame;
-//class PlotFrame;
-//class ChartPanel;
+using namespace std;
 
-//struct CheckBody;
-//struct CheckLimb;
-//template<class T> struct CheckCheck;
-//struct CheckChrono;
-//template<class P> class CheckAngle;
-//template<class P> struct CheckSign;
-//template<class P> struct CheckArcDegree;
-//template<class P> struct CheckArcMinute;
-//struct CheckLength;
-//class CheckDate;
-//class CheckYear;
-//class CheckMonth;
-//class CheckDay;
-//struct CheckHour;
-//struct CheckMinute;
-//struct CheckSecond;
-//template<class P> struct CheckString;
-//template<class P> struct SetStringToCurrentTime;
-//struct TabulateDays;
-//template<class T> class PrintErrorMessage;
-//struct OnSelectInListBox;
+#include "lib.h"
 
-//class Catalog;
-//class Limb;
-//class Angle;
-//class Length;
-//class String;
-//class Plot;
-//class File;
-//class Time;
-//class Date;
-//class Chrono;
-//class Route;
-//class Sight;
-//class Atmosphere;
-//class Answer;
-//class Body;
+
+
+
 
 class MyApp: public wxApp{
 public:
 
     //this rectangle contains the size of the display on which the *this is run
     wxRect rectangle_display;
+    //The default fore/background color for day/night vision of the app of all frames in *this. background_color also represents the default, plain background color of fields, such as BodyFields, and it is thus conceptally equivalent to 'white' color
+    Color foreground_color, background_color;
+    Int time_zone;
 
     virtual bool OnInit();
 
 };
 
+wxDECLARE_APP(MyApp);
+wxIMPLEMENT_APP(MyApp);

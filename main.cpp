@@ -1,10 +1,12 @@
 /*
  
- g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -I/Applications/ChartDirector/include -I/Applications/boost_1_66_0/ -L/Applications/ChartDirector/lib  -Wall -Wno-c++11-extensions -lchartdir -rpath /Applications/ChartDirector/lib -O3
+ g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -I/Applications/boost_1_66_0/ -L/Applications/ChartDirector/lib  -Wall -Wno-c++11-extensions -rpath -O3
  */
 
 //uncomment this to test the code at higher speed
 //#define wxDEBUG_LEVEL 0
+
+
 
 #include "main.h"
 #include "lib.cpp"
@@ -12,13 +14,15 @@
 /*
  notes:
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
+ - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
+ 
+ 
  - set parents to constructors of all frames that you defined
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
  - set up a proper output to a log file
  - add separator between recent items and non-recent items in BodyField->name
  - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
- - conversion                                    (parent->color_horizon).GetRGBA() does not give the right color
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
  - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label
@@ -35,18 +39,19 @@
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
 - remove zoom_factor, because it is related to omega
- - add night mode.
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - uncomment at '//uncomment this at the end' to display coastlines at the end
+ - uncomment at 'un-comment' and 'un-comment' to display coastlines at the end
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
  - transform all the instances where you compute the span between two angles with Angle::span
  - when you delete a Position, make sure that buttons that modify and delete a position are disabled 
  - in DrawPanel::Draw_Mercator, delete the setting and any use  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
+ - for night mode: add backdrount color to all frames, and change color of text to adapt to day/night mode
+- fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
+ - fix '//bottom border of chart' and draw the other borders. 
  */
 
 
 
-wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(){
     
@@ -92,6 +97,32 @@ bool MyApp::OnInit(){
     
     */
     
+    /*
+    Color my_color(232,23,13);
+    int j = my_color.ToRGB();
+    */
+    
+    /*
+    wxBitmap *michele;
+    wxMemoryDC dc;
+    
+    michele = new wxBitmap(100, 100);
+    dc.SelectObject(*michele);
+    dc.SetPen(wxPen(*wxRED, 1));
+    dc.DrawLine(0,0,10,10);
+
+    */
+    
+    unsigned int i;
+    Int n_chart_frames;
+    stringstream s;
+    String default_projection;
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    wxDisplay display;
+    //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
+    Chrono current_time, dawn, dusk;
+
+    
     wxImage::AddHandler(new wxPNGHandler);
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
@@ -103,13 +134,30 @@ bool MyApp::OnInit(){
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
+    
+    
+    //read the time, and set the background color to either the day or night background color, which are read from file
+    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
+    dawn.read_from_file(String("dawn"), String(path_file_init), String(""));
+    dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
+    current_time.set_current(time_zone, String(""));
+    
 
-    unsigned int i;
-    Int n_chart_frames;
-    stringstream s;
-    String default_projection;
-    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    wxDisplay display;
+    if((current_time < dawn) || (current_time > dusk)){
+        //we are at night -> set background color to night mode
+        
+        foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
+        background_color.read_from_file(String("night background color"), String(path_file_init), String(""));
+
+    }else{
+        //we are at day -> set background color ot day mode
+        
+        foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
+        background_color.read_from_file(String("day background color"), String(path_file_init), String(""));
+        
+    }
+
+
     
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));

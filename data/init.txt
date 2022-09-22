@@ -55,6 +55,7 @@ tick length over width plot area = 1e-2
 tick length over aperture circle observer = 1e-2
 standard thickness over length screen = 1.2e-3
 large thickness over length screen = 3e-3
+size small button over width screen = 2e-2
 thickness route selection over length screen = 2e-2
 color list = (255,0,00) (0,255,0) (0,0,255) (255,128,0) (0,255,255) (255,192,203) (51,102,0) (160,160,160) (255,255,0) (51,153,255)
 color selected item = (51,153,255)
@@ -62,12 +63,14 @@ color horizon = (0,191,255)
 default height of eye = 7 ft
 #the exponent which sets the relation between zoom factor and value of slider
 exponent zoom = 2.0
-maximal zoom factor = 100000
+maximal zoom factor = 10000
 data precision = 32
-display precision = 4
+display precision = 3
+#the time zone where the computer on which the app runs is located, it is a signed integer corresponding to UTC+ ... 
+time zone = +2
 relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
-default projection = 3D
+default projection = Mercator
 #the number of chart frames opened when the program starts
 number chart frames = 2
 #initial rotation with which the 3D projection is displayed
@@ -75,3 +78,11 @@ rotation 0 =
 alpha = 68° 3.43879'
 beta = 1° 3.5304'
 gamma = 3° 11.035789'
+day foreground color = (0,0,0)
+night foreground color = (255,255,255)
+day background color = (224,224,224)
+night background color = (40,40,43)
+#the threshold hour between night and day
+dawn = 06:10:27
+#the threshold hour between day and night
+dusk = 06:35:41

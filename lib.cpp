@@ -8432,8 +8432,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     //sets the pen and the brush, for memory_dc, which will be used in the following 
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-    wxBrush brush(wxGetApp().background_color);
-    memory_dc.SetBrush(brush);
+    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
     
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
@@ -8518,9 +8517,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     int i, j, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
     
-    wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
     //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
-    dc.SetBrush(brush);
+    dc.SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
     
     
     //draw coastlines
@@ -8717,8 +8715,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     wxPoint p;
     Position q, temp;
     
-    wxBrush brush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25));
-    dc.SetBrush(brush);
+    dc.SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
     
     //draw coastlines
     dc.DrawBitmap(*bitmap_image, 0, 0);
@@ -9455,7 +9452,7 @@ void DrawPanel::Draw_3D(void){
     gsl_vector_set(rp, 2, sin((q.phi)));
     
     //draw horizon circle
-    /*
+    //
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
@@ -9470,7 +9467,7 @@ void DrawPanel::Draw_3D(void){
                          );
     //set back the wxPen color
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-     */
+     //
     
     
     

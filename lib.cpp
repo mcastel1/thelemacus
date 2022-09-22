@@ -8432,7 +8432,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     //sets the pen and the brush, for memory_dc, which will be used in the following 
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-    wxBrush brush(Color(0, 0, 0, 0), wxBRUSHSTYLE_TRANSPARENT);
+    wxBrush brush(wxGetApp().background_color);
     memory_dc.SetBrush(brush);
     
     //    sizer_h->Add(text_phi);
@@ -8951,6 +8951,8 @@ void DrawPanel::Draw_Mercator(void){
     //allocate bitmap_image
     bitmap_image = new wxBitmap(width_chart, height_chart);
     memory_dc.SelectObject(*bitmap_image);
+    //draws a rectangle filled with color wxGetApp().background_color on bitmap_image, so bitmap_image will have the right background color
+    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
 
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
@@ -9233,6 +9235,8 @@ void DrawPanel::Draw_3D(void){
     //allocate bitmap_image
     bitmap_image = new wxBitmap(width_chart, height_chart);
     memory_dc.SelectObject(*bitmap_image);
+    //draws a rectangle filled with color wxGetApp().background_color on bitmap_image, so bitmap_image will have the right background color
+    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
 
     
     position_plot_area = wxPoint((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
@@ -9442,6 +9446,7 @@ void DrawPanel::Draw_3D(void){
     gsl_vector_set(rp, 2, sin((q.phi)));
     
     //draw horizon circle
+    /*
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
@@ -9456,6 +9461,7 @@ void DrawPanel::Draw_3D(void){
                          );
     //set back the wxPen color
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+     */
     
     
     

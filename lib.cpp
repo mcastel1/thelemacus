@@ -8430,9 +8430,10 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     text_position_start = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
     text_position_end = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
 
-    //sets the pen, and the color, for memory_dc, which will be used in the following 
+    //sets the pen and the brush, for memory_dc, which will be used in the following 
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-
+    wxBrush brush(Color(0, 0, 0, 0), wxBRUSHSTYLE_TRANSPARENT);
+    memory_dc.SetBrush(brush);
     
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
@@ -9435,7 +9436,6 @@ void DrawPanel::Draw_3D(void){
     gsl_vector_set(rp, 2, sin((q.phi)));
     
     //draw horizon circle
-    /*this does not work 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
@@ -9450,7 +9450,7 @@ void DrawPanel::Draw_3D(void){
                          );
     //set back the wxPen color
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-    */
+    
     
     
     //draw coastlines

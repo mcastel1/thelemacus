@@ -9458,6 +9458,7 @@ void DrawPanel::Draw_3D(void){
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
     //set the wxPen color for the horizon
     memory_dc.SetPen(wxPen(parent->color_horizon, 1));
+    memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
     memory_dc.SetBackground(wxGetApp().background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     memory_dc.DrawCircle(
@@ -9465,8 +9466,9 @@ void DrawPanel::Draw_3D(void){
                          (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
                          (temp.y)/y_max * ((double)width_plot_area)/2.0
                          );
-    //set back the wxPen color
+    //set back the pen  color and brush 
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+    memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
      //
     
     

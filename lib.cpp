@@ -9139,8 +9139,10 @@ void DrawPanel::Draw_Mercator(void){
         }
     
     //bottom border of chart
-    Route(String("l"), Position(plot->phi_min, plot->lambda_min), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
-    
+    Route(String("l"), Position(plot->lambda_min, Angle(plot->phi_min + epsilon_double)), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
+    //upper border of chart
+    Route(String("l"), Position(plot->lambda_min, Angle(plot->phi_max - epsilon_double)), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
+  
     
     //draw labels on parallels
     for(first_label = true,

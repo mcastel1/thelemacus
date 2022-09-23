@@ -144,13 +144,19 @@ bool MyApp::OnInit(){
         
         foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
         background_color.read_from_file(String("night background color"), String(path_file_init), String(""));
-        
+
+        frame_foreground_color.read_from_file(String("frame night foreground color"), String(path_file_init), String(""));
+        frame_background_color.read_from_file(String("frame night background color"), String(path_file_init), String(""));
+         
     }else{
         //we are at day -> set background color ot day mode
         
         foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
         background_color.read_from_file(String("day background color"), String(path_file_init), String(""));
         
+        frame_foreground_color.read_from_file(String("frame day foreground color"), String(path_file_init), String(""));
+        frame_background_color.read_from_file(String("frame day background color"), String(path_file_init), String(""));
+    
     }
     
     

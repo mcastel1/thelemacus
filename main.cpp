@@ -24,7 +24,6 @@
  - add separator between recent items and non-recent items in BodyField->name
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
- - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
  - transforms all  exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
  - in Route::draw_3D, code the part for loxodrome curves

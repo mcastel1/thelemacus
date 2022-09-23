@@ -862,6 +862,36 @@ bool Answer::set(String name, char c, String prefix){
     return check;
     
 }
+//reads *this from file whose path is filename, by looking through the entire file
+void Answer::read_from_file(String name, String filename, String prefix){
+    
+    string line;
+    size_t pos;
+    File file;
+    
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+    
+    //rewind the file pointer
+    file.value.clear();                 // clear fail and eof bits
+    file.value.seekg(0, std::ios::beg); // back to the start!
+    
+    do{
+        
+        line.clear();
+        getline(file.value, line);
+        
+    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+    
+    pos = line.find(" = ");
+    
+    value = line[pos+3];
+    
+    file.close(String(""));
+    
+}
+
 
 
 void Answer::read_from_file(String name, File& file, bool search_entire_file, String prefix){
@@ -9598,6 +9628,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
+    
+    //read show_coastlines from file_init
+    show_coastlines.read_from_file(String("show coastlines"), String(path_file_init), String(""));
     
     //read zoom_factor_max from file_init
     zoom_factor_max.read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));

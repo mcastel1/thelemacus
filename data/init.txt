@@ -90,3 +90,4 @@ frame night background color = (25,25,112)
 dawn = 06:10:27
 #the threshold hour between day and night
 dusk = 21:35:41
+show coastlines = y

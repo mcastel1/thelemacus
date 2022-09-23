@@ -35,7 +35,7 @@
  - if two entries in file_init have a common word, make sure that they are read correctly by the functions which read from file.
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
-- remove zoom_factor, because it is related to omega
+ - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - uncomment at 'un-comment' and 'un-comment' to display coastlines at the end
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
@@ -43,8 +43,7 @@
  - when you delete a Position, make sure that buttons that modify and delete a position are disabled 
  - in DrawPanel::Draw_Mercator, delete the setting and any use  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
  - for night mode: add backdrount color to all frames, and change color of text to adapt to day/night mode
-- fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
- - fix '//bottom border of chart' and draw the other borders.
+ - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
  */
 
 
@@ -53,21 +52,21 @@
 bool MyApp::OnInit(){
     
     /*
-    gsl_vector *a, *b, *c;
-    a = gsl_vector_alloc(3);
-    b = gsl_vector_alloc(3);
-    
-    gsl_vector_set(a, 0, 3.43);
-    gsl_vector_set(a, 1, 2.43);
-    gsl_vector_set(a, 2, 43);
-    
-    gsl_vector_set(b, 0, 2.3);
-    gsl_vector_set(b, 1, .12);
-    gsl_vector_set(b, 2, .3);
-    
-    cross(a, b, &c);
-    
-    cout << "\t\t c = " << gsl_vector_get(c, 0) << " " << gsl_vector_get(c, 1) << " " << gsl_vector_get(c, 2) << "\n";    
+     gsl_vector *a, *b, *c;
+     a = gsl_vector_alloc(3);
+     b = gsl_vector_alloc(3);
+     
+     gsl_vector_set(a, 0, 3.43);
+     gsl_vector_set(a, 1, 2.43);
+     gsl_vector_set(a, 2, 43);
+     
+     gsl_vector_set(b, 0, 2.3);
+     gsl_vector_set(b, 1, .12);
+     gsl_vector_set(b, 2, .3);
+     
+     cross(a, b, &c);
+     
+     cout << "\t\t c = " << gsl_vector_get(c, 0) << " " << gsl_vector_get(c, 1) << " " << gsl_vector_get(c, 2) << "\n";    
      */
     
     /*
@@ -80,35 +79,35 @@ bool MyApp::OnInit(){
      */
     
     /*
-    Route cape_horn;
-    Rectangle ice;
-    vector<Angle> t;
-    bool output;
-    
-    
-    cape_horn = Route(String("c"), Position(Angle(-0.9), Angle(-1)), Angle(0.1));
-    ice = Rectangle(Position(Angle(-1), Angle(-0.5)), Position(Angle(-1.2), Angle(-1.2)));
+     Route cape_horn;
+     Rectangle ice;
+     vector<Angle> t;
+     bool output;
      
-    output = cape_horn.is_included_in(ice, &t, String(""));
-    
-    
-    */
+     
+     cape_horn = Route(String("c"), Position(Angle(-0.9), Angle(-1)), Angle(0.1));
+     ice = Rectangle(Position(Angle(-1), Angle(-0.5)), Position(Angle(-1.2), Angle(-1.2)));
+     
+     output = cape_horn.is_included_in(ice, &t, String(""));
+     
+     
+     */
     
     /*
-    Color my_color(232,23,13);
-    int j = my_color.ToRGB();
-    */
+     Color my_color(232,23,13);
+     int j = my_color.ToRGB();
+     */
     
     /*
-    wxBitmap *michele;
-    wxMemoryDC dc;
-    
-    michele = new wxBitmap(100, 100);
-    dc.SelectObject(*michele);
-    dc.SetPen(wxPen(*wxRED, 1));
-    dc.DrawLine(0,0,10,10);
-
-    */
+     wxBitmap *michele;
+     wxMemoryDC dc;
+     
+     michele = new wxBitmap(100, 100);
+     dc.SelectObject(*michele);
+     dc.SetPen(wxPen(*wxRED, 1));
+     dc.DrawLine(0,0,10,10);
+     
+     */
     
     unsigned int i;
     Int n_chart_frames;
@@ -118,7 +117,7 @@ bool MyApp::OnInit(){
     wxDisplay display;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     Chrono current_time, dawn, dusk;
-
+    
     
     wxImage::AddHandler(new wxPNGHandler);
     
@@ -127,7 +126,7 @@ bool MyApp::OnInit(){
     
     max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
     min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
-
+    
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
@@ -139,13 +138,13 @@ bool MyApp::OnInit(){
     dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
     current_time.set_current(time_zone, String(""));
     
-
+    
     if((current_time < dawn) || (current_time > dusk)){
         //we are at night -> set background color to night mode
         
         foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
         background_color.read_from_file(String("night background color"), String(path_file_init), String(""));
-
+        
     }else{
         //we are at day -> set background color ot day mode
         
@@ -153,8 +152,8 @@ bool MyApp::OnInit(){
         background_color.read_from_file(String("day background color"), String(path_file_init), String(""));
         
     }
-
-
+    
+    
     
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));

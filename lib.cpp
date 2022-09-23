@@ -107,9 +107,20 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
 
 //sets fore/background colors to a generic object of type T
 template<class T> void SetColor(T* object){
-    
-    object->SetForegroundColour((wxGetApp()).foreground_color);
-    object->SetBackgroundColour((wxGetApp()).background_color);
+
+    if((is_base_of<wxFrame, T>::value)){
+        //class T is a frame, beacuse it is derived from wxFrame class -> I set fore/background colors of frames
+        
+        object->SetForegroundColour((wxGetApp()).frame_foreground_color);
+        object->SetBackgroundColour((wxGetApp()).frame_background_color);
+        
+    }else{
+        //class T is not a frame, beacuse it is derived from wxFrame class -> I set fore/background colors of objects which are not frames
+
+        object->SetForegroundColour((wxGetApp()).foreground_color);
+        object->SetBackgroundColour((wxGetApp()).background_color);
+        
+    }
     
 }
 

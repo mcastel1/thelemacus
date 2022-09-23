@@ -82,6 +82,8 @@ day foreground color = (0,0,0)
 night foreground color = (255,255,255)
 day background color = (224,224,224)
 night background color = (40,40,43)
+frame day foreground color = (0,0,0)
+frame night foreground color = (255,255,255)
 frame day background color = (169,169,169)
 frame night background color = (0,0,128)
 #the threshold hour between night and day

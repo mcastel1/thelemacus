@@ -2052,11 +2052,11 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
                 , new_prefix);
         
         //determine which one between the point on (*this) at t_1 and the one at t_2 is the one with minimum distance with respect to q, and store this point into (*p)
-        compute_end(Length((t_1.value)*Re*sin(omega.value)), new_prefix);
+        compute_end(Length((t_1.value)*Re*sin(omega)), new_prefix);
         p_1 = end;
         q.distance(p_1, &s_1, String("Distance with respect to p_1"), new_prefix);
         
-        compute_end(Length((t_2.value)*Re*sin(omega.value)), new_prefix);
+        compute_end(Length((t_2.value)*Re*sin(omega)), new_prefix);
         p_2 = end;
         q.distance(p_2, &s_2, String("Distance with respect to p_2"), new_prefix);
         
@@ -3264,7 +3264,7 @@ void Route::compute_end(String prefix){
             Angle t;
             //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
             //R sin omega = r, r t = l, t = l / (R sin omega)
-            t.set(String(""), (l.value)/(Re*sin(omega.value)), prefix);
+            t.set(String(""), (l.value)/(Re*sin(omega)), prefix);
             
             
             (end.phi).set(String(""), M_PI_2-acos(cos((omega.value))* sin(reference_position.phi)-cos(reference_position.phi)* cos((t.value)) *sin((omega.value))), prefix);

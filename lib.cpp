@@ -12022,7 +12022,7 @@ template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(
         
         time_temp.set_current(String(""));
         //I write in the non-GUI object (p->string)
-        (*(p->string)) = String(time_temp.to_string((display_precision.value)));
+        (*(p->string)) = String(time_temp.to_string((data_precision.value)));
         
         p->set();
         
@@ -15459,7 +15459,7 @@ template <class P> void AngleField<P>::set(void){
     
     //all the cases above must share these lines, so I put them here
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
-    min->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, min_temp));
+    min->SetValue(wxString::Format(wxT("%.*f"), data_precision.value, min_temp));
     
     sign_ok = true;
     deg_ok = true;
@@ -15477,7 +15477,7 @@ template<class P> void LengthField<P>::set(void){
             //unit = String("nm")
             
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (length->value)));
+            value->SetValue(wxString::Format(wxT("%.*f"), data_precision.value, (length->value)));
             unit->SetValue(wxString("nm"));
             break;
             
@@ -15487,7 +15487,7 @@ template<class P> void LengthField<P>::set(void){
         case 'm':{
             //unit = String("m")
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
+            value->SetValue(wxString::Format(wxT("%.*f"), data_precision.value, /*I convert the lenght from nm to meters*/(length->value)*1e3*nm));
             unit->SetValue(wxString("m"));
             
             break;
@@ -15498,7 +15498,7 @@ template<class P> void LengthField<P>::set(void){
         case 'f':{
             //unit = String("ft")
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(length->value)*nm_ft));
+            value->SetValue(wxString::Format(wxT("%.*f"), data_precision.value, /*I convert the lenght from nm to feet*/(length->value)*nm_ft));
             unit->SetValue(wxString("ft"));
             
             break;
@@ -15536,7 +15536,7 @@ void ChronoField::set(Chrono chrono_in){
     
     hour->SetValue(wxString::Format(wxT("%i"), chrono_in.h));
     minute->SetValue(wxString::Format(wxT("%i"), chrono_in.m));
-    second->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, chrono_in.s));
+    second->SetValue(wxString::Format(wxT("%.*f"), data_precision.value, chrono_in.s));
     
     hour_ok = true;
     minute_ok = true;

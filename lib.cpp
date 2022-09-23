@@ -4192,7 +4192,7 @@ Angle Angle::operator+ (const Angle& angle){
     
     Angle temp;
     
-    temp.value = value +angle.value;
+    (temp.value) = value + (angle.value);
     temp.normalize();
     
     return temp;
@@ -4244,7 +4244,7 @@ Angle& Angle::operator -= (const double& x){
 Angle Angle::operator- (const Angle& angle){
     Angle temp;
     
-    temp.value = value -angle.value;
+    (temp.value) = value - (angle.value);
     temp.normalize();
     
     return temp;

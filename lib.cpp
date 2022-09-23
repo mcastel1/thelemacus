@@ -5642,8 +5642,8 @@ void Plot::compute_crossings(String prefix){
             if((route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix)){
                 //in this case, the two routes under consideration intercept with no error message
                 
-                //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle.value), then I add this crossing to the list of sensible crossings
-                if(fabs(x) < cos(min_crossing_angle.value)){
+                //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle), then I add this crossing to the list of sensible crossings
+                if(fabs(x) < cos(min_crossing_angle)){
                     
                     p.resize(l+1);
                     (p[l]).resize(2);
@@ -6321,14 +6321,14 @@ void Sight::compute_DH_parallax_and_limb(String prefix){
             }
             case 'l':
             {
-                //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
-                DH_parallax_and_limb.value = asin(((atmosphere.earth_radius.value)*cos(H_i.value)+(body.radius.value))/(r.value));
+                //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius.value)*cos(H_i)+(body.radius.value))/(r.value));
+                DH_parallax_and_limb.value = asin(((atmosphere.earth_radius.value)*cos(H_i)+(body.radius.value))/(r.value));
                 break;
             }
             case 'c':
             {
-                //H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
-                DH_parallax_and_limb.value = asin((atmosphere.earth_radius.value)*cos(H_i.value)/(r.value));
+                //H_o.value = (H_i.value) + asin((atmosphere.earth_radius.value)*cos(H_i)/(r.value));
+                DH_parallax_and_limb.value = asin((atmosphere.earth_radius.value)*cos(H_i)/(r.value));
                 break;
             }
         }

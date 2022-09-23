@@ -8705,6 +8705,8 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         
         (*labels).resize(((*labels).size())+1);
         ((*labels).back()) = new StaticText(this, wx_string, p, wxDefaultSize);
+        //the constructor of StaticText sets by default the background color to wxGetApp().frame_background_color, becasue most static texts are displayed on top of frames, but here the static text is displayed on top of a wxImage, so I set the appropriate background color
+        ((*labels).back())->SetBackgroundColour(wxGetApp().background_color);
         
         first_label = false;
         
@@ -10878,6 +10880,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         s.str("");
         s << (((parent->parent)->p_now).phi).to_string(String("NS"), (display_precision.value), true) << " " << (((parent->parent)->p_now).lambda).to_string(String("EW"), (display_precision.value), true);
         text_position_end->SetLabel(wxString(s.str().c_str()));
+        text_position_end->SetBackgroundColour(wxGetApp().background_color);
         text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         PaintNow();
     }
@@ -11243,6 +11246,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         s.clear();
         s << (((parent->parent)->p_start).phi).to_string(String("NS"), (display_precision.value), true) << " " << (((parent->parent)->p_start).lambda).to_string(String("EW"), (display_precision.value), true);
         text_position_start->SetLabel(wxString(s.str().c_str()));
+        text_position_start->SetBackgroundColour(wxGetApp().background_color);
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
         //        cout << "((parent->parent)->p_start) = {" << (((parent->parent)->p_start).lambda).to_string(String("EW"), (display_precision.value), false) << " , " << (((parent->parent)->p_start).phi).to_string(String("NS"), (display_precision.value), false) << " }\n";

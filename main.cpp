@@ -22,7 +22,6 @@
  - add lambert projection and 3D sphere with no projection
  - set up a proper output to a log file
  - add separator between recent items and non-recent items in BodyField->name
- - when I replace sample_sight.txt with a file with only a Route, there is a debugging error being prompted
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
  - in Render_Mercator, transform loop to draw labels into loop over coordinates of a geographic Position q, then transform q to draw panel coordinates and obtain p, and use p to set the location of the label

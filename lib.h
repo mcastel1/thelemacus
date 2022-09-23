@@ -221,23 +221,33 @@ inline int floor_exp(double x){
     
 }
 
-//given a wxListCtrl* list_control, it finds on what element of it the mouse is currently on and writes the id of this element in i
+//given a wxListCtrl* list_control, if * list_control has at least one item, it finds on what element of *list_control the mouse is currently on and writes the id of this element in i. Otherwise, it writes wxNOT_FOUND in *i
 void MousePositionOnListControl(wxListCtrl* list_control, int* i){
     
-    wxPoint p;
-    wxRect r;
-    int hit_test_flag;
-    
-    hit_test_flag = wxLIST_HITTEST_ONITEM;
-    
-    p = (list_control->ScreenToClient(wxGetMousePosition()));
-    
-    list_control->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
-    (p.y) -= r.y;
-    
-    (*i) = ((int)(list_control->HitTest(p, hit_test_flag)));
-    
-    //    cout << "\nMouse is on item # " << (*i);
+    if((list_control->GetItemCount()) > 0){
+        //*list_control has a non-zero size -> write in *i the number of the item on which the mouse is hovering
+        
+        wxPoint p;
+        wxRect r;
+        int hit_test_flag;
+        
+        hit_test_flag = wxLIST_HITTEST_ONITEM;
+        
+        p = (list_control->ScreenToClient(wxGetMousePosition()));
+        
+        list_control->GetItemRect(0, r, wxLIST_RECT_BOUNDS);
+        (p.y) -= r.y;
+        
+        (*i) = ((int)(list_control->HitTest(p, hit_test_flag)));
+        
+        //    cout << "\nMouse is on item # " << (*i);
+        
+    }else{
+        //*list_control has zero size -> write in *t wxNOT_FOUND
+        
+        (*i) = wxNOT_FOUND;
+        
+    }
     
 }
 

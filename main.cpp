@@ -25,7 +25,6 @@
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
- - transforms all  exprssions such as cos((route.reference_position.phi.value)) into cos((route.reference_position.phi))
  - in Route::draw_3D, code the part for loxodrome curves
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future

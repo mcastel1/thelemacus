@@ -45,7 +45,6 @@
  - for night mode: add backdrount color to all frames, and change color of text to adapt to day/night mode
 - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
  - fix '//bottom border of chart' and draw the other borders.
- - floating point numbers in listcontrols should be displayed with display precision, while they should displayed with data precision in GUI fields, so the user can access and modify all of their digits. 
  */
 
 

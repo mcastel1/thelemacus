@@ -84,8 +84,6 @@ day background color = (224,224,224)
 night background color = (40,40,43)
 frame day background color = (169,169,169)
 frame night background color = (0,0,128)
-
-
 #the threshold hour between night and day
 dawn = 06:10:27
 #the threshold hour between day and night

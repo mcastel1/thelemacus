@@ -9189,7 +9189,6 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
     memory_dc.DrawRectangle(position_plot_area.x, position_plot_area.y, width_plot_area, height_plot_area);
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
-    memory_dc.SetPen(wxPen(wxGetApp().background_color));
 
     
     //draw labels on parallels
@@ -9218,6 +9217,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
+    memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
     for(i=0; i<(parent->x).size(); i++){
         ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
         memory_dc.DrawPoint(p);

@@ -9190,17 +9190,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.DrawRectangle(position_plot_area.x, position_plot_area.y, width_plot_area, height_plot_area);
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
     memory_dc.SetPen(wxPen(wxGetApp().background_color));
-    
-    /*
-     //bottom border of chart
-     Route(String("l"), Position(plot->lambda_min, Angle(plot->phi_min + epsilon_double)), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
-     //upper border of chart
-     Route(String("l"), Position(plot->lambda_min, Angle(plot->phi_max - epsilon_double)), Angle(M_PI_2), Length(Re*cos(plot->phi_min)*lambda_span)).DrawOld(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this);
-     //left border of chart
-     Route(String("o"), Position(plot->lambda_min - epsilon_double, Angle(plot->phi_min)), Angle(0.0), Length(Re*((plot->phi_max).normalize_pm_pi_ret().value - (plot->phi_min).normalize_pm_pi_ret().value))).Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
-     //right border of chart
-     Route(String("o"), Position(plot->lambda_max + epsilon_double, Angle(plot->phi_min)), Angle(0.0), Length(Re*((plot->phi_max).normalize_pm_pi_ret().value - (plot->phi_min).normalize_pm_pi_ret().value))).Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
-     */
+
     
     //draw labels on parallels
     for(first_label = true,

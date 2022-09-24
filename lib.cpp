@@ -13591,6 +13591,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     plot = new Plot(catalog, String(""));
     
+    //read show_coastlines from file_init
+    show_coastlines.read_from_file(String("show coastlines"), String(path_file_init), String(""));
+    
     GetAllCoastLineData();
     
     this->Bind(wxEVT_CLOSE_WINDOW, &ListFrame::OnClose, this);
@@ -13603,8 +13606,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //read color list from file_init
     s.read_from_file(String("color list"), String(path_file_init), String(""));
     
-    //read show_coastlines from file_init
-    show_coastlines.read_from_file(String("show coastlines"), String(path_file_init), String(""));
+  
     
     
     margin_v = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);

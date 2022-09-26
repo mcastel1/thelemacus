@@ -44,6 +44,7 @@
  - in DrawPanel::Draw_Mercator, delete the setting and any use  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
  - for night mode: add backdrount color to all frames, and change color of text to adapt to day/night mode
  - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
+ - replace fore/background color is determined from the default background color of a wxComboBox with proper extraction of default background color 
  */
 
 
@@ -194,6 +195,11 @@ bool MyApp::OnInit(){
     //bring either of these wxFrames to front
     //    list_frame->Raise();
     ((list_frame->chart_frames)[0])->Raise();
+    
+    //fore/background color is determined from the default background color of a wxComboBox
+    foreground_color = Color(((list_frame->chart_frames)[0])->projection->name->GetForegroundColour());
+    background_color = Color(((list_frame->chart_frames)[0])->projection->name->GetBackgroundColour());
+    
     
     
     return true;

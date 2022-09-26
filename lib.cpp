@@ -9061,7 +9061,7 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set phi_start, phi_end and delta_phi
-    phi_span =  2.0*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value));
+    phi_span =  (((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value);
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > k){

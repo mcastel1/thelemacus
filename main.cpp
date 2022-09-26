@@ -116,7 +116,7 @@ bool MyApp::OnInit(){
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
-    Chrono current_time, dawn, dusk;
+//    Chrono current_time, dawn, dusk;
     
     
     wxImage::AddHandler(new wxPNGHandler);
@@ -133,24 +133,26 @@ bool MyApp::OnInit(){
     
     
     //read the time, and set the background color to either the day or night background color, which are read from file
-    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
-    dawn.read_from_file(String("dawn"), String(path_file_init), String(""));
-    dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
-    current_time.set_current(time_zone, String(""));
+//    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
+//    dawn.read_from_file(String("dawn"), String(path_file_init), String(""));
+//    dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
+//    current_time.set_current(time_zone, String(""));
     
     
-    if((current_time < dawn) || (current_time > dusk)){
-        //we are at night -> set background color to night mode
-        
-        foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
-         
-    }else{
-        //we are at day -> set background color ot day mode
-        
-        foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
+//    if((current_time < dawn) || (current_time > dusk)){
+//        //we are at night -> set background color to night mode
+//
+//        foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
+//
+//    }else{
+//        //we are at day -> set background color ot day mode
+//
+//        foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
+//
+//    }
     
-    }
     
+    foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
     
     rectangle_display = (display.GetClientArea());

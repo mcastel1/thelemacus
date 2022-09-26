@@ -8717,23 +8717,27 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         }
         
         wx_string = wxString(s.str().c_str());
-        
-        //shift p it in such a way that the label drawn at p  is diplayed nicely, and draw the label at  p
-        if(mode == String("NS")){
-            
-            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())-((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), -(GetTextExtent(wx_string).GetHeight())/2);
-            
-        }else{
-            
-            p += wxPoint(-(GetTextExtent(wx_string).GetWidth())/2, ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
-            
-        }
-        
+                
         
         //        dc.DrawRotatedText(wx_string, p, 0);
         
         (*labels).resize(((*labels).size())+1);
-        ((*labels).back()) = new StaticText(this, wx_string, p, wxDefaultSize);
+        //I first crate a StaticText with default position ...
+        ((*labels).back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
+        
+        //... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of ((*labels).back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of ((*labels).back())
+        if(mode == String("NS")){
+            
+            p += wxPoint(-( ((*labels).back())->GetSize().GetWidth() )-((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), -( ((*labels).back())->GetSize().GetHeight() )/2);
+            
+        }else{
+            
+            p += wxPoint(-( ((*labels).back())->GetSize().GetWidth() )/2, ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+            
+        }
+        //... and finally, I set the position of ((*labels).back()) equal to p
+        ((*labels).back())->SetPosition(p);
+        
         //the constructor of StaticText sets by default the background color to wxGetApp().frame_background_color, becasue most static texts are displayed on top of frames, but here the static text is displayed on top of a wxImage, so I set the appropriate background color
         ((*labels).back())->SetBackgroundColour(wxGetApp().background_color);
         

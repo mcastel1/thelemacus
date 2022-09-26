@@ -46,6 +46,15 @@ inline double acos(Double x){
     
 }
 
+//this function shifts x by the minimal amount allowed from the double precision
+inline double shift(double x){
+    
+    
+    
+    
+    
+}
+
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
 inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
     

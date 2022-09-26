@@ -9653,7 +9653,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //read tick length over width plot area from file_init
     tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
-    SetColor(this);
+    //SetColor(this);
     
     
     idling = false;
@@ -12652,7 +12652,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     idling = false;
     
-    SetColor(this);
+    //SetColor(this);
     
     unset_idling = new UnsetIdling<SightFrame>(this);
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
@@ -12924,7 +12924,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     idling = false;
     
-    SetColor(this);
+    //SetColor(this);
     
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
@@ -13061,7 +13061,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     idling = false;
     
-    SetColor(this);
+    //SetColor(this);
     
     unset_idling = new UnsetIdling<RouteFrame>(this);
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
@@ -13461,7 +13461,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     f_ok = f_ok_in;
     
-    SetColor(this);
+    //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
     
@@ -13516,7 +13516,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     f_b = f_b_in;
     string_b = string_b_in;
     
-    SetColor(this);
+    //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);
     
@@ -13616,7 +13616,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //when the ListFrame is created there is no open selection rectangle in any ChartFrame
     selection_rectangle = false;
     
-    SetColor(this);
+    //SetColor(this);
     
     for(i=0; i<color_list.size(); i++){
         
@@ -13782,7 +13782,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_delete_sight);
     
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    SetColor(listcontrol_sights);
+    //SetColor(listcontrol_sights);
     //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -13834,7 +13834,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    SetColor(listcontrol_positions);
+    //SetColor(listcontrol_positions);
     //    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -13872,7 +13872,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    SetColor(listcontrol_routes);
+    //SetColor(listcontrol_routes);
     //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, &ListFrame::OnChangeSelectionInListControl, this);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, &ListFrame::OnChangeSelectionInListControl, this);
@@ -15351,7 +15351,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     //    types.Add(wxT("Lambert"));
     
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
-    SetColor(name);
+    //SetColor(name);
     name->SetValue(types[0]);
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -15386,7 +15386,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //    name->SetValue("");
-    SetColor(name);
+    //SetColor(name);
     read_recent_items();
     AdjustWidth(name);
     name->Bind(wxEVT_KILL_FOCUS, *check);
@@ -15648,7 +15648,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
-    SetColor(name);
+    //SetColor(name);
     
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
@@ -15685,7 +15685,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
     (check->p) = this;
     
     checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-    SetColor(checkbox);
+    //SetColor(checkbox);
     checkbox->Bind(wxEVT_CHECKBOX, (*check));
     
     checkbox->SetValue(false);
@@ -15755,7 +15755,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
-    SetColor(deg);
+    //SetColor(deg);
     AdjustWidth(deg);
     deg->SetValue(wxString(""));
     deg_ok = false;
@@ -15769,7 +15769,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     
     min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
-    SetColor(min);
+    //SetColor(min);
     min->SetValue(wxString(""));
     min_ok = false;
     min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
@@ -15787,7 +15787,7 @@ template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String form
     if(format != String("")){
         //if the AngleField format is either NS, EW or +-, the sign field is used -> I set its background colour, width and bind it to check->check_sign
         
-        SetColor(sign);
+        //SetColor(sign);
         AdjustWidth(sign);
         sign->SetValue(wxString(""));
         sign_ok = false;
@@ -15862,7 +15862,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    SetColor(value);
+    //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
@@ -15873,7 +15873,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
     
     
     unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
-    SetColor(unit);
+    //SetColor(unit);
     AdjustWidth(unit);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
     unit->SetValue(unit_value.value);
@@ -15906,7 +15906,7 @@ template<class P> StringField<P>::StringField(P* parent_in, String* p){
     (set_string_to_current_time.p) = this;
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
-    SetColor(value);
+    //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");
     value->Bind(wxEVT_KILL_FOCUS, check);
@@ -16179,7 +16179,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     }
     
     year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
-    SetColor(year);
+    //SetColor(year);
     year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
     year->SetValue(wxString(""));
     year_ok = false;
@@ -16190,7 +16190,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     
     text_hyphen_1 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize);
     month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
-    SetColor(month);
+    //SetColor(month);
     AdjustWidth(month);
     month->SetValue(wxString(""));
     month_ok = false;
@@ -16202,7 +16202,7 @@ DateField::DateField(SightFrame* frame, Date* p){
     text_hyphen_2 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize);
     
     day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
-    SetColor(day);
+    //SetColor(day);
     //I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
     for(days.Clear(), i=0; i<31; i++){
         days.Add(wxString::Format(wxT("%i"), i+1));
@@ -16251,7 +16251,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
-    SetColor(hour);
+    //SetColor(hour);
     //    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
     AdjustWidth(hour);
     hour->SetValue(wxString(""));
@@ -16264,7 +16264,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     text_colon_1 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize);
     
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
-    SetColor(minute);
+    //SetColor(minute);
     AdjustWidth(minute);
     //    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
     minute->SetValue(wxString(""));
@@ -16278,7 +16278,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
-    SetColor(second);
+    //SetColor(second);
     second->SetValue(wxString(""));
     second_ok = false;
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
@@ -16316,7 +16316,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s){
     
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
-    SetColor(name);
+    //SetColor(name);
     AdjustWidth(name);
     ok = false;
     name->SetValue("");
@@ -16834,7 +16834,7 @@ ListControl::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_butt
 //construct a StaticText object from a wxStaticText object, and sets its color
 StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& pos, const wxSize& size) : wxStaticText(parent, wxID_ANY, label, pos, size, 0, wxT("")){
     
-    SetColor(this);
+    //SetColor(this);
     
 }
 

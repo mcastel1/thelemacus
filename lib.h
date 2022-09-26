@@ -58,6 +58,7 @@ class Color: public wxColour{
     
 public:
     Color();
+    Color(wxColour);
     Color(unsigned char, unsigned char, unsigned char);
     Color(unsigned char, unsigned char, unsigned char, unsigned char);
     

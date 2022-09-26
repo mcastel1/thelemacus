@@ -151,7 +151,7 @@ bool MyApp::OnInit(){
     
     }
     
-    background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_BACKGROUND));
+    background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
     
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));

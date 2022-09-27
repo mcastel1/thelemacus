@@ -44,6 +44,7 @@
  - replace fore/background color is determined from the default background color of a wxComboBox with proper extraction of default background color
  - when you reduce a Sight, the selected items in listcontrol_sights change -> call OnSelectInListControl to enable/disable the correct buttons accordingly
  - when you press reduce in SightFrame, there are errors
+ - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
  */
 
 

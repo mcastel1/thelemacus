@@ -10827,10 +10827,33 @@ void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
 //given a geographic position p and a position q with respect to the origin of *this, it writes the geographic coordinates of p into label and positions label close to q
 void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label){
 
+    //the shift that will be applied to the position of *label
+    wxPoint shift;
+    
+    //set the text of *label
     label->SetLabel(wxString(p.to_string(display_precision.value)));
-    label->SetPosition(q +
-                                   /*I shift the label label with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
-                                   );
+    
+    
+    if((q.x) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) + ((label->GetSize()).x) > (GetSize().x) ){
+        
+        shift = wxPoint(
+                        - ( ((label->GetSize()).x) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) ),
+                        ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
+                        );
+        
+    }else{
+        
+        shift = wxPoint(
+                            ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
+                            ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
+                            );
+        
+    }
+    
+    
+    //I shift the label label with respect to p for clarity
+    label->SetPosition(q + shift);
+
     
 }
 

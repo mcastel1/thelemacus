@@ -1523,6 +1523,7 @@ public:
     bool GeoToDrawPanel_3D(Position, wxPoint*);
     void ShowCoordinates(Position, wxStaticText*);
     void ShowCoordinates(wxPoint, wxStaticText*);
+    void SetCoordinateLabel(Position, wxPoint, wxStaticText*);
     void Set_lambda_phi_min_max_Mercator(void);
     void Set_lambda_phi_min_max_3D(void);
     void Set_x_y_min_max_Mercator(void);

@@ -10803,12 +10803,9 @@ void DrawPanel::ShowCoordinates(Position q, wxStaticText* label){
     wxPoint p;
 
     (this->*GeoToDrawPanel)(q, &p);
-    
-    label->SetLabel(wxString(q.to_string(display_precision.value)));
-    label->SetPosition(p +
-                                   /*I shift the label label with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
-                                   );
-    
+      
+    SetCoordinateLabel(q, p, label);
+
 }
 
 
@@ -10822,8 +10819,16 @@ void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
     (this->*ScreenToGeo)(q, &r);
     (this->ScreenToDrawPanel)(q, &p);
     
-    label->SetLabel(wxString(r.to_string(display_precision.value)));
-    label->SetPosition(p +
+    SetCoordinateLabel(r, p, label);
+    
+}
+
+
+//given a geographic position p and a position q with respect to the origin of *this, it writes the geographic coordinates of p into label and positions label close to q
+void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label){
+
+    label->SetLabel(wxString(p.to_string(display_precision.value)));
+    label->SetPosition(q +
                                    /*I shift the label label with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
                                    );
     

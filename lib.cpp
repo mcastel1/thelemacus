@@ -1686,7 +1686,8 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
     
     //sets color and width of memory_dc to the ones supported as arguments of Draw
     (draw_panel->memory_dc).SetPen(wxPen(color, width));
-    
+    (draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
+
     //comoute the end values of l and writes them in s
     compute_l_ends(&s, draw_panel, prefix);
     

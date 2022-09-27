@@ -10797,8 +10797,8 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
 }
 
-//given a position q with respect to the origin of the screen, it draws on *this a text with the geographic coordinates corresponding to q
-void DrawPanel::ShowCoordinates(wxPoint q){
+//given a position q with respect to the origin of the screen, it writes in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity)
+void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
 
     wxPoint p;
     Position r;
@@ -10806,9 +10806,9 @@ void DrawPanel::ShowCoordinates(wxPoint q){
     (this->*ScreenToGeo)(q, &r);
     (this->ScreenToDrawPanel)(q, &p);
     
-    text_geo_position->SetLabel(wxString(r.to_string(display_precision.value)));
-    text_geo_position->SetPosition(p +
-                                   /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
+    label->SetLabel(wxString(r.to_string(display_precision.value)));
+    label->SetPosition(p +
+                                   /*I shift the label label with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
                                    );
     
 }
@@ -11585,7 +11585,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         }
                         
                         //draw the label of the coordinates of the position which is being
-                        ShowCoordinates(position_now_drag);
+                        ShowCoordinates(position_now_drag, text_geo_position);
                                                 
                         //update the data of the Position under consideration in listcontrol_positions
                         ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

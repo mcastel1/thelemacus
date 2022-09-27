@@ -11057,6 +11057,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         (this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
         
         
+        
         if((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)){
             //in this case, I am dragging the chart (not a route or position)
             
@@ -11107,6 +11108,9 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         }else{
             //in this case, I am dragging a route or position
             
+            //given that the drag is finished, I set to empty text_geo_position
+            text_geo_position->SetLabel(wxString(""));
+            
             if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
                   ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )))){
                 //in this case, drag_end_position lies out the plot area
@@ -11154,10 +11158,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         
     }else{
         //the left button of the mouse has not been lifted at the end of a drag
-        
-        //given that the drag is finished, I set to empty text_geo_position
-        text_geo_position->SetLabel(wxString(""));
-        
+            
         //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
         if(((parent->parent)->highlighted_position) != -1){
             

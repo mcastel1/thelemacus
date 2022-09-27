@@ -14515,12 +14515,6 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
             
         }
         
-        
-        
-        
-        
-        
-        
     }
     
     for(i=0; i<chart_frames.size(); i++){

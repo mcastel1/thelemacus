@@ -10511,6 +10511,12 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
     
 }
 
+
+bool DrawPanel::ScreenToDrawPanel(wxPoint p, wPoint* q){
+    
+    
+}
+
 //converts the point p on the screen (which is supposed to lie in the plot area) into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
 bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     

@@ -10318,7 +10318,7 @@ template<class T>void CheckBody::operator()(T& event){
         }
         i--;
         
-        if(check || ((((p->name)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->name)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             if(check){
@@ -10411,7 +10411,7 @@ template<class T> void CheckLimb::operator()(T &event){
         check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
         
         
-        if(check || ((((p->name)->GetBackgroundColour()) == (wxGetApp().background_color)) && (s == String("")))){
+        if(check || ((((p->name)->GetBackgroundColour()) != (wxGetApp().error_color)) && (s == String("")))){
             //p->name either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set ok to true (false)
@@ -10494,7 +10494,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
         }
         
         
-        if(check || ((((p->sign)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->sign)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))){
             //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set sign_ok to true (false)
@@ -12198,7 +12198,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
         
         check = check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360);
         
-        if(check || ((((p->deg)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->deg)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set deg_ok to true (false)
             (p->deg_ok) = check;
@@ -12236,7 +12236,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
         
         check = check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
         
-        if(check || ((((p->min)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->min)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->min)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->min)->GetValue()).ToStdString())) == String("")))){
             //p->min either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set min_ok to true (false)
@@ -12277,7 +12277,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
         
         check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
         
-        if(check || ((((p->value)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->value)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))){
             //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set value_ok to true (false)
@@ -12324,7 +12324,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
         }
         i--;
         
-        if(check || ((((p->unit)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->unit)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set unit_ok to true (false)
             (p->unit_ok) = check;
@@ -14746,7 +14746,7 @@ template<class T> void CheckYear::operator()(T&event){
         
         check = check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0);
         
-        if(check || ((((p->year)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->year)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->year)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->year)->GetValue()).ToStdString())) == String("")))){
             //p->year either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set year_ok to true (false)
@@ -14795,7 +14795,7 @@ template<class T> void CheckMonth::operator()(T&event){
         
         check = check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12+1);
         
-        if(check || ((((p->month)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->month)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->month)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->month)->GetValue()).ToStdString())) == String("")))){
             //p->month either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set month_ok to true (false)
@@ -14857,7 +14857,7 @@ template<class T> void CheckDay::operator()(T& event){
         }
         
         
-        if(check || ((((p->day)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->day)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->day)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->day)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set day_ok to true (false)
             (p->day_ok) = check;
@@ -15005,7 +15005,7 @@ template<class T> void CheckHour::operator()(T &event){
         check = check_unsigned_int(((p->hour)->GetValue()).ToStdString(), NULL, true, 0, 24);
         
         
-        if(check || ((((p->hour)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->hour)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->hour)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->hour)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set hour_ok to true (false)
             (p->hour_ok) = check;
@@ -15049,7 +15049,7 @@ template<class T> void CheckMinute::operator()(T &event){
         
         check = check_unsigned_int(((p->minute)->GetValue()).ToStdString(), NULL, true, 0, 60);
         
-        if(check || ((((p->minute)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->minute)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->minute)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->minute)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set minute_ok to true (false)
             (p->minute_ok) = check;
@@ -15092,7 +15092,7 @@ template<class T> void CheckSecond::operator()(T &event){
         
         check = check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
         
-        if(check || ((((p->second)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->second)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->second)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->second)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set second_ok to true (false)
             (p->second_ok) = check;
@@ -15195,7 +15195,7 @@ template<class T>void CheckRouteType::operator()(T& event){
         }
         
         
-        if(check || ((((p->name)->GetBackgroundColour()) == (wxGetApp().background_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
+        if(check || ((((p->name)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;

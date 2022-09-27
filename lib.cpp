@@ -10886,12 +10886,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
     //update the instantaneous position of the mouse on the chart
-    s.str("");
     if(GetMouseGeoPosition(&((parent->parent)->p_now))){;
         //if the mouse has a screen position corresponding to a geographic position, I write it into s, otherwise s is left empty
-        s << (((parent->parent)->p_now).phi).to_string(String("NS"), (display_precision.value), true) << " " << (((parent->parent)->p_now).lambda).to_string(String("EW"), (display_precision.value), true);
+        (parent->text_position_now)->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
+    }else{
+        (parent->text_position_now)->SetLabel(wxString(""));
     }
-    (parent->text_position_now)->SetLabel(wxString(s.str().c_str()));
     
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(((parent->parent)->selection_rectangle)){

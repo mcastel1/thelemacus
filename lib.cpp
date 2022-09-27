@@ -10512,8 +10512,10 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
 }
 
 
-bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q){
+//converts the screen position p into the position q with respect to the DrawPanel *this
+void DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q){
     
+    (*q) = p - GetScreenPosition();
     
 }
 

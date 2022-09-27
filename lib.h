@@ -1923,7 +1923,7 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     DeletePosition *delete_position;
-    OnChangeSelectionInListControl* on_change_selection_in_listcontrol_sights;
+    OnChangeSelectionInListControl *on_change_selection_in_listcontrol_sights, *on_change_selection_in_listcontrol_positions, *on_change_selection_in_listcontrol_routes;
     ModifyRoute *modify_route;
     NewRoute *create_route;
     bool selection_rectangle,   /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/

@@ -14527,24 +14527,6 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
 }
 
-/*
- //when the mouse hovers over a given element of listcontrol_positions sets highlighted_position equal to the id of that position
- void ListFrame::OnMouseOnListControlPositions(wxMouseEvent& event){
- 
- unsigned int i;
- 
- MousePositionOnListControl(listcontrol_positions, &highlighted_position);
- 
- for(i=0; i<chart_frames.size(); i++){
- 
- ((chart_frames[i])->draw_panel)->PaintNow();
- 
- }
- 
- event.Skip(true);
- 
- }
- */
 
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){

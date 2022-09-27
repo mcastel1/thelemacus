@@ -24,12 +24,11 @@
  - add separator between recent items and non-recent items in BodyField->name
  - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
- - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code)
+ - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function
  - in Route::draw_3D, code the part for loxodrome curves
  - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  -                                 sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
- - in DrawPanel::Draw_3D delta_lambda is used without being initialized (?)
  - check fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0 in  DrawPanel::Render_3D: it seems that this line has been written as if delta_lambda were expressed in degrees, while it is expressed in radians
  - it seems that DrawPanel::Draw_3D/Mercator  is called multiple times at the beginning of the code, and this is pointless -> check
  - if two entries in file_init have a common word, make sure that they are read correctly by the functions which read from file.
@@ -40,10 +39,11 @@
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
  - transform all the instances where you compute the span between two angles with Angle::span
  - when you delete a Position, make sure that buttons that modify and delete a position are disabled 
- - in DrawPanel::Draw_Mercator, delete the setting and any use  of circle_observer, because you shouldn't need it for mercator projection. all you need for mercator projection if rectangle_observer
- - for night mode: add backdrount color to all frames, and change color of text to adapt to day/night mode
+  - for night mode: dynamically change background color of chart to adapt to day/night mode
  - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
- - replace fore/background color is determined from the default background color of a wxComboBox with proper extraction of default background color 
+ - replace fore/background color is determined from the default background color of a wxComboBox with proper extraction of default background color
+ - when you reduce a Sight, the selected items in listcontrol_sights change -> call OnSelectInListControl to enable/disable the correct buttons accordingly
+ - when you press reduce in SightFrame, there are errors
  */
 
 

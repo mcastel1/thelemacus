@@ -8936,37 +8936,9 @@ void DrawPanel::Draw_Mercator(void){
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
-    
-    
-    //construct the circle of equal altitude which comprises the rectangle delimited by phi_min ... lambda_max
-    //compute the midpoint of the rectangle and write it into circle_observer.refernce_position
-    (circle_observer.reference_position).phi.set(String(""),
-                                                 ((((plot->phi_min).normalize_pm_pi_ret()).value) + (((plot->phi_max).normalize_pm_pi_ret()).value))/2.0,
-                                                 String(""));
-    (circle_observer.reference_position).lambda.set(String(""),
-                                                    ((((plot->lambda_min).normalize_pm_pi_ret()).value) + (((plot->lambda_max).normalize_pm_pi_ret()).value))/2.0,
-                                                    String(""));
-    
-    
-    //compute the maximal distance between the midpoint and the corners of the rectangle, by considering two different corners, and set this (divided by Re) equal to the aperture angle of circle_observer: in this way, circle_observer is centered at the midpoint of the rectangle, and it is wide enough to comprise the rectangle
-    (circle_observer.reference_position).distance(
-                                                  Position(plot->lambda_min, plot->phi_min),
-                                                  &r,
-                                                  String(""), prefix
-                                                  );
-    (circle_observer.reference_position).distance(
-                                                  Position(plot->lambda_min, plot->phi_max),
-                                                  &s,
-                                                  String(""), prefix
-                                                  );
-    (circle_observer.omega).set(String(""), ((max(r,s)).value)/Re, prefix);
-    
+
     //set rectangle_obseerver
     rectangle_observer = Rectangle(Position(plot->lambda_min, plot->phi_min), Position(plot->lambda_max, plot->phi_max));
-    
-    
-    
-    
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){
@@ -9118,7 +9090,7 @@ void DrawPanel::Draw_Mercator(void){
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
                 //                phi_saved = ((route.reference_position).phi);
                 
-                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                (route.l).set(String(""), Re*((parent->tick_length_over_width_plot_area).value)*phi_span, String(""));
                 //                ((route.reference_position).phi) = (plot->phi_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -9165,7 +9137,7 @@ void DrawPanel::Draw_Mercator(void){
                 
                 //                (route.type).set(String(""), String("o"), String(""));
                 //                (route.Z).set(String(""), M_PI_2, String(""));
-                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                (route.l).set(String(""), Re*((parent->tick_length_over_width_plot_area).value)*lambda_span, String(""));
                 //                ((route.reference_position).lambda) = (plot->lambda_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -9294,12 +9266,10 @@ void DrawPanel::Draw_3D(void){
     n_intervals_ticks = (unsigned int)((plot->n_intervals_ticks_preferred).value);
     
     
-    //set lambda_start, lambda_end and delta_lambda
+    //set lambda_span
     if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
         //in this case circle_observer spans all longitudes
         
-        (lambda_start.value) = 0.0;
-        (lambda_end.value) = 2.0*M_PI;
         //because in this case lambda_min/max span the whole angle 2 pi and cannot define a range for lambda_span, I set
         lambda_span = 2.0*((circle_observer.omega).value);
         
@@ -9308,24 +9278,16 @@ void DrawPanel::Draw_3D(void){
         
         if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
             
-            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-            (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
             lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
             
         }else{
             
-            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-            (lambda_end.value) = ((plot->lambda_min).value);
             lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
             
         }
         
     }
-    
-    
-    //compute lambda_middle
-    lambda_middle.set(String(""), round((((circle_observer.reference_position).lambda).value)/delta_lambda) * delta_lambda, String(""));
-    
+
     
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(lambda_span > k){
@@ -9344,11 +9306,41 @@ void DrawPanel::Draw_3D(void){
         }
     }
     
+    //compute delta_lambda
     delta_lambda=k/((double)gamma_lambda);
     while(n_intervals_ticks*delta_lambda<lambda_span){
         if(delta_lambda == k/((double)gamma_lambda)){delta_lambda += k*4.0/((double)gamma_lambda);}
         else{delta_lambda += k*5.0/((double)gamma_lambda);}
     }
+    
+    //compute lambda_middle
+    lambda_middle.set(String(""), round((((circle_observer.reference_position).lambda).value)/delta_lambda) * delta_lambda, String(""));
+  
+    
+    //set lambda_start, lambda_end
+    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+        //in this case circle_observer spans all longitudes
+        
+        (lambda_start.value) = 0.0;
+        (lambda_end.value) = 2.0*M_PI;
+         
+    }else{
+        //in this case, there are two finite longitudes which encircle circle_observer
+        
+        if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+            
+            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
+            
+        }else{
+            
+            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((plot->lambda_min).value);
+            
+        }
+        
+    }
+    
     
     
     

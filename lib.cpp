@@ -13810,7 +13810,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin_v);
     
-    on_change_selection_in_listcontrol = new OnChangeSelectionInListControl(listcontrol_sights);
+    on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights);
 
     
     //listcontrol_positions with positions

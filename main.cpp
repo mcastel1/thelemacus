@@ -152,6 +152,7 @@ bool MyApp::OnInit(){
     
     foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
+    error_color.read_from_file(String("error color"), String(path_file_init), String(""));
     
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));

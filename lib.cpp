@@ -11584,15 +11584,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             
                         }
                         
-                        //draw the label of the coordinates of the position which is being dragged, close to the position itself
-//                        (this->ScreenToDrawPanel)(position_now_drag, &p);
-//                        text_geo_position->SetLabel(wxString( ((plot->position_list)[((parent->parent)->highlighted_position)]).to_string(display_precision.value)  ));
-//                        text_geo_position->SetPosition(p +
-//                                                       /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
-//                                                       );
+                        //draw the label of the coordinates of the position which is being
                         ShowCoordinates(position_now_drag);
-                        
-                        
+                                                
                         //update the data of the Position under consideration in listcontrol_positions
                         ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                         

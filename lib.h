@@ -1521,6 +1521,7 @@ public:
     void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);
     void ProjectionToDrawPanel_3D(Projection, wxPoint*);
     bool GeoToDrawPanel_3D(Position, wxPoint*);
+    void ShowCoordinates(Position, wxStaticText*);
     void ShowCoordinates(wxPoint, wxStaticText*);
     void Set_lambda_phi_min_max_Mercator(void);
     void Set_lambda_phi_min_max_3D(void);

@@ -10797,6 +10797,22 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
 }
 
+//given a Position q, it writes in label a text with the geographic coordinates of q, and sets the position of label close to q (with some margin, for clarity)
+void DrawPanel::ShowCoordinates(Position q, wxStaticText* label){
+
+    wxPoint p;
+
+    (this->*GeoToDrawPanel)(q, &p);
+    
+    label->SetLabel(wxString(q.to_string(display_precision.value)));
+    label->SetPosition(p +
+                                   /*I shift the label label with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
+                                   );
+    
+}
+
+
+
 //given a position q with respect to the origin of the screen, it writes in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity)
 void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
 
@@ -10918,8 +10934,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(((parent->parent)->selection_rectangle)){
-        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
-        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
+//        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
+//        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
+        
+        ShowCoordinates((parent->parent)->p_now, text_position_end);
+        
         PaintNow();
     }
     

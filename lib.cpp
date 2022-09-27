@@ -11547,20 +11547,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     if(((parent->parent)->highlighted_position) != -1){
                         //in this case, the mouse is over a position
                         
+                        wxPoint p;
+
                         if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
 
-                            wxPoint p;
 
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                             (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                            (this->ScreenToDrawPanel)(position_now_drag, &p);
-                            
-                            text_geo_position->SetLabel(wxString( ((plot->position_list)[((parent->parent)->highlighted_position)]).to_string(display_precision.value)  ));
-                            text_geo_position->SetPosition(p +
-                                                           /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
-                                                           );
-                       
-                            
+                                                        
                         }
                         
                         
@@ -11574,6 +11568,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             geo_start_drag.rotate(String(""), rotation_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]), String(""));
                             
                         }
+                        
+                        //draw the label of the coordinates of the position which is being dragged, close to the position itself
+                        (this->ScreenToDrawPanel)(position_now_drag, &p);
+                        text_geo_position->SetLabel(wxString( ((plot->position_list)[((parent->parent)->highlighted_position)]).to_string(display_precision.value)  ));
+                        text_geo_position->SetPosition(p +
+                                                       /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
+                                                       );
+
                         
                         //update the data of the Position under consideration in listcontrol_positions
                         ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

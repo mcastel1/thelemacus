@@ -10797,6 +10797,21 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
 }
 
+//given a position q with respect to the origin of the screen, it draws on *this a text with the geographic coordinates corresponding to q
+void DrawPanel::ShowCoordinates(wxPoint q){
+
+    wxPoint p;
+    Position r;
+
+    (this->*ScreenToGeo)(q, &r);
+    (this->ScreenToDrawPanel)(q, &p);
+    
+    text_geo_position->SetLabel(wxString(r.to_string(display_precision.value)));
+    text_geo_position->SetPosition(p +
+                                   /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
+                                   );
+    
+}
 
 template<class E> void DrawPanel::OnChooseProjection(E& event){
     
@@ -11570,12 +11585,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         }
                         
                         //draw the label of the coordinates of the position which is being dragged, close to the position itself
-                        (this->ScreenToDrawPanel)(position_now_drag, &p);
-                        text_geo_position->SetLabel(wxString( ((plot->position_list)[((parent->parent)->highlighted_position)]).to_string(display_precision.value)  ));
-                        text_geo_position->SetPosition(p +
-                                                       /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
-                                                       );
-
+//                        (this->ScreenToDrawPanel)(position_now_drag, &p);
+//                        text_geo_position->SetLabel(wxString( ((plot->position_list)[((parent->parent)->highlighted_position)]).to_string(display_precision.value)  ));
+//                        text_geo_position->SetPosition(p +
+//                                                       /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
+//                                                       );
+                        ShowCoordinates(position_now_drag);
+                        
                         
                         //update the data of the Position under consideration in listcontrol_positions
                         ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

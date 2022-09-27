@@ -10512,7 +10512,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
 }
 
 
-bool DrawPanel::ScreenToDrawPanel(wxPoint p, wPoint* q){
+bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q){
     
     
 }

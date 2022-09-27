@@ -11275,13 +11275,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     
     if(((parent->parent)->selection_rectangle)){
         //start drawing a selection rectangle
-        
-        stringstream s;
-        
+                
         GetMouseGeoPosition(&((parent->parent)->p_start));
         position_start_selection = position_screen_now;
         //stores the x at the beginning of the selection process, to compute the zoom factor later
-        //        ScreenToMercator(position_start_selection, &start_selection);
         (this->*ScreenToProjection)(position_start_selection, &start_selection);
         text_position_start->SetLabel(wxString( ((parent->parent)->p_start).to_string(display_precision.value) ));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));

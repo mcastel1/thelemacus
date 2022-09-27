@@ -1619,7 +1619,8 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
     
     //sets color and width of memory_dc to the ones supported as arguments of Draw
     (draw_panel->memory_dc).SetPen(wxPen(color, width));
-    
+    (draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
+
     
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){

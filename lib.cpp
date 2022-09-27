@@ -11259,7 +11259,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         position_start_selection = position_screen_now;
         //stores the x at the beginning of the selection process, to compute the zoom factor later
         //        ScreenToMercator(position_start_selection, &start_selection);
-        (this->*ScreenToProjection)(position_start_selection, &start_selection);        
+        (this->*ScreenToProjection)(position_start_selection, &start_selection);
         text_position_start->SetLabel(wxString( ((parent->parent)->p_start).to_string(display_precision.value) ));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
         
@@ -11541,16 +11541,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
 
-                            stringstream s;
                             wxPoint p;
 
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                             (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
                             (this->*GeoToDrawPanel)(((plot->position_list)[((parent->parent)->highlighted_position)]), &p);
                             
-                            s.clear();
-                            s << (((plot->position_list)[((parent->parent)->highlighted_position)]).phi).to_string(String("NS"), (display_precision.value), true) << " " << (((plot->position_list)[((parent->parent)->highlighted_position)]).lambda).to_string(String("EW"), (display_precision.value), true);
-                            text_geo_position->SetLabel(wxString(s.str().c_str()));
+                            text_geo_position->SetLabel(wxString( ((plot->position_list)[((parent->parent)->highlighted_position)]).to_string(display_precision.value)  ));
                             text_geo_position->SetPosition(p +
                                                            /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
                                                            );

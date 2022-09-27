@@ -11553,7 +11553,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
 
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                             (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                            (this->*GeoToDrawPanel)(((plot->position_list)[((parent->parent)->highlighted_position)]), &p);
+                            (this->ScreenToDrawPanel)(position_now_drag, &p);
                             
                             text_geo_position->SetLabel(wxString( ((plot->position_list)[((parent->parent)->highlighted_position)]).to_string(display_precision.value)  ));
                             text_geo_position->SetPosition(p +

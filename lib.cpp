@@ -11259,16 +11259,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         position_start_selection = position_screen_now;
         //stores the x at the beginning of the selection process, to compute the zoom factor later
         //        ScreenToMercator(position_start_selection, &start_selection);
-        (this->*ScreenToProjection)(position_start_selection, &start_selection);
-        
-        
-        s.clear();
-        s << (((parent->parent)->p_start).phi).to_string(String("NS"), (display_precision.value), true) << " " << (((parent->parent)->p_start).lambda).to_string(String("EW"), (display_precision.value), true);
-        text_position_start->SetLabel(wxString(s.str().c_str()));
-//        text_position_start->SetBackgroundColour(wxGetApp().background_color);
+        (this->*ScreenToProjection)(position_start_selection, &start_selection);        
+        text_position_start->SetLabel(wxString( ((parent->parent)->p_start).to_string(display_precision.value) ));
         text_position_start->SetPosition(wxPoint((position_start_selection.x)-(position_draw_panel.x), (position_start_selection.y)-(position_draw_panel.y)));
-        
-        //        cout << "((parent->parent)->p_start) = {" << (((parent->parent)->p_start).lambda).to_string(String("EW"), (display_precision.value), false) << " , " << (((parent->parent)->p_start).phi).to_string(String("NS"), (display_precision.value), false) << " }\n";
         
     }else{
         //finish drawing a selection rectangle

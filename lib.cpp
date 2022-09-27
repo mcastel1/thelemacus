@@ -8996,11 +8996,9 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.SelectObject(*bitmap_image);
     //draws a rectangle whose border and fill are with color wxGetApp().background_color on bitmap_image, so bitmap_image will have the right background color
     //set the pen color equal to the background color, because I want the border of the rectangle to have the background color
-    memory_dc.SetPen(wxPen(wxGetApp().background_color));
-    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
-    //set back the pen color equal to the foreground color
+    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    
+    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint(width_chart*0.15, height_chart*0.1);
@@ -9190,7 +9188,6 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
     memory_dc.DrawRectangle(position_plot_area.x, position_plot_area.y, width_plot_area, height_plot_area);
-    memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
 
     
     //draw labels on parallels

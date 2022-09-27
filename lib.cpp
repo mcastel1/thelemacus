@@ -13810,6 +13810,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin_v);
     
+    on_change_selection_in_listcontrol = new OnChangeSelectionInListControl(listcontrol_sights);
+
     
     //listcontrol_positions with positions
     disableable_buttons.clear();
@@ -15194,6 +15196,11 @@ template<class T>void CheckRouteType::operator()(T& event){
 }
 
 
+OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* caller_in){
+    
+    caller = caller_in;
+
+}
 
 template<class T>void OnChangeSelectionInListControl::operator()(T& event){
     

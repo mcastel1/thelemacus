@@ -11560,7 +11560,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             s.clear();
                             s << (((plot->position_list)[((parent->parent)->highlighted_position)]).phi).to_string(String("NS"), (display_precision.value), true) << " " << (((plot->position_list)[((parent->parent)->highlighted_position)]).lambda).to_string(String("EW"), (display_precision.value), true);
                             text_geo_position->SetLabel(wxString(s.str().c_str()));
-                            text_geo_position->SetPosition(p);
+                            text_geo_position->SetPosition(p +
+                                                           /*I shift the label text_geo_position with respect to p for clarity*/wxPoint(  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
+                                                           );
                        
                             
                         }

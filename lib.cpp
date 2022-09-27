@@ -10824,7 +10824,7 @@ void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
 }
 
 
-//given a geographic position p and a position q with respect to the origin of *this, it writes the geographic coordinates of p into label and positions label close to q
+//given a geographic position p and a position q with respect to the origin of *this, it writes the geographic coordinates of p into label and positions label close to q. The position of label is adjusted in such a way that label is enclosed  in *this
 void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label){
 
     //the shift that will be applied to the position of *label
@@ -10833,25 +10833,34 @@ void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label){
     //set the text of *label
     label->SetLabel(wxString(p.to_string(display_precision.value)));
     
-    
-    if((q.x) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) + ((label->GetSize()).x) > (GetSize().x) ){
-        
-        shift = wxPoint(
-                        - ( ((label->GetSize()).x) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) ),
+    //the default value of the shift
+    shift = wxPoint(
+                        ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
                         ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
                         );
+
+    
+    if((q.x) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) + ((label->GetSize()).x) > (GetSize().x) ){
+        //label does not fit into *this: it goes beyond the right edge of *this -> move it to the left
         
-    }else{
-        
-        shift = wxPoint(
-                            ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
-                            ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
-                            );
+        shift -= wxPoint(
+                        ( ((label->GetSize()).x) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) ),
+                        0
+                        );
         
     }
     
+    if((q.y) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) + ((label->GetSize()).y) > (GetSize().y) ){
+        //label does not fit into *this: it goes beyond the bottom edge of *this -> move up shift
+
+        shift -= wxPoint(
+                         0,
+                         ( ((label->GetSize()).y) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) )
+                         );
+        
+    }
     
-    //I shift the label label with respect to p for clarity
+    //hift the label label with respect to p
     label->SetPosition(q + shift);
 
     

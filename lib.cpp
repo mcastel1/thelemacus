@@ -13585,7 +13585,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     select_route = new SelectRoute(this);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
-    
+    //create extract_color with zero size, because I will need extract_color only to get colors
     
     plot = new Plot(catalog, String(""));
     
@@ -13924,6 +13924,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_add_route = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
     
+    extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, wxSize(0, 0));
+
     
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);

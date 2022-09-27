@@ -194,10 +194,10 @@ bool MyApp::OnInit(){
     //    list_frame->Raise();
     ((list_frame->chart_frames)[0])->Raise();
     
-    //fore/background color is determined from the default background color of a wxComboBox
-    foreground_color = Color(((list_frame->chart_frames)[0])->projection->name->GetForegroundColour());
-    background_color = Color(((list_frame->chart_frames)[0])->projection->name->GetBackgroundColour());
-    
+    //fore/background color is determined from the default background color of extract_colors
+    foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
+    background_color = Color(list_frame->extract_colors->GetBackgroundColour());
+
     
     
     return true;

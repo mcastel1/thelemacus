@@ -13769,6 +13769,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_delete_sight);
     
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights);
     //SetColor(listcontrol_sights);
     //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
@@ -13810,9 +13811,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin_v);
     
-    on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights);
-    on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes);
-    on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions);
 
     
     //listcontrol_positions with positions
@@ -13825,8 +13823,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
-    //SetColor(listcontrol_positions);
-    //    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_positions);
+    on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
     //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
@@ -13863,6 +13860,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes);
     //SetColor(listcontrol_routes);
     //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_routes);

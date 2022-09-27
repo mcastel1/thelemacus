@@ -1216,6 +1216,36 @@ public:
 };
 
 
+//my own derived class of wxListCtrl
+class ListControl : public wxListCtrl{
+  
+public:
+    
+    //a vector containing pointers to the buttons of *this (modify button, etc ...) which may be disabled if some event occurs
+    vector<wxButton*> disableable_buttons;
+    
+    ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&);
+    
+    void PushBackColumn(wxString);
+    void DeselectAll(void);
+    
+};
+
+
+
+//if an item is selected/deselected in caller, enable/disable the disableable buttons in caller
+class OnChangeSelectionInListControl{
+    
+public:
+    
+    ListControl* caller;
+
+    template<class T> void operator()(T&);
+        
+};
+
+
+
 template<class P> struct SetStringToCurrentTime{
     
     StringField<P>* p;
@@ -1408,25 +1438,6 @@ public:
     StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&);
         
 };
-
-
-
-//my own derived class of wxListCtrl
-class ListControl : public wxListCtrl{
-  
-public:
-    
-    //a vector containing pointers to the buttons of *this (modify button, etc ...) which may be disabled if some event occurs
-    vector<wxButton*> disableable_buttons;
-    
-    ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&);
-    
-    void PushBackColumn(wxString);
-    void DeselectAll(void);
-    
-};
-
-
 
 
 class DrawPanel : public wxPanel{
@@ -1958,7 +1969,6 @@ public:
     void OnModifyPosition(wxCommandEvent& event);
     void OnTransportPosition(wxCommandEvent& event);
     void OnPressDeletePosition(wxCommandEvent& event);
-    void OnChangeSelectionInListControl(wxCommandEvent&);
 
     void OnAddRoute(wxCommandEvent& event);
     void OnModifyRoute(wxCommandEvent& event);

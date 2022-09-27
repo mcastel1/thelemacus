@@ -14284,25 +14284,6 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
     
 }
 
-//if an item is deselected in listcontrol_positions, disable button_modify_position, button_transport_position and button_delete_position
-void ListFrame::OnChangeSelectionInListControl(wxCommandEvent& event){
-    
-    unsigned int i;
-    ListControl* caller;
-    
-    caller = ((ListControl*)event.GetEventObject());
-    
-    for(i=0; i<(caller->disableable_buttons).size(); i++){
-        (caller->disableable_buttons)[i]->Enable(caller->GetSelectedItemCount() != 0);
-    }
-    
-    //    button_modify_position->Enable(caller->GetSelectedItemCount() != 0);
-    //    button_transport_position->Enable(caller->GetSelectedItemCount() != 0);
-    //    button_delete_position->Enable(caller->GetSelectedItemCount() != 0);
-    
-    event.Skip(true);
-    
-}
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     
@@ -15211,6 +15192,24 @@ template<class T>void CheckRouteType::operator()(T& event){
     event.Skip(true);
     
 }
+
+
+
+template<class T>void OnChangeSelectionInListControl::operator()(T& event){
+    
+    unsigned int i;
+  
+    for(i=0; i<(caller->disableable_buttons).size(); i++){
+        (caller->disableable_buttons)[i]->Enable(caller->GetSelectedItemCount() != 0);
+    }
+
+    
+    event.Skip(true);
+    
+}
+
+
+
 
 
 //this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second

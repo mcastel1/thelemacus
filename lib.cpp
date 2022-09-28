@@ -11565,7 +11565,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             
                             wxPoint p;
                             
-                            //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (grount) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
+                            //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
                             
                             (this->*GeoToDrawPanel)(route_position_start_drag, &p);
                             
@@ -11598,6 +11598,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             }
                             
                         }
+                        
+                        //draw the label of the coordinates of the position which is being
+                        
+                        wxPoint q;
+                        
+                        //show the coordinates of the reference position of the Route that is being dragged
+                        ShowCoordinates(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
                         
                         //update the data of the Route under consideration in listcontrol_routes
                         ((plot->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);

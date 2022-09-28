@@ -12132,7 +12132,7 @@ DeletePosition::DeletePosition(ListFrame* f_in){
     
 }
 
-//delete a position in the GUI object f->listcontrol_position and in the non-GUI object f->plot
+//delete the  selected position in the GUI object f->listcontrol_position and in the non-GUI object f->plot. If no position is selected, it does nothing. 
 void DeletePosition::operator()(wxCommandEvent& event){
     
     long i;

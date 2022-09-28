@@ -12010,9 +12010,6 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
     f->UpdateRelatedSightsAndRoutes();
     
-    f->plot->print(true, String("--------- "), cout);
-    
-    
     event.Skip(true);
     
 }

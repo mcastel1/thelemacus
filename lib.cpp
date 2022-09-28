@@ -14126,6 +14126,9 @@ void ListFrame::UpdateRelatedSightsAndRoutes(void){
     
     for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
         
+        //set the id of the sight in column #0 of listcontrol_sights
+        listcontrol_sights->SetItem(i, 0, wxString::Format(wxT("%i"), i+1));
+        
         if(((((plot->sight_list)[i]).related_route).value) == -1){
             
             listcontrol_sights->SetItem(i, (listcontrol_sights->GetColumnCount())-1, wxString(""));
@@ -14146,6 +14149,9 @@ void ListFrame::UpdateRelatedSightsAndRoutes(void){
     
     for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
         
+        //set the id of the route in column #0 of listcontrol_routes
+        listcontrol_routes->SetItem(i, 0, wxString::Format(wxT("%i"), i+1));
+
         if(((((plot->route_list)[i]).related_sight).value) == -1){
             
             listcontrol_routes->SetItem(i, (listcontrol_routes->GetColumnCount())-1, wxString(""));

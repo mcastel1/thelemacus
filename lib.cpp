@@ -14582,7 +14582,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
                     listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
-                    if(((((plot->route_list)[i]).related_sight).value) != -1){
+                    if((((((plot->route_list)[i]).related_sight).value) != -1) && ((listcontrol_sights->GetItemCount()) >  ((((plot->route_list)[i]).related_sight).value))){
                         listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), wxGetApp().background_color);
                     }
                     

@@ -46,6 +46,7 @@
  - when you press reduce in SightFrame, there are errors
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
  - when you press button_reduce in SightFrame, you should call on_change_selection_in_listcontrol_sights in such a way that some buttons are deactivated in listcontrol_sights, and same for other listcontrols
+ -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer
  */
 
 

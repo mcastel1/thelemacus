@@ -14574,7 +14574,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                     listcontrol_routes->SetItemBackgroundColour(i, color_selected_item);
-                    if(j != -1){
+                    if((j != -1) && ((listcontrol_sights->GetItemCount()) > j)){
                         listcontrol_sights->SetItemBackgroundColour(j, color_selected_item);
                     }
                     

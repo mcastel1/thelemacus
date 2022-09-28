@@ -15288,6 +15288,7 @@ OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* call
 
 }
 
+//check whether there are some selected items in ListControl *caller, and enables/disables disableable_buttons accordingly
 template<class T>void OnChangeSelectionInListControl::operator()(T& event){
     
     unsigned int i;

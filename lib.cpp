@@ -10512,11 +10512,20 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
 }
 
 
-//converts the screen position p into the position q with respect to the DrawPanel *this
-void DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q){
+// the screen position p lies within the DrawPanel *this, it returns true and write it into the position q with respect to the DrawPanel *this. Otherwise, it returns alse, and does nothing with q
+bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q){
     
-    (*q) = p - GetScreenPosition();
+    bool check;
     
+    check = ((p.x) >= (GetScreenPosition().x)) && ((p.x) <= (GetScreenPosition().x)) + (GetSize().x) && ((p.y) >= (GetScreenPosition().y)) && ((p.y) <= (GetScreenPosition().y)) + (GetSize().y);
+    
+    
+    if(check){
+        (*q) = p - GetScreenPosition();
+    }
+    
+    return check;
+        
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area) into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
@@ -10797,29 +10806,34 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
     
 }
 
-//given a Position q, it writes in label a text with the geographic coordinates of q, and sets the position of label close to q (with some margin, for clarity)
+//given a Position q if q lies witin *this, it writes in label a text with the geographic coordinates of q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
 void DrawPanel::ShowCoordinates(Position q, wxStaticText* label){
 
     wxPoint p;
 
-    (this->*GeoToDrawPanel)(q, &p);
-      
-    SetCoordinateLabel(q, p, label);
+    if((this->*GeoToDrawPanel)(q, &p)){
+        SetCoordinateLabel(q, p, label);
+    }else{
+        label->SetLabel(wxString(""));
+    }
 
 }
 
 
 
-//given a position q with respect to the origin of the screen, it writes in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity)
+//given a position q with respect to the origin of the screen, if q lies within *this, it writes in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
 void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
 
     wxPoint p;
     Position r;
 
     (this->*ScreenToGeo)(q, &r);
-    (this->ScreenToDrawPanel)(q, &p);
     
-    SetCoordinateLabel(r, p, label);
+    if((this->ScreenToDrawPanel)(q, &p)){
+        SetCoordinateLabel(r, p, label);
+    }else{
+        label->SetLabel(wxString(""));
+    }
     
 }
 

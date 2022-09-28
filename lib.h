@@ -1508,7 +1508,7 @@ public:
     void PaintEvent(wxPaintEvent & evt);
     void PaintNow();
     
-    void ScreenToDrawPanel(wxPoint, wxPoint*);
+    bool ScreenToDrawPanel(wxPoint, wxPoint*);
     void GeoToScreen(Position, wxPoint*);
     bool DrawPanelToGeo(wxPoint, Position*);
     bool ScreenToMercator(wxPoint, Projection*);

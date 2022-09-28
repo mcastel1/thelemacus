@@ -12140,6 +12140,10 @@ void DeletePosition::operator()(wxCommandEvent& event){
     i = (f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     (f->listcontrol_positions)->DeleteItem(i);
     (f->plot)->remove_position(((unsigned int)i), String(""));
+        
+    for(i=0; i<((f->listcontrol_positions)->GetItemCount()); i++){
+        (f->listcontrol_positions)->SetItem(i, 0, wxString::Format(wxT("%i"), ((unsigned int)(i+1))));
+    }
     
     event.Skip(true);
     

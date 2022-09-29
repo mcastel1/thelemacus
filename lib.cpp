@@ -13941,9 +13941,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_positions->PushBackColumn(wxString("Label"));
     
     //write the positions into plot->position_list into listcontrol_sights
-    for(i=0; i<((plot->position_list).size()); i++){
-        ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
-    }
+//    for(i=0; i<((plot->position_list).size()); i++){
+//        ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
+//    }
+    listcontrol_positions->set(plot->position_list);
     
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
@@ -13989,9 +13990,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_routes->PushBackColumn(wxString("Related Sight"));
     
     //write the routes into plot->route_list into listcontrol_routes
-    for(i=0; i<((plot->route_list).size()); i++){
-        ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
-    }
+//    for(i=0; i<((plot->route_list).size()); i++){
+//        ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
+//    }
+    listcontrol_routes->set(plot->route_list);
     
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){

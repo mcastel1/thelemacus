@@ -11993,7 +11993,7 @@ template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-    int i_related_route;
+    int i, i_related_route;
     
     i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
     
@@ -12008,7 +12008,15 @@ void DeleteSight::operator()(wxCommandEvent& event){
     //I remove the sight and the related route from both the non-GUI object plot
     (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
     
-    f->UpdateRelatedSightsAndRoutes();
+//    f->UpdateRelatedSightsAndRoutes();
+    
+    //write the routes into plot->route_list into listcontrol_routes
+    (f->listcontrol_routes)->DeleteAllItems();
+    for(i=0; i<(((f->plot)->route_list).size()); i++){
+        (((f->plot)->route_list)[i]).add_to_wxListCtrl(-1, f->listcontrol_routes);
+    }
+ 
+    
     
     event.Skip(true);
     

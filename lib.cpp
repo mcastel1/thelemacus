@@ -11993,31 +11993,25 @@ template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-    int i, i_related_route;
+    int i_related_route;
     
     i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
+    
+    //I remove the sight and the related route from  the non-GUI object plot
+    (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
+
     
     
     //remove the route related to the sight which I am about to remove from the GUI object listcontrol_routes
     if((i_related_route != -1) && (remove_related_route == Answer('y', String("")))){
         
         (f->listcontrol_routes)->DeleteItem(i_related_route);
-        
+        //clear listcontrol_routes and write in it the routes of plot->route_list
+        (f->listcontrol_routes)->set((f->plot)->route_list);
+
     }
-    
-    //I remove the sight and the related route from both the non-GUI object plot
-    (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
-    
-//    f->UpdateRelatedSightsAndRoutes();
-    
-    //write the routes into plot->route_list into listcontrol_routes
-//    (f->listcontrol_routes)->DeleteAllItems();
-//    for(i=0; i<(((f->plot)->route_list).size()); i++){
-//        (((f->plot)->route_list)[i]).add_to_wxListCtrl(-1, f->listcontrol_routes);
-//    }
-    (f->listcontrol_routes)->set((f->plot)->route_list);
  
-    
+    f->UpdateRelatedSightsAndRoutes();
     
     event.Skip(true);
     

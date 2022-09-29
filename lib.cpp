@@ -12011,10 +12011,11 @@ void DeleteSight::operator()(wxCommandEvent& event){
 //    f->UpdateRelatedSightsAndRoutes();
     
     //write the routes into plot->route_list into listcontrol_routes
-    (f->listcontrol_routes)->DeleteAllItems();
-    for(i=0; i<(((f->plot)->route_list).size()); i++){
-        (((f->plot)->route_list)[i]).add_to_wxListCtrl(-1, f->listcontrol_routes);
-    }
+//    (f->listcontrol_routes)->DeleteAllItems();
+//    for(i=0; i<(((f->plot)->route_list).size()); i++){
+//        (((f->plot)->route_list)[i]).add_to_wxListCtrl(-1, f->listcontrol_routes);
+//    }
+    (f->listcontrol_routes)->set((f->plot)->route_list);
  
     
     
@@ -16957,3 +16958,18 @@ void ListControl::DeselectAll(void){
     
 }
 
+//clears *this and sets all its items equal to the items in the non-GUI vector v
+template<class T> void ListControl::set(vector<T> v){
+    
+    unsigned int i;
+    
+    
+    DeleteAllItems();
+    
+    for(i=0; i<v.size(); i++){
+        (v[i]).add_to_wxListCtrl(-1, this);
+    }
+ 
+    
+    
+}

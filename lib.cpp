@@ -15367,7 +15367,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
     
-    sight->print(String("sight entered via GUI"), String(""), cout);
+//    sight->print(String("sight entered via GUI"), String(""), cout);
     
     
     if(position_in_listcontrol_sights==-1){

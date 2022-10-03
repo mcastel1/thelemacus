@@ -12134,8 +12134,10 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     //I remove the route and the related sight from both the non-GUI object plot
     (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
-    f->UpdateRelatedSightsAndRoutes();
-    
+//    f->UpdateRelatedSightsAndRoutes();
+    (f->listcontrol_sights)->set((f->plot)->sight_list);
+    (f->listcontrol_routes)->set((f->plot)->route_list);
+
     event.Skip(true);
     
 }
@@ -13447,8 +13449,10 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
     }
     
-    parent->UpdateRelatedSightsAndRoutes();
-    
+//    parent->UpdateRelatedSightsAndRoutes();
+    (parent->listcontrol_sights)->set((parent->plot)->sight_list);
+    (parent->listcontrol_routes)->set((parent->plot)->route_list);
+
     route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
     
     
@@ -14145,59 +14149,7 @@ void ListFrame::DrawAll(void){
 }
 
 
-//writes the ids of the related sights and route in the GUI fields in ListFrame -> this, by reading them from the non-GUI object Plot
-void ListFrame::UpdateRelatedSightsAndRoutes(void){
-    
-    unsigned int i;
-    
-    for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
-        
-        //set the id of the sight in column #0 of listcontrol_sights
-        listcontrol_sights->SetItem(i, 0, wxString::Format(wxT("%i"), i+1));
-        
-        if(((((plot->sight_list)[i]).related_route).value) == -1){
-            
-            listcontrol_sights->SetItem(i, (listcontrol_sights->GetColumnCount())-1, wxString(""));
-            
-        }else{
-            
-            listcontrol_sights->SetItem(
-                                        i,
-                                        (listcontrol_sights->GetColumnCount())-1,
-                                        wxString::Format(wxT("%i"),
-                                                         ((((plot->sight_list)[i]).related_route).value) + 1
-                                                         )
-                                        );
-            
-        }
-        
-    }
-    
-    for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
-        
-        //set the id of the route in column #0 of listcontrol_routes
-        listcontrol_routes->SetItem(i, 0, wxString::Format(wxT("%i"), i+1));
 
-        if(((((plot->route_list)[i]).related_sight).value) == -1){
-            
-            listcontrol_routes->SetItem(i, (listcontrol_routes->GetColumnCount())-1, wxString(""));
-            
-        }else{
-            
-            listcontrol_routes->SetItem(
-                                        i,
-                                        (listcontrol_routes->GetColumnCount())-1,
-                                        wxString::Format(wxT("%i"),
-                                                         ((((plot->route_list)[i]).related_sight).value)+1
-                                                         )
-                                        );
-            
-        }
-        
-    }
-    
-    
-}
 
 void ListFrame::OnAddSight(wxCommandEvent& event){
     
@@ -15425,8 +15377,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
     }
     
-    parent->UpdateRelatedSightsAndRoutes();
-    
+//    parent->UpdateRelatedSightsAndRoutes();
+  
+    (parent->listcontrol_sights)->set((parent->plot)->sight_list);
+    (parent->listcontrol_routes)->set((parent->plot)->route_list);
+
 //    parent->plot->print(true, String(""), cout);
 
     

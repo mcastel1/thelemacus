@@ -1965,7 +1965,6 @@ public:
     void DrawAll(void);
 
     void GetAllCoastLineData(void);
-    void UpdateRelatedSightsAndRoutes(void);
     
     void OnAddSight(wxCommandEvent& event);
     void OnModifySight(wxCommandEvent& event);

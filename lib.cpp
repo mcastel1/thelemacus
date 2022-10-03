@@ -6018,9 +6018,19 @@ void Plot::remove_sight(unsigned int i, Answer remove_related_route, String pref
     cout << prefix.value << "Sight removed.\n";
     
     
-    if(((i_related_route.value) != -1) && (remove_related_route == Answer('y', prefix))){
+    if((i_related_route.value) != -1){
         
-        remove_route((i_related_route.value), Answer('n', prefix), prefix);
+        if(remove_related_route == Answer('y', prefix)){
+            //the related route must be removed -> I remove it
+            
+            remove_route((i_related_route.value), Answer('n', prefix), prefix);
+            
+        }else{
+            //the related route must not be removed: given that its related sight has been deleted, I set its related_sight.value to -1
+            
+            (route_list[i_related_route.value]).related_sight.set(String(""), -1, String(""));
+            
+        }
         
     }
     
@@ -12007,11 +12017,11 @@ void DeleteSight::operator()(wxCommandEvent& event){
         
         (f->listcontrol_routes)->DeleteItem(i_related_route);
         //clear listcontrol_routes and write in it the routes of plot->route_list
-        (f->listcontrol_routes)->set((f->plot)->route_list);
 
     }
 
     (f->listcontrol_sights)->set((f->plot)->sight_list);
+    (f->listcontrol_routes)->set((f->plot)->route_list);
 
 //    f->UpdateRelatedSightsAndRoutes();
     

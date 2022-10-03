@@ -12010,8 +12010,10 @@ void DeleteSight::operator()(wxCommandEvent& event){
         (f->listcontrol_routes)->set((f->plot)->route_list);
 
     }
- 
-    f->UpdateRelatedSightsAndRoutes();
+
+    (f->listcontrol_sights)->set((f->plot)->sight_list);
+
+//    f->UpdateRelatedSightsAndRoutes();
     
     event.Skip(true);
     

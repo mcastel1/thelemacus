@@ -15415,8 +15415,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     parent->UpdateRelatedSightsAndRoutes();
     
-    parent->plot->print(true, String(""), cout);
-    
+//    parent->plot->print(true, String(""), cout);
+
     
     parent->DrawAll();
     

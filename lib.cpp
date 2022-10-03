@@ -12012,13 +12012,13 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
     
     
-    //remove the route related to the sight which I am about to remove from the GUI object listcontrol_routes
-    if((i_related_route != -1) && (remove_related_route == Answer('y', String("")))){
-        
-        (f->listcontrol_routes)->DeleteItem(i_related_route);
-        //clear listcontrol_routes and write in it the routes of plot->route_list
-
-    }
+//    //remove the route related to the sight which I am about to remove from the GUI object listcontrol_routes
+//    if((i_related_route != -1) && (remove_related_route == Answer('y', String("")))){
+//
+//        (f->listcontrol_routes)->DeleteItem(i_related_route);
+//        //clear listcontrol_routes and write in it the routes of plot->route_list
+//
+//    }
 
     (f->listcontrol_sights)->set((f->plot)->sight_list);
     (f->listcontrol_routes)->set((f->plot)->route_list);
@@ -13456,7 +13456,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     (parent->listcontrol_sights)->set((parent->plot)->sight_list);
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
 
-    route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
+//    route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
     
     
     parent->DrawAll();
@@ -14281,9 +14281,7 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
     
     
     long item;
-    item = listcontrol_routes->GetNextItem(-1,
-                                           wxLIST_NEXT_ALL,
-                                           wxLIST_STATE_SELECTED);
+    item = listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     
     if(item != -1){
         
@@ -14373,7 +14371,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     (delete_route->i_route_to_remove) = i_route_to_remove;
     
     //remove the route from the GUI object listcontrol_routes
-    listcontrol_routes->DeleteItem((delete_route->i_route_to_remove));
+//    listcontrol_routes->DeleteItem((delete_route->i_route_to_remove));
     
     
     if( ((((plot->route_list)[i_route_to_remove]).related_sight).value) != -1){

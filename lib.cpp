@@ -12158,12 +12158,14 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
     if(i != -1){
         
-        (f->listcontrol_positions)->DeleteItem(i);
+//        (f->listcontrol_positions)->DeleteItem(i);
         (f->plot)->remove_position(((unsigned int)i), String(""));
         
-        for(i=0; i<((f->listcontrol_positions)->GetItemCount()); i++){
-            (f->listcontrol_positions)->SetItem(i, 0, wxString::Format(wxT("%i"), ((unsigned int)(i+1))));
-        }
+//        for(i=0; i<((f->listcontrol_positions)->GetItemCount()); i++){
+//            (f->listcontrol_positions)->SetItem(i, 0, wxString::Format(wxT("%i"), ((unsigned int)(i+1))));
+//        }
+       
+        (f->listcontrol_positions)->set((f->plot)->position_list);
         
     }
     
@@ -13396,7 +13398,8 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
         (((this->parent)->plot)->position_list).push_back(*position);
     }
     
-    position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
+//    position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
+    (parent->listcontrol_positions)->set((parent->plot)->position_list);
     
     parent->DrawAll();
     
@@ -14257,9 +14260,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
 void ListFrame::OnModifyPosition(wxCommandEvent& event){
     
     long item;
-    item = listcontrol_positions->GetNextItem(-1,
-                                              wxLIST_NEXT_ALL,
-                                              wxLIST_STATE_SELECTED);
+    item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     
     if(item != -1){
         

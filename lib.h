@@ -1391,7 +1391,7 @@ template<class T> class CheckField{
 public:
     
     //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    SightFrame* parent;
     Answer* answer;
     //related_field is a GUI field (such as ChronoField, etc) related to this CheckField, such that: if direct_reverse = true->  when the checkbox in this CheckFIeld is checked (unchecked), related_field is active (inactive). If direct_reverse = false ->  when the checkbox in this CheckFIeld is unchecked (checked), related_field is active (inactive).
     T* related_field;

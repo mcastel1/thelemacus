@@ -14990,7 +14990,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
     
     (*((p->related_field)->check))(event);
     
-    (p->parent_frame)->AllOk();
+    (p->parent)->AllOk();
     
     event.Skip(true);
     
@@ -15725,7 +15725,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
 //constructor of a CheckField object, based on the parent frame frame
 template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* related_field_in, bool direct_reverse_in){
     
-    parent_frame = frame;
+    parent = frame;
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
     related_field = related_field_in;
@@ -15734,7 +15734,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
     check = new CheckCheck<T>;
     (check->p) = this;
     
-    checkbox = new wxCheckBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+    checkbox = new wxCheckBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     //SetColor(checkbox);
     checkbox->Bind(wxEVT_CHECKBOX, (*check));
     

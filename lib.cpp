@@ -12079,7 +12079,38 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
 
 void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
     
+    int i_route_to_remove;
+
+    //set i_route_to_remove equal to the currently relected Route in listcontrol_routes
+    i_route_to_remove = ((int)((parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+
+    ((parent->delete_route_and_related_sight)->i_route_to_remove) = i_route_to_remove;
+    ((parent->delete_route)->i_route_to_remove) = i_route_to_remove;
+
     
+    if( (((((parent->plot)->route_list)[i_route_to_remove]).related_sight).value) != -1){
+        //if the route which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
+        
+        //remove the route from the non-GUI object plot
+        //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
+        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
+                                                                                                              parent->delete_route_and_related_sight, String("Yes"),
+                                                                                                              parent->delete_route, String("No"),
+                                                                                                              "",
+                                                                                                              "Do you want to remove the sight related to this route?",
+                                                                                                              wxDefaultPosition,
+                                                                                                              wxDefaultSize,
+                                                                                                              String(""));
+        
+        question_frame->Show(true);
+        
+    }else{
+        //if not, I simply delete teh route
+        
+        (*(parent->delete_route))(event);
+        
+    }
+
     event.Skip(true);
     
 }
@@ -14379,14 +14410,6 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
 
-    int i_route_to_remove;
-    
-    
-    i_route_to_remove = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-
-    (delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;
-    (delete_route->i_route_to_remove) = i_route_to_remove;
-
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,
                                                            ask_remove_related_sight, String("Yes"), unset_idling, String("No"),
@@ -14405,32 +14428,6 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
     (delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;
     (delete_route->i_route_to_remove) = i_route_to_remove;
     
-    //remove the route from the GUI object listcontrol_routes
-//    listcontrol_routes->DeleteItem((delete_route->i_route_to_remove));
-    
-    
-    if( ((((plot->route_list)[i_route_to_remove]).related_sight).value) != -1){
-        //if the route which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
-        
-        //remove the route from the non-GUI object plot
-        //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
-        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
-                                                                                                              delete_route_and_related_sight, String("Yes"),
-                                                                                                              delete_route, String("No"),
-                                                                                                              "",
-                                                                                                              "Do you want to remove the sight related to this route?",
-                                                                                                              wxDefaultPosition,
-                                                                                                              wxDefaultSize,
-                                                                                                              String(""));
-        
-        question_frame->Show(true);
-        
-    }else{
-        //if not, I simply delete teh route
-        
-        (*delete_route)(event);
-        
-    }
     */
     
     

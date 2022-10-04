@@ -8026,6 +8026,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
     Projection temp;
     bool check;
+    wxPoint q;
     
     //set i_min/max, j_min/max
     
@@ -8066,8 +8067,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
-    x_3d.clear();
-    y_3d.clear();
+    p_3d.clear();
     
     for(i=i_min; i<i_max; i++){
         
@@ -8143,10 +8143,9 @@ void ChartFrame::GetCoastLineData_3D(void){
                 for(l=0; (l*every)<((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
                     
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                    if((draw_panel->GeoTo3D((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &temp))){
+                    if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &q)){
                         
-                        x_3d.push_back((temp.x));
-                        y_3d.push_back((temp.y));
+                        p_3d.push_back(q);
                         
                     }
                     
@@ -9511,9 +9510,9 @@ void DrawPanel::Draw_3D(void){
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
-    for(i=0; i<(parent->x_3d).size(); i++){
-        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        memory_dc.DrawPoint(p);
+    for(i=0; i<(parent->p_3d).size(); i++){
+//        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
+        memory_dc.DrawPoint((parent->p_3d)[i]);
     }
     
     

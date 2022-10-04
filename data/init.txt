@@ -87,8 +87,4 @@ frame day foreground color = (0,0,0)
 frame night foreground color = (255,255,255)
 frame day background color = (169,169,169)
 frame night background color = (65,74,76)
-#the threshold hour between night and day
-dawn = 06:10:27
-#the threshold hour between day and night
-dusk = 21:35:41
 show coastlines = n

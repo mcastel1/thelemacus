@@ -14363,7 +14363,27 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
 
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
+
+    int i_route_to_remove;
     
+    
+    i_route_to_remove = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+
+    (delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;
+    (delete_route->i_route_to_remove) = i_route_to_remove;
+
+    //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
+    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,
+                                                           ask_related_sight, String("Yes"), unset_idling, String("No"),
+                                                           "",
+                                                           "Do you really want to remove this route?",
+                                                           wxDefaultPosition,
+                                                           wxDefaultSize,
+                                                           String(""));
+    
+    question_frame->Show(true);
+    
+    /*
     int i_route_to_remove = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //the id of the route to removed is the one of the route selected in listcontrol_routes: I write it in delete_route_and_related_route and in delete_route
@@ -14396,7 +14416,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
         (*delete_route)(event);
         
     }
-    
+    */
     
     
     event.Skip(true);

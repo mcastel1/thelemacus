@@ -1956,12 +1956,10 @@ public:
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message;
     PrintMessage<ListFrame, SelectRoute >* print_info_message;
     
-//    OnSelectInListControlSights* on_select_in_listcontrol_sights;
-//    OnSelectInListControlPositions* on_select_in_listcontrol_positions;
-//    OnSelectInListControlRoutes* on_select_in_listcontrol_routes;
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
-    
+    AskRemoveRelatedSight* ask_remove_related_sight;
+
     void DrawAll(void);
 
     void GetAllCoastLineData(void);

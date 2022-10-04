@@ -14374,7 +14374,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
 
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,
-                                                           ask_related_sight, String("Yes"), unset_idling, String("No"),
+                                                           ask_remove_related_sight, String("Yes"), unset_idling, String("No"),
                                                            "",
                                                            "Do you really want to remove this route?",
                                                            wxDefaultPosition,

@@ -14424,17 +14424,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
                                                            String(""));
     
     question_frame->Show(true);
-    
-    /*
-    int i_route_to_remove = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-    
-    //the id of the route to removed is the one of the route selected in listcontrol_routes: I write it in delete_route_and_related_route and in delete_route
-    (delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;
-    (delete_route->i_route_to_remove) = i_route_to_remove;
-    
-    */
-    
-    
+        
     event.Skip(true);
     
 }
@@ -14466,8 +14456,6 @@ void ListFrame::Disconnect(int i_sight){
         
     }
     
-    
-    
     //print an info message
     (print_warning_message->control) = NULL;
     (print_warning_message->title) = String("The route which is being dragged was related to a sight!");
@@ -14477,27 +14465,6 @@ void ListFrame::Disconnect(int i_sight){
     
 }
 
-/*
- //when the mouse hovers over a given element of listcontrol_sights, sets highlighted_route equal to the id of the route related to that sight, if any
- void ListFrame::OnMouseOnListControlSights(wxMouseEvent& event){
- 
- int i;
- 
- MousePositionOnListControl(listcontrol_sights, &i);
- 
- highlighted_route = ((((plot->sight_list)[i]).related_route).value);
- 
- 
- for(i=0; i<chart_frames.size(); i++){
- 
- ((chart_frames[i])->draw_panel)->PaintNow();
- 
- }
- 
- event.Skip(true);
- 
- }
- */
 
 //when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route equal to the id of that route, and the same for the relaetd sight in listcontrol_sights.
 void ListFrame::OnMouseMovement(wxMouseEvent& event){
@@ -14728,24 +14695,6 @@ void SightFrame::SetIdling(bool b){
 //this function checks whether all the fields in SightFrame are ok, and if they are, it enables the button_reduce
 void SightFrame::AllOk(void){
     
-    /*
-     //this does not work
-     wxCommandEvent dummy;
-     
-     //I created a dummy event and call on it all check functors of the fields in *this-> this will write into the variables *ok of all fields
-     (*(body->check))(dummy);
-     (*(limb->check))(dummy);
-     (*(H_s->check))(dummy);
-     (*(index_error->check))(dummy);
-     (*(artificial_horizon_check->check))(dummy);
-     (*(height_of_eye->check))(dummy);
-     (*(master_clock_date->check))(dummy);
-     (*(master_clock_chrono->check))(dummy);
-     (*(stopwatch_check->check))(dummy);
-     (*(stopwatch_reading->check))(dummy);
-     (*(TAI_minus_UTC->check))(dummy);
-     */
-    
     button_reduce->Enable(
                           (body->is_ok()) &&
                           ((!( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) )) || (limb->is_ok())) &&
@@ -14758,9 +14707,6 @@ void SightFrame::AllOk(void){
                           (TAI_minus_UTC->is_ok()));
     
 }
-
-
-
 
 
 void SightFrame::OnPressCancel(wxCommandEvent& event){
@@ -15380,45 +15326,13 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
         
         sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
-        
-//        //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
-//        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
-//        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(
-//                                                                                               (sight->related_route).value,
-//                                                                                               ((this->parent)->listcontrol_routes)
-//                                                                                               );
-        
+                
     }
-    
-    
-//    //add the route related to sight (if any) to the GUI object listcontrol_routes
-//    if(((sight->related_route).value) != -1){
-//
-//        if(((sight->related_route).value) < (((this->parent)->listcontrol_routes)->GetItemCount())){
-//            //in this case, in listcontrol_routes there is already an entry for the related route -> I write the related route into listcontrol_routes  in this entry
-//
-//            (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl((sight->related_route).value, ((this->parent)->listcontrol_routes));
-//
-//        }else{
-//            //in this case, in listcontrol_routes there is no entry for the related route -> I insert the related route by creating a new entry into listcontrol_routes
-//
-//            (this->parent->plot->route_list)[(sight->related_route).value].add_to_wxListCtrl(-1, ((this->parent)->listcontrol_routes));
-//
-//        }
-//
-//
-//    }
-    
-//    parent->UpdateRelatedSightsAndRoutes();
-  
+     
     (parent->listcontrol_sights)->set((parent->plot)->sight_list);
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
 
-//    parent->plot->print(true, String(""), cout);
-
-    
     parent->DrawAll();
-    
     
     event.Skip(true);
     

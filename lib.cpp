@@ -12017,20 +12017,8 @@ void DeleteSight::operator()(wxCommandEvent& event){
     //I remove the sight and the related route from  the non-GUI object plot
     (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
 
-    
-    
-//    //remove the route related to the sight which I am about to remove from the GUI object listcontrol_routes
-//    if((i_related_route != -1) && (remove_related_route == Answer('y', String("")))){
-//
-//        (f->listcontrol_routes)->DeleteItem(i_related_route);
-//        //clear listcontrol_routes and write in it the routes of plot->route_list
-//
-//    }
-
     (f->listcontrol_sights)->set((f->plot)->sight_list);
     (f->listcontrol_routes)->set((f->plot)->route_list);
-
-//    f->UpdateRelatedSightsAndRoutes();
     
     event.Skip(true);
     

@@ -13767,6 +13767,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     idling = false;
     unset_idling = new UnsetIdling<ListFrame>(this);
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
+    ask_remove_related_route = new AskRemoveRelatedRoute(this);
     select_route = new SelectRoute(this);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
@@ -14376,39 +14377,17 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
 
 
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
+
+    //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
+    QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame> >(NULL,
+                                                           ask_remove_related_route, String("Yes"), unset_idling, String("No"),
+                                                           "",
+                                                           "Do you really want to remove this sight?",
+                                                           wxDefaultPosition,
+                                                           wxDefaultSize,
+                                                           String(""));
     
-    int i_sight_to_remove;
-    
-    i_sight_to_remove = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-    
-    //the id of the sight to removed is the one of the sight selected in listcontrol_sights: I write it in delete_sight_and_related_route and in delete_sight
-    (delete_sight_and_related_route->i_sight_to_remove) = i_sight_to_remove;
-    (delete_sight->i_sight_to_remove) = i_sight_to_remove;
-    
-    
-    if( ((((plot->sight_list)[i_sight_to_remove]).related_route).value) != -1){
-        //if the sight which I am about to remove is related to a route, I ask the user whether he wants to remove the related route too by showing  question_frame
-        
-        
-        //remove the sight from the non-GUI object plot
-        //ask the user whether he/she wants to remove the related route as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_route. If no, it calls the functor delete_sight.
-        QuestionFrame<DeleteSight, DeleteSight>* question_frame = new QuestionFrame<DeleteSight, DeleteSight>(NULL,
-                                                                                                              delete_sight_and_related_route, String("Yes"),
-                                                                                                              delete_sight, String("No"),
-                                                                                                              "",
-                                                                                                              "Do you want to remove the route related to this sight?",
-                                                                                                              wxDefaultPosition,
-                                                                                                              wxDefaultSize,
-                                                                                                              String(""));
-        question_frame->Show(true);
-        
-    }else{
-        
-        //if not, I simply delete teh sight
-        
-        (*delete_sight)(event);
-        
-    }
+    question_frame->Show(true);
     
     event.Skip(true);
     
@@ -14435,7 +14414,7 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
 
-    //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
+    //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,
                                                            ask_remove_related_sight, String("Yes"), unset_idling, String("No"),
                                                            "",

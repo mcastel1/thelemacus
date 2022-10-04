@@ -22,7 +22,6 @@
  - add lambert projection and 3D sphere with no projection
  - set up a proper output to a log file
  - add separator between recent items and non-recent items in BodyField->name
- - check all times that GeoTo3D is called to see whether they are compatible with the new modification
  - transfrom all angular qantities in units of radians
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function
  - in Route::draw_3D, code the part for loxodrome curves
@@ -43,6 +42,7 @@
  - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
   - when you reduce a Sight, the selected items in listcontrol_sights change -> call OnSelectInListControl to enable/disable the correct buttons accordingly
  - when you press reduce in SightFrame, there are errors
+- add error message that is prompted when the user enters a year out the JPL data files
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
  - when you press button_reduce in SightFrame, you should call on_change_selection_in_listcontrol_sights in such a way that some buttons are deactivated in listcontrol_sights, and same for other listcontrols
  -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer

@@ -12025,20 +12025,11 @@ void DeleteSight::operator()(wxCommandEvent& event){
 }
 
 void ModifyRoute::operator()(wxCommandEvent& event){
-    
-    //    PrintMessage<ListFrame,  UnsetIdling<DrawPanel>>* print_error_message;
-    //
-    //    print_error_message = new PrintMessage<ListFrame, void>(f, NULL);
-    
+        
     (f->print_info_message->control) = NULL;
     (f->print_info_message->title) = String("");
     (f->print_info_message->message) = String("Select the route which which you want to transport the sight");
     (*(f->print_info_message))();
-    
-    
-    
-    //    (f->OnModifyRoute)(event);
-    
     
     event.Skip(true);
     

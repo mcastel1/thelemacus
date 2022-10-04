@@ -8071,14 +8071,8 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     for(i=i_min; i<i_max; i++){
         
-        //        cout << "\n i = " << i;
-        
         for(j=j_min; j<j_max; j++){
-            
-            //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-            //            flush(cout);
-            
-            
+                        
             if(!((i >= -90) && (i <= 90))){
                 //in this case, i needs to be adjusted because it is not between -90 and +90
                 

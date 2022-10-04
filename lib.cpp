@@ -11992,6 +11992,12 @@ AskRemoveRelatedSight::AskRemoveRelatedSight(ListFrame* parent_in){
     
 }
 
+AskRemoveRelatedRoute::AskRemoveRelatedRoute(ListFrame* parent_in){
+    
+    parent = parent_in;
+    
+}
+
 
 SelectRoute::SelectRoute(ListFrame* parent_in){
     
@@ -12093,6 +12099,46 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
     event.Skip(true);
     
 }
+
+void AskRemoveRelatedRoute::operator()(wxCommandEvent& event){
+    
+    int i_sight_to_remove;
+
+    //set i_sight_to_remove equal to the currently relected Sight in listcontrol_sights
+    i_sight_to_remove = ((int)((parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+
+    ((parent->delete_sight)->i_sight_to_remove) = i_sight_to_remove;
+
+    
+    if( (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value) != -1){
+        //if the sight which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
+
+        ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value);
+        
+        //remove the route from the non-GUI object plot
+        //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_sight. If no, it calls the functor delete_sight.
+        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
+                                                                                                              parent->delete_route_and_related_sight, String("Yes"),
+                                                                                                              parent->delete_sight, String("No"),
+                                                                                                              "",
+                                                                                                              "Do you want to remove the route related to this sight?",
+                                                                                                              wxDefaultPosition,
+                                                                                                              wxDefaultSize,
+                                                                                                              String(""));
+        
+        question_frame->Show(true);
+        
+    }else{
+        //if not, I simply delete teh sight
+        
+        (*(parent->delete_sight))(event);
+        
+    }
+
+    event.Skip(true);
+    
+}
+
 
 
 void SelectRoute::operator()(wxCommandEvent& event){

@@ -1333,6 +1333,19 @@ public:
     
 };
 
+//this functor pops up a QuestionFrame and asks the user whether he wants to remove the a Route related to a Sight
+class AskRemoveRelatedRoute{
+    
+public:
+    
+    AskRemoveRelatedRoute(ListFrame*);
+    
+    //the frame which called this struct
+    ListFrame* parent;
+
+    void operator()(wxCommandEvent&);
+    
+};
 
 
 //this functor allows the user to select a Route in *parent frame
@@ -1975,6 +1988,7 @@ public:
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
     AskRemoveRelatedSight* ask_remove_related_sight;
+    AskRemoveRelatedRoute* ask_remove_related_route;
 
     void DrawAll(void);
 

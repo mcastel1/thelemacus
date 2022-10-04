@@ -11986,6 +11986,13 @@ template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in){
     
 }
 
+AskRemoveRelatedSight::AskRemoveRelatedSight(ListFrame* parent_in){
+    
+    parent = parent_in;
+    
+}
+
+
 SelectRoute::SelectRoute(ListFrame* parent_in){
     
     parent = parent_in;
@@ -12065,6 +12072,13 @@ void NewRoute::operator()(wxCommandEvent& event){
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
     (parent->idling) = false;
+    
+    event.Skip(true);
+    
+}
+
+void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
+    
     
     event.Skip(true);
     
@@ -13696,6 +13710,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     idling = false;
     unset_idling = new UnsetIdling<ListFrame>(this);
+    ask_remove_related_sight = new AskRemoveRelatedSight(this);
     select_route = new SelectRoute(this);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);

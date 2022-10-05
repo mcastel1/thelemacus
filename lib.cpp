@@ -8202,7 +8202,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     phi_min_int = floor(K*(((parent->plot)->phi_min).value));
     phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
     
-    //transform the values lambda_min_int, lambda_max_int in a format appropriate for data_x and data_y
+    //transform the values lambda_min_int, lambda_max_int in a format appropriate for p_coastline
     if((draw_panel->x_min) <= (draw_panel->x_max)){
         //this is the 'normal' case where x_min, x_max do not embrace the meridian lambda = pi
         
@@ -8234,7 +8234,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
-    if(parent->show_coastlines == Answer('y', String(""))){
+    if((parent->show_coastlines) == Answer('y', String(""))){
         
         x.clear();
         y.clear();

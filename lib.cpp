@@ -8248,21 +8248,18 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //            flush(cout);
                 
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((unsigned int)(((parent->data_x)[i - floor_min_lat][j % 360]).size()));
+                n = ((unsigned int)(((parent->data_3d)[i - floor_min_lat][j % 360]).size()));
                 
                 every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for(l=0; (l*every)<((parent->data_x)[i - floor_min_lat][j % 360]).size(); l++){
+                for(l=0; (l*every)<((parent->data_3d)[i - floor_min_lat][j % 360]).size(); l++){
                     
-                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
-                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+//                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
+//                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                     
-                    //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                    //                if((l % every) == 0){
-                    
-                    if((draw_panel->check(temp))){
+                    if((draw_panel->*(draw_panel->GeoToProjection))((parent->data_3d)[i - floor_min_lat][j % 360][l*every], &temp)){
                         
                         if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                             (temp.x) += 2.0*M_PI;
@@ -8271,9 +8268,6 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                         y.push_back((temp.y));
                         
                     }
-                    
-                    //                }
-                    
                     
                 }
                 
@@ -8333,15 +8327,8 @@ void ListFrame::GetAllCoastLineData(void){
         while(!(file_coastline_data_blocked.value.eof())){
             
             
-            data_x.resize(i+1);
-            data_y.resize(i+1);
             
             data_3d.resize(i+1);
-            
-            
-            (data_x[i]).resize(360);
-            (data_y[i]).resize(360);
-            
             (data_3d[i]).resize(360);
             
             for(j=0; j<360; j++){
@@ -8376,9 +8363,9 @@ void ListFrame::GetAllCoastLineData(void){
                     ins << line;
                     ins >> phi_temp >> lambda_temp;
                     
-                    (data_x[i][j]).push_back(x_mercator(lambda_temp));
-                    (data_y[i][j]).push_back(y_mercator(phi_temp));
-                    
+//                    (data_x[i][j]).push_back(x_mercator(lambda_temp));
+//                    (data_y[i][j]).push_back(y_mercator(phi_temp));
+//
                     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                     (p_temp.phi).set(String(""), k*phi_temp, String(""));
                     
@@ -10728,7 +10715,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
-//this function converts the geographic position q into the coordinates x, y of its Mercator projection
+// If the projection of q falls within the plot area, it writes its projection into p and returns true, and it returns false otherwise
 bool DrawPanel::GeoToMercator(Position q, Projection* p){
     
     Projection temp;

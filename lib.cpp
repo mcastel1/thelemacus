@@ -14695,17 +14695,15 @@ void SightFrame::AllOk(void){
     
 }
 
-template<class T> bool SightFrame::CheckTimeInterval(T& event){
+template<class T> void SightFrame::CheckTimeInterval(T& event){
     
     
     if(
-       
        (master_clock_date->is_ok()) &&
        (master_clock_chrono->is_ok()) &&
        ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
        (TAI_minus_UTC->is_ok())
        )
-        
     {
         
         master_clock_date->get(event);
@@ -14716,14 +14714,17 @@ template<class T> bool SightFrame::CheckTimeInterval(T& event){
         }
         TAI_minus_UTC->get(event);
         
-        return((sight->check_time_interval(String(""))));
-        
-    }else{
-        
-        return false;
+        if(!(sight->check_time_interval(String("")))){
+            
+            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+            (print_error_message->control) = NULL;
+            (print_error_message->title) = String("Time not covered by ephemerides' data!");
+            (print_error_message->message) = String("Time must be covered by emphmerides data");
+            CallAfter(*print_error_message);
+            
+        }
         
     }
-    
     
     event.Skip(true);
     

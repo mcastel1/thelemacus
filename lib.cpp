@@ -4680,7 +4680,7 @@ bool Sight::read_from_file(File& file, String prefix){
     time.print(String("TAI date and hour of sight"), new_prefix, cout);
     
     //check whether the date and hour of sight falls within the time window covered by JPL data files
-    check &= check_data_time_interval(prefix);
+    check &= check_time_interval(prefix);
     
     label.read_from_file(String("label"), file, false, new_prefix);
     
@@ -4696,7 +4696,7 @@ bool Sight::read_from_file(File& file, String prefix){
 }
 
 //compute this->time and returns true if time lies within the data file of NASA JPL ephemerides files, and false otherwise
-bool Sight::check_data_time_interval(String prefix){
+bool Sight::check_time_interval(String prefix){
     
     int l_min, l_max;
     stringstream temp;
@@ -6217,7 +6217,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
         time+=TAI_minus_UTC;
         time.print(String("TAI date and hour of sight"), new_prefix, cout);
         
-    }while(!check_data_time_interval(prefix));
+    }while(!check_time_interval(prefix));
     
     
     //if the sight has use_stopwatch = 'y', then I add to the list of its items the stopwatch reading
@@ -6966,7 +6966,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
     
     
     file.set_name(String(temp.c_str()));
-    if((file.open(String("in"), new_prefix)) && check_data_time_interval(new_prefix)){
+    if((file.open(String("in"), new_prefix)) && check_time_interval(new_prefix)){
         //the file corresponding to this->body exists and the time of *this lies within the time interval of NASA JPL ephemerides data
         
         
@@ -14691,7 +14691,7 @@ void SightFrame::AllOk(void){
                           (master_clock_date->is_ok()) &&
                           (master_clock_chrono->is_ok()) &&
                           ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
-                          (TAI_minus_UTC->is_ok()));
+                          (TAI_minus_UTC->is_ok()) && (sight->check_time_interval(String(""))));
     
 }
 

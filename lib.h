@@ -875,7 +875,7 @@ public:
     void print(String, String, ostream&);
     bool read_from_file(File&, String);
     bool reduce(Route*, String);
-    bool check_data_time_interval(String);
+    bool check_time_interval(String);
     
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);

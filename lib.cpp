@@ -14702,7 +14702,7 @@ void SightFrame::SetIdling(bool b){
 
 
 
-//this function checks whether all the fields in SightFrame are ok, and if they are, it enables the button_reduce
+//this function checks whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span: if all these conditions are true, it enables the button_reduce
 void SightFrame::AllOk(void){
     
     button_reduce->Enable(

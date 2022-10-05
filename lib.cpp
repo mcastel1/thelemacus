@@ -4695,7 +4695,7 @@ bool Sight::read_from_file(File& file, String prefix){
     
 }
 
-//check whether the time of sight lies within the data file of NASA JPL ephemerides files
+//compute this->time and returns true if time lies within the data file of NASA JPL ephemerides files, and false otherwise
 bool Sight::check_data_time_interval(String prefix){
     
     int l_min, l_max;
@@ -4706,6 +4706,18 @@ bool Sight::check_data_time_interval(String prefix){
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
+    
+    //compute this->time
+    
+    //I first set time to master_clock_date_and_hour ...
+    time = master_clock_date_and_hour;
+    //.. then I add to it sight->stopwatch, if any ....
+    if(use_stopwatch == Answer('y', String(""))){
+        time+=stopwatch;
+    }
+    //... then I add to it TAI_minus_UTC, to convert it from the UTC to the TAI scale
+    time+=TAI_minus_UTC;
+
     
     
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines

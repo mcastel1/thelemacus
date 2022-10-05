@@ -12919,6 +12919,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
+    //I bind master_clock_date->year to CheckTimeInterval in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
+    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
+
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);

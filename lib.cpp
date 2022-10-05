@@ -14697,6 +14697,8 @@ void SightFrame::AllOk(void){
 
 template<class T> void SightFrame::CheckTimeInterval(T& event){
     
+//    !check && !((((p->deg)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->deg)->GetValue()).ToStdString())) == String(""))))
+    
     
     if(
        (master_clock_date->is_ok()) &&
@@ -14714,7 +14716,13 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
         }
         TAI_minus_UTC->get(event);
         
-        if(!(sight->check_time_interval(String("")))){
+        if(!(sight->check_time_interval(String(""))) &&
+           
+           (!((((master_clock_date->year)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->year)->GetValue()).ToStdString())) == String("")))) &&
+           (!((((master_clock_date->month)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->month)->GetValue()).ToStdString())) == String("")))) &&
+           (!((((master_clock_date->day)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->day)->GetValue()).ToStdString())) == String(""))))
+           
+           ){
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             (print_error_message->control) = NULL;

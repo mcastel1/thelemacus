@@ -14716,10 +14716,8 @@ void SightFrame::AllOk(void){
     
 }
 
+//prompt an error message to signal to the user that the entered time of sight lies outside ephemerides data
 template<class T> void SightFrame::CheckTimeInterval(T& event){
-    
-//    !check && !((((p->deg)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((p->deg)->GetValue()).ToStdString())) == String(""))))
-    
     
     if(
        (master_clock_date->is_ok()) &&
@@ -14728,6 +14726,7 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
        (TAI_minus_UTC->is_ok())
        )
     {
+        //the fields that specify the time of the sight are all ok ...
         
         master_clock_date->get(event);
         master_clock_chrono->get(event);
@@ -14737,11 +14736,14 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
         }
         TAI_minus_UTC->get(event);
         
-        if(!(sight->check_time_interval(String(""))) &&
+        if(!(sight->check_time_interval(String("")))
+           //... and the resulting time does not lie within the ephemerides time interval -> I recall the user that the entered value is wrong by prompting an error message
            
-           (!((((master_clock_date->year)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->year)->GetValue()).ToStdString())) == String("")))) &&
-           (!((((master_clock_date->month)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->month)->GetValue()).ToStdString())) == String("")))) &&
-           (!((((master_clock_date->day)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->day)->GetValue()).ToStdString())) == String(""))))
+//           &&
+//
+//           (!((((master_clock_date->year)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->year)->GetValue()).ToStdString())) == String("")))) &&
+//           (!((((master_clock_date->month)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->month)->GetValue()).ToStdString())) == String("")))) &&
+//           (!((((master_clock_date->day)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->day)->GetValue()).ToStdString())) == String(""))))
            
            ){
             

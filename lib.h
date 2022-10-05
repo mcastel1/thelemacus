@@ -2063,7 +2063,7 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void AllOk(void);
-    tamplate<class T> bool CheckTimeInterval(T&);
+    template<class T> bool CheckTimeInterval(T&);
     
     //    wxDECLARE_EVENT_TABLE();
     

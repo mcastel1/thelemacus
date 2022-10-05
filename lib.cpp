@@ -14695,8 +14695,34 @@ void SightFrame::AllOk(void){
     
 }
 
-template<class T> SightFrame::CheckTimeInterval(T& event){
-
+template<class T> bool SightFrame::CheckTimeInterval(T& event){
+    
+    
+    if(
+       
+       (master_clock_date->is_ok()) &&
+       (master_clock_chrono->is_ok()) &&
+       ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
+       (TAI_minus_UTC->is_ok())
+       )
+        
+    {
+        
+        master_clock_date->get(event);
+        master_clock_chrono->get(event);
+        stopwatch_check->get(event);
+        if(((stopwatch_check->checkbox)->GetValue())){
+            stopwatch_reading->get(event);
+        }
+        TAI_minus_UTC->get(event);
+        
+        return((sight->check_time_interval(String(""))));
+        
+    }else{
+        
+        return false;
+        
+    }
     
     
     event.Skip(true);

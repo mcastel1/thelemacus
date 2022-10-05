@@ -8022,7 +8022,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 void ChartFrame::GetCoastLineData_3D(void){
     
     unsigned long every, l, n, n_points_grid;
-    //integer values of min/max lat/lon to be extractd from data_3d
+    //integer values of min/max lat/lon to be extractd from p_coastline
     int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
     Projection temp;
     bool check;
@@ -8078,7 +8078,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                 
                 if(i < -90){
                     
-                    if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->data_3d).size())){
+                    if((-(180+i) - floor_min_lat >=0) && (-(180+i) - floor_min_lat < (parent->p_coastline).size())){
                         
                         i_adjusted = -(180+i);
                         j_adjusted = 180+j;
@@ -8095,7 +8095,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                 
                 if(i > 90){
                     
-                    if((180-i - floor_min_lat >=0) && (180-i - floor_min_lat < (parent->data_3d).size())){
+                    if((180-i - floor_min_lat >=0) && (180-i - floor_min_lat < (parent->p_coastline).size())){
                         
                         i_adjusted = 180 - i;
                         j_adjusted = 180 + j;
@@ -8113,7 +8113,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                 
             }else{
                 
-                if((i - floor_min_lat >=0) && (i - floor_min_lat < (parent->data_3d).size())){
+                if((i - floor_min_lat >=0) && (i - floor_min_lat < (parent->p_coastline).size())){
                     
                     i_adjusted = i;
                     j_adjusted = j;
@@ -8133,17 +8133,17 @@ void ChartFrame::GetCoastLineData_3D(void){
             if(check){
                 
                 //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+                n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
                 
                 //I plot every 'every' data points
                 every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for(l=0; (l*every)<((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
+                for(l=0; (l*every)<((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
                     
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                    if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->data_3d)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &q)){
+                    if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &q)){
                         
                         p_3d.push_back(q);
                         
@@ -8162,13 +8162,13 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     
     /*
-     every = (unsigned int)(((double)((parent->data_3d).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
+     every = (unsigned int)(((double)((parent->p_coastline).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
      if(every == 0){every = 1;}
      
-     for(x_3d.clear(), y_3d.clear(), i=0; every*i<(parent->data_3d).size(); i++){
+     for(x_3d.clear(), y_3d.clear(), i=0; every*i<(parent->p_coastline).size(); i++){
      
      //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-     if((draw_panel->GeoTo3D((parent->data_3d)[every*i], &temp))){
+     if((draw_panel->GeoTo3D((parent->p_coastline)[every*i], &temp))){
      
      x_3d.push_back(temp.x);
      y_3d.push_back(temp.y);
@@ -8248,18 +8248,18 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //            flush(cout);
                 
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((unsigned int)(((parent->data_3d)[i - floor_min_lat][j % 360]).size()));
+                n = ((unsigned int)(((parent->p_coastline)[i - floor_min_lat][j % 360]).size()));
                 
                 every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for(l=0; (l*every)<((parent->data_3d)[i - floor_min_lat][j % 360]).size(); l++){
+                for(l=0; (l*every)<((parent->p_coastline)[i - floor_min_lat][j % 360]).size(); l++){
                     
 //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
 //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                     
-                    if((draw_panel->*(draw_panel->GeoToProjection))((parent->data_3d)[i - floor_min_lat][j % 360][l*every], &temp)){
+                    if((draw_panel->*(draw_panel->GeoToProjection))((parent->p_coastline)[i - floor_min_lat][j % 360][l*every], &temp)){
                         
                         if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                             (temp.x) += 2.0*M_PI;
@@ -8280,7 +8280,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
 }
 
 
-//this function fetches the data in path_file_coastline_data_blocked and stores them in data_x, data_y, data_3d so that they can be read fastly
+//this function fetches the data in path_file_coastline_data_blocked and stores them in data_x, data_y, p_coastline so that they can be read fastly
 void ListFrame::GetAllCoastLineData(void){
     
     File file_n_line, file_coastline_data_blocked;
@@ -8328,8 +8328,8 @@ void ListFrame::GetAllCoastLineData(void){
             
             
             
-            data_3d.resize(i+1);
-            (data_3d[i]).resize(360);
+            p_coastline.resize(i+1);
+            (p_coastline[i]).resize(360);
             
             for(j=0; j<360; j++){
                 
@@ -8342,7 +8342,6 @@ void ListFrame::GetAllCoastLineData(void){
                 
                 (file_coastline_data_blocked.value).read(buffer, l);
                 string data(buffer, l);
-                
                 
                 
                 //count how many datapoints are in data
@@ -8363,13 +8362,10 @@ void ListFrame::GetAllCoastLineData(void){
                     ins << line;
                     ins >> phi_temp >> lambda_temp;
                     
-//                    (data_x[i][j]).push_back(x_mercator(lambda_temp));
-//                    (data_y[i][j]).push_back(y_mercator(phi_temp));
-//
                     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                     (p_temp.phi).set(String(""), k*phi_temp, String(""));
                     
-                    (data_3d[i][j]).push_back(p_temp);
+                    (p_coastline[i][j]).push_back(p_temp);
                     
                     pos_beg = pos_end+1;
                     pos_end = data.find(" ", pos_beg);

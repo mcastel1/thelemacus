@@ -2170,8 +2170,8 @@ public:
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     //pointer used to shorten the reference to parent->plot
     Plot* plot;
-    //in p_3d, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline
-    vector<wxPoint> p_3d;
+    //in p_coastline_draw, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline
+    vector<wxPoint> p_coastline_draw;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling;
     //This is the actual value of the maximal zoom factor allowed

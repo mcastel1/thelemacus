@@ -8067,7 +8067,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
-    p_3d.clear();
+    p_coastline_draw.clear();
     
     for(i=i_min; i<i_max; i++){
         
@@ -8145,7 +8145,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
                     if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &q)){
                         
-                        p_3d.push_back(q);
+                        p_coastline_draw.push_back(q);
                         
                     }
                     
@@ -8235,7 +8235,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     if((parent->show_coastlines) == Answer('y', String(""))){
         
-        p_3d.clear();
+        p_coastline_draw.clear();
         
         for(i=i_min; i<i_max; i++){
             
@@ -8264,7 +8264,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
 //                            (temp.x) += 2.0*M_PI;
 //                        }
 
-                        p_3d.push_back(temp);
+                        p_coastline_draw.push_back(temp);
                         
                     }
                     
@@ -9181,14 +9181,14 @@ void DrawPanel::Draw_Mercator(void){
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    for(i=0; i<(parent->p_3d).size(); i++){
-        memory_dc.DrawPoint((parent->p_3d)[i]);
+    for(i=0; i<(parent->p_coastline_draw).size(); i++){
+        memory_dc.DrawPoint((parent->p_coastline_draw)[i]);
     }
     
     
     TabulateRoutes();
     
-    (parent->p_3d).clear();
+    (parent->p_coastline_draw).clear();
     
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
@@ -9494,9 +9494,9 @@ void DrawPanel::Draw_3D(void){
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
-    for(i=0; i<(parent->p_3d).size(); i++){
+    for(i=0; i<(parent->p_coastline_draw).size(); i++){
 //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        memory_dc.DrawPoint((parent->p_3d)[i]);
+        memory_dc.DrawPoint((parent->p_coastline_draw)[i]);
     }
     
     
@@ -9528,7 +9528,7 @@ void DrawPanel::Draw_3D(void){
     }
     
     
-    (parent->p_3d).clear();
+    (parent->p_coastline_draw).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();

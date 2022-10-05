@@ -87,4 +87,4 @@ frame day foreground color = (0,0,0)
 frame night foreground color = (255,255,255)
 frame day background color = (169,169,169)
 frame night background color = (65,74,76)
-show coastlines = n
+show coastlines = y

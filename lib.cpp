@@ -16295,10 +16295,10 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     //    (check.p) = this;
     
     for(hours.Clear(), hours.Add(wxT("")), i=0; i<24; i++){
-        hours.Add(wxString::Format(wxT("%i"), i+1));
+        hours.Add(wxString::Format(wxT("%i"), i));
     }
     for(minutes.Clear(), minutes.Add(wxT("")), i=0; i<60; i++){
-        minutes.Add(wxString::Format(wxT("%i"), i+1));
+        minutes.Add(wxString::Format(wxT("%i"), i));
     }
     
     hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);

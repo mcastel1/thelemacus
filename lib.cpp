@@ -12943,6 +12943,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
     //I bind stopwatch_check to CheckTimeInterval in such a way that, if the user enters a stopwatch_check such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
+    //if stopwatch_check is checked/unchecked, then I runm CheckTimeInterval to verify that the time of sight lies within the ephemerides' time span
+    (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, &SightFrame::CheckTimeInterval<wxCommandEvent>, this);
 
     
     //stopwatch reading
@@ -14761,6 +14763,17 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
             (print_error_message->title) = String("Time not covered by ephemerides' data!");
             (print_error_message->message) = String("Time must be covered by emphmerides data");
             CallAfter(*print_error_message);
+            
+        }else{
+            
+            master_clock_date->SetBackgroundColor(wxGetApp().background_color);
+            master_clock_chrono->SetBackgroundColor(wxGetApp().background_color);
+            if((stopwatch_check->checkbox)->GetValue()){
+                stopwatch_reading->SetBackgroundColor(wxGetApp().background_color);
+            }
+            TAI_minus_UTC->SetBackgroundColor(wxGetApp().background_color);
+
+            
             
         }
         

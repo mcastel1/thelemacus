@@ -4695,6 +4695,7 @@ bool Sight::read_from_file(File& file, String prefix){
     
 }
 
+//check whether the time of sight lies within the data file of NASA JPL ephemerides files
 bool Sight::check_data_time_interval(String prefix){
     
     int l_min, l_max;
@@ -6953,12 +6954,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
     
     
     file.set_name(String(temp.c_str()));
-    if(file.open(String("in"), new_prefix)){
+    if((file.open(String("in"), new_prefix)) && check_data_time_interval(new_prefix)){
+        //the file corresponding to this->body exists and the time of *this lies within the time interval of NASA JPL ephemerides data
         
-        /* cout << "\nMJD = " << t.MJD; */
-        /* cout << "\nMJD0 = " << MJD_min; */
-        /* cout << "\ndiff = " << (t.MJD)-MJD_min; */
-        /* cin >>l ; */
         
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
         l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
@@ -7134,6 +7132,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
         //(*circle_of_equal_altitude).l.set(String("length of circle of equal altitude"), 2.0*M_PI*Re*sin((*circle_of_equal_altitude).omega.value), new_prefix);
         
     }else{
+        
         check &= false;
     }
     

@@ -8236,8 +8236,8 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     if((parent->show_coastlines) == Answer('y', String(""))){
         
-        x.clear();
-        y.clear();
+        p_3d.clear();
+        
         for(i=i_min; i<i_max; i++){
             
             //        cout << "\n i = " << i;
@@ -8264,8 +8264,8 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                         if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                             (temp.x) += 2.0*M_PI;
                         }
-                        x.push_back((temp.x));
-                        y.push_back((temp.y));
+                        
+                        p_3d.push_back(temp);
                         
                     }
                     
@@ -9178,16 +9178,14 @@ void DrawPanel::Draw_Mercator(void){
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    for(i=0; i<(parent->x).size(); i++){
-        ProjectionToDrawPanel_Mercator(Projection((parent->x)[i], (parent->y)[i]), &p);
-        memory_dc.DrawPoint(p);
+    for(i=0; i<(parent->p_3d).size(); i++){
+        memory_dc.DrawPoint((parent->p_3d)[i]);
     }
     
     
     TabulateRoutes();
     
-    (parent->x).clear();
-    (parent->y).clear();
+    (parent->p_3d).clear();
     
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
@@ -9527,8 +9525,7 @@ void DrawPanel::Draw_3D(void){
     }
     
     
-    (parent->x).clear();
-    (parent->y).clear();
+    (parent->p_3d).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();

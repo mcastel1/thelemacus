@@ -14747,6 +14747,15 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
            
            ){
             
+            master_clock_date->SetBackgroundColor(wxGetApp().error_color);
+            master_clock_chrono->SetBackgroundColor(wxGetApp().error_color);
+            if((stopwatch_check->checkbox)->GetValue()){
+                stopwatch_reading->SetBackgroundColor(wxGetApp().error_color);
+            }
+            TAI_minus_UTC->SetBackgroundColor(wxGetApp().error_color);
+            
+
+            
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Time not covered by ephemerides' data!");
@@ -15642,6 +15651,15 @@ void DateField::set(Date date_in){
     
 }
 
+//set color as the background color in all fields of *this
+void DateField::SetBackgroundColor(Color color){
+    
+    year->SetBackgroundColour(color);
+    month->SetBackgroundColour(color);
+    day->SetBackgroundColour(color);
+
+}
+
 //sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
 void ChronoField::set(Chrono chrono_in){
     
@@ -15653,6 +15671,15 @@ void ChronoField::set(Chrono chrono_in){
     minute_ok = true;
     second_ok = true;
     
+}
+
+//set color as the background color in all fields of *this
+void ChronoField::SetBackgroundColor(Color color){
+    
+    hour->SetBackgroundColour(color);
+    minute->SetBackgroundColour(color);
+    second->SetBackgroundColour(color);
+
 }
 
 //sets the value in the GUI object equal to the value in the non-GUI  object string

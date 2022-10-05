@@ -8189,9 +8189,8 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
     wxPoint temp;
     
-    //set x_min, ..., y_max for the following
-    draw_panel->Set_x_y_min_max_Mercator();
-    
+//    //set x_min, ..., y_max for the following
+//    draw_panel->Set_x_y_min_max_Mercator();
     
     //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     ((parent->plot)->phi_min).normalize_pm_pi();
@@ -8920,9 +8919,8 @@ void DrawPanel::Draw_Mercator(void){
     for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
     label_phi.resize(0);
     
-    
-    //fetch the data on the region that I am about to plot from the data files.
-    parent->GetCoastLineData_Mercator();
+    //set x_min, ..., y_max for the following
+    Set_x_y_min_max_Mercator();
 
     //set rectangle_obseerver
     rectangle_observer = Rectangle(Position(plot->lambda_min, plot->phi_min), Position(plot->lambda_max, plot->phi_max));
@@ -8952,6 +8950,8 @@ void DrawPanel::Draw_Mercator(void){
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     tick_length = ((parent->tick_length_over_width_plot_area).value)*width_plot_area;
     
+    
+    
     //allocate bitmap_image
     bitmap_image = new wxBitmap(width_chart, height_chart);
     memory_dc.SelectObject(*bitmap_image);
@@ -8963,6 +8963,9 @@ void DrawPanel::Draw_Mercator(void){
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint(width_chart*0.15, height_chart*0.1);
+    
+    //fetch the data on the region that I am about to plot from the data files.
+    parent->GetCoastLineData_Mercator();
     
     //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
     dummy.from_sign_deg_min('+', 179, 59);

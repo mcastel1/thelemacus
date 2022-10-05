@@ -8187,7 +8187,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0, lambda_min_int, lambda_max_int, phi_min_int, phi_max_int;
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
-    Projection temp;
+    wxPoint temp;
     
     //set x_min, ..., y_max for the following
     draw_panel->Set_x_y_min_max_Mercator();
@@ -8259,12 +8259,12 @@ void ChartFrame::GetCoastLineData_Mercator(void){
 //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
 //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                     
-                    if((draw_panel->*(draw_panel->GeoToProjection))((parent->p_coastline)[i - floor_min_lat][j % 360][l*every], &temp)){
+                    if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->p_coastline)[i - floor_min_lat][j % 360][l*every], &temp)){
                         
-                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
-                            (temp.x) += 2.0*M_PI;
-                        }
-                        
+//                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
+//                            (temp.x) += 2.0*M_PI;
+//                        }
+
                         p_3d.push_back(temp);
                         
                     }

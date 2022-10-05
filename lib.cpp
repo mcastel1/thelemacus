@@ -14695,6 +14695,14 @@ void SightFrame::AllOk(void){
     
 }
 
+template<class T> SightFrame::CheckTimeInterval(T& event){
+
+    
+    
+    event.Skip(true);
+    
+}
+
 
 void SightFrame::OnPressCancel(wxCommandEvent& event){
     

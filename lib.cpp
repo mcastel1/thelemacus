@@ -10495,12 +10495,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->sign);
-            ((f->print_error_message)->title) = String("Sign is not valid!");
-            ((f->print_error_message)->message) = String("Sign must be +-, NS or EW.");
-            f->CallAfter(*(f->print_error_message));
-            
+            (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."));
             (p->sign_ok) = false;
             
         }

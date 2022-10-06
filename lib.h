@@ -2066,6 +2066,7 @@ public:
     void OnPressReduce(wxCommandEvent& event);
     void AllOk(void);
     template<class T> void OnEditTime(T&);
+    void TimeIntervalOk(String);
     
     //    wxDECLARE_EVENT_TABLE();
     

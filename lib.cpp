@@ -14722,10 +14722,9 @@ void SightFrame::SetIdling(bool b){
 //this function checks whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span: if all these conditions are true, it enables the button_reduce
 void SightFrame::AllOk(void){
     
-    wxCommandEvent dummy;
     
-    //runs OnEditTime to compute time_interval_ok
-    OnEditTime(dummy);
+    //runs TimeIntervalOk to compute time_interval_ok, which will be used to determine whether button_reduce is enabled or not
+    TimeIntervalOk(String(""));
     
     button_reduce->Enable(
                           (body->is_ok()) &&
@@ -14740,10 +14739,8 @@ void SightFrame::AllOk(void){
     
 }
 
-//prompt an error message to signal to the user if the entered time of sight lies outside ephemerides data
-template<class T> void SightFrame::OnEditTime(T& event){
-    
-    time_interval_ok = false;
+//compute time_interval_ok
+void SightFrame::TimeIntervalOk(String prefix){
     
     if(
        (master_clock_date->is_ok()) &&
@@ -14754,56 +14751,46 @@ template<class T> void SightFrame::OnEditTime(T& event){
     {
         //the fields that specify the time of the sight are all ok ...
         
-        master_clock_date->get(event);
-        master_clock_chrono->get(event);
-        stopwatch_check->get(event);
-        if(((stopwatch_check->checkbox)->GetValue())){
-            stopwatch_reading->get(event);
-        }
-        TAI_minus_UTC->get(event);
+        wxCommandEvent dummy;
         
-        if(!(sight->check_time_interval(String("")))
-           //... and the resulting time does not lie within the ephemerides time interval -> I recall the user that the entered value is wrong by prompting an error message
-           
-           //           &&
-           //
-           //           (!((((master_clock_date->year)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->year)->GetValue()).ToStdString())) == String("")))) &&
-           //           (!((((master_clock_date->month)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->month)->GetValue()).ToStdString())) == String("")))) &&
-           //           (!((((master_clock_date->day)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->day)->GetValue()).ToStdString())) == String(""))))
-           
-           ){
-            
-            //            master_clock_date->SetBackgroundColor(wxGetApp().error_color);
-            //            master_clock_chrono->SetBackgroundColor(wxGetApp().error_color);
-            //            if((stopwatch_check->checkbox)->GetValue()){
-            //                stopwatch_reading->SetBackgroundColor(wxGetApp().error_color);
-            //            }
-            //            TAI_minus_UTC->SetBackgroundColor(wxGetApp().error_color);
-                        
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            (print_error_message->control) = NULL;
-            (print_error_message->title) = String("Time not covered by ephemerides' data!");
-            (print_error_message->message) = String("Time must be covered by emphmerides data");
-            CallAfter(*print_error_message);
-            
-        }else{
-            
-            time_interval_ok = true;
-
-            
-            //            master_clock_date->SetBackgroundColor(wxGetApp().background_color);
-            //            master_clock_chrono->SetBackgroundColor(wxGetApp().background_color);
-            //            if((stopwatch_check->checkbox)->GetValue()){
-            //                stopwatch_reading->SetBackgroundColor(wxGetApp().background_color);
-            //            }
-            //            TAI_minus_UTC->SetBackgroundColor(wxGetApp().background_color);
-            
-            
-            
+        master_clock_date->get(dummy);
+        master_clock_chrono->get(dummy);
+        stopwatch_check->get(dummy);
+        if(((stopwatch_check->checkbox)->GetValue())){
+            stopwatch_reading->get(dummy);
         }
+        TAI_minus_UTC->get(dummy);
+        
+        //... compute if sight->time lies within the ephemerids' data time interval
+        time_interval_ok = (sight->check_time_interval(String("")));
+        
+        
+    }else{
+        
+        time_interval_ok = false;
         
     }
     
+    
+}
+
+//prompt an error message to signal to the user if the entered time of sight lies outside ephemerides data
+template<class T> void SightFrame::OnEditTime(T& event){
+    
+    //compute time_interval_ok
+    TimeIntervalOk(String(""));
+    
+    if(!time_interval_ok){
+        //time_interval_ok = false -> prompt error message
+        
+        //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
+        (print_error_message->control) = NULL;
+        (print_error_message->title) = String("Time not covered by ephemerides' data!");
+        (print_error_message->message) = String("Time must be covered by emphmerides data");
+        CallAfter(*print_error_message);
+        
+    }
+     
     event.Skip(true);
     
 }

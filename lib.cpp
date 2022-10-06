@@ -13106,6 +13106,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     if(sight_in != NULL){set();}
     
+    //runs AllOk to enable/disable button_reduce
+    AllOk();
+    
     Centre();
     
 }
@@ -14719,6 +14722,11 @@ void SightFrame::SetIdling(bool b){
 //this function checks whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span: if all these conditions are true, it enables the button_reduce
 void SightFrame::AllOk(void){
     
+    wxCommandEvent dummy;
+    
+    //runs CheckTimeInterval to compute time_interval_ok
+    CheckTimeInterval(dummy);
+    
     button_reduce->Enable(
                           (body->is_ok()) &&
                           ((!( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) )) || (limb->is_ok())) &&
@@ -14728,7 +14736,7 @@ void SightFrame::AllOk(void){
                           (master_clock_date->is_ok()) &&
                           (master_clock_chrono->is_ok()) &&
                           ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
-                          (TAI_minus_UTC->is_ok()) && (sight->check_time_interval(String(""))));
+                          (TAI_minus_UTC->is_ok()) && time_interval_ok);
     
 }
 

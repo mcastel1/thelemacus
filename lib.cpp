@@ -11210,11 +11210,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     TabulateRoutes();
                     PaintNow();
                     
-                    //                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    //                    (print_error_message->control) = NULL;
-                    //                    (print_error_message->title) = ;
-                    //                    (print_error_message->message) = ;
-                    //                    (*print_error_message)();
                     print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."));
                     
                 }

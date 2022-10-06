@@ -13784,9 +13784,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
     control = control_in;
     title = title_in;
     message = message_in;
-    CallAfter(*this);
-
-    
+    f->CallAfter(*this);
     
 }
 
@@ -14496,10 +14494,11 @@ void ListFrame::Disconnect(int i_sight){
     }
     
     //print an info message
-    (print_warning_message->control) = NULL;
-    (print_warning_message->title) = String("The route which is being dragged was related to a sight!");
-    (print_warning_message->message) = String("Disconnecting the route from the sight.");
-    CallAfter(*print_warning_message);
+    //    (print_warning_message->control) = NULL;
+    //    (print_warning_message->title) = String("The route which is being dragged was related to a sight!");
+    //    (print_warning_message->message) = String("Disconnecting the route from the sight.");
+    //    CallAfter(*print_warning_message);
+    print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."));
     
     
 }

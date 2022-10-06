@@ -188,12 +188,12 @@ bool MyApp::OnInit(){
                                                        String("")
                                                        );
         ((list_frame->chart_frames)[i])->Show(true);
-        
+        ((list_frame->chart_frames)[i])->Raise();
+
     }
     
     //bring either of these wxFrames to front
-    list_frame->Raise();
-//    ((list_frame->chart_frames)[0])->Raise();
+//    list_frame->Raise();
     
     //fore/background color is determined from the default background color of extract_colors
     foreground_color = Color(list_frame->extract_colors->GetForegroundColour());

@@ -10418,12 +10418,7 @@ template<class T> void CheckLimb::operator()(T &event){
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->name);
-            ((f->print_error_message)->title) = String("Limb not valid!");
-            ((f->print_error_message)->message) = String("Limb must be upper, lower or center.");
-            f->CallAfter(*(f->print_error_message));
-            
+            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, lower or center."));
             (p->ok) = false;
             
         }

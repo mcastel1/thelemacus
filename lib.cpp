@@ -10374,11 +10374,7 @@ template<class T>void CheckBody::operator()(T& event){
             
         }else{
             
-            //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->name);
-            ((f->print_error_message)->title) = String("Body not found in catalog!");
-            ((f->print_error_message)->message) = String("Body must be in catalog.");
-            f->CallAfter(*(f->print_error_message));
+            (f->print_error_message)->SetAndCall(p->name, String("Body not found in catalog!"), String("Body must be in catalog."));
             
             (p->ok) = false;
             
@@ -14494,12 +14490,7 @@ void ListFrame::Disconnect(int i_sight){
     }
     
     //print an info message
-    //    (print_warning_message->control) = NULL;
-    //    (print_warning_message->title) = String("The route which is being dragged was related to a sight!");
-    //    (print_warning_message->message) = String("Disconnecting the route from the sight.");
-    //    CallAfter(*print_warning_message);
-    print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."));
-    
+     print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."));
     
 }
 

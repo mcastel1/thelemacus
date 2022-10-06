@@ -12373,10 +12373,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->deg);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°"));
             
             (p->deg_ok) = false;
             
@@ -12412,10 +12409,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->min);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Arcminutes must be floating-point numbers >= 0' and < 60'");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"));
             
             (p->min_ok) = false;
             
@@ -12453,10 +12447,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             
-            ((f->print_error_message)->control) = (p->value);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Lengths must be floating-point numbers >= 0 m");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"));
             
             (p->value_ok) = false;
             
@@ -12500,10 +12491,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             
-            ((f->print_error_message)->control) = (p->unit);
-            ((f->print_error_message)->title) = String("Unit not found in list!");
-            ((f->print_error_message)->message) = String("Unit must be nm, m or ft.");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."));
             
             (p->unit_ok) = false;
             
@@ -14848,10 +14836,7 @@ template<class T> void CheckYear::operator()(T&event){
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             
-            ((f->print_error_message)->control) = (p->year);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Year must be an unsigned integer");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"));
             
             (p->year_ok) = false;
             (p->day)->Enable(false);
@@ -14896,10 +14881,7 @@ template<class T> void CheckMonth::operator()(T&event){
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter     ((f->print_error_message)->control) = (p->month);
             
-            ((f->print_error_message)->control) = (p->month);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Month must be an unsigned integer >= 1 and <= 12");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"));
             
             (p->month_ok) = false;
             (p->day)->Enable(false);
@@ -14950,10 +14932,7 @@ template<class T> void CheckDay::operator()(T& event){
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             
-            ((f->print_error_message)->control) = (p->day);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Day must be an unsigned integer comprised between the days of the relative month");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"));
             
             (p->day_ok) = false;
             
@@ -15097,10 +15076,7 @@ template<class T> void CheckHour::operator()(T &event){
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->hour);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Hours must be unsigned integer numbers >= 0 and < 24");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"));
             
             (p->hour_ok) = false;
             
@@ -15140,10 +15116,7 @@ template<class T> void CheckMinute::operator()(T &event){
             
         }else{
             
-            ((f->print_error_message)->control) = (p->minute);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Minutes must be unsigned integer numbers >= 0 and < 60");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"));
             
             (p->minute_ok) = false;
             
@@ -15184,10 +15157,7 @@ template<class T> void CheckSecond::operator()(T &event){
         }else{
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             
-            ((f->print_error_message)->control) = (p->second);
-            ((f->print_error_message)->title) = String("Entered value is not valid!");
-            ((f->print_error_message)->message) = String("Seconds must be floating-point numbers >= 0.0 and < 60.0");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"));
             
             (p->second_ok) = false;
             
@@ -15287,10 +15257,7 @@ template<class T>void CheckRouteType::operator()(T& event){
         }else{
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-            ((f->print_error_message)->control) = (p->name);
-            ((f->print_error_message)->title) = String("Route type not found in list!");
-            ((f->print_error_message)->message) = String("Route type must be loxodrome, orthodrome, or circle of equal altitude.");
-            f->CallAfter(*(f->print_error_message));
+(f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."));
             
             (p->ok) = false;
             

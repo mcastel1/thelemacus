@@ -13778,7 +13778,7 @@ template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, 
     
 }
 
-//set the wxControl, title and message for the functor *this, and I call the functor with CallAfter
+//set the wxControl, title and message for the functor *this, and I call the functor operator() with CallAfter
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxControl* control_in, String title_in, String message_in){
     
     control = control_in;

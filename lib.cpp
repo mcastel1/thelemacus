@@ -116,9 +116,9 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
 
 //sets fore/background colors to a generic object of type T
 template<class T> void SetColor(T* object){
-         
-        object->SetForegroundColour((wxGetApp()).foreground_color);
-        object->SetBackgroundColour((wxGetApp()).background_color);
+    
+    object->SetForegroundColour((wxGetApp()).foreground_color);
+    object->SetBackgroundColour((wxGetApp()).background_color);
     
 }
 
@@ -1620,7 +1620,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
     //sets color and width of memory_dc to the ones supported as arguments of Draw
     (draw_panel->memory_dc).SetPen(wxPen(color, width));
     (draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
-
+    
     
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
@@ -1687,7 +1687,7 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
     //sets color and width of memory_dc to the ones supported as arguments of Draw
     (draw_panel->memory_dc).SetPen(wxPen(color, width));
     (draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
-
+    
     //comoute the end values of l and writes them in s
     compute_l_ends(&s, draw_panel, prefix);
     
@@ -4701,10 +4701,10 @@ bool Sight::check_time_interval(String prefix){
     String new_prefix;
     stringstream temp;
     File data_file;
-
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
- 
+    
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
     temp.clear();
     if((body.type) != String("star")){
@@ -4713,7 +4713,7 @@ bool Sight::check_time_interval(String prefix){
         temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/j2000_to_itrf93.txt";
     }
     data_file.set_name(temp.str());
-
+    
     
     if(data_file.check_if_exists(new_prefix)){
         //the ephemerides file data_file exists -> check the time interval
@@ -8097,7 +8097,7 @@ void ChartFrame::GetCoastLineData_3D(void){
     for(i=i_min; i<i_max; i++){
         
         for(j=j_min; j<j_max; j++){
-                        
+            
             if(!((i >= -90) && (i <= 90))){
                 //in this case, i needs to be adjusted because it is not between -90 and +90
                 
@@ -8214,8 +8214,8 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
     wxPoint temp;
     
-//    //set x_min, ..., y_max for the following
-//    draw_panel->Set_x_y_min_max_Mercator();
+    //    //set x_min, ..., y_max for the following
+    //    draw_panel->Set_x_y_min_max_Mercator();
     
     //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     ((parent->plot)->phi_min).normalize_pm_pi();
@@ -8280,15 +8280,15 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
                 for(l=0; (l*every)<((parent->p_coastline)[i - floor_min_lat][j % 360]).size(); l++){
                     
-//                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
-//                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
+                    //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
+                    //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                     
                     if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->p_coastline)[i - floor_min_lat][j % 360][l*every], &temp)){
                         
-//                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
-//                            (temp.x) += 2.0*M_PI;
-//                        }
-
+                        //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
+                        //                            (temp.x) += 2.0*M_PI;
+                        //                        }
+                        
                         p_coastline_draw.push_back(temp);
                         
                     }
@@ -8482,7 +8482,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     text_position_start = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
     text_position_end = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
     text_geo_position = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
-
+    
     //sets the pen and the brush, for memory_dc, which will be used in the following
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
@@ -8730,7 +8730,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         }
         
         wx_string = wxString(s.str().c_str());
-                
+        
         
         //        dc.DrawRotatedText(wx_string, p, 0);
         
@@ -8946,7 +8946,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //set x_min, ..., y_max for the following
     Set_x_y_min_max_Mercator();
-
+    
     //set rectangle_obseerver
     rectangle_observer = Rectangle(Position(plot->lambda_min, plot->phi_min), Position(plot->lambda_max, plot->phi_max));
     
@@ -9177,7 +9177,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
     memory_dc.DrawRectangle(position_plot_area.x, position_plot_area.y, width_plot_area, height_plot_area);
-
+    
     
     //draw labels on parallels
     for(first_label = true,
@@ -9300,7 +9300,7 @@ void DrawPanel::Draw_3D(void){
         }
         
     }
-
+    
     
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(lambda_span > k){
@@ -9328,7 +9328,7 @@ void DrawPanel::Draw_3D(void){
     
     //compute lambda_middle
     lambda_middle.set(String(""), round((((circle_observer.reference_position).lambda).value)/delta_lambda) * delta_lambda, String(""));
-  
+    
     
     //set lambda_start, lambda_end
     if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
@@ -9336,7 +9336,7 @@ void DrawPanel::Draw_3D(void){
         
         (lambda_start.value) = 0.0;
         (lambda_end.value) = 2.0*M_PI;
-         
+        
     }else{
         //in this case, there are two finite longitudes which encircle circle_observer
         
@@ -9520,7 +9520,7 @@ void DrawPanel::Draw_3D(void){
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
     for(i=0; i<(parent->p_coastline_draw).size(); i++){
-//        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
+        //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
         memory_dc.DrawPoint((parent->p_coastline_draw)[i]);
     }
     
@@ -10536,7 +10536,7 @@ bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q){
     }
     
     return check;
-        
+    
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area) into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
@@ -10819,25 +10819,25 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
 
 //given a Position q if q lies witin *this, it writes in label a text with the geographic coordinates of q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
 void DrawPanel::ShowCoordinates(Position q, wxStaticText* label){
-
+    
     wxPoint p;
-
+    
     if((this->*GeoToDrawPanel)(q, &p)){
         SetCoordinateLabel(q, p, label);
     }else{
         label->SetLabel(wxString(""));
     }
-
+    
 }
 
 
 
 //given a position q with respect to the origin of the screen, if q lies within *this, it writes in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
 void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
-
+    
     wxPoint p;
     Position r;
-
+    
     (this->*ScreenToGeo)(q, &r);
     
     if((this->ScreenToDrawPanel)(q, &p)){
@@ -10851,7 +10851,7 @@ void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label){
 
 //given a geographic position p and a position q with respect to the origin of *this, it writes the geographic coordinates of p into label and positions label close to q. The position of label is adjusted in such a way that label is enclosed  in *this
 void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label){
-
+    
     //the shift that will be applied to the position of *label
     wxPoint shift;
     
@@ -10860,24 +10860,24 @@ void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label){
     
     //the default value of the shift
     shift = wxPoint(
-                        ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
-                        ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
-                        );
-
+                    ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
+                    ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
+                    );
+    
     
     if((q.x) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) + ((label->GetSize()).x) > (GetSize().x) ){
         //label does not fit into *this: it goes beyond the right edge of *this -> move it to the left
         
         shift -= wxPoint(
-                        ( ((label->GetSize()).x) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) ),
-                        0
-                        );
+                         ( ((label->GetSize()).x) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) ),
+                         0
+                         );
         
     }
     
     if((q.y) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) + ((label->GetSize()).y) > (GetSize().y) ){
         //label does not fit into *this: it goes beyond the bottom edge of *this -> move up shift
-
+        
         shift -= wxPoint(
                          0,
                          ( ((label->GetSize()).y) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) )
@@ -10887,7 +10887,7 @@ void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label){
     
     //hift the label label with respect to p
     label->SetPosition(q + shift);
-
+    
     
 }
 
@@ -10996,8 +10996,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //if a selection rectangle is being drawn, update the instantaneous position of the final corner of the rectangle
     if(((parent->parent)->selection_rectangle)){
-//        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
-//        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
+        //        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
+        //        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         
         ShowCoordinates((parent->parent)->p_now, text_position_end);
         
@@ -11259,7 +11259,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
         
     }else{
         //the left button of the mouse has not been lifted at the end of a drag
-            
+        
         //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
         if(((parent->parent)->highlighted_position) != -1){
             
@@ -11356,12 +11356,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
     
     if(((parent->parent)->selection_rectangle)){
         //start drawing a selection rectangle
-                
+        
         GetMouseGeoPosition(&((parent->parent)->p_start));
         position_start_selection = position_screen_now;
         //stores the position at the beginning of the selection process, to compute the zoom factor later
         (this->*ScreenToProjection)(position_start_selection, &start_selection);
-
+        
         ShowCoordinates(position_start_selection, text_position_start);
         
     }else{
@@ -11648,13 +11648,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //in this case, the mouse is over a position
                         
                         wxPoint p;
-
+                        
                         if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
-
-
+                            
+                            
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                             (this->*ScreenToGeo)(position_now_drag, &((plot->position_list)[((parent->parent)->highlighted_position)]));
-                                                        
+                            
                         }
                         
                         
@@ -11671,7 +11671,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         //draw the label of the coordinates of the position which is being
                         ShowCoordinates(position_now_drag, text_geo_position);
-                                                
+                        
                         //update the data of the Position under consideration in listcontrol_positions
                         ((plot->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                         
@@ -12023,7 +12023,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
     //I remove the sight and the related route from  the non-GUI object plot
     (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
-
+    
     (f->listcontrol_sights)->set((f->plot)->sight_list);
     (f->listcontrol_routes)->set((f->plot)->route_list);
     
@@ -12032,7 +12032,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
 }
 
 void ModifyRoute::operator()(wxCommandEvent& event){
-        
+    
     (f->print_info_message->control) = NULL;
     (f->print_info_message->title) = String("");
     (f->print_info_message->message) = String("Select the route which which you want to transport the sight");
@@ -12066,13 +12066,13 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
 void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
     
     int i_route_to_remove;
-
+    
     //set i_route_to_remove equal to the currently relected Route in listcontrol_routes
     i_route_to_remove = ((int)((parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-
+    
     ((parent->delete_route_and_related_sight)->i_route_to_remove) = i_route_to_remove;
     ((parent->delete_route)->i_route_to_remove) = i_route_to_remove;
-
+    
     
     if( (((((parent->plot)->route_list)[i_route_to_remove]).related_sight).value) != -1){
         //if the route which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
@@ -12096,7 +12096,7 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
         (*(parent->delete_route))(event);
         
     }
-
+    
     event.Skip(true);
     
 }
@@ -12104,16 +12104,16 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
 void AskRemoveRelatedRoute::operator()(wxCommandEvent& event){
     
     int i_sight_to_remove;
-
+    
     //set i_sight_to_remove equal to the currently relected Sight in listcontrol_sights
     i_sight_to_remove = ((int)((parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-
+    
     ((parent->delete_sight)->i_sight_to_remove) = i_sight_to_remove;
-
+    
     
     if( (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value) != -1){
         //if the sight which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
-
+        
         ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value);
         
         //remove the route from the non-GUI object plot
@@ -12135,7 +12135,7 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event){
         (*(parent->delete_sight))(event);
         
     }
-
+    
     event.Skip(true);
     
 }
@@ -12205,10 +12205,10 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     //I remove the route and the related sight from both the non-GUI object plot
     (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
-//    f->UpdateRelatedSightsAndRoutes();
+    //    f->UpdateRelatedSightsAndRoutes();
     (f->listcontrol_sights)->set((f->plot)->sight_list);
     (f->listcontrol_routes)->set((f->plot)->route_list);
-
+    
     event.Skip(true);
     
 }
@@ -12229,13 +12229,13 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
     if(i != -1){
         
-//        (f->listcontrol_positions)->DeleteItem(i);
+        //        (f->listcontrol_positions)->DeleteItem(i);
         (f->plot)->remove_position(((unsigned int)i), String(""));
         
-//        for(i=0; i<((f->listcontrol_positions)->GetItemCount()); i++){
-//            (f->listcontrol_positions)->SetItem(i, 0, wxString::Format(wxT("%i"), ((unsigned int)(i+1))));
-//        }
-       
+        //        for(i=0; i<((f->listcontrol_positions)->GetItemCount()); i++){
+        //            (f->listcontrol_positions)->SetItem(i, 0, wxString::Format(wxT("%i"), ((unsigned int)(i+1))));
+        //        }
+        
         (f->listcontrol_positions)->set((f->plot)->position_list);
         
     }
@@ -12937,7 +12937,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (master_clock_date->day)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
-
+    
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
@@ -12946,7 +12946,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (master_clock_chrono->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (master_clock_chrono->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (master_clock_chrono->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
-
+    
     //I initialize the GUI filed master_clock_chrono with the one written in sight_in.
     //    if(sight_in != NULL){
     master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
@@ -12959,7 +12959,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     //if stopwatch_check is checked/unchecked, then I runm CheckTimeInterval to verify that the time of sight lies within the ephemerides' time span
     (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, &SightFrame::CheckTimeInterval<wxCommandEvent>, this);
-
+    
     
     //stopwatch reading
     StaticText* text_stopwatch_reading = new StaticText(panel, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize);
@@ -12971,7 +12971,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (stopwatch_reading->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (stopwatch_reading->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (stopwatch_reading->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
-
+    
     
     //initialize stopwatch_check and stopwatch_reading
     (stopwatch_check->checkbox)->SetValue(false);
@@ -12983,7 +12983,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (TAI_minus_UTC->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (TAI_minus_UTC->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
     (TAI_minus_UTC->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::CheckTimeInterval<wxFocusEvent>, this);
-
+    
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
     //label
@@ -13492,7 +13492,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
         (((this->parent)->plot)->position_list).push_back(*position);
     }
     
-//    position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
+    //    position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
     (parent->listcontrol_positions)->set((parent->plot)->position_list);
     
     parent->DrawAll();
@@ -13546,11 +13546,11 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
     }
     
-//    parent->UpdateRelatedSightsAndRoutes();
+    //    parent->UpdateRelatedSightsAndRoutes();
     (parent->listcontrol_sights)->set((parent->plot)->sight_list);
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
-
-//    route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
+    
+    //    route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
     
     
     parent->DrawAll();
@@ -13814,7 +13814,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //read color list from file_init
     s.read_from_file(String("color list"), String(path_file_init), String(""));
     
-  
+    
     
     
     margin_v = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);
@@ -14017,9 +14017,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     //write the sights contained into plot->sight_list into listcontrol_sights
-//    for(i=0; i<((plot->sight_list).size()); i++){
-//        ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol_sights);
-//    }
+    //    for(i=0; i<((plot->sight_list).size()); i++){
+    //        ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol_sights);
+    //    }
     listcontrol_sights->set(plot->sight_list);
     
     //    set the column width to the width of its longest item
@@ -14034,7 +14034,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin_v);
     
-
+    
     
     //listcontrol_positions with positions
     disableable_buttons.clear();
@@ -14057,9 +14057,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_positions->PushBackColumn(wxString("Label"));
     
     //write the positions into plot->position_list into listcontrol_sights
-//    for(i=0; i<((plot->position_list).size()); i++){
-//        ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
-//    }
+    //    for(i=0; i<((plot->position_list).size()); i++){
+    //        ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
+    //    }
     listcontrol_positions->set(plot->position_list);
     
     //    set the column width to the width of its longest item
@@ -14106,9 +14106,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_routes->PushBackColumn(wxString("Related Sight"));
     
     //write the routes into plot->route_list into listcontrol_routes
-//    for(i=0; i<((plot->route_list).size()); i++){
-//        ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
-//    }
+    //    for(i=0; i<((plot->route_list).size()); i++){
+    //        ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
+    //    }
     listcontrol_routes->set(plot->route_list);
     
     //    set the column width to the width of its longest item
@@ -14140,7 +14140,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
     
     extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, wxSize(0, 0));
-
+    
     
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
@@ -14401,15 +14401,15 @@ void ListFrame::OnModifyRoute(wxCommandEvent& event){
 
 
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
-
+    
     //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame> >(NULL,
-                                                           ask_remove_related_route, String("Yes"), unset_idling, String("No"),
-                                                           "",
-                                                           "Do you really want to remove this sight?",
-                                                           wxDefaultPosition,
-                                                           wxDefaultSize,
-                                                           String(""));
+                                                                                                                                                      ask_remove_related_route, String("Yes"), unset_idling, String("No"),
+                                                                                                                                                      "",
+                                                                                                                                                      "Do you really want to remove this sight?",
+                                                                                                                                                      wxDefaultPosition,
+                                                                                                                                                      wxDefaultSize,
+                                                                                                                                                      String(""));
     
     question_frame->Show(true);
     
@@ -14437,18 +14437,18 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
 
 
 void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
-
+    
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,
-                                                           ask_remove_related_sight, String("Yes"), unset_idling, String("No"),
-                                                           "",
-                                                           "Do you really want to remove this route?",
-                                                           wxDefaultPosition,
-                                                           wxDefaultSize,
-                                                           String(""));
+                                                                                                                                                      ask_remove_related_sight, String("Yes"), unset_idling, String("No"),
+                                                                                                                                                      "",
+                                                                                                                                                      "Do you really want to remove this route?",
+                                                                                                                                                      wxDefaultPosition,
+                                                                                                                                                      wxDefaultSize,
+                                                                                                                                                      String(""));
     
     question_frame->Show(true);
-        
+    
     event.Skip(true);
     
 }
@@ -14755,22 +14755,22 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
         if(!(sight->check_time_interval(String("")))
            //... and the resulting time does not lie within the ephemerides time interval -> I recall the user that the entered value is wrong by prompting an error message
            
-//           &&
-//
-//           (!((((master_clock_date->year)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->year)->GetValue()).ToStdString())) == String("")))) &&
-//           (!((((master_clock_date->month)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->month)->GetValue()).ToStdString())) == String("")))) &&
-//           (!((((master_clock_date->day)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->day)->GetValue()).ToStdString())) == String(""))))
+           //           &&
+           //
+           //           (!((((master_clock_date->year)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->year)->GetValue()).ToStdString())) == String("")))) &&
+           //           (!((((master_clock_date->month)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->month)->GetValue()).ToStdString())) == String("")))) &&
+           //           (!((((master_clock_date->day)->GetBackgroundColour()) != (wxGetApp().error_color)) && (String((((master_clock_date->day)->GetValue()).ToStdString())) == String(""))))
            
            ){
             
-            master_clock_date->SetBackgroundColor(wxGetApp().error_color);
-            master_clock_chrono->SetBackgroundColor(wxGetApp().error_color);
-            if((stopwatch_check->checkbox)->GetValue()){
-                stopwatch_reading->SetBackgroundColor(wxGetApp().error_color);
-            }
-            TAI_minus_UTC->SetBackgroundColor(wxGetApp().error_color);
+            //            master_clock_date->SetBackgroundColor(wxGetApp().error_color);
+            //            master_clock_chrono->SetBackgroundColor(wxGetApp().error_color);
+            //            if((stopwatch_check->checkbox)->GetValue()){
+            //                stopwatch_reading->SetBackgroundColor(wxGetApp().error_color);
+            //            }
+            //            TAI_minus_UTC->SetBackgroundColor(wxGetApp().error_color);
             
-
+            
             
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             (print_error_message->control) = NULL;
@@ -14780,13 +14780,13 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
             
         }else{
             
-            master_clock_date->SetBackgroundColor(wxGetApp().background_color);
-            master_clock_chrono->SetBackgroundColor(wxGetApp().background_color);
-            if((stopwatch_check->checkbox)->GetValue()){
-                stopwatch_reading->SetBackgroundColor(wxGetApp().background_color);
-            }
-            TAI_minus_UTC->SetBackgroundColor(wxGetApp().background_color);
-
+            //            master_clock_date->SetBackgroundColor(wxGetApp().background_color);
+            //            master_clock_chrono->SetBackgroundColor(wxGetApp().background_color);
+            //            if((stopwatch_check->checkbox)->GetValue()){
+            //                stopwatch_reading->SetBackgroundColor(wxGetApp().background_color);
+            //            }
+            //            TAI_minus_UTC->SetBackgroundColor(wxGetApp().background_color);
+            
             
             
         }
@@ -15321,18 +15321,18 @@ template<class T>void CheckRouteType::operator()(T& event){
 OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* caller_in){
     
     caller = caller_in;
-
+    
 }
 
 //check whether there are some selected items in ListControl *caller, and enables/disables disableable_buttons accordingly
 template<class T>void OnChangeSelectionInListControl::operator()(T& event){
     
     unsigned int i;
-  
+    
     for(i=0; i<(caller->disableable_buttons).size(); i++){
         (caller->disableable_buttons)[i]->Enable(caller->GetSelectedItemCount() != 0);
     }
-
+    
     
     event.Skip(true);
     
@@ -15398,7 +15398,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
     
-//    sight->print(String("sight entered via GUI"), String(""), cout);
+    //    sight->print(String("sight entered via GUI"), String(""), cout);
     
     
     if(position_in_listcontrol_sights==-1){
@@ -15407,20 +15407,20 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         ((this->parent)->plot)->add_sight_and_reduce(sight, String(""));
         
         //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
-//        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
-//        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
+        //        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
+        //        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
         
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
         
         
         sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
-                
+        
     }
-     
+    
     (parent->listcontrol_sights)->set((parent->plot)->sight_list);
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
-
+    
     parent->DrawAll();
     
     event.Skip(true);
@@ -15684,7 +15684,7 @@ void DateField::SetBackgroundColor(Color color){
     year->SetBackgroundColour(color);
     month->SetBackgroundColour(color);
     day->SetBackgroundColour(color);
-
+    
 }
 
 //sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
@@ -15706,7 +15706,7 @@ void ChronoField::SetBackgroundColor(Color color){
     hour->SetBackgroundColour(color);
     minute->SetBackgroundColour(color);
     second->SetBackgroundColour(color);
-
+    
 }
 
 //sets the value in the GUI object equal to the value in the non-GUI  object string
@@ -16985,7 +16985,7 @@ template<class T> void ListControl::set(vector<T> v){
     for(i=0; i<v.size(); i++){
         (v[i]).add_to_wxListCtrl(-1, this);
     }
- 
+    
     
     
 }

@@ -2065,7 +2065,7 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void AllOk(void);
-    template<class T> void CheckTimeInterval(T&);
+    template<class T> void OnEditTime(T&);
     
     //    wxDECLARE_EVENT_TABLE();
     

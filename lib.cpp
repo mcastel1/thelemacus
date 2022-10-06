@@ -4695,56 +4695,70 @@ bool Sight::read_from_file(File& file, String prefix){
     
 }
 
-//compute this->time and returns true if time lies within the data file of NASA JPL ephemerides files, and false otherwise
+//compute this->time and returns true if time lies within the data file of NASA JPL ephemerides files, and false otherwise. This function requires that body.name is specified: if body.name is "", it returns false.
 bool Sight::check_time_interval(String prefix){
     
-    int l_min, l_max;
+    String new_prefix;
     stringstream temp;
     File data_file;
-    bool check;
-    String new_prefix;
-    
+
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    
-    //compute this->time
-    
-    //I first set time to master_clock_date_and_hour ...
-    time = master_clock_date_and_hour;
-    //.. then I add to it sight->stopwatch, if any ....
-    if(use_stopwatch == Answer('y', String(""))){
-        time+=stopwatch;
-    }
-    //... then I add to it TAI_minus_UTC, to convert it from the UTC to the TAI scale
-    time+=TAI_minus_UTC;
-
-    
-    
+ 
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
     temp.clear();
-    if((body.type.value) != "star"){
-        temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/" << body.name.value << ".txt";
+    if((body.type) != String("star")){
+        temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/" << (body.name.value) << ".txt";
     }else{
         temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/j2000_to_itrf93.txt";
     }
     data_file.set_name(temp.str());
-    data_file.count_lines(new_prefix);
+
     
-    //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-    l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
-    //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-    l_max = (int)(L*((time.MJD)-MJD_min))+(int)(N/2.0);
-    
-    //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored
-    if((l_min >= 0) && (l_max < (int)(data_file.number_of_lines))){
-        check = true;
+    if(data_file.check_if_exists(new_prefix)){
+        //the ephemerides file data_file exists -> check the time interval
+        
+        int l_min, l_max;
+        bool check;
+        
+        //compute this->time
+        
+        //I first set time to master_clock_date_and_hour ...
+        time = master_clock_date_and_hour;
+        //.. then I add to it sight->stopwatch, if any ....
+        if(use_stopwatch == Answer('y', String(""))){
+            time+=stopwatch;
+        }
+        //... then I add to it TAI_minus_UTC, to convert it from the UTC to the TAI scale
+        time+=TAI_minus_UTC;
+        
+        
+        
+        data_file.count_lines(new_prefix);
+        
+        //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
+        l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
+        //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
+        l_max = (int)(L*((time.MJD)-MJD_min))+(int)(N/2.0);
+        
+        //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored
+        if((l_min >= 0) && (l_max < (int)(data_file.number_of_lines))){
+            check = true;
+        }else{
+            check = false;
+            cout << new_prefix.value << RED << "Time lies outside interval of NASA's JPL data files!\n" << RESET;
+        }
+        
+        return check;
+        
     }else{
-        check = false;
-        cout << new_prefix.value << RED << "Time lies outside interval of NASA's JPL data files!\n" << RESET;
+        //the ephemerides file data_file does not exist
+        
+        cout << new_prefix.value << RED << "Cannot check time interval because ephemerides' file does not exist!\n" << RESET;
+        
+        return false;
+        
     }
-    
-    return check;
-    
     
 }
 

@@ -13778,6 +13778,18 @@ template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, 
     
 }
 
+//set the wxControl, title and message for the functor *this, and I call the functor with CallAfter
+template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxControl* control_in, String title_in, String message_in){
+    
+    control = control_in;
+    title = title_in;
+    message = message_in;
+    CallAfter(*this);
+
+    
+    
+}
+
 
 ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     

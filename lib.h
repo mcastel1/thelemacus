@@ -1455,6 +1455,7 @@ public:
     
     PrintMessage(T*, FF_OK*);
     
+    void SetAndCall(wxControl*, String, String);
     void operator()(void);
     
     

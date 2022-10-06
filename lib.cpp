@@ -11232,11 +11232,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     //given that the position under consideration has changed, I re-pain the chart
                     PaintNow();
                     
-                    //        set the wxControl, title and message for the functor print_error_message, and then call the functor
-                    (print_error_message->control) = NULL;
-                    (print_error_message->title) = String("Position outside plot area!");
-                    (print_error_message->message) = String("The position must lie within the plot area.");
-                    (*print_error_message)();
+                    print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."));
                     
                 }
                 

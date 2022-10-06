@@ -2036,7 +2036,7 @@ public:
     long position_in_listcontrol_sights;
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
-    bool idling;
+    bool idling, /*this is true if all the GUI fileds which specify sight->time are ok and the resulting sight->time falls within the time covered by ephemerids' data files, and false otherwise*/time_interval_ok;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     UnsetIdling<SightFrame>* unset_idling;

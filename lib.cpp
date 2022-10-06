@@ -14732,8 +14732,10 @@ void SightFrame::AllOk(void){
     
 }
 
-//prompt an error message to signal to the user that the entered time of sight lies outside ephemerides data
+//prompt an error message to signal to the user that the entered time of sight lies outside ephemerides data. It also computes time_interval_ok
 template<class T> void SightFrame::CheckTimeInterval(T& event){
+    
+    time_interval_ok = false;
     
     if(
        (master_clock_date->is_ok()) &&
@@ -14769,9 +14771,7 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
             //                stopwatch_reading->SetBackgroundColor(wxGetApp().error_color);
             //            }
             //            TAI_minus_UTC->SetBackgroundColor(wxGetApp().error_color);
-            
-            
-            
+                        
             //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
             (print_error_message->control) = NULL;
             (print_error_message->title) = String("Time not covered by ephemerides' data!");
@@ -14779,6 +14779,9 @@ template<class T> void SightFrame::CheckTimeInterval(T& event){
             CallAfter(*print_error_message);
             
         }else{
+            
+            time_interval_ok = true;
+
             
             //            master_clock_date->SetBackgroundColor(wxGetApp().background_color);
             //            master_clock_chrono->SetBackgroundColor(wxGetApp().background_color);

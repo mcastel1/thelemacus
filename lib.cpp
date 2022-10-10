@@ -11170,14 +11170,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     (this->*Draw)();
                     PaintNow();
                     
-                    //set the wxControl, title and message for the functor print_error_message, and then call the functor
                     //uncomment this if you want to print an error message
-                    /*
-                     (print_error_message->control) = NULL;
-                     (print_error_message->title) = String("Chart outside boundaries!");
-                     (print_error_message->message) = String("The chart must lie within the boundaries.");
-                     (*print_error_message)();
-                     */
+                    //                     print_error_message->SetAndCall(NULL, String("Chart outside boundaries!"), String("The chart must lie within the boundaries."));
                     
                 }
                 

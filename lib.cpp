@@ -11396,10 +11396,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                 s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
                 
                 //set the title and message for the functor print_error_message, and then call the functor
-                (print_error_message->control) = NULL;
-                (print_error_message->title) = String("Zoom level exceeded its maximal value!");
-                (print_error_message->message) = String(s.str().c_str());
-                (*print_error_message)();
+                print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()));
                 
             }
             

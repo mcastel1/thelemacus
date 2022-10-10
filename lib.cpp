@@ -14750,12 +14750,8 @@ template<class T> void SightFrame::OnEditTime(T& event){
     
     if(!time_interval_ok){
         //time_interval_ok = false -> prompt error message
-        
-        //set the wxControl, title and message for the functor print_error_message. When Ok is pressed in the MessageFrame triggered from print_error_message, I don't need to call any function, so I set ((f->print_error_message)->f_ok) = NULL. Finally,I call the functor with CallAfter
-        (print_error_message->control) = NULL;
-        (print_error_message->title) = String("Time not covered by ephemerides' data!");
-        (print_error_message->message) = String("Time must be covered by emphmerides data");
-        CallAfter(*print_error_message);
+
+        print_error_message->SetAndCall(NULL, String("Time not covered by ephemerides' data!"), String("Time must be covered by emphmerides data"));
         
     }
     

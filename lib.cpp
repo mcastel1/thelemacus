@@ -11673,13 +11673,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //I am using the mercator projection: then the position is invalid and I may print an error message
                         
                         //uncomment this if you want an info message to be pribted
-                        //
-                        //print an info message
-                        //
-                        //                ((parent->print_error_message)->control) = NULL;
-                        //                ((parent->print_error_message)->title) = String("The drag goes through an invalid point!");
-                        //                ((parent->print_error_message)->message) = String("The drag must go through valid points.");
-                        //                parent->CallAfter(*(parent->print_error_message));
+                        //print_error_message->SetAndCall(NULL,  String("The drag goes through an invalid point!"), String("The drag must go through valid points."));
                         
                         
                         break;

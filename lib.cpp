@@ -10036,11 +10036,11 @@ void DrawPanel::SetIdling(bool b){
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 void DrawPanel::Set_lambda_phi_min_max_Mercator(void){
     
-    (((parent->parent)->plot)->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
-    (((parent->parent)->plot)->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
+    (parent->lambda_min).set(String(""), k*lambda_mercator(x_min), String(""));
+    (parent->lambda_max).set(String(""), k*lambda_mercator(x_max), String(""));
     
-    (((parent->parent)->plot)->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
-    (((parent->parent)->plot)->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
+    (parent->phi_min).set(String(""), k*phi_mercator(y_min), String(""));
+    (parent->phi_max).set(String(""), k*phi_mercator(y_max), String(""));
     
 }
 
@@ -10104,10 +10104,10 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
 //this function computes x_min, ... y_max and from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void){
     
-    x_min = x_mercator(K*((((parent->parent)->plot)->lambda_min).value));
-    x_max = x_mercator(K*((((parent->parent)->plot)->lambda_max).value));
-    y_min = y_mercator(K*((((parent->parent)->plot)->phi_min).value));
-    y_max = y_mercator(K*((((parent->parent)->plot)->phi_max).value));
+    x_min = x_mercator(K*((parent->lambda_min).value));
+    x_max = x_mercator(K*((parent->lambda_max).value));
+    y_min = y_mercator(K*((parent->phi_min).value));
+    y_max = y_mercator(K*((parent->phi_max).value));
     
     //    if(x_max >= x_min){
     //        //in this case, x_max, x_min do not encompass the meridian lambda = pi
@@ -11360,24 +11360,24 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                 (((parent->parent)->p_end).lambda).normalize_pm_pi();
                 //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
                 if((((parent->parent)->p_start).lambda)>(((parent->parent)->p_end).lambda)){
-                    (((parent->parent)->plot)->lambda_min) = (((parent->parent)->p_start).lambda);
-                    (((parent->parent)->plot)->lambda_max) = (((parent->parent)->p_end).lambda);
+                    (parent->lambda_min) = (((parent->parent)->p_start).lambda);
+                    (parent->lambda_max) = (((parent->parent)->p_end).lambda);
                 }else{
-                    (((parent->parent)->plot)->lambda_min) = (((parent->parent)->p_end).lambda);
-                    (((parent->parent)->plot)->lambda_max) = (((parent->parent)->p_start).lambda);
+                    (parent->lambda_min) = (((parent->parent)->p_end).lambda);
+                    (parent->lambda_max) = (((parent->parent)->p_start).lambda);
                 }
                 if((((parent->parent)->p_start).phi)>(((parent->parent)->p_end).phi)){
-                    (((parent->parent)->plot)->phi_max) = (((parent->parent)->p_start).phi);
-                    (((parent->parent)->plot)->phi_min) = (((parent->parent)->p_end).phi);
+                    (parent->phi_max) = (((parent->parent)->p_start).phi);
+                    (parent->phi_min) = (((parent->parent)->p_end).phi);
                 }else{
-                    (((parent->parent)->plot)->phi_min) = (((parent->parent)->p_start).phi);
-                    (((parent->parent)->plot)->phi_max) = (((parent->parent)->p_end).phi);
+                    (parent->phi_min) = (((parent->parent)->p_start).phi);
+                    (parent->phi_max) = (((parent->parent)->p_end).phi);
                 }
                 //I normalize lambda_min, ..., phi_max for future use.
-                (((parent->parent)->plot)->lambda_min).normalize();
-                (((parent->parent)->plot)->lambda_max).normalize();
-                (((parent->parent)->plot)->phi_min).normalize();
-                (((parent->parent)->plot)->phi_max).normalize();
+                (parent->lambda_min).normalize();
+                (parent->lambda_max).normalize();
+                (parent->phi_min).normalize();
+                (parent->phi_max).normalize();
                 
                 (((parent->parent)->p_start).phi).normalize();
                 (((parent->parent)->p_start).lambda).normalize();

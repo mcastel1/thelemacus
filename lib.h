@@ -906,7 +906,6 @@ public:
     vector<Route> route_list;
     vector<String> choices;
     vector<unsigned int> crossing_route_list;
-    Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max*/lambda_min, lambda_max;
     Int n_points_plot_coastline, n_points_routes, /*the preferred numer of ticks per axis in the chart plot: if there is enough space, I will put this number of ticks. If not, I will plot a nuber of ticks as cloase as possible to the preferred one*/n_intervals_ticks_preferred;
     
     Plot(Catalog*, String);
@@ -2175,6 +2174,7 @@ public:
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     //pointer used to shorten the reference to parent->plot
     Plot* plot;
+    /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max*/lambda_min, lambda_max;
     //in p_coastline_draw, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline
     vector<wxPoint> p_coastline_draw;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false

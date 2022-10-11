@@ -5660,15 +5660,8 @@ Plot::Plot(Catalog* cata, String prefix){
     
     //read n_points_plot_coastline from file_init
     n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
-    
-    //read lambda_min, ...., phi_max from file_init
-    lambda_min.read_from_file(String("minimal longitude"), file_init, true, new_prefix);
-    lambda_max.read_from_file(String("maximal longitude"), file_init, true, new_prefix);
-    phi_min.read_from_file(String("minimal latitude"), file_init, true, new_prefix);
-    phi_max.read_from_file(String("maximal latitude"), file_init, true, new_prefix);
-    
+        
     file_init.close(prefix);
-    
     
 }
 
@@ -9617,6 +9610,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
+    
+    //read lambda_min, ...., phi_max from file_init
+    lambda_min.read_from_file(String("minimal longitude"), String(path_file_init), true, new_prefix);
+    lambda_max.read_from_file(String("maximal longitude"), String(path_file_init), true, new_prefix);
+    phi_min.read_from_file(String("minimal latitude"), String(path_file_init), true, new_prefix);
+    phi_max.read_from_file(String("maximal latitude"), String(path_file_init), true, new_prefix);
+
     
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnClose, this);
     

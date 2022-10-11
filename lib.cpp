@@ -9878,11 +9878,11 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     delta = (relative_displacement.value) * (draw_panel->x_span());
     
     //update lambda_min, lambda_max according to the drag.
-    (((draw_panel->plot)->lambda_min).value) += delta;
-    (((draw_panel->plot)->lambda_max).value) += delta;
+    (lambda_min.value) += delta;
+    (lambda_max.value) += delta;
     
-    ((draw_panel->plot)->lambda_min).normalize();
-    ((draw_panel->plot)->lambda_max).normalize();
+    lambda_min.normalize();
+    lambda_max.normalize();
     
     (draw_panel->*(draw_panel->Set_x_y_min_max))();
     
@@ -9948,11 +9948,11 @@ template<class T> void ChartFrame::MoveRight(T& event){
     delta = (relative_displacement.value) * (draw_panel->x_span());
     
     //update lambda_min, lambda_max according to the drag.
-    (((draw_panel->plot)->lambda_min).value) -= delta;
-    (((draw_panel->plot)->lambda_max).value) -= delta;
+    (lambda_min.value) -= delta;
+    (lambda_max.value) -= delta;
     
-    ((draw_panel->plot)->lambda_min).normalize();
-    ((draw_panel->plot)->lambda_max).normalize();
+    lambda_min.normalize();
+    lambda_max.normalize();
     
     (draw_panel->*(draw_panel->Set_x_y_min_max))();
     
@@ -9973,10 +9973,10 @@ template<class T> void ChartFrame::Reset(T& event){
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
         //read lambda_min, ...., phi_max from file_init
-        ((parent->plot)->lambda_min).read_from_file(String("minimal longitude"), String(path_file_init), String(""));
-        ((parent->plot)->lambda_max).read_from_file(String("maximal longitude"), String(path_file_init), String(""));
-        ((parent->plot)->phi_min).read_from_file(String("minimal latitude"), String(path_file_init), String(""));
-        ((parent->plot)->phi_max).read_from_file(String("maximal latitude"), String(path_file_init), String(""));
+        lambda_min.read_from_file(String("minimal longitude"), String(path_file_init), String(""));
+        lambda_max.read_from_file(String("maximal longitude"), String(path_file_init), String(""));
+        phi_min.read_from_file(String("minimal latitude"), String(path_file_init), String(""));
+        phi_max.read_from_file(String("maximal latitude"), String(path_file_init), String(""));
         draw_panel->Set_x_y_min_max_Mercator();
         ZoomFactor_Mercator(draw_panel->x_span());
         

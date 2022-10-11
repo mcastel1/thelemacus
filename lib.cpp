@@ -8696,7 +8696,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
             }else{
                 //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
                 
-                //                if(ceil((K*((plot->phi_max).value)))  - floor((K*((plot->phi_min).value))) != 1){
+                //                if(ceil((K*((parent->phi_max).value)))  - floor((K*((parent->phi_min).value))) != 1){
                 if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
                     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
@@ -8941,7 +8941,7 @@ void DrawPanel::Draw_Mercator(void){
     Set_x_y_min_max_Mercator();
     
     //set rectangle_obseerver
-    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_min), Position(plot->lambda_max, plot->phi_max));
+    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_min), Position(parent->lambda_max, parent->phi_max));
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){
@@ -8998,13 +8998,13 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //set lambda_span
-    if(((parent->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+    if(((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)){
         
-        lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+        lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value) + 2.0*M_PI;
         
     }else{
         
-        lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value);
+        lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value);
         
     }
     
@@ -9032,20 +9032,20 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     
-    if(((parent->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+    if(((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)){
         
-        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_start.value) = floor(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
         (lambda_end.value) = ((parent->lambda_min).value) + (2.0*M_PI);
         
     }else{
         
-        (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_start.value) = floor(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
         (lambda_end.value) = ((parent->lambda_min).value);
         
     }
     
     //set phi_start, phi_end and delta_phi
-    phi_span =  (((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value);
+    phi_span =  (((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value);
     
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if(phi_span > k){
@@ -9072,7 +9072,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //set phi_start/end and phi_middle
     (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
-    (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
+    (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
     
     
     //draw meridians
@@ -9080,7 +9080,7 @@ void DrawPanel::Draw_Mercator(void){
     (route.type).set(String(""), String("o"), String(""));
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = (parent->phi_min);
-    (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+    (route.l).set(String(""), Re*((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
     
     
     for(
@@ -9110,7 +9110,7 @@ void DrawPanel::Draw_Mercator(void){
                     
                 }
                 
-                (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
+                (route.l).set(String(""), Re*((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
                 //                ((route.reference_position).phi) = phi_saved;
                 
@@ -9180,7 +9180,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((plot->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, String("NS"));
+        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((parent->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, String("NS"));
         
     }
     
@@ -9192,7 +9192,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"));
+        PutLabel(q, parent->lambda_max, parent->lambda_min, String("EW"));
         
     }
     
@@ -9273,7 +9273,7 @@ void DrawPanel::Draw_3D(void){
     
     
     //set lambda_span
-    if(((parent->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+    if(((parent->lambda_min) == 0.0) && ((parent->lambda_max) == 0.0)){
         //in this case circle_observer spans all longitudes
         
         //because in this case lambda_min/max span the whole angle 2 pi and cannot define a range for lambda_span, I set
@@ -9282,13 +9282,13 @@ void DrawPanel::Draw_3D(void){
     }else{
         //in this case, there are two finite longitudes which encircle circle_observer
         
-        if(((parent->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        if(((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)){
             
-            lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+            lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value) + 2.0*M_PI;
             
         }else{
             
-            lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value);
+            lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value);
             
         }
         
@@ -9324,7 +9324,7 @@ void DrawPanel::Draw_3D(void){
     
     
     //set lambda_start, lambda_end
-    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+    if(((parent->lambda_min) == 0.0) && ((parent->lambda_max) == 0.0)){
         //in this case circle_observer spans all longitudes
         
         (lambda_start.value) = 0.0;
@@ -9333,15 +9333,15 @@ void DrawPanel::Draw_3D(void){
     }else{
         //in this case, there are two finite longitudes which encircle circle_observer
         
-        if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        if(((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)){
             
-            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-            (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
+            (lambda_start.value) = floor(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((parent->lambda_min).value) + (2.0*M_PI);
             
         }else{
             
-            (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-            (lambda_end.value) = ((plot->lambda_min).value);
+            (lambda_start.value) = floor(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((parent->lambda_min).value);
             
         }
         
@@ -9377,8 +9377,8 @@ void DrawPanel::Draw_3D(void){
     }
     
     //set phi_start/end and phi_middle
-    (phi_start.value) = floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
-    (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
+    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
+    (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
     
     phi_middle.set(String(""), round((((circle_observer.reference_position).phi).value)/delta_phi) * delta_phi, String(""));
     //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd ->
@@ -9529,7 +9529,7 @@ void DrawPanel::Draw_3D(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, plot->phi_min, plot->phi_max, String("NS"));
+        PutLabel(q, parent->phi_min, parent->phi_max, String("NS"));
         
     }
     
@@ -9541,7 +9541,7 @@ void DrawPanel::Draw_3D(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"));
+        PutLabel(q, parent->lambda_max, parent->lambda_min, String("EW"));
         
     }
     
@@ -10063,7 +10063,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
     
     
     //set lambda_min/max from circle_observer
-    circle_observer.lambda_min_max(&(plot->lambda_min), &(plot->lambda_max), String(""));
+    circle_observer.lambda_min_max(&(parent->lambda_min), &(parent->lambda_max), String(""));
     
     
     //set phi_min/max
@@ -10073,24 +10073,24 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
        ((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) > -M_PI_2)){
         //in this case, circle_observer does not encircle the N/S pole
         
-        (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
-        (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
+        (parent->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
+        (parent->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
         
     }else{
         
         if((((circle_observer.reference_position).phi).value)+((circle_observer.omega).value) > M_PI_2){
             //in this case, circle_observer encircles the N pole
             
-            (plot->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
-            (plot->phi_max).set(String(""), M_PI_2, String(""));
+            (parent->phi_min) = ((circle_observer.reference_position).phi)-(circle_observer.omega);
+            (parent->phi_max).set(String(""), M_PI_2, String(""));
             
         }
         
         if((((circle_observer.reference_position).phi).value)-((circle_observer.omega).value) < -M_PI_2){
             //in this case, circle_observer encircles the S pole
             
-            (plot->phi_min).set(String(""), 3.0*M_PI_2, String(""));
-            (plot->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
+            (parent->phi_min).set(String(""), 3.0*M_PI_2, String(""));
+            (parent->phi_max) = ((circle_observer.reference_position).phi)+(circle_observer.omega);
             
         }
         

@@ -8211,13 +8211,13 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     //    draw_panel->Set_x_y_min_max_Mercator();
     
     //transform the values phi_min_int, phi_max_int in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
-    ((parent->plot)->phi_min).normalize_pm_pi();
-    ((parent->plot)->phi_max).normalize_pm_pi();
+    phi_min.normalize_pm_pi();
+    phi_max.normalize_pm_pi();
     
-    lambda_min_int = ceil(K*(((parent->plot)->lambda_min).value));
-    lambda_max_int = floor(K*(((parent->plot)->lambda_max).value));
-    phi_min_int = floor(K*(((parent->plot)->phi_min).value));
-    phi_max_int = ceil(K*(((parent->plot)->phi_max).value));
+    lambda_min_int = ceil(K*(lambda_min.value));
+    lambda_max_int = floor(K*(lambda_max.value));
+    phi_min_int = floor(K*(phi_min.value));
+    phi_max_int = ceil(K*(phi_max.value));
     
     //transform the values lambda_min_int, lambda_max_int in a format appropriate for p_coastline
     if((draw_panel->x_min) <= (draw_panel->x_max)){
@@ -8941,7 +8941,7 @@ void DrawPanel::Draw_Mercator(void){
     Set_x_y_min_max_Mercator();
     
     //set rectangle_obseerver
-    rectangle_observer = Rectangle(Position(plot->lambda_min, plot->phi_min), Position(plot->lambda_max, plot->phi_max));
+    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_min), Position(plot->lambda_max, plot->phi_max));
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){
@@ -8998,13 +8998,13 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //set lambda_span
-    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+    if(((parent->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
-        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+        lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
         
     }else{
         
-        lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
+        lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value);
         
     }
     
@@ -9032,15 +9032,15 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     
-    if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+    if(((parent->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
         
         (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        (lambda_end.value) = ((plot->lambda_min).value) + (2.0*M_PI);
+        (lambda_end.value) = ((parent->lambda_min).value) + (2.0*M_PI);
         
     }else{
         
         (lambda_start.value) = floor(((plot->lambda_max).value)/delta_lambda)*delta_lambda;
-        (lambda_end.value) = ((plot->lambda_min).value);
+        (lambda_end.value) = ((parent->lambda_min).value);
         
     }
     
@@ -9071,7 +9071,7 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set phi_start/end and phi_middle
-    (phi_start.value) = floor((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
+    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
     (phi_end.value) = (((plot->phi_max).normalize_pm_pi_ret()).value);
     
     
@@ -9079,7 +9079,7 @@ void DrawPanel::Draw_Mercator(void){
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
     (route.Z).set(String(""), 0.0, String(""));
-    ((route.reference_position).phi) = (plot->phi_min);
+    ((route.reference_position).phi) = (parent->phi_min);
     (route.l).set(String(""), Re*((((plot->phi_max).normalize_pm_pi_ret()).value) - (((plot->phi_min).normalize_pm_pi_ret()).value)), String(""));
     
     
@@ -9099,7 +9099,7 @@ void DrawPanel::Draw_Mercator(void){
                 //                phi_saved = ((route.reference_position).phi);
                 
                 (route.l).set(String(""), Re*((parent->tick_length_over_width_plot_area).value)*phi_span, String(""));
-                //                ((route.reference_position).phi) = (plot->phi_min);
+                //                ((route.reference_position).phi) = (parent->phi_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((((route.reference_position).lambda).value) = (lambda_saved.value);
@@ -9123,7 +9123,7 @@ void DrawPanel::Draw_Mercator(void){
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String(""), String("l"), String(""));
     (route.Z).set(String(""), M_PI_2, String(""));
-    ((route.reference_position).lambda) = (plot->lambda_min);
+    ((route.reference_position).lambda) = (parent->lambda_min);
     
     //this loop runs over the latitude of the parallel, which we call phi
     for(
@@ -9146,7 +9146,7 @@ void DrawPanel::Draw_Mercator(void){
                 //                (route.type).set(String(""), String("o"), String(""));
                 //                (route.Z).set(String(""), M_PI_2, String(""));
                 (route.l).set(String(""), Re*((parent->tick_length_over_width_plot_area).value)*lambda_span, String(""));
-                //                ((route.reference_position).lambda) = (plot->lambda_min);
+                //                ((route.reference_position).lambda) = (parent->lambda_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(
@@ -9175,19 +9175,19 @@ void DrawPanel::Draw_Mercator(void){
     //draw labels on parallels
     for(first_label = true,
         ((q.phi).value) = (phi_start.value),
-        (q.lambda) = (plot->lambda_min) - epsilon_double;
+        (q.lambda) = (parent->lambda_min) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((plot->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((plot->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, String("NS"));
+        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((plot->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, String("NS"));
         
     }
     
     //draw labels on meridians
     for(first_label = true,
         ((q.lambda).value) = (lambda_start.value),
-        (q.phi) = (plot->phi_min) + epsilon_double;
+        (q.phi) = (parent->phi_min) + epsilon_double;
         ((q.lambda).value) < (lambda_end.value);
         ((q.lambda).value) += delta_lambda
         ){
@@ -9273,7 +9273,7 @@ void DrawPanel::Draw_3D(void){
     
     
     //set lambda_span
-    if(((plot->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
+    if(((parent->lambda_min) == 0.0) && ((plot->lambda_max) == 0.0)){
         //in this case circle_observer spans all longitudes
         
         //because in this case lambda_min/max span the whole angle 2 pi and cannot define a range for lambda_span, I set
@@ -9282,13 +9282,13 @@ void DrawPanel::Draw_3D(void){
     }else{
         //in this case, there are two finite longitudes which encircle circle_observer
         
-        if(((plot->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
+        if(((parent->lambda_min) < M_PI) && ((plot->lambda_max) > M_PI)){
             
-            lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
+            lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value) + 2.0*M_PI;
             
         }else{
             
-            lambda_span = ((plot->lambda_min).value) - ((plot->lambda_max).value);
+            lambda_span = ((parent->lambda_min).value) - ((plot->lambda_max).value);
             
         }
         

@@ -10769,7 +10769,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
-// If the projection of q falls within the plot area, it writes its projection into p and returns true. If not, it returns false and, if write = true, it writes its projection in p
+// If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
 bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     
     Projection temp;
@@ -10783,13 +10783,17 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     if(b || write){
         //if the point falls within the plot area, write it into x, y
         
-        (p->x) = (temp.x);
-        //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
-        if((x_max < x_min) && ((p->x) < x_max)){
-            (p->x) += 2.0*M_PI;
+        if(p!=NULL){
+            
+            (p->x) = (temp.x);
+            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
+            if((x_max < x_min) && ((p->x) < x_max)){
+                (p->x) += 2.0*M_PI;
+            }
+            
+            (p->y) = (temp.y);
+            
         }
-        
-        (p->y) = (temp.y);
         
         return b;
         

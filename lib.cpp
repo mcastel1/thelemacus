@@ -8586,7 +8586,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
         
         //draw the reference position
-        if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).reference_position), &p)){
+        if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).reference_position), &p, false)){
             dc.DrawCircle(p, 4.0*thickness);
         }
         
@@ -8620,7 +8620,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         
-        if(GeoToDrawPanel_Mercator((plot->position_list)[i], &p)){
+        if(GeoToDrawPanel_Mercator((plot->position_list)[i], &p, false)){
             //if the point returned from GeoToDrawPanel_Mercator falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
@@ -10782,7 +10782,7 @@ bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p, bool write){
     Projection temp;
     bool check;
     
-    check = GeoToMercator(q, &temp);
+    check = GeoToMercator(q, &temp, write);
     
     if(check || write){
         

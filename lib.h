@@ -1524,9 +1524,9 @@ public:
     void (DrawPanel::*Draw)(void);
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
-    bool (DrawPanel::*GeoToProjection)(Position, Projection*);
+    bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
     void (DrawPanel::*Render)(wxDC&);
-    bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*);
+    bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*, bool);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
   

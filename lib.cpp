@@ -10818,16 +10818,27 @@ void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint *p){
 
 
 
-//this function converts the geographic position q into the  position p with respect to the origin of the 3d draw panel. It returs true if q lies on the visible side of the Earth, and false otherwise.
-bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p){
+//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p
+bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p, bool write){
     
     Projection temp;
-    bool output;
+    bool check;
     
-    output = GeoTo3D(q, &temp);
-    ProjectionToDrawPanel_3D(temp, p);
+    check = GeoTo3D(q, &temp);
     
-    return output;
+    if(check || write){
+        
+        if(p){
+            ProjectionToDrawPanel_3D(temp, p);
+        }
+        
+        return check;
+        
+    }else{
+        
+        return false;
+        
+    }
     
 }
 

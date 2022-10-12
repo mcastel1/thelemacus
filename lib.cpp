@@ -46,14 +46,6 @@ inline double acos(Double x){
     
 }
 
-//this function shifts x by the minimal amount allowed from the double precision
-inline double shift(double x){
-    
-    
-    
-    
-    
-}
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
 inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
@@ -1681,7 +1673,7 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
     
     unsigned int i;
     vector<wxPoint> p;
-    wxPoint temp;
+    wxPoint temp, q;
     vector<Length> s;
     
     //sets color and width of memory_dc to the ones supported as arguments of Draw
@@ -1707,6 +1699,7 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
             //*this is included in the area of the chart visible by the observer
             
             unsigned int j;
+            bool check;
             
             for(j=0; j<(s.size())-1; j++){
                 
@@ -1718,9 +1711,22 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
                     
                     compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
                     
-                    if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp, false))){
+                    check = (draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp, true);
+                    
+                    if(check){
+                        //temp is a valid point
                         
                         p.push_back(temp);
+                        
+                    }else{
+                        //temp is not a valid point
+                        
+                        if(!(draw_panel->PutBackIn(temp, &q))){
+                            //temp does not fall in the plot area
+                            
+                            p.push_back(temp);
+                            
+                        }
                         
                     }
                     
@@ -10147,25 +10153,36 @@ void DrawPanel::Set_x_y_min_max_3D(void){
     
 }
 
-//puts point *p which lies outside the plot area, back into the plot area 
-void DrawPanel::PutBackIn(wxPoint* p){
+//puts point *p which lies outside the plot area, back into the plot area . It returns true if p is in the plot area, and false otherwise
+bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p){
+    
+    bool output;
+    
+    output = true;
+    
+    (*p)=q;
     
     if((p->x) < (position_plot_area.x)){
         (p->x) = (position_plot_area.x);
+        output = false;
     }
 
     if((p->x) > (position_plot_area.x) + width_plot_area){
         (p->x) = (position_plot_area.x) + width_plot_area;
+        output = false;
     }
 
     if((p->y) < (position_plot_area.y)){
         (p->y) = (position_plot_area.y);
+        output = false;
     }
 
     if((p->y) > (position_plot_area.y) + height_plot_area){
         (p->y) = (position_plot_area.y) + height_plot_area;
+        output = false;
     }
     
+    return output;
     
 }
 

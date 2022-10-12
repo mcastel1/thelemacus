@@ -1558,7 +1558,7 @@ public:
     void Set_lambda_phi_min_max_3D(void);
     void Set_x_y_min_max_Mercator(void);
     void Set_x_y_min_max_3D(void);
-    void PutBackIn(wxPoint*);
+    bool PutBackIn(wxPoint, wxPoint*);
     bool check(const Projection);
     bool check_x(const Projection);
     double x_span(void);

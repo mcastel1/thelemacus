@@ -10694,8 +10694,8 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
 }
 
 
-//converts the geographic Position p  to the  3D projection (x,y): if the projeciton of  p lies on the visible part of the sphere: if q != NULL  it writes the result into q and returns true, if q = NULL it returns false. If the projection of p does not lie on the visible side of the sphere, it returns false.
-bool DrawPanel::GeoTo3D(Position p, Projection* q){
+//converts the geographic Position p  to the  3D projection (x,y). / If the projection of p falls in the visible side of the earth, it writes its projection into *q and returns true. If not, it returns false and, if write = true, it writes its projection in p (if p!=NULL)
+bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write){
     
     bool check;
     Double d;
@@ -10714,17 +10714,25 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q){
     
     check = (gsl_vector_get(rp, 1) < - 1.0/(1.0+(d.value)));
     
-    if(check && (q != NULL)){
+    
+    if(check || write){
         
-        (q->x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
-        (q->y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+        if(q != NULL){
+            
+            (q->x) = ((d.value)*gsl_vector_get(rp, 0))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+            (q->y) = ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1));
+            
+        }
+        
+        return check;
+        
+    }else{
+        
+        return false;
         
     }
     
-    
-    //I return true if p lies on the visible side of the Earth with respect to the observer (i.e. the points with y' < - Re/(l+d) (given that in the three-dimensional construction Re = 1, the condition reads y' < -1/(l+d) ), and I return false otherwise.
-    
-    return(check);
+        
     
 }
 
@@ -10824,7 +10832,7 @@ bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p, bool write){
     Projection temp;
     bool check;
     
-    check = GeoTo3D(q, &temp);
+    check = GeoTo3D(q, &temp, write);
     
     if(check || write){
         

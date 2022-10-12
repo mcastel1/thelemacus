@@ -1549,8 +1549,8 @@ public:
     bool ScreenToGeo_3D(wxPoint, Position*);
     bool GeoToDrawPanel_Mercator(Position, wxPoint*, bool);
     void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);
-    void ProjectionToDrawPanel_3D(Projection, wxPoint*, bool);
-    bool GeoToDrawPanel_3D(Position, wxPoint*);
+    void ProjectionToDrawPanel_3D(Projection, wxPoint*);
+    bool GeoToDrawPanel_3D(Position, wxPoint*, bool);
     void ShowCoordinates(Position, wxStaticText*);
     void ShowCoordinates(wxPoint, wxStaticText*);
     void SetCoordinateLabel(Position, wxPoint, wxStaticText*);

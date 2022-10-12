@@ -10147,8 +10147,24 @@ void DrawPanel::Set_x_y_min_max_3D(void){
     
 }
 
-void DrawPanel::PubBackIn(wxPoint* p){
+//puts point *p which lies outside the plot area, back into the plot area 
+void DrawPanel::PutBackIn(wxPoint* p){
     
+    if((p->x) < (position_plot_area.x)){
+        (p->x) = (position_plot_area.x);
+    }
+
+    if((p->x) > (position_plot_area.x) + width_plot_area){
+        (p->x) = (position_plot_area.x) + width_plot_area;
+    }
+
+    if((p->y) < (position_plot_area.y)){
+        (p->y) = (position_plot_area.y);
+    }
+
+    if((p->y) > (position_plot_area.y) + height_plot_area){
+        (p->y) = (position_plot_area.y) + height_plot_area;
+    }
     
     
 }

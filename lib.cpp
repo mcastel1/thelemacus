@@ -10744,15 +10744,18 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
-// If the projection of q falls within the plot area, it writes its projection into p and returns true, and it returns false otherwise
-bool DrawPanel::GeoToMercator(Position q, Projection* p){
+// If the projection of q falls within the plot area, it writes its projection into p and returns true. If not, it returns false and, if write = true, it writes its projection in p
+bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     
     Projection temp;
+    bool b;
     
     (temp.x) = x_mercator(K*((q.lambda).value));
     (temp.y) = y_mercator(K*((q.phi).value));
     
-    if(check(temp)){
+    b = check(temp);
+    
+    if(b || write){
         //if the point falls within the plot area, write it into x, y
         
         (p->x) = (temp.x);
@@ -10763,7 +10766,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p){
         
         (p->y) = (temp.y);
         
-        return true;
+        return b;
         
     }else{
         
@@ -10773,18 +10776,21 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p){
     
 }
 
-//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and it does not write into p.
-bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p){
+//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p
+bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p, bool write){
     
     Projection temp;
+    bool check;
     
-    if(GeoToMercator(q, &temp)){
+    check = GeoToMercator(q, &temp);
+    
+    if(check || write){
         
         if(p){
             ProjectionToDrawPanel_Mercator(temp, p);
         }
         
-        return true;
+        return check;
         
     }else{
         

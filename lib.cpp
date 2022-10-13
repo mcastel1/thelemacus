@@ -12774,13 +12774,13 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
         
         if(control != NULL){
             
-            if(((control->GetBackgroundColour()) != (wxGetApp().error_color))){
+            if(((control->GetForegroundColour()) != (wxGetApp().error_color))){
                 
                 message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
                 message_frame ->Show(true);
                 
                 control->SetFocus();
-                control->SetBackgroundColour((wxGetApp().error_color));
+                control->SetForegroundColour((wxGetApp().error_color));
                 
             }else{
                 //because in this case I don't print an error message frame, the code is no longer in idling mode
@@ -16019,7 +16019,7 @@ template<class P> template<class E> void AngleField<P>::OnEditSign(E& event){
     if(check){
         
         //because the text in sign is valid, I set the background color of sign to white
-        sign->SetBackgroundColour(wxGetApp().background_color);
+        sign->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16044,7 +16044,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event
     if(check){
         
         //because the text in sign is valid, I set the background color of deg to white
-        deg->SetBackgroundColour(wxGetApp().background_color);
+        deg->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16069,7 +16069,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event
     if(check){
         
         //because the text in sign is valid, I set the background color of min to white
-        min->SetBackgroundColour(wxGetApp().background_color);
+        min->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16107,7 +16107,7 @@ template<class E> void ChronoField::OnEditHour(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        hour->SetBackgroundColour(wxGetApp().background_color);
+        hour->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16131,7 +16131,7 @@ template<class E> void ChronoField::OnEditMinute(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        minute->SetBackgroundColour(wxGetApp().background_color);
+        minute->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16155,7 +16155,7 @@ template<class E> void ChronoField::OnEditSecond(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        second->SetBackgroundColour(wxGetApp().background_color);
+        second->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16181,7 +16181,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of value to white
-        value->SetBackgroundColour(wxGetApp().background_color);
+        value->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16208,7 +16208,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event){
     if(check){
         
         //because the text in value is valid, I set the background color of unit to white
-        unit->SetBackgroundColour(wxGetApp().background_color);
+        unit->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16452,7 +16452,7 @@ template<class E> void BodyField::OnEdit(E& event){
         (*((parent_frame->limb)->check))(event);
         
         //because the text in name is valid, I set the background color of name to white
-        name->SetBackgroundColour(wxGetApp().background_color);
+        name->SetForegroundColour(wxGetApp().foreground_color);
         
     }else{
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
@@ -16491,7 +16491,7 @@ template<class E> void LimbField::OnEdit(E& event){
     
     if(check){
         
-        name->SetBackgroundColour(wxGetApp().background_color);
+        name->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16517,7 +16517,7 @@ template<class E> void DateField::OnEditYear(E& event){
     
     if(check){
         
-        year->SetBackgroundColour(wxGetApp().background_color);
+        year->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16542,7 +16542,7 @@ template<class E> void DateField::OnEditMonth(E& event){
     
     if(check){
         
-        month->SetBackgroundColour(wxGetApp().background_color);
+        month->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16577,7 +16577,7 @@ template<class E> void DateField::OnEditDay(E& event){
     
     if(check){
         
-        day->SetBackgroundColour(wxGetApp().background_color);
+        day->SetForegroundColour(wxGetApp().foreground_color);
         
     }
     
@@ -16625,7 +16625,7 @@ template<class E> void RouteTypeField::OnEdit(E& event){
         (parent_frame->omega)->Enable(!enable);
         
         //because the text in name is valid, I set the background color of name to white
-        name->SetBackgroundColour(wxGetApp().background_color);
+        name->SetForegroundColour(wxGetApp().foreground_color);
         
     }else{
         
@@ -16848,7 +16848,7 @@ template<class E> void ProjectionField::OnEdit(E& event){
     
     if(check){
         
-        name->SetBackgroundColour(wxGetApp().background_color);
+        name->SetForegroundColour(wxGetApp().foreground_color);
         //choses the projection entered in name button_reduce
         (parent->draw_panel)->OnChooseProjection(event);
         

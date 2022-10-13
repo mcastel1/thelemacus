@@ -12774,13 +12774,13 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
         
         if(control != NULL){
             
-            if(((control->GetBackgroundColour()) != *wxRED)){
+            if(((control->GetBackgroundColour()) != (wxGetApp().error_color))){
                 
                 message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
                 message_frame ->Show(true);
                 
                 control->SetFocus();
-                control->SetBackgroundColour(*wxRED);
+                control->SetBackgroundColour((wxGetApp().error_color));
                 
             }else{
                 //because in this case I don't print an error message frame, the code is no longer in idling mode

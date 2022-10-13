@@ -1526,7 +1526,7 @@ public:
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
     void (DrawPanel::*Render)(wxDC&);
-    bool (DrawPanel::*GeoToDrawPanel)(Position, wxPoint*, bool);
+    void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
   
@@ -1543,14 +1543,13 @@ public:
     bool DrawPanelToGeo(wxPoint, Position*);
     bool ScreenToMercator(wxPoint, Projection*);
     bool ScreenTo3D(wxPoint, Projection*);
+    bool GeoToDrawPanel(Position, wxPoint*, bool);
     bool GeoTo3D(Position, Projection*, bool);
     bool GeoToMercator(Position, Projection*, bool);
     bool ScreenToGeo_Mercator(wxPoint, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);
-    bool GeoToDrawPanel_Mercator(Position, wxPoint*, bool);
     void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);
     void ProjectionToDrawPanel_3D(Projection, wxPoint*);
-    bool GeoToDrawPanel_3D(Position, wxPoint*, bool);
     void ShowCoordinates(Position, wxStaticText*);
     void ShowCoordinates(wxPoint, wxStaticText*);
     void SetCoordinateLabel(Position, wxPoint, wxStaticText*);

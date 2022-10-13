@@ -1579,7 +1579,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
         
         compute_end(Length((l.value)*((double)i)/((double)(n_points-1))), String(""));
         
-        if((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p, false)){
+        if((draw_panel->GeoToDrawPanel)(end, &p, false)){
             
             if(end_connected){
                 
@@ -1619,7 +1619,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
         
         compute_end(Length((l.value)*((double)i)/((double)(n_points-1))), String(""));
         
-        if((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp, false)){
+        if((draw_panel->GeoToDrawPanel)(end, &temp, false)){
             
             if(end_connected){
                 
@@ -1711,7 +1711,7 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
                     
                     compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
                     
-                    check = (draw_panel->*(draw_panel->GeoToDrawPanel))(end, &temp, true);
+                    check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
                     
                     if(check){
                         //temp is a valid point
@@ -1781,7 +1781,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                 
                 compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
                 
-                if(((draw_panel->*(draw_panel->GeoToDrawPanel))(end, &p, false))){
+                if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
                     
                     ((*v)[j]).push_back(p);
                     
@@ -8167,7 +8167,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                 for(l=0; (l*every)<((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
                     
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
-                    if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &q, false)){
+                    if((draw_panel->GeoToDrawPanel)((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &q, false)){
                         
                         p_coastline_draw.push_back(q);
                         
@@ -8282,7 +8282,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                     //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
                     //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
                     
-                    if((draw_panel->*(draw_panel->GeoToDrawPanel))((parent->p_coastline)[i - floor_min_lat][j % 360][l*every], &temp, false)){
+                    if((draw_panel->GeoToDrawPanel)((parent->p_coastline)[i - floor_min_lat][j % 360][l*every], &temp, false)){
                         
                         //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                         //                            (temp.x) += 2.0*M_PI;
@@ -8592,7 +8592,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
         
         //draw the reference position
-        if(GeoToDrawPanel_Mercator((((plot->route_list)[i]).reference_position), &p, false)){
+        if(GeoToDrawPanel((((plot->route_list)[i]).reference_position), &p, false)){
             dc.DrawCircle(p, 4.0*thickness);
         }
         
@@ -8626,8 +8626,8 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         
-        if(GeoToDrawPanel_Mercator((plot->position_list)[i], &p, false)){
-            //if the point returned from GeoToDrawPanel_Mercator falls within the plot area, then I plot it
+        if(GeoToDrawPanel((plot->position_list)[i], &p, false)){
+            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
         }
@@ -8657,7 +8657,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
     wxPoint p;
     vector<StaticText*>* labels;
     
-    if(/* convert temp to draw_panel coordinates p*/(this->*GeoToDrawPanel)(q, &p, false)){
+    if(/* convert temp to draw_panel coordinates p*/GeoToDrawPanel(q, &p, false)){
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
         
         wxString wx_string;
@@ -8797,7 +8797,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
         //draw the reference_position
-        if(GeoToDrawPanel_3D((((plot->route_list)[i]).reference_position), &p, false)){
+        if(GeoToDrawPanel((((plot->route_list)[i]).reference_position), &p, false)){
             dc.DrawCircle(p, 4.0*thickness);
         }
         
@@ -8831,8 +8831,8 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
         
-        if(GeoToDrawPanel_3D((plot->position_list)[i], &p, false)){
-            //if the point returned from GeoToDrawPanel_Mercator falls within the plot area, then I plot it
+        if(GeoToDrawPanel((plot->position_list)[i], &p, false)){
+            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
             
@@ -10762,7 +10762,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     position_draw_panel = (this->GetScreenPosition());
     
     
-    (this->*GeoToDrawPanel)(q, p, false);
+    GeoToDrawPanel(q, p, false);
     
     (p->x) += (position_draw_panel.x);
     (p->y) += (position_draw_panel.y);
@@ -10805,18 +10805,19 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     
 }
 
-//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p
-bool DrawPanel::GeoToDrawPanel_Mercator(Position q, wxPoint *p, bool write){
+//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
+bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p, bool write){
     
     Projection temp;
     bool check;
     
-    check = GeoToMercator(q, &temp, write);
+    
+    check = (this->*GeoToProjection)(q, &temp, write);
     
     if(check || write){
         
         if(p){
-            ProjectionToDrawPanel_Mercator(temp, p);
+            (this->*ProjectionToDrawPanel)(temp, p);
         }
         
         return check;
@@ -10847,36 +10848,12 @@ void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint *p){
 
 
 
-//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p
-bool DrawPanel::GeoToDrawPanel_3D(Position q, wxPoint *p, bool write){
-    
-    Projection temp;
-    bool check;
-    
-    check = GeoTo3D(q, &temp, write);
-    
-    if(check || write){
-        
-        if(p){
-            ProjectionToDrawPanel_3D(temp, p);
-        }
-        
-        return check;
-        
-    }else{
-        
-        return false;
-        
-    }
-    
-}
-
 //given a Position q if q lies witin *this, it writes in label a text with the geographic coordinates of q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
 void DrawPanel::ShowCoordinates(Position q, wxStaticText* label){
     
     wxPoint p;
     
-    if((this->*GeoToDrawPanel)(q, &p, false)){
+    if(GeoToDrawPanel(q, &p, false)){
         SetCoordinateLabel(q, p, label);
     }else{
         label->SetLabel(wxString(""));
@@ -10972,7 +10949,8 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
         
         Draw = (&DrawPanel::Draw_Mercator);
         Render = (&DrawPanel::Render_Mercator);
-        GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
+        ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
+//        GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_Mercator);
         ScreenToProjection = (&DrawPanel::ScreenToMercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
@@ -10994,7 +10972,8 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
         
         Draw = (&DrawPanel::Draw_3D);
         Render = (&DrawPanel::Render_3D);
-        GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
+        ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
+//        GeoToDrawPanel = (&DrawPanel::GeoToDrawPanel_3D);
         ScreenToProjection = (&DrawPanel::ScreenTo3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
@@ -11629,7 +11608,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             
                             //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
                             
-                            (this->*GeoToDrawPanel)(route_position_start_drag, &p, false);
+                            GeoToDrawPanel(route_position_start_drag, &p, false);
                             
                             //this command is the same for all types of Routes
                             DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((plot->route_list)[((parent->parent)->highlighted_route)]).reference_position));

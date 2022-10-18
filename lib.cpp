@@ -12920,18 +12920,18 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
     //I bind master_clock_date->year/month/day to OnEditTime in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (master_clock_date->day)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (master_clock_date->day)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     //I bind master_clock_chrono->hour/minute/second to OnEditTime in such a way that, if the user enters a master_clock_chrono such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-    (master_clock_chrono->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (master_clock_chrono->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (master_clock_chrono->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (master_clock_chrono->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (master_clock_chrono->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (master_clock_chrono->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     //I initialize the GUI filed master_clock_chrono with the one written in sight_in.
     //    if(sight_in != NULL){
@@ -12942,9 +12942,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
     stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
     //I bind stopwatch_check to OnEditTime in such a way that, if the user enters a stopwatch_check such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-    (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //if stopwatch_check is checked/unchecked, then I runm OnEditTime to verify that the time of sight lies within the ephemerides' time span
-    (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, &SightFrame::OnEditTime<wxCommandEvent>, this);
+//    (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, &SightFrame::OnEditTime<wxCommandEvent>, this);
     
     
     //stopwatch reading
@@ -12954,9 +12954,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
     (stopwatch_check->related_field) = stopwatch_reading;
     //I bind stopwatch_reading->hour/minute/second to OnEditTime in such a way that, if the user enters a stopwatch_reading such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-    (stopwatch_reading->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (stopwatch_reading->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (stopwatch_reading->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (stopwatch_reading->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (stopwatch_reading->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (stopwatch_reading->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     
     //initialize stopwatch_check and stopwatch_reading
@@ -12966,9 +12966,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_TAI_minus_UTC = new StaticText(panel,wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize);
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
     //I bind TAI_minus_UTC->hour/minute/second to OnEditTime in such a way that, if the user enters a TAI_minus_UTC such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-    (TAI_minus_UTC->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (TAI_minus_UTC->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    (TAI_minus_UTC->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (TAI_minus_UTC->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (TAI_minus_UTC->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+//    (TAI_minus_UTC->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
@@ -14767,21 +14767,22 @@ void SightFrame::TimeIntervalOk(String prefix){
 }
 
 //prompt an error message to signal to the user if the entered time of sight lies outside ephemerides data
-template<class T> void SightFrame::OnEditTime(T& event){
-    
-    //compute time_interval_ok
-    TimeIntervalOk(String(""));
-    
-    if(!time_interval_ok){
-        //time_interval_ok = false -> prompt error message
 
-        print_error_message->SetAndCall(NULL, String("Time not covered by ephemerides' data!"), String("Time must be covered by emphmerides data"));
-        
-    }
-    
-    event.Skip(true);
-    
-}
+//template<class T> void SightFrame::OnEditTime(T& event){
+//    
+//    //compute time_interval_ok
+//    TimeIntervalOk(String(""));
+//    
+//    if(!time_interval_ok){
+//        //time_interval_ok = false -> prompt error message
+//
+//        print_error_message->SetAndCall(NULL, String("Time not covered by ephemerides' data!"), String("Time must be covered by emphmerides data"));
+//        
+//    }
+//    
+//    event.Skip(true);
+//    
+//}
 
 
 void SightFrame::OnPressCancel(wxCommandEvent& event){

@@ -10360,6 +10360,7 @@ template<class T>void CheckBody::operator()(T& event){
         if(check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
+            
             if(check){
                 
                 if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
@@ -10408,9 +10409,10 @@ template<class T>void CheckBody::operator()(T& event){
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
-            //the background color is set to white, because in this case there is no erroneous value in name
+            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name.
             (p->name)->SetForegroundColour(wxGetApp().foreground_color);
             (p->name)->SetFont(wxGetApp().default_font);
+            p->Reset();
             
         }else{
             
@@ -16495,6 +16497,17 @@ template<class E> void BodyField::OnEdit(E& event){
     parent_frame->AllOk();
     
     event.Skip(true);
+    
+}
+
+//I reset *this by storing its current value into temp, resetting its list of items, and resetting its value from temp
+void BodyField::Reset(void){
+    
+    wxString temp;
+    
+    temp = (name->GetValue());
+    name->Set(bodies);
+    name->SetValue(temp);
     
 }
 

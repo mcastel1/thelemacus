@@ -45,7 +45,6 @@
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
  - when you press button_reduce in SightFrame, you should call on_change_selection_in_listcontrol_sights in such a way that some buttons are deactivated in listcontrol_sights, and same for other listcontrols
  -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer
-- when error message that time is not comprised in ephemerides is prompted, the time fields are not highkighted in red if its content is not formatted properly
  */
 
 
@@ -199,6 +198,8 @@ bool MyApp::OnInit(){
     //fore/background color is determined from the default background color of extract_colors
     foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
     background_color = Color(list_frame->extract_colors->GetBackgroundColour());
+
+    font = (list_frame->extract_colors->GetFont());
 
     
     

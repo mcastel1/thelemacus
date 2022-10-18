@@ -126,9 +126,9 @@ template <class T> void Reset(T* control){
         list.Add(control->GetString(i), 1);
     }
     
-    control->SetValue(value);
     control->Set(list);
-    
+    control->SetValue(value);
+
 }
 
 

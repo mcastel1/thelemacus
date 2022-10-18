@@ -1628,7 +1628,6 @@ public:
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEdit(E&);
-    void Reset(void);
     
     
 };

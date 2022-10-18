@@ -114,6 +114,23 @@ template<class T> void SetColor(T* object){
     
 }
 
+//I reset control by storing its current value into temp, resetting its list of items, and resetting its value from temp
+template <class T> void Reset(T* control){
+    
+    int i;
+    wxString value;
+    wxArrayString list;
+    
+    value = (control->GetValue());
+    for(i=0; i<(control->GetCount()); i++){
+        list.Add(control->GetString(i), 1);
+    }
+    
+    control->SetValue(value);
+    control->Set(list);
+    
+}
+
 
 bool String::operator==(const String& s){
     
@@ -10412,7 +10429,7 @@ template<class T>void CheckBody::operator()(T& event){
             //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name.
             (p->name)->SetForegroundColour(wxGetApp().foreground_color);
             (p->name)->SetFont(wxGetApp().default_font);
-            p->Reset();
+//            Reset(p->name);
             
         }else{
             
@@ -12791,6 +12808,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
                 control->SetFocus();
                 control->SetForegroundColour((wxGetApp().error_color));
                 control->SetFont(wxGetApp().error_font);
+//                Reset(control);
                 
             }else{
                 //because in this case I don't print an error message frame, the code is no longer in idling mode
@@ -16500,16 +16518,6 @@ template<class E> void BodyField::OnEdit(E& event){
     
 }
 
-//I reset *this by storing its current value into temp, resetting its list of items, and resetting its value from temp
-void BodyField::Reset(void){
-    
-    wxString temp;
-    
-    temp = (name->GetValue());
-    name->Set(bodies);
-    name->SetValue(temp);
-    
-}
 
 bool LimbField::is_ok(void){
     

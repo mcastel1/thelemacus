@@ -12919,6 +12919,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
+//    (master_clock_date->year)->SetFont((wxGetApp().bold_font));
     //I bind master_clock_date->year/month/day to OnEditTime in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
 //    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
 //    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);

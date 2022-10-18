@@ -199,8 +199,11 @@ bool MyApp::OnInit(){
     foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
     background_color = Color(list_frame->extract_colors->GetBackgroundColour());
 
-    font = (list_frame->extract_colors->GetFont());
-
+    
+    //extracts the default font and creates a bold_font, obtained from default font by setting its weight to wxFONTWEIGHT_BOLD
+    default_font = (list_frame->extract_colors->GetFont());
+    bold_font = (list_frame->extract_colors->GetFont());
+    bold_font.SetWeight(wxFONTWEIGHT_BOLD);
     
     
     return true;

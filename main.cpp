@@ -200,10 +200,10 @@ bool MyApp::OnInit(){
     background_color = Color(list_frame->extract_colors->GetBackgroundColour());
 
     
-    //extracts the default font and creates a bold_font, obtained from default font by setting its weight to wxFONTWEIGHT_BOLD
+    //extracts the default font and creates a error_font, obtained from default font by setting its weight to wxFONTWEIGHT_BOLD
     default_font = (list_frame->extract_colors->GetFont());
-    bold_font = (list_frame->extract_colors->GetFont());
-    bold_font.SetWeight(wxFONTWEIGHT_BOLD);
+    error_font = (list_frame->extract_colors->GetFont());
+    error_font.SetWeight(wxFONTWEIGHT_BOLD);
     
     
     return true;

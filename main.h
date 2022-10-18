@@ -61,6 +61,7 @@ public:
     wxRect rectangle_display;
     //The default fore/background color for day/night vision of the app of all objects in *this. background_color also represents the default, plain background color of fields, such as BodyFields, and it is thus conceptally equivalent to 'white' color
     Color foreground_color, background_color, error_color;
+    //the default font used by the operating system, and a bold font obtained by the defalult font by setting its weight to wxFONTWEIGHT_BOLD
     wxFont default_font, bold_font;
     Int time_zone;
 

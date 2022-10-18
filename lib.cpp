@@ -10410,6 +10410,7 @@ template<class T>void CheckBody::operator()(T& event){
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name)->SetFont(wxGetApp().default_font);
             
         }else{
             
@@ -10453,6 +10454,7 @@ template<class T> void CheckLimb::operator()(T &event){
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name)->SetFont(wxGetApp().default_font);;
             
             
         }else{
@@ -10531,6 +10533,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             (p->sign_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in sign
             (p->sign)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->sign)->SetFont(wxGetApp().default_font);;
             
         }else{
             
@@ -12388,6 +12391,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             (p->deg_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             (p->deg)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->deg)->SetFont(wxGetApp().default_font);;
             
         }else{
             
@@ -12423,6 +12427,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             (p->min_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in min
             (p->min)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->min)->SetFont(wxGetApp().default_font);;
             
         }else{
             
@@ -12460,6 +12465,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             (p->value_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in value
             (p->value)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->value)->SetFont(wxGetApp().default_font);;
             
         }else{
             
@@ -12502,6 +12508,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             (p->unit_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             (p->unit)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->unit)->SetFont(wxGetApp().default_font);;
             
             
         }else{
@@ -12781,6 +12788,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
                 
                 control->SetFocus();
                 control->SetForegroundColour((wxGetApp().error_color));
+                control->SetFont(wxGetApp().error_font);
                 
             }else{
                 //because in this case I don't print an error message frame, the code is no longer in idling mode
@@ -14836,6 +14844,7 @@ template<class T> void CheckYear::operator()(T&event){
             (p->year_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in year
             (p->year)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->year)->SetFont(wxGetApp().default_font);;
             
             if(check && (p->month_ok)){
                 
@@ -14881,6 +14890,7 @@ template<class T> void CheckMonth::operator()(T&event){
             (p->month_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in month
             (p->month)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->month)->SetFont(wxGetApp().default_font);;
             
             if(check && (p->year_ok)){
                 
@@ -14938,6 +14948,7 @@ template<class T> void CheckDay::operator()(T& event){
             (p->day_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in day
             (p->day)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->day)->SetFont(wxGetApp().default_font);;
             
             
         }else{
@@ -15082,6 +15093,7 @@ template<class T> void CheckHour::operator()(T &event){
             (p->hour_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             (p->hour)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->hour)->SetFont(wxGetApp().default_font);;
             
         }else{
             
@@ -15122,6 +15134,7 @@ template<class T> void CheckMinute::operator()(T &event){
             (p->minute_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in minute
             (p->minute)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->minute)->SetFont(wxGetApp().default_font);;
             
         }else{
             
@@ -15162,6 +15175,7 @@ template<class T> void CheckSecond::operator()(T &event){
             (p->second_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             (p->second)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->second)->SetFont(wxGetApp().default_font);;
             
         }else{
             
@@ -15261,6 +15275,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name)->SetFont(wxGetApp().default_font);;
             
         }else{
             

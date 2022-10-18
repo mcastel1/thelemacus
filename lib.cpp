@@ -10426,10 +10426,10 @@ template<class T>void CheckBody::operator()(T& event){
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
-            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name.
+            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
             (p->name)->SetForegroundColour(wxGetApp().foreground_color);
             (p->name)->SetFont(wxGetApp().default_font);
-//            Reset(p->name);
+            Reset(p->name);
             
         }else{
             

@@ -16037,6 +16037,7 @@ template<class P> template<class E> void AngleField<P>::OnEditSign(E& event){
         
         //because the text in sign is valid, I set the background color of sign to white
         sign->SetForegroundColour(wxGetApp().foreground_color);
+        sign->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16062,6 +16063,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event
         
         //because the text in sign is valid, I set the background color of deg to white
         deg->SetForegroundColour(wxGetApp().foreground_color);
+        deg->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16087,6 +16089,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event
         
         //because the text in sign is valid, I set the background color of min to white
         min->SetForegroundColour(wxGetApp().foreground_color);
+        min->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16125,6 +16128,7 @@ template<class E> void ChronoField::OnEditHour(E& event){
         
         //because the text in value is valid, I set the background color of value to white
         hour->SetForegroundColour(wxGetApp().foreground_color);
+        hour->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16149,6 +16153,7 @@ template<class E> void ChronoField::OnEditMinute(E& event){
         
         //because the text in value is valid, I set the background color of value to white
         minute->SetForegroundColour(wxGetApp().foreground_color);
+        minute->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16173,6 +16178,7 @@ template<class E> void ChronoField::OnEditSecond(E& event){
         
         //because the text in value is valid, I set the background color of value to white
         second->SetForegroundColour(wxGetApp().foreground_color);
+        second->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16199,6 +16205,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event){
         
         //because the text in value is valid, I set the background color of value to white
         value->SetForegroundColour(wxGetApp().foreground_color);
+        value->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16226,6 +16233,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event){
         
         //because the text in value is valid, I set the background color of unit to white
         unit->SetForegroundColour(wxGetApp().foreground_color);
+        unit->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16470,6 +16478,7 @@ template<class E> void BodyField::OnEdit(E& event){
         
         //because the text in name is valid, I set the background color of name to white
         name->SetForegroundColour(wxGetApp().foreground_color);
+        name->SetFont(wxGetApp().default_font);
         
     }else{
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
@@ -16509,6 +16518,7 @@ template<class E> void LimbField::OnEdit(E& event){
     if(check){
         
         name->SetForegroundColour(wxGetApp().foreground_color);
+        name->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16535,6 +16545,7 @@ template<class E> void DateField::OnEditYear(E& event){
     if(check){
         
         year->SetForegroundColour(wxGetApp().foreground_color);
+        year->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16560,6 +16571,7 @@ template<class E> void DateField::OnEditMonth(E& event){
     if(check){
         
         month->SetForegroundColour(wxGetApp().foreground_color);
+        month->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16595,6 +16607,7 @@ template<class E> void DateField::OnEditDay(E& event){
     if(check){
         
         day->SetForegroundColour(wxGetApp().foreground_color);
+        day->SetFont(wxGetApp().default_font);
         
     }
     
@@ -16643,6 +16656,7 @@ template<class E> void RouteTypeField::OnEdit(E& event){
         
         //because the text in name is valid, I set the background color of name to white
         name->SetForegroundColour(wxGetApp().foreground_color);
+        name->SetFont(wxGetApp().default_font);
         
     }else{
         
@@ -16866,6 +16880,7 @@ template<class E> void ProjectionField::OnEdit(E& event){
     if(check){
         
         name->SetForegroundColour(wxGetApp().foreground_color);
+        name->SetFont(wxGetApp().default_font);
         //choses the projection entered in name button_reduce
         (parent->draw_panel)->OnChooseProjection(event);
         

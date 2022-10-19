@@ -16,16 +16,19 @@
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
  
- 
- - set parents to constructors of all frames that you defined
+ ********** THINGS TO ADD ************
+
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
- - set up a proper output to a log file
  - add separator between recent items and non-recent items in BodyField->name
+
+ ********** THINGS TO FIX ************
+ 
+ - set parents to constructors of all frames that you defined
+ - set up a proper output to a log file
  - transfrom all angular qantities in units of radians
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function
  - in Route::draw_3D, code the part for loxodrome curves
- - get rid of eventual superfluous if condition  (which checks whether angles are multiples of one degree) when drawing labels in the 3d projection
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  -                                 sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - check fabs(K*((temp.lambda).value) - ((double)round(K*((temp.lambda).value)))) < delta_lambda/2.0 in  DrawPanel::Render_3D: it seems that this line has been written as if delta_lambda were expressed in degrees, while it is expressed in radians

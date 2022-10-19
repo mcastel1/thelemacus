@@ -117,6 +117,7 @@ bool MyApp::OnInit(){
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
 //    Chrono current_time, dawn, dusk;
     
+    timer = new wxTimer();
     
     wxImage::AddHandler(new wxPNGHandler);
     

@@ -64,7 +64,7 @@ public:
     //the default font used by the operating system, and a bold font obtained by the defalult font by setting its weight to wxFONTWEIGHT_BOLD
     wxFont default_font, error_font;
     Int time_zone;
-    wxTimer timer;
+    wxTimer* timer;
 
     virtual bool OnInit();
 

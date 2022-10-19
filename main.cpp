@@ -49,6 +49,16 @@
 
 void MyApp::OnTimer(wxTimerEvent& event){
 
+    Color background_color_new;
+    
+    background_color_new = Color((list_frame->extract_colors)->GetBackgroundColour());
+    
+    if(background_color_new != background_color){
+        
+        foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
+        background_color = Color(list_frame->extract_colors->GetBackgroundColour());
+
+    }
     
 }
 
@@ -168,7 +178,7 @@ bool MyApp::OnInit(){
     rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
     
     
-    ListFrame *list_frame = new ListFrame(this, "List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
+    list_frame = new ListFrame(this, "List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
     
@@ -213,7 +223,7 @@ bool MyApp::OnInit(){
     error_font = (list_frame->extract_colors->GetFont());
     error_font.SetWeight(wxFONTWEIGHT_BOLD);
     
-    timer->Start(10000, wxTIMER_CONTINUOUS);
+    timer->Start(1000, wxTIMER_CONTINUOUS);
     
     
     return true;

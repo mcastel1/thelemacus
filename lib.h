@@ -6,6 +6,7 @@
 #include "wx/listctrl.h"
 #include "wx/slider.h"
 #include "wx/mstream.h"
+#include "wx/timer.h"
 
 
 

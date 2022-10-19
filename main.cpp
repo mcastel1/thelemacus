@@ -21,6 +21,7 @@
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
  - add separator between recent items and non-recent items in BodyField->name
+ -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer
 
  ********** THINGS TO FIX ************
  
@@ -39,13 +40,12 @@
  - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
- - when you delete a Position, make sure that buttons that modify and delete a position are disabled 
+ - when you delete a Position, make sure that buttons that modify and delete a position are disabled
   - for night mode: dynamically change background color of chart to adapt to day/night mode
  - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
   - when you reduce a Sight, the selected items in listcontrol_sights change -> call OnSelectInListControl to enable/disable the correct buttons accordingly
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
  - when you press button_reduce in SightFrame, you should call on_change_selection_in_listcontrol_sights in such a way that some buttons are deactivated in listcontrol_sights, and same for other listcontrols
- -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer
  */
 
 

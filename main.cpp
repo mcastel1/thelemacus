@@ -47,6 +47,10 @@
  - when you press button_reduce in SightFrame, you should call on_change_selection_in_listcontrol_sights in such a way that some buttons are deactivated in listcontrol_sights, and same for other listcontrols
  */
 
+void MyApp::OnTimer(wxTimerEvent& event){
+
+    
+}
 
 bool MyApp::OnInit(){
     
@@ -150,6 +154,9 @@ bool MyApp::OnInit(){
 //        foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
 //
 //    }
+    
+    timer->Bind(wxEVT_TIMER, &MyApp::OnTimer, this);
+
     
     
     foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));

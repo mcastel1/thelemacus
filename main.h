@@ -67,6 +67,7 @@ public:
     wxTimer* timer;
 
     virtual bool OnInit();
+    void OnTimer(wxTimerEvent&);
 
 };
 

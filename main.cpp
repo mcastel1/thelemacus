@@ -22,11 +22,11 @@
  - add lambert projection and 3D sphere with no projection
  - add separator between recent items and non-recent items in BodyField->name
  -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer
+ - set up a proper output to a log file
 
  ********** THINGS TO FIX ************
  
  - set parents to constructors of all frames that you defined
- - set up a proper output to a log file
  - transfrom all angular qantities in units of radians
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function
  - in Route::draw_3D, code the part for loxodrome curves

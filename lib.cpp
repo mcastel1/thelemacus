@@ -13590,6 +13590,10 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
 
 void RouteFrame::AllOk(void){
     
+    wxCommandEvent dummy;
+    
+    get(dummy);
+    
     button_ok->Enable((type->is_ok()) &&
                       (
                        ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&

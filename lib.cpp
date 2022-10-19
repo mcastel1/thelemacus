@@ -128,7 +128,7 @@ template <class T> void Reset(T* control){
     
     control->Set(list);
     control->SetValue(value);
-
+    
 }
 
 
@@ -5683,7 +5683,7 @@ Plot::Plot(Catalog* cata, String prefix){
     
     //read n_points_plot_coastline from file_init
     n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
-        
+    
     file_init.close(prefix);
     
 }
@@ -9639,7 +9639,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     lambda_max.read_from_file(String("maximal longitude"), String(path_file_init), new_prefix);
     phi_min.read_from_file(String("minimal latitude"), String(path_file_init), new_prefix);
     phi_max.read_from_file(String("maximal latitude"), String(path_file_init), new_prefix);
-
+    
     
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnClose, this);
     
@@ -9812,7 +9812,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
-      CenterOnScreen();
+    CenterOnScreen();
     
 }
 
@@ -10183,17 +10183,17 @@ bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p){
         (p->x) = (position_plot_area.x);
         output = false;
     }
-
+    
     if((p->x) > (position_plot_area.x) + width_plot_area){
         (p->x) = (position_plot_area.x) + width_plot_area;
         output = false;
     }
-
+    
     if((p->y) < (position_plot_area.y)){
         (p->y) = (position_plot_area.y);
         output = false;
     }
-
+    
     if((p->y) > (position_plot_area.y) + height_plot_area){
         (p->y) = (position_plot_area.y) + height_plot_area;
         output = false;
@@ -10771,7 +10771,7 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write){
         
     }
     
-        
+    
     
 }
 
@@ -12808,7 +12808,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
                 control->SetFocus();
                 control->SetForegroundColour((wxGetApp().error_color));
                 control->SetFont(wxGetApp().error_font);
-//                Reset(control);
+                //                Reset(control);
                 
             }else{
                 //because in this case I don't print an error message frame, the code is no longer in idling mode
@@ -12947,20 +12947,20 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
-//    (master_clock_date->year)->SetFont((wxGetApp().error_font));
+    //    (master_clock_date->year)->SetFont((wxGetApp().error_font));
     //I bind master_clock_date->year/month/day to OnEditTime in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-//    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (master_clock_date->day)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (master_clock_date->day)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
     master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
     //I bind master_clock_chrono->hour/minute/second to OnEditTime in such a way that, if the user enters a master_clock_chrono such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-//    (master_clock_chrono->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (master_clock_chrono->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (master_clock_chrono->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (master_clock_chrono->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (master_clock_chrono->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (master_clock_chrono->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     //I initialize the GUI filed master_clock_chrono with the one written in sight_in.
     //    if(sight_in != NULL){
@@ -12971,9 +12971,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
     stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
     //I bind stopwatch_check to OnEditTime in such a way that, if the user enters a stopwatch_check such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-//    (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //if stopwatch_check is checked/unchecked, then I runm OnEditTime to verify that the time of sight lies within the ephemerides' time span
-//    (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, &SightFrame::OnEditTime<wxCommandEvent>, this);
+    //    (stopwatch_check->checkbox)->Bind(wxEVT_CHECKBOX, &SightFrame::OnEditTime<wxCommandEvent>, this);
     
     
     //stopwatch reading
@@ -12983,9 +12983,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
     (stopwatch_check->related_field) = stopwatch_reading;
     //I bind stopwatch_reading->hour/minute/second to OnEditTime in such a way that, if the user enters a stopwatch_reading such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-//    (stopwatch_reading->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (stopwatch_reading->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (stopwatch_reading->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (stopwatch_reading->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (stopwatch_reading->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (stopwatch_reading->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     
     //initialize stopwatch_check and stopwatch_reading
@@ -12995,9 +12995,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_TAI_minus_UTC = new StaticText(panel,wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize);
     TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
     //I bind TAI_minus_UTC->hour/minute/second to OnEditTime in such a way that, if the user enters a TAI_minus_UTC such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-//    (TAI_minus_UTC->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (TAI_minus_UTC->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-//    (TAI_minus_UTC->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (TAI_minus_UTC->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (TAI_minus_UTC->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
+    //    (TAI_minus_UTC->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
@@ -14743,6 +14743,9 @@ void SightFrame::SetIdling(bool b){
 //this function checks whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span: if all these conditions are true, it enables the button_reduce
 void SightFrame::AllOk(void){
     
+    wxCommandEvent dummy;
+    
+    get(dummy);
     
     //runs TimeIntervalOk to compute time_interval_ok, which will be used to determine whether button_reduce is enabled or not
     TimeIntervalOk(String(""));
@@ -14772,15 +14775,15 @@ void SightFrame::TimeIntervalOk(String prefix){
     {
         //the fields that specify the time of the sight are all ok ...
         
-        wxCommandEvent dummy;
-        
-        master_clock_date->get(dummy);
-        master_clock_chrono->get(dummy);
-        stopwatch_check->get(dummy);
-        if(((stopwatch_check->checkbox)->GetValue())){
-            stopwatch_reading->get(dummy);
-        }
-        TAI_minus_UTC->get(dummy);
+        //        wxCommandEvent dummy;
+        //
+        //        master_clock_date->get(dummy);
+        //        master_clock_chrono->get(dummy);
+        //        stopwatch_check->get(dummy);
+        //        if(((stopwatch_check->checkbox)->GetValue())){
+        //            stopwatch_reading->get(dummy);
+        //        }
+        //        TAI_minus_UTC->get(dummy);
         
         //... compute if sight->time lies within the ephemerids' data time interval
         time_interval_ok = (sight->check_time_interval(String("")));

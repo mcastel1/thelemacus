@@ -8910,8 +8910,9 @@ void DrawPanel::TabulateRoutes(void){
     unsigned int i;
     wxPoint p;
     
-    //clear up points_route_list
-    for(i=0; i<points_route_list.size(); i++){
+    //resize points_route_list, which needs to have the same size as (plot->route_list), and clear up points_route_list
+    points_route_list.resize((plot->route_list).size());
+    for(i=0; i<(points_route_list.size()); i++){
         (points_route_list[i]).clear();
     }
     
@@ -14270,6 +14271,7 @@ void ListFrame::DrawAll(void){
         
         //I call PaintNow() because the positions have changed, so I need to re-draw the chart
         (((chart_frames[i])->draw_panel)->*(((chart_frames[i])->draw_panel)->Draw))();
+        
         ((chart_frames[i])->draw_panel)->PaintNow();
         
     }

@@ -213,6 +213,8 @@ bool MyApp::OnInit(){
     error_font = (list_frame->extract_colors->GetFont());
     error_font.SetWeight(wxFONTWEIGHT_BOLD);
     
+    timer->Start(10000, wxTIMER_CONTINUOUS);
+    
     
     return true;
     

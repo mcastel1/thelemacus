@@ -13588,6 +13588,7 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
     
 }
 
+//write the content in the GUI fields into the non-GUI fields, and tries to enable button_ok
 void RouteFrame::AllOk(void){
     
     wxCommandEvent dummy;
@@ -13675,8 +13676,12 @@ void RouteFrame::SetIdling(bool b){
 }
 
 
-//this function checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
+//write all the content in the GUI fields into the non-GUI objects, checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
 void PositionFrame::AllOk(void){
+    
+    wxCommandEvent dummy;
+    
+    get(dummy);
     
     button_ok->Enable((lat->is_ok()) && (lon->is_ok()));
     
@@ -14746,7 +14751,7 @@ void SightFrame::SetIdling(bool b){
 
 
 
-//this function checks whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span: if all these conditions are true, it enables the button_reduce
+//write the content in the GUI fields into the non=GUI fields, and check whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span: if all these conditions are true, it enables the button_reduce
 void SightFrame::AllOk(void){
     
     wxCommandEvent dummy;

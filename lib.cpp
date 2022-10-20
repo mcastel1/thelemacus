@@ -12043,6 +12043,7 @@ template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
 void DeleteSight::operator()(wxCommandEvent& event){
     
     int i_related_route;
+    unsigned int j;
     
     i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
     
@@ -12051,6 +12052,27 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
     (f->listcontrol_sights)->set((f->plot)->sight_list);
     (f->listcontrol_routes)->set((f->plot)->route_list);
+    
+    //given that I called set in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
+    for(j=0; j<((f->listcontrol_sights)->disableable_buttons).size(); j++){
+        
+        (((f->listcontrol_sights)->disableable_buttons)[j])->Enable(false);
+        
+    }
+    
+    if(remove_related_route == Answer('y', String(""))){
+        
+        //given that I called set for listcontrol_routes, no item is selected in listcontrol_routes -> I disable the modify_, transport_ and delete_route buttons
+        for(j=0; j<((f->listcontrol_routes)->disableable_buttons).size(); j++){
+            
+            (((f->listcontrol_routes)->disableable_buttons)[j])->Enable(false);
+            
+        }
+
+        
+        
+    }
+
     
     event.Skip(true);
     
@@ -12241,7 +12263,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     (f->listcontrol_sights)->set((f->plot)->sight_list);
     (f->listcontrol_routes)->set((f->plot)->route_list);
     
-    //given that after one item is deleted in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
+    //given that I called set in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
     for(j=0; j<((f->listcontrol_routes)->disableable_buttons).size(); j++){
         
         (((f->listcontrol_routes)->disableable_buttons)[j])->Enable(false);
@@ -12273,7 +12295,7 @@ void DeletePosition::operator()(wxCommandEvent& event){
         (f->plot)->remove_position(((unsigned int)i), String(""));
         (f->listcontrol_positions)->set((f->plot)->position_list);
         
-        //given that after one item is deleted in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
+        //given that I called set in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
         for(j=0; j<((f->listcontrol_positions)->disableable_buttons).size(); j++){
             
             (((f->listcontrol_positions)->disableable_buttons)[j])->Enable(false);

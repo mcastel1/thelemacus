@@ -17039,10 +17039,10 @@ template<class T> void ListControl::set(vector<T> v){
 void ListControl::EnableButtons(bool check){
  
     unsigned int i;
-    
-    for(i=0; i<((((ListFrame*)GetParent())->listcontrol_positions)->disableable_buttons).size(); i++){
         
-        (((((ListFrame*)GetParent())->listcontrol_positions)->disableable_buttons)[i])->Enable(check);
+    for(i=0; i<disableable_buttons.size(); i++){
+        
+        (disableable_buttons[i])->Enable(check);
         
     }
     

@@ -49,16 +49,18 @@
 
 void MyApp::OnTimer(wxTimerEvent& event){
 
-    Color background_color_new;
+    wxSystemSettings settings;
     
-    background_color_new = Color((list_frame->extract_colors)->GetBackgroundColour());
-    
-    if(background_color_new != background_color){
+    if((settings.GetAppearance()).IsDark()){
         
-        foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
-        background_color = Color(list_frame->extract_colors->GetBackgroundColour());
-
+        
+        
     }
+          
+//        foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
+//        background_color = Color(list_frame->extract_colors->GetBackgroundColour());
+
+ 
     
 }
 

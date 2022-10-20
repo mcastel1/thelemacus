@@ -10,7 +10,6 @@
 //#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/app.h"
-#include "wx/datetime.h"
 //#endif
 
 #include <iostream>

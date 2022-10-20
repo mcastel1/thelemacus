@@ -7,7 +7,8 @@
 #include "wx/slider.h"
 #include "wx/mstream.h"
 #include "wx/timer.h"
-
+#include "wx/datetime.h"
+#include "wx/settings.h"
 
 
 #ifndef WX_PRECOMP

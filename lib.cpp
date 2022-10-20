@@ -12217,6 +12217,7 @@ DeleteRoute::DeleteRoute(ListFrame* f_in, Answer remove_related_sight_in){
 void DeleteRoute::operator()(wxCommandEvent& event){
     
     int i_related_sight;
+    unsigned int j;
     
     i_related_sight = ((((f->plot)->route_list)[i_route_to_remove]).related_sight).value;
     
@@ -12225,14 +12226,27 @@ void DeleteRoute::operator()(wxCommandEvent& event){
         
         (f->listcontrol_sights)->DeleteItem(i_related_sight);
         
+        //given that after one item is deleted in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
+        for(j=0; j<((f->listcontrol_sights)->disableable_buttons).size(); j++){
+            
+            (((f->listcontrol_sights)->disableable_buttons)[j])->Enable(false);
+            
+        }
+
     }
     
     //I remove the route and the related sight from both the non-GUI object plot
     (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
-    //    f->UpdateRelatedSightsAndRoutes();
     (f->listcontrol_sights)->set((f->plot)->sight_list);
     (f->listcontrol_routes)->set((f->plot)->route_list);
+    
+    //given that after one item is deleted in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
+    for(j=0; j<((f->listcontrol_routes)->disableable_buttons).size(); j++){
+        
+        (((f->listcontrol_routes)->disableable_buttons)[j])->Enable(false);
+        
+    }
     
     event.Skip(true);
     

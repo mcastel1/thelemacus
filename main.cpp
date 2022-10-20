@@ -39,7 +39,6 @@
  - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
- - when you delete a Position, make sure that buttons that modify and delete a position are disabled
  - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
   - when you reduce a Sight, the selected items in listcontrol_sights change -> call OnSelectInListControl to enable/disable the correct buttons accordingly
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value

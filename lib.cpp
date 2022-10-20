@@ -12254,15 +12254,18 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
     if(i != -1){
         
-        //        (f->listcontrol_positions)->DeleteItem(i);
+        unsigned int j;
+        
         (f->plot)->remove_position(((unsigned int)i), String(""));
-        
-        //        for(i=0; i<((f->listcontrol_positions)->GetItemCount()); i++){
-        //            (f->listcontrol_positions)->SetItem(i, 0, wxString::Format(wxT("%i"), ((unsigned int)(i+1))));
-        //        }
-        
         (f->listcontrol_positions)->set((f->plot)->position_list);
         
+        //given that after one item is deleted in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
+        for(j=0; j<((f->listcontrol_positions)->disableable_buttons).size(); j++){
+            
+            (((f->listcontrol_positions)->disableable_buttons)[j])->Enable(false);
+            
+        }
+       
     }
     
     event.Skip(true);

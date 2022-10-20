@@ -1230,7 +1230,7 @@ public:
     void PushBackColumn(wxString);
     void DeselectAll(void);
     template<class T> void set(vector<T>);
-    void DisableButtons(void);
+    void EnableButtons(bool);
     
 };
 

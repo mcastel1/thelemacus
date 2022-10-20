@@ -135,7 +135,8 @@ bool MyApp::OnInit(){
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
-    
+    time_check.read_from_file(String("time check"), String(path_file_init), String(""));
+
     max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
     min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
     
@@ -222,7 +223,7 @@ bool MyApp::OnInit(){
     error_font = (list_frame->extract_colors->GetFont());
     error_font.SetWeight(wxFONTWEIGHT_BOLD);
     
-    timer->Start(1000, wxTIMER_CONTINUOUS);
+    timer->Start(/*time_check is converted in milliseconds, because Start() takes its first argument i milliseconds*/((time_check.h)*60.0*60.0 + (time_check.m)*60.0 + (time_check.s)) * 1000.0, wxTIMER_CONTINUOUS);
     
     
     return true;

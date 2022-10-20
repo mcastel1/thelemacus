@@ -67,6 +67,8 @@ public:
     Int time_zone;
     wxTimer* timer;
     wxSystemSettings* settings;
+    //the code checks every time_check whether the operating system has changed its light/dark mode
+    Chrono time_check;
     //this is true/false if the system is in dark/light mode, respectively
     bool dark_mode;
 

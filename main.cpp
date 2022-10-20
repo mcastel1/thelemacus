@@ -47,14 +47,13 @@
  - when you press button_reduce in SightFrame, you should call on_change_selection_in_listcontrol_sights in such a way that some buttons are deactivated in listcontrol_sights, and same for other listcontrols
  */
 
+//this function is executed reguarly over time, to check some things
 void MyApp::OnTimer(wxTimerEvent& event){
 
     wxSystemSettings settings;
     
     if((settings.GetAppearance()).IsDark()){
-        
-        
-        
+        list_frame->DrawAll();
     }
           
 //        foreground_color = Color(list_frame->extract_colors->GetForegroundColour());

@@ -50,17 +50,13 @@
 //this function is executed reguarly over time, to check some things
 void MyApp::OnTimer(wxTimerEvent& event){
 
-    wxSystemSettings settings;
-    
-    if((settings.GetAppearance()).IsDark()){
+    if(dark_mode != ((settings->GetAppearance()).IsDark())){
+        //if the dark mode of the operating system has changed, I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
         list_frame->DrawAll();
     }
-          
-//        foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
-//        background_color = Color(list_frame->extract_colors->GetBackgroundColour());
-
- 
-    
+     
+    dark_mode = (settings->GetAppearance()).IsDark();
+     
 }
 
 bool MyApp::OnInit(){
@@ -132,6 +128,7 @@ bool MyApp::OnInit(){
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
 //    Chrono current_time, dawn, dusk;
     
+    settings = new wxSystemSettings();
     timer = new wxTimer();
     
     wxImage::AddHandler(new wxPNGHandler);
@@ -173,7 +170,8 @@ bool MyApp::OnInit(){
     foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
     error_color.read_from_file(String("error color"), String(path_file_init), String(""));
-    
+    dark_mode = (settings->GetAppearance()).IsDark();
+
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));
     rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));

@@ -66,6 +66,9 @@ public:
     wxFont default_font, error_font;
     Int time_zone;
     wxTimer* timer;
+    wxSystemSettings* settings;
+    //this is true/false if the system is in dark/light mode, respectively
+    bool dark_mode;
 
     virtual bool OnInit();
     void OnTimer(wxTimerEvent&);

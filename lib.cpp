@@ -13584,12 +13584,13 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
     }
     
-    //    parent->UpdateRelatedSightsAndRoutes();
     (parent->listcontrol_sights)->set((parent->plot)->sight_list);
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
     
-    //    route->add_to_wxListCtrl(position_in_listcontrol_routes, ((this->parent)->listcontrol_routes));
-    
+    //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
+    (parent->listcontrol_sights)->EnableButtons(false);
+    (parent->listcontrol_routes)->EnableButtons(false);
+
     
     parent->DrawAll();
     

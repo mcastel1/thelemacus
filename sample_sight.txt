@@ -56,7 +56,6 @@
         starting heading = 51° 16.7866'
         length = 3245.5847893679 nm
         label = come va
-        Related sight # = -1
     Positions in the plot:
         Position #1:
 			latitude = 48° 51.179385474737415506751858629286'

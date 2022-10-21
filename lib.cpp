@@ -13530,8 +13530,10 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
         (((this->parent)->plot)->position_list).push_back(*position);
     }
     
-    //    position->add_to_wxListCtrl(position_in_listcontrol_positions, ((this->parent)->listcontrol_positions));
     (parent->listcontrol_positions)->set((parent->plot)->position_list);
+    
+    //given that I have reset the content of listcontrol_positions, no items will be selected in this ListControl -> I disable its disableable buttons
+    (parent->listcontrol_positions)->EnableButtons(false);
     
     parent->DrawAll();
     

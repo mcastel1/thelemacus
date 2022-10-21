@@ -11993,7 +11993,7 @@ DeleteSight::DeleteSight(ListFrame* f_in, Answer remove_related_route_in){
     
 }
 
-ModifyRoute::ModifyRoute(ListFrame* f_in){
+ExistingRoute::ExistingRoute(ListFrame* f_in){
     
     f = f_in;
     
@@ -12068,7 +12068,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
 }
 
-void ModifyRoute::operator()(wxCommandEvent& event){
+void ExistingRoute::operator()(wxCommandEvent& event){
     
     (f->print_info_message->control) = NULL;
     (f->print_info_message->title) = String("");
@@ -13964,8 +13964,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     delete_position = new DeletePosition(this);
     
     
-    //initialized modify_route and create_route, which define the functors to modify / create a Route
-    modify_route = new ModifyRoute(this);
+    //initialized existing_route and create_route, which define the functors to modify / create a Route
+    existing_route = new ExistingRoute(this);
     create_route = new NewRoute(this);
     
     catalog = new Catalog(String(path_file_catalog), String(""));
@@ -14370,8 +14370,8 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-    QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,
-                                                                                                    modify_route,
+    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
+                                                                                                    existing_route,
                                                                                                     String("Existing route"),
                                                                                                     create_route, String("New route"),
                                                                                                     "",
@@ -14394,8 +14394,8 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-    QuestionFrame<ModifyRoute, NewRoute>* question_frame = new QuestionFrame<ModifyRoute, NewRoute>(NULL,
-                                                                                                    modify_route,
+    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
+                                                                                                    existing_route,
                                                                                                     String("Existing route"),
                                                                                                     create_route, String("New route"),
                                                                                                     "",

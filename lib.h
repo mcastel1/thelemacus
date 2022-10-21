@@ -1278,11 +1278,11 @@ public:
 };
 
 //this class defines a functor () used to modify an existing Route
-class ModifyRoute{
+class ExistingRoute{
     
 public:
     
-    ModifyRoute(ListFrame*);
+    ExistingRoute(ListFrame*);
     
     //the frame which called this struct
     ListFrame* f;
@@ -1963,7 +1963,7 @@ public:
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     DeletePosition *delete_position;
     OnChangeSelectionInListControl *on_change_selection_in_listcontrol_sights, *on_change_selection_in_listcontrol_routes, *on_change_selection_in_listcontrol_positions;
-    ModifyRoute *modify_route;
+    ExistingRoute *existing_route;
     NewRoute *create_route;
     bool selection_rectangle,   /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/
      idling;

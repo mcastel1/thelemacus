@@ -12070,22 +12070,27 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 void ExistingRoute::operator()(wxCommandEvent& event){
     
-    unsigned int i;
+    int i;
+    vector<Route> route_list_no_related_sight;
     
     (f->print_info_message->control) = NULL;
     (f->print_info_message->title) = String("");
     (f->print_info_message->message) = String("Select the route with which you want to transport the sight");
     (*(f->print_info_message))();
     
-    for(i=0; i<((f->listcontrol_routes)->GetItemCount()); i++){
+    
+    //Gvien that a sight must be transported only with a Route that does not come from a Sight, I store in route_list_no_related_sight the Routes in route_list which are not related to any sight, show route_list_no_related_sight in listcontrol_routes, and let the user select one item in route_list_no_related_sight to transport the Sight
+    for(i=0; i<((f->plot)->route_list).size(); i++){
         
-        if((((((f->plot)->route_list)[i]).related_sight).value) != -1){
+        if((((((f->plot)->route_list)[i]).related_sight).value) == -1){
         
-            (f->listcontrol_routes)->DeleteItem(i);
+            route_list_no_related_sight.push_back(((f->plot)->route_list)[i]);
             
         }
         
     }
+    
+    (f->listcontrol_routes)->set(route_list_no_related_sight);
     
     event.Skip(true);
     

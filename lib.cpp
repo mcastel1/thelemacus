@@ -12070,10 +12070,22 @@ void DeleteSight::operator()(wxCommandEvent& event){
 
 void ExistingRoute::operator()(wxCommandEvent& event){
     
+    unsigned int i;
+    
     (f->print_info_message->control) = NULL;
     (f->print_info_message->title) = String("");
     (f->print_info_message->message) = String("Select the route with which you want to transport the sight");
     (*(f->print_info_message))();
+    
+    for(i=0; i<((f->listcontrol_routes)->GetItemCount()); i++){
+        
+        if((((((f->plot)->route_list)[i]).related_sight).value) == -1){
+        
+            (f->listcontrol_routes)->DeleteItem(i);
+            
+        }
+        
+    }
     
     event.Skip(true);
     

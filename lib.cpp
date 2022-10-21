@@ -12079,7 +12079,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     
     for(i=0; i<((f->listcontrol_routes)->GetItemCount()); i++){
         
-        if((((((f->plot)->route_list)[i]).related_sight).value) == -1){
+        if((((((f->plot)->route_list)[i]).related_sight).value) != -1){
         
             (f->listcontrol_routes)->DeleteItem(i);
             

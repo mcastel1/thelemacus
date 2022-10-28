@@ -12700,13 +12700,34 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 //if an item in listcontrol_sights is selected, I transport the sight/position under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
-    int i_object_to_transport, i_transporting_route;
+    int i, i_object_to_transport, i_transporting_route;
     
     //the id of the Route which will transport
-    i_transporting_route = ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    
+    
+    
+    
+    for(i_transporting_route=0, i=0; i_transporting_route<((f->plot)->route_list).size(); i_transporting_route++){
+        
+        if((((((f->plot)->route_list)[i_transporting_route]).related_sight).value) == -1){
+            
+            if(i == ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)))){
+                
+                break;
+                
+            }
+            
+            i++;
+        
+        }
+        
+    }
+    
     
     
     if(transported_object == String("route")){
+        
+        String new_label;
         
         //the id of the Route that will be transported,
         i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
@@ -12719,6 +12740,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                           
                                                                                           );
         
+        //the new label which will be given to the transported Route
+        new_label = ((((f->plot)->route_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
         
         //set back listcontrol_routes to route_list, in order to include all routes (not only those which are not related to a sight)
         (f->listcontrol_routes)->set((f->plot)->route_list);
@@ -12730,7 +12753,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
         
         //change the label of Route #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
-        ((((f->plot)->route_list)[i_object_to_transport]).label) = ((((f->plot)->route_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        ((((f->plot)->route_list)[i_object_to_transport]).label) = new_label;
         
         //update the Route information in f, and re-draw everything
         (((f->plot)->route_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_routes);

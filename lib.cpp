@@ -12043,7 +12043,6 @@ template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
 void DeleteSight::operator()(wxCommandEvent& event){
     
     int i_related_route;
-    unsigned int j;
     
     i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
     

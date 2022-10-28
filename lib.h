@@ -1965,8 +1965,7 @@ public:
     OnChangeSelectionInListControl *on_change_selection_in_listcontrol_sights, *on_change_selection_in_listcontrol_routes, *on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *create_route;
-    bool selection_rectangle,   /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight
-     idling;
+    bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling;
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines;
 
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;

@@ -12722,6 +12722,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         //set back listcontrol_routes to route_list, in order to include all routes (not only those which are not related to a sight)
         (f->listcontrol_routes)->set((f->plot)->route_list);
+        //given that the transport is over, set highlight_routes back to true
+        (f->highlight_routes) = true;
 
         
         //given that I am transporting a Route related to a Sight, disconnect the Route from the sight

@@ -12719,6 +12719,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                           
                                                                                           );
         
+        
+        //set back listcontrol_routes to route_list, in order to include all routes (not only those which are not related to a sight)
+        (f->listcontrol_routes)->set((f->plot)->route_list);
+
+        
         //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
         f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
         
@@ -14643,7 +14648,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
             
         }
         
-        if(highlighted_route != wxNOT_FOUND){
+        if((highlighted_route != wxNOT_FOUND) && enable_highlight){
             //in this case, the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
             
             j = ((((plot->route_list)[highlighted_route]).related_sight).value);

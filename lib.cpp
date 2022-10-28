@@ -12077,8 +12077,10 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     (f->print_info_message->message) = String("Select the route with which you want to transport the sight");
     (*(f->print_info_message))();
     
+    //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
+    (f->enable_highlight) = false;
     
-    //Gvien that a sight must be transported only with a Route that does not come from a Sight, I store in route_list_no_related_sight the Routes in route_list which are not related to any sight, show route_list_no_related_sight in listcontrol_routes, and let the user select one item in route_list_no_related_sight to transport the Sight
+    //Given that a sight must be transported only with a Route that does not come from a Sight, I store in route_list_no_related_sight the Routes in route_list which are not related to any sight, show route_list_no_related_sight in listcontrol_routes, and let the user select one item in route_list_no_related_sight to transport the Sight
     for(i=0; i<((f->plot)->route_list).size(); i++){
         
         if((((((f->plot)->route_list)[i]).related_sight).value) == -1){

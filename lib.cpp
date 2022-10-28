@@ -13866,6 +13866,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     idling = false;
+    enable_highlight = true;
     unset_idling = new UnsetIdling<ListFrame>(this);
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
@@ -14590,7 +14591,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         
     }else{
         
-        if(highlighted_sight != wxNOT_FOUND){
+        if((highlighted_sight != wxNOT_FOUND) && enable_highlight){
             //in this case, the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
             
             highlighted_route = ((((plot->sight_list)[highlighted_sight]).related_route).value);

@@ -27,20 +27,20 @@
  ********** THINGS TO FIX ************
  
  - set parents to constructors of all frames that you defined
- - transfrom all angular qantities in units of radians
+ - transfrom all angular quantities in units of radians
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function
  - in Route::draw_3D, code the part for loxodrome curves
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
- -                                 sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
+ -   sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - it seems that DrawPanel::Draw_3D/Mercator  is called multiple times at the beginning of the code, and this is pointless -> check
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
  - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - when you are about to select and existing route to transport a sight or position, disable in list_routes the routes which come from a sight
  - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
  - when you press button_reduce in SightFrame, you should call on_change_selection_in_listcontrol_sights in such a way that some buttons are deactivated in listcontrol_sights, and same for other listcontrols
+ - curves are cut as they go through greenwich meridian in mercator projection
  */
 
 //this function is executed reguarly over time, to check some things

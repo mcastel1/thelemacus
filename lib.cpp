@@ -9213,7 +9213,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((parent->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, String("NS"));
+        PutLabel(q, /*I give to putlabel the interval between the smallest and the largest parallel tick: this will wllo PutLabel to verify whether the tick interval spans one arcdegree or more*/ceil((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, floor((((parent->phi_max).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi, display_precision, String("NS"));
         
     }
     
@@ -9225,7 +9225,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q, parent->lambda_max, parent->lambda_min, String("EW"));
+        PutLabel(q, parent->lambda_max, parent->lambda_min, display_precision, String("EW"));
         
     }
     
@@ -9562,7 +9562,7 @@ void DrawPanel::Draw_3D(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, parent->phi_min, parent->phi_max, String("NS"));
+        PutLabel(q, parent->phi_min, parent->phi_max, display_precision, String("NS"));
         
     }
     
@@ -9574,7 +9574,7 @@ void DrawPanel::Draw_3D(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q, parent->lambda_max, parent->lambda_min, String("EW"));
+        PutLabel(q, parent->lambda_max, parent->lambda_min, display_precision, String("EW"));
         
     }
     

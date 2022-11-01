@@ -1863,9 +1863,18 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String pref
             if(check){
                 //there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
                 
-                s->resize(2);
-                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
-                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
+                unsigned int i;
+                
+                //                s->resize(2);
+                //                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
+                //                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
+                
+                for(s->resize(t.size()), i=0; i<(t.size()); i++) {
+                    
+                    ((*s)[i]).set(String(""), ((t[i]).value)*Re, String(""));
+                    
+                }
+                
                 
                 t.clear();
                 

@@ -8678,7 +8678,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 }
 
 //This function draws into *this the text label for a parallel or a meridian, by placing it near the Positian q. The latitude/longitude in the text label is q.phi/q.lambda, and the labels are wxStaticText objects which are stored in label_phi/label_lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
-void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
+void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, Int precision, String mode){
     
     wxPoint p;
     vector<StaticText*>* labels;
@@ -8715,7 +8715,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
         if(/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(K*(angle_label.value)-round(K*(angle_label.value))) < epsilon_double){
             //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             
-            s << angle_label.deg_to_string(mode, (display_precision.value));
+            s << angle_label.deg_to_string(mode, (precision.value));
             
         }else{
             
@@ -8723,7 +8723,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
             if(k*fabs(K*(angle_label.value) - ((double)round(K*(angle_label.value)))) < delta/2.0){
                 //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
                 
-                s << angle_label.deg_to_string(mode, (display_precision.value));
+                s << angle_label.deg_to_string(mode, (precision.value));
                 
             }else{
                 //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
@@ -8732,18 +8732,18 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, String mode){
                 if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
                     //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                     
-                    s << angle_label.min_to_string(mode, (display_precision.value));
+                    s << angle_label.min_to_string(mode, (precision.value));
                     
                 }else{
                     //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
                     
                     if(first_label){
                         
-                        s << angle_label.to_string(mode, (display_precision.value), false);
+                        s << angle_label.to_string(mode, (precision.value), false);
                         
                     }else{
                         
-                        s << angle_label.min_to_string(mode, (display_precision.value));
+                        s << angle_label.min_to_string(mode, (precision.value));
                         
                     }
                     

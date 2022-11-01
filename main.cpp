@@ -39,7 +39,6 @@
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
-  - curves are cut as they go through greenwich meridian in mercator projection
  */
 
 //this function is executed reguarly over time, to check some things

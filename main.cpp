@@ -37,7 +37,6 @@
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
  - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - fix limits in PutLabel(q, plot->lambda_max, plot->lambda_min, String("EW"))
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
  */
 

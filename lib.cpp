@@ -10137,18 +10137,20 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
 //this function computes x_min, ... y_max and from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void){
     
-    x_min = x_mercator(K*((parent->lambda_min).value));
-    x_max = x_mercator(K*((parent->lambda_max).value));
-    y_min = y_mercator(K*((parent->phi_min).value));
-    y_max = y_mercator(K*((parent->phi_max).value));
+    Projection p_min, p_max;
     
-    //    if(x_max >= x_min){
-    //        //in this case, x_max, x_min do not encompass the meridian lambda = pi
-    //        x_span = x_max-x_min;
-    //    }else{
-    //        //in this case, x_max, x_min encompass the meridian lambda = pi
-    //        x_span = 2.0*M_PI - (x_min-x_max);
-    //    }
+    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
+    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
+    
+    x_min = (p_min.x);
+    y_min = (p_min.y);
+    x_max = (p_max.x);
+    y_max = (p_max.y);
+    
+    //    x_min = x_mercator(K*((parent->lambda_min).value));
+    //    x_max = x_mercator(K*((parent->lambda_max).value));
+    //    y_min = y_mercator(K*((parent->phi_min).value));
+    //    y_max = y_mercator(K*((parent->phi_max).value));
     
 }
 
@@ -10807,8 +10809,10 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     Projection temp;
     bool b;
     
-    (temp.x) = x_mercator(K*((q.lambda).value));
-    (temp.y) = y_mercator(K*((q.phi).value));
+//    (temp.x) = x_mercator(K*((q.lambda).value));
+//    (temp.y) = y_mercator(K*((q.phi).value));
+    
+    (this->*GeoToProjection)(q, &temp, true);
     
     b = check(temp);
     

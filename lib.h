@@ -621,7 +621,7 @@ public:
 };
 
 
-
+/*
 //this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
 inline double x_mercator(double lambda){
     
@@ -648,7 +648,8 @@ inline double y_mercator(double phi){
     return log(1./cos(phi_temp*k) + tan(phi_temp*k));
     
 }
-
+*/
+ 
 //this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
 inline double lambda_mercator(double x){
     

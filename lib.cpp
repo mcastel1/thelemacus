@@ -9854,10 +9854,15 @@ void ChartFrame::OnClose(wxCloseEvent& event){
 template<class T> void ChartFrame::MoveUp(T& event){
     
     double delta;
+    Projection p_ceil_min, p_floor_max;
     
     delta = (relative_displacement.value) * ((draw_panel->y_max)-(draw_panel->y_min));
     
-    if(((draw_panel->y_max)+delta < y_mercator(floor_max_lat)) && ((draw_panel->y_min)+delta > y_mercator(ceil_min_lat))){
+    (draw_panel->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
+    (draw_panel->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
+
+    
+    if(((draw_panel->y_max)+delta < (p_floor_max.y)) && ((draw_panel->y_min)+delta > (p_ceil_min.y))){
         //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
         
         //update y_min, y_max according to the drag.

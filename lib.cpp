@@ -12356,8 +12356,6 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
     if(i != -1){
         
-        unsigned int j;
-        
         (f->plot)->remove_position(((unsigned int)i), String(""));
         (f->listcontrol_positions)->set((f->plot)->position_list);
         

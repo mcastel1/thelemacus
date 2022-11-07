@@ -11602,11 +11602,16 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         //in this case, I am using the mercator projection
                         
                         double delta_x, delta_y;
+                        Projection p_ceil_min, p_floor_max;
                         
                         delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
                         delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
                         
-                        if((y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_max_start_drag) < y_mercator(floor_max_lat)) && (y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min_start_drag) > y_mercator(ceil_min_lat))){
+                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
+                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
+
+                        
+                        if((y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min_start_drag) > (p_ceil_min.y))){
                             //in this case, the drag operation does not end out of the min and max latitude contained in the data files
                             
                             //update x_min, ..., y_max according to the drag.

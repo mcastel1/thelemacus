@@ -11237,11 +11237,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                 
                 double delta_x, delta_y;
-                
+                Projection p_ceil_min, p_floor_max;
+
                 delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
                 delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
                 
-                if((!((y_max+delta_y < y_mercator(floor_max_lat)) && (y_min+delta_y > y_mercator(ceil_min_lat))))){
+                (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
+                (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
+
+                
+                if((!((y_max+delta_y < (p_floor_max.y)) && (y_min+delta_y > (p_ceil_min.y))))){
                     //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset x_min , .... , y_max to their original values
                     
                     x_min = x_min_start_drag;

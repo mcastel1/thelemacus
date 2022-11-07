@@ -10813,16 +10813,43 @@ void DrawPanel::GeoToScreen(Position q, wxPoint *p){
     
 }
 
+
+//this function returns the rectangular x value of the spherical Mercator projection from the longitude lambda (expressed in degrees, positive towards W).
+//inline double x_mercator(double lambda){
+//
+//    //construct lambda_temp and set it to lambda, in order to report lambda in the interval [0, 2pi)
+//    Angle lambda_temp;
+//
+//    lambda_temp.set(String(""), lambda*k, String(""));
+//
+//    //return x by taking into account the periodicity of the projection
+//    return( -((lambda_temp.value) - floor((lambda_temp.value)/M_PI)*2.0*M_PI) );
+//
+//}
+
+//this function returns the rectangular y value of the spherical Mercator projection from the latitude phi (expressed in degrees).
+//inline double y_mercator(double phi){
+//
+//    double phi_temp;
+//
+//    phi_temp = phi;
+//
+//    //puts the phi_temp value in the range [-180.0, +180.0]
+//    if(phi > +180.0){phi_temp-=360.0;}
+//
+//    return log(1./cos(phi_temp*k) + tan(phi_temp*k));
+//
+//}
+
+
 // If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
 bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     
     Projection temp;
     bool b;
     
-//    (temp.x) = x_mercator(K*((q.lambda).value));
-//    (temp.y) = y_mercator(K*((q.phi).value));
-    
-    (this->*GeoToProjection)(q, &temp, true);
+    (temp.x) = -(((q.lambda).value) - floor(((q.lambda).value)/M_PI)*2.0*M_PI);
+    (temp.y) = log(1.0/cos((q.phi)) + tan((q.phi)));
     
     b = check(temp);
     
@@ -12285,7 +12312,6 @@ DeleteRoute::DeleteRoute(ListFrame* f_in, Answer remove_related_sight_in){
 void DeleteRoute::operator()(wxCommandEvent& event){
     
     int i_related_sight;
-    unsigned int j;
     
     i_related_sight = ((((f->plot)->route_list)[i_route_to_remove]).related_sight).value;
     

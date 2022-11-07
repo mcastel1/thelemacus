@@ -11918,14 +11918,19 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
+        Projection p_min, p_max;
+
+        
         //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
         (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
         (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
         (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
         (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
         
+        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(max_lat)), &p_max, true);
+        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(min_lat)), &p_min, true);
         
-        if((((draw_panel->y_max) <= y_mercator(K*(max_lat.value))) && ((draw_panel->y_min) >= y_mercator(K*(min_lat.value))) && ((draw_panel->x_span()) <= 2.0*M_PI))){
+        if((((draw_panel->y_max) <= (p_max.y)) && ((draw_panel->y_min) >= (p_min.y)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
             (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
             //            ZoomFactor_Mercator((draw_panel->x_span));

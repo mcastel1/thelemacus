@@ -38,7 +38,8 @@
  - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
- - fix bug: sometimes labels are not shown on the x axis in the Mercator projection
+ - fix bug: in Mercator mode, x labels are not shown on first Draw_Mercator call, but they are shown wehen you press reset
+- in Mercator projection, if you drag and go through the lambda = pi meridian there are problems
  */
 
 //this function is executed reguarly over time, to check some things

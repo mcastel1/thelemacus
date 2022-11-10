@@ -9560,25 +9560,29 @@ void DrawPanel::Draw_3D(void){
     
     //draw labels on parallels
     for(first_label = true,
+        //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2+ceil(fabs(log(delta_phi*K*60)))),
         ((q.phi).value) = floor((circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value)/delta_phi)*delta_phi,
         (q.lambda) = lambda_middle;
         ((q.phi).value) < circle_observer.reference_position.phi.normalize_pm_pi_ret().value + circle_observer.omega.value;
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, parent->phi_min, parent->phi_max, display_precision, String("NS"));
+        PutLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
         
     }
     
     //draw labels on meridians
     for(first_label = true,
+        //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
+        (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2+ceil(fabs(log(delta_lambda*K*60)))),
         ((q.lambda).value) = (lambda_start.value),
         (q.phi) = phi_middle;
         ((q.lambda).value) < (lambda_end.value);
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q, parent->lambda_max, parent->lambda_min, display_precision, String("EW"));
+        PutLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
         
     }
     

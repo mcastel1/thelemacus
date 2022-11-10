@@ -9207,13 +9207,15 @@ void DrawPanel::Draw_Mercator(void){
     
     //draw labels on parallels
     for(first_label = true,
+        //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2+ceil(fabs(log(delta_phi*K*60)))),
         ((q.phi).value) = (phi_start.value),
         (q.lambda) = (parent->lambda_min) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, parent->phi_min, parent->phi_max, display_precision, String("NS"));
+        PutLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
         
     }
     

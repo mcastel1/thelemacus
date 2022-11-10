@@ -1489,7 +1489,10 @@ public:
     x_min_0, x_max_0, y_min_0, y_max_0, x_span_0,
     /*the coordinates of the center of the projection when scrolling starts*/ x_center_scrolling, y_center_scrolling,
     /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi,     /*this is a quantity resulting from the 3D projection: if and only if it is >= 0, then the point under consideration in the 3d projeciton lies on the visible surface of the earth */ arg_sqrt;
-;
+    //the precision used to print out labels
+    Int label_precision;
+    
+    
     //the euler angles which specify the orientation of the earth for the 3d representation
     //two auxiliary vectors which will be used later
     gsl_vector *r, /*vector position in the x'y'z' reference frame used for multiple purposes*/*rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;

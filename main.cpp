@@ -32,13 +32,11 @@
  - in Route::draw_3D, code the part for loxodrome curves
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  -   sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
- - it seems that DrawPanel::Draw_3D/Mercator  is called multiple times at the beginning of the code, and this is pointless -> check
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
  - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
- - fix bug: in Mercator mode, x labels are not shown on first Draw_Mercator call, but they are shown wehen you press reset
 - in Mercator projection, if you drag and go through the lambda = pi meridian there are problems
  */
 

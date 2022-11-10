@@ -10225,31 +10225,6 @@ bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p){
     
 }
 
-////checks if x lies in the correct interval with respect to x_min, x_max in the Mercator projection
-//bool DrawPanel::check_x(Projection p){
-//    
-//    if(x_min <= x_max){
-//        //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
-//        
-//        return((x_min <= (p.x)) && ((p.x) <= x_max));
-//        
-//    }else{
-//        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
-//        
-//        return((x_min <= (p.x)) || ((p.x) <= x_max));
-//        
-//    }
-//    
-//}
-//
-////check whether the Projection p is valid in the Mercator projection
-//bool DrawPanel::check(Projection p){
-//    
-//    return((check_x(p) && (y_min <= (p.y)) && ((p.y) <= y_max)));
-//    
-//}
-
-
 //generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection.
 Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end){
     

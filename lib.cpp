@@ -10863,7 +10863,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     Projection temp;
     bool check_x, check;
     
-    (temp.x) = -(((q.lambda).value) - floor(((q.lambda).value)/M_PI)*2.0*M_PI);
+    (temp.x) = -(((q.lambda).normalize_pm_pi_ret()).value);
     (temp.y) = log(1.0/cos((q.phi)) + tan((q.phi)));
     
     //compute check_x and, from check_x, compute b

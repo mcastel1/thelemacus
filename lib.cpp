@@ -2240,6 +2240,22 @@ bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
                                 //there are two intersection points -> the part of *this comprised into circle is the one with (*t)[0] < t <(*t)[1] -> all I need to do is sort t
                                 
                                 sort(t->begin(), t->end());
+
+                                compute_end(Length(Re*sin(omega)*(((((*t)[0]).value)+(((*t)[1]).value))/2.0)), String(""));
+                                
+                                if(!(end.is_in(circle, String("")))){
+                                    //the midpoints on *this between t[0] and t[1] is not comprised into circle
+                                    
+                                    //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
+                                    t->push_back(Angle(0.0));
+                                    t->push_back(Angle(2.0*M_PI));
+                                    (t->back()).value = 2.0*M_PI;
+                                    
+                                    sort(t->begin(), t->end());
+
+
+                                }
+                                
                                 
                                 break;
                                 

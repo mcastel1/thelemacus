@@ -35,7 +35,6 @@
  - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
  - remove zoom_factor, because it is related to omega
  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - if displayprecision is too small, contiguous labels on paralles / merdisians show the same value
 - in Mercator projection, if you drag and go through the lambda = pi meridian there are problems
  */
 

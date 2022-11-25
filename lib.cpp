@@ -8987,8 +8987,8 @@ void DrawPanel::Draw_Mercator(void){
     label_phi.resize(0);
     
     //set x_min, ..., y_max for the following
-    Set_x_y_min_max_Mercator();
-    
+    (this->*Set_x_y_min_max)();
+
     //set rectangle_obseerver
     rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_min), Position(parent->lambda_max, parent->phi_max));
     

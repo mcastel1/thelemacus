@@ -10179,12 +10179,7 @@ void DrawPanel::Set_x_y_min_max_Mercator(void){
     y_min = (p_min.y);
     x_max = (p_max.x);
     y_max = (p_max.y);
-    
-    //    x_min = x_mercator(K*((parent->lambda_min).value));
-    //    x_max = x_mercator(K*((parent->lambda_max).value));
-    //    y_min = y_mercator(K*((parent->phi_min).value));
-    //    y_max = y_mercator(K*((parent->phi_max).value));
-    
+        
 }
 
 /*returns a double: the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/

@@ -32,8 +32,7 @@
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  -   sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - add check on zoom factor in OnMouseRightDown for the 3D projections
- - add the stuff on setting d, zoom factor, x_y, lambda_phi in Draw_3D into Draw_Mercator too, and remove it elsewhere if unnecessary
- - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
+  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
 - in Mercator projection, if you drag and go through the lambda = pi meridian there are problems
  */
 

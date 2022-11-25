@@ -8592,7 +8592,7 @@ void DrawPanel::PaintNow(){
     
     (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, height_chart + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)));
     
-    //    (parent->panel)->Fit();
+    (parent->panel)->Fit();
     parent->SetSizerAndFit(parent->sizer_v);
     
     

@@ -10840,7 +10840,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     }else{
         //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
-        check_x = ((x_min <= (temp.x)) || ((temp.x) <= x_max));
+        check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
         
     }
     

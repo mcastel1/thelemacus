@@ -1485,8 +1485,8 @@ Rectangle::Rectangle(void){
     
 }
 
-//constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in
-Rectangle::Rectangle(Position p_NW_in, Position p_SE_in){
+//constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
+Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, String prefix){
     
 //    Angle phi_N, phi_S, lambda_W, lambda_E;
 //
@@ -1511,6 +1511,12 @@ Rectangle::Rectangle(Position p_NW_in, Position p_SE_in){
     
     p_NW = p_NW_in;
     p_SE = p_SE_in;
+    
+    if(!((((p_NW_in.lambda).normalize_pm_pi_ret()) > ((p_SE_in.lambda).normalize_pm_pi_ret())) && (((p_NW_in.phi).normalize_pm_pi_ret()) > ((p_SE_in.phi).normalize_pm_pi_ret())))){
+        
+        cout << prefix.value << RED << "p_NW and p_SE are not ordered!\n" << RESET;
+
+    }
     
 }
 
@@ -8993,7 +8999,7 @@ void DrawPanel::Draw_Mercator(void){
     (this->*Set_x_y_min_max)();
 
     //set rectangle_obseerver
-    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min));
+    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){

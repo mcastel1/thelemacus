@@ -1485,29 +1485,32 @@ Rectangle::Rectangle(void){
     
 }
 
-//constructor which constructs p_NW and p_SE from a and b
-Rectangle::Rectangle(Position a, Position b){
+//constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in
+Rectangle::Rectangle(Position p_NW_in, Position p_SE_in){
     
-    Angle phi_N, phi_S, lambda_W, lambda_E;
+//    Angle phi_N, phi_S, lambda_W, lambda_E;
+//
+//    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
+//
+//    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+//    phi_N.normalize();
+//
+//    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+//    phi_S.normalize();
+//
+//    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+//    lambda_W.normalize();
+//
+//    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+//    lambda_E.normalize();
     
-    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
     
-    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-    phi_N.normalize();
+//    p_NW = Position(lambda_W, phi_N);
+//    p_SE = Position(lambda_E, phi_S);
+
     
-    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-    phi_S.normalize();
-    
-    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-    lambda_W.normalize();
-    
-    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-    lambda_E.normalize();
-    
-    
-    p_NW = Position(lambda_W, phi_N);
-    p_SE = Position(lambda_E, phi_S);
-    
+    p_NW = p_NW_in;
+    p_SE = p_SE_in;
     
 }
 
@@ -8990,7 +8993,7 @@ void DrawPanel::Draw_Mercator(void){
     (this->*Set_x_y_min_max)();
 
     //set rectangle_obseerver
-    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_min), Position(parent->lambda_max, parent->phi_max));
+    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min));
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){

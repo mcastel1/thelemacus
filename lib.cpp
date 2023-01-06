@@ -1512,11 +1512,11 @@ Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, String prefix){
     p_NW = p_NW_in;
     p_SE = p_SE_in;
     
-    if(!((((p_NW_in.lambda).normalize_pm_pi_ret()) > ((p_SE_in.lambda).normalize_pm_pi_ret())) && (((p_NW_in.phi).normalize_pm_pi_ret()) > ((p_SE_in.phi).normalize_pm_pi_ret())))){
-        
-        cout << prefix.value << RED << "p_NW and p_SE are not ordered!\n" << RESET;
-
-    }
+//    if(!((((p_NW_in.lambda).normalize_pm_pi_ret()) > ((p_SE_in.lambda).normalize_pm_pi_ret())) && (((p_NW_in.phi).normalize_pm_pi_ret()) > ((p_SE_in.phi).normalize_pm_pi_ret())))){
+//        
+//        cout << prefix.value << RED << "p_NW and p_SE are not ordered!\n" << RESET;
+//
+//    }
     
 }
  

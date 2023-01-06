@@ -1523,10 +1523,24 @@ Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, String prefix){
 //returns true/false if p is containted in *this
 bool Rectangle::Contains(Position p){
     
-    return( ((p.lambda).normalize_pm_pi_ret() < ((p_NW.lambda).normalize_pm_pi_ret())) &&
-           ((p.lambda).normalize_pm_pi_ret() > ((p_SE.lambda).normalize_pm_pi_ret())) &&
-           ((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
-           ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret())) );
+    bool check_lambda;
+    
+    if((p_NW.lambda) > (p_SE.lambda)){
+        //'normal' configuration where *this does not encompass the anti-greenwich meridian
+        
+        check_lambda = (((p.lambda) < (p_NW.lambda)) && ((p.lambda) > (p_SE.lambda)));
+        
+    }else{
+        //'non-normal' configuration where *this  encompasses the anti-greenwich meridian
+
+        check_lambda = (((p.lambda) < (p_NW.lambda)) || ((p.lambda) > (p_SE.lambda)));
+
+        
+    }
+    
+    return( check_lambda &&
+           (((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
+           ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret()))) );
     
 }
 
@@ -1758,7 +1772,9 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
                     
                 }
                 
-                (draw_panel->memory_dc).DrawSpline((int)(p.size()), p.data());
+                if((p.size())>1){
+                    (draw_panel->memory_dc).DrawSpline((int)(p.size()), p.data());
+                }
                 
                 //free up memory
                 p.clear();
@@ -2427,7 +2443,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
             }
             
             if(rectangle.Contains(end)){
-                //if rectangle contains the emidpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
+                //if rectangle contains the midpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
                 
                 output = true;
                 
@@ -10180,9 +10196,19 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
 void DrawPanel::Set_x_y_min_max_Mercator(void){
     
     Projection p_min, p_max;
+    Position temp;
     
-    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
-    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
+//    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
+//    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
+    
+    temp = Position(parent->lambda_min, parent->phi_min);
+    (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
+    (p_min.y) = log(1.0/cos((temp.phi)) + tan((temp.phi)));
+
+    temp = Position(parent->lambda_max, parent->phi_max);
+    (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
+    (p_max.y) = log(1.0/cos((temp.phi)) + tan((temp.phi)));
+
     
     x_min = (p_min.x);
     y_min = (p_min.y);
@@ -10724,8 +10750,8 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     }else{
         //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
-        check_x = ((x_min <= (temp.x)) || ((temp.x) <= x_max));
-        
+        check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
+
     }
     
     
@@ -10847,7 +10873,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
         check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max));
         
     }else{
-        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
+        //        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
         check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
         
@@ -10862,7 +10888,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
             
             (p->x) = (temp.x);
             //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
-            if((x_max < x_min) && ((p->x) < x_max)){
+            if((x_max < x_min) /*&& ((p->x) < x_max)*/){
                 (p->x) += 2.0*M_PI;
             }
             

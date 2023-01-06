@@ -10887,8 +10887,8 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
         if(p!=NULL){
             
             (p->x) = (temp.x);
-            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
-            if((x_max < x_min) /*&& ((p->x) < x_max)*/){
+            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if p->x is smaller than x_max, then it nees to be translated to the right by 2pi in order to be plotted
+            if((x_max < x_min) && ((p->x) < x_max)){
                 (p->x) += 2.0*M_PI;
             }
             

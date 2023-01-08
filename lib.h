@@ -707,7 +707,7 @@ public:
     Position p_NW, p_SE;
     
     Rectangle();
-    Rectangle(Position, Position);
+    Rectangle(Position, Position, String);
     bool Contains(Position);
     
 };

@@ -1485,39 +1485,62 @@ Rectangle::Rectangle(void){
     
 }
 
-//constructor which constructs p_NW and p_SE from a and b
-Rectangle::Rectangle(Position a, Position b){
+//constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
+Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, String prefix){
     
-    Angle phi_N, phi_S, lambda_W, lambda_E;
+//    Angle phi_N, phi_S, lambda_W, lambda_E;
+//
+//    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
+//
+//    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+//    phi_N.normalize();
+//
+//    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+//    phi_S.normalize();
+//
+//    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+//    lambda_W.normalize();
+//
+//    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+//    lambda_E.normalize();
     
-    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
     
-    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-    phi_N.normalize();
+//    p_NW = Position(lambda_W, phi_N);
+//    p_SE = Position(lambda_E, phi_S);
+
     
-    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-    phi_S.normalize();
+    p_NW = p_NW_in;
+    p_SE = p_SE_in;
     
-    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-    lambda_W.normalize();
-    
-    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-    lambda_E.normalize();
-    
-    
-    p_NW = Position(lambda_W, phi_N);
-    p_SE = Position(lambda_E, phi_S);
-    
+//    if(!((((p_NW_in.lambda).normalize_pm_pi_ret()) > ((p_SE_in.lambda).normalize_pm_pi_ret())) && (((p_NW_in.phi).normalize_pm_pi_ret()) > ((p_SE_in.phi).normalize_pm_pi_ret())))){
+//        
+//        cout << prefix.value << RED << "p_NW and p_SE are not ordered!\n" << RESET;
+//
+//    }
     
 }
-
+ 
 //returns true/false if p is containted in *this
 bool Rectangle::Contains(Position p){
     
-    return( ((p.lambda).normalize_pm_pi_ret() < ((p_NW.lambda).normalize_pm_pi_ret())) &&
-           ((p.lambda).normalize_pm_pi_ret() > ((p_SE.lambda).normalize_pm_pi_ret())) &&
-           ((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
-           ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret())) );
+    bool check_lambda;
+    
+    if((p_NW.lambda) > (p_SE.lambda)){
+        //'normal' configuration where *this does not encompass the anti-greenwich meridian
+        
+        check_lambda = (((p.lambda) < (p_NW.lambda)) && ((p.lambda) > (p_SE.lambda)));
+        
+    }else{
+        //'non-normal' configuration where *this  encompasses the anti-greenwich meridian
+
+        check_lambda = (((p.lambda) < (p_NW.lambda)) || ((p.lambda) > (p_SE.lambda)));
+
+        
+    }
+    
+    return( check_lambda &&
+           (((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
+           ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret()))) );
     
 }
 
@@ -1749,7 +1772,9 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
                     
                 }
                 
-                (draw_panel->memory_dc).DrawSpline((int)(p.size()), p.data());
+                if((p.size())>1){
+                    (draw_panel->memory_dc).DrawSpline((int)(p.size()), p.data());
+                }
                 
                 //free up memory
                 p.clear();
@@ -2418,7 +2443,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
             }
             
             if(rectangle.Contains(end)){
-                //if rectangle contains the emidpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
+                //if rectangle contains the midpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
                 
                 output = true;
                 
@@ -8990,7 +9015,7 @@ void DrawPanel::Draw_Mercator(void){
     (this->*Set_x_y_min_max)();
 
     //set rectangle_obseerver
-    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_min), Position(parent->lambda_max, parent->phi_max));
+    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){
@@ -10171,9 +10196,19 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void){
 void DrawPanel::Set_x_y_min_max_Mercator(void){
     
     Projection p_min, p_max;
+    Position temp;
     
-    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
-    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
+//    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
+//    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
+    
+    temp = Position(parent->lambda_min, parent->phi_min);
+    (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
+    (p_min.y) = log(1.0/cos((temp.phi)) + tan((temp.phi)));
+
+    temp = Position(parent->lambda_max, parent->phi_max);
+    (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
+    (p_max.y) = log(1.0/cos((temp.phi)) + tan((temp.phi)));
+
     
     x_min = (p_min.x);
     y_min = (p_min.y);
@@ -10715,8 +10750,8 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     }else{
         //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
-        check_x = ((x_min <= (temp.x)) || ((temp.x) <= x_max));
-        
+        check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
+
     }
     
     
@@ -10838,9 +10873,21 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
         check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max));
         
     }else{
-        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
+        //        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
-        check_x = ((x_min <= (temp.x)) || ((temp.x) <= x_max));
+        //        check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
+        
+        if((temp.x) > 0.0){
+            //temp.x is positive: for it to fall within the plot area, I only need to check whether it lies betweeen x_min and pi. Given temp.x < pi by definition, I only need to check that temp.x > x_min
+            
+            check_x = ((temp.x) >= x_min);
+            
+        }else{
+            //temp.x is negative: for it to fall within the plot area, I only need to check whether it lies betweeen -pi and x_max. Given temp.x > -pi by definition, I only need to check that temp.x < x_max
+
+            check_x = ((temp.x) <= x_max);
+
+        }
         
     }
     
@@ -10852,7 +10899,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
         if(p!=NULL){
             
             (p->x) = (temp.x);
-            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian
+            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if p->x is smaller than x_max, then it nees to be translated to the right by 2pi in order to be plotted
             if((x_max < x_min) && ((p->x) < x_max)){
                 (p->x) += 2.0*M_PI;
             }

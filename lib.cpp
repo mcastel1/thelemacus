@@ -10875,7 +10875,19 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
     }else{
         //        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
-        check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
+        //        check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
+        
+        if((temp.x) > 0.0){
+            //temp.x is positive: for it to fall within the plot area, I only need to check whether it lies betweeen x_min and pi. Given temp.x < pi by definition, I only need to check that temp.x > x_min
+            
+            check_x = ((temp.x) >= x_min);
+            
+        }else{
+            //temp.x is negative: for it to fall within the plot area, I only need to check whether it lies betweeen -pi and x_max. Given temp.x > -pi by definition, I only need to check that temp.x < x_max
+
+            check_x = ((temp.x) <= x_max);
+
+        }
         
     }
     

@@ -33,7 +33,6 @@
  -   sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - add check on zoom factor in OnMouseRightDown for the 3D projections
   - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
-- in Mercator projection, if you drag and go through the lambda = pi meridian there are problems
  */
 
 //this function is executed reguarly over time, to check some things

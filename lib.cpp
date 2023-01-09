@@ -11495,113 +11495,135 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&((parent->parent)->p_start));
         position_start_selection = position_screen_now;
         //stores the position at the beginning of the selection process, to compute the zoom factor later
-        (this->*ScreenToProjection)(position_start_selection, &start_selection);
+        if((this->*ScreenToProjection)(position_start_selection, &start_selection)){
+            //position_start_selection is valid -> start the selection rectangle
+            
+            ShowCoordinates(position_start_selection, text_position_start);
+            
+        }else{
+            //position_start_selection is not vlid -> delete the selection rectangle by setting selection_rectangle to false
+            
+            ((parent->parent)->selection_rectangle) = false;
+            //I call paintnow to delete the currently drawn selection rectangle
+            PaintNow();
+            
+        }
         
-        ShowCoordinates(position_start_selection, text_position_start);
         
     }else{
         //finish drawing a selection rectangle
         
         GetMouseGeoPosition(&((parent->parent)->p_end));
         position_end_selection = position_screen_now;
-        //stores the x at the end of the selection process, to compute the zoom factor later
-        (this->*ScreenToProjection)(position_end_selection, &end_selection);
         
-        
-        if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
+        //stores the position at the end of the selection process, to compute the zoom factor later
+        if((this->*ScreenToProjection)(position_end_selection, &end_selection)){
+            //position_end_selection is valid
             
-            if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
-                //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
+            
+            if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                 
-                //sets the new values of lambda_min, lambda_max, phi_min and phi_max
-                //                delete chart;
-                //I convert all the angles to the format between -pi and pi, so I can sort them numerically
-                (((parent->parent)->p_start).phi).normalize_pm_pi();
-                (((parent->parent)->p_start).lambda).normalize_pm_pi();
-                (((parent->parent)->p_end).phi).normalize_pm_pi();
-                (((parent->parent)->p_end).lambda).normalize_pm_pi();
-                //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
-                if((((parent->parent)->p_start).lambda)>(((parent->parent)->p_end).lambda)){
-                    (parent->lambda_min) = (((parent->parent)->p_start).lambda);
-                    (parent->lambda_max) = (((parent->parent)->p_end).lambda);
+                if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
+                    //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
+                    
+                    //sets the new values of lambda_min, lambda_max, phi_min and phi_max
+                    //                delete chart;
+                    //I convert all the angles to the format between -pi and pi, so I can sort them numerically
+                    (((parent->parent)->p_start).phi).normalize_pm_pi();
+                    (((parent->parent)->p_start).lambda).normalize_pm_pi();
+                    (((parent->parent)->p_end).phi).normalize_pm_pi();
+                    (((parent->parent)->p_end).lambda).normalize_pm_pi();
+                    //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
+                    if((((parent->parent)->p_start).lambda)>(((parent->parent)->p_end).lambda)){
+                        (parent->lambda_min) = (((parent->parent)->p_start).lambda);
+                        (parent->lambda_max) = (((parent->parent)->p_end).lambda);
+                    }else{
+                        (parent->lambda_min) = (((parent->parent)->p_end).lambda);
+                        (parent->lambda_max) = (((parent->parent)->p_start).lambda);
+                    }
+                    if((((parent->parent)->p_start).phi)>(((parent->parent)->p_end).phi)){
+                        (parent->phi_max) = (((parent->parent)->p_start).phi);
+                        (parent->phi_min) = (((parent->parent)->p_end).phi);
+                    }else{
+                        (parent->phi_min) = (((parent->parent)->p_start).phi);
+                        (parent->phi_max) = (((parent->parent)->p_end).phi);
+                    }
+                    //I normalize lambda_min, ..., phi_max for future use.
+                    (parent->lambda_min).normalize();
+                    (parent->lambda_max).normalize();
+                    (parent->phi_min).normalize();
+                    (parent->phi_max).normalize();
+                    
+                    (((parent->parent)->p_start).phi).normalize();
+                    (((parent->parent)->p_start).lambda).normalize();
+                    (((parent->parent)->p_end).phi).normalize();
+                    (((parent->parent)->p_end).lambda).normalize();
+                    
+                    (this->*Draw)();
+                    PaintNow();
+                    
+                    parent->UpdateSlider();
+                    
                 }else{
-                    (parent->lambda_min) = (((parent->parent)->p_end).lambda);
-                    (parent->lambda_max) = (((parent->parent)->p_start).lambda);
+                    //if the zoom factor is not valid, then I print an error message
+                    
+                    s.str("");
+                    s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
+                    
+                    //set the title and message for the functor print_error_message, and then call the functor
+                    print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()));
+                    
                 }
-                if((((parent->parent)->p_start).phi)>(((parent->parent)->p_end).phi)){
-                    (parent->phi_max) = (((parent->parent)->p_start).phi);
-                    (parent->phi_min) = (((parent->parent)->p_end).phi);
-                }else{
-                    (parent->phi_min) = (((parent->parent)->p_start).phi);
-                    (parent->phi_max) = (((parent->parent)->p_end).phi);
-                }
-                //I normalize lambda_min, ..., phi_max for future use.
-                (parent->lambda_min).normalize();
-                (parent->lambda_max).normalize();
-                (parent->phi_min).normalize();
-                (parent->phi_max).normalize();
-                
-                (((parent->parent)->p_start).phi).normalize();
-                (((parent->parent)->p_start).lambda).normalize();
-                (((parent->parent)->p_end).phi).normalize();
-                (((parent->parent)->p_end).lambda).normalize();
-                
-                (this->*Draw)();
-                PaintNow();
-                
-                parent->UpdateSlider();
-                
-            }else{
-                //if the zoom factor is not valid, then I print an error message
-                
-                s.str("");
-                s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
-                
-                //set the title and message for the functor print_error_message, and then call the functor
-                print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()));
                 
             }
             
+            if((((parent->projection)->name)->GetValue()) == wxString("3D")){
+                
+                Length l1, l2;
+                Position reference_position_old;
+                
+                //store the current ground position of circle_observer into reference_position_old
+                reference_position_old = (circle_observer.reference_position);
+                
+                //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
+                (circle_observer.reference_position) = Position(
+                                                                Angle(
+                                                                      (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).lambda).normalize_pm_pi_ret().value))/2.0
+                                                                      ),
+                                                                Angle(
+                                                                      (((((parent->parent)->p_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).phi).normalize_pm_pi_ret().value))/2.0
+                                                                      )
+                                                                );
+                
+                //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
+                (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
+                (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
+                (circle_observer.omega).set(String(""), (max(l1, l2).value)/Re, String(""));
+                
+                
+                //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+                //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
+                rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
+                
+                
+                (this->*Draw)();
+                PaintNow();
+                parent->UpdateSlider();
+                
+            }
+            
+            //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
+            text_position_start->SetLabel(wxString(""));
+            text_position_end->SetLabel(wxString(""));
+            
+        }else{
+            //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
+            
+            ((parent->parent)->selection_rectangle) = false;
+            text_position_start->SetLabel(wxString(""));
+            text_position_end->SetLabel(wxString(""));
+            
         }
-        
-        if((((parent->projection)->name)->GetValue()) == wxString("3D")){
-            
-            Length l1, l2;
-            Position reference_position_old;
-            
-            //store the current ground position of circle_observer into reference_position_old
-            reference_position_old = (circle_observer.reference_position);
-            
-            //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
-            (circle_observer.reference_position) = Position(
-                                                            Angle(
-                                                                  (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).lambda).normalize_pm_pi_ret().value))/2.0
-                                                                  ),
-                                                            Angle(
-                                                                  (((((parent->parent)->p_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).phi).normalize_pm_pi_ret().value))/2.0
-                                                                  )
-                                                            );
-            
-            //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
-            (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
-            (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
-            (circle_observer.omega).set(String(""), (max(l1, l2).value)/Re, String(""));
-            
-            
-            //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-            //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
-            rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
-            
-            
-            (this->*Draw)();
-            PaintNow();
-            parent->UpdateSlider();
-            
-        }
-        
-        //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
-        text_position_start->SetLabel(wxString(""));
-        text_position_end->SetLabel(wxString(""));
         
     }
     

@@ -11505,7 +11505,6 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
         GetMouseGeoPosition(&((parent->parent)->p_end));
         position_end_selection = position_screen_now;
         //stores the x at the end of the selection process, to compute the zoom factor later
-        //        ScreenToMercator(position_end_selection, &end_selection);
         (this->*ScreenToProjection)(position_end_selection, &end_selection);
         
         

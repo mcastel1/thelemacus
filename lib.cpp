@@ -9038,9 +9038,9 @@ void DrawPanel::Draw_Mercator(void){
         size_chart.SetWidth((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
         size_chart.SetHeight((size_chart.GetWidth())*((y_max-y_min)/x_span()));
     }
-    width_plot_area = (size_chart.GetWidth())*(length_plot_area_over_length_chart.value);
-    height_plot_area = (size_chart.GetHeight())*(length_plot_area_over_length_chart.value);
-    tick_length = ((parent->tick_length_over_width_plot_area).value)*width_plot_area;
+    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
+    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
+    tick_length = ((parent->tick_length_over_width_plot_area).value)*(size_plot_area.GetWidth());
     
     
     
@@ -9063,7 +9063,7 @@ void DrawPanel::Draw_Mercator(void){
     dummy.from_sign_deg_min('+', 179, 59);
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    n_intervals_ticks_max = ((unsigned int)floor(((double)width_plot_area)/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth()))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth()))));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
@@ -9243,7 +9243,7 @@ void DrawPanel::Draw_Mercator(void){
     
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
-    memory_dc.DrawRectangle(position_plot_area.x, position_plot_area.y, width_plot_area, height_plot_area);
+    memory_dc.DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
     
     
     //draw labels on parallels
@@ -9327,8 +9327,8 @@ void DrawPanel::Draw_3D(void){
     size_chart.SetHeight(((parent->GetSize()).GetHeight()) * 0.75);
     size_chart.SetWidth((size_chart.GetHeight()));
     
-    width_plot_area = (size_chart.GetWidth())*(length_plot_area_over_length_chart.value);
-    height_plot_area = (size_chart.GetHeight())*(length_plot_area_over_length_chart.value);
+    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
+    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
     
     //allocate bitmap_image
     bitmap_image = new wxBitmap((size_chart.GetWidth()), (size_chart.GetHeight()));
@@ -9576,9 +9576,9 @@ void DrawPanel::Draw_3D(void){
     memory_dc.SetBackground(wxGetApp().background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     memory_dc.DrawCircle(
-                         (position_plot_area.x) + (int)(((double)width_plot_area)/2.0),
-                         (position_plot_area.y) + (int)(((double)height_plot_area)/2.0),
-                         (temp.y)/y_max * ((double)width_plot_area)/2.0
+                         (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth()))/2.0),
+                         (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight()))/2.0),
+                         (temp.y)/y_max * ((double)(size_plot_area.GetWidth()))/2.0
                          );
     //set back the pen  color and brush
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
@@ -10259,8 +10259,8 @@ bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p){
         output = false;
     }
     
-    if((p->x) > (position_plot_area.x) + width_plot_area){
-        (p->x) = (position_plot_area.x) + width_plot_area;
+    if((p->x) > (position_plot_area.x) + (size_plot_area.GetWidth())){
+        (p->x) = (position_plot_area.x) + (size_plot_area.GetWidth());
         output = false;
     }
     
@@ -10269,8 +10269,8 @@ bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p){
         output = false;
     }
     
-    if((p->y) > (position_plot_area.y) + height_plot_area){
-        (p->y) = (position_plot_area.y) + height_plot_area;
+    if((p->y) > (position_plot_area.y) + (size_plot_area.GetHeight())){
+        (p->y) = (position_plot_area.y) + (size_plot_area.GetHeight());
         output = false;
     }
     
@@ -10733,8 +10733,8 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (temp.x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)width_plot_area))*x_span();
-    (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
+    (temp.x) = x_min + (((double)(p.x)-((position_draw_panel.x)+(position_plot_area.x)))/((double)(size_plot_area.GetWidth())))*x_span();
+    (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.GetHeight())) ) / ((double)(size_plot_area.GetHeight()))*(y_max - y_min);
     
     if(q){
         (q->x) = (temp.x);
@@ -10772,8 +10772,8 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q){
     //updates the position of the draw pane this
     position_draw_panel = (this->GetScreenPosition());
     
-    (temp.x) = x_min + ((((double)(p.x)) - ((position_draw_panel.x)+(position_plot_area.x)) ) / ((double)width_plot_area))*(x_max-x_min);
-    (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+height_plot_area) ) / ((double)height_plot_area)*(y_max - y_min);
+    (temp.x) = x_min + ((((double)(p.x)) - ((position_draw_panel.x)+(position_plot_area.x)) ) / ((double)(size_plot_area.GetWidth())))*(x_max-x_min);
+    (temp.y) = y_min - ( ((double)(p.y)) - ((position_draw_panel.y)+(position_plot_area.y)+(size_plot_area.GetHeight())) ) / ((double)(size_plot_area.GetHeight()))*(y_max - y_min);
     
     //I pulled out a factor (temp.x)^2 from arg_sqrt for clarity
     arg_sqrt = -((gsl_sf_pow_int((d.value),2)*(-1 + gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) + 2*(d.value)*(gsl_sf_pow_int((temp.x),2) + gsl_sf_pow_int((temp.y),2)) ));
@@ -10946,16 +10946,16 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint *p, bool write){
 //this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
 void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint *p){
     
-    (p->x) = (position_plot_area.x) + ((q.x)-x_min)/x_span()*width_plot_area;
-    (p->y) = (position_plot_area.y) + height_plot_area - (((q.y)-y_min)/(y_max-y_min)*height_plot_area);
+    (p->x) = (position_plot_area.x) + ((q.x)-x_min)/x_span()*(size_plot_area.GetWidth());
+    (p->y) = (position_plot_area.y) + (size_plot_area.GetHeight()) - (((q.y)-y_min)/(y_max-y_min)*(size_plot_area.GetHeight()));
     
 }
 
 //this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
 void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint *p){
     
-    (p->x) = ((double)(position_plot_area.x)) + (1.0+(q.x)/x_max)*(((double)width_plot_area)/2.0);
-    (p->y) = ((double)(position_plot_area.y)) + (1.0-(q.y)/y_max)*(((double)height_plot_area)/2.0);
+    (p->x) = ((double)(position_plot_area.x)) + (1.0+(q.x)/x_max)*(((double)(size_plot_area.GetWidth()))/2.0);
+    (p->y) = ((double)(position_plot_area.y)) + (1.0-(q.y)/y_max)*(((double)(size_plot_area.GetHeight()))/2.0);
     
 }
 
@@ -11311,8 +11311,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 double delta_x, delta_y;
                 Projection p_ceil_min, p_floor_max;
 
-                delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
-                delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+                delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)(size_plot_area.GetWidth())) * x_span();
+                delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_min);
                 
                 (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
                 (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
@@ -11355,8 +11355,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             //given that the drag is finished, I set to empty text_geo_position
             text_geo_position->SetLabel(wxString(""));
             
-            if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
-                  ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )))){
+            if(!((( ((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.GetWidth())) ) &&
+                  ( ((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.GetHeight())) )))){
                 //in this case, drag_end_position lies out the plot area
                 
                 if(((parent->parent)->highlighted_route) != -1){
@@ -11677,8 +11677,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
             position_now_drag = wxGetMousePosition();
             
             
-            //        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + width_plot_area) ) &&
-            //           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  height_plot_area) )){
+            //        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.GetWidth())) ) &&
+            //           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.GetHeight())) )){
             
             if((this->*ScreenToGeo)(position_now_drag, NULL)){
                 //in this case, position_drag_now is a valid position
@@ -11692,21 +11692,21 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         double delta_x, delta_y;
                         Projection p_ceil_min, p_floor_max;
                         
-                        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span();
-                        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min);
+                        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)(size_plot_area.GetWidth())) * x_span();
+                        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_min);
                         
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
 
                         
-                        if((y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max-y_min_start_drag) > (p_ceil_min.y))){
+                        if((y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_min_start_drag) > (p_ceil_min.y))){
                             //in this case, the drag operation does not end out of the min and max latitude contained in the data files
                             
                             //update x_min, ..., y_max according to the drag.
-                            x_min = x_min_start_drag - ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span_start_drag;
-                            x_max = x_max_start_drag - ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)width_plot_area) * x_span_start_drag;
-                            y_min = y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max_start_drag-y_min_start_drag);
-                            y_max = y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)height_plot_area) * (y_max_start_drag-y_min_start_drag);
+                            x_min = x_min_start_drag - ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)(size_plot_area.GetWidth())) * x_span_start_drag;
+                            x_max = x_max_start_drag - ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)(size_plot_area.GetWidth())) * x_span_start_drag;
+                            y_min = y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max_start_drag-y_min_start_drag);
+                            y_max = y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max_start_drag-y_min_start_drag);
                             
                             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                                 (this->*Set_lambda_phi_min_max)();

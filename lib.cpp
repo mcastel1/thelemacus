@@ -8609,9 +8609,9 @@ void DrawPanel::PaintNow(){
     
     
     //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
-    this->SetMinSize(wxSize(width_chart, height_chart));
+    this->SetMinSize(size_chart);
     parent->SetMinSize(wxSize(
-                              width_chart + ((parent->slider)->GetSize().GetWidth()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
+                              (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
                               height_chart + (((parent->text_position_now)->GetSize()).GetHeight()) + 6*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
                               ));
     
@@ -9036,25 +9036,25 @@ void DrawPanel::Draw_Mercator(void){
                         );
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         width_chart = (length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight());
-        height_chart = width_chart*((y_max-y_min)/x_span());
+        height_chart = (size_chart.GetWidth())*((y_max-y_min)/x_span());
     }
-    width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
+    width_plot_area = (size_chart.GetWidth())*(length_plot_area_over_length_chart.value);
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     tick_length = ((parent->tick_length_over_width_plot_area).value)*width_plot_area;
     
     
     
     //allocate bitmap_image
-    bitmap_image = new wxBitmap(width_chart, height_chart);
+    bitmap_image = new wxBitmap((size_chart.GetWidth()), height_chart);
     memory_dc.SelectObject(*bitmap_image);
     //draws a rectangle whose border and fill are with color wxGetApp().background_color on bitmap_image, so bitmap_image will have the right background color
     //set the pen color equal to the background color, because I want the border of the rectangle to have the background color
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
+    memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), height_chart);
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint(width_chart*0.15, height_chart*0.1);
+    position_plot_area = wxPoint((size_chart.GetWidth())*0.15, height_chart*0.1);
     
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
@@ -9327,19 +9327,19 @@ void DrawPanel::Draw_3D(void){
     height_chart = ((parent->GetSize()).GetHeight()) * 0.75;
     width_chart = height_chart;
     
-    width_plot_area = width_chart*(length_plot_area_over_length_chart.value);
+    width_plot_area = (size_chart.GetWidth())*(length_plot_area_over_length_chart.value);
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);
     
     //allocate bitmap_image
-    bitmap_image = new wxBitmap(width_chart, height_chart);
+    bitmap_image = new wxBitmap((size_chart.GetWidth()), height_chart);
     memory_dc.SelectObject(*bitmap_image);
     //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
-    memory_dc.DrawRectangle(0, 0, width_chart, height_chart);
+    memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), height_chart);
     
     
-    position_plot_area = wxPoint((int)(((double)width_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0),
+    position_plot_area = wxPoint((int)(((double)(size_chart.GetWidth()))*(1.0-(length_plot_area_over_length_chart.value))/2.0),
                                  (int)(((double)height_chart)*(1.0-(length_plot_area_over_length_chart.value))/2.0));
     
     
@@ -9827,13 +9827,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice of the projeciton above.
     draw_panel->OnChooseProjection(dummy_event);
     
-    //stores the x_min .. y_max, width_chart, height chart the first time that the chart is shown into x_min_0 ... height_chart_0
+    //stores the x_min .. y_max, (size_chart.GetWidth()), height chart the first time that the chart is shown into x_min_0 ... height_chart_0
     (draw_panel->x_min_0) = (draw_panel->x_min);
     (draw_panel->x_max_0) = (draw_panel->x_max);
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
     (draw_panel->x_span_0) = (draw_panel->x_span());
-    (draw_panel->width_chart_0) = (draw_panel->width_chart);
+    (draw_panel->width_chart_0) = (draw_panel->(size_chart.GetWidth()));
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
     
@@ -10105,8 +10105,8 @@ template<class T> void ChartFrame::Reset(T& event){
     
     (draw_panel->*(draw_panel->Draw))();
     
-    //now that width_chart and height_chart have been set, I set width_chart_0 and height_chart_0 equal to width_chart and height_chart
-    (draw_panel->width_chart_0) = (draw_panel->width_chart);
+    //now that (size_chart.GetWidth()) and height_chart have been set, I set width_chart_0 and height_chart_0 equal to width_chart and height_chart
+    (draw_panel->width_chart_0) = (draw_panel->(size_chart.GetWidth()));
     (draw_panel->height_chart_0) = (draw_panel->height_chart);
     
     draw_panel->PaintNow();
@@ -10340,7 +10340,7 @@ bool ChartFrame::ZoomFactor_Mercator(double delta_x){
     double temp;
     bool output;
     
-    temp = ((double)(draw_panel->width_chart))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
+    temp = ((double)(draw_panel->(size_chart.GetWidth())))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
     
     output = ((1 <= ((unsigned int)temp)) && (((unsigned int)temp) <= (zoom_factor_max.value)));
     
@@ -11971,7 +11971,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
      
      delta_x = w/z/ (w_0/delta_x_0) = w*delta_x_0/(z*w_0)
      
-     height_chart/width_chart * x_span = (y_max-y_min);
+     height_chart/(size_chart.GetWidth()) * x_span = (y_max-y_min);
      
      
      */
@@ -12010,10 +12010,10 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
 
         
         //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
-        (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
-        (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->width_chart)*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
-        (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
-        (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->width_chart)) )/2.0;
+        (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)((draw_panel->(size_chart.GetWidth()))*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
+        (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + ( ((double)((draw_panel->(size_chart.GetWidth()))*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
+        (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->(size_chart.GetWidth()))) )/2.0;
+        (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + ( ((double)((draw_panel->height_chart)*(draw_panel->x_span()))) / ((double)(draw_panel->(size_chart.GetWidth()))) )/2.0;
         
         (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(max_lat)), &p_max, true);
         (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(min_lat)), &p_min, true);

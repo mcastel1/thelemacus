@@ -9027,7 +9027,7 @@ void DrawPanel::Draw_Mercator(void){
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         height_chart = (length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight());
-        width_chart = height_chart/((y_max-y_min)/x_span());
+        size_chart.SetWidth(height_chart/((y_max-y_min)/x_span()));
     }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
@@ -9035,7 +9035,7 @@ void DrawPanel::Draw_Mercator(void){
                         ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
                         );
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        width_chart = (length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight());
+        size_chart.SetWidth((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
         height_chart = (size_chart.GetWidth())*((y_max-y_min)/x_span());
     }
     width_plot_area = (size_chart.GetWidth())*(length_plot_area_over_length_chart.value);
@@ -9325,7 +9325,7 @@ void DrawPanel::Draw_3D(void){
                     );
     
     height_chart = ((parent->GetSize()).GetHeight()) * 0.75;
-    width_chart = height_chart;
+    size_chart.SetWidth(height_chart);
     
     width_plot_area = (size_chart.GetWidth())*(length_plot_area_over_length_chart.value);
     height_plot_area = height_chart*(length_plot_area_over_length_chart.value);

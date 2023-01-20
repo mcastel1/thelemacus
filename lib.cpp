@@ -309,7 +309,7 @@ void Double::set(String name, double x, String prefix){
 }
 
 
-//returns true if *this is equal to y within the numerical accuracy of a double, and false otherwise
+//returns true if *this is equal to y within the numerical accuracy accuracy_equal_approx
 bool Double::equal_approx(Double x){
     
     

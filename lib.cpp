@@ -312,6 +312,20 @@ void Double::set(String name, double x, String prefix){
 //returns true if *this is equal to y within the numerical accuracy accuracy_equal_approx
 bool Double::equal_approx(Double x){
     
+    bool check;
+    unsigned int i;
+    uint64_t value_uint64_t, xvalue_uint64_t;
+    
+    
+    memcpy(&value_uint64_t, &value, 8);
+    memcpy(&xvalue_uint64_t, &(x.value), 8);
+
+    
+    for(check = true, i=0; i<52; i++){
+        check ^= (((value_uint64_t >> i) & 1) & ((xvalue_uint64_t >> i) & 1));
+    }
+    
+    return check;
     
     
 }

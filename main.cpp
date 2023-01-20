@@ -108,6 +108,15 @@ bool MyApp::OnInit(){
      
      */
     
+    //
+    Double a, b;
+    a.set(String("a"), 3.2423, String("\t"));
+    b = a;
+//    (b.value) += 1e-6;
+
+    cout << "equal_approx = " << a.equal_approx(b) << "\n";
+    //
+    
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

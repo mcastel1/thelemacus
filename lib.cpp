@@ -322,7 +322,7 @@ bool Double::equal_approx(Double x){
 
     
     for(check = true, i=0; i<52; i++){
-        check ^= (((value_uint64_t >> i) & one_uint64_t) & ((xvalue_uint64_t >> i) & one_uint64_t));
+        check &= (((value_uint64_t >> i) & one_uint64_t) & ((xvalue_uint64_t >> i) & one_uint64_t));
     }
     
     return check;
@@ -12190,7 +12190,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
     int i_related_route;
     
-    i_related_route = ((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value;
+    i_related_route = (((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value);
     
     //I remove the sight and the related route from  the non-GUI object plot
     (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));

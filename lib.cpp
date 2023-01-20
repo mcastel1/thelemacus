@@ -322,7 +322,7 @@ bool Double::equal_approx(Double x){
 
     
     for(check = true, i=0; i<52; i++){
-        check ^= (((value_uint64_t >> i) & 1) & ((xvalue_uint64_t >> i) & 1));
+        check ^= (((value_uint64_t >> i) & one_uint64_t) & ((xvalue_uint64_t >> i) & one_uint64_t));
     }
     
     return check;

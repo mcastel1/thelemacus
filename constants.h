@@ -20,6 +20,7 @@ Angle max_lat, min_lat;
 #define epsrel (1e-12)
 #define epsilon_double (1e-14)
 #define max_iter (1e3)
+#define accuracy_equal_approx 52
 //one nautical mile in kilometers
 #define nm 1.852
 //one nautical mile in feet

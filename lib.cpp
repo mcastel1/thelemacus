@@ -309,6 +309,12 @@ void Double::set(String name, double x, String prefix){
 }
 
 
+//returns true if *this is equal to y within the numerical accuracy of a double, and false otherwise
+bool Double::equal_approx(Double x){
+    
+    
+    
+}
 
 void Double::read_from_file(String name, File& file, bool search_entire_file, String prefix){
     

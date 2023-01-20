@@ -130,6 +130,7 @@ class Double{
 public:
     double value;
     
+    bool equal_approx(Double);
     void read_from_file(String, File&, bool, String);
     void read_from_file(String, String, String);
     void set(String, double, String);

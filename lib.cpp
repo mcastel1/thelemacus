@@ -9077,8 +9077,8 @@ void DrawPanel::Draw_Mercator(void){
     position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);
     
     //set p_NW and p_SE
-    DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1,1), &p_NW);
-    DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/- wxPoint(1,1), &p_SE);
+    DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1, 1), &p_NW);
+    DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/- wxPoint(1, 1), &p_SE);
 
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
@@ -9177,8 +9177,8 @@ void DrawPanel::Draw_Mercator(void){
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
     (route.Z).set(String(""), 0.0, String(""));
-    ((route.reference_position).phi) = (parent->phi_min);
-    (route.l).set(String(""), Re*((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
+    ((route.reference_position).phi) = (p_SE.phi);
+    (route.l).set(String(""), Re*((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
     
     
     for(

@@ -10679,7 +10679,7 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     
 }
 
-//converts the point p on the screen to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
+//converts the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
 bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
     
     return(this->*ScreenToGeo)(p + position_draw_panel, q);

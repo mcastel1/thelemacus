@@ -11101,6 +11101,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
+        Set_size_chart = (&DrawPanel::Set_size_chart_Mercator);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
         
         //I enable the buttons up ... right because they are needed in Mercator mode
@@ -11123,6 +11124,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
+        Set_size_chart = (&DrawPanel::Set_size_chart_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
         
         //I disable the buttons up down ... right because they cannot be used in 3D mode

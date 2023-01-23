@@ -1538,7 +1538,8 @@ public:
     void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
-  
+    void (DrawPanel::*Set_size_chart)(void);
+
     
     void SetIdling(bool);
     void Draw_Mercator(void);
@@ -1566,6 +1567,8 @@ public:
     void Set_lambda_phi_min_max_3D(void);
     void Set_x_y_min_max_Mercator(void);
     void Set_x_y_min_max_3D(void);
+    void Set_size_chart_Mercator(void);
+    void Set_size_chart_3D(void);
     bool PutBackIn(wxPoint, wxPoint*);
     bool check(const Projection);
     bool check_x(const Projection);

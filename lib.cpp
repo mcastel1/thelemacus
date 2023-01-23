@@ -9016,7 +9016,7 @@ void DrawPanel::Draw_Mercator(void){
     Angle dummy, phi, lambda_saved, Z_saved, phi_saved;
     Route route;
     Length r, s;
-    Position q;
+    Position q, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE;
     String prefix, new_prefix;
     wxPoint p;
     
@@ -9076,6 +9076,10 @@ void DrawPanel::Draw_Mercator(void){
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
     position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);
     
+    //set p_NW and p_SE
+    DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1,1), &p_NW);
+    DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/- wxPoint(1,1), &p_SE);
+
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
     
@@ -9217,7 +9221,7 @@ void DrawPanel::Draw_Mercator(void){
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String(""), String("l"), String(""));
     (route.Z).set(String(""), M_PI_2, String(""));
-    ((route.reference_position).lambda) = (parent->lambda_min);
+    ((route.reference_position).lambda) = (p_NW.lambda);
     
     //this loop runs over the latitude of the parallel, which we call phi
     for(
@@ -9228,7 +9232,16 @@ void DrawPanel::Draw_Mercator(void){
             
             //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
             ((route.reference_position).phi) = phi;
-            (route.l).set(String(""), Re*cos(phi)*lambda_span, String(""));
+            (route.l).set(String(""),
+                          
+                          
+                          
+                          Re*cos(phi)* ((
+                                        
+                                        
+                                        (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda)-(p_SE.lambda) + 2.0*M_PI) : ((p_NW.lambda)-(p_SE.lambda))
+                                        
+                                        ).value), String(""));
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw cannot handle loxodromes
@@ -10662,7 +10675,7 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
     Projection temp;
     bool output;
     
-    //updates the position of the draw pane this
+    //updates the position of the DrawPanel *this
     position_draw_panel = (this->GetScreenPosition());
     
     
@@ -11147,8 +11160,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     //    cout << "\nMouse moved";
     
     //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-    //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
-        cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
+    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
+    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
     //update the instantaneous position of the mouse on the chart
     if(GetMouseGeoPosition(&((parent->parent)->p_now))){;

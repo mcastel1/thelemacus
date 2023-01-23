@@ -9045,19 +9045,14 @@ void DrawPanel::Draw_Mercator(void){
                         ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())
                         );
         
-        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        size_chart.SetHeight((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
-        size_chart.SetWidth((size_chart.GetHeight())/((y_max-y_min)/x_span()));
-    }else{
+      }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
                         ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()),
                         ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
                         );
-        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-        size_chart.SetWidth((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
-        size_chart.SetHeight((size_chart.GetWidth())*((y_max-y_min)/x_span()));
     }
+    (this->*Set_size_chart)();
     size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
     size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
     tick_length = ((parent->tick_length_over_width_plot_area).value)*(size_plot_area.GetWidth());
@@ -9356,9 +9351,7 @@ void DrawPanel::Draw_3D(void){
                     ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()),
                     ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())
                     );
-    
-    size_chart.SetHeight(((parent->GetSize()).GetHeight()) * 0.75);
-    size_chart.SetWidth((size_chart.GetHeight()));
+    (this->*Set_size_chart)();
     
     size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
     size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
@@ -10248,6 +10241,33 @@ void DrawPanel::Set_x_y_min_max_Mercator(void){
     x_max = (p_max.x);
     y_max = (p_max.y);
         
+}
+
+//sets size_chart for the Mercator projection
+void DrawPanel::Set_size_chart_Mercator(void){
+    
+     if((y_max-y_min) > x_span()){
+        
+        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
+         
+        size_chart.SetHeight((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
+        size_chart.SetWidth((size_chart.GetHeight())/((y_max-y_min)/x_span()));
+    }else{
+        //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
+        
+        size_chart.SetWidth((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
+        size_chart.SetHeight((size_chart.GetWidth())*((y_max-y_min)/x_span()));
+        
+    }
+    
+}
+
+//set size_chart for the 3D projection
+void DrawPanel::Set_size_chart_3D(void){
+    
+    size_chart.SetHeight(((parent->GetSize()).GetHeight()) * 0.75);
+    size_chart.SetWidth((size_chart.GetHeight()));
+    
 }
 
 /*returns a double: the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/

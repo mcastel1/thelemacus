@@ -24,6 +24,7 @@
  -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer
  - set up a proper output to a log file
  - set parents to constructors of all frames that you defined
+ - move all constants to the init file , such as  the 0.15 in  'position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);' 
 
  ********** THINGS TO FIX ************
  

@@ -9072,6 +9072,7 @@ void DrawPanel::Draw_Mercator(void){
     position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);
     
     //set p_NW and p_SE
+    //updates the position of the draw pane this
     DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1, 1), &p_NW);
     DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/- wxPoint(1, 1), &p_SE);
 
@@ -9211,6 +9212,9 @@ void DrawPanel::Draw_Mercator(void){
             
         }
     
+    //I put this to cound how many times Draw_Mercator has been called, because the breakpoints do not seem to do the job for this
+    cout << " ---------------- Draw_Mercator has been called ---------------- \n";
+    flush(cout);
     
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
@@ -9658,7 +9662,7 @@ void DrawPanel::Draw_3D(void){
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();
     
-    //updates the position of the draw pane this
+    //updates the position of the DrawPanel *this
     position_draw_panel = (this->GetScreenPosition());
     
     
@@ -10714,6 +10718,9 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position *q){
 
 //converts the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
 bool DrawPanel::DrawPanelToGeo(wxPoint p, Position *q){
+    
+    //computes the poisition of the DrawPanel *this which will be needed in the following
+    position_draw_panel = (this->GetScreenPosition());
     
     return(this->*ScreenToGeo)(p + position_draw_panel, q);
     

@@ -9069,7 +9069,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);
+    position_plot_area = wxPoint((size_chart.GetWidth())*((parent->plot_area_x_margin_over_x_size_chart).value), (size_chart.GetHeight())*(parent->plot_area_y_margin_over_y_size_chart).value);
     
     //set p_NW and p_SE
     //updates the position of the draw pane this

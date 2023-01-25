@@ -9031,6 +9031,9 @@ void DrawPanel::Draw_Mercator(void){
     for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
     label_phi.resize(0);
     
+    //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
+    dummy.from_sign_deg_min('+', 179, 59);
+    
     //set x_min, ..., y_max for the following
     (this->*Set_x_y_min_max)();
 
@@ -9053,8 +9056,26 @@ void DrawPanel::Draw_Mercator(void){
                         );
     }
     (this->*Set_size_chart)();
-    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
-    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
+    
+    
+    if(
+       ((size_chart.GetWidth()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth())) * (size_chart.GetHeight())/(size_chart.GetWidth())
+       < (size_chart.GetHeight()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("NS"), (display_precision.value), false)))).GetHeight())
+       ){
+        
+        size_plot_area.SetWidth((size_chart.GetWidth()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth()));
+        //    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
+        size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight())/(size_chart.GetWidth()) );
+        //    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
+        
+    }else{
+        
+        size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("NS"), (display_precision.value), false)))).GetHeight()));
+        size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
+
+        
+    }
+
     tick_length = ((parent->tick_length_over_width_plot_area).value)*(size_plot_area.GetWidth());
     
     
@@ -9069,8 +9090,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint((size_chart.GetWidth())*((parent->plot_area_x_margin_over_x_size_chart).value), (size_chart.GetHeight())*(parent->plot_area_y_margin_over_y_size_chart).value);
-    
+    position_plot_area = wxPoint((size_chart - size_plot_area).GetWidth()/2.0, (size_chart - size_plot_area).GetHeight()/2.0);
     //set p_NW and p_SE
     //updates the position of the draw pane this
     DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1, 1), &p_NW);
@@ -9078,9 +9098,6 @@ void DrawPanel::Draw_Mercator(void){
 
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
-    
-    //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
-    dummy.from_sign_deg_min('+', 179, 59);
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth()))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth()))));

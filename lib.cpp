@@ -9011,7 +9011,7 @@ void DrawPanel::Draw_Mercator(void){
     int i;
     double lambda_span, phi_span, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor;
     Projection temp, delta_temp;
-    unsigned int n_intervals_ticks, n_intervals_ticks_max;
+    unsigned int n_intervals_ticks, n_intervals_ticks_max, size_label_vertical, size_label_horizontal;
     //the total length of each Route
     Angle dummy, phi, lambda_saved, Z_saved, phi_saved;
     Route route;
@@ -9020,10 +9020,12 @@ void DrawPanel::Draw_Mercator(void){
     String prefix, new_prefix;
     wxPoint p;
     
-    
     //append \t to prefix
     prefix = String("");
     new_prefix = prefix.append(String("\t"));
+    
+    size_label_vertical = (GetTextExtent(wxString((dummy.to_string(String("NS"), (display_precision.value), false)))).GetHeight());
+    size_label_horizontal = (GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth());
     
     //clears all labels previously drawn
     for(i=0; i<label_lambda.size(); i++){(label_lambda[i])->Destroy();}
@@ -9057,23 +9059,35 @@ void DrawPanel::Draw_Mercator(void){
     }
     (this->*Set_size_chart)();
     
-    
+    //sets size_plot_area
     if(
-       ((size_chart.GetWidth()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth())) * (size_chart.GetHeight())/(size_chart.GetWidth())
-       < (size_chart.GetHeight()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("NS"), (display_precision.value), false)))).GetHeight())
+       ((size_chart.GetWidth()) - 2.5 * size_label_horizontal) * (size_chart.GetHeight())/(size_chart.GetWidth())
+       < (size_chart.GetHeight()) - 2.5 * size_label_vertical
        ){
+           //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is enough space to set size_plot_area's height by keeping the aspect ratio
         
-        size_plot_area.SetWidth((size_chart.GetWidth()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth()));
+        size_plot_area.SetWidth((size_chart.GetWidth()) - 2.5 * size_label_horizontal);
         //    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
         size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight())/(size_chart.GetWidth()) );
         //    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
         
     }else{
+        //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first
         
-        size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * (GetTextExtent(wxString((dummy.to_string(String("NS"), (display_precision.value), false)))).GetHeight()));
+        if((((size_chart.GetHeight()) - 2.5 * size_label_vertical) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < (size_chart.GetWidth()) - 2.5 * size_label_horizontal){
+            //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_vertical
+            
+            size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_vertical);
+            
+        }else{
+            //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is not enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_horizontal
+            
+            size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_horizontal);
+ 
+        }
+
         size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
 
-        
     }
 
     tick_length = ((parent->tick_length_over_width_plot_area).value)*(size_plot_area.GetWidth());
@@ -9100,7 +9114,7 @@ void DrawPanel::Draw_Mercator(void){
     parent->GetCoastLineData_Mercator();
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth()))/((double)(GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth()))));
+    n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth()))/((double)size_label_horizontal)));
     n_intervals_ticks = min(
                             (unsigned int)((plot->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max

@@ -9159,12 +9159,12 @@ void DrawPanel::Draw_Mercator(void){
     
     if(((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)){
         
-        (lambda_start.value) = floor(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_start.value) = ceil(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
         (lambda_end.value) = ((parent->lambda_min).value) + (2.0*M_PI);
         
     }else{
         
-        (lambda_start.value) = floor(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
+        (lambda_start.value) = ceil(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
         (lambda_end.value) = ((parent->lambda_min).value);
         
     }
@@ -9195,8 +9195,8 @@ void DrawPanel::Draw_Mercator(void){
         else{delta_phi += k*5.0/((double)gamma_phi);}
     }
     
-    //set phi_start/end and phi_middle
-    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
+    //set phi_start/end
+    (phi_start.value) = ceil((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
     (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
     
     

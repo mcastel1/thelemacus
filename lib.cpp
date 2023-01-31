@@ -9778,12 +9778,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read relative_displacement from file_init
     relative_displacement.read_from_file(String("relative displacement"), String(path_file_init), String(""));
-    
-    //read plot area x(y) margin over x (y) size chart from file_init
-    plot_area_x_margin_over_x_size_chart.read_from_file(String("plot area x margin over x size chart"), String(path_file_init), String(""));
-    plot_area_y_margin_over_y_size_chart.read_from_file(String("plot area y margin over y size chart"), String(path_file_init), String(""));
-
-    
+        
     //read standard_thickness_over_length_screen from file_init
     standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
     

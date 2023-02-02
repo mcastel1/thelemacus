@@ -12386,7 +12386,7 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event){
     
     
     if( (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value) != -1){
-        //if the sight which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
+        //if the sight which I am about to remove is related to a Route, I ask the user whether he wants to remove the related Route too by showing  question_frame
         
         ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value);
         
@@ -12472,7 +12472,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
     if((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))){
         
-        (f->listcontrol_sights)->DeleteItem(i_related_sight);
+//        (f->listcontrol_sights)->DeleteItem(i_related_sight);
         
         //given that after one item is deleted in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
         (f->listcontrol_sights)->EnableButtons(false);

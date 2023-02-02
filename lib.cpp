@@ -9046,15 +9046,15 @@ void DrawPanel::Draw_Mercator(void){
     if((y_max-y_min) > x_span()){
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())/((y_max-y_min)/x_span()),
-                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())
+                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())/((y_max-y_min)/x_span()),
+                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
                         );
         
       }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
-                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()),
-                        ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
+                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max-y_min)/x_span())
                         );
     }
     (this->*Set_size_chart)();
@@ -9383,8 +9383,8 @@ void DrawPanel::Draw_3D(void){
     parent->GetCoastLineData_3D();
     
     parent->SetSize(
-                    ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()),
-                    ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight())
+                    (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+                    (((wxGetApp().rectangle_display).GetSize()).GetHeight())
                     );
     (this->*Set_size_chart)();
     
@@ -10285,12 +10285,12 @@ void DrawPanel::Set_size_chart_Mercator(void){
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
          
-        size_chart.SetHeight((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
+        size_chart.SetHeight((length_chart_over_length_chart_frame.value) * (((wxGetApp().rectangle_display).GetSize()).GetHeight()));
         size_chart.SetWidth((size_chart.GetHeight())/((y_max-y_min)/x_span()));
     }else{
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
         
-        size_chart.SetWidth((length_chart_over_length_chart_frame.value) * ((((((parent->parent)->parent)->rectangle_display)).GetSize()).GetHeight()));
+        size_chart.SetWidth((length_chart_over_length_chart_frame.value) * (((wxGetApp().rectangle_display).GetSize()).GetHeight()));
         size_chart.SetHeight((size_chart.GetWidth())*((y_max-y_min)/x_span()));
         
     }

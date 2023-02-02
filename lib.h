@@ -1982,7 +1982,6 @@ public:
     Double size_small_button_over_width_screen;
     vector< vector< vector<Position> > > p_coastline;
     Position /*these are the positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_now, p_end;
-    vector<Color> color_list;
       //the rectangle used to measure the size of the display
     wxDisplay display;
     //this referrs to the init file

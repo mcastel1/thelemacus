@@ -8675,7 +8675,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
             thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         
-        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         
         //draw the reference position
@@ -8710,7 +8710,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
             thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         
-        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         
         if(GeoToDrawPanel((plot->position_list)[i], &p, false)){
@@ -8881,7 +8881,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }else{
             thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
-        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         //draw the reference_position
         if(GeoToDrawPanel((((plot->route_list)[i]).reference_position), &p, false)){
@@ -8916,7 +8916,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }else{
             thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
-        dc.SetPen(wxPen(((parent->parent)->color_list)[(color_id++) % (((parent->parent)->color_list).size())], thickness) );
+        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         if(GeoToDrawPanel((plot->position_list)[i], &p, false)){
             //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
@@ -14148,14 +14148,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     margin_v = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
-    color_list.resize(count((s.value).begin(), (s.value).end(), '('));
+    (wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
     
     //when the ListFrame is created there is no open selection rectangle in any ChartFrame
     selection_rectangle = false;
     
     //SetColor(this);
     
-    for(i=0; i<color_list.size(); i++){
+    for(i=0; i<(wxGetApp().color_list).size(); i++){
         
         //get rid of everything that comes before and at '(' at the beginnign of s
         pos_end = (s.value).find("(");
@@ -14182,7 +14182,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
         blue = stoi((s.value).substr(0, pos_end+1).c_str());
         
         //write the color that I just read in color_list
-        color_list[i] = Color(red, green, blue);
+        (wxGetApp().color_list)[i] = Color(red, green, blue);
         
     }
     

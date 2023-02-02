@@ -1983,9 +1983,7 @@ public:
     vector< vector< vector<Position> > > p_coastline;
     Position /*these are the positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_now, p_end;
     vector<Color> color_list;
-    //the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area
-    Color color_selected_item;
-     //the rectangle used to measure the size of the display
+      //the rectangle used to measure the size of the display
     wxDisplay display;
     //this referrs to the init file
     File file_init;

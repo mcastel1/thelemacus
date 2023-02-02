@@ -11290,9 +11290,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                         ((parent->parent)->highlighted_route) = i;
                         
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
+                        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                         if((((plot->route_list)[i]).related_sight).value != -1){
-                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (parent->parent)->color_selected_item);
+                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((plot->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
                         }
                         
                         // quit the loops over l ad j
@@ -11324,7 +11324,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 //sets the highlighted position to i, so as to use highlighted_position in other functions
                 ((parent->parent)->highlighted_position) = i;
                 
-                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (parent->parent)->color_selected_item);
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                 
                 
             }else{
@@ -14187,7 +14187,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     }
     
     //read color selected item from file
-    color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
+    (wxGetApp().color_selected_item).read_from_file(String("color selected item"), String(path_file_init), String(""));
     
     size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
     
@@ -14851,9 +14851,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 if(i==highlighted_sight){
                     
                     //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
-                    listcontrol_sights->SetItemBackgroundColour(i, color_selected_item);
+                    listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                     if((highlighted_route != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route)){
-                        listcontrol_routes->SetItemBackgroundColour(highlighted_route, color_selected_item);
+                        listcontrol_routes->SetItemBackgroundColour(highlighted_route, (wxGetApp().color_selected_item));
                     }
                     
                 }else{
@@ -14879,7 +14879,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 if(i==highlighted_position){
                     
                     //set the beckgorund color of the Position in listcontrol_positions to a highlight color
-                    listcontrol_positions->SetItemBackgroundColour(i, color_selected_item);
+                    listcontrol_positions->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                     
                 }else{
                     
@@ -14902,9 +14902,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                 if(i==highlighted_route){
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                    listcontrol_routes->SetItemBackgroundColour(i, color_selected_item);
+                    listcontrol_routes->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                     if((j != -1) && ((listcontrol_sights->GetItemCount()) > j)){
-                        listcontrol_sights->SetItemBackgroundColour(j, color_selected_item);
+                        listcontrol_sights->SetItemBackgroundColour(j, (wxGetApp().color_selected_item));
                     }
                     
                 }else{

@@ -35,6 +35,7 @@
  -   sort(t->begin(), t->end()); is wrong: you should take into account the case where the midpoint between t.begin and t.end lies outside circle_obsrever
  - add check on zoom factor in OnMouseRightDown for the 3D projections
   - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
+ - move all stuff which is general enough in the code to MyApp class 
  */
 
 //this function is executed reguarly over time, to check some things

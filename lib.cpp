@@ -12489,6 +12489,9 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     
     //given that I called set in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
     (f->listcontrol_routes)->EnableButtons(false);
+    
+    //given that a Route has been removed, I re-draw everything
+    f->DrawAll();
             
     event.Skip(true);
     

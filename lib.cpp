@@ -2294,7 +2294,7 @@ bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
                                     //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
                                     t->push_back(Angle(0.0));
                                     t->push_back(Angle(2.0*M_PI));
-                                    (t->back()).value = 2.0*M_PI;
+//                                    (t->back()).value = 2.0*M_PI;
                                     
                                     sort(t->begin(), t->end());
 

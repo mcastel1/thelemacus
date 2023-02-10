@@ -9632,7 +9632,7 @@ void DrawPanel::Draw_3D(void){
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
     //set the wxPen color for the horizon
-    memory_dc.SetPen(wxPen(parent->color_horizon, 1));
+    memory_dc.SetPen(wxPen(wxGetApp().color_horizon, 1));
     memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
     memory_dc.SetBackground(wxGetApp().background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
@@ -9786,7 +9786,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
     
     //read color horizon from file
-    color_horizon.read_from_file(String("color horizon"), String(path_file_init), String(""));
+    (wxGetApp().color_horizon).read_from_file(String("color horizon"), String(path_file_init), String(""));
     
     //read tick length over width plot area from file_init
     tick_length_over_width_plot_area.read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));

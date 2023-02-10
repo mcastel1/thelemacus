@@ -2176,8 +2176,6 @@ public:
     wxStaticBitmap* image;
     wxSlider* slider;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
-    //the color of the horizon circle for the 3D projection
-    Color color_horizon;
     ProjectionField* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     //pointer used to shorten the reference to parent->plot

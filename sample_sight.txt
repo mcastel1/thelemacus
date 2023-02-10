@@ -50,9 +50,9 @@
         Route #1:
         type = o
         ground position:
-            latitude = 40° 40.1715'
-            longitude = 39° 39.2563'
-            label = ciao
+            latitude = 70° 20.91'
+            longitude = 239° 43.2'
+            label = Let us pick the bug!
         starting heading = 51° 16.7866'
         length = 3245.5847893679 nm
         label = come va

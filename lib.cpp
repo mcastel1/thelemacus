@@ -2494,6 +2494,10 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
             
         }
         
+        //delete duplicates from t
+        set<Angle> t_temp( t->begin(), t->end() );
+        t->assign( t_temp.begin(), t_temp.end() );
+        
         return output;
         
     }

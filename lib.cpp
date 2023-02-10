@@ -1841,7 +1841,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
             //tabulate the Route points of the jth component
             for(i=0; i<n_points; i++){
                 
-                compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
+                compute_end(Length(((s[j]).value + margin) + (((((s[j+1]).value)-margin))-(((s[j]).value)+margin))*((double)i)/((double)(n_points-1))), String(""));
                 
                 if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
                     

@@ -9196,7 +9196,7 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     //set phi_start/end
-    (phi_start.value) = ceil((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
+    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
     (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
     
     

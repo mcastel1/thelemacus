@@ -8670,9 +8670,9 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     for(i=0; i<(plot->route_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         
         dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
@@ -8705,9 +8705,9 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     for(i=0; i<(plot->position_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         
         dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
@@ -8877,9 +8877,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
         //set the route thickness and pen
         if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
@@ -8912,9 +8912,9 @@ void DrawPanel::Render_3D(wxDC&  dc){
         
         //set thickness and pen
         if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)(((parent->large_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)(((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
         }
         dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
@@ -9090,7 +9090,7 @@ void DrawPanel::Draw_Mercator(void){
 
     }
 
-    tick_length = ((parent->tick_length_over_width_plot_area).value)*(size_plot_area.GetWidth());
+    tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value)*(size_plot_area.GetWidth());
     
     
     
@@ -9223,7 +9223,7 @@ void DrawPanel::Draw_Mercator(void){
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
                 //                phi_saved = ((route.reference_position).phi);
                 
-                (route.l).set(String(""), Re*((parent->tick_length_over_width_plot_area).value)*phi_span, String(""));
+                (route.l).set(String(""), Re*(((wxGetApp().tick_length_over_width_plot_area)).value)*phi_span, String(""));
                 //                ((route.reference_position).phi) = (parent->phi_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -9231,7 +9231,7 @@ void DrawPanel::Draw_Mercator(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
+                    route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, this, String(""));
                     
                 }
                 
@@ -9282,7 +9282,7 @@ void DrawPanel::Draw_Mercator(void){
                 
                 //                (route.type).set(String(""), String("o"), String(""));
                 //                (route.Z).set(String(""), M_PI_2, String(""));
-                (route.l).set(String(""), Re*((parent->tick_length_over_width_plot_area).value)*lambda_span, String(""));
+                (route.l).set(String(""), Re*(((wxGetApp().tick_length_over_width_plot_area)).value)*lambda_span, String(""));
                 //                ((route.reference_position).lambda) = (parent->lambda_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -9292,9 +9292,9 @@ void DrawPanel::Draw_Mercator(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        //                        route.Draw((parent->n_points_minor_ticks).value, 0x0000ff, -1, this, String(""));
+                        //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, -1, this, String(""));
                         //here I use DrawOld because Draw cannot handle loxodromes
-                        route.DrawOld((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this);
+                        route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, this);
                         
                     }
                 
@@ -9549,7 +9549,7 @@ void DrawPanel::Draw_3D(void){
                 Z_saved = (route.Z);
                 
                 (route.Z).set(String(""), 0.0, String(""));
-                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                (route.l).set(String(""), Re*2.0*((((wxGetApp().tick_length_over_aperture_circle_observer)).value)*((circle_observer.omega).value)), String(""));
                 ((route.reference_position).phi) = phi_middle;
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -9557,7 +9557,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
+                    route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, this, String(""));
                     
                 }
                 
@@ -9595,7 +9595,7 @@ void DrawPanel::Draw_3D(void){
                 
                 (route.type).set(String(""), String("o"), String(""));
                 (route.Z).set(String(""), M_PI_2, String(""));
-                (route.l).set(String(""), Re*2.0*(((parent->tick_length_over_aperture_circle_observer).value)*((circle_observer.omega).value)), String(""));
+                (route.l).set(String(""), Re*2.0*((((wxGetApp().tick_length_over_aperture_circle_observer)).value)*((circle_observer.omega).value)), String(""));
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for(
@@ -9604,7 +9604,7 @@ void DrawPanel::Draw_3D(void){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.Draw((parent->n_points_minor_ticks).value, wxGetApp().foreground_color, -1, this, String(""));
+                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, this, String(""));
                         
                     }
                 
@@ -9771,28 +9771,28 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     zoom_factor.set(String(""), 1.0, String(""));
     
     //read zoom_factor_max from file_init
-    zoom_factor_max.read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
+    (wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
     
     //read n_points_minor_ticks from file_init
-    n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
+    (wxGetApp().n_points_minor_ticks).read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
     
     //read relative_displacement from file_init
-    relative_displacement.read_from_file(String("relative displacement"), String(path_file_init), String(""));
+    (wxGetApp().relative_displacement).read_from_file(String("relative displacement"), String(path_file_init), String(""));
         
     //read standard_thickness_over_length_screen from file_init
-    standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
+    (wxGetApp().standard_thickness_over_length_screen).read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
     
     //read large_thickness_over_length_screen from file_init
-    large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
+    (wxGetApp().large_thickness_over_length_screen).read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
     
     //read color horizon from file
     (wxGetApp().color_horizon).read_from_file(String("color horizon"), String(path_file_init), String(""));
     
     //read tick length over width plot area from file_init
-    tick_length_over_width_plot_area.read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
+    (wxGetApp().tick_length_over_width_plot_area).read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
     
     //read tick length over width plot area from file_init
-    tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
+    (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
     //SetColor(this);
     
@@ -9819,12 +9819,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //initialize the variable neededed for slider
     //    zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
-    slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)(zoom_factor_max.value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
+    slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)((wxGetApp().zoom_factor_max).value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
-    //sets the coefficients for the function which relates the zoom factor to the slider value: read from file e_zoom and set a_zoom, b_zoom
-    e_zoom.read_from_file(String("exponent zoom"), String(path_file_init), String(""));
-    a_zoom.set(String(""), (-1.0 + (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
-    b_zoom.set(String(""), (pow(((double)(slider->GetMax())), e_zoom.value) - (zoom_factor_max.value))/(-1.0 + pow(((double)(slider->GetMax())), e_zoom.value)), String(""));
+    //sets the coefficients for the function which relates the zoom factor to the slider value: read from file (wxGetApp().e_zoom) and set (wxGetApp().a_zoom), (wxGetApp().b_zoom)
+    (wxGetApp().e_zoom).read_from_file(String("exponent zoom"), String(path_file_init), String(""));
+    (wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value))/(-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
+    (wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value))/(-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
     
     
     //text field showing the current value of the zoom slider
@@ -9965,7 +9965,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
     double delta;
     Projection p_ceil_min, p_floor_max;
     
-    delta = (relative_displacement.value) * ((draw_panel->y_max)-(draw_panel->y_min));
+    delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max)-(draw_panel->y_min));
     
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
@@ -9996,7 +9996,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
     double delta;
     Projection p_ceil_min, p_floor_max;
     
-    delta = (relative_displacement.value) * ((draw_panel->y_max)-(draw_panel->y_min));
+    delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max)-(draw_panel->y_min));
     
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
@@ -10027,7 +10027,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
     
     double delta;
     
-    delta = (relative_displacement.value) * (draw_panel->x_span());
+    delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
     
     //update lambda_min, lambda_max according to the drag.
     (lambda_min.value) += delta;
@@ -10097,7 +10097,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
     
     double delta;
     
-    delta = (relative_displacement.value) * (draw_panel->x_span());
+    delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
     
     //update lambda_min, lambda_max according to the drag.
     (lambda_min.value) -= delta;
@@ -10422,7 +10422,7 @@ void ChartFrame::UpdateSliderLabel_3D(void){
     
 }
 
-//computes the zoom factor of the chart based on the currenct value of span_x. It returns true and writes the value in zoom_factor if the zooming factor is smaller than zoom_factor_max, and returns false otherwise
+//computes the zoom factor of the chart based on the currenct value of span_x. It returns true and writes the value in zoom_factor if the zooming factor is smaller than (wxGetApp().zoom_factor_max), and returns false otherwise
 bool ChartFrame::ZoomFactor_Mercator(double delta_x){
     
     double temp;
@@ -10430,7 +10430,7 @@ bool ChartFrame::ZoomFactor_Mercator(double delta_x){
     
     temp = ((double)((draw_panel->size_chart).GetWidth()))/((double)(draw_panel->width_chart_0))*((draw_panel->x_max_0)-(draw_panel->x_min_0))/delta_x;
     
-    output = ((1 <= ((unsigned int)temp)) && (((unsigned int)temp) <= (zoom_factor_max.value)));
+    output = ((1 <= ((unsigned int)temp)) && (((unsigned int)temp) <= ((wxGetApp().zoom_factor_max).value)));
     
     if(output){
         zoom_factor.set(String(""), temp, String(""));
@@ -10445,7 +10445,7 @@ bool ChartFrame::ZoomFactor_3D(void){
     
     bool output;
     
-    output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= (zoom_factor_max.value)));
+    output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= ((wxGetApp().zoom_factor_max).value)));
     
     if(output){
         
@@ -10477,7 +10477,7 @@ void ChartFrame::UpdateSlider(void){
     }
     
     //a tentative value for the value of slizer
-    temp = round(pow(((zoom_factor.value)-(b_zoom.value))/(a_zoom.value), 1.0/(e_zoom.value)));
+    temp = round(pow(((zoom_factor.value)-((wxGetApp().b_zoom).value))/((wxGetApp().a_zoom).value), 1.0/((wxGetApp().e_zoom).value)));
     
     
     //if the tentative value exceeds the slider boundaries, I set it to the respective boundary
@@ -11284,7 +11284,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                        ){
                         
                         //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                        //                       (((parent->standard_thickness_over_length_screen).value) * (((parent->parent)->parent)->rectangle_display).GetWidth())){
+                        //                       ((((wxGetApp().standard_thickness_over_length_screen)).value) * (((parent->parent)->parent)->rectangle_display).GetWidth())){
                         
                         //sets the highlighted route to i, so as to use highlighted_route in other functions
                         ((parent->parent)->highlighted_route) = i;
@@ -11319,7 +11319,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             GeoToScreen((plot->position_list)[i], &q);
             
             if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
-               4.0 * (((parent->standard_thickness_over_length_screen).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth())){
+               4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth())){
                 
                 //sets the highlighted position to i, so as to use highlighted_position in other functions
                 ((parent->parent)->highlighted_position) = i;
@@ -11661,7 +11661,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                     //if the zoom factor is not valid, then I print an error message
                     
                     s.str("");
-                    s << "Zoom level must be >= 1 and <= " << ((parent->zoom_factor_max).value) << ".";
+                    s << "Zoom level must be >= 1 and <= " << ((wxGetApp().zoom_factor_max).value) << ".";
                     
                     //set the title and message for the functor print_error_message, and then call the functor
                     print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()));
@@ -11996,19 +11996,19 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
     cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
     cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
-    //    cout << "Zoom factor max = " << ((parent->zoom_factor_max).value) << "\n";
+    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
     cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
     cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
     cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
     
-    //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((parent->zoom_factor_max).value)))){
+    //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((wxGetApp().zoom_factor_max).value)))){
     
     //        int i;
     
     //set the new value of slider, i,  according to the rotation of the mouse wheel:
     //    if(j < 0){
     //
-    //        i = ((int)((parent->slider)->GetValue())) - ((int)((((parent->zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
+    //        i = ((int)((parent->slider)->GetValue())) - ((int)((((wxGetApp().zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
     //
     //    }else{
     //
@@ -12021,7 +12021,7 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     cout << "Slier value new = " << i << "\n";
     
     //if i gets out of range, put it back in the correct range
-    if((i>=1) && (i<=((parent->zoom_factor_max).value))){
+    if((i>=1) && (i<=((wxGetApp().zoom_factor_max).value))){
         
         if(!(parent->mouse_scrolling)){
             parent->OnMouseLeftDownOnSlider(event);
@@ -12047,18 +12047,18 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
      n = value of slider,
      z = zoom factor,
      
-     1 <= z <= zoom_factor_max
+     1 <= z <= (wxGetApp().zoom_factor_max)
      1 <= n <= n_max
      
      n = ((double)(slider->GetValue()));
      n_max = ((double)(slider->GetMax()))
      
-     z = a_zoom*n^e_zoom + b_zoom
-     n = log((z-b_zoom)/a_zoom)/e_zoom
+     z = (wxGetApp().a_zoom)*n^(wxGetApp().e_zoom) + (wxGetApp().b_zoom)
+     n = log((z-(wxGetApp().b_zoom))/(wxGetApp().a_zoom))/(wxGetApp().e_zoom)
      
      
-     a_zoom = (-1 + zoom_factor_max)/(-1 + n_max^e_zoom);
-     b_zoom = (n_max^e_zoom - zoom_factor_max)/(-1 + n_max^e_zoom);
+     (wxGetApp().a_zoom) = (-1 + (wxGetApp().zoom_factor_max))/(-1 + n_max^(wxGetApp().e_zoom));
+     (wxGetApp().b_zoom) = (n_max^(wxGetApp().e_zoom) - (wxGetApp().zoom_factor_max))/(-1 + n_max^(wxGetApp().e_zoom));
      
      z = w/delta_x / (w_0/delta_x_0)
      
@@ -12076,7 +12076,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     //set zoom_factor from the value of slider
     zoom_factor.set(
                     String(""),
-                    (a_zoom.value) * pow((slider->GetValue()), e_zoom.value) + (b_zoom.value)
+                    ((wxGetApp().a_zoom).value) * pow((slider->GetValue()), (wxGetApp().e_zoom).value) + ((wxGetApp().b_zoom).value)
                     ,
                     String("")
                     );
@@ -12088,9 +12088,9 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
         
     }
     
-    if((zoom_factor.value) > (zoom_factor_max.value)){
+    if((zoom_factor.value) > ((wxGetApp().zoom_factor_max).value)){
         
-        (zoom_factor.value) = (zoom_factor_max.value);
+        (zoom_factor.value) = ((wxGetApp().zoom_factor_max).value);
         
     }
     

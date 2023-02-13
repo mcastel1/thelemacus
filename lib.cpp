@@ -1829,30 +1829,74 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     
     unsigned int i, j;
     wxPoint p;
+    Angle lambda_a, lambda_b;
     vector<Length> s;
     
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends(&s, draw_panel, prefix)){
         
+        
+        //
         //run over all chunks of *this which are visible
-        v->resize((s.size())-1);
-        for(j=0; j<v->size(); j++){
+        for(j=0; j<(s.size()); j++){
+                
+            v->resize((v->size())+1);
+            
+            
+            compute_end(Length(((s[j]).value)), String(""));
+            if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
+                (v->back()).push_back(p);
+            }
             
             //tabulate the Route points of the jth component
-            for(i=0; i<n_points; i++){
+            for(i=1; i<n_points; i++){
                 
-                //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area 
-                compute_end(Length(((s[j]).value)*(1.0+epsilon_double) + (((s[j+1]).value)*(1.0-epsilon_double)-((s[j]).value)*(1.0+epsilon_double))*((double)i)/((double)(n_points-1))), String(""));
+                compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)(i-1))/((double)(n_points-1))), String(""));
+                lambda_b = (end.lambda);
                 
+                compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)i)/((double)(n_points-1))), String(""));
+                lambda_a = (end.lambda);
+                
+        
+
                 if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
+                    //end is a valid point
                     
-                    ((*v)[j]).push_back(p);
+                    if(((lambda_b > lambda_a) && (lambda_b > ((draw_panel->parent)->lambda_max)) && (lambda_a < ((draw_panel->parent)->lambda_min))) || ((lambda_b < lambda_a) && (lambda_b < ((draw_panel->parent)->lambda_min)) && (lambda_a > ((draw_panel->parent)->lambda_max)))){
+                        //there is a discontinuous jump when *this is drawn
+                        
+                        v->resize((v->size())+1);
+                        
+                    }
+                    
+                    (v->back()).push_back(p);
                     
                 }
                 
             }
             
         }
+        //
+        
+//        //run over all chunks of *this which are visible
+//        v->resize((s.size())-1);
+//        for(j=0; j<v->size(); j++){
+//            
+//            //tabulate the Route points of the jth component
+//            for(i=0; i<n_points; i++){
+//                
+//                //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
+//                compute_end(Length(((s[j]).value)*(1.0+epsilon_double) + (((s[j+1]).value)*(1.0-epsilon_double)-((s[j]).value)*(1.0+epsilon_double))*((double)i)/((double)(n_points-1))), String(""));
+//                
+//                if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
+//                    
+//                    ((*v)[j]).push_back(p);
+//                    
+//                }
+//                
+//            }
+//            
+//        }
         
     }else{
         

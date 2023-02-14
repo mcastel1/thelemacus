@@ -1175,10 +1175,18 @@ Angle::Angle(void){
     
 }
 
-//constructor of Angle, which sets the value of the angle to x
+//constructor of Angle, which sets the value of the angle to x, where x is in radians
 Angle::Angle(double x){
     
     value = x;
+    normalize();
+    
+}
+
+//constructor of Angle, which sets the value of the angle to deg° min'
+Angle::Angle(unsigned int deg, double min){
+    
+    value = k*(((double)deg) + min/60.0);
     normalize();
     
 }
@@ -9103,8 +9111,10 @@ void DrawPanel::Draw_Mercator(void){
     prefix = String("");
     new_prefix = prefix.append(String("\t"));
     
-    size_label_vertical = (GetTextExtent(wxString((dummy.to_string(String("NS"), (display_precision.value), false)))).GetHeight());
-    size_label_horizontal = (GetTextExtent(wxString((dummy.to_string(String("EW"), (display_precision.value), false)))).GetWidth());
+    //take the angle 33° 33.333333....' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
+    size_label_vertical = (GetTextExtent(wxString((Angle(0,  0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
+    //take the angle 333° 33.333333....' expresed with display_precision: the size of this angle label is the largest possible -> set it equal to size_label_horizontal
+    size_label_horizontal = (GetTextExtent(wxString((Angle(333, 100.0/3.0).to_string(String("EW"), (display_precision.value), false)))).GetWidth());
     
     //clears all labels previously drawn
     for(i=0; i<label_lambda.size(); i++){(label_lambda[i])->Destroy();}

@@ -148,6 +148,7 @@ public:
     
     Angle();
     Angle(double);
+    Angle(unsigned int, double);
     Angle(String, double, String);
     void normalize(void);
     Angle normalize_ret(void);

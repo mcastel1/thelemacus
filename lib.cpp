@@ -319,7 +319,7 @@ bool Double::equal_approx(Double x){
     
     memcpy(&value_uint64_t, &value, 8);
     memcpy(&xvalue_uint64_t, &(x.value), 8);
-
+    
     
     for(check = true, i=0; i<52; i++){
         check &= (((value_uint64_t >> i) & one_uint64_t) & ((xvalue_uint64_t >> i) & one_uint64_t));
@@ -1508,38 +1508,38 @@ Rectangle::Rectangle(void){
 //constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
 Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, String prefix){
     
-//    Angle phi_N, phi_S, lambda_W, lambda_E;
-//
-//    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
-//
-//    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-//    phi_N.normalize();
-//
-//    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-//    phi_S.normalize();
-//
-//    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-//    lambda_W.normalize();
-//
-//    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-//    lambda_E.normalize();
+    //    Angle phi_N, phi_S, lambda_W, lambda_E;
+    //
+    //    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
+    //
+    //    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+    //    phi_N.normalize();
+    //
+    //    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
+    //    phi_S.normalize();
+    //
+    //    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+    //    lambda_W.normalize();
+    //
+    //    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
+    //    lambda_E.normalize();
     
     
-//    p_NW = Position(lambda_W, phi_N);
-//    p_SE = Position(lambda_E, phi_S);
-
+    //    p_NW = Position(lambda_W, phi_N);
+    //    p_SE = Position(lambda_E, phi_S);
+    
     
     p_NW = p_NW_in;
     p_SE = p_SE_in;
     
-//    if(!((((p_NW_in.lambda).normalize_pm_pi_ret()) > ((p_SE_in.lambda).normalize_pm_pi_ret())) && (((p_NW_in.phi).normalize_pm_pi_ret()) > ((p_SE_in.phi).normalize_pm_pi_ret())))){
-//        
-//        cout << prefix.value << RED << "p_NW and p_SE are not ordered!\n" << RESET;
-//
-//    }
+    //    if(!((((p_NW_in.lambda).normalize_pm_pi_ret()) > ((p_SE_in.lambda).normalize_pm_pi_ret())) && (((p_NW_in.phi).normalize_pm_pi_ret()) > ((p_SE_in.phi).normalize_pm_pi_ret())))){
+    //
+    //        cout << prefix.value << RED << "p_NW and p_SE are not ordered!\n" << RESET;
+    //
+    //    }
     
 }
- 
+
 //returns true/false if p is containted in *this
 bool Rectangle::Contains(Position p){
     
@@ -1552,15 +1552,15 @@ bool Rectangle::Contains(Position p){
         
     }else{
         //'non-normal' configuration where *this  encompasses the anti-greenwich meridian
-
+        
         check_lambda = (((p.lambda) < (p_NW.lambda)) || ((p.lambda) > (p_SE.lambda)));
-
+        
         
     }
     
     return( check_lambda &&
            (((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
-           ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret()))) );
+            ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret()))) );
     
 }
 
@@ -1836,87 +1836,96 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     if(compute_l_ends(&s, draw_panel, prefix)){
         
         
-        //
-        //run over all chunks of *this which are visible
-        for(j=0; j<(s.size()); j++){
-                
-            v->resize((v->size())+1);
-            
-            compute_end(Length(((s[j]).value)), String(""));
-            if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
-                (v->back()).push_back(p);
-            }
-            
-            //tabulate the Route points of the jth component
-            for(i=1; i<n_points; i++){
-                
-                compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)(i-1))/((double)(n_points-1))), String(""));
-                lambda_a = (end.lambda);
-                
-                compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)i)/((double)(n_points-1))), String(""));
-                lambda_b = (end.lambda);
-                
+        /*
+         //run over all chunks of *this which are visible
+         for(j=0; j<(s.size()); j++){
+         
+         v->resize((v->size())+1);
+         
+         compute_end(Length(((s[j]).value)), String(""));
+         if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
+         (v->back()).push_back(p);
+         }
+         
+         //tabulate the Route points of the jth component
+         for(i=1; i<n_points; i++){
+         
+         compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)(i-1))/((double)(n_points-1))), String(""));
+         lambda_a = (end.lambda);
+         
+         compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)i)/((double)(n_points-1))), String(""));
+         lambda_b = (end.lambda);
+         
+         
+         
+         if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
+         //end is a valid point
+         
+         //                    if(((lambda_b > lambda_a) && (lambda_b > ((draw_panel->parent)->lambda_min)) && (lambda_a < ((draw_panel->parent)->lambda_min))) || ((lambda_b < lambda_a) && (lambda_b < ((draw_panel->parent)->lambda_max)) && (lambda_a > ((draw_panel->parent)->lambda_max)))){
+         //                        //there is a discontinuous jump when *this is drawn
+         //
+         //                        //create a new chunk in v
+         //                        v->resize((v->size())+1);
+         //
+         //                    }
+         
+         (v->back()).push_back(p);
+         
+         }
+         //                else{
+         //                    //end is a valid point
+         //
+         //                    //create a new chunk in v without adding any point to this chunk
+         //                    v->resize((v->size())+1);
+         //
+         //                }
+         
+         
+         
+         }
+         
+         
+         
+         }
+         */
         
-
+        
+        
+        
+        
+        //run over all chunks of *this which are visible
+        //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
+        v->resize((s.size())-1);
+        for(j=0; j<(v->size()); j++){
+            //run over all chunks
+            
+            //tabulate the Route points of the jth chunk
+            for(i=0; i<n_points; i++){
+                
+                //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
+                compute_end(Length(((s[j]).value)*(1.0+epsilon_double) + (((s[j+1]).value)*(1.0-epsilon_double)-((s[j]).value)*(1.0+epsilon_double))*((double)i)/((double)(n_points-1))), String(""));
+                
                 if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
                     //end is a valid point
                     
-                    if(((lambda_b > lambda_a) && (lambda_b > ((draw_panel->parent)->lambda_min)) && (lambda_a < ((draw_panel->parent)->lambda_min))) || ((lambda_b < lambda_a) && (lambda_b < ((draw_panel->parent)->lambda_max)) && (lambda_a > ((draw_panel->parent)->lambda_max)))){
-                        //there is a discontinuous jump when *this is drawn
-                        
-                        //create a new chunk in v
-                        v->resize((v->size())+1);
-                        
-                    }
-                    
-                    (v->back()).push_back(p);
-                    
-                }else{
-                    //end is a valid point
-                    
-                    //create a new chunk in v without adding any point to this chunk
-                    v->resize((v->size())+1);
+                    ((*v)[j]).push_back(p);
                     
                 }
                 
-                
-                
-            }
-            
-            
-            
-        }
-        
-        //delete chunks with size 1
-        for(j=0; j<(v->size()); ){
-            
-            if(((v[j]).size())<=1){
-                v->erase(((v->begin())+j));
-            }else{
-                j++;
             }
             
         }
-        //
         
-//        //run over all chunks of *this which are visible
-//        v->resize((s.size())-1);
-//        for(j=0; j<v->size(); j++){
-//            
-//            //tabulate the Route points of the jth component
-//            for(i=0; i<n_points; i++){
-//                
-//                //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
-//                compute_end(Length(((s[j]).value)*(1.0+epsilon_double) + (((s[j+1]).value)*(1.0-epsilon_double)-((s[j]).value)*(1.0+epsilon_double))*((double)i)/((double)(n_points-1))), String(""));
-//                
-//                if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
-//                    
-//                    ((*v)[j]).push_back(p);
-//                    
-//                }
-//                
+        
+//        //delete chunks with size 1
+//        for(j=0; j<(v->size()); ){
+//
+//            if(((v[j]).size())<=1){
+//                v->erase(((v->begin())+j));
+//            }else{
+//                j++;
 //            }
-//            
+//
 //        }
         
     }else{
@@ -2351,7 +2360,7 @@ bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
                                 //there are two intersection points -> the part of *this comprised into circle is the one with (*t)[0] < t <(*t)[1] -> all I need to do is sort t
                                 
                                 sort(t->begin(), t->end());
-
+                                
                                 compute_end(Length(Re*(((((*t)[0]).value)+(((*t)[1]).value))/2.0)), String(""));
                                 
                                 if(!(end.is_in(circle, String("")))){
@@ -2360,11 +2369,11 @@ bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
                                     //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
                                     t->push_back(Angle(0.0));
                                     t->push_back(Angle(2.0*M_PI));
-//                                    (t->back()).value = 2.0*M_PI;
+                                    //                                    (t->back()).value = 2.0*M_PI;
                                     
                                     sort(t->begin(), t->end());
-
-
+                                    
+                                    
                                 }
                                 
                                 
@@ -9108,7 +9117,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //set x_min, ..., y_max for the following
     (this->*Set_x_y_min_max)();
-
+    
     //set rectangle_obseerver
     rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
     
@@ -9120,7 +9129,7 @@ void DrawPanel::Draw_Mercator(void){
                         (((wxGetApp().rectangle_display).GetSize()).GetHeight())
                         );
         
-      }else{
+    }else{
         //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
         parent->SetSize(
                         (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
@@ -9135,31 +9144,31 @@ void DrawPanel::Draw_Mercator(void){
        < (size_chart.GetHeight()) - 2.5 * size_label_vertical
        ){
            //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is enough space to set size_plot_area's height by keeping the aspect ratio
-        
-        size_plot_area.SetWidth((size_chart.GetWidth()) - 2.5 * size_label_horizontal);
-        //    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
-        size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight())/(size_chart.GetWidth()) );
-        //    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
-        
-    }else{
-        //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first
-        
-        if((((size_chart.GetHeight()) - 2.5 * size_label_vertical) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < (size_chart.GetWidth()) - 2.5 * size_label_horizontal){
-            //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_vertical
-            
-            size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_vertical);
-            
-        }else{
-            //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is not enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_horizontal
-            
-            size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_horizontal);
- 
-        }
-
-        size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
-
-    }
-
+           
+           size_plot_area.SetWidth((size_chart.GetWidth()) - 2.5 * size_label_horizontal);
+           //    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
+           size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight())/(size_chart.GetWidth()) );
+           //    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
+           
+       }else{
+           //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first
+           
+           if((((size_chart.GetHeight()) - 2.5 * size_label_vertical) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < (size_chart.GetWidth()) - 2.5 * size_label_horizontal){
+               //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_vertical
+               
+               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_vertical);
+               
+           }else{
+               //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is not enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_horizontal
+               
+               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_horizontal);
+               
+           }
+           
+           size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
+           
+       }
+    
     tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value)*(size_plot_area.GetWidth());
     
     
@@ -9179,7 +9188,7 @@ void DrawPanel::Draw_Mercator(void){
     //updates the position of the draw pane this
     DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1, 1), &p_NW);
     DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/- wxPoint(1, 1), &p_SE);
-
+    
     //fetch the data on the region that I am about to plot from the data files.
     parent->GetCoastLineData_Mercator();
     
@@ -9337,11 +9346,11 @@ void DrawPanel::Draw_Mercator(void){
                           
                           
                           Re*cos(phi)* ((
-                                        
-                                        
-                                        (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda)-(p_SE.lambda) + 2.0*M_PI) : ((p_NW.lambda)-(p_SE.lambda))
-                                        
-                                        ).value), String(""));
+                                         
+                                         
+                                         (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda)-(p_SE.lambda) + 2.0*M_PI) : ((p_NW.lambda)-(p_SE.lambda))
+                                         
+                                         ).value), String(""));
             
             //            route.Draw(((plot->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw cannot handle loxodromes
@@ -9848,7 +9857,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read relative_displacement from file_init
     (wxGetApp().relative_displacement).read_from_file(String("relative displacement"), String(path_file_init), String(""));
-        
+    
     //read standard_thickness_over_length_screen from file_init
     (wxGetApp().standard_thickness_over_length_screen).read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
     
@@ -10039,7 +10048,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
     
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
-
+    
     
     if(((draw_panel->y_max)+delta < (p_floor_max.y)) && ((draw_panel->y_min)+delta > (p_ceil_min.y))){
         //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
@@ -10070,7 +10079,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
     
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
     (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
-
+    
     
     if(((draw_panel->y_max)+delta < (p_floor_max.y)) && ((draw_panel->y_min)+delta > (p_ceil_min.y))){
         //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
@@ -10329,32 +10338,32 @@ void DrawPanel::Set_x_y_min_max_Mercator(void){
     Projection p_min, p_max;
     Position temp;
     
-//    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
-//    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
+    //    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
+    //    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
     
     temp = Position(parent->lambda_min, parent->phi_min);
     (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     (p_min.y) = log(1.0/cos((temp.phi)) + tan((temp.phi)));
-
+    
     temp = Position(parent->lambda_max, parent->phi_max);
     (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     (p_max.y) = log(1.0/cos((temp.phi)) + tan((temp.phi)));
-
+    
     
     x_min = (p_min.x);
     y_min = (p_min.y);
     x_max = (p_max.x);
     y_max = (p_max.y);
-        
+    
 }
 
 //sets size_chart for the Mercator projection
 void DrawPanel::Set_size_chart_Mercator(void){
     
-     if((y_max-y_min) > x_span()){
+    if((y_max-y_min) > x_span()){
         
         //set the height and width of chart with the correct aspect ratio, and both similtaneously rescaled with respect to the size of the ChartFrame objest, in such a way that the chart fits into the ChartFrame object
-         
+        
         size_chart.SetHeight((length_chart_over_length_chart_frame.value) * (((wxGetApp().rectangle_display).GetSize()).GetHeight()));
         size_chart.SetWidth((size_chart.GetHeight())/((y_max-y_min)/x_span()));
     }else{
@@ -10912,7 +10921,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q){
         //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
         
         check_x = ((x_min <= (temp.x)) && ((temp.x) <= x_max+2.0*M_PI));
-
+        
     }
     
     
@@ -11045,9 +11054,9 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
             
         }else{
             //temp.x is negative: for it to fall within the plot area, I only need to check whether it lies betweeen -pi and x_max. Given temp.x > -pi by definition, I only need to check that temp.x < x_max
-
+            
             check_x = ((temp.x) <= x_max);
-
+            
         }
         
     }
@@ -11473,13 +11482,13 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 
                 double delta_x, delta_y;
                 Projection p_ceil_min, p_floor_max;
-
+                
                 delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)(size_plot_area.GetWidth())) * x_span();
                 delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_min);
                 
                 (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
                 (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
-
+                
                 
                 if((!((y_max+delta_y < (p_floor_max.y)) && (y_min+delta_y > (p_ceil_min.y))))){
                     //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset x_min , .... , y_max to their original values
@@ -11860,7 +11869,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
-
+                        
                         
                         if((y_max_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_min_start_drag) > (p_ceil_min.y))){
                             //in this case, the drag operation does not end out of the min and max latitude contained in the data files
@@ -12170,7 +12179,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
         Projection p_min, p_max;
-
+        
         
         //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
         (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - ( ((double)(((draw_panel->size_chart).GetWidth())*(draw_panel->x_span_0))) / ((double)(((zoom_factor.value)*(draw_panel->width_chart_0)))) )/2.0;
@@ -12350,7 +12359,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
         (f->listcontrol_routes)->EnableButtons(false);
         
     }
-
+    
     
     event.Skip(true);
     
@@ -12373,7 +12382,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     for(i=0; i<((f->plot)->route_list).size(); i++){
         
         if((((((f->plot)->route_list)[i]).related_sight).value) == -1){
-        
+            
             route_list_no_related_sight.push_back(((f->plot)->route_list)[i]);
             
         }
@@ -12542,13 +12551,13 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
     if((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))){
         
-//        (f->listcontrol_sights)->DeleteItem(i_related_sight);
+        //        (f->listcontrol_sights)->DeleteItem(i_related_sight);
         
         //given that after one item is deleted in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
         (f->listcontrol_sights)->EnableButtons(false);
-            
         
-
+        
+        
     }
     
     //I remove the route and the related sight from both the non-GUI object plot
@@ -12562,7 +12571,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     
     //given that a Route has been removed, I re-draw everything
     f->DrawAll();
-            
+    
     event.Skip(true);
     
 }
@@ -13007,7 +13016,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             }
             
             i++;
-        
+            
         }
         
     }
@@ -13036,7 +13045,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         (f->listcontrol_routes)->set((f->plot)->route_list);
         //given that the transport is over, set highlight_routes back to true
         (f->enable_highlight) = true;
-
+        
         
         //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
         f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
@@ -13929,7 +13938,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
     (parent->listcontrol_routes)->EnableButtons(false);
-
+    
     
     parent->DrawAll();
     
@@ -14709,14 +14718,14 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
-                                                                                                    existing_route,
-                                                                                                    String("Existing route"),
-                                                                                                    create_route, String("New route"),
-                                                                                                    "",
-                                                                                                    "With what route do you want to transport the sight?",
-                                                                                                    wxDefaultPosition,
-                                                                                                    wxDefaultSize,
-                                                                                                    String(""));
+                                                                                                        existing_route,
+                                                                                                        String("Existing route"),
+                                                                                                        create_route, String("New route"),
+                                                                                                        "",
+                                                                                                        "With what route do you want to transport the sight?",
+                                                                                                        wxDefaultPosition,
+                                                                                                        wxDefaultSize,
+                                                                                                        String(""));
     question_frame->Show(true);
     
     
@@ -14733,14 +14742,14 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
-                                                                                                    existing_route,
-                                                                                                    String("Existing route"),
-                                                                                                    create_route, String("New route"),
-                                                                                                    "",
-                                                                                                    "With what route do you want to transport the sight?",
-                                                                                                    wxDefaultPosition,
-                                                                                                    wxDefaultSize,
-                                                                                                    String(""));
+                                                                                                        existing_route,
+                                                                                                        String("Existing route"),
+                                                                                                        create_route, String("New route"),
+                                                                                                        "",
+                                                                                                        "With what route do you want to transport the sight?",
+                                                                                                        wxDefaultPosition,
+                                                                                                        wxDefaultSize,
+                                                                                                        String(""));
     question_frame->Show(true);
     
     
@@ -15794,7 +15803,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
     (parent->listcontrol_routes)->EnableButtons(false);
-
+    
     parent->DrawAll();
     
     event.Skip(true);
@@ -17382,9 +17391,9 @@ template<class T> void ListControl::set(vector<T> v){
 
 //if check = true/false it enables/disables all disableable buttons in *this
 void ListControl::EnableButtons(bool check){
- 
+    
     unsigned int i;
-        
+    
     for(i=0; i<disableable_buttons.size(); i++){
         
         (disableable_buttons[i])->Enable(check);

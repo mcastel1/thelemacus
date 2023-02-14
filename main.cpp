@@ -147,6 +147,22 @@ bool MyApp::OnInit(){
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
     
+    //read n_points_minor_ticks from file_init
+    (wxGetApp().n_points_minor_ticks).read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
+    //read relative_displacement from file_init
+    (wxGetApp().relative_displacement).read_from_file(String("relative displacement"), String(path_file_init), String(""));
+    //read standard_thickness_over_length_screen from file_init
+    (wxGetApp().standard_thickness_over_length_screen).read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
+    //read large_thickness_over_length_screen from file_init
+    (wxGetApp().large_thickness_over_length_screen).read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
+    //read color horizon from file
+    (wxGetApp().color_horizon).read_from_file(String("color horizon"), String(path_file_init), String(""));
+    //read tick length over width plot area from file_init
+    (wxGetApp().tick_length_over_width_plot_area).read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
+    //read tick length over width plot area from file_init
+    (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
+ 
+    
     
     //read the time, and set the background color to either the day or night background color, which are read from file
 //    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));

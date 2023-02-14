@@ -9852,26 +9852,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //read zoom_factor_max from file_init
     (wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
     
-    //read n_points_minor_ticks from file_init
-    (wxGetApp().n_points_minor_ticks).read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
     
-    //read relative_displacement from file_init
-    (wxGetApp().relative_displacement).read_from_file(String("relative displacement"), String(path_file_init), String(""));
-    
-    //read standard_thickness_over_length_screen from file_init
-    (wxGetApp().standard_thickness_over_length_screen).read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
-    
-    //read large_thickness_over_length_screen from file_init
-    (wxGetApp().large_thickness_over_length_screen).read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
-    
-    //read color horizon from file
-    (wxGetApp().color_horizon).read_from_file(String("color horizon"), String(path_file_init), String(""));
-    
-    //read tick length over width plot area from file_init
-    (wxGetApp().tick_length_over_width_plot_area).read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
-    
-    //read tick length over width plot area from file_init
-    (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
     //SetColor(this);
     
@@ -9929,7 +9910,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
     
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
-    
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
     draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);

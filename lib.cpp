@@ -1883,6 +1883,19 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                 
             }
             
+            
+            
+        }
+        
+        //delete chunks with size 1
+        for(j=0; j<(v->size()); ){
+            
+            if(((v[j]).size())<=1){
+                v->erase(((v->begin())+j));
+            }else{
+                j++;
+            }
+            
         }
         //
         

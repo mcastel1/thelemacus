@@ -1842,7 +1842,6 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                 
             v->resize((v->size())+1);
             
-            
             compute_end(Length(((s[j]).value)), String(""));
             if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
                 (v->back()).push_back(p);
@@ -1852,26 +1851,35 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
             for(i=1; i<n_points; i++){
                 
                 compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)(i-1))/((double)(n_points-1))), String(""));
-                lambda_b = (end.lambda);
+                lambda_a = (end.lambda);
                 
                 compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)i)/((double)(n_points-1))), String(""));
-                lambda_a = (end.lambda);
+                lambda_b = (end.lambda);
                 
         
 
                 if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
                     //end is a valid point
                     
-                    if(((lambda_b > lambda_a) && (lambda_b > ((draw_panel->parent)->lambda_max)) && (lambda_a < ((draw_panel->parent)->lambda_min))) || ((lambda_b < lambda_a) && (lambda_b < ((draw_panel->parent)->lambda_min)) && (lambda_a > ((draw_panel->parent)->lambda_max)))){
+                    if(((lambda_b > lambda_a) && (lambda_b > ((draw_panel->parent)->lambda_min)) && (lambda_a < ((draw_panel->parent)->lambda_min))) || ((lambda_b < lambda_a) && (lambda_b < ((draw_panel->parent)->lambda_max)) && (lambda_a > ((draw_panel->parent)->lambda_max)))){
                         //there is a discontinuous jump when *this is drawn
                         
+                        //create a new chunk in v
                         v->resize((v->size())+1);
                         
                     }
                     
                     (v->back()).push_back(p);
                     
+                }else{
+                    //end is a valid point
+                    
+                    //create a new chunk in v without adding any point to this chunk
+                    v->resize((v->size())+1);
+                    
                 }
+                
+                
                 
             }
             

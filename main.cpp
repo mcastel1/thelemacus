@@ -37,7 +37,7 @@
  - add check on zoom factor in OnMouseRightDown for the 3D projections
   - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
  - move all stuff which is general enough in the code to MyApp class 
- - in the mercator projection ticks on the x axis are missing on the left edge of the x axis
+ - in the mercator projection ticks on the x axis are missing on the right edge of the x axis
 
  */
 

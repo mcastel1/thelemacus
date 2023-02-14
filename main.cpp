@@ -27,6 +27,7 @@
  - in Route::draw_3D, code the part for loxodrome curves
  - move all constants to the init file , such as  the 0.15 in  'position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
  - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
+ - replace use of epsilon_double with more proper methods 
 
  ********** THINGS TO FIX ************
  

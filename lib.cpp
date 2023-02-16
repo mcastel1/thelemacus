@@ -1925,16 +1925,16 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
         }
         
         
-//        //delete chunks with size 1
-//        for(j=0; j<(v->size()); ){
-//
-//            if(((v[j]).size())<=1){
-//                v->erase(((v->begin())+j));
-//            }else{
-//                j++;
-//            }
-//
-//        }
+        //        //delete chunks with size 1
+        //        for(j=0; j<(v->size()); ){
+        //
+        //            if(((v[j]).size())<=1){
+        //                v->erase(((v->begin())+j));
+        //            }else{
+        //                j++;
+        //            }
+        //
+        //        }
         
     }else{
         
@@ -9153,27 +9153,15 @@ void DrawPanel::Draw_Mercator(void){
        ((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))) * (size_chart.GetHeight())/(size_chart.GetWidth())
        < (size_chart.GetHeight()) - (((int)size_label_vertical) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
        ){
-           //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is enough space to set size_plot_area's height by keeping the aspect ratio
+           //if I set size_plot_area's width first to leave room for size_label_horizontal + 3 margins, then there is enough space to set size_plot_area's height by keeping the aspect ratio
            
            size_plot_area.SetWidth((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
-           //    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
            size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight())/(size_chart.GetWidth()) );
-           //    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
            
        }else{
-           //if I set size_plot_area's width first to leave room for 2.5 * ((int)size_label_horizontal), then there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first
+           //if I set size_plot_area's width first to leave room for  ((int)size_label_horizontal) + 3 margins and there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first and set the width later according to the aspect ratio
            
-           if((((size_chart.GetHeight()) - 2.5 * ((int)size_label_vertical)) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < (size_chart.GetWidth()) - 2.5 * ((int)size_label_horizontal)){
-               //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_vertical
-               
-               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * ((int)size_label_vertical));
-               
-           }else{
-               //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is not enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_horizontal
-               
-               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * ((int)size_label_horizontal));
-               
-           }
+           size_plot_area.SetHeight((size_chart.GetHeight()) - ( ((int)size_label_vertical) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
            
            size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
            

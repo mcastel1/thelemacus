@@ -8914,7 +8914,7 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, Int precision,
         //... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of ((*labels).back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of ((*labels).back())
         if(mode == String("NS")){
             
-            p += wxPoint(-size_label_horizontal-((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), -size_label_vertical/2);
+            p += wxPoint(-((int)size_label_horizontal)-((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), -((int)size_label_vertical)/2);
             
         }else{
             
@@ -9150,28 +9150,28 @@ void DrawPanel::Draw_Mercator(void){
     
     //sets size_plot_area
     if(
-       ((size_chart.GetWidth()) - ( size_label_horizontal + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))) * (size_chart.GetHeight())/(size_chart.GetWidth())
-       < (size_chart.GetHeight()) - (size_label_vertical + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
+       ((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))) * (size_chart.GetHeight())/(size_chart.GetWidth())
+       < (size_chart.GetHeight()) - (((int)size_label_vertical) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
        ){
            //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is enough space to set size_plot_area's height by keeping the aspect ratio
            
-           size_plot_area.SetWidth((size_chart.GetWidth()) - ( size_label_horizontal + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
+           size_plot_area.SetWidth((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
            //    size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
            size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight())/(size_chart.GetWidth()) );
            //    size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
            
        }else{
-           //if I set size_plot_area's width first to leave room for 2.5 * size_label_horizontal, then there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first
+           //if I set size_plot_area's width first to leave room for 2.5 * ((int)size_label_horizontal), then there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first
            
-           if((((size_chart.GetHeight()) - 2.5 * size_label_vertical) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < (size_chart.GetWidth()) - 2.5 * size_label_horizontal){
+           if((((size_chart.GetHeight()) - 2.5 * ((int)size_label_vertical)) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < (size_chart.GetWidth()) - 2.5 * ((int)size_label_horizontal)){
                //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_vertical
                
-               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_vertical);
+               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * ((int)size_label_vertical));
                
            }else{
                //if I set size_plot_area's height by leaving room for 2.5 * size_label_vertical there is not enough space for size_plot_area's width by keeping the aspect ratio -> I set size_plot_area's height by leaving room for 2.5 * size_label_horizontal
                
-               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * size_label_horizontal);
+               size_plot_area.SetHeight((size_chart.GetHeight()) - 2.5 * ((int)size_label_horizontal));
                
            }
            
@@ -9193,7 +9193,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //stores into position_plot_area the screen position of the top-left edge of the plot area.
-    position_plot_area = wxPoint(size_label_horizontal + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+    position_plot_area = wxPoint(((int)size_label_horizontal) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
     //set p_NW and p_SE
     //updates the position of the draw pane this
     DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1, 1), &p_NW);

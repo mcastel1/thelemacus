@@ -9116,7 +9116,7 @@ void DrawPanel::Draw_Mercator(void){
     Projection temp, delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
-    Angle dummy, phi, lambda_saved, Z_saved, phi_saved;
+    Angle phi, lambda_saved, Z_saved, phi_saved;
     Route route;
     Length r, s;
     Position q, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE;
@@ -9137,9 +9137,6 @@ void DrawPanel::Draw_Mercator(void){
     label_lambda.resize(0);
     for(i=0; i<label_phi.size(); i++){(label_phi[i])->Destroy();}
     label_phi.resize(0);
-    
-    //I create an angle which has the largest posible label when printed out in the "EW" format, so as to compute the  value of n_interval_ticks which allows the x-axis labels not to superpose
-    dummy.from_sign_deg_min('+', 179, 59);
     
     //set x_min, ..., y_max for the following
     (this->*Set_x_y_min_max)();

@@ -9174,7 +9174,7 @@ void DrawPanel::Draw_Mercator(void){
            
            position_plot_area = wxPoint(
                                         ((int)size_label_horizontal) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
-                                        ( ((int)(size_chart.GetHeight())) -  (((int)(size_plot_area.GetHeight())) + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)) )/2
+                                        ( ((int)(size_chart.GetHeight())) -  (((int)(size_plot_area.GetHeight())) + ((int)size_label_vertical) + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)) )/2
                                         );
            
            
@@ -9184,7 +9184,17 @@ void DrawPanel::Draw_Mercator(void){
            size_plot_area.SetHeight((size_chart.GetHeight()) - ( ((int)size_label_vertical) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
            size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
            
-           //stores into position_plot_area the screen position of the top-left edge of the plot area.
+           position_plot_area = wxPoint(
+                                        
+                                        ( ((int)(size_chart.GetWidth())) -  (((int)(size_plot_area.GetWidth())) + ((int)size_label_horizontal) +  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)) )/2
+
+                                        
+                                        ,
+                                        
+                                        ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)
+                                        
+                                        );
+           
 
            
        }

@@ -8825,8 +8825,82 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     
 }
 
-//This function draws into *this the text label for a parallel or a meridian, by placing it near the Positian q. The latitude/longitude in the text label is q.phi/q.lambda, and the labels are wxStaticText objects which are stored in label_phi/label_lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
-void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, Int precision, String mode){
+
+//This function writes into *output the text label for a parallel or a meridia. The latitude/longitude in the text label is q.phi/q.lambda, min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process of the label by DrawPanel::SetLabel, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively. The output is written int *output
+void DrawPanel::SetLabel(const Position& q, Angle min, Angle max, Int precision, String mode, wxString* output){
+    
+    double delta;
+    //a pointer to the angle which will be used to draw the label
+    Angle angle_label;
+    stringstream s;
+    wxString wx_string;
+    
+    s.str("");
+    
+    if(mode == String("NS")){
+        //if I am drawing latitude labels, I set the angle relative to the label to q.phi, and delta to delta_phi, and I let labels point to label_phi
+        
+        angle_label = (q.phi);
+        delta = delta_phi;
+        
+    }else{
+        //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda, and I let labels point to label_lambda
+        
+        angle_label = (q.lambda);
+        delta = delta_lambda;
+        
+    }
+    
+    
+    if(/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(K*(angle_label.value)-round(K*(angle_label.value))) < epsilon_double){
+        //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
+        
+        s << angle_label.deg_to_string(mode, (precision.value));
+        
+    }else{
+        
+        //in this case, delta  is not an integer multiple of a degree. However, (angle_label.value) may still be or not be a multiple integer of a degree
+        if(k*fabs(K*(angle_label.value) - ((double)round(K*(angle_label.value)))) < delta/2.0){
+            //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
+            
+            s << angle_label.deg_to_string(mode, (precision.value));
+            
+        }else{
+            //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
+            
+            //                if(ceil((K*((parent->phi_max).value)))  - floor((K*((parent->phi_min).value))) != 1){
+            if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
+                //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
+                
+                s << angle_label.min_to_string(mode, (precision.value));
+                
+            }else{
+                //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
+                
+                if(first_label){
+                    
+                    s << angle_label.to_string(mode, (precision.value), false);
+                    
+                }else{
+                    
+                    s << angle_label.min_to_string(mode, (precision.value));
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+    }
+    
+    (*output) = wxString(s.str().c_str());
+    
+    
+}
+
+//This function draws into *this the text label for a parallel or a meridian, by placing it near the Position q. The latitude/longitude in the text label is q.phi/q.lambda, and the labels are wxStaticText objects which are stored in label_phi/label_lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
+void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision, String mode){
     
     wxPoint p;
     vector<StaticText*>* labels;
@@ -8835,78 +8909,20 @@ void DrawPanel::PutLabel(const Position& q, Angle min, Angle max, Int precision,
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
         
         wxString wx_string;
-        //a pointer to the angle which will be used to draw the label
-        Angle angle_label;
-        double delta;
-        stringstream s;
         
+        //write the label into wx_string
+        SetLabel(q, min, max, precision, mode, &wx_string);
         
-        s.str("");
         
         if(mode == String("NS")){
-            //if I am drawing latitude labels, I set the angle relative to the label to q.phi, and delta to delta_phi, and I let labels point to label_phi
-            
-            angle_label = (q.phi);
-            delta = delta_phi;
-            labels = &label_phi;
-            
+            //if I am drawing latitude labels I let labels point to label_phi
+               labels = &label_phi;
         }else{
-            //if I am drawing longitude labels, I set the angle relative to the label to q.lambda, and delta to delta_lambda, and I let labels point to label_lambda
-            
-            angle_label = (q.lambda);
-            delta = delta_lambda;
-            labels = &label_lambda;
-            
+            //if I am drawing longitude labels I let labels point to label_lambda
+             labels = &label_lambda;
         }
         
-        
-        if(/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(K*(angle_label.value)-round(K*(angle_label.value))) < epsilon_double){
-            //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
             
-            s << angle_label.deg_to_string(mode, (precision.value));
-            
-        }else{
-            
-            //in this case, delta  is not an integer multiple of a degree. However, (angle_label.value) may still be or not be a multiple integer of a degree
-            if(k*fabs(K*(angle_label.value) - ((double)round(K*(angle_label.value)))) < delta/2.0){
-                //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
-                
-                s << angle_label.deg_to_string(mode, (precision.value));
-                
-            }else{
-                //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
-                
-                //                if(ceil((K*((parent->phi_max).value)))  - floor((K*((parent->phi_min).value))) != 1){
-                if(ceil((K*((max.normalize_pm_pi_ret()).value)))  - floor((K*((min.normalize_pm_pi_ret()).value))) != 1){
-                    //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
-                    
-                    s << angle_label.min_to_string(mode, (precision.value));
-                    
-                }else{
-                    //in this case, the phi interval which is plotted spans less than a degree: there will be no tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I add this tic by printing, at the first tic, both the arcdegrees and arcminutes.
-                    
-                    if(first_label){
-                        
-                        s << angle_label.to_string(mode, (precision.value), false);
-                        
-                    }else{
-                        
-                        s << angle_label.min_to_string(mode, (precision.value));
-                        
-                    }
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-        wx_string = wxString(s.str().c_str());
-        
-        
-        //        dc.DrawRotatedText(wx_string, p, 0);
-        
         (*labels).resize(((*labels).size())+1);
         //I first crate a StaticText with default position ...
         ((*labels).back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
@@ -9396,7 +9412,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
+        DrawLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
         
     }
     
@@ -9410,7 +9426,7 @@ void DrawPanel::Draw_Mercator(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
+        DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
         
     }
     
@@ -9746,7 +9762,7 @@ void DrawPanel::Draw_3D(void){
         ((q.phi).value) += delta_phi
         ){
         
-        PutLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
+        DrawLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
         
     }
     
@@ -9760,7 +9776,7 @@ void DrawPanel::Draw_3D(void){
         ((q.lambda).value) += delta_lambda
         ){
         
-        PutLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
+        DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
         
     }
     

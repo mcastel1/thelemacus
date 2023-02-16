@@ -9127,7 +9127,7 @@ void DrawPanel::Draw_Mercator(void){
     prefix = String("");
     new_prefix = prefix.append(String("\t"));
     
-    //take the angle 33° 33.333333....' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
+    //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
     size_label_vertical = (GetTextExtent(wxString((Angle(0,  0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
     //take the angle 333° 33.333333....' expresed with display_precision: the size of this angle label is the largest possible -> set it equal to size_label_horizontal
     size_label_horizontal = (GetTextExtent(wxString((Angle(333, 100.0/3.0).to_string(String("EW"), (display_precision.value), false)))).GetWidth());

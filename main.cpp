@@ -28,7 +28,10 @@
  - move all constants to the init file , such as  the 0.15 in  'position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
  - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
  - replace use of epsilon_double with more proper methods 
-
+- add button that allows user to jump from ListFrame to ChartFrame and the other way around
+ - replace limb dropdown menu and other dropdown menus with horizontal selection menus
+ - selection rectangle should be activated with a single left mouse click rather than with a right mouse click
+ - the code should return the position (lat lon) of the crossiing betqween two circles of equal altitude
  ********** THINGS TO FIX ************
  
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function

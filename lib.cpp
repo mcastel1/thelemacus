@@ -9184,9 +9184,17 @@ void DrawPanel::Draw_Mercator(void){
            size_plot_area.SetHeight((size_chart.GetHeight()) - ( ((int)size_label_vertical) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
            size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
            
+           if(((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < ((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )))){
+               //good: there is enough space
+               
+           }else{
+               //bad: there is not enough space
+               
+           }
+           
            position_plot_area = wxPoint(
                                         
-                                        ( ((int)(size_chart.GetWidth())) -  (((int)(size_plot_area.GetWidth())) + ((int)size_label_horizontal) +  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)) )/2
+                                        ( ((int)(size_chart.GetWidth())) -  (((int)(size_plot_area.GetWidth())) - ((int)size_label_horizontal) -  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)) )/2
 
                                         
                                         ,

@@ -8827,7 +8827,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
 
 
 //This function writes into *output the text label for a parallel or a meridia. The latitude/longitude in the text label is q.phi/q.lambda, min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process of the label by DrawPanel::SetLabel, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively. The output is written int *output
-void DrawPanel::SetLabel(const Position& q, Angle min, Angle max, Int precision, String mode, wxString* output){
+void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precision, String mode, wxString* output){
     
     double delta;
     //a pointer to the angle which will be used to draw the label
@@ -8911,7 +8911,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         wxString wx_string;
         
         //write the label into wx_string
-        SetLabel(q, min, max, precision, mode, &wx_string);
+        WriteLabel(q, min, max, precision, mode, &wx_string);
         
         
         if(mode == String("NS")){

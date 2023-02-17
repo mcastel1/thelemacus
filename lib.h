@@ -1579,7 +1579,7 @@ public:
     
     void Render_Mercator(wxDC&);
     void Render_3D(wxDC&);
-    void SetLabel(const Position&, Angle, Angle, Int, String, wxString*);
+    void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
 
     bool GetMouseGeoPosition(Position*);

@@ -9132,6 +9132,56 @@ void DrawPanel::Draw_Mercator(void){
     //take the angle 333° 33.333333....' expresed with display_precision: the size of this angle label is the largest possible -> set it equal to size_label_horizontal
     size_label_horizontal = (GetTextExtent(wxString((Angle(333, 100.0/3.0).to_string(String("EW"), (display_precision.value), false)))).GetWidth());
     
+    
+    //set phi_start, phi_end and delta_phi
+    phi_span =  (((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value);
+    
+    //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
+    if(phi_span > k){
+        //in this case, phi_span is larger than one degree
+        gamma_phi = 1;
+        delta_phi_minor = -1.0;
+    }else{
+        if(phi_span > 10.0*arcmin_radians){
+            //in this case, one arcdegree > phi_span > 10 arcminutes
+            gamma_phi = 60;
+            delta_phi_minor = arcmin_radians;
+        }else{
+            //in this case, 10 arcminutes > phi_span
+            gamma_phi = 60 * 10;
+            delta_phi_minor = tenth_arcmin_radians;
+        }
+    }
+    
+    delta_phi=k/((double)gamma_phi);
+    while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
+        if(delta_phi == k/((double)gamma_phi)){delta_phi += k*4.0/((double)gamma_phi);}
+        else{delta_phi += k*5.0/((double)gamma_phi);}
+    }
+    
+    //set phi_start/end
+    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
+    (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
+ 
+
+    
+    /*
+     //compute size of largest label on parallel
+    for(first_label = true,
+        //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2+ceil(fabs(log(delta_phi*K*60)))),
+        ((q.phi).value) = (phi_start.value),
+        (q.lambda) = (parent->lambda_min) - epsilon_double;
+        ((q.phi).value) < (phi_end.value);
+        ((q.phi).value) += delta_phi
+        ){
+        
+        DrawLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
+        
+    }
+     */
+    
+    
     //clears all labels previously drawn
     for(i=0; i<label_lambda.size(); i++){(label_lambda[i])->Destroy();}
     label_lambda.resize(0);
@@ -9284,35 +9334,7 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
-    //set phi_start, phi_end and delta_phi
-    phi_span =  (((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value);
     
-    //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-    if(phi_span > k){
-        //in this case, phi_span is larger than one degree
-        gamma_phi = 1;
-        delta_phi_minor = -1.0;
-    }else{
-        if(phi_span > 10.0*arcmin_radians){
-            //in this case, one arcdegree > phi_span > 10 arcminutes
-            gamma_phi = 60;
-            delta_phi_minor = arcmin_radians;
-        }else{
-            //in this case, 10 arcminutes > phi_span
-            gamma_phi = 60 * 10;
-            delta_phi_minor = tenth_arcmin_radians;
-        }
-    }
-    
-    delta_phi=k/((double)gamma_phi);
-    while(((plot->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
-        if(delta_phi == k/((double)gamma_phi)){delta_phi += k*4.0/((double)gamma_phi);}
-        else{delta_phi += k*5.0/((double)gamma_phi);}
-    }
-    
-    //set phi_start/end
-    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
-    (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
     
     
     //draw meridians

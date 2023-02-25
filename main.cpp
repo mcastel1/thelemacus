@@ -32,7 +32,6 @@
  - replace limb dropdown menu and other dropdown menus with horizontal selection menus
  - selection rectangle should be activated with a single left mouse click rather than with a right mouse click
  - the code should return the position (lat lon) of the crossiing betqween two circles of equal altitude
- - metti cestino spazzatura per bottone elimina
  ********** THINGS TO FIX ************
  
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function

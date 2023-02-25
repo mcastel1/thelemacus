@@ -14577,8 +14577,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol routes with routes
     
     
-    
-    
+    //button to show map
+    button_show_map = new wxButton(panel, wxID_ANY, "Map", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+//    button_show_map->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
+ 
     //button to add a sight
     button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
@@ -14622,6 +14624,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_v->Add(sizer_box_sight, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_position, 0,  wxALL, margin_v);
     sizer_v->Add(sizer_box_route, 0,  wxALL, margin_v);
+    sizer_v->Add(button_show_map, 0, wxALL, margin_v);
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);

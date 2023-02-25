@@ -14378,6 +14378,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     plot->print(true, String(""), cout);
     //
     
+    //image for button_map
+    wxBitmap my_bitmap_map = wxBitmap(wxT(path_file_map_icon), wxBITMAP_TYPE_PNG);
+    wxImage my_image_map = my_bitmap_map.ConvertToImage();
+    my_image_map.Rescale(20,20);
     
     //image for button_modify_sight
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
@@ -14578,7 +14582,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     //button to show map
-    button_show_map = new wxButton(panel, wxID_ANY, "Map", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_show_map = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
 //    button_show_map->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
  
     //button to add a sight

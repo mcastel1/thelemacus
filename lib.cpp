@@ -14426,12 +14426,12 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_delete_sight->Enable(false);
     
     //button to delete a position
-    button_delete_position = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition, this);
     button_delete_position->Enable(false);
     
     //button to delete a route
-    button_delete_route = new wxButton(panel, wxID_ANY, "-", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(size_small_button_over_width_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
     button_delete_route->Enable(false);
     

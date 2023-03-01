@@ -57,6 +57,18 @@ void MyApp::OnTimer(wxTimerEvent& event){
      
 }
 
+void MyApp::ShowMap(wxCommandEvent& event){
+    
+    unsigned int i;
+    
+    for(i=0; i<(list_frame->chart_frames).size(); i++){
+        
+        ((list_frame->chart_frames)[i])->Raise();
+
+    }
+    
+}
+
 bool MyApp::OnInit(){
     
     /*

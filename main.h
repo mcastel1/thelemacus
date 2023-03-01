@@ -78,6 +78,7 @@ public:
 
     virtual bool OnInit();
     void OnTimer(wxTimerEvent&);
+    void ShowMap(wxCommandEvent&);
 
 };
 

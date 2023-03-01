@@ -57,7 +57,7 @@ void MyApp::OnTimer(wxTimerEvent& event){
      
 }
 
-void MyApp::ShowMap(wxCommandEvent& event){
+void MyApp::ShowChart(wxCommandEvent& event){
     
     unsigned int i;
     

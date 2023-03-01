@@ -146,6 +146,10 @@ bool MyApp::OnInit(){
     max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
     min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
     
+    size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
+    size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), String(path_file_init), String(""));
+
+    
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
@@ -160,6 +164,8 @@ bool MyApp::OnInit(){
     (wxGetApp().large_thickness_over_length_screen).read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
     //read color horizon from file
     (wxGetApp().color_horizon).read_from_file(String("color horizon"), String(path_file_init), String(""));
+    //read color selected item from file
+    color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
     //read tick length over width plot area from file_init
     (wxGetApp().tick_length_over_width_plot_area).read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
     //read tick length over width plot area from file_init

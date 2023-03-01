@@ -10050,7 +10050,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
-    CenterOnScreen();
+//    CenterOnScreen();
     
 }
 

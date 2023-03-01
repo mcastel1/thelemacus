@@ -239,10 +239,18 @@ bool MyApp::OnInit(){
                                                        String(""),
                                                        s.str(),
                                                        /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
-                                                       wxPoint(
-                                                               0 + (i+1)*(int)(((double)(rectangle_display.GetWidth()))/20.0),
-                                                               0 + (i+1)*(int)(((double)(rectangle_display.GetHeight()))/20.0)
-                                                               ),
+//                                                       wxPoint(
+//
+//                                                                 ((double)(rectangle_display.GetWidth())) - ((double)(rectangle_display.GetWidth()))
+//                                                               )
+//                                                               ,
+//                                                               i*(
+//                                                                   (rectangle_display.GetHeight())/3.0 - ((rectangle_display.GetHeight()) - ((list_frame->chart_frames).size())*((rectangle_display.GetHeight())/3.0))/2.0
+//                                                               )
+//
+//                                                               )
+                                                       wxDefaultPosition
+        ,
                                                        wxDefaultSize,
                                                        String("")
                                                        );

@@ -60,14 +60,35 @@ void MyApp::OnTimer(wxTimerEvent& event){
 void MyApp::ShowChart(wxCommandEvent& event){
     
     unsigned int i;
+    //the spacing between one frame and another
+    double delta, x;
     
-    for(i=0; i<(list_frame->chart_frames).size(); i++){
+    delta = ( ((double)(rectangle_display.GetWidth())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetWidth())) ) / 2.0 ) / ((double)(((list_frame->chart_frames).size())-1));
+    
+    
+    
+    for(i=0; i<((list_frame->chart_frames).size()); i++){
+        
 
-        ((list_frame->chart_frames)[i])->SetPosition(wxPoint(0, 0));
+        
         ((list_frame->chart_frames)[i])->Show(true);
-        ((list_frame->chart_frames)[i])->Raise();
-
+        //        ((list_frame->chart_frames)[i])->Raise();
+        ((list_frame->chart_frames)[i])->SetPosition(wxPoint(
+                                                             
+                                                             
+                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth())) ) / 2.0 + delta*((double)i)
+                                                             
+                                                             
+                                                             ,
+                                                             
+                                                             0
+                                                             
+                                                             ));
+        
+        
+        
     }
+
     
 }
 

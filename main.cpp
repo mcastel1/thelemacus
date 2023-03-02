@@ -63,6 +63,7 @@ void MyApp::ShowChart(wxCommandEvent& event){
     
     for(i=0; i<(list_frame->chart_frames).size(); i++){
 
+        ((list_frame->chart_frames)[i])->SetPosition(wxPoint(0, 0));
         ((list_frame->chart_frames)[i])->Show(true);
         ((list_frame->chart_frames)[i])->Raise();
 

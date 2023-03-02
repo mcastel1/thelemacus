@@ -57,13 +57,17 @@ void MyApp::OnTimer(wxTimerEvent& event){
      
 }
 
+//shows all ChartFrames and positions them properly on the screen 
 void MyApp::ShowChart(wxCommandEvent& event){
     
     unsigned int i;
     //the spacing between one frame and another in the x and y direction, respectively
     double delta_x, delta_y, margin;
- 
     
+    
+    i = (((list_frame->menu_bar)->GetSize()).GetHeight());
+
+    //I add the margin so the frames do not stick to the edges of the screen
     margin = ((double)((rectangle_display.GetWidth())*(length_border_over_length_screen.value)));
     delta_x = ( ((double)(rectangle_display.GetWidth())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetWidth())) ) / 2.0  - 2.0 * margin ) / ((double)(((list_frame->chart_frames).size())-1));
     delta_y = ( ((double)(rectangle_display.GetHeight())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetHeight())) ) / 2.0 - 2.0 * margin ) / ((double)(((list_frame->chart_frames).size())-1));
@@ -83,6 +87,8 @@ void MyApp::ShowChart(wxCommandEvent& event){
                                                              
                                                              ,
                                                              
+                                                             /*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
+                                                             list_frame->menu_bar->GetSize().GetHeight() +
                                                              ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight())) ) / 2.0 + margin + delta_y*((double)i)
                                                            
                                                              ));

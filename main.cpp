@@ -62,7 +62,8 @@ void MyApp::ShowChart(wxCommandEvent& event){
     unsigned int i;
     
     for(i=0; i<(list_frame->chart_frames).size(); i++){
-        
+
+        ((list_frame->chart_frames)[i])->Show(true);
         ((list_frame->chart_frames)[i])->Raise();
 
     }
@@ -144,6 +145,7 @@ bool MyApp::OnInit(){
     String default_projection;
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
+    wxCommandEvent dummy;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
 //    Chrono current_time, dawn, dusk;
     
@@ -254,10 +256,12 @@ bool MyApp::OnInit(){
                                                        wxDefaultSize,
                                                        String("")
                                                        );
-        ((list_frame->chart_frames)[i])->Show(true);
-        ((list_frame->chart_frames)[i])->Raise();
+//        ((list_frame->chart_frames)[i])->Show(true);
+//        ((list_frame->chart_frames)[i])->Raise();
 
     }
+    
+    ShowChart(dummy);
     
     //bring either of these wxFrames to front
 //    list_frame->Raise();

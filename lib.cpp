@@ -14223,7 +14223,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
 
 ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width /*, margin_h = 10*/, margin_v, red, green, blue;
+    unsigned int i, total_column_width, margin, red, green, blue;
     wxListItem column, item;
     String s;
     vector<wxButton*> disableable_buttons;
@@ -14263,7 +14263,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     
-    margin_v = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);
+    margin = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     (wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
@@ -14485,7 +14485,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
     
-    sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin_v);
+    sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin);
     
     
     
@@ -14525,7 +14525,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
     
-    sizer_box_position->Add(listcontrol_positions, 0,  wxALL, margin_v);
+    sizer_box_position->Add(listcontrol_positions, 0,  wxALL, margin);
     
     
     
@@ -14574,7 +14574,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
     
-    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin_v);
+    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
     //listcontrol routes with routes
     
     
@@ -14601,18 +14601,18 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_transport_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_delete_sight, 0, wxALIGN_CENTER);
-    sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, margin_v);
+    sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, margin);
     
     sizer_buttons_position->Add(button_add_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_modify_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_transport_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_delete_position, 0, wxALIGN_CENTER);
-    sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, margin_v);
+    sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, margin);
     
     sizer_buttons_route->Add(button_add_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
-    sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, margin_v);
+    sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, margin);
     
     
     //
@@ -14622,17 +14622,17 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
     
-    sizer_v->Add(sizer_box_sight, 0,  wxALL, margin_v);
-    sizer_v->Add(sizer_box_position, 0,  wxALL, margin_v);
-    sizer_v->Add(sizer_box_route, 0,  wxALL, margin_v);
-    sizer_v->Add(button_show_map, 0, wxALIGN_RIGHT | wxALL, margin_v);
+    sizer_v->Add(sizer_box_sight, 0,  wxALL, margin);
+    sizer_v->Add(sizer_box_position, 0,  wxALL, margin);
+    sizer_v->Add(sizer_box_route, 0,  wxALL, margin);
+    sizer_v->Add(button_show_map, 0, wxALIGN_RIGHT | wxALL, margin);
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     //    panel->SetSizer(sizer_v);
     
-    //    panel->SetSize(wxSize(total_column_width+4*margin_v,-1));
-    //    this->SetSize(wxSize(total_column_width+6*margin_v,-1));
+    //    panel->SetSize(wxSize(total_column_width+4*margin,-1));
+    //    this->SetSize(wxSize(total_column_width+6*margin,-1));
     //
 }
 

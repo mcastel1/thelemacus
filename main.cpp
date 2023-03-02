@@ -61,11 +61,12 @@ void MyApp::ShowChart(wxCommandEvent& event){
     
     unsigned int i;
     //the spacing between one frame and another in the x and y direction, respectively
-    double delta_x, delta_y, x;
+    double delta_x, delta_y, margin;
+ 
     
-    delta_x = ( ((double)(rectangle_display.GetWidth())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetWidth())) ) / 2.0 ) / ((double)(((list_frame->chart_frames).size())-1));
-    delta_y = ( ((double)(rectangle_display.GetHeight())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetHeight())) ) / 2.0 ) / ((double)(((list_frame->chart_frames).size())-1));
-
+    margin = ((double)((rectangle_display.GetWidth())*(length_border_over_length_screen.value)));
+    delta_x = ( ((double)(rectangle_display.GetWidth())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetWidth())) ) / 2.0  - 2.0 * margin ) / ((double)(((list_frame->chart_frames).size())-1));
+    delta_y = ( ((double)(rectangle_display.GetHeight())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetHeight())) ) / 2.0 - 2.0 * margin ) / ((double)(((list_frame->chart_frames).size())-1));
     
     
     for(i=0; i<((list_frame->chart_frames).size()); i++){
@@ -77,12 +78,12 @@ void MyApp::ShowChart(wxCommandEvent& event){
         ((list_frame->chart_frames)[i])->SetPosition(wxPoint(
                                                              
                                                              
-                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth())) ) / 2.0 + delta_x*((double)i)
+                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth())) ) / 2.0 + margin + delta_x*((double)i)
                                                              
                                                              
                                                              ,
                                                              
-                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight())) ) / 2.0 + delta_y*((double)i)
+                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight())) ) / 2.0 + margin + delta_y*((double)i)
                                                            
                                                              ));
         

@@ -2170,6 +2170,7 @@ public:
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
     wxSlider* slider;
+    wxBitmapButton* button_switch;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     ProjectionField* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;

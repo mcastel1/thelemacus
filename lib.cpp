@@ -131,6 +131,12 @@ template <class T> void Reset(T* control){
     
 }
 
+//rescales *image to fit into size by keeping its proprtions and writes the result into *image
+void RescaleProportionally(wxImage* image, const wxSize size){
+    
+    
+    
+}
 
 bool String::operator==(const String& s){
     

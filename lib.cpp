@@ -131,20 +131,23 @@ template <class T> void Reset(T* control){
     
 }
 
-//rescales *image to fit into size by keeping its proprtions and writes the result into *image
+//rescales *image to fit into size, by including the margin given by length_border_over_length_screen, and by keeping its proprtions, and writes the result into *image
 void RescaleProportionally(wxImage* image, const wxSize size){
     
-    wxSize original_size;
+    wxSize original_size, size_minus_margins;
     Double scaling_factor;
     
     original_size = (image->GetSize());
+    size_minus_margins = wxSize(
+                                (size.GetWidth()) -   ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
+                                ( (size.GetHeight()) - ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) )
+                                );
             
     scaling_factor.set(String(""),
-                       
                        (
                         ((original_size.GetWidth()) > (original_size.GetHeight()))
-                        ? ((double)(size.GetWidth()))/((double)(original_size.GetWidth()))
-                        : ((double)(size.GetHeight()))/((double)(original_size.GetHeight()))
+                        ? ((double) ((size_minus_margins.GetWidth())) / ((double)(original_size.GetWidth())) )
+                        : ((double) ((size_minus_margins.GetHeight())) / ((double)(original_size.GetHeight())) )
                         )
                        ,
                        String("")
@@ -9977,10 +9980,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //image for button_list
     wxBitmap my_bitmap_list = wxBitmap(wxT(path_file_list_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_list = my_bitmap_list.ConvertToImage();
-    my_image_list.Rescale(
+    RescaleProportionally(&my_image_list, wxSize(
                          ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
-                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
-                          wxIMAGE_QUALITY_HIGH
+                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value))
                          );
 
     

@@ -134,8 +134,28 @@ template <class T> void Reset(T* control){
 //rescales *image to fit into size by keeping its proprtions and writes the result into *image
 void RescaleProportionally(wxImage* image, const wxSize size){
     
+    wxSize original_size;
+    Double scaling_factor;
     
-    
+    original_size = (image->GetSize());
+            
+    scaling_factor.set(String(""),
+                       
+                       (
+                        ((original_size.GetWidth()) > (original_size.GetHeight()))
+                        ? ((double)(size.GetWidth()))/((double)(original_size.GetWidth()))
+                        : ((double)(size.GetHeight()))/((double)(original_size.GetHeight()))
+                        )
+                       ,
+                       String("")
+                       );
+  
+    image->Rescale(
+                   ((int)(((double)(original_size.GetWidth()))*(scaling_factor.value))),
+                   ((int)(((double)(original_size.GetHeight()))*(scaling_factor.value))),
+                   wxIMAGE_QUALITY_HIGH
+                   );
+
 }
 
 bool String::operator==(const String& s){

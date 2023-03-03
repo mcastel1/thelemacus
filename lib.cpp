@@ -9911,11 +9911,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read zoom_factor_max from file_init
     (wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
-    
-    
-    
-    //SetColor(this);
-    
+
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
@@ -9952,12 +9948,27 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     s << "1:" << (zoom_factor.value);
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize);
     
+    //image for button_list
+    wxBitmap my_bitmap_list = wxBitmap(wxT(path_file_list_icon), wxBITMAP_TYPE_PNG);
+    wxImage my_image_list = my_bitmap_list.ConvertToImage();
+    my_image_list.Rescale(
+                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
+                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
+                          wxIMAGE_QUALITY_HIGH
+                         );
+
+    
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_down = new wxButton(panel, wxID_ANY, wxT("S"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_left = new wxButton(panel, wxID_ANY, wxT("W"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_right = new wxButton(panel, wxID_ANY, wxT("E"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    
+    //button to show list
+    button_show_list = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_list), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
+
     
     projection = new ProjectionField(this);
     (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
@@ -14377,7 +14388,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     wxImage my_image_map = my_bitmap_map.ConvertToImage();
     my_image_map.Rescale(
                          ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
-                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)
+                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
+                         wxIMAGE_QUALITY_HIGH
                          );
     
     //image for button_modify_sight
@@ -14580,7 +14592,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //button to show map
     button_show_map = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart, parent);
+    button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart, &wxGetApp());
  
     //button to add a sight
     button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);

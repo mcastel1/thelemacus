@@ -58,6 +58,7 @@ Angle max_lat, min_lat;
 #define sample_width_floating_point_field "0.000000000"
 #define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
 #define path_file_app_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_rogers_png.png"
+#define path_file_list_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/list_icon.png"
 #define path_file_map_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/map_icon.png"
 #define path_file_pencil_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/pencil_icon.png"
 #define path_file_trash_icon "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/trash_icon.png"

@@ -1963,8 +1963,8 @@ public:
     wxPanel *panel;
     //a dummy RouteFrame which will be used for various purposes
     RouteFrame* route_frame;
-    wxButton *button_add_sight, *button_add_position, *button_delete_position, *button_add_route, *button_delete_route, *button_show_map;
-    wxBitmapButton *button_modify_sight, *button_delete_sight, *button_transport_sight, *button_transport_position, *button_modify_position, *button_modify_route;
+    wxButton  *button_delete_position, *button_delete_route, *button_show_map;
+    wxBitmapButton *button_add_sight, *button_add_position, *button_add_route, *button_modify_sight, *button_delete_sight, *button_transport_sight, *button_transport_position, *button_modify_position, *button_modify_route;
     wxBoxSizer *sizer_h, *sizer_v;
     wxSizer *sizer_buttons_sight, *sizer_buttons_position, *sizer_buttons_route;
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;

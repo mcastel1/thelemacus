@@ -14415,6 +14415,12 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     plot->read_from_file(file_sample_sight, String(""));
     plot->print(true, String(""), cout);
     //
+
+    
+    //image for button_add_sight, button_add_position and button_add_route
+    wxBitmap my_bitmap_plus = wxBitmap(wxT(path_file_plus_icon), wxBITMAP_TYPE_PNG);
+    wxImage my_image_plus = my_bitmap_plus.ConvertToImage();
+    my_image_plus.Rescale(20, 20, wxIMAGE_QUALITY_HIGH);
     
     //image for button_map
     wxBitmap my_bitmap_map = wxBitmap(wxT(path_file_map_icon), wxBITMAP_TYPE_PNG);
@@ -14628,15 +14634,15 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart, &wxGetApp());
  
     //button to add a sight
-    button_add_sight = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
     
     //button to add a position
-    button_add_position = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
     
     //button to add a route
-    button_add_route = new wxButton(panel, wxID_ANY, "+", wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
     
     extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, wxSize(0, 0));

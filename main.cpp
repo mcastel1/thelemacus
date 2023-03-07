@@ -189,6 +189,10 @@ bool MyApp::OnInit(){
     
     wxImage::AddHandler(new wxPNGHandler);
     
+    rectangle_display = (display.GetClientArea());
+    rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));
+    rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
+    
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
     time_check.read_from_file(String("time check"), String(path_file_init), String(""));
@@ -198,6 +202,16 @@ bool MyApp::OnInit(){
     
     size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
     size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), String(path_file_init), String(""));
+    
+    //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
+    size_small_button = wxSize(
+                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
+                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)
+                               );
+    size_large_button = wxSize(
+                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
+                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)
+                               );
 
     
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
@@ -251,11 +265,6 @@ bool MyApp::OnInit(){
     error_color.read_from_file(String("error color"), String(path_file_init), String(""));
     dark_mode = (settings->GetAppearance()).IsDark();
 
-    rectangle_display = (display.GetClientArea());
-    rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));
-    rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
-    
-    
     list_frame = new ListFrame(this, "List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     

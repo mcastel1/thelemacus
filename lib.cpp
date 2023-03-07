@@ -9980,10 +9980,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //image for button_list
     wxBitmap my_bitmap_list = wxBitmap(wxT(path_file_list_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_list = my_bitmap_list.ConvertToImage();
-    RescaleProportionally(&my_image_list, wxSize(
-                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
-                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value))
-                         );
+    RescaleProportionally(&my_image_list, (wxGetApp().size_large_button));
 
     
     //navigation buttons
@@ -14420,83 +14417,67 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //image for button_add_sight, button_add_position and button_add_route
     wxBitmap my_bitmap_plus = wxBitmap(wxT(path_file_plus_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_plus = my_bitmap_plus.ConvertToImage();
-    RescaleProportionally(&my_image_plus, wxSize(
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
-                            );
+    RescaleProportionally(&my_image_plus, wxGetApp().size_small_button);
     
     
     //image for button_map
     wxBitmap my_bitmap_map = wxBitmap(wxT(path_file_map_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_map = my_bitmap_map.ConvertToImage();
-    my_image_map.Rescale(
-                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
-                         ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
-                         wxIMAGE_QUALITY_HIGH
-                         );
+    RescaleProportionally(&my_image_map, wxGetApp().size_large_button);
     
     //image for button_modify_sight
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
-    RescaleProportionally(&my_image, wxSize(
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
-                            );
+    RescaleProportionally(&my_image, wxGetApp().size_small_button);
     
     //image for button_transport_sight
     wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_transport = my_bitmap_transport_sight.ConvertToImage();
-    RescaleProportionally(&my_image_transport, wxSize(
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
-                            );
+    RescaleProportionally(&my_image_transport, wxGetApp().size_small_button);
     
     //image for button_delete_sight
     wxBitmap my_bitmap_delete_sight = wxBitmap(wxT(path_file_trash_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_delete = my_bitmap_delete_sight.ConvertToImage();
-    RescaleProportionally(&my_image_delete, wxSize(
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
-                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
-                            );
+    RescaleProportionally(&my_image_delete, wxGetApp().size_small_button);
 
     
     //button to modify a sight
-    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
     button_modify_sight->Enable(false);
     
     //button to transport a sight
-    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_transport_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
     button_transport_sight->Enable(false);
     
     //button to modify a position
-    button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
     button_modify_position->Enable(false);
     
     //button to transport a position
-    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
     
     //button to modify a route
-    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute, this);
     button_modify_route->Enable(false);
     
     //button to delete a sight
-    button_delete_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight, this);
     button_delete_sight->Enable(false);
     
     //button to delete a position
-    button_delete_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition, this);
     button_delete_position->Enable(false);
     
     //button to delete a route
-    button_delete_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
     button_delete_route->Enable(false);
     
@@ -14647,15 +14628,15 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart, &wxGetApp());
  
     //button to add a sight
-    button_add_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
     
     //button to add a position
-    button_add_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
     
     //button to add a route
-    button_add_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
     
     extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, wxSize(0, 0));

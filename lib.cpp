@@ -14420,7 +14420,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //image for button_add_sight, button_add_position and button_add_route
     wxBitmap my_bitmap_plus = wxBitmap(wxT(path_file_plus_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_plus = my_bitmap_plus.ConvertToImage();
-    my_image_plus.Rescale(20, 20, wxIMAGE_QUALITY_HIGH);
+    RescaleProportionally(&my_image_plus, wxSize(
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
+                            );
+    
     
     //image for button_map
     wxBitmap my_bitmap_map = wxBitmap(wxT(path_file_map_icon), wxBITMAP_TYPE_PNG);
@@ -14434,17 +14438,26 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //image for button_modify_sight
     wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
-    my_image.Rescale(20,20);
+    RescaleProportionally(&my_image, wxSize(
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
+                            );
     
     //image for button_transport_sight
     wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_transport = my_bitmap_transport_sight.ConvertToImage();
-    my_image_transport.Rescale(20,20);
-
+    RescaleProportionally(&my_image_transport, wxSize(
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
+                            );
+    
     //image for button_delete_sight
     wxBitmap my_bitmap_delete_sight = wxBitmap(wxT(path_file_trash_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_delete = my_bitmap_delete_sight.ConvertToImage();
-    my_image_delete.Rescale(20,20);
+    RescaleProportionally(&my_image_delete, wxSize(
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value),
+                            ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_small_button_over_width_screen).value))
+                            );
 
     
     //button to modify a sight

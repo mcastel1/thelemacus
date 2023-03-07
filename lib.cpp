@@ -14670,7 +14670,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_v->Add(sizer_box_position, 0,  wxALL, margin);
     sizer_listcontrol_routes_button_show_map->Add(sizer_box_route);
     sizer_listcontrol_routes_button_show_map->AddStretchSpacer(1);
-    sizer_listcontrol_routes_button_show_map->Add(button_show_map);
+    //here I set the flag '0' to avoid button_show_map from being stretched
+    sizer_listcontrol_routes_button_show_map->Add(button_show_map, 0, wxALIGN_BOTTOM);
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_button_show_map expand, and thus I flush to the right button_show_map
     sizer_v->Add(sizer_listcontrol_routes_button_show_map, 0,  wxALL | wxEXPAND, margin);
     

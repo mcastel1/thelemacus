@@ -88,7 +88,7 @@ void MyApp::ShowChart(wxCommandEvent& event){
                                                              ,
                                                              
                                                              /*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
-                                                             list_frame->menu_bar->GetSize().GetHeight() +
+                                                             (((list_frame->menu_bar)->GetSize()).GetHeight()) +
                                                              ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight())) ) / 2.0 + margin + delta_y*((double)i)
                                                              
                                                              ));
@@ -99,6 +99,9 @@ void MyApp::ShowChart(wxCommandEvent& event){
 
 //shows ListFrame and positions it properly on the screen
 void MyApp::ShowList(wxCommandEvent& event){
+    
+    list_frame->SetPosition(wxPoint(0, /*move down ListFrame to take account of the menu_bar*/((list_frame->menu_bar)->GetSize()).GetHeight()));
+    list_frame->Raise();
     
 }
 

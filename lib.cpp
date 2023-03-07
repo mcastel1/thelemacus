@@ -9994,7 +9994,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     //button to show list
-    button_show_list = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_list), wxDefaultPosition, my_image_list.GetSize(), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_show_list = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_list), wxDefaultPosition, (my_image_list.GetSize()) + wxSize(((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
 
     
@@ -14267,6 +14267,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     unsigned int i, total_column_width, margin, red, green, blue;
     wxListItem column, item;
     String s;
+    wxBoxSizer *sizer_listcontrol_routes_button_show_map;
     vector<wxButton*> disableable_buttons;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
@@ -14396,7 +14397,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    
+    sizer_listcontrol_routes_button_show_map = new wxBoxSizer(wxHORIZONTAL);
+
     sizer_buttons_sight = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_route = new wxBoxSizer(wxHORIZONTAL);
@@ -14666,8 +14668,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     sizer_v->Add(sizer_box_sight, 0,  wxALL, margin);
     sizer_v->Add(sizer_box_position, 0,  wxALL, margin);
-    sizer_v->Add(sizer_box_route, 0,  wxALL, margin);
-    sizer_v->Add(button_show_map, 0, wxALIGN_RIGHT | wxALL, margin);
+    sizer_listcontrol_routes_button_show_map->Add(sizer_box_route);
+    sizer_listcontrol_routes_button_show_map->AddStretchSpacer(1);
+    sizer_listcontrol_routes_button_show_map->Add(button_show_map);
+    //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_button_show_map expand, and thus I flush to the right button_show_map
+    sizer_v->Add(sizer_listcontrol_routes_button_show_map, 0,  wxALL | wxEXPAND, margin);
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);

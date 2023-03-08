@@ -13396,7 +13396,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //    (master_clock_date->day)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    
+    //(master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, /*function that will call an error message and tell the user that the entered vlaue of the date is invalid ... */);
+
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
@@ -13410,6 +13411,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //    if(sight_in != NULL){
     master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
     //    }
+
     
     //check/uncheck stopwatch
     StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);

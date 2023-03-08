@@ -9,17 +9,17 @@
 clear; clear;
 
 #the name of the app that you want to create
-APP_NAME='minimal_working_example'
+APP_NAME='Thelemacus'
 #the path to the icon of the app
 ICON_PATH='/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/jolly_roger.icns'
 #the path to the .cpp file
-CPP_FILE_PATH='/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/mwe.cpp'
+CPP_FILE_PATH='/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/main.cpp'
 
 rm -rf temp.o $APP_NAME.app $APP_NAME
 
 
-/Applications/wxWidgets-3.2.0/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags --libs` -std=gnu++11 -mmacosx-version-min=10.10 -c -o temp.o -I/Applications/wxWidgets-3.2.0/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $CPP_FILE_PATH
-g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $APP_NAME  temp.o    -L/Applications/wxWidgets-3.2.0/build-cocoa-debug/lib      -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lwx_osx_cocoau_core-3.2  -lwx_baseu-3.2        -lpng -lz -ljpeg -L/usr/local/Cellar/libtiff/4.3.0/lib -ltiff -framework WebKit    -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lz -framework Security -lpthread -liconv -lcurl -L/usr/local/Cellar/pcre2/10.39/lib -lpcre2-32  -lz -framework Security -lpthread -liconv -lcurl
+/Applications/wxWidgets-3.2.0/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags --libs` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-3.2.0/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/ -I/Applications/boost_1_66_0/ -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $CPP_FILE_PATH
+g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $APP_NAME  temp.o    -L/Applications/wxWidgets-3.2.0/build-cocoa-debug/lib      -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lwx_osx_cocoau_core-3.2  -lwx_baseu-3.2        -lpng -lz -ljpeg -L/usr/local/Cellar/libtiff/4.3.0/lib -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lz -framework Security -lpthread -liconv -lcurl -L/usr/local/Cellar/pcre2/10.39/lib -lpcre2-32  -lz -framework Security -lpthread -liconv -lcurl
 mkdir -p $APP_NAME.app/Contents
 mkdir -p $APP_NAME.app/Contents/MacOS
 mkdir -p $APP_NAME.app/Contents/Resources

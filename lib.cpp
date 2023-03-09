@@ -13311,9 +13311,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    
-    text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
-    
+        
     sizer_grid_measurement = new wxFlexGridSizer(6, 2,
                                                  (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                                                  (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
@@ -13446,6 +13444,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
+
+    //message and image shown if the time entered by the user is not covered by ephemerides' data
+    text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
+    image_time_interval_not_ok = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+
+    
     
     //label
     StaticText* text_label = new StaticText(panel,wxT("Label"), wxDefaultPosition, wxDefaultSize);
@@ -13512,7 +13516,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
     
     sizer_grid_time->Add(text_time_interval_not_ok);
-//    sizer_grid_time->Add();
+    sizer_grid_time->Add(image_time_interval_not_ok);
     
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);

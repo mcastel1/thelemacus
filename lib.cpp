@@ -15237,8 +15237,9 @@ void SightFrame::AllOk(void){
     //runs TimeIntervalOk to compute time_interval_ok, which will be used to determine whether button_reduce is enabled or not
     TimeIntervalOk(String(""));
     
-    text_time_interval_not_ok->SetLabel(wxString((time_interval_ok) ? "" : "Time not enclosed in ephemerides' data!"));
-        
+    text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));
+    image_time_interval_not_ok->SetBitmap(time_interval_ok ? wxNullBitmap : wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG));
+  
     
     
     button_reduce->Enable(

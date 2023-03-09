@@ -13312,12 +13312,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
+    text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     sizer_grid_measurement = new wxFlexGridSizer(6, 2,
                                                  (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                                                  (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                                  );
-    sizer_grid_time = new wxFlexGridSizer(4, 2,
+    sizer_grid_time = new wxFlexGridSizer(5, 2,
                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                                           (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
                                           );
@@ -13395,8 +13396,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //I bind master_clock_date->year/month/day to OnEditTime in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     //    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    //    (master_clock_date->day)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    //(master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, /*function that will call an error message and tell the user that the entered vlaue of the date is invalid ... */);
 
     
     //master-clock chrono
@@ -13446,6 +13445,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //    (TAI_minus_UTC->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
+    
+    StaticText* text_empty = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //label
     StaticText* text_label = new StaticText(panel,wxT("Label"), wxDefaultPosition, wxDefaultSize);
@@ -13510,6 +13511,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     sizer_grid_time->Add(text_TAI_minus_UTC);
     TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
+    
+    sizer_grid_time->Add(text_time_interval_not_ok);
+    sizer_grid_time->Add(text_empty);
     
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
@@ -15229,6 +15233,10 @@ void SightFrame::AllOk(void){
     
     //runs TimeIntervalOk to compute time_interval_ok, which will be used to determine whether button_reduce is enabled or not
     TimeIntervalOk(String(""));
+    
+    text_time_interval_not_ok->SetLabel(wxString((time_interval_ok) ? "" : "Time not enclosed in ephemerides' data!"));
+        
+    
     
     button_reduce->Enable(
                           (body->is_ok()) &&

@@ -13449,7 +13449,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     image_time_interval_not_ok = new wxImage();
-    (*image_time_interval_not_ok) = (wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG).ConvertToImage());
+    (*image_time_interval_not_ok) = (wxBitmap(path_file_warning_icon, wxBITMAP_TYPE_PNG).ConvertToImage());
     RescaleProportionally(image_time_interval_not_ok, wxGetApp().size_small_button);
 
     

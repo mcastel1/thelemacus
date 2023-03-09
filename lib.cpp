@@ -13446,7 +13446,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
-    StaticText* text_empty = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //label
     StaticText* text_label = new StaticText(panel,wxT("Label"), wxDefaultPosition, wxDefaultSize);
@@ -13513,7 +13512,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
     
     sizer_grid_time->Add(text_time_interval_not_ok);
-    sizer_grid_time->Add(text_empty);
+//    sizer_grid_time->Add();
     
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);

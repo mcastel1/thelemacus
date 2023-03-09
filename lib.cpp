@@ -13445,9 +13445,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
 
-    //message and image shown if the time entered by the user is not covered by ephemerides' data
+    //message and image shown if the time entered by the user is not covered by ephemerides' data. Both are set to empty at the construction of SightFrame
     text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
-    image_time_interval_not_ok = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image_time_interval_not_ok = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
 
     
     

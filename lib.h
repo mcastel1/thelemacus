@@ -2043,7 +2043,7 @@ public:
     //this messages displays a text on SightFrame if the time interval entered by the user does not lie within the interval covered by the ephemerides' data
     StaticText* text_time_interval_not_ok;
     //image shown on SightFrame if the time interval entered by the user does not lie within the interval covered by the ephemerides' data
-    wxStaticBitmap* image_time_interval_not_ok;
+    wxStaticBitmap* image_time_interval_status;
     
     //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
     UnsetIdling<SightFrame>* unset_idling;

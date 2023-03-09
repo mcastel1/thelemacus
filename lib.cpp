@@ -13447,7 +13447,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //message and image shown if the time entered by the user is not covered by ephemerides' data. Both are set to empty at the construction of SightFrame
     text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
-    image_time_interval_not_ok = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
+    image_time_interval_status = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
 
     
     
@@ -13516,7 +13516,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
     
     sizer_grid_time->Add(text_time_interval_not_ok);
-    sizer_grid_time->Add(image_time_interval_not_ok);
+    sizer_grid_time->Add(image_time_interval_status);
     
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
@@ -15244,7 +15244,7 @@ void SightFrame::AllOk(void){
     RescaleProportionally(&temp, wxGetApp().size_small_button);
 
     
-    image_time_interval_not_ok->SetBitmap(time_interval_ok ? wxNullBitmap : wxBitmap(temp, wxBITMAP_SCREEN_DEPTH));
+    image_time_interval_status->SetBitmap(time_interval_ok ? wxNullBitmap : wxBitmap(temp, wxBITMAP_SCREEN_DEPTH));
   
     
     

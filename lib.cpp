@@ -15238,7 +15238,13 @@ void SightFrame::AllOk(void){
     TimeIntervalOk(String(""));
     
     text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));
-    image_time_interval_not_ok->SetBitmap(time_interval_ok ? wxNullBitmap : wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG));
+    
+    
+    wxImage temp = (wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG).ConvertToImage());
+    RescaleProportionally(&temp, wxGetApp().size_small_button);
+
+    
+    image_time_interval_not_ok->SetBitmap(time_interval_ok ? wxNullBitmap : wxBitmap(temp, wxBITMAP_SCREEN_DEPTH));
   
     
     

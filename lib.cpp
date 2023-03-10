@@ -8516,7 +8516,7 @@ void ListFrame::GetAllCoastLineData(void){
     int i, j;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
     vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
-    unsigned int l, n = 0;
+    unsigned int l/*, n = 0*/;
     char* buffer = NULL;
     size_t pos_beg, pos_end;
     double lambda_temp, phi_temp;
@@ -8571,7 +8571,7 @@ void ListFrame::GetAllCoastLineData(void){
                 
                 
                 //count how many datapoints are in data
-                n = ((unsigned int)count(data.begin(), data.end(), ','));
+//                n = ((unsigned int)count(data.begin(), data.end(), ','));
                 
                 l=0;
                 pos_beg = 0;

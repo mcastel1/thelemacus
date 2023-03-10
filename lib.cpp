@@ -11558,10 +11558,9 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             
             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                 
-                double delta_x, delta_y;
+                double delta_y;
                 Projection p_ceil_min, p_floor_max;
                 
-                delta_x = ((double)((position_end_drag.x)-(position_start_drag.x)))/((double)(size_plot_area.GetWidth())) * x_span();
                 delta_y = ((double)((position_end_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_min);
                 
                 (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
@@ -11939,11 +11938,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                         //in this case, I am using the mercator projection
                         
-                        double delta_x, delta_y;
                         Projection p_ceil_min, p_floor_max;
-                        
-                        delta_x = ((double)((position_now_drag.x)-(position_start_drag.x)))/((double)(size_plot_area.GetWidth())) * x_span();
-                        delta_y = ((double)((position_now_drag.y)-(position_start_drag.y)))/((double)(size_plot_area.GetHeight())) * (y_max-y_min);
                         
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
@@ -12417,11 +12412,7 @@ template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
 
 
 void DeleteSight::operator()(wxCommandEvent& event){
-    
-    int i_related_route;
-    
-    i_related_route = (((((f->plot)->sight_list)[i_sight_to_remove]).related_route).value);
-    
+        
     //I remove the sight and the related route from  the non-GUI object plot
     (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
     

@@ -14729,8 +14729,9 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
                                            wxDefaultSize,
                                            String("")
                                            );
-    (chart_frames.back())->Show(true);
+//    (chart_frames.back())->Show(true);
     
+    wxGetApp().ShowChart(event);
     
     
     

@@ -10115,6 +10115,9 @@ void ChartFrame::OnClose(wxCloseEvent& event){
         
     }
     
+    //given that one ChartFrame is gone, I show all ChartFrames and positions them properly on the screen
+    wxGetApp().ShowChart(event);
+    
 }
 
 //moves (makes slide) up the chart
@@ -14632,7 +14635,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //button to show map
     button_show_map = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart, &wxGetApp());
+    button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart<wxCommandEvent>, &wxGetApp());
  
     //button to add a sight
     button_add_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);

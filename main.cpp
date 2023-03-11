@@ -15,6 +15,8 @@
  notes:
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
+ - when a new chartframe is created, call ShowCharts to re-arrange all chartframes.
+ - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen 
  
  ********** THINGS TO ADD ************
 
@@ -60,7 +62,7 @@ void MyApp::OnTimer(wxTimerEvent& event){
 }
 
 //shows all ChartFrames and positions them properly on the screen 
-void MyApp::ShowChart(wxCommandEvent& event){
+template<class T> void MyApp::ShowChart(T& event){
     
     unsigned int i;
     //the spacing between one frame and another in the x and y direction, respectively

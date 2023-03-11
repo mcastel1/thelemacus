@@ -32,6 +32,8 @@
  - replace limb dropdown menu and other dropdown menus with horizontal selection menus
  - selection rectangle should be activated with a single left mouse click rather than with a right mouse click
  - the code should return the position (lat lon) of the crossiing betqween two circles of equal altitude
+ - when you delete a ChartFrame, re-position automatically all chartframes in such a way that the whole screen is filled
+ 
  ********** THINGS TO FIX ************
  
  - make scaling of images to absolute sizes 20,20 relative to screen size

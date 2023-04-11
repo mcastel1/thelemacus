@@ -16,7 +16,10 @@
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
  - when a new chartframe is created, call ShowCharts to re-arrange all chartframes.
- - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen 
+ - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen
+ - per creare un progetto xcode con wxwidgets 1. decomprimi il tar.gz di wxwidgets 2. in samples/minimal/ modifical minimal_cocoa mettendoci i files C++ e le referenze in system header search path, library search path, le linking flag, etc.
+ - se xcode ti crea nuove copie dei file .cpp e .h quando li aggiungi a un progetto, fai attenzione a deselezioare 'copy items if needed' nel momento in cui li aggiungi al progetto
+ 
  
  ********** THINGS TO ADD ************
 

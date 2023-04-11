@@ -14172,7 +14172,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
     
     //bind the function MessageFrame<FF_OK>::KeyDown to the event where a keyboard dey is down
-    this->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(MessageFrame<FF_OK>::KeyDown), this);
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(MessageFrame<FF_OK>::KeyDown), this);
 
     
     //buttons
@@ -14205,11 +14205,16 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event){
     
     switch (event.GetKeyCode()){
-            
            
         case WXK_ESCAPE:
+            //the user presses esc
             
-            //If the user presses esc
+//           (*close_frame)();
+            
+            break;
+   
+        case WXK_RETURN:
+            //the user presses return
             
             break;
             

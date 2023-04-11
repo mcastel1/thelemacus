@@ -14197,6 +14197,23 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
 }
 
+//if a key is pressed in the keyboard, I call this function
+template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event){
+    
+    switch (event.GetKeyCode()){
+            
+           
+        case WXK_ESCAPE:
+            
+            //If the user presses esc
+            
+            break;
+            
+    }
+    
+}
+
+
 template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;

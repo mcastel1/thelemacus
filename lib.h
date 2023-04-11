@@ -271,6 +271,7 @@ public:
     wxStaticBitmap* image;
     //initialize the functor to close this MessageFrame when button_ok will be pressed
     CloseFrame<MessageFrame>* close_frame;
+    void KeyDown(wxKeyEvent&);
   
     
     //pointer to the struct containing the functor which will be called when the button ok is pressed
@@ -962,6 +963,7 @@ public:
     template<class T> void operator()(T&);
     
 };
+
 
 //this checks if an element of the Body class is valid
 class CheckBody{

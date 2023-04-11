@@ -14204,20 +14204,12 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 //if a key is pressed in the keyboard, I call this function
 template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event){
     
-    switch (event.GetKeyCode()){
-           
-        case WXK_ESCAPE:
-            //the user presses esc
-            
-//           (*close_frame)();
-            
-            break;
-   
-        case WXK_RETURN:
-            //the user presses return
-            
-            break;
-            
+    if(((event.GetKeyCode()) == WXK_ESCAPE) || ((event.GetKeyCode()) == WXK_RETURN)){
+        //the user presses esc or return -> I close *this and set the idling variable to false
+        
+        (*close_frame)(event);
+        ((f_ok->parent)->idling) = false;
+        
     }
     
 }

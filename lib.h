@@ -2077,6 +2077,8 @@ public:
     void AllOk(void);
 //    template<class T> void OnEditTime(T&);
     void TimeIntervalOk(String);
+    void KeyDown(wxKeyEvent&);
+
     
     //    wxDECLARE_EVENT_TABLE();
     

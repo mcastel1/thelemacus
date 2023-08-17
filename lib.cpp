@@ -13476,7 +13476,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
     button_reduce->Bind(wxEVT_BUTTON, &StringField<SightFrame>::get<wxCommandEvent>, label);
-    
+    //bind the function SightFrame::KeyDown to the event where a keyboard dey is down
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));
@@ -13579,6 +13581,20 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     AllOk();
     
     Centre();
+    
+}
+
+
+//if a key is pressed in the keyboard, I call this function
+void SightFrame::KeyDown(wxKeyEvent& event){
+    
+    if(((event.GetKeyCode()) == WXK_ESCAPE) || ((event.GetKeyCode()) == WXK_RETURN)){
+        //the user presses esc or return -> I close *this and set the idling variable to false
+        
+//        (*close_frame)(event);
+//        ((f_ok->parent)->idling) = false;
+        
+    }
     
 }
 

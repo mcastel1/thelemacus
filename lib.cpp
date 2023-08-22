@@ -13487,6 +13487,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     height_of_eye->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     master_clock_date->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    master_clock_chrono->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    stopwatch_reading->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    TAI_minus_UTC->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     
     
     
@@ -16813,6 +16816,18 @@ template<class E> void ChronoField::OnEditSecond(E& event){
     event.Skip(true);
     
 }
+
+
+
+template <typename EventTag, typename Method, typename Object> void ChronoField::Bind(EventTag tag,  Method method, Object object){
+    
+    //I bind hour, minute and second to method
+    hour->Bind(tag, method, object);
+    minute->Bind(tag, method, object);
+    second->Bind(tag, method, object);
+
+}
+
 
 
 

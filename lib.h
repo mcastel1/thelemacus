@@ -1831,6 +1831,8 @@ public:
     template<class E> void OnEditHour(E&);
     template<class E> void OnEditMinute(E&);
     template<class E> void OnEditSecond(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+
 
 };
 

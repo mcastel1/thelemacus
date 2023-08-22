@@ -13485,6 +13485,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     index_error->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     artificial_horizon_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     stopwatch_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    height_of_eye->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
   
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
@@ -16865,6 +16866,14 @@ template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event){
     
 }
 
+
+
+template<class P> template <typename EventTag, typename Method, typename Object> void LengthField<P>::Bind(EventTag tag,  Method method, Object object){
+    
+    value->Bind(tag, method, object);
+    unit->Bind(tag, method, object);
+
+}
 
 //constructor of a DateField object, based on the parent frame frame
 DateField::DateField(SightFrame* frame, Date* p){

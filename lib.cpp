@@ -15282,11 +15282,8 @@ void SightFrame::SetIdling(bool b){
 }
 
 
-
-
-
-//write the content in the GUI fields into the non=GUI fields, and check whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span: if all these conditions are true, it enables the button_reduce
-void SightFrame::AllOk(void){
+//write the content in the GUI fields into the non=GUI fields, and check whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span:
+bool SightFrame::CheckAllOk(void){
     
     wxCommandEvent dummy;
     
@@ -15297,23 +15294,26 @@ void SightFrame::AllOk(void){
     
     text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));
     
-    
-
-    
     image_time_interval_status->SetBitmap(time_interval_ok ? wxNullBitmap : wxBitmap(*image_time_interval_not_ok, wxBITMAP_SCREEN_DEPTH));
+    
+    return(
+           (body->is_ok()) &&
+           ((!( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) )) || (limb->is_ok())) &&
+           (H_s->is_ok()) &&
+           (index_error->is_ok()) &&
+           ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok())) &&
+           (master_clock_date->is_ok()) &&
+           (master_clock_chrono->is_ok()) &&
+           ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
+           (TAI_minus_UTC->is_ok()) && time_interval_ok);
   
     
+}
+
+//calls CheckAllOk: if it returns true/false, it enables/disables the button_reduce
+void SightFrame::AllOk(void){
     
-    button_reduce->Enable(
-                          (body->is_ok()) &&
-                          ((!( ((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")) )) || (limb->is_ok())) &&
-                          (H_s->is_ok()) &&
-                          (index_error->is_ok()) &&
-                          ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok())) &&
-                          (master_clock_date->is_ok()) &&
-                          (master_clock_chrono->is_ok()) &&
-                          ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
-                          (TAI_minus_UTC->is_ok()) && time_interval_ok);
+    button_reduce->Enable(CheckAllOk());
     
 }
 

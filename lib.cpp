@@ -13486,7 +13486,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     artificial_horizon_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     stopwatch_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     height_of_eye->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-  
+    master_clock_date->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    
+    
+    
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));
@@ -17262,6 +17265,18 @@ template<class E> void DateField::OnEditDay(E& event){
     event.Skip(true);
     
 }
+
+
+
+template <typename EventTag, typename Method, typename Object> void DateField::Bind(EventTag tag,  Method method, Object object){
+    
+    //I bind year, month and day to method
+    year->Bind(tag, method, object);
+    month->Bind(tag, method, object);
+    day->Bind(tag, method, object);
+
+}
+
 
 
 

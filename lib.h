@@ -1796,6 +1796,8 @@ public:
     template<class E> void OnEditYear(E&);
     template<class E> void OnEditMonth(E&);
     template<class E> void OnEditDay(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+
 
 };
 

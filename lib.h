@@ -1642,7 +1642,6 @@ public:
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEdit(E&);
-    
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
 
 };
@@ -1671,6 +1670,7 @@ public:
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEdit(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
     
 };

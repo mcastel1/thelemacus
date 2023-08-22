@@ -13476,9 +13476,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
     button_reduce->Bind(wxEVT_BUTTON, &StringField<SightFrame>::get<wxCommandEvent>, label);
-    //bind the function SightFrame::KeyDown to the event where a keyboard dey is down
+    //bind the function SightFrame::KeyDown to the event where a keyboard dey is pressed down in panel, body, ... and all fields
     panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     body->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    limb->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
 
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
@@ -15318,7 +15319,7 @@ bool SightFrame::is_ok(void){
 //calls CheckAllOk: if it returns true/false, it enables/disables the button_reduce
 void SightFrame::AllOk(void){
     
-    button_reduce->Enable(CheckAllOk());
+    button_reduce->Enable(is_ok());
     
 }
 
@@ -17097,6 +17098,13 @@ bool LimbField::is_ok(void){
     return(ok);
     
 }
+
+template <typename EventTag, typename Method, typename Object> void LimbField::Bind(EventTag tag,  Method method, Object object){
+    
+    name->Bind(tag, method, object);
+    
+}
+
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
 template<class E> void LimbField::OnEdit(E& event){

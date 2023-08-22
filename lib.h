@@ -1643,7 +1643,8 @@ public:
     bool is_ok(void);
     template<class E> void OnEdit(E&);
     
-    
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+
 };
 
 

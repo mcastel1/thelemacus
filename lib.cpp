@@ -13478,8 +13478,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &StringField<SightFrame>::get<wxCommandEvent>, label);
     //bind the function SightFrame::KeyDown to the event where a keyboard dey is down
     panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    body->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
 
-    
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));
@@ -17077,6 +17077,13 @@ template<class E> void BodyField::OnEdit(E& event){
     event.Skip(true);
     
 }
+
+template <typename EventTag, typename Method, typename Object> void BodyField::Bind(EventTag tag,  Method method, Object object){
+    
+    name->Bind(tag, method, object);
+    
+}
+
 
 
 bool LimbField::is_ok(void){

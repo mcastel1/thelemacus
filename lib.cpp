@@ -13615,6 +13615,7 @@ void SightFrame::KeyDown(wxKeyEvent& event){
             
     }
            
+    event.Skip(true);
 
     
 }

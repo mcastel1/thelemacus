@@ -2062,7 +2062,6 @@ public:
     DateField *master_clock_date;
     ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField<SightFrame> *label;
-    bool CheckAllOk();
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer_2, *box_sizer_3, *box_sizer_4;
@@ -2073,6 +2072,7 @@ public:
     
     void SetIdling(bool);
     void set(void);
+    bool is_ok();
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);

@@ -13605,7 +13605,7 @@ void SightFrame::KeyDown(wxKeyEvent& event){
         case WXK_RETURN:{
             //the user pressed return
             
-            if(CheckAllOk()){
+            if(is_ok()){
                 //if all fields are ok, I do as if the user presssed button_reduce
                 
                 wxCommandEvent dummy;
@@ -15288,7 +15288,7 @@ void SightFrame::SetIdling(bool b){
 
 
 //write the content in the GUI fields into the non=GUI fields, and check whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span:
-bool SightFrame::CheckAllOk(void){
+bool SightFrame::is_ok(void){
     
     wxCommandEvent dummy;
     

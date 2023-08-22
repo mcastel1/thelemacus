@@ -13603,10 +13603,15 @@ void SightFrame::KeyDown(wxKeyEvent& event){
             
             
         case WXK_RETURN:{
+            //the user pressed return
             
-            
-            wxCommandEvent dummy;
-            OnPressReduce(dummy);
+            if(CheckAllOk()){
+                //if all fields are ok, I do as if the user presssed button_reduce
+                
+                wxCommandEvent dummy;
+                OnPressReduce(dummy);
+                
+            }
             
             break;
             

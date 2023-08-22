@@ -13482,6 +13482,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     limb->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     H_s->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     index_error->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    artificial_horizon_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    stopwatch_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
   
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
@@ -16132,6 +16134,14 @@ template<class T> void CheckField<T>::set(void){
     }
     
 }
+
+template<class T> template <typename EventTag, typename Method, typename Object> void CheckField<T>::Bind(EventTag tag,  Method method, Object object){
+    
+    checkbox->Bind(tag, method, object);
+    
+}
+
+
 
 //sets the value in the GUI objects deg and min equal to the value in the non-GUI limb object angle
 template <class P> void AngleField<P>::set(void){

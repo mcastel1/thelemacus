@@ -1707,6 +1707,8 @@ public:
     template<class E> void OnEditSign(E&);
     template<class E> void OnEditArcDegree(E&);
     template<class E> void OnEditArcMinute(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+
 
 };
 

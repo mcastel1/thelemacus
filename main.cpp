@@ -40,6 +40,7 @@
  
  ********** THINGS TO FIX ************
  
+ - check why there is a beep as I press return in SightFrame while focusing on one of the Fields in SightFrame
  - make scaling of images to absolute sizes 20,20 relative to screen size
  - make sure that Route::draw is used every time a Route is drawn (no useless copies of the same lines of code) -> use the fact that in the mercator projection loxodromes are straight lines to incoprporate them in the new Draw function
  - Make sure that Draw is not called uselessly some times

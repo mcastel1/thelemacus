@@ -46,7 +46,7 @@ height of terminal window = 110
 #width of terminal window = 110
 #height of terminal window = 110
 #values for black screen
-number of points coastline = 80000
+number of points coastline = 120000
 number of points for routes = 20
 number of points for minor ticks = 3
 preferred number of intervals for ticks = 6

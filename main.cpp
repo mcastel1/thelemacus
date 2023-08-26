@@ -44,8 +44,7 @@
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - add check on zoom factor in OnMouseRightDown for the 3D projections
-  - fix bug: when one clicks with the mouse on the second wxTextCtrl in ChronoField, nothing happens
- - move all stuff which is general enough in the code to MyApp class 
+ - move all stuff which is general enough in the code to MyApp class
  - in the mercator projection ticks on the x axis are missing on the right edge of the x axis
 
  */

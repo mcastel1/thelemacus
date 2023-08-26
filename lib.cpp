@@ -17132,7 +17132,7 @@ ChronoField::ChronoField(SightFrame* frame, Chrono* p){
     
     text_colon_2 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize);
     
-    second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxCB_DROPDOWN);
+    second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
     //SetColor(second);
     second->SetValue(wxString(""));

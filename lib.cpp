@@ -9382,7 +9382,7 @@ void DrawPanel::Draw_Mercator(void){
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = (p_SE.phi);
     
-    
+    //draw the first chunk of intermediate ticks on the longitude axis
     if(gamma_lambda != 1){
         
         (route.l).set(String(""), Re*(((wxGetApp().tick_length_over_width_plot_area)).value)*phi_span, String(""));
@@ -9410,7 +9410,7 @@ void DrawPanel::Draw_Mercator(void){
             route.Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_lambda != 1){
-                //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
+                //draw intermediate ticks on the longitude axis 
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
                 (route.l).set(String(""), Re*(((wxGetApp().tick_length_over_width_plot_area)).value)*phi_span, String(""));

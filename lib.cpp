@@ -13634,7 +13634,7 @@ void SightFrame::KeyDown(wxKeyEvent& event){
             
     }
    
- 
+    event.Skip(true);
     
 }
 
@@ -14186,7 +14186,7 @@ void RouteFrame::KeyDown(wxKeyEvent& event){
             
     }
    
- 
+    event.Skip(true);
     
 }
 
@@ -14312,6 +14312,9 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
             
             
     }
+    
+    event.Skip(true);
+
    
 }
 

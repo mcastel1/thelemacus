@@ -13608,9 +13608,11 @@ void SightFrame::KeyDown(wxKeyEvent& event){
     switch((event.GetKeyCode())){
             
         case WXK_ESCAPE:{
+            // the use pressed escape -> I do as if the user pressed button_cancel
             
-            Close(TRUE);
-            
+            wxCommandEvent dummy;
+            OnPressCancel(dummy);
+ 
             break;
             
         }
@@ -13892,6 +13894,21 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     button_ok->Enable((route_in != NULL));
     button_cancel->Bind(wxEVT_BUTTON, &RouteFrame::OnPressCancel, this);
     
+    
+    //bind the function SightFrame::KeyDown to the event where a keyboard dey is pressed down in panel, ... and all fields
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    Z->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    omega->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    start_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    start_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    GP_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    GP_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    l->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+
+    
+
+    
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
     type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
     
@@ -14100,25 +14117,73 @@ void RouteFrame::OnPressCancel(wxCommandEvent& event){
     
 }
 
-//write the content in the GUI fields into the non-GUI fields, and tries to enable button_ok
-void RouteFrame::AllOk(void){
+
+//write the content in the GUI fields into the non-GUI fields, and returns true if all is ok, false otherwise
+bool RouteFrame::is_ok(void){
     
     wxCommandEvent dummy;
     
     get(dummy);
     
-    button_ok->Enable((type->is_ok()) &&
-                      (
-                       ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
-                        ((Z->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
-                       ||
-                       ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
-                        ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
-                       )
-                      );
+    return((type->is_ok()) &&
+            (
+             ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
+              ((Z->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
+             ||
+             ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
+              ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
+             )
+           );
     
 }
 
+//tries to enable button_ok
+void RouteFrame::AllOk(void){
+    
+    button_ok->Enable(is_ok());
+    
+}
+
+
+
+//if a key is pressed in the keyboard, I call this function
+void RouteFrame::KeyDown(wxKeyEvent& event){
+        
+    switch((event.GetKeyCode())){
+            
+        case WXK_ESCAPE:{
+            //the user pressed escape -> I do as if the user pressed button_cancel
+            
+            wxCommandEvent dummy;
+
+            OnPressCancel(dummy);
+            
+            break;
+            
+        }
+            
+        case WXK_RETURN:{
+            //the user pressed return
+            
+            if(is_ok()){
+                //if all fields are ok, I do as if the user presssed button_ok
+                
+                wxCommandEvent dummy;
+                
+                OnPressOk(dummy);
+                
+            }
+            
+            break;
+            
+        }
+            
+            
+    }
+   
+ 
+    
+}
 
 //sets the values in all the GUI fields equal to the values in the respective non-GUI fields
 void RouteFrame::set(void){

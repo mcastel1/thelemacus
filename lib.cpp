@@ -14253,14 +14253,22 @@ void RouteFrame::SetIdling(bool b){
 }
 
 
-//write all the content in the GUI fields into the non-GUI objects, checks whether all the fields in PositionFrame are ok, and if they are, it enables the button_add
-void PositionFrame::AllOk(void){
-    
+//write all the content in the GUI fields into the non-GUI objects, checks whether all the fields in PositionFrame are ok and if they are it returns true and false otherwise
+bool PositionFrame::is_ok(void){
+
     wxCommandEvent dummy;
     
     get(dummy);
     
-    button_ok->Enable((lat->is_ok()) && (lon->is_ok()));
+    return((lat->is_ok()) && (lon->is_ok()));
+    
+    
+}
+
+//if all_ok() returns turue it enables  button_add, and it disables it otherwise
+void PositionFrame::AllOk(void){
+    
+    button_ok->Enable(is_ok());
     
 }
 

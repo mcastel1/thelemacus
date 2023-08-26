@@ -2130,6 +2130,7 @@ public:
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);
+    bool is_ok(void);
     void AllOk(void);
     
     //    wxDECLARE_EVENT_TABLE();

@@ -46,7 +46,7 @@ height of terminal window = 110
 #width of terminal window = 110
 #height of terminal window = 110
 #values for black screen
-number of points coastline = 80000
+number of points coastline = 1500000
 number of points for routes = 20
 number of points for minor ticks = 3
 preferred number of intervals for ticks = 6
@@ -87,4 +87,4 @@ day foreground color = (0,0,0)
 night foreground color = (255,255,255)
 day background color = (224,224,224)
 night background color = (40,40,43)
-show coastlines = n
+show coastlines = y

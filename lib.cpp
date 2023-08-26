@@ -13448,8 +13448,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     
     image_time_interval_status = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
-
-    
     
     
     //label
@@ -13718,6 +13716,13 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_ok->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
     button_ok->Bind(wxEVT_BUTTON, &::PositionFrame::OnPressOk, this);
     button_cancel->Bind(wxEVT_BUTTON, &PositionFrame::OnPressCancel, this);
+    
+    
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
+    lat->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
+    lon->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
+    label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
+
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_ok->Enable((position_in != NULL));
@@ -14271,6 +14276,45 @@ void PositionFrame::AllOk(void){
     button_ok->Enable(is_ok());
     
 }
+
+
+
+//if a key is pressed in the keyboard, I call this function
+void PositionFrame::KeyDown(wxKeyEvent& event){
+        
+    switch((event.GetKeyCode())){
+            
+        case WXK_ESCAPE:{
+            // the use pressed escape -> I do as if the user pressed button_cancel
+            
+            wxCommandEvent dummy;
+            OnPressCancel(dummy);
+ 
+            break;
+            
+        }
+            
+            
+        case WXK_RETURN:{
+            //the user pressed return
+            
+            if(is_ok()){
+                //if all fields are ok, I do as if the user presssed button_reduce
+                
+                wxCommandEvent dummy;
+                OnPressOk(dummy);
+                
+            }
+            
+            break;
+            
+        }
+            
+            
+    }
+   
+}
+
 
 
 

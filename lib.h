@@ -2091,7 +2091,6 @@ public:
     void TimeIntervalOk(String);
     void KeyDown(wxKeyEvent&);
 
-    
     //    wxDECLARE_EVENT_TABLE();
     
 };
@@ -2108,7 +2107,6 @@ public:
     wxPanel *panel;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
-    
     
     
     //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
@@ -2132,6 +2130,7 @@ public:
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);
     void AllOk(void);
+    void KeyDown(wxKeyEvent&);
     
     //    wxDECLARE_EVENT_TABLE();
     

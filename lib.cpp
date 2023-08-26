@@ -8514,6 +8514,7 @@ void ListFrame::GetAllCoastLineData(void){
     string data, line;
     stringstream ins;
     int i, j;
+    string::size_type sz;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
     vector<unsigned int> n_line(360*(floor_max_lat-floor_min_lat+1));
     unsigned int l/*, n = 0*/;
@@ -8584,9 +8585,13 @@ void ListFrame::GetAllCoastLineData(void){
                     replace(line.begin(), line.end(), ' ', '\n');
                     replace(line.begin(), line.end(), ',', ' ');
                     
-                    ins.clear();
-                    ins << line;
-                    ins >> phi_temp >> lambda_temp;
+//                    ins.clear();
+//                    ins << line;
+//                    ins >> phi_temp >> lambda_temp;
+                    
+                    phi_temp = std::stod(line,&sz);
+                    lambda_temp = std::stod(line.substr(sz));
+
                     
                     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                     (p_temp.phi).set(String(""), k*phi_temp, String(""));

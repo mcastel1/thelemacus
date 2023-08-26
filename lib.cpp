@@ -142,7 +142,7 @@ void RescaleProportionally(wxImage* image, const wxSize size){
                                 (size.GetWidth()) -   ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
                                 ( (size.GetHeight()) - ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) )
                                 );
-            
+    
     scaling_factor.set(String(""),
                        (
                         ((original_size.GetWidth()) > (original_size.GetHeight()))
@@ -152,13 +152,13 @@ void RescaleProportionally(wxImage* image, const wxSize size){
                        ,
                        String("")
                        );
-  
+    
     image->Rescale(
                    ((int)(((double)(original_size.GetWidth()))*(scaling_factor.value))),
                    ((int)(((double)(original_size.GetHeight()))*(scaling_factor.value))),
                    wxIMAGE_QUALITY_HIGH
                    );
-
+    
 }
 
 bool String::operator==(const String& s){
@@ -8572,7 +8572,7 @@ void ListFrame::GetAllCoastLineData(void){
                 
                 
                 //count how many datapoints are in data
-//                n = ((unsigned int)count(data.begin(), data.end(), ','));
+                //                n = ((unsigned int)count(data.begin(), data.end(), ','));
                 
                 l=0;
                 pos_beg = 0;
@@ -8585,13 +8585,13 @@ void ListFrame::GetAllCoastLineData(void){
                     replace(line.begin(), line.end(), ' ', '\n');
                     replace(line.begin(), line.end(), ',', ' ');
                     
-//                    ins.clear();
-//                    ins << line;
-//                    ins >> phi_temp >> lambda_temp;
+                    //                    ins.clear();
+                    //                    ins << line;
+                    //                    ins >> phi_temp >> lambda_temp;
                     
                     phi_temp = std::stod(line,&sz);
                     lambda_temp = std::stod(line.substr(sz));
-
+                    
                     
                     (p_temp.lambda).set(String(""), k*lambda_temp, String(""));
                     (p_temp.phi).set(String(""), k*phi_temp, String(""));
@@ -8950,13 +8950,13 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         
         if(mode == String("NS")){
             //if I am drawing latitude labels I let labels point to label_phi
-               labels = &label_phi;
+            labels = &label_phi;
         }else{
             //if I am drawing longitude labels I let labels point to label_lambda
-             labels = &label_lambda;
+            labels = &label_lambda;
         }
         
-            
+        
         (*labels).resize(((*labels).size())+1);
         //I first crate a StaticText with default position ...
         ((*labels).back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
@@ -9162,7 +9162,7 @@ void DrawPanel::Draw_Mercator(void){
     prefix = String("");
     new_prefix = prefix.append(String("\t"));
     
-      
+    
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of Draw_Mercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
     phi_span =  (((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value);
@@ -9193,9 +9193,9 @@ void DrawPanel::Draw_Mercator(void){
     //set phi_start/end
     (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
     (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
-
     
-     //compute size of largest label on parallel: run through all labels on parallels and set size_label_horizontal as the size of the largest label on parallel that has ben found
+    
+    //compute size of largest label on parallel: run through all labels on parallels and set size_label_horizontal as the size of the largest label on parallel that has ben found
     for(size_label_horizontal = 0,
         first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
@@ -9213,10 +9213,10 @@ void DrawPanel::Draw_Mercator(void){
         }
         
     }
-     
+    
     //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
     size_label_vertical = (GetTextExtent(wxString((Angle(0,  0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
- 
+    
     
     //clears all labels previously drawn
     for(i=0; i<label_lambda.size(); i++){(label_lambda[i])->Destroy();}
@@ -9281,7 +9281,7 @@ void DrawPanel::Draw_Mercator(void){
            position_plot_area = wxPoint(
                                         
                                         ( ((int)(size_chart.GetWidth())) -  (((int)(size_plot_area.GetWidth())) - ((int)size_label_horizontal) -  ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)) )/2
-
+                                        
                                         
                                         ,
                                         
@@ -9289,7 +9289,7 @@ void DrawPanel::Draw_Mercator(void){
                                         
                                         );
            
-
+           
            
        }
     
@@ -9306,7 +9306,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
     memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
-      //set p_NW and p_SE
+    //set p_NW and p_SE
     //updates the position of the draw pane this
     DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1, 1), &p_NW);
     DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/- wxPoint(1, 1), &p_SE);
@@ -9375,7 +9375,7 @@ void DrawPanel::Draw_Mercator(void){
     
     //draw meridians
     
-
+    
     
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
@@ -9410,7 +9410,7 @@ void DrawPanel::Draw_Mercator(void){
             route.Draw(((plot->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_lambda != 1){
-                //draw intermediate ticks on the longitude axis 
+                //draw intermediate ticks on the longitude axis
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
                 (route.l).set(String(""), Re*(((wxGetApp().tick_length_over_width_plot_area)).value)*phi_span, String(""));
@@ -9432,9 +9432,9 @@ void DrawPanel::Draw_Mercator(void){
             
         }
     
-    //I put this to cound how many times Draw_Mercator has been called, because the breakpoints do not seem to do the job for this
-    cout << " ---------------- Draw_Mercator has been called ---------------- \n";
-    flush(cout);
+    //I put this to count how many times Draw_Mercator has been called, because the breakpoints do not seem to do the job for this
+    //    cout << " ---------------- Draw_Mercator has been called ---------------- \n";
+    //    flush(cout);
     
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
@@ -9961,7 +9961,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     //read zoom_factor_max from file_init
     (wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
-
+    
     
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
@@ -10002,7 +10002,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     wxBitmap my_bitmap_list = wxBitmap(wxT(path_file_list_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_list = my_bitmap_list.ConvertToImage();
     RescaleProportionally(&my_image_list, (wxGetApp().size_large_button));
-
+    
     
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -10014,7 +10014,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //button to show list
     button_show_list = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_list), wxDefaultPosition, (my_image_list.GetSize()) + wxSize(((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
-
+    
     
     projection = new ProjectionField(this);
     (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
@@ -10095,7 +10095,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     projection->InsertIn<wxBoxSizer>(sizer_slider);
     sizer_slider->AddStretchSpacer(1);
     sizer_slider->Add(button_show_list, 0, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-
+    
     
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL | wxEXPAND, 0);
@@ -10110,7 +10110,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
-//    CenterOnScreen();
+    //    CenterOnScreen();
     
 }
 
@@ -12436,7 +12436,7 @@ template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
 
 
 void DeleteSight::operator()(wxCommandEvent& event){
-        
+    
     //I remove the sight and the related route from  the non-GUI object plot
     (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
     
@@ -13326,7 +13326,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     }
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-        
+    
     sizer_grid_measurement = new wxFlexGridSizer(6, 2,
                                                  (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value),
                                                  (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value)
@@ -13409,7 +13409,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //I bind master_clock_date->year/month/day to OnEditTime in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     //    (master_clock_date->year)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //    (master_clock_date->month)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-
+    
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
@@ -13423,7 +13423,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //    if(sight_in != NULL){
     master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
     //    }
-
+    
     
     //check/uncheck stopwatch
     StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
@@ -13459,14 +13459,14 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
-
+    
     //message and image shown if the time entered by the user is not covered by ephemerides' data. Both are set to empty at the construction of SightFrame
     text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     image_time_interval_not_ok = new wxImage();
     (*image_time_interval_not_ok) = (wxBitmap(path_file_warning_icon, wxBITMAP_TYPE_PNG).ConvertToImage());
     RescaleProportionally(image_time_interval_not_ok, wxGetApp().size_small_button);
-
+    
     
     image_time_interval_status = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
     
@@ -13510,7 +13510,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_reading->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     TAI_minus_UTC->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-
+    
     
     
     
@@ -13631,7 +13631,7 @@ void SightFrame::KeyDown(wxKeyEvent& event){
             
             wxCommandEvent dummy;
             OnPressCancel(dummy);
- 
+            
             break;
             
         }
@@ -13654,7 +13654,7 @@ void SightFrame::KeyDown(wxKeyEvent& event){
             
             
     }
-   
+    
     event.Skip(true);
     
 }
@@ -13743,7 +13743,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     lat->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
     lon->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
     label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
-
+    
     
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL
     button_ok->Enable((position_in != NULL));
@@ -13931,9 +13931,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     GP_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     l->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-
     
-
+    
+    
     
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
     type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
@@ -14152,13 +14152,13 @@ bool RouteFrame::is_ok(void){
     get(dummy);
     
     return((type->is_ok()) &&
-            (
-             ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
-              ((Z->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
-             ||
-             ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
-              ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
-             )
+           (
+            ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
+             ((Z->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
+            ||
+            ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
+             ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
+            )
            );
     
 }
@@ -14174,14 +14174,14 @@ void RouteFrame::AllOk(void){
 
 //if a key is pressed in the keyboard, I call this function
 void RouteFrame::KeyDown(wxKeyEvent& event){
-        
+    
     switch((event.GetKeyCode())){
             
         case WXK_ESCAPE:{
             //the user pressed escape -> I do as if the user pressed button_cancel
             
             wxCommandEvent dummy;
-
+            
             OnPressCancel(dummy);
             
             break;
@@ -14206,7 +14206,7 @@ void RouteFrame::KeyDown(wxKeyEvent& event){
             
             
     }
-   
+    
     event.Skip(true);
     
 }
@@ -14281,7 +14281,7 @@ void RouteFrame::SetIdling(bool b){
 
 //write all the content in the GUI fields into the non-GUI objects, checks whether all the fields in PositionFrame are ok and if they are it returns true and false otherwise
 bool PositionFrame::is_ok(void){
-
+    
     wxCommandEvent dummy;
     
     get(dummy);
@@ -14302,7 +14302,7 @@ void PositionFrame::AllOk(void){
 
 //if a key is pressed in the keyboard, I call this function
 void PositionFrame::KeyDown(wxKeyEvent& event){
-        
+    
     switch((event.GetKeyCode())){
             
         case WXK_ESCAPE:{
@@ -14310,7 +14310,7 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
             
             wxCommandEvent dummy;
             OnPressCancel(dummy);
- 
+            
             break;
             
         }
@@ -14335,8 +14335,8 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
     }
     
     event.Skip(true);
-
-   
+    
+    
 }
 
 
@@ -14370,7 +14370,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     //bind the function MessageFrame<FF_OK>::KeyDown to the event where a keyboard dey is down
     panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(MessageFrame<FF_OK>::KeyDown), this);
-
+    
     
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
@@ -14568,7 +14568,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
         (wxGetApp().color_list)[i] = Color(red, green, blue);
         
     }
-        
+    
     //no positions nor routes are highlighted when ListFrame is constructed
     highlighted_route = -1;
     highlighted_position = -1;
@@ -14621,7 +14621,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_listcontrol_routes_button_show_map = new wxBoxSizer(wxHORIZONTAL);
-
+    
     sizer_buttons_sight = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_route = new wxBoxSizer(wxHORIZONTAL);
@@ -14637,7 +14637,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     plot->read_from_file(file_sample_sight, String(""));
     plot->print(true, String(""), cout);
     //
-
+    
     
     //image for button_add_sight, button_add_position and button_add_route
     wxBitmap my_bitmap_plus = wxBitmap(wxT(path_file_plus_icon), wxBITMAP_TYPE_PNG);
@@ -14664,7 +14664,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     wxBitmap my_bitmap_delete_sight = wxBitmap(wxT(path_file_trash_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_delete = my_bitmap_delete_sight.ConvertToImage();
     RescaleProportionally(&my_image_delete, wxGetApp().size_small_button);
-
+    
     
     //button to modify a sight
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
@@ -14851,7 +14851,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //button to show map
     button_show_map = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart<wxCommandEvent>, &wxGetApp());
- 
+    
     //button to add a sight
     button_add_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
@@ -14944,7 +14944,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
                                            wxDefaultSize,
                                            String("")
                                            );
-//    (chart_frames.back())->Show(true);
+    //    (chart_frames.back())->Show(true);
     
     wxGetApp().ShowChart(event);
     
@@ -15465,7 +15465,7 @@ bool SightFrame::is_ok(void){
            (master_clock_chrono->is_ok()) &&
            ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok())) &&
            (TAI_minus_UTC->is_ok()) && time_interval_ok);
-  
+    
     
 }
 
@@ -16856,7 +16856,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
     
     
     if(format != String("")){
-     //the angle format contains a non-empty sign
+        //the angle format contains a non-empty sign
         
         //I bind the sign to method
         sign->Bind(tag, method, object);
@@ -16865,7 +16865,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
     //I bind deg and min to method
     deg->Bind(tag, method, object);
     min->Bind(tag, method, object);
-
+    
 }
 
 
@@ -16966,7 +16966,7 @@ template <typename EventTag, typename Method, typename Object> void ChronoField:
     hour->Bind(tag, method, object);
     minute->Bind(tag, method, object);
     second->Bind(tag, method, object);
-
+    
 }
 
 
@@ -17031,7 +17031,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
     
     value->Bind(tag, method, object);
     unit->Bind(tag, method, object);
-
+    
 }
 
 //constructor of a DateField object, based on the parent frame frame
@@ -17430,7 +17430,7 @@ template <typename EventTag, typename Method, typename Object> void DateField::B
     year->Bind(tag, method, object);
     month->Bind(tag, method, object);
     day->Bind(tag, method, object);
-
+    
 }
 
 
@@ -17665,7 +17665,7 @@ template <class P> template <typename EventTag, typename Method, typename Object
     
     //I bind value to method
     value->Bind(tag, method, object);
-
+    
 }
 
 

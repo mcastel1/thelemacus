@@ -13490,7 +13490,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     master_clock_chrono->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     stopwatch_reading->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     TAI_minus_UTC->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    
+    label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+
     
     
     
@@ -17518,6 +17519,17 @@ template<class P> template<class T> void StringField<P>::InsertIn(T* host){
     host->Add(sizer_v);
     
 }
+
+//bind this -> value to method
+template <class P> template <typename EventTag, typename Method, typename Object> void StringField<P>::Bind(EventTag tag,  Method method, Object object){
+    
+    //I bind value to method
+    value->Bind(tag, method, object);
+
+}
+
+
+
 
 template<class T> void ChronoField::InsertIn(T* host){
     

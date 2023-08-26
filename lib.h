@@ -1764,6 +1764,7 @@ public:
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 

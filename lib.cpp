@@ -9374,12 +9374,31 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //draw meridians
+    
+
+    
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String(""), String("o"), String(""));
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = (p_SE.phi);
-    (route.l).set(String(""), Re*((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
     
+    
+    if(gamma_lambda != 1){
+        
+        (route.l).set(String(""), Re*(((wxGetApp().tick_length_over_width_plot_area)).value)*phi_span, String(""));
+        
+        //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+        for((((route.reference_position).lambda).value) = (lambda_start.value)-delta_lambda;
+            (((route.reference_position).lambda).value) - ((lambda_start.value)-delta_lambda) < delta_lambda;
+            (((route.reference_position).lambda).value) += delta_lambda_minor){
+            
+            route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, this, String(""));
+            
+        }
+        
+    }
+    
+    (route.l).set(String(""), Re*((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
     
     for(
         (((route.reference_position).lambda).value) = (lambda_start.value);
@@ -9394,10 +9413,7 @@ void DrawPanel::Draw_Mercator(void){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
                 
                 (lambda_saved.value) = (((route.reference_position).lambda).value);
-                //                phi_saved = ((route.reference_position).phi);
-                
                 (route.l).set(String(""), Re*(((wxGetApp().tick_length_over_width_plot_area)).value)*phi_span, String(""));
-                //                ((route.reference_position).phi) = (parent->phi_min);
                 
                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
                 for((((route.reference_position).lambda).value) = (lambda_saved.value);

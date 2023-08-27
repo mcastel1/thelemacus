@@ -2226,10 +2226,10 @@ public:
     void SetIdling(bool);
     void AllOk(void);
     
-    template<class T> void MoveUp(T&);
-    template<class T> void MoveDown(T&);
-    template<class T> void MoveLeft(T&);
-    template<class T> void MoveRight(T&);
+    template<class T> void MoveNorth(T&);
+    template<class T> void MoveSouth(T&);
+    template<class T> void MoveWest(T&);
+    template<class T> void MoveEast(T&);
     template<class T> void Reset(T&);
     
     //this is created for testing

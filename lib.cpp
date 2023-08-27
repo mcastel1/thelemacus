@@ -10076,10 +10076,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
     
     
-    button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveUp<wxCommandEvent>, this);
-    button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveDown<wxCommandEvent>, this);
-    button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveLeft<wxCommandEvent>, this);
-    button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveRight<wxCommandEvent>, this);
+    button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveNorth<wxCommandEvent>, this);
+    button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveSouth<wxCommandEvent>, this);
+    button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveWest<wxCommandEvent>, this);
+    button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveEast<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
     
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
@@ -10200,7 +10200,7 @@ void ChartFrame::OnClose(wxCloseEvent& event){
 }
 
 //moves (makes slide) to the north the chart
-template<class T> void ChartFrame::MoveUp(T& event){
+template<class T> void ChartFrame::MoveNorth(T& event){
     
     
     switch((((projection->name)->GetValue()).ToStdString())[0]){
@@ -10239,7 +10239,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
         case '3':{
             //I am using the 3d projection
             
-            Angle /*the angular displacement of the operation MoveUp*/delta;
+            Angle /*the angular displacement of the operation MoveNorth*/delta;
             
            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
@@ -10269,7 +10269,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
 
 //moves (makes slide) to the south the chart
 //moves (makes slide) up the chart
-template<class T> void ChartFrame::MoveDown(T& event){
+template<class T> void ChartFrame::MoveSouth(T& event){
     
     
     switch((((projection->name)->GetValue()).ToStdString())[0]){
@@ -10308,7 +10308,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
         case '3':{
             //I am using the 3d projection
             
-            Angle /*the angular displacement of the operation MoveUp*/delta;
+            Angle /*the angular displacement of the operation MoveNorth*/delta;
             
            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
@@ -10335,7 +10335,7 @@ template<class T> void ChartFrame::MoveDown(T& event){
 }
 
 //moves (makes slide) to the west the chart
-template<class T> void ChartFrame::MoveLeft(T& event){
+template<class T> void ChartFrame::MoveWest(T& event){
     
     
     switch((((projection->name)->GetValue()).ToStdString())[0]){
@@ -10365,7 +10365,7 @@ template<class T> void ChartFrame::MoveLeft(T& event){
         case '3':{
             //I am using the 3d projection
             
-            Angle /*the angular displacement of the operation MoveUp*/delta;
+            Angle /*the angular displacement of the operation MoveNorth*/delta;
             
            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
@@ -10404,22 +10404,22 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
             
         case WXK_UP:
             
-            parent->MoveUp<wxKeyEvent>(event);
+            parent->MoveNorth<wxKeyEvent>(event);
             break;
             
         case WXK_DOWN:
             
-            parent->MoveDown<wxKeyEvent>(event);
+            parent->MoveSouth<wxKeyEvent>(event);
             break;
             
         case WXK_LEFT:
             
-            parent->MoveLeft<wxKeyEvent>(event);
+            parent->MoveWest<wxKeyEvent>(event);
             break;
             
         case WXK_RIGHT:
             
-            parent->MoveRight<wxKeyEvent>(event);
+            parent->MoveEast<wxKeyEvent>(event);
             break;
             
         case WXK_ESCAPE:
@@ -10441,7 +10441,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
 }
 
 //moves (makes slide) to the east the chart
-template<class T> void ChartFrame::MoveRight(T& event){
+template<class T> void ChartFrame::MoveEast(T& event){
     
     
     switch((((projection->name)->GetValue()).ToStdString())[0]){
@@ -10471,7 +10471,7 @@ template<class T> void ChartFrame::MoveRight(T& event){
         case '3':{
             //I am using the 3d projection
             
-            Angle /*the angular displacement of the operation MoveUp*/delta;
+            Angle /*the angular displacement of the operation MoveNorth*/delta;
             
            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);

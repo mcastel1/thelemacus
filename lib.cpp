@@ -9324,11 +9324,13 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //set lambda_span
-    if(((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)){
+    if((((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)) || ((parent->lambda_min) < (parent->lambda_max))){
+        //the 'anomalous' situation where the chart encompasses the Greenwich antimeridian
         
         lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value) + 2.0*M_PI;
         
     }else{
+        //the 'normal' situation where the chart does not encompass the Greenwich antimeridian
         
         lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value);
         
@@ -9365,8 +9367,19 @@ void DrawPanel::Draw_Mercator(void){
         
     }else{
         
-        (lambda_start.value) = ceil(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
-        (lambda_end.value) = ((parent->lambda_min).value);
+        if((parent->lambda_min) > (parent->lambda_max)){
+            
+            (lambda_start.value) = ceil(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((parent->lambda_min).value);
+            
+        }else{
+            
+            (lambda_start.value) = ceil(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
+            (lambda_end.value) = ((parent->lambda_min).value)+ 2.0*M_PI;
+  
+            
+            
+        }
         
     }
     

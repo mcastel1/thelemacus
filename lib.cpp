@@ -1070,7 +1070,7 @@ Rotation::Rotation(Angle a_in, Angle b_in, Angle c_in){
     //allocate and set the rotation matrix
     matrix = gsl_matrix_alloc(3, 3);
     
-    set(a,b,c);
+    set(a_in, b_in, c_in);
     
 }
 

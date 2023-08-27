@@ -11351,13 +11351,6 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
         Set_size_chart = (&DrawPanel::Set_size_chart_Mercator);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
         
-        //I enable the buttons up ... right because they are needed in Mercator mode
-        //        (parent->slider)->Enable(true);
-        (parent->button_up)->Enable(true);
-        (parent->button_down)->Enable(true);
-        (parent->button_left)->Enable(true);
-        (parent->button_right)->Enable(true);
-        
     }
     
     if((((parent->projection)->name)->GetValue()) == wxString("3D")){
@@ -11373,14 +11366,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
         Set_size_chart = (&DrawPanel::Set_size_chart_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
-        
-        //I disable the buttons up down ... right because they cannot be used in 3D mode
-        //        (parent->slider)->Enable(false);
-        (parent->button_up)->Enable(false);
-        (parent->button_down)->Enable(false);
-        (parent->button_left)->Enable(false);
-        (parent->button_right)->Enable(false);
-        
+                
     }
     
     //reset everything and draw

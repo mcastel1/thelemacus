@@ -1114,11 +1114,8 @@ Rotation::Rotation(Position p, Position q){
                                rotation_angle
                                ));
         
-        
-        //        gsl_vector_free(r_p);
-        //        gsl_vector_free(r_q);
-        //        gsl_vector_free(omega);
-        
+        //writes the Euler angles from matrix
+        this->set(matrix);
         
     }else{
         //if start = end, I return the identity as rotation
@@ -1130,7 +1127,6 @@ Rotation::Rotation(Position p, Position q){
                             ));
         
     }
-    
     
 }
 

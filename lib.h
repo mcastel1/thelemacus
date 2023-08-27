@@ -190,6 +190,7 @@ inline double csc(double x){
     
 }
 
+//returns alpha = arctan(y/x), with alpha lying in the same quadrant as the vector x, y
 inline double atan(double x, double y){
     
     if(x != 0.0){

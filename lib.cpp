@@ -10334,30 +10334,66 @@ template<class T> void ChartFrame::MoveDown(T& event){
     
 }
 
-//moves (makes slide) left the chart
+//moves (makes slide) to the west the chart
 template<class T> void ChartFrame::MoveLeft(T& event){
     
-    double delta;
     
-    delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
-    
-    //update lambda_min, lambda_max according to the drag.
-    (lambda_min.value) += delta;
-    (lambda_max.value) += delta;
-    
-    lambda_min.normalize();
-    lambda_max.normalize();
-    
-    (draw_panel->*(draw_panel->Set_x_y_min_max))();
-    
+    switch((((projection->name)->GetValue()).ToStdString())[0]){
+            
+        case 'M':{
+            //I am using the mercator projection
+            
+            
+            double delta;
+            
+            delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
+            
+            //update lambda_min, lambda_max according to the drag.
+            (lambda_min.value) += delta;
+            (lambda_max.value) += delta;
+            
+            lambda_min.normalize();
+            lambda_max.normalize();
+            
+            (draw_panel->*(draw_panel->Set_x_y_min_max))();
+            
+            break;
+                    
+        }
+            
+            
+        case '3':{
+            //I am using the 3d projection
+            
+            Angle /*the angular displacement of the operation MoveUp*/delta;
+            
+           //I set delta as a fraction of circle_obsrever.omega
+            delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
+
+            //since I am moving north, I increase the b Euler ancgle of rotation
+            ((draw_panel->rotation).a) -= delta;
+            //I update rotation->matrix
+            (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        
+            
+            
+            break;
+            
+        }
+  
+            
+    }
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
+
     
     event.Skip(true);
     
 }
+
+
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event){
@@ -10404,29 +10440,66 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
     
 }
 
-//moves (makes slide) up the chart
+//moves (makes slide) to the east the chart
 template<class T> void ChartFrame::MoveRight(T& event){
     
-    double delta;
     
-    delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
-    
-    //update lambda_min, lambda_max according to the drag.
-    (lambda_min.value) -= delta;
-    (lambda_max.value) -= delta;
-    
-    lambda_min.normalize();
-    lambda_max.normalize();
-    
-    (draw_panel->*(draw_panel->Set_x_y_min_max))();
+    switch((((projection->name)->GetValue()).ToStdString())[0]){
+            
+        case 'M':{
+            //I am using the mercator projection
+            
+            
+            double delta;
+            
+            delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
+            
+            //update lambda_min, lambda_max according to the drag.
+            (lambda_min.value) -= delta;
+            (lambda_max.value) -= delta;
+            
+            lambda_min.normalize();
+            lambda_max.normalize();
+            
+            (draw_panel->*(draw_panel->Set_x_y_min_max))();
+            
+            break;
+                    
+        }
+            
+            
+        case '3':{
+            //I am using the 3d projection
+            
+            Angle /*the angular displacement of the operation MoveUp*/delta;
+            
+           //I set delta as a fraction of circle_obsrever.omega
+            delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
+
+            //since I am moving north, I increase the b Euler ancgle of rotation
+            ((draw_panel->rotation).a) += delta;
+            //I update rotation->matrix
+            (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        
+            
+            
+            break;
+            
+        }
+  
+            
+    }
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
+
     
     event.Skip(true);
     
 }
+
+
 
 //resets the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event){

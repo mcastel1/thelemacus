@@ -10241,6 +10241,11 @@ template<class T> void ChartFrame::MoveUp(T& event){
             
            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
+
+            //since I am moving north, I increase the b Euler ancgle of rotation
+            ((draw_panel->rotation).b) += delta;
+            //I update rotation->matrix
+            (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
         
             
             

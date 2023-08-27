@@ -8423,36 +8423,61 @@ void ChartFrame::GetCoastLineData_Mercator(void){
     phi_min.normalize_pm_pi();
     phi_max.normalize_pm_pi();
     
-    lambda_min_int = ceil(K*(lambda_min.value));
-    lambda_max_int = floor(K*(lambda_max.value));
+    
+    if((lambda_min < M_PI) && (lambda_max > M_PI)){
+        
+        lambda_min_int = floor(K*((lambda_max).value));
+        lambda_max_int = ceil(K*(((lambda_min).value)+2.0*M_PI));
+        
+    }else{
+        
+        if(lambda_min > lambda_max){
+            
+            lambda_min_int = floor(K*((lambda_max).value));
+            lambda_max_int = ceil(K*((lambda_min).value));
+            
+        }else{
+            
+            lambda_min_int = floor(K*((lambda_max).value));
+            lambda_max_int = ceil(K*(((lambda_min).value)+2.0*M_PI));
+  
+        }
+        
+    }
+    
+//    lambda_min_int = ceil(K*(lambda_min.value));
+//    lambda_max_int = floor(K*(lambda_max.value));
     phi_min_int = floor(K*(phi_min.value));
     phi_max_int = ceil(K*(phi_max.value));
     
-    //transform the values lambda_min_int, lambda_max_int in a format appropriate for p_coastline
-    if((draw_panel->x_min) <= (draw_panel->x_max)){
-        //this is the 'normal' case where x_min, x_max do not embrace the meridian lambda = pi
-        
-        if((lambda_min_int < 180) && (lambda_max_int >= 180)){
-            //in this case, x_min and x_max embrace the meridian lambda = 0
-            
-            j_min = lambda_max_int;
-            j_max = 360 + lambda_min_int;
-            
-        }else{
-            //in thi case, both x_min and x_max lie either in the interval [-pi, 0] or in [0, pi]
-            
-            j_min = lambda_max_int;
-            j_max = lambda_min_int;
-            
-        }
-        
-    }else{
-        //this is the 'non-normal' case, where x_min, x_max embrace the meridian lambda = pi.
-        
-        j_min = lambda_max_int;
-        j_max = lambda_min_int;
-        
-    }
+//    //transform the values lambda_min_int, lambda_max_int in a format appropriate for p_coastline
+//    if((draw_panel->x_min) <= (draw_panel->x_max)){
+//        //this is the 'normal' case where x_min, x_max do not embrace the meridian lambda = pi
+//
+//        if((lambda_min_int < 180) && (lambda_max_int >= 180)){
+//            //in this case, x_min and x_max embrace the meridian lambda = 0
+//
+//            j_min = lambda_max_int;
+//            j_max = 360 + lambda_min_int;
+//
+//        }else{
+//            //in thi case, both x_min and x_max lie either in the interval [-pi, 0] or in [0, pi]
+//
+//            j_min = lambda_max_int;
+//            j_max = lambda_min_int;
+//
+//        }
+//
+//    }else{
+//        //this is the 'non-normal' case, where x_min, x_max embrace the meridian lambda = pi.
+//
+//        j_min = lambda_max_int;
+//        j_max = lambda_min_int;
+//
+//    }
+//
+    j_min = lambda_min_int;
+    j_max = lambda_max_int;
     
     i_min = phi_min_int;
     i_max = phi_max_int;

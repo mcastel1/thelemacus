@@ -1030,8 +1030,12 @@ Rotation::Rotation(void){
     
 }
 
-//sets the rotation from the Euler angles a, b, c 
-void Rotation::set(Angle a, Angle b, Angle c){
+//sets the rotation euler angles and matrix from the Euler angles a_in, b_in, c_in
+void Rotation::set(Angle a_in, Angle b_in, Angle c_in){
+    
+    a=a_in;
+    b=b_in;
+    c=c_in;
     
     gsl_matrix_set(matrix, 0 ,0 , cos(a)*cos(c) - cos(b)*sin(a)*sin(c));
     gsl_matrix_set(matrix, 0 ,1 , -(cos(c)*sin(a)) - cos(a)*cos(b)*sin(c));
@@ -1048,7 +1052,7 @@ void Rotation::set(Angle a, Angle b, Angle c){
 }
 
 //constructor of a Rotation instance which sets the rotation matrix according to three Euler angles
-Rotation::Rotation(Angle a, Angle b, Angle c){
+Rotation::Rotation(Angle a_in, Angle b_in, Angle c_in){
     
     //allocate and set the rotation matrix
     matrix = gsl_matrix_alloc(3, 3);
@@ -1123,6 +1127,13 @@ Rotation::Rotation(Position p, Position q){
 Rotation Rotation::inverse(void){
     
     Rotation t;
+    Angle temp;
+    
+    //set the euler angles corredponding to the inverse rotation
+    b = b*(-1.0);
+    temp = c;
+    c = a*(-1.0);
+    a = temp*(-1.0);
     
     //transposes (inverts) this->matrix and copies the result into t.matrix
     gsl_matrix_transpose_memcpy(t.matrix, matrix);
@@ -1148,7 +1159,11 @@ void Rotation::print(String name, String prefix, ostream& ostr){
     
     unsigned int i, j;
     
-    ostr << prefix.value << name.value << " : \n";
+    a.print(String("a"), String(""), ostr);
+    b.print(String("a"), String(""), ostr);
+    c.print(String("a"), String(""), ostr);
+
+    ostr << prefix.value << name.value << "matrix : \n";
     
     for(i=0; i<3; i++){
         

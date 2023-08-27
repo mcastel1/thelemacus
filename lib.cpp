@@ -1173,8 +1173,8 @@ void Rotation::print(String name, String prefix, ostream& ostr){
 
     
     a.print(String("a"), new_prefix, ostr);
-    b.print(String("a"), new_prefix, ostr);
-    c.print(String("a"), new_prefix, ostr);
+    b.print(String("b"), new_prefix, ostr);
+    c.print(String("c"), new_prefix, ostr);
 
     
     ostr << prefix.value  << "matrix : \n";

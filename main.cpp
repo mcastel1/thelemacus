@@ -177,7 +177,9 @@ bool MyApp::OnInit(){
     ////    (b.value) += 1e-6;
     //
     //    cout << "equal_approx = " << a.equal_approx(b) << "\n";
-    //    //
+    
+    
+    //
     Rotation r, rp;
     gsl_rng* myran;
     gsl_rng_env_setup();
@@ -187,7 +189,11 @@ bool MyApp::OnInit(){
     r.set(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
     rp.set(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
 
-    (r*rp).print(String("product of rotations"), String("\t"), cout);
+    r.print(String("r"), String(""), cout);
+    rp.print(String("rp"), String(""), cout);
+
+    (r*rp).print(String("r x rp"), String("\t"), cout);
+    //
     
     
     unsigned int i;

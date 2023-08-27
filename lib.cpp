@@ -4500,13 +4500,26 @@ Angle Angle::operator- (const Angle& angle){
     return temp;
 }
 
+Angle Angle::operator* (const double& x){
+    
+    Angle temp;
+    
+    temp.value = value*x;
+    temp.normalize();
+    
+    return temp;
+    
+}
+
 Angle Angle::operator/ (const double& x){
+    
     Angle temp;
     
     temp.value = value/x;
     temp.normalize();
     
     return temp;
+    
 }
 
 
@@ -10157,6 +10170,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
             double delta;
             Projection p_ceil_min, p_floor_max;
             
+            //I set delta as a fraction of y_max - y_min
             delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max)-(draw_panel->y_min));
             
             (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
@@ -10186,6 +10200,11 @@ template<class T> void ChartFrame::MoveUp(T& event){
         case '3':{
             //I am using the 3d projection
             
+            Angle /*the angular displacement of the operation MoveUp*/delta;
+            
+           //I set delta as a fraction of circle_obsrever.omega
+            delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
+        
             
             
             break;

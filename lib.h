@@ -168,7 +168,7 @@ public:
     string min_to_string(String, unsigned int);
 
      bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
-    Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&);
+    Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
     Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
     
 };

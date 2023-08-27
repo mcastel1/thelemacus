@@ -1163,11 +1163,13 @@ Rotation Rotation::operator *(const Rotation& s){
     
     gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, this->matrix, s.matrix, 0.0, t.matrix);
     
-    //extract the Euler angles from the matrix t
-    (t.b) = acos(gsl_matrix_get(t.matrix, 2, 2));
-    (t.a) = atan(gsl_matrix_get(t.matrix, 2, 1)/(-sin(t.b)), gsl_matrix_get(t.matrix, 2, 0)/(-sin(t.b)));
-    (t.c) = atan(gsl_matrix_get(t.matrix, 1, 2)/sin(t.b), gsl_matrix_get(t.matrix, 0, 2)/(-sin(t.b)));
+    //extract the Euler angles from the matrix t and write them into t
+    t.set(t.matrix);
     
+//    (t.b) = acos(gsl_matrix_get(t.matrix, 2, 2));
+//    (t.a) = atan(gsl_matrix_get(t.matrix, 2, 1)/(-sin(t.b)), gsl_matrix_get(t.matrix, 2, 0)/(-sin(t.b)));
+//    (t.c) = atan(gsl_matrix_get(t.matrix, 1, 2)/sin(t.b), gsl_matrix_get(t.matrix, 0, 2)/(-sin(t.b)));
+//    
     return t;
     
 }

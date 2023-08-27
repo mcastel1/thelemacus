@@ -10197,7 +10197,7 @@ void ChartFrame::OnClose(wxCloseEvent& event){
     
 }
 
-//moves (makes slide) up the chart
+//moves (makes slide) to the north the chart
 template<class T> void ChartFrame::MoveUp(T& event){
     
     
@@ -10265,33 +10265,68 @@ template<class T> void ChartFrame::MoveUp(T& event){
     
 }
 
-//moves (makes slide) down the chart
+//moves (makes slide) to the south the chart
+//moves (makes slide) up the chart
 template<class T> void ChartFrame::MoveDown(T& event){
     
-    double delta;
-    Projection p_ceil_min, p_floor_max;
     
-    delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max)-(draw_panel->y_min));
-    
-    (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
-    (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
-    
-    
-    if(((draw_panel->y_max)+delta < (p_floor_max.y)) && ((draw_panel->y_min)+delta > (p_ceil_min.y))){
-        //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
+    switch((((projection->name)->GetValue()).ToStdString())[0]){
+            
+        case 'M':{
+            //I am using the mercator projection
+            
+            
+            double delta;
+            Projection p_ceil_min, p_floor_max;
+            
+            //I set delta as a fraction of y_max - y_min
+            delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max)-(draw_panel->y_min));
+            
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
+            
+            
+            if(((draw_panel->y_max)+delta < (p_floor_max.y)) && ((draw_panel->y_min)+delta > (p_ceil_min.y))){
+                //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
+                
+                //update y_min, y_max according to the drag.
+                (draw_panel->y_min) -= delta;
+                (draw_panel->y_max) -= delta;
+                
+                (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
+                
         
-        //update y_min, y_max according to the drag.
-        (draw_panel->y_min) -= delta;
-        (draw_panel->y_max) -= delta;
-        
-        draw_panel->Set_lambda_phi_min_max_Mercator();
-        
-        //re-draw the chart
-        (draw_panel->*(draw_panel->Draw))();
-        draw_panel->PaintNow();
-        
+            }
+            
+            break;
+                    
+        }
+            
+            
+        case '3':{
+            //I am using the 3d projection
+            
+            Angle /*the angular displacement of the operation MoveUp*/delta;
+            
+           //I set delta as a fraction of circle_obsrever.omega
+            delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
+
+            //since I am moving north, I increase the b Euler ancgle of rotation
+            ((draw_panel->rotation).b) -= delta;
+            //I update rotation->matrix
+            (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+            
+            break;
+            
+        }
+  
+            
     }
     
+    //re-draw the chart
+    (draw_panel->*(draw_panel->Draw))();
+    draw_panel->PaintNow();
+
     
     event.Skip(true);
     

@@ -23,6 +23,7 @@
  
  ********** THINGS TO ADD ************
 
+ - the selection rectangle in the 3D projection should be filled with color 
  - add + / - button in chartframe to zoom in / out
  - add instrumental error
  - add lambert projection and 3D sphere with no projection

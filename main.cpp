@@ -178,6 +178,17 @@ bool MyApp::OnInit(){
     //
     //    cout << "equal_approx = " << a.equal_approx(b) << "\n";
     //    //
+    Rotation r, rp;
+    gsl_rng* myran;
+    gsl_rng_env_setup();
+    myran = gsl_rng_alloc(gsl_rng_default);
+    gsl_rng_set(myran, 0);
+    
+    r.set(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
+    rp.set(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
+
+    (r*rp).print(String("product of rotations"), String("\t"), cout);
+    
     
     unsigned int i;
     Int n_chart_frames;

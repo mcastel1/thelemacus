@@ -1163,16 +1163,25 @@ Rotation Rotation::operator *(const Rotation& s){
 void Rotation::print(String name, String prefix, ostream& ostr){
     
     unsigned int i, j;
+    String new_prefix;
     
-    a.print(String("a"), String(""), ostr);
-    b.print(String("a"), String(""), ostr);
-    c.print(String("a"), String(""), ostr);
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+ 
 
-    ostr << prefix.value << name.value << "matrix : \n";
+    ostr << prefix.value << name.value << "\n" << prefix.value  << "Euler angles : \n";
+
+    
+    a.print(String("a"), new_prefix, ostr);
+    b.print(String("a"), new_prefix, ostr);
+    c.print(String("a"), new_prefix, ostr);
+
+    
+    ostr << prefix.value  << "matrix : \n";
     
     for(i=0; i<3; i++){
         
-        for(ostr << prefix.value, j=0; j<3; j++){
+        for(ostr << new_prefix.value, j=0; j<3; j++){
             
             ostr << gsl_matrix_get(matrix, i, j) << "\t";
             

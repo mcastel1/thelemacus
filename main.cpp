@@ -23,6 +23,7 @@
  
  ********** THINGS TO ADD ************
 
+ - add + / - button in chartframe to zoom in / out
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
  - add separator between recent items and non-recent items in BodyField->name

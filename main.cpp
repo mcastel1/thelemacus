@@ -22,7 +22,7 @@
  
  
  ********** THINGS TO ADD ************
-
+ 
  - the selection rectangle in the 3D projection should be filled with color 
  - add + / - button in chartframe to zoom in / out
  - add instrumental error
@@ -40,26 +40,26 @@
  - the code should return the position (lat lon) of the crossiing betqween two circles of equal altitude
  
  ********** THINGS TO FIX ************
-
+ 
  - sometimes arrow up/down do not work to move N/S
  - there is a segmentation fault when you move N/S the Mercator projection hitting phi_min/max
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - move all stuff which is general enough in the code to MyApp class
-
+ 
  */
 
 //this function is executed reguarly over time, to check some things
 void MyApp::OnTimer(wxTimerEvent& event){
-
+    
     if(dark_mode != ((settings->GetAppearance()).IsDark())){
         //if the dark mode of the operating system has changed, I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
         list_frame->DrawAll();
     }
-     
+    
     dark_mode = (settings->GetAppearance()).IsDark();
-     
+    
 }
 
 //shows all ChartFrames and positions them properly on the screen 
@@ -71,7 +71,7 @@ template<class T> void MyApp::ShowChart(T& event){
     
     
     i = (((list_frame->menu_bar)->GetSize()).GetHeight());
-
+    
     //I add the margin so the frames do not stick to the edges of the screen
     margin = ((double)((rectangle_display.GetWidth())*(length_border_over_length_screen.value)));
     delta_x = ( ((double)(rectangle_display.GetWidth())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetWidth())) ) / 2.0  - 2.0 * margin ) / ((double)(((list_frame->chart_frames).size())-1));
@@ -179,21 +179,23 @@ bool MyApp::OnInit(){
     //    cout << "equal_approx = " << a.equal_approx(b) << "\n";
     
     
-    //
-    Rotation r, rp;
-    gsl_rng* myran;
-    gsl_rng_env_setup();
-    myran = gsl_rng_alloc(gsl_rng_default);
-    gsl_rng_set(myran, 0);
-    
-    r.set(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
-    rp.set(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
-
-    r.print(String("r"), String(""), cout);
-    rp.print(String("rp"), String(""), cout);
-
-    (r*rp).print(String("r x rp"), String("\t"), cout);
-    //
+    /*
+     Position r, rp;
+     gsl_rng* myran;
+     gsl_rng_env_setup();
+     myran = gsl_rng_alloc(gsl_rng_default);
+     gsl_rng_set(myran, 0);
+     
+     r = Position(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
+     rp = Position(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
+     
+     r.print(String("r"), String(""), cout);
+     rp.print(String("rp"), String(""), cout);
+     Rotation R;
+     R = Rotation(r, rp);
+     R.print(String("r*rp"), String(" * "), cout);
+     
+     */
     
     
     unsigned int i;
@@ -204,7 +206,7 @@ bool MyApp::OnInit(){
     wxDisplay display;
     wxCommandEvent dummy;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
-//    Chrono current_time, dawn, dusk;
+    //    Chrono current_time, dawn, dusk;
     
     settings = new wxSystemSettings();
     timer = new wxTimer();
@@ -218,7 +220,7 @@ bool MyApp::OnInit(){
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
     time_check.read_from_file(String("time check"), String(path_file_init), String(""));
-
+    
     max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
     min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
     
@@ -234,7 +236,7 @@ bool MyApp::OnInit(){
                                ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value),
                                ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)
                                );
-
+    
     
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
@@ -256,37 +258,37 @@ bool MyApp::OnInit(){
     (wxGetApp().tick_length_over_width_plot_area).read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
     //read tick length over width plot area from file_init
     (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
- 
+    
     
     
     //read the time, and set the background color to either the day or night background color, which are read from file
-//    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
-//    dawn.read_from_file(String("dawn"), String(path_file_init), String(""));
-//    dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
-//    current_time.set_current(time_zone, String(""));
+    //    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
+    //    dawn.read_from_file(String("dawn"), String(path_file_init), String(""));
+    //    dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
+    //    current_time.set_current(time_zone, String(""));
     
     
-//    if((current_time < dawn) || (current_time > dusk)){
-//        //we are at night -> set background color to night mode
-//
-//        foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
-//
-//    }else{
-//        //we are at day -> set background color ot day mode
-//
-//        foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
-//
-//    }
+    //    if((current_time < dawn) || (current_time > dusk)){
+    //        //we are at night -> set background color to night mode
+    //
+    //        foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
+    //
+    //    }else{
+    //        //we are at day -> set background color ot day mode
+    //
+    //        foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
+    //
+    //    }
     
     timer->Bind(wxEVT_TIMER, &MyApp::OnTimer, this);
-
+    
     
     
     foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
     error_color.read_from_file(String("error color"), String(path_file_init), String(""));
     dark_mode = (settings->GetAppearance()).IsDark();
-
+    
     list_frame = new ListFrame(this, "List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
@@ -307,35 +309,35 @@ bool MyApp::OnInit(){
                                                        String(""),
                                                        s.str(),
                                                        /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
-//                                                       wxPoint(
-//
-//                                                                 ((double)(rectangle_display.GetWidth())) - ((double)(rectangle_display.GetWidth()))
-//                                                               )
-//                                                               ,
-//                                                               i*(
-//                                                                   (rectangle_display.GetHeight())/3.0 - ((rectangle_display.GetHeight()) - ((list_frame->chart_frames).size())*((rectangle_display.GetHeight())/3.0))/2.0
-//                                                               )
-//
-//                                                               )
+                                                       //                                                       wxPoint(
+                                                       //
+                                                       //                                                                 ((double)(rectangle_display.GetWidth())) - ((double)(rectangle_display.GetWidth()))
+                                                       //                                                               )
+                                                       //                                                               ,
+                                                       //                                                               i*(
+                                                       //                                                                   (rectangle_display.GetHeight())/3.0 - ((rectangle_display.GetHeight()) - ((list_frame->chart_frames).size())*((rectangle_display.GetHeight())/3.0))/2.0
+                                                       //                                                               )
+                                                       //
+                                                       //                                                               )
                                                        wxDefaultPosition
-        ,
+                                                       ,
                                                        wxDefaultSize,
                                                        String("")
                                                        );
-//        ((list_frame->chart_frames)[i])->Show(true);
-//        ((list_frame->chart_frames)[i])->Raise();
-
+        //        ((list_frame->chart_frames)[i])->Show(true);
+        //        ((list_frame->chart_frames)[i])->Raise();
+        
     }
     
     ShowChart(dummy);
     
     //bring either of these wxFrames to front
-//    list_frame->Raise();
+    //    list_frame->Raise();
     
     //fore/background color is determined from the default background color of extract_colors
     foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
     background_color = Color(list_frame->extract_colors->GetBackgroundColour());
-
+    
     
     //extracts the default font and creates a error_font, obtained from default font by setting its weight to wxFONTWEIGHT_BOLD
     default_font = (list_frame->extract_colors->GetFont());

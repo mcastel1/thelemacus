@@ -10186,10 +10186,7 @@ template<class T> void ChartFrame::MoveUp(T& event){
                 
                 (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
                 
-                //re-draw the chart
-                (draw_panel->*(draw_panel->Draw))();
-                draw_panel->PaintNow();
-                
+        
             }
             
             break;
@@ -10214,7 +10211,9 @@ template<class T> void ChartFrame::MoveUp(T& event){
             
     }
     
-    
+    //re-draw the chart
+    (draw_panel->*(draw_panel->Draw))();
+    draw_panel->PaintNow();
 
     
     event.Skip(true);

@@ -10147,29 +10147,56 @@ void ChartFrame::OnClose(wxCloseEvent& event){
 //moves (makes slide) up the chart
 template<class T> void ChartFrame::MoveUp(T& event){
     
-    double delta;
-    Projection p_ceil_min, p_floor_max;
     
-    delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max)-(draw_panel->y_min));
-    
-    (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
-    (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
-    
-    
-    if(((draw_panel->y_max)+delta < (p_floor_max.y)) && ((draw_panel->y_min)+delta > (p_ceil_min.y))){
-        //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
-        
-        //update y_min, y_max according to the drag.
-        (draw_panel->y_min) += delta;
-        (draw_panel->y_max) += delta;
-        
-        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-        
-        //re-draw the chart
-        (draw_panel->*(draw_panel->Draw))();
-        draw_panel->PaintNow();
-        
+    switch((((projection->name)->GetValue()).ToStdString())[0]){
+            
+        case 'M':{
+            //I am using the mercator projection
+            
+            
+            double delta;
+            Projection p_ceil_min, p_floor_max;
+            
+            delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max)-(draw_panel->y_min));
+            
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*floor_max_lat)), &p_floor_max, true);
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k*ceil_min_lat)), &p_ceil_min, true);
+            
+            
+            if(((draw_panel->y_max)+delta < (p_floor_max.y)) && ((draw_panel->y_min)+delta > (p_ceil_min.y))){
+                //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
+                
+                //update y_min, y_max according to the drag.
+                (draw_panel->y_min) += delta;
+                (draw_panel->y_max) += delta;
+                
+                (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
+                
+                //re-draw the chart
+                (draw_panel->*(draw_panel->Draw))();
+                draw_panel->PaintNow();
+                
+            }
+            
+            break;
+                    
+        }
+            
+            
+        case '3':{
+            //I am using the 3d projection
+            
+            
+            
+            break;
+            
+        }
+  
+            
     }
+    
+    
+
     
     event.Skip(true);
     

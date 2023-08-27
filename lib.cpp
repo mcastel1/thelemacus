@@ -1030,7 +1030,7 @@ Rotation::Rotation(void){
     
 }
 
-//sets the rotation euler angles and matrix from the Euler angles a_in, b_in, c_in
+//sets the Euler angles and matrix of *this from the Euler angles a_in, b_in, c_in
 void Rotation::set(Angle a_in, Angle b_in, Angle c_in){
     
     a=a_in;
@@ -1048,6 +1048,19 @@ void Rotation::set(Angle a_in, Angle b_in, Angle c_in){
     gsl_matrix_set(matrix, 2 ,0 , -(sin(a)*sin(b)));
     gsl_matrix_set(matrix, 2 ,1 , -(cos(a)*sin(b)));
     gsl_matrix_set(matrix, 2 ,2 , cos(b));
+    
+}
+
+//sets matrix and Euler angles of *this from the matrix m
+void Rotation::set(gsl_matrix* m){
+    
+    gsl_matrix_memcpy(matrix, m);
+    
+    //extract the Euler angles from the matrix m
+    b = acos(gsl_matrix_get(m, 2, 2));
+    a = atan(gsl_matrix_get(m, 2, 1)/(-sin(b)), gsl_matrix_get(m, 2, 0)/(-sin(b)));
+    c = atan(gsl_matrix_get(m, 1, 2)/sin(b), gsl_matrix_get(m, 0, 2)/(-sin(b)));
+
     
 }
 

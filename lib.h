@@ -620,6 +620,7 @@ public:
     Rotation operator *(const Rotation&);
     Rotation inverse(void);
     void set(Angle, Angle, Angle);
+    void set(gsl_matrix*);
     void print(String, String, ostream&);
     void read_from_file(String, String, String);
     

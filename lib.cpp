@@ -10464,6 +10464,11 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
             break;
             
         case WXK_PLUS:
+            //the + key is pressed and control is pressed too -> I zoom in by increasing slider by one unit
+            
+            if(event.ControlDown()){
+                parent->SetSlider(((parent->slider)->GetValue())+1);
+            }
             
             break;
             

@@ -9,6 +9,8 @@
 #include "wx/timer.h"
 #include "wx/datetime.h"
 #include "wx/settings.h"
+#include "wx/kbdstate.h"
+
 
 
 #ifndef WX_PRECOMP

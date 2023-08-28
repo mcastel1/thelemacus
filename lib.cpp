@@ -10809,27 +10809,14 @@ void ChartFrame::UpdateSliderLabel_Mercator(void){
     
 }
 
-//updates the text in text_slider by writing in it the current value of the altitude of the observer with respect to the earth surface
+//updates the text in text_slider by writing in it the ration between circle_observer.omega and circle_observer_0.omega
 void ChartFrame::UpdateSliderLabel_3D(void){
     
-    String s;
-    Length l;
+    stringstream s;
     
-    //d = 1 corresponds to one earth radsius, so the height of the observer is
-    l.set(String(""), ( -1.0 + sqrt(1.0 + gsl_pow_2(tan((draw_panel->circle_observer).omega))) )*Re, String(""));
+    s << "1:" << ((unsigned int)((((draw_panel->circle_observer_0).omega).value)/(((draw_panel->circle_observer).omega).value)));
     
-    if((l.value) > 1.0){
-        //if the altitude is larger than 1 nm, I output it in units of nm
-        
-        s = (l.to_string(String("nm"), 0));
-        
-    }else{
-        //if the altitude is smaller than 1 nm, I output it in units of m
-        
-        s = (l.to_string(String("m"), 0));
-    }
-    
-    text_slider->SetLabel(s.value);
+    text_slider->SetLabel(s.str().c_str());
     
 }
 

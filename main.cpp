@@ -46,6 +46,7 @@
  ********** THINGS TO FIX ************
  
 - zoom factor should go back to 1:1 when slider is put all the way up
+ - when one chartframe is closed, they are all closed and there is a segmentation fault 
  */
 
 //this function is executed reguarly over time, to check some things

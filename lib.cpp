@@ -10541,7 +10541,7 @@ template<class T> void ChartFrame::Reset(T& event){
         phi_min.read_from_file(String("minimal latitude"), String(path_file_init), String(""));
         phi_max.read_from_file(String("maximal latitude"), String(path_file_init), String(""));
         draw_panel->Set_x_y_min_max_Mercator();
-        ZoomFactor_Mercator(draw_panel->x_span());
+        ComputeZoomFactor_Mercator(draw_panel->x_span());
         
         //reset the chart boundaries to the initial ones
         //        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
@@ -10553,7 +10553,7 @@ template<class T> void ChartFrame::Reset(T& event){
         
         ((draw_panel->circle_observer_0).omega).read_from_file(String("omega draw 3d"), String(path_file_init), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
-        ZoomFactor_3D();
+        ComputeZoomFactor_3D();
         
         //        (draw_panel->rotation_0) = Rotation(
         //                                            Angle(String("Euler angle alpha"), -M_PI_2, String("")),
@@ -10834,7 +10834,7 @@ void ChartFrame::UpdateSliderLabel_3D(void){
 }
 
 //computes the zoom factor of the chart based on the currenct value of span_x. It returns true and writes the value in zoom_factor if the zooming factor is smaller than (wxGetApp().zoom_factor_max), and returns false otherwise
-bool ChartFrame::ZoomFactor_Mercator(double delta_x){
+bool ChartFrame::ComputeZoomFactor_Mercator(double delta_x){
     
     double temp;
     bool output;
@@ -10852,7 +10852,7 @@ bool ChartFrame::ZoomFactor_Mercator(double delta_x){
 }
 
 //returns true if zoom_factor is valid, false otherwise
-bool ChartFrame::ZoomFactor_3D(void){
+bool ChartFrame::ComputeZoomFactor_3D(void){
     
     bool output;
     
@@ -10877,13 +10877,13 @@ void ChartFrame::UpdateSlider(void){
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
-        ZoomFactor_Mercator((draw_panel->x_span()));
+        ComputeZoomFactor_Mercator((draw_panel->x_span()));
         
     }
     
     if(((projection->name)->GetValue()) == wxString("3D")){
         //is this necessary here ?
-        ZoomFactor_3D();
+        ComputeZoomFactor_3D();
         
     }
     
@@ -12015,7 +12015,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
             
             if((((parent->projection)->name)->GetValue()) == wxString("Mercator")){
                 
-                if((parent->ZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
+                if((parent->ComputeZoomFactor_Mercator(fabs((end_selection.x)-(start_selection.x))))){
                     //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
                     
                     //sets the new values of lambda_min, lambda_max, phi_min and phi_max
@@ -12509,7 +12509,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
         if((((draw_panel->y_max) <= (p_max.y)) && ((draw_panel->y_min) >= (p_min.y)) && ((draw_panel->x_span()) <= 2.0*M_PI))){
             
             (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-            //            ZoomFactor_Mercator((draw_panel->x_span));
+            //            ComputeZoomFactor_Mercator((draw_panel->x_span));
             
             (draw_panel->*(draw_panel->Draw))();
             draw_panel->PaintNow();

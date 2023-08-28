@@ -2215,8 +2215,8 @@ public:
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);
     void UpdateSlider(void);
-    bool ZoomFactor_Mercator(double);
-    bool ZoomFactor_3D(void);
+    bool ComputeZoomFactor_Mercator(double);
+    bool ComputeZoomFactor_3D(void);
     void UpdateSliderLabel_Mercator(void);
     void UpdateSliderLabel_3D(void);
     template<class T> void OnMouseLeftDownOnSlider(T&);

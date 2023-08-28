@@ -2369,7 +2369,7 @@ bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
     
     if(((circle.type) == String("c"))){
         
-        switch((((*this).type).value)[0]){
+        switch((type.value)[0]){
                 
             case 'l':{
                 

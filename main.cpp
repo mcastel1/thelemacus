@@ -39,11 +39,11 @@
  - replace limb dropdown menu and other dropdown menus with horizontal selection menus
  - selection rectangle should be activated with a single left mouse click rather than with a right mouse click
  - the code should return the position (lat lon) of the crossiing betqween two circles of equal altitude
- 
- ********** THINGS TO FIX ************
- 
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
+
+ ********** THINGS TO FIX ************
+ 
  - add check on zoom factor in OnMouseRightDown for the 3D projections
  - move all stuff which is general enough in the code to MyApp class
  

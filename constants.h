@@ -52,6 +52,7 @@ Angle max_lat, min_lat;
 #define span_lat ((floor_max_lat-floor_min_lat+1)
 #define outfile_precision 16
 //#define wxDEBUG_LEVEL 0
+#define WXK_PLUS 61
 
 
 //this string defines the width of GUI fields hosting floating-point numbers
@@ -84,3 +85,4 @@ vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_
 //these are the color codes in kml file format for a few populat colors (red, etc...);
 string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
+

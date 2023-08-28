@@ -10425,26 +10425,32 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
     
     //    if ( (event.GetUnicodeKey()) == WXK_NONE ){
     
+    
+    
     switch (event.GetKeyCode()){
             
         case WXK_UP:
             
             parent->MoveNorth<wxKeyEvent>(event);
+            
             break;
             
         case WXK_DOWN:
             
             parent->MoveSouth<wxKeyEvent>(event);
+            
             break;
             
         case WXK_LEFT:
             
             parent->MoveWest<wxKeyEvent>(event);
+            
             break;
             
         case WXK_RIGHT:
             
             parent->MoveEast<wxKeyEvent>(event);
+            
             break;
             
         case WXK_ESCAPE:
@@ -10454,6 +10460,10 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
             text_position_start->SetLabel(wxString(""));
             text_position_end->SetLabel(wxString(""));
             PaintNow();
+            
+            break;
+            
+        case WXK_PLUS:
             
             break;
             
@@ -12375,12 +12385,12 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
     j = (event.GetWheelRotation());
     
-//    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
-//    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
-//    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
-//    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
-//    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
-//    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
+    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
+    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
+    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
+    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
+    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
+    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
     
     //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((wxGetApp().zoom_factor_max).value)))){
     
@@ -12399,24 +12409,21 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
     i =  ((int)((parent->slider)->GetValue())) - j;
     
-    cout << "Slier value new = " << i << "\n";
+    //    cout << "Slider value new = " << i << "\n";
     
     //if i gets out of range, put it back in the correct range
-    if((i>=1) && (i<=((wxGetApp().zoom_factor_max).value))){
+    if(i<1){i=1;}
+    if(i>((parent->slider)->GetMax())){i = ((parent->slider)->GetMax());}
         
-        if(!(parent->mouse_scrolling)){
-            parent->OnMouseLeftDownOnSlider(event);
-        }
-        (parent->slider)->SetValue(i);
-        
-        //call OnScroll to update evrything adter the change of the value of slider
-        parent->OnScroll(event);
-        parent->OnMouseLeftUpOnSlider(event);
-        
+    if(!(parent->mouse_scrolling)){
+        parent->OnMouseLeftDownOnSlider(event);
     }
+    (parent->slider)->SetValue(i);
     
-    //    }
-    
+    //call OnScroll to update evrything adter the change of the value of slider
+    parent->OnScroll(event);
+    parent->OnMouseLeftUpOnSlider(event);
+
     event.Skip(true);
     
 }

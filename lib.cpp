@@ -10422,11 +10422,7 @@ template<class T> void ChartFrame::MoveWest(T& event){
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event){
-    
-    //    if ( (event.GetUnicodeKey()) == WXK_NONE ){
-    
-    
-    
+        
     switch (event.GetKeyCode()){
             
         case WXK_UP:
@@ -10464,12 +10460,22 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
             break;
             
         case WXK_PLUS:
-            //the + key is pressed and control is pressed too -> I zoom in by increasing slider by one unit
+            //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
             
             if(event.ControlDown()){
-                parent->SetSlider(((parent->slider)->GetValue())+1);
+                parent->SetSlider(((parent->slider)->GetValue())*2);
             }
             
+            break;
+            
+            
+        case WXK_MINUS:
+            //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
+
+            if(event.ControlDown()){
+                parent->SetSlider(round(((parent->slider)->GetValue())/2.0));
+            }
+
             break;
             
     }

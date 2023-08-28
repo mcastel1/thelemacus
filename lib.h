@@ -2222,6 +2222,7 @@ public:
     template<class T> void OnMouseLeftDownOnSlider(T&);
     template<class T> void OnMouseLeftUpOnSlider(T&);
     template<class T> void OnScroll(T&);
+    bool SetSlider(unsigned int);
     void OnClose(wxCloseEvent&);
     void SetIdling(bool);
     void AllOk(void);

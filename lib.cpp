@@ -12537,6 +12537,33 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
     
 }
 
+//If slider->GetMin() <= slider_value <= slider->GetMax() it returns true, and sets slider to slider_value and updates the chart zoom accordingly. It returns false otherwise
+bool ChartFrame::SetSlider(unsigned int slider_value){
+    
+    if((slider_value >= (slider->GetMin())) && (slider_value <= (slider->GetMax()))){
+        
+        wxCommandEvent dummy;
+        
+        if(!mouse_scrolling){
+            OnMouseLeftDownOnSlider(dummy);
+        }
+        (slider)->SetValue(slider_value);
+        
+        //call OnScroll to update evrything adter the change of the value of slider
+        OnScroll(dummy);
+        OnMouseLeftUpOnSlider(dummy);
+     
+        return true;
+        
+    }else{
+        
+        return false;
+        
+    }
+    
+    
+}
+
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
 template<class P> template <class T> void AngleField<P>::get(T &event){
     

@@ -45,7 +45,6 @@
 
  ********** THINGS TO FIX ************
  
- - add check on zoom factor in OnMouseRightDown for the 3D projections
  
  */
 

@@ -12415,14 +12415,7 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     if(i<1){i=1;}
     if(i>((parent->slider)->GetMax())){i = ((parent->slider)->GetMax());}
         
-    if(!(parent->mouse_scrolling)){
-        parent->OnMouseLeftDownOnSlider(event);
-    }
-    (parent->slider)->SetValue(i);
-    
-    //call OnScroll to update evrything adter the change of the value of slider
-    parent->OnScroll(event);
-    parent->OnMouseLeftUpOnSlider(event);
+    parent->SetSlider(i);
 
     event.Skip(true);
     

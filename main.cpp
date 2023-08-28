@@ -41,7 +41,6 @@
  
  ********** THINGS TO FIX ************
  
- - when 3D projecition is loaded from the init file, labels on parallels are missing 
  - there is a segmentation fault when you move N/S the Mercator projection hitting phi_min/max
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future

@@ -9611,6 +9611,7 @@ void DrawPanel::Draw_3D(void){
     Position q;
     Projection temp;
     wxPoint p;
+    wxString dummy_label;
     unsigned int i, n_intervals_ticks;
     
     //clears all labels previously drawn
@@ -9768,6 +9769,31 @@ void DrawPanel::Draw_3D(void){
     if((fabs((phi_middle.value)-M_PI_2) < epsilon_double) || (fabs((phi_middle.value)- (3.0*M_PI_2)) < epsilon_double)){
         (phi_middle.value) -= GSL_SIGN((phi_middle.normalize_pm_pi_ret()).value) * delta_phi;
     }
+    
+    
+    
+    //compute the size of labels, i.e., size_label_horizontal and size_label_vertical
+    //compute size of largest label on parallel: run through all labels on parallels and set size_label_horizontal as the size of the largest label on parallel that has ben found
+    for(size_label_horizontal = 0,
+        first_label = true,
+        //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2+ceil(fabs(log(delta_phi*K*60)))),
+        ((q.phi).value) = (phi_start.value),
+        (q.lambda) = (parent->lambda_min) - epsilon_double;
+        ((q.phi).value) < (phi_end.value);
+        ((q.phi).value) += delta_phi
+        ){
+        
+        WriteLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"), &dummy_label);
+        
+        if((GetTextExtent(dummy_label).GetWidth()) > size_label_horizontal){
+            size_label_horizontal = (GetTextExtent(dummy_label).GetWidth());
+        }
+        
+    }
+    
+    //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
+    size_label_vertical = (GetTextExtent(wxString((Angle(0,  0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
     
     
     

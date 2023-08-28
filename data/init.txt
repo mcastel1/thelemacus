@@ -73,7 +73,7 @@ display precision = 2
 time zone = +2
 relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
-default projection = 3D
+default projection = Mercator
 #the number of chart frames opened when the program starts
 number chart frames = 2
 #initial rotation with which the 3D projection is displayed
@@ -87,4 +87,4 @@ night foreground color = (255,255,255)
 day background color = (224,224,224)
 night background color = (40,40,43)
 number of points coastline = 20000
-show coastlines = y
+show coastlines = n

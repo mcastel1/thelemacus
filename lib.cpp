@@ -10065,7 +10065,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     text_position_now = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //initialize the variable neededed for slider
-    //    zoom_factor_old = 1 + epsilon_double;
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)((wxGetApp().zoom_factor_max).value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
@@ -12376,12 +12375,12 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
     j = (event.GetWheelRotation());
     
-    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
-    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
-    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
-    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
-    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
-    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
+//    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
+//    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
+//    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
+//    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
+//    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
+//    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
     
     //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((wxGetApp().zoom_factor_max).value)))){
     
@@ -12464,13 +12463,13 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T&event){
                     );
     
     //if the resulting value of zoom_factor is outside the boundaries I set it back to the rspective boundary
-    if((zoom_factor.value) < 1.0){
+    if(((zoom_factor.value) < 1.0) || ((slider->GetValue()) == (slider->GetMin()))){
         
         (zoom_factor.value) = 1.0;
         
     }
     
-    if((zoom_factor.value) > ((wxGetApp().zoom_factor_max).value)){
+    if(((zoom_factor.value) > ((wxGetApp().zoom_factor_max).value)) ||  ((slider->GetValue()) == (slider->GetMax()))){
         
         (zoom_factor.value) = ((wxGetApp().zoom_factor_max).value);
         

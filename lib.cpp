@@ -12385,12 +12385,12 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
     j = (event.GetWheelRotation());
     
-    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
-    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
-    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
-    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
-    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
-    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
+//    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
+//    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
+//    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
+//    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
+//    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
+//    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
     
     //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((wxGetApp().zoom_factor_max).value)))){
     

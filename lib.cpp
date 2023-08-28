@@ -10873,7 +10873,7 @@ void ChartFrame::UpdateSlider(void){
     
     int temp;
     
-    //compute the zooming factor of the chart and write it into zoom_factor
+    //compute the zoom factor of the chart and write it into zoom_factor
     
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         

@@ -14825,12 +14825,17 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Append(wxID_HIGHEST + 1, "Mercator\tCtrl-m");
     menu_new_chart->Append(wxID_HIGHEST + 2, "3D\tCtrl-3");
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New chart"), wxT(""));
+    menu_chart->Append(wxID_HIGHEST + 3, "Close\tCtrl-w");
+    menu_chart->Append(wxID_HIGHEST + 4, "Close all\tCtrl-a");
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
     
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 1);
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
+    menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseFocusedChartFrame, this, wxID_HIGHEST + 3);
+
     
+
     
     //    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
     //    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
@@ -15191,6 +15196,12 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
     
     wxGetApp().ShowChart(event);
     
+    
+    
+}
+
+//closes the ChartFrame that  has focus
+void ListFrame::OnCloseFocusedChartFrame(wxCommandEvent& event){
     
     
 }

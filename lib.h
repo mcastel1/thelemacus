@@ -2033,6 +2033,7 @@ public:
     void Disconnect(int);
 
     void OnAddChartFrame(wxCommandEvent& event);
+    void OnClosedFocusedChartFrame(wxCommandEvent& event);
 
 //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);

@@ -2033,7 +2033,7 @@ public:
     void Disconnect(int);
 
     void OnAddChartFrame(wxCommandEvent& event);
-    void OnClosedFocusedChartFrame(wxCommandEvent& event);
+    void OnCloseFocusedChartFrame(wxCommandEvent&);
 
 //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
@@ -2226,7 +2226,7 @@ public:
     template<class T> void OnMouseLeftUpOnSlider(T&);
     template<class T> void OnScroll(T&);
     bool SetSlider(unsigned int);
-    void OnClose(wxCloseEvent&);
+    template<class T> void OnClose(T&);
     void SetIdling(bool);
     void AllOk(void);
     

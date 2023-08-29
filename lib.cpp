@@ -10031,7 +10031,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     phi_max.read_from_file(String("maximal latitude"), String(path_file_init), new_prefix);
     
     
-    this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnClose, this);
+    this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnClose<wxCloseEvent>, this);
     
     
     mouse_scrolling = false;
@@ -10198,7 +10198,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 }
 
 //when a ChartFrame is closed, I destroy it, delete the respecive item in parent->chart_frames vector, and rename all the other ChartFrames in that vector to take into account the shifting of the CartFrame ids due to the Chartframe deletion
-void ChartFrame::OnClose(wxCloseEvent& event){
+template<class T> void ChartFrame::OnClose(T& event){
     
     vector<ChartFrame*>::iterator i;
     unsigned int j;
@@ -15203,6 +15203,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
 //closes the ChartFrame that  has focus
 void ListFrame::OnCloseFocusedChartFrame(wxCommandEvent& event){
     
+    (chart_frames.back())->OnClose(event);
     
 }
 

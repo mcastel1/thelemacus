@@ -2034,6 +2034,7 @@ public:
 
     void OnAddChartFrame(wxCommandEvent& event);
     void OnCloseFocusedChartFrame(wxCommandEvent&);
+    void OnCloseAllChartFrames(wxCommandEvent&);
 
 //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);

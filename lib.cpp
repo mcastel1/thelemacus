@@ -14833,6 +14833,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 1);
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseFocusedChartFrame, this, wxID_HIGHEST + 3);
+    menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseAllChartFrames, this, wxID_HIGHEST + 4);
 
     
 
@@ -15213,6 +15214,18 @@ void ListFrame::OnCloseFocusedChartFrame(wxCommandEvent& event){
     }
     
 }
+
+//closes the ChartFrame that  has focus
+void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event){
+        
+    //closes all ChartFrames in chart_frames
+    for(; 0<(chart_frames.size()); ){
+        (chart_frames[0])->OnClose(event);
+    }
+    
+    
+}
+
 
 //when a ListFrame is closed, the function OnClose is called on all the ChartFrames which are his children, and *this is destroyed.
 void ListFrame::OnClose(wxCloseEvent& event){

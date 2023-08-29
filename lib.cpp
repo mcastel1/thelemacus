@@ -14758,7 +14758,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     GetAllCoastLineData();
     
-    this->Bind(wxEVT_CLOSE_WINDOW, &ListFrame::OnExit, this);
+    Bind(wxEVT_CLOSE_WINDOW, &ListFrame::OnExit, this);
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     (parent->rectangle_display) = ((wxGetApp().display).GetClientArea());

@@ -15203,7 +15203,14 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event){
 //closes the ChartFrame that  has focus
 void ListFrame::OnCloseFocusedChartFrame(wxCommandEvent& event){
     
-    (chart_frames.back())->OnClose(event);
+    unsigned int i;
+    
+    //find the ChartFrame in chart_frames taht is Active and closes it
+    for(i=0; (i<(chart_frames.size())) && (((chart_frames[i])->IsActive()) == false); i++){}
+    
+    if(i<(chart_frames.size())){
+        (chart_frames[i])->OnClose(event);
+    }
     
 }
 

@@ -14758,7 +14758,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     GetAllCoastLineData();
     
-    Bind(wxEVT_CLOSE_WINDOW, &ListFrame::OnExit, this);
+    //when the ListFrame window is closed, quit the app
+    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnExit<wxCloseEvent>, &(wxGetApp()));
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     (parent->rectangle_display) = ((wxGetApp().display).GetClientArea());
@@ -14817,6 +14818,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     highlighted_position = -1;
     
     menu_bar = new wxMenuBar;
+    menu_app = new wxMenu;
     menu_chart = new wxMenu;
     menu_new_chart = new wxMenu;
     menu_item_mercator = new wxMenu;
@@ -14827,6 +14829,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New"), wxT(""));
     menu_chart->Append(wxID_HIGHEST + 3, "Close\tCtrl-w");
     menu_chart->Append(wxID_HIGHEST + 4, "Close all\tCtrl-a");
+    menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
+    
+    menu_bar->Append(menu_app, wxT("&App"));
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
     
@@ -14834,13 +14839,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseFocusedChartFrame, this, wxID_HIGHEST + 3);
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseAllChartFrames, this, wxID_HIGHEST + 4);
-
+    menu_bar->Bind(wxEVT_MENU, &MyApp::OnExit<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
     
-
-    
-    //    on_select_in_listcontrol_sights = new OnSelectInListControlSights(this);
-    //    on_select_in_listcontrol_positions = new OnSelectInListControlPositions(this);
-    //    on_select_in_listcontrol_routes = new OnSelectInListControlRoutes(this);
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
     
@@ -15227,18 +15227,7 @@ void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event){
 }
 
 
-//when the user exits the app by closing ListFrame is closed, the function OnExit is called on all the ChartFrames which are his children, and *this is destroyed.
-void ListFrame::OnExit(wxCloseEvent& event){
-    
-    for(; 0<chart_frames.size(); ){
-        (chart_frames[0])->OnClose(event);
-    }
-    
-    Destroy();
-    Close(true);
-    
-    
-}
+
 
 //calls Draw and PaintNow in all che ChartFrames which are children of *this
 void ListFrame::DrawAll(void){

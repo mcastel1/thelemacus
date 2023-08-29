@@ -84,6 +84,7 @@ public:
 
 
     virtual bool OnInit();
+    template<class T> void OnExit(T&);
     void OnTimer(wxTimerEvent&);
     template<class T> void ShowChart(T&);
     void ShowList(wxCommandEvent&);

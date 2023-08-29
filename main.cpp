@@ -63,6 +63,24 @@ void MyApp::OnTimer(wxTimerEvent& event){
     
 }
 
+//exit the app by destroying ListFrame
+template<class T> void MyApp::OnExit(T& event){
+    
+//    for(; 0<chart_frames.size(); ){
+//        (chart_frames[0])->OnClose(event);
+//    }
+//    
+//    Destroy();
+//    Close(true);
+    
+//    return this->wxApp::OnExit();
+
+    delete list_frame;
+    
+    
+    
+}
+
 //shows all ChartFrames and positions them properly on the screen 
 template<class T> void MyApp::ShowChart(T& event){
     

@@ -2040,7 +2040,7 @@ public:
     void OnMouseMovement(wxMouseEvent&);
 //    void OnMouseOnListControlPositions(wxMouseEvent&);
         
-    void OnClose(wxCloseEvent&);
+    void OnExit(wxCloseEvent&);
     
 };
 

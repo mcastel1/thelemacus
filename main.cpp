@@ -45,6 +45,7 @@
 
  ********** THINGS TO FIX ************
  
+ - meridians are still cut on the top in mercator projection 
  - check that WXK_PLUS does not depend on the computer
 - zoom factor should go back to 1:1 when slider is put all the way up
  - when one chartframe is closed, they are all closed and there is a segmentation fault 

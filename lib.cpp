@@ -14822,8 +14822,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_item_mercator = new wxMenu;
     menu_item_3d = new wxMenu;
     
-    menu_new_chart->Append(wxID_HIGHEST + 1, wxT("Mercator"), wxT(""));
-    menu_new_chart->Append(wxID_HIGHEST + 2, wxT("3D"), wxT(""));
+    menu_new_chart->Append(wxID_HIGHEST + 1, "Mercator\tCtrl-m");
+    menu_new_chart->Append(wxID_HIGHEST + 2, "3D\tCtrl-3");
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New chart"), wxT(""));
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);

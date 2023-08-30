@@ -10,6 +10,8 @@
 #include "wx/datetime.h"
 #include "wx/settings.h"
 #include "wx/kbdstate.h"
+#include "wx/wfstream.h"
+
 
 
 
@@ -2073,6 +2075,8 @@ public:
 //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
 //    void OnMouseOnListControlPositions(wxMouseEvent&);
+    
+    template<class E> void OpenFile(E&);
         
     
 };

@@ -15688,6 +15688,30 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
 }
 
+template<class E> void ListFrame::OpenFile(E& event){
+    
+    wxFileDialog openFileDialog(this, _("Open XYZ file"), "", "", "XYZ files (*.xyz)|*.xyz", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    
+    if(openFileDialog.ShowModal() == wxID_CANCEL){
+        
+             // the user changed his/her mind...
+        
+    }else{
+        // proceed loading the file chosen by the user;
+        wxFileInputStream input_stream(openFileDialog.GetPath());
+        
+        if(!input_stream.IsOk()){
+            
+            wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
+            
+        }
+        
+    }
+        
+    event.Skip(true);
+    
+}
+
 
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event){

@@ -1060,7 +1060,7 @@ void Rotation::set(gsl_matrix* m){
     b = acos(gsl_matrix_get(m, 2, 2));
     a = atan(gsl_matrix_get(m, 2, 1)/(-sin(b)), gsl_matrix_get(m, 2, 0)/(-sin(b)));
     c = atan(gsl_matrix_get(m, 1, 2)/sin(b), gsl_matrix_get(m, 0, 2)/(-sin(b)));
-
+    
     
 }
 
@@ -1162,10 +1162,10 @@ Rotation Rotation::operator *(const Rotation& s){
     //extract the Euler angles from the matrix t and write them into t
     t.set(t.matrix);
     
-//    (t.b) = acos(gsl_matrix_get(t.matrix, 2, 2));
-//    (t.a) = atan(gsl_matrix_get(t.matrix, 2, 1)/(-sin(t.b)), gsl_matrix_get(t.matrix, 2, 0)/(-sin(t.b)));
-//    (t.c) = atan(gsl_matrix_get(t.matrix, 1, 2)/sin(t.b), gsl_matrix_get(t.matrix, 0, 2)/(-sin(t.b)));
-//    
+    //    (t.b) = acos(gsl_matrix_get(t.matrix, 2, 2));
+    //    (t.a) = atan(gsl_matrix_get(t.matrix, 2, 1)/(-sin(t.b)), gsl_matrix_get(t.matrix, 2, 0)/(-sin(t.b)));
+    //    (t.c) = atan(gsl_matrix_get(t.matrix, 1, 2)/sin(t.b), gsl_matrix_get(t.matrix, 0, 2)/(-sin(t.b)));
+    //    
     return t;
     
 }
@@ -1178,15 +1178,15 @@ void Rotation::print(String name, String prefix, ostream& ostr){
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
- 
-
+    
+    
     ostr << prefix.value << name.value << "\n" << prefix.value  << "Euler angles : \n";
-
+    
     
     a.print(String("a"), new_prefix, ostr);
     b.print(String("b"), new_prefix, ostr);
     c.print(String("c"), new_prefix, ostr);
-
+    
     
     ostr << prefix.value  << "matrix : \n";
     
@@ -8493,7 +8493,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
             
             j_min = floor(K*((lambda_max).value));
             j_max = ceil(K*(((lambda_min).value)+2.0*M_PI));
-  
+            
         }
         
     }
@@ -9419,7 +9419,7 @@ void DrawPanel::Draw_Mercator(void){
             
             (lambda_start.value) = ceil(((parent->lambda_max).value)/delta_lambda)*delta_lambda;
             (lambda_end.value) = ((parent->lambda_min).value)+ 2.0*M_PI;
-  
+            
             
             
         }
@@ -10109,7 +10109,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
     panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
-
+    
     draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
     draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
@@ -10253,11 +10253,11 @@ template<class T> void ChartFrame::MoveNorth(T& event){
                 
                 (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
                 
-        
+                
             }
             
             break;
-                    
+            
         }
             
             
@@ -10266,27 +10266,27 @@ template<class T> void ChartFrame::MoveNorth(T& event){
             
             Angle /*the angular displacement of the operation MoveNorth*/delta;
             
-           //I set delta as a fraction of circle_obsrever.omega
+            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
-
+            
             //since I am moving north, I increase the b Euler ancgle of rotation
             ((draw_panel->rotation).b) += delta;
             //I update rotation->matrix
             (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
-        
+            
             
             
             break;
             
         }
-  
+            
             
     }
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
+    
     
     event.Skip(true);
     
@@ -10322,11 +10322,11 @@ template<class T> void ChartFrame::MoveSouth(T& event){
                 
                 (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
                 
-        
+                
             }
             
             break;
-                    
+            
         }
             
             
@@ -10335,9 +10335,9 @@ template<class T> void ChartFrame::MoveSouth(T& event){
             
             Angle /*the angular displacement of the operation MoveNorth*/delta;
             
-           //I set delta as a fraction of circle_obsrever.omega
+            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
-
+            
             //since I am moving north, I increase the b Euler ancgle of rotation
             ((draw_panel->rotation).b) -= delta;
             //I update rotation->matrix
@@ -10346,14 +10346,14 @@ template<class T> void ChartFrame::MoveSouth(T& event){
             break;
             
         }
-  
+            
             
     }
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
+    
     
     event.Skip(true);
     
@@ -10383,7 +10383,7 @@ template<class T> void ChartFrame::MoveWest(T& event){
             (draw_panel->*(draw_panel->Set_x_y_min_max))();
             
             break;
-                    
+            
         }
             
             
@@ -10392,27 +10392,27 @@ template<class T> void ChartFrame::MoveWest(T& event){
             
             Angle /*the angular displacement of the operation MoveNorth*/delta;
             
-           //I set delta as a fraction of circle_obsrever.omega
+            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
-
+            
             //since I am moving north, I increase the b Euler ancgle of rotation
             ((draw_panel->rotation).a) -= delta;
             //I update rotation->matrix
             (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
-        
+            
             
             
             break;
             
         }
-  
+            
             
     }
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
+    
     
     event.Skip(true);
     
@@ -10422,7 +10422,7 @@ template<class T> void ChartFrame::MoveWest(T& event){
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event){
-        
+    
     switch (event.GetKeyCode()){
             
         case WXK_UP:
@@ -10471,18 +10471,18 @@ void DrawPanel::KeyDown(wxKeyEvent& event){
             
         case WXK_MINUS:
             //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
-
+            
             if(event.ControlDown()){
                 parent->SetSlider(round(((parent->slider)->GetValue())/2.0));
             }
-
+            
             break;
             
     }
     
     //    }
     
-        event.Skip(true);
+    event.Skip(true);
     
 }
 
@@ -10510,7 +10510,7 @@ template<class T> void ChartFrame::MoveEast(T& event){
             (draw_panel->*(draw_panel->Set_x_y_min_max))();
             
             break;
-                    
+            
         }
             
             
@@ -10519,27 +10519,27 @@ template<class T> void ChartFrame::MoveEast(T& event){
             
             Angle /*the angular displacement of the operation MoveNorth*/delta;
             
-           //I set delta as a fraction of circle_obsrever.omega
+            //I set delta as a fraction of circle_obsrever.omega
             delta = ((draw_panel->circle_observer).omega)*((wxGetApp().relative_displacement).value);
-
+            
             //since I am moving north, I increase the b Euler ancgle of rotation
             ((draw_panel->rotation).a) += delta;
             //I update rotation->matrix
             (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
-        
+            
             
             
             break;
             
         }
-  
+            
             
     }
     
     //re-draw the chart
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
-
+    
     
     event.Skip(true);
     
@@ -11390,18 +11390,18 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write){
                    
                    );
         
-//        if((temp.x) > 0.0){
-//            //temp.x is positive: for it to fall within the plot area, I only need to check whether it lies betweeen x_min and pi. Given temp.x < pi by definition, I only need to check that temp.x > x_min
-//
-//            check_x = ((temp.x) >= x_min);
-//
-//        }else{
-//            //temp.x is negative: for it to fall within the plot area, I only need to check whether it lies betweeen -pi and x_max. Given temp.x > -pi by definition, I only need to check that temp.x < x_max
-//
-//            check_x = ((temp.x) <= x_max);
-//
-//        }
-//
+        //        if((temp.x) > 0.0){
+        //            //temp.x is positive: for it to fall within the plot area, I only need to check whether it lies betweeen x_min and pi. Given temp.x < pi by definition, I only need to check that temp.x > x_min
+        //
+        //            check_x = ((temp.x) >= x_min);
+        //
+        //        }else{
+        //            //temp.x is negative: for it to fall within the plot area, I only need to check whether it lies betweeen -pi and x_max. Given temp.x > -pi by definition, I only need to check that temp.x < x_max
+        //
+        //            check_x = ((temp.x) <= x_max);
+        //
+        //        }
+        //
     }
     
     check = ((check_x && (y_min <= (temp.y)) && ((temp.y) <= y_max)));
@@ -11599,7 +11599,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
         Set_size_chart = (&DrawPanel::Set_size_chart_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
-                
+        
     }
     
     //reset everything and draw
@@ -12396,12 +12396,12 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     
     j = (event.GetWheelRotation());
     
-//    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
-//    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
-//    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
-//    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
-//    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
-//    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
+    //    cout << "\n\n\nWheel rotation = " << event.GetWheelRotation() << "\n";
+    //    cout << "Slider value old = " << ((parent->slider)->GetValue()) << "\n";
+    //    //    cout << "Zoom factor max = " << ((wxGetApp().zoom_factor_max).value) << "\n";
+    //    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
+    //    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
+    //    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
     
     //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((wxGetApp().zoom_factor_max).value)))){
     
@@ -12425,9 +12425,9 @@ void DrawPanel::OnMouseWheel(wxMouseEvent &event){
     //if i gets out of range, put it back in the correct range
     if(i<1){i=1;}
     if(i>((parent->slider)->GetMax())){i = ((parent->slider)->GetMax());}
-        
+    
     parent->SetSlider(i);
-
+    
     event.Skip(true);
     
 }
@@ -12556,7 +12556,7 @@ bool ChartFrame::SetSlider(unsigned int slider_value){
         //call OnScroll to update evrything adter the change of the value of slider
         OnScroll(dummy);
         OnMouseLeftUpOnSlider(dummy);
-     
+        
         return true;
         
     }else{
@@ -12760,7 +12760,7 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
 }
 
 template<class P> void Close<P>::operator()(wxCommandEvent& event){
-
+    
     //destroys parent
     parent->Destroy();
     
@@ -14748,7 +14748,7 @@ template<class T, typename FF_YES, typename FF_NO> PrintQuestion<T, FF_YES, FF_N
     f = f_in;
     f_yes = f_yes_in;
     f_no = f_no_in;
-
+    
 }
 
 //set the wxControl, title and question and answers for the functor *this, and I call the functor operator() with CallAfter
@@ -14777,7 +14777,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
             
             if(((control->GetForegroundColour()) != (wxGetApp().error_color))){
                 
-                question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, f_no, title.value, question.value, answer_y.value, answer_n.value, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxDefaultPosition, wxDefaultSize, String(""));
                 question_frame->Show(true);
                 
                 control->SetFocus();
@@ -14794,7 +14794,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
         }else{
             //this question has not been prompted from a control
             
-            question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, f_no, title.value, message.value, answer_y.value, answer_n.value, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxDefaultPosition, wxDefaultSize, String(""));
             question_frame->Show(true);
             
         }
@@ -15293,7 +15293,7 @@ void ListFrame::OnCloseFocusedChartFrame(wxCommandEvent& event){
 
 //closes the ChartFrame that  has focus
 void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event){
-        
+    
     //closes all ChartFrames in chart_frames
     for(; 0<(chart_frames.size()); ){
         (chart_frames[0])->OnClose(event);

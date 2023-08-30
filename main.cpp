@@ -74,15 +74,29 @@ template<class T> void MyApp::OnPressCtrlQ(T& event){
 //    Close(true);
     
 //    return this->wxApp::OnPressCtrlQ();
-//    UnsetIdling<ListFrame>* unset_idling;
+    UnsetIdling<ListFrame>* unset_idling;
     Close<ListFrame>* close;
-    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
 
-//    unset_idling = new UnsetIdling<ListFrame>(list_frame);
+    unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new Close<ListFrame>(list_frame);
+    
+//    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
+    
+    QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>(NULL,
+                                                                                                        close,
+                                                                                                        String("Yes"),
+                                                                                                        unset_idling, String("No"),
+                                                                                                        "",
+                                                                                                        "Do you want to close the app?",
+                                                                                                        wxDefaultPosition,
+                                                                                                        wxDefaultSize,
+                                                                                                        String(""));
+    question_frame->Show(true);
+
+
 //    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(list_frame, unset_idling);
-    print_info_message = new PrintMessage<ListFrame, Close<ListFrame> >(list_frame, close);
-    print_info_message->SetAndCall(NULL, String("You want to exit the app"), String("Exiting the app"));
+//    print_info_message = new PrintMessage<ListFrame, Close<ListFrame> >(list_frame, close);
+//    print_info_message->SetAndCall(NULL, String("You want to exit the app"), String("Exiting the app"));
     
 
     

@@ -13435,13 +13435,17 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     f->DrawAll();
     
+    (f->listcontrol_routes)->set<Route>((f->plot)->route_list);
+
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_change_selection_in_listcontrol_routes));
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, *(f->on_change_selection_in_listcontrol_routes));
     
-    //set parameters back to their original value
+    //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
     (f->idling) = false;
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
+    
+    
     
     event.Skip(true);
     
@@ -15383,7 +15387,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
     
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
-    print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport the sight?"), String("Existing route"), String("New route"));
+    print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
 //    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
@@ -15410,17 +15414,20 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
-                                                                                                        existing_route,
-                                                                                                        String("Existing route"),
-                                                                                                        create_route, String("New route"),
-                                                                                                        "",
-                                                                                                        "With what route do you want to transport the sight?",
-                                                                                                        wxDefaultPosition,
-                                                                                                        wxDefaultSize,
-                                                                                                        String(""));
-    question_frame->Show(true);
+    PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
+    print_question->SetAndCall(NULL, String("You want to transport a position"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
+ //    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
+//                                                                                                        existing_route,
+//                                                                                                        String("Existing route"),
+//                                                                                                        create_route, String("New route"),
+//                                                                                                        "",
+//                                                                                                        "With what route do you want to transport the position?",
+//                                                                                                        wxDefaultPosition,
+//                                                                                                        wxDefaultSize,
+//                                                                                                        String(""));
+//    question_frame->Show(true);
+//
     
     
     event.Skip(true);

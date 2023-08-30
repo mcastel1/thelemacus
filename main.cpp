@@ -19,11 +19,11 @@
  - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen
  - per creare un progetto xcode con wxwidgets 1. decomprimi il tar.gz di wxwidgets 2. in samples/minimal/ modifical minimal_cocoa mettendoci i files C++ e le referenze in system header search path, library search path, le linking flag, etc.
  - se xcode ti crea nuove copie dei file .cpp e .h quando li aggiungi a un progetto, fai attenzione a deselezioare 'copy items if needed' nel momento in cui li aggiungi al progetto. Non mettere i file in /src/, altrimenti xcode ti crea una copie di quei file nella directory in cui si trova il file .xcodeproj
- - change     highlight_color = color_selected_item and     highlight_font = default_font;
- with a better  choice
  
  ********** THINGS TO ADD ************
  
+ - change     highlight_color = color_selected_item and     highlight_font = default_font;
+ with a better  choice
  - add an interface to load, save and close sight files
  - the selection rectangle in the 3D projection should be filled with color
  - add + / - button in chartframe to zoom in / out
@@ -46,6 +46,7 @@
 
  ********** THINGS TO FIX ************
  
+ - replace calls of QuestionFrame that do not use PrintQuestion by using PrintQUesiton 
  - meridians are still cut on the top in mercator projection 
  - check that WXK_PLUS does not depend on the computer
 - zoom factor should go back to 1:1 when slider is put all the way up

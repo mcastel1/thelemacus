@@ -63,7 +63,7 @@ void MyApp::OnTimer(wxTimerEvent& event){
     
 }
 
-//exit the app by destroying ListFrame
+//if the user presses Ctrl + Q to exit the app, I call this function which prompts a message frame
 template<class T> void MyApp::OnPressCtrlQ(T& event){
     
 //    for(; 0<chart_frames.size(); ){

@@ -14902,6 +14902,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     menu_bar = new wxMenuBar;
     menu_app = new wxMenu;
+    menu_file = new wxMenu;
     menu_chart = new wxMenu;
     menu_new_chart = new wxMenu;
     menu_item_mercator = new wxMenu;
@@ -14913,8 +14914,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_chart->Append(wxID_HIGHEST + 3, "Close\tCtrl-w");
     menu_chart->Append(wxID_HIGHEST + 4, "Close all\tCtrl-a");
     menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
-    
+    menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
+
     menu_bar->Append(menu_app, wxT("&App"));
+    menu_bar->Append(menu_file, wxT("&File"));
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
     

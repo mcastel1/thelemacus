@@ -2010,7 +2010,7 @@ public:
     Catalog *catalog;
     //    wxListBox* listbox;
     wxMenuBar *menu_bar;
-    wxMenu *menu_app, *menu_chart, *menu_new_chart, *menu_item_mercator, *menu_item_3d;
+    wxMenu *menu_app, *menu_file, *menu_chart, *menu_new_chart, *menu_item_mercator, *menu_item_3d;
     ListControl *listcontrol_sights, *listcontrol_routes, *listcontrol_positions;
     //extract_colors is created only to detect the background and foreground colors set by the operating systems, it has no other use. As a result, its size will be set to zero.
     wxTextCtrl* extract_colors;

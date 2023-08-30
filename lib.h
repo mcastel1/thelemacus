@@ -1479,9 +1479,7 @@ public:
     String title, message;
     FF_OK* f_ok;
     MessageFrame<FF_OK>* message_frame;
-    
-//    FunctionOnPressOk<T> * function_on_press_ok;
-    
+        
     PrintMessage(T*, FF_OK*);
     
     void SetAndCall(wxControl*, String, String);

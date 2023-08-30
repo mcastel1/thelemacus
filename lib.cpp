@@ -13510,9 +13510,10 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
     
-    
-    if(!(f->idling)){
-        
+    //you may need to put this back  - start
+    //    if(!(f->idling)){
+    //you may need to put this back  - end
+
         //I may be about to prompt a temporary dialog window, thus I set f->idling to true
         (f->idling = true);
         
@@ -13541,9 +13542,11 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
             message_frame ->Show(true);
             
         }
-        
-    }
-    
+       
+    //you may need to put this back  - start
+//    }
+    //you may need to put this back  - end
+
 }
 
 
@@ -15379,17 +15382,20 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
     
+    PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
+    print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport the sight?"), String("Existing route"), String("New route"));
+    
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
-                                                                                                        existing_route,
-                                                                                                        String("Existing route"),
-                                                                                                        create_route, String("New route"),
-                                                                                                        "",
-                                                                                                        "With what route do you want to transport the sight?",
-                                                                                                        wxDefaultPosition,
-                                                                                                        wxDefaultSize,
-                                                                                                        String(""));
-    question_frame->Show(true);
+//    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
+//                                                                                                        existing_route,
+//                                                                                                        String("Existing route"),
+//                                                                                                        create_route, String("New route"),
+//                                                                                                        "",
+//                                                                                                        "With what route do you want to transport the sight?",
+//                                                                                                        wxDefaultPosition,
+//                                                                                                        wxDefaultSize,
+//                                                                                                        String(""));
+//    question_frame->Show(true);
     
     
     

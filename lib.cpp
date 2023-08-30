@@ -14764,6 +14764,46 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
     
 }
 
+template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::operator()(void){
+    
+    
+    if(!(f->idling)){
+        
+        //I may be about to prompt a temporary dialog window, thus I set f->idling to true
+        (f->idling = true);
+        
+        if(control != NULL){
+            //this question has been prompted from a control
+            
+            if(((control->GetForegroundColour()) != (wxGetApp().error_color))){
+                
+                question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, f_no, title.value, question.value, answer_y.value, answer_n.value, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame->Show(true);
+                
+                control->SetFocus();
+                control->SetForegroundColour((wxGetApp().highlight_color));
+                control->SetFont(wxGetApp().highlight_font);
+                
+            }else{
+                //because in this case I don't print an error message frame, the code is no longer in idling mode
+                
+                (f->idling = false);
+                
+            }
+            
+        }else{
+            //this question has not been prompted from a control
+            
+            question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, f_no, title.value, message.value, answer_y.value, answer_n.value, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame->Show(true);
+            
+        }
+        
+    }
+    
+}
+
+
 ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i, total_column_width, margin, red, green, blue;

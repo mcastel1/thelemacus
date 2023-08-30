@@ -19,7 +19,8 @@
  - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen
  - per creare un progetto xcode con wxwidgets 1. decomprimi il tar.gz di wxwidgets 2. in samples/minimal/ modifical minimal_cocoa mettendoci i files C++ e le referenze in system header search path, library search path, le linking flag, etc.
  - se xcode ti crea nuove copie dei file .cpp e .h quando li aggiungi a un progetto, fai attenzione a deselezioare 'copy items if needed' nel momento in cui li aggiungi al progetto. Non mettere i file in /src/, altrimenti xcode ti crea una copie di quei file nella directory in cui si trova il file .xcodeproj
- 
+ - change     highlight_color = color_selected_item and     highlight_font = default_font;
+ with a better  choice
  
  ********** THINGS TO ADD ************
  
@@ -344,6 +345,7 @@ bool MyApp::OnInit(){
     foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
     error_color.read_from_file(String("error color"), String(path_file_init), String(""));
+    highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
     
     list_frame = new ListFrame(this, "List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
@@ -399,6 +401,7 @@ bool MyApp::OnInit(){
     //extracts the default font and creates a error_font, obtained from default font by setting its weight to wxFONTWEIGHT_BOLD
     default_font = (list_frame->extract_colors->GetFont());
     error_font = (list_frame->extract_colors->GetFont());
+    highlight_font = default_font;
     error_font.SetWeight(wxFONTWEIGHT_BOLD);
     
     timer->Start(/*time_check is converted in milliseconds, because Start() takes its first argument i milliseconds*/((time_check.h)*60.0*60.0 + (time_check.m)*60.0 + (time_check.s)) * 1000.0, wxTIMER_CONTINUOUS);

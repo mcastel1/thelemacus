@@ -63,10 +63,10 @@ public:
     //the size of small and large buttons of the app
     wxSize size_small_button, size_large_button;
     //The default fore/background color for day/night vision of the app of all objects in *this. background_color also represents the default, plain background color of fields, such as BodyFields, and it is thus conceptally equivalent to 'white' color
-    Color foreground_color, background_color, error_color, /*the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area*/ color_selected_item,  /*the color of the horizon circle for the 3D projection*/ color_horizon;
+    Color foreground_color, background_color, error_color, highlight_color, /*the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area*/ color_selected_item,  /*the color of the horizon circle for the 3D projection*/ color_horizon;
     vector<Color> color_list;
     //the default font used by the operating system, and a bold font obtained by the defalult font by setting its weight to wxFONTWEIGHT_BOLD
-    wxFont default_font, error_font;
+    wxFont default_font, error_font, highlight_font;
     Int time_zone, zoom_factor_max, n_points_minor_ticks;
     Double  /*the displacemenet over the x (y) axis divided by the length of the x (y) axis used by the functions MoveUp, ..., MoveRight*/ relative_displacement, /*the default thickness of the line with which routes are drawn*/ standard_thickness_over_length_screen, /*the thickness with which highlighted routes are drawn*/ large_thickness_over_length_screen, /*the numerical coefficients which define the function which relates the slider value to the zoom factor*/a_zoom, b_zoom, e_zoom,  /*this is the ratio between the length of the ticks on both axes, and the width of the plot area (for the mercator projection)/angle of aperture of the observer circle (for the 3d projection)*/tick_length_over_width_plot_area, tick_length_over_aperture_circle_observer, /*the ration between the size of small/large buttons and the width of the screen*/ size_small_button_over_width_screen, size_large_button_over_width_screen;
 ;

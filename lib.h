@@ -1469,7 +1469,7 @@ public:
     
 };
 
-//this functor pops out an error-message window with title tile and error message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
+//this functor pops out a message window with title tile and  message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
 template<class T, typename FF_OK> class PrintMessage{
     
 public:
@@ -1487,6 +1487,26 @@ public:
     
     
 };
+
+//this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
+template<class T, typename FF_OK> class PrintQuestion{
+    
+public:
+    
+    T* f;
+    wxControl* control;
+    String title, message;
+    FF_OK* f_ok;
+    MessageFrame<FF_OK>* message_frame;
+        
+    PrintMessage(T*, FF_OK*);
+    
+    void SetAndCall(wxControl*, String, String);
+    void operator()(void);
+    
+    
+};
+
 
 //my own derived class of wxStaticText
 class StaticText : public wxStaticText{

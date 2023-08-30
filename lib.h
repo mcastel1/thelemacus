@@ -1495,7 +1495,7 @@ public:
     
     T* f;
     wxControl* control;
-    String title, message, answer_y, answer_n;
+    String title, message, question, answer_y, answer_n;
     FF_YES* f_yes;
     FF_NO* f_no;
     QuestionFrame<FF_YES, FF_NO>* question_frame;

@@ -14743,6 +14743,26 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
     
 }
 
+template<class T, typename FF_YES, typename FF_NO> PrintQuestion<T, FF_YES, FF_NO>::PrintQuestion(T* f_in, FF_YES* f_yes_in, FF_NO* f_no_in){
+    
+    f = f_in;
+    f_yes = f_yes_in;
+    f_no = f_no_in;
+
+}
+
+//set the wxControl, title and question and answers for the functor *this, and I call the functor operator() with CallAfter
+template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in){
+    
+    control = control_in;
+    title = title_in;
+    question = question_in;
+    answer_y = answer_y_in;
+    answer_n = answer_n_in;
+    
+    f->CallAfter(*this);
+    
+}
 
 ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     

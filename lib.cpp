@@ -14759,7 +14759,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     GetAllCoastLineData();
     
     //when the ListFrame window is closed, quit the app
-    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnExit<wxCloseEvent>, &(wxGetApp()));
+    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     (parent->rectangle_display) = ((wxGetApp().display).GetClientArea());
@@ -14839,7 +14839,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseFocusedChartFrame, this, wxID_HIGHEST + 3);
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseAllChartFrames, this, wxID_HIGHEST + 4);
-    menu_bar->Bind(wxEVT_MENU, &MyApp::OnExit<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
+    menu_bar->Bind(wxEVT_MENU, &MyApp::OnPressCtrlQ<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);

@@ -64,7 +64,7 @@ void MyApp::OnTimer(wxTimerEvent& event){
 }
 
 //exit the app by destroying ListFrame
-template<class T> void MyApp::OnExit(T& event){
+template<class T> void MyApp::OnPressCtrlQ(T& event){
     
 //    for(; 0<chart_frames.size(); ){
 //        (chart_frames[0])->OnClose(event);
@@ -73,7 +73,7 @@ template<class T> void MyApp::OnExit(T& event){
 //    Destroy();
 //    Close(true);
     
-//    return this->wxApp::OnExit();
+//    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_info_message;
 

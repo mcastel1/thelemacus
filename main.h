@@ -76,7 +76,7 @@ public:
     //the code checks every time_check whether the operating system has changed its light/dark mode
     Chrono time_check;
     //this is true/false if the system is in dark/light mode, respectively
-    bool dark_mode;
+    bool dark_mode, idling;
     //the rectangle used to measure the size of the display
     wxDisplay display;
     //this referrs to the init file

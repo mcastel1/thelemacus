@@ -74,11 +74,14 @@ template<class T> void MyApp::OnPressCtrlQ(T& event){
 //    Close(true);
     
 //    return this->wxApp::OnPressCtrlQ();
-    UnsetIdling<ListFrame>* unset_idling;
-    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_info_message;
+//    UnsetIdling<ListFrame>* unset_idling;
+    Close<ListFrame>* close;
+    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
 
-    unset_idling = new UnsetIdling<ListFrame>(list_frame);
-    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(list_frame, unset_idling);
+//    unset_idling = new UnsetIdling<ListFrame>(list_frame);
+    close = new Close<ListFrame>(list_frame);
+//    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(list_frame, unset_idling);
+    print_info_message = new PrintMessage<ListFrame, Close<ListFrame> >(list_frame, close);
     print_info_message->SetAndCall(NULL, String("You want to exit the app"), String("Exiting the app"));
     
 

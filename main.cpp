@@ -396,7 +396,7 @@ bool MyApp::OnInit(){
     ShowChart(dummy);
     
     //bring either of these wxFrames to front
-    //    list_frame->Raise();
+//    list_frame->Raise();
     
     //fore/background color is determined from the default background color of extract_colors
     foreground_color = Color(list_frame->extract_colors->GetForegroundColour());

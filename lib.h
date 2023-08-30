@@ -2030,7 +2030,9 @@ public:
     NewRoute *create_route;
     bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling;
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines;
-
+    //path to the file shown in *this
+    wxString file_path;
+    
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<Position> > > p_coastline;
@@ -2076,7 +2078,7 @@ public:
     void OnMouseMovement(wxMouseEvent&);
 //    void OnMouseOnListControlPositions(wxMouseEvent&);
     
-    template<class E> void OpenFile(E&);
+    template<class E> void OnPressCtrlO(E&);
         
     
 };

@@ -14926,6 +14926,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseFocusedChartFrame, this, wxID_HIGHEST + 3);
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseAllChartFrames, this, wxID_HIGHEST + 4);
     menu_bar->Bind(wxEVT_MENU, &MyApp::OnPressCtrlQ<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlO<wxCommandEvent>, this, wxID_HIGHEST + 6);
+
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
@@ -15691,9 +15693,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
 }
 
-template<class E> void ListFrame::OpenFile(E& event){
+template<class E> void ListFrame::OnPressCtrlO(E& event){
     
-    wxFileDialog openFileDialog(this, _("Open XYZ file"), "", "", "XYZ files (*.xyz)|*.xyz", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Open sav file"), "", "", "sav files (*.sav)|*.sav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
     if(openFileDialog.ShowModal() == wxID_CANCEL){
         
@@ -15702,12 +15704,18 @@ template<class E> void ListFrame::OpenFile(E& event){
     }else{
         // proceed loading the file chosen by the user;
         wxFileInputStream input_stream(openFileDialog.GetPath());
-        
+
         if(!input_stream.IsOk()){
             
             wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
             
+        }else{
+            
+            file_path = openFileDialog.GetPath();
+
+            
         }
+        
         
     }
         

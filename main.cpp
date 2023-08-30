@@ -77,22 +77,26 @@ template<class T> void MyApp::OnPressCtrlQ(T& event){
 //    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     Close<ListFrame>* close;
-
+    PrintQuestion<ListFrame, Close<ListFrame>, UnsetIdling<ListFrame>>* print_question;
     unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new Close<ListFrame>(list_frame);
     
 //    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
     
-    QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>(NULL,
-                                                                                                        close,
-                                                                                                        String("Yes"),
-                                                                                                        unset_idling, String("No"),
-                                                                                                        "",
-                                                                                                        "Do you want to close the app?",
-                                                                                                        wxDefaultPosition,
-                                                                                                        wxDefaultSize,
-                                                                                                        String(""));
-    question_frame->Show(true);
+    print_question = new PrintQuestion<ListFrame, Close<ListFrame>, UnsetIdling<ListFrame>>(list_frame, close, unset_idling);
+    
+    print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
+    
+//    QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>(NULL,
+//                                                                                                        close,
+//                                                                                                        String("Yes"),
+//                                                                                                        unset_idling, String("No"),
+//                                                                                                        "",
+//                                                                                                        "Do you want to close the app?",
+//                                                                                                        wxDefaultPosition,
+//                                                                                                        wxDefaultSize,
+//                                                                                                        String(""));
+//    question_frame->Show(true);
 
 
 //    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(list_frame, unset_idling);

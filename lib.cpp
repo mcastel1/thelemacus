@@ -14839,7 +14839,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     plot = new Plot(catalog, String(""));
-    plot_saved = new Plot(catalog, String(""));
 
     //read show_coastlines from file_init
     show_coastlines.read_from_file(String("show coastlines"), String(path_file_init), String(""));
@@ -15689,7 +15688,6 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             file_path = openFileDialog.GetPath();
             file.set_name(String(file_path.ToStdString()));
             plot->read_from_file(file, String(""));
-            plot_saved->read_from_file(file, String(""));
 //            plot->print(true, String(""), cout);
             
             //load the data in plot into the GUI fields of *this
@@ -15711,14 +15709,14 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
 template<class E> void ListFrame::OnPressCtrlW(E& event){
     
 
-    if(plot == plot_saved){
-        //plot has not been edited
-        
-    }else{
-        //plot has been edited
-        
-        
-    }
+//    if(plot == plot_saved){
+//        //plot has not been edited
+//        
+//    }else{
+//        //plot has been edited
+//        
+//        
+//    }
     
     
 }

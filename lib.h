@@ -2003,7 +2003,7 @@ public:
     
     //the MyApp that constructed *this
     MyApp* parent;
-    Plot /*pointer to the non-GUI object Plot which is related to the GUI object this*/*plot, /*when file is opened, the related plot is stored here to detect file changes*/*plot_saved;
+    Plot /*pointer to the non-GUI object Plot which is related to the GUI object this*/*plot;
     //point to the child frame of this
     vector<ChartFrame*> chart_frames;
     //this is a pointer to a Catalog object which will be used by plot

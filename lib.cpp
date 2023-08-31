@@ -14916,7 +14916,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_new_chart->Append(wxID_HIGHEST + 1, "Mercator\tCtrl-m");
     menu_new_chart->Append(wxID_HIGHEST + 2, "3D\tCtrl-3");
     menu_chart->AppendSubMenu(menu_new_chart, wxT("New"), wxT(""));
-    menu_chart->Append(wxID_HIGHEST + 3, "Close\tCtrl-w");
+    menu_chart->Append(wxID_HIGHEST + 3, "Close\tCtrl-c");
     menu_chart->Append(wxID_HIGHEST + 4, "Close all\tCtrl-a");
     menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
     menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");

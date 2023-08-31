@@ -14813,7 +14813,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 
 ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
-    unsigned int i, total_column_width, margin, red, green, blue;
+    unsigned int i, red, green, blue;
     wxListItem column, item;
     String s;
     wxBoxSizer *sizer_listcontrol_routes_button_show_map;
@@ -15712,11 +15712,48 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
         }else{
 
             File file_sample_sight;
+            unsigned int i;
             
             file_path = openFileDialog.GetPath();
             file_sample_sight.set_name(String(file_path.ToStdString()));
             plot->read_from_file(file_sample_sight, String(""));
             plot->print(true, String(""), cout);
+            
+            //set listcontrol_sights
+            listcontrol_sights->set(plot->sight_list);
+            //    set the column width to the width of its longest item
+            for(i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+                listcontrol_sights->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+            }
+            for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+                total_column_width += (listcontrol_sights->GetColumnWidth(i));
+            }
+            listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
+            sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin);
+          
+            //set listcontrol_positions
+            listcontrol_positions->set(plot->position_list);
+            //    set the column width to the width of its longest item
+            for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+                listcontrol_positions->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+            }
+            for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+                total_column_width += (listcontrol_positions->GetColumnWidth(i));
+            }
+            listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
+            
+            //set listcontrol_routes
+            listcontrol_routes->set(plot->route_list);
+            //    set the column width to the width of its longest item
+            for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
+                listcontrol_routes->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+            }
+            for(total_column_width=0, i=0; i<(listcontrol_routes->GetColumnCount()); i++){
+                total_column_width += (listcontrol_routes->GetColumnWidth(i));
+            }
+            listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
+
+
             
         }
         

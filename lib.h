@@ -2033,6 +2033,7 @@ public:
     //path to the file shown in *this
     wxString file_path;
     
+    unsigned int total_column_width, margin;
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<Position> > > p_coastline;

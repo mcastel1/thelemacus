@@ -2051,6 +2051,7 @@ public:
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
 
+    void set(void);
     void DrawAll(void);
 
     void GetAllCoastLineData(void);

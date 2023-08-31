@@ -15133,43 +15133,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //listcontrol routes with routes
     
     
-    //
-    //write the sights contained into plot->sight_list into listcontrol_sights
-    listcontrol_sights->set(plot->sight_list);
-    //    set the column width to the width of its longest item
-    for(i=0; i<(listcontrol_sights->GetColumnCount()); i++){
-        listcontrol_sights->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
-    }
-    for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
-        total_column_width += (listcontrol_sights->GetColumnWidth(i));
-    }
-    listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
-    
-    
-    //write the positions into plot->position_list into listcontrol_sights
-    listcontrol_positions->set(plot->position_list);
-    //    set the column width to the width of its longest item
-    for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
-        listcontrol_positions->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-    }
-    for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
-        total_column_width += (listcontrol_positions->GetColumnWidth(i));
-    }
-    listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
-
-    
-    //write the routes into plot->route_list into listcontrol_routes
-    listcontrol_routes->set(plot->route_list);
-    //    set the column width to the width of its longest item
-    for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
-        listcontrol_routes->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-    }
-    for(total_column_width=0, i=0; i<(listcontrol_routes->GetColumnCount()); i++){
-        total_column_width += (listcontrol_routes->GetColumnWidth(i));
-    }
-    listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
-
-    //
+    set();
     
     //button to show map
     button_show_map = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
@@ -15318,7 +15282,49 @@ void ListFrame::DrawAll(void){
 }
 
 
+//set all the GUI fileds in *this from the data in this->plot and adapts the size of columns and panel accordingly
+void ListFrame::set(){
+    
+    unsigned int i;
+    
+    //write the sights contained into plot->sight_list into listcontrol_sights
+    listcontrol_sights->set(plot->sight_list);
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+        listcontrol_sights->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
+    }
+    for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+        total_column_width += (listcontrol_sights->GetColumnWidth(i));
+    }
+    listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
+    
+    
+    //write the positions into plot->position_list into listcontrol_sights
+    listcontrol_positions->set(plot->position_list);
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+        listcontrol_positions->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+    }
+    for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+        total_column_width += (listcontrol_positions->GetColumnWidth(i));
+    }
+    listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
 
+    
+    //write the routes into plot->route_list into listcontrol_routes
+    listcontrol_routes->set(plot->route_list);
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
+        listcontrol_routes->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+    }
+    for(total_column_width=0, i=0; i<(listcontrol_routes->GetColumnCount()); i++){
+        total_column_width += (listcontrol_routes->GetColumnWidth(i));
+    }
+    listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
+
+    Maximize(panel);
+    
+}
 
 void ListFrame::OnAddSight(wxCommandEvent& event){
     
@@ -15698,48 +15704,13 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
         }else{
 
             File file_sample_sight;
-            unsigned int i;
             
             file_path = openFileDialog.GetPath();
             file_sample_sight.set_name(String(file_path.ToStdString()));
             plot->read_from_file(file_sample_sight, String(""));
             plot->print(true, String(""), cout);
             
-            //set listcontrol_sights
-            listcontrol_sights->set(plot->sight_list);
-            //    set the column width to the width of its longest item
-            for(i=0; i<(listcontrol_sights->GetColumnCount()); i++){
-                listcontrol_sights->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-            }
-            for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
-                total_column_width += (listcontrol_sights->GetColumnWidth(i));
-            }
-            listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
-          
-            //set listcontrol_positions
-            listcontrol_positions->set(plot->position_list);
-            //    set the column width to the width of its longest item
-            for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
-                listcontrol_positions->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-            }
-            for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
-                total_column_width += (listcontrol_positions->GetColumnWidth(i));
-            }
-            listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
-            
-            //set listcontrol_routes
-            listcontrol_routes->set(plot->route_list);
-            //    set the column width to the width of its longest item
-            for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
-                listcontrol_routes->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-            }
-            for(total_column_width=0, i=0; i<(listcontrol_routes->GetColumnCount()); i++){
-                total_column_width += (listcontrol_routes->GetColumnWidth(i));
-            }
-            listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
-            Maximize(panel);
-
-            
+            set();
             DrawAll();
             
         }

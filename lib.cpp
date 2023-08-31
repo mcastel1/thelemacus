@@ -14934,6 +14934,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_bar->Append(menu_chart, wxT("&Chart"));
     SetMenuBar(menu_bar);
     
+    menu_file->Enable(wxID_HIGHEST + 7, false);
+    
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 1);
     menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseFocusedChartFrame, this, wxID_HIGHEST + 3);
@@ -15711,6 +15713,8 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             plot->read_from_file(file, String(""));
 //            plot->print(true, String(""), cout);
             
+            //emable the menu item to close file
+            menu_file->Enable(wxID_HIGHEST + 7, true);
             //load the data in plot into the GUI fields of *this
             set();
             //change the title of *this to the filename

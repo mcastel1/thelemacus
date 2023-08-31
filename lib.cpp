@@ -13435,9 +13435,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     }
     
     f->DrawAll();
-    
+    //re-load the data of plot->route_list into listcontrol_routes and Fit it beacuse its size may have changed
     (f->listcontrol_routes)->set<Route>((f->plot)->route_list);
+    (f->listcontrol_routes)->Fit();
+    f->Maximize(f->panel);
 
+    
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_change_selection_in_listcontrol_routes));
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, *(f->on_change_selection_in_listcontrol_routes));

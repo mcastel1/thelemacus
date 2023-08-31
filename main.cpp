@@ -46,6 +46,7 @@
 
  ********** THINGS TO FIX ************
  
+ - in OnSelectRouteInListControlRoutesForTransport I cannot resize listcontrol_routes to account for the larger text resulting after the transport 
  - replace calls of QuestionFrame that do not use PrintQuestion by using PrintQUesiton 
  - meridians are still cut on the top in mercator projection 
  - check that WXK_PLUS does not depend on the computer

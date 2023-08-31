@@ -69,6 +69,7 @@ Angle max_lat, min_lat;
 #define path_file_arrow_icon "/Users/macbookpro/Dropbox/sight_reduction_program/arrow_icon.png"
 #define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
 #define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
+//the default directory where to look for files when openin a file 
 #define default_open_directory "/Users/macbookpro/Dropbox/sight_reduction_program/"
 
 //for debug

@@ -12802,6 +12802,8 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
         
     }
     
+    parent->OnModifyFile();
+    
     event.Skip(true);
     
 }
@@ -12840,6 +12842,8 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event){
         (*(parent->delete_sight))(event);
         
     }
+    
+    parent->OnModifyFile();
     
     event.Skip(true);
     
@@ -12949,6 +12953,8 @@ void DeletePosition::operator()(wxCommandEvent& event){
         
         //given that I called set in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
         (f->listcontrol_positions)->EnableButtons(false);
+
+        f->OnModifyFile();
         
     }
     
@@ -15382,7 +15388,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
 //                                                                                                        String(""));
 //    question_frame->Show(true);
     
-    
+    OnModifyFile();
     
     event.Skip(true);
     
@@ -15409,7 +15415,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
 //                                                                                                        String(""));
 //    question_frame->Show(true);
 //
-    
+    OnModifyFile();
     
     event.Skip(true);
     
@@ -15477,6 +15483,7 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
                                                                                                                                                       String(""));
     
     question_frame->Show(true);
+
     
     event.Skip(true);
     
@@ -15495,7 +15502,7 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
                                                                                                                                         wxDefaultSize,
                                                                                                                                         String(""));
     question_frame->Show(true);
-    
+        
     event.Skip(true);
     
 }
@@ -15513,7 +15520,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
                                                                                                                                                       String(""));
     
     question_frame->Show(true);
-    
+        
     event.Skip(true);
     
 }

@@ -87,4 +87,4 @@ night foreground color = (255,255,255)
 day background color = (224,224,224)
 night background color = (40,40,43)
 number of points coastline = 100000
-show coastlines = y
+show coastlines = n

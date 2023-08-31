@@ -10198,7 +10198,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 }
 
 //when a ChartFrame is closed, I destroy it, delete the respecive item in parent->chart_frames vector, and rename all the other ChartFrames in that vector to take into account the shifting of the CartFrame ids due to the Chartframe deletion
-template<class T> void ChartFrame::OnClose(T& event){
+template<class T> void ChartFrame::OnPressCtrlW(T& event){
     
     vector<ChartFrame*>::iterator i;
     unsigned int j;
@@ -14839,7 +14839,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     plot = new Plot(catalog, String(""));
-    
+    plot_saved = new Plot(catalog, String(""));
+
     //read show_coastlines from file_init
     show_coastlines.read_from_file(String("show coastlines"), String(path_file_init), String(""));
     
@@ -14919,6 +14920,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_chart->Append(wxID_HIGHEST + 4, "Close all\tCtrl-a");
     menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
     menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
+    menu_file->Append(wxID_HIGHEST + 7, "Close\tCtrl-w");
 
     menu_bar->Append(menu_app, wxT("&App"));
     menu_bar->Append(menu_file, wxT("&File"));
@@ -14931,6 +14933,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseAllChartFrames, this, wxID_HIGHEST + 4);
     menu_bar->Bind(wxEVT_MENU, &MyApp::OnPressCtrlQ<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlO<wxCommandEvent>, this, wxID_HIGHEST + 6);
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlW<wxCommandEvent>, this, wxID_HIGHEST + 7);
 
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);

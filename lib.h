@@ -2270,7 +2270,7 @@ public:
     template<class T> void OnMouseLeftUpOnSlider(T&);
     template<class T> void OnScroll(T&);
     bool SetSlider(unsigned int);
-    template<class T> void OnClose(T&);
+    template<class T> void OnPressCtrlW(T&);
     void SetIdling(bool);
     void AllOk(void);
     

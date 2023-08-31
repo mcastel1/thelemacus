@@ -14829,6 +14829,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     idling = false;
+    file_has_been_modified = false;
     enable_highlight = true;
     unset_idling = new UnsetIdling<ListFrame>(this);
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
@@ -15667,6 +15668,17 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
 }
 
+void ListFrame::OnModifyFile(void){
+    
+        //file has been modified
+    file_has_been_modified = true;
+    
+    //add a mark to the label of *this
+    SetLabel((String(GetLabel().ToStdString()).append(String(" [modified]"))).value);
+    
+    
+}
+
 template<class E> void ListFrame::OnPressCtrlO(E& event){
     
     wxFileDialog openFileDialog(this, _("Open nav file"), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
@@ -15677,6 +15689,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
         
     }else{
         // proceed loading the file chosen by the user;
+        
         wxFileInputStream input_stream(openFileDialog.GetPath());
 
         if(!input_stream.IsOk()){
@@ -15701,6 +15714,9 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
         
         
     }
+    
+    //the file has not been touched yet, thus
+    file_has_been_modified = false;
         
     event.Skip(true);
     
@@ -16521,6 +16537,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
     (parent->listcontrol_routes)->EnableButtons(false);
+    parent->OnModifyFile();
     
     parent->DrawAll();
     

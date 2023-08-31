@@ -2081,6 +2081,7 @@ public:
     void OnMouseMovement(wxMouseEvent&);
 //    void OnMouseOnListControlPositions(wxMouseEvent&);
     
+    void OnModifyFile(void);
     template<class E> void OnPressCtrlO(E&);
     template<class E> void OnPressCtrlW(E&);
 

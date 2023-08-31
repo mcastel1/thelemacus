@@ -15695,7 +15695,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 
 template<class E> void ListFrame::OnPressCtrlO(E& event){
     
-    wxFileDialog openFileDialog(this, _("Open sgt file"), "", "", "sgt files (*.sgt)|*.sgt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Open sgt file"), default_open_directory, "", "sgt files (*.sgt)|*.sgt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
     if(openFileDialog.ShowModal() == wxID_CANCEL){
         
@@ -15729,7 +15729,6 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
                 total_column_width += (listcontrol_sights->GetColumnWidth(i));
             }
             listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
-            sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin);
           
             //set listcontrol_positions
             listcontrol_positions->set(plot->position_list);
@@ -15753,7 +15752,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             }
             listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
 
-
+            DrawAll();
             
         }
         

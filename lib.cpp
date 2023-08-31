@@ -15667,7 +15667,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 
 template<class E> void ListFrame::OnPressCtrlO(E& event){
     
-    wxFileDialog openFileDialog(this, _("Open sgt file"), default_open_directory, "", "sgt files (*.sgt)|*.sgt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Open nav file"), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
     if(openFileDialog.ShowModal() == wxID_CANCEL){
         

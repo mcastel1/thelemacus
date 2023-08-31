@@ -15321,7 +15321,7 @@ void ListFrame::set(){
         total_column_width += (listcontrol_routes->GetColumnWidth(i));
     }
     listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
-
+    
     Maximize(panel);
     
 }
@@ -15710,7 +15710,11 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             plot->read_from_file(file_sample_sight, String(""));
             plot->print(true, String(""), cout);
             
+            //load the data in plot into the GUI fields of *this
             set();
+            //change the title of *this to the filename
+            SetLabel(file_path);
+            //draw all charts according to the newly loaded data
             DrawAll();
             
         }

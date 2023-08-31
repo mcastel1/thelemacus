@@ -353,7 +353,7 @@ bool MyApp::OnInit(){
     highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
     
-    list_frame = new ListFrame(this, "List of sights", "", wxDefaultPosition, wxDefaultSize, String(""));
+    list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
     

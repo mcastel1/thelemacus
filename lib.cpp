@@ -14839,6 +14839,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     file_has_been_modified = false;
     enable_highlight = true;
     unset_idling = new UnsetIdling<ListFrame>(this);
+    close = new CloseFrame<ListFrame>(this);
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
     select_route = new SelectRoute(this);

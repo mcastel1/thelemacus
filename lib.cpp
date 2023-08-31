@@ -14967,13 +14967,13 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
     
-    //
+    /*
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
     plot->read_from_file(file_sample_sight, String(""));
     plot->print(true, String(""), cout);
-    //
+    */
     
     
     //image for button_add_sight, button_add_position and button_add_route

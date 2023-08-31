@@ -15695,7 +15695,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 
 template<class E> void ListFrame::OnPressCtrlO(E& event){
     
-    wxFileDialog openFileDialog(this, _("Open sav file"), "", "", "sav files (*.sav)|*.sav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Open sgt file"), "", "", "sgt files (*.sgt)|*.sgt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
     if(openFileDialog.ShowModal() == wxID_CANCEL){
         
@@ -15710,9 +15710,13 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
             
         }else{
+
+            File file_sample_sight;
             
             file_path = openFileDialog.GetPath();
-
+            file_sample_sight.set_name(String(file_path.ToStdString()));
+            plot->read_from_file(file_sample_sight, String(""));
+            plot->print(true, String(""), cout);
             
         }
         

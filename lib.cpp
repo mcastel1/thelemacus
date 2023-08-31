@@ -15751,7 +15751,9 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
                 total_column_width += (listcontrol_routes->GetColumnWidth(i));
             }
             listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
+            Maximize(panel);
 
+            
             DrawAll();
             
         }

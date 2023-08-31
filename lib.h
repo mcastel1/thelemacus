@@ -2003,8 +2003,7 @@ public:
     
     //the MyApp that constructed *this
     MyApp* parent;
-    //this is a pointer to the non-GUI object Plot which is related to the GUI object this
-    Plot* plot;
+    Plot /*pointer to the non-GUI object Plot which is related to the GUI object this*/*plot, /*when file is opened, the related plot is stored here to detect file changes*/*plot_saved;
     //point to the child frame of this
     vector<ChartFrame*> chart_frames;
     //this is a pointer to a Catalog object which will be used by plot
@@ -2031,6 +2030,7 @@ public:
     NewRoute *create_route;
     bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling;
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines;
+    File file;
     //path to the file shown in *this
     wxString file_path;
     
@@ -2082,7 +2082,8 @@ public:
 //    void OnMouseOnListControlPositions(wxMouseEvent&);
     
     template<class E> void OnPressCtrlO(E&);
-        
+    template<class E> void OnPressCtrlW(E&);
+
     
 };
 

@@ -15682,13 +15682,12 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
             
         }else{
-
-            File file_sample_sight;
             
             file_path = openFileDialog.GetPath();
-            file_sample_sight.set_name(String(file_path.ToStdString()));
-            plot->read_from_file(file_sample_sight, String(""));
-            plot->print(true, String(""), cout);
+            file.set_name(String(file_path.ToStdString()));
+            plot->read_from_file(file, String(""));
+            plot_saved->read_from_file(file, String(""));
+//            plot->print(true, String(""), cout);
             
             //load the data in plot into the GUI fields of *this
             set();
@@ -15703,6 +15702,21 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
     }
         
     event.Skip(true);
+    
+}
+
+template<class E> void ListFrame::OnPressCtrlW(E& event){
+    
+
+    if(plot == plot_saved){
+        //plot has not been edited
+        
+    }else{
+        //plot has been edited
+        
+        
+    }
+    
     
 }
 

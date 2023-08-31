@@ -15076,24 +15076,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     
     
-    //write the sights contained into plot->sight_list into listcontrol_sights
-    //    for(i=0; i<((plot->sight_list).size()); i++){
-    //        ((plot->sight_list)[i]).add_to_wxListCtrl(-1, listcontrol_sights);
-    //    }
-    listcontrol_sights->set(plot->sight_list);
-    
-    //    set the column width to the width of its longest item
-    for(i=0; i<(listcontrol_sights->GetColumnCount()); i++){
-        listcontrol_sights->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
-    }
-    for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
-        total_column_width += (listcontrol_sights->GetColumnWidth(i));
-    }
-    
-    listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
     
     sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin);
-    
     
     
     //listcontrol_positions with positions
@@ -15101,9 +15085,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_modify_position);
     disableable_buttons.push_back(button_transport_position);
     disableable_buttons.push_back(button_delete_position);
-    
-    
-    
+  
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions);
@@ -15115,34 +15097,15 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
     listcontrol_positions->PushBackColumn(wxString("Label"));
-    
-    //write the positions into plot->position_list into listcontrol_sights
-    //    for(i=0; i<((plot->position_list).size()); i++){
-    //        ((plot->position_list)[i]).add_to_wxListCtrl(-1, listcontrol_positions);
-    //    }
-    listcontrol_positions->set(plot->position_list);
-    
-    //    set the column width to the width of its longest item
-    for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
-        listcontrol_positions->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-    }
-    for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
-        total_column_width += (listcontrol_positions->GetColumnWidth(i));
-    }
-    
-    listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
-    
+        
     sizer_box_position->Add(listcontrol_positions, 0,  wxALL, margin);
-    
     
     
     //listcontrol routes with routes
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
-    //    disableable_buttons.push_back(button_transport_route);
     disableable_buttons.push_back(button_delete_route);
-    
-    
+        
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes);
     //SetColor(listcontrol_routes);
@@ -15164,13 +15127,39 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_routes->PushBackColumn(wxString("Omega"));
     listcontrol_routes->PushBackColumn(wxString("Label"));
     listcontrol_routes->PushBackColumn(wxString("Related Sight"));
+ 
+    
+    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
+    //listcontrol routes with routes
+    
+    
+    //
+    //write the sights contained into plot->sight_list into listcontrol_sights
+    listcontrol_sights->set(plot->sight_list);
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+        listcontrol_sights->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER );
+    }
+    for(total_column_width=0, i=0; i<(listcontrol_sights->GetColumnCount()); i++){
+        total_column_width += (listcontrol_sights->GetColumnWidth(i));
+    }
+    listcontrol_sights->SetMinSize(wxSize(total_column_width,-1));
+    
+    
+    //write the positions into plot->position_list into listcontrol_sights
+    listcontrol_positions->set(plot->position_list);
+    //    set the column width to the width of its longest item
+    for(i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+        listcontrol_positions->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+    }
+    for(total_column_width=0, i=0; i<(listcontrol_positions->GetColumnCount()); i++){
+        total_column_width += (listcontrol_positions->GetColumnWidth(i));
+    }
+    listcontrol_positions->SetMinSize(wxSize(total_column_width,-1));
+
     
     //write the routes into plot->route_list into listcontrol_routes
-    //    for(i=0; i<((plot->route_list).size()); i++){
-    //        ((plot->route_list)[i]).add_to_wxListCtrl(-1, listcontrol_routes);
-    //    }
     listcontrol_routes->set(plot->route_list);
-    
     //    set the column width to the width of its longest item
     for(i=0; i<(listcontrol_routes->GetColumnCount()); i++){
         listcontrol_routes->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
@@ -15178,12 +15167,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     for(total_column_width=0, i=0; i<(listcontrol_routes->GetColumnCount()); i++){
         total_column_width += (listcontrol_routes->GetColumnWidth(i));
     }
-    
     listcontrol_routes->SetMinSize(wxSize(total_column_width,-1));
-    
-    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
-    //listcontrol routes with routes
-    
+
+    //
     
     //button to show map
     button_show_map = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);

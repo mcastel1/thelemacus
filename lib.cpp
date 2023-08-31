@@ -10031,7 +10031,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     phi_max.read_from_file(String("maximal latitude"), String(path_file_init), new_prefix);
     
     
-    this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnClose<wxCloseEvent>, this);
+    this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
     
     
     mouse_scrolling = false;
@@ -15255,7 +15255,7 @@ void ListFrame::OnCloseFocusedChartFrame(wxCommandEvent& event){
     for(i=0; (i<(chart_frames.size())) && (((chart_frames[i])->IsActive()) == false); i++){}
     
     if(i<(chart_frames.size())){
-        (chart_frames[i])->OnClose(event);
+        (chart_frames[i])->OnPressCtrlW(event);
     }
     
 }
@@ -15265,7 +15265,7 @@ void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event){
     
     //closes all ChartFrames in chart_frames
     for(; 0<(chart_frames.size()); ){
-        (chart_frames[0])->OnClose(event);
+        (chart_frames[0])->OnPressCtrlW(event);
     }
     
     

@@ -270,7 +270,7 @@ public:
     MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
     
     wxPanel *panel;
-    wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
+    wxBoxSizer *frame_sizer, *sizer_v;
     wxGridSizer* sizer_grid;
     wxButton* button_ok;
     wxStaticBitmap* image;

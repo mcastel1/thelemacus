@@ -14637,8 +14637,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
     
     //allocate sizers
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    frame_sizer = new wxBoxSizer(wxVERTICAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
+
     //    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
     //    sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
@@ -14659,17 +14660,19 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value), -1));
     
     
-    sizer_v->Add(text, 0, wxEXPAND | wxALL, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_v->Add(image, 0, wxEXPAND | wxALL, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(button_ok, 0,  wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
-    //    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
-    sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    panel->SetSizer(sizer_v);
     
-    Maximize(panel);
+    //    frame_sizer->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
+    frame_sizer->Add(panel, wxSizerFlags().Expand());
+
+//    Maximize(panel);
     
-    //    sizer_h->Fit(panel);
-    SetSizerAndFit(sizer_h);
+    //    frame_sizer->Fit(panel);
+    SetSizerAndFit(frame_sizer);
     
     CentreOnScreen();
     

@@ -1479,13 +1479,13 @@ public:
     
     T* f;
     wxControl* control;
-    String title, message;
+    String title, message, image_path;
     FF_OK* f_ok;
     MessageFrame<FF_OK>* message_frame;
         
     PrintMessage(T*, FF_OK*);
     
-    void SetAndCall(wxControl*, String, String);
+    void SetAndCall(wxControl*, String, String, String);
     void operator()(void);
     
     

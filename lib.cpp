@@ -10989,7 +10989,7 @@ template<class T>void CheckBody::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name, String("Body not found in catalog!"), String("Body must be in catalog."));
+            (f->print_error_message)->SetAndCall(p->name, String("Body not found in catalog!"), String("Body must be in catalog."), String("path_file_error_icon"));
             
             (p->ok) = false;
             
@@ -11034,7 +11034,7 @@ template<class T> void CheckLimb::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, lower or center."));
+            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, lower or center."), String("path_file_error_icon"));
             (p->ok) = false;
             
         }
@@ -11112,7 +11112,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."));
+            (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."), String("path_file_error_icon"));
             (p->sign_ok) = false;
             
         }
@@ -11866,7 +11866,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     TabulateRoutes();
                     PaintNow();
                     
-                    print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."));
+                    print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."), String("path_file_error_icon"));
                     
                 }
                 
@@ -11883,7 +11883,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     //given that the position under consideration has changed, I re-pain the chart
                     PaintNow();
                     
-                    print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."));
+                    print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."), String("path_file_error_icon"));
                     
                 }
                 
@@ -12070,7 +12070,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                     s << "Zoom level must be >= 1 and <= " << ((wxGetApp().zoom_factor_max).value) << ".";
                     
                     //set the title and message for the functor print_error_message, and then call the functor
-                    print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()));
+                    print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()), String("path_file_error_icon"));
                     
                 }
                 
@@ -13108,7 +13108,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°"));
+            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°"), String("path_file_error_icon"));
             
             (p->deg_ok) = false;
             
@@ -13144,7 +13144,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"));
+            (f->print_error_message)->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"), String("path_file_error_icon"));
             
             (p->min_ok) = false;
             
@@ -13182,7 +13182,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"));
+            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"), String("path_file_error_icon"));
             
             (p->value_ok) = false;
             
@@ -13226,7 +13226,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."));
+            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."), String("path_file_error_icon"));
             
             (p->unit_ok) = false;
             
@@ -13535,7 +13535,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
             
             if(((control->GetForegroundColour()) != (wxGetApp().error_color))){
                 
-                message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+                message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
                 message_frame ->Show(true);
                 
                 control->SetFocus();
@@ -13552,7 +13552,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
             
         }else{
             
-            message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
         }
@@ -14619,7 +14619,7 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
 
 
 
-template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, const wxPoint& pos, wxString image_path, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxRect rectangle;
@@ -14656,7 +14656,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
     
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);
@@ -15409,18 +15409,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
     print_question->SetAndCall(NULL, String("You want to transport a position"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
- //    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
-//                                                                                                        existing_route,
-//                                                                                                        String("Existing route"),
-//                                                                                                        create_route, String("New route"),
-//                                                                                                        "",
-//                                                                                                        "With what route do you want to transport the position?",
-//                                                                                                        wxDefaultPosition,
-//                                                                                                        wxDefaultSize,
-//                                                                                                        String(""));
-//    question_frame->Show(true);
-//
-    OnModifyFile();
+     OnModifyFile();
     
     event.Skip(true);
     
@@ -15558,7 +15547,7 @@ void ListFrame::Disconnect(int i_sight){
     }
     
     //print an info message
-    print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."));
+    print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."), String("path_file_warning_icon"));
     
 }
 
@@ -16009,7 +15998,7 @@ template<class T> void CheckYear::operator()(T&event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"));
+            (f->print_error_message)->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), String("path_file_error_icon"));
             
             (p->year_ok) = false;
             (p->day)->Enable(false);
@@ -16054,7 +16043,7 @@ template<class T> void CheckMonth::operator()(T&event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"));
+            (f->print_error_message)->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), String("path_file_error_icon"));
             
             (p->month_ok) = false;
             (p->day)->Enable(false);
@@ -16105,7 +16094,7 @@ template<class T> void CheckDay::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"));
+            (f->print_error_message)->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"), String("path_file_error_icon"));
             
             (p->day_ok) = false;
             
@@ -16249,7 +16238,7 @@ template<class T> void CheckHour::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"));
+            (f->print_error_message)->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"), String("path_file_error_icon"));
             
             (p->hour_ok) = false;
             
@@ -16290,7 +16279,7 @@ template<class T> void CheckMinute::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"));
+            (f->print_error_message)->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"), String("path_file_error_icon"));
             
             (p->minute_ok) = false;
             
@@ -16331,7 +16320,7 @@ template<class T> void CheckSecond::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"));
+            (f->print_error_message)->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), String("path_file_error_icon"));
             
             (p->second_ok) = false;
             
@@ -16431,7 +16420,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."));
+            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."), String("path_file_error_icon"));
             
             (p->ok) = false;
             

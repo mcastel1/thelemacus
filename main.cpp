@@ -47,7 +47,8 @@
 
  ********** THINGS TO FIX ************
  
- - if one types a wrong entry in the projeciton field, no error message is displayed 
+ - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted 
+ - if one types a wrong entry in the projeciton field, no error message is displayed
  - in OnSelectRouteInListControlRoutesForTransport I cannot resize listcontrol_routes to account for the larger text resulting after the transport 
  - replace calls of QuestionFrame that do not use PrintQuestion by using PrintQUesiton 
  - meridians are still cut on the top in mercator projection 

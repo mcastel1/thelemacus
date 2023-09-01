@@ -22,6 +22,7 @@
  
  ********** THINGS TO ADD ************
  
+ - improve esthetics of framing in messageframe 
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
  with a better  choice
  - add an interface to load, save and close sight files

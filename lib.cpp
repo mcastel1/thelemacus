@@ -13004,10 +13004,12 @@ template<class F> SaveFile<F>::SaveFile(F* frame_in){
 
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
+  
+    //destroys frame
+    frame->Destroy();
     
     event.Skip(true);
-    
-    frame->Close(true);
+ 
     
 }
 
@@ -15772,10 +15774,11 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
         SaveFile<ListFrame>* save_file;
         CloseFrame<ListFrame>* close_frame;
         PrintQuestion<ListFrame, SaveFile<ListFrame>, CloseFrame<ListFrame>  >* print_question;
+        
         save_file = new SaveFile<ListFrame>(this);
         close_frame = new CloseFrame<ListFrame>(this);
-        
         print_question = new PrintQuestion<ListFrame, SaveFile<ListFrame>,  CloseFrame<ListFrame> >(this, save_file, close_frame);
+        
         print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
         
         

@@ -15745,8 +15745,17 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     
     
     if(file_has_been_modified){
-        //the user wants to close a file that has been modified 
+        //the user wants to close a file that has been modified
         
+            UnsetIdling<ListFrame>* unset_idling;
+            CloseFrame<ListFrame>* close;
+            PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
+            unset_idling = new UnsetIdling<ListFrame>(this);
+            close = new CloseFrame<ListFrame>(this);
+            
+            print_question = new PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(this, close, unset_idling);
+            print_question->SetAndCall(NULL, String("You pressed CTRL+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
+            
         
     }
     

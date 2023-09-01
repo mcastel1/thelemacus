@@ -14639,7 +14639,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     //allocate sizers
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
+//    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
 //    sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
     
@@ -14661,8 +14661,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     sizer_v->Add(text, 0, wxALIGN_CENTER);
     sizer_v->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    sizer_buttons->Add(button_ok, 0, wxALIGN_CENTER);
-    sizer_v->Add(sizer_buttons, 0, wxALIGN_CENTER);
+    sizer_v->Add(button_ok, 0, wxALIGN_CENTER);
     
 //    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);

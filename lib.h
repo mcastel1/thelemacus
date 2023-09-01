@@ -267,7 +267,7 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
 template<typename FF_OK> class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
     
     wxPanel *panel;
     wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;

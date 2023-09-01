@@ -14619,7 +14619,7 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
 
 
 
-template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
+template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, const wxPoint& pos, wxString image_path, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size){
     
     wxDisplay display;
     wxRect rectangle;
@@ -14656,7 +14656,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
     
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);

@@ -14640,7 +14640,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
-    sizer_grid = new wxGridSizer(3, 1, 0, 0);
+//    sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
     
     StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
@@ -14659,17 +14659,17 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value), -1));
     
     
-    sizer_grid->Add(text, 0, wxALIGN_CENTER);
-    sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
+    sizer_v->Add(text, 0, wxALIGN_CENTER);
+    sizer_v->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
     sizer_buttons->Add(button_ok, 0, wxALIGN_CENTER);
-    sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
+    sizer_v->Add(sizer_buttons, 0, wxALIGN_CENTER);
     
-    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
-    sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
+//    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
+    sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
     //  Maximize(panel);
     
-    sizer_v->Fit(panel);
-    panel->SetSizer(sizer_v);
+//    sizer_h->Fit(panel);
+    panel->SetSizerAndFit(sizer_h);
     
     CentreOnScreen();
     
@@ -14989,9 +14989,21 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     /*
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     File file_sample_sight;
-    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
+    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav"));
     plot->read_from_file(file_sample_sight, String(""));
     plot->print(true, String(""), cout);
+    */
+    
+    //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
+    /*
+    file_path = wxString("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav");
+    file.set_name(String(file_path.ToStdString()));
+    plot->read_from_file(file, String(""));
+    
+    menu_file->Enable(wxID_HIGHEST + 7, true);
+    set();
+    SetLabel(file_path);
+    DrawAll();
     */
     
     

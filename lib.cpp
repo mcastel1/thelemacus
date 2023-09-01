@@ -12995,6 +12995,13 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
     
 }
 
+template<class F> SaveFile<F>::SaveFile(F* frame_in){
+    
+    frame = frame_in;
+    
+}
+
+
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
     
@@ -13002,6 +13009,16 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
     
     frame->Close(true);
     
+}
+
+
+//saves the data in frame->plot to file frame->file
+template<class F> template <class T> void SaveFile<F>::operator()(T& event){
+    
+    
+    
+    event.Skip(true);
+        
 }
 
 
@@ -15747,15 +15764,15 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     if(file_has_been_modified){
         //the user wants to close a file that has been modified
         
-            UnsetIdling<ListFrame>* unset_idling;
-            CloseFrame<ListFrame>* close;
-            PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
-            unset_idling = new UnsetIdling<ListFrame>(this);
-            close = new CloseFrame<ListFrame>(this);
-            
-            print_question = new PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(this, close, unset_idling);
-            print_question->SetAndCall(NULL, String("You pressed CTRL+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
-            
+        UnsetIdling<ListFrame>* unset_idling;
+        CloseFrame<ListFrame>* close;
+        PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
+        unset_idling = new UnsetIdling<ListFrame>(this);
+        close = new CloseFrame<ListFrame>(this);
+        
+        print_question = new PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(this, close, unset_idling);
+        print_question->SetAndCall(NULL, String("You pressed CTRL+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
+        
         
     }
     

@@ -971,6 +971,18 @@ public:
     
 };
 
+template<class F> class SaveFile{
+    
+public:
+    
+    //the frame to be closed
+    F* frame;
+    SaveFile(F*);
+    
+    template<class T> void operator()(T&);
+    
+};
+
 
 //this checks if an element of the Body class is valid
 class CheckBody{

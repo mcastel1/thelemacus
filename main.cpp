@@ -276,7 +276,8 @@ bool MyApp::OnInit(){
     timer = new wxTimer();
     
     wxImage::AddHandler(new wxPNGHandler);
-    
+//    wxImage::AddHandler(new wxBMPHandler);
+
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));
     rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));

@@ -14656,7 +14656,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
     
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value), -1));
     
     
     sizer_grid->Add(text, 0, wxALIGN_CENTER);

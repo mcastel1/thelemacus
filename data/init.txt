@@ -57,6 +57,7 @@ plot area y margin over y size chart = 0.1
 standard thickness over length screen = 1.2e-3
 time check = 00:00:0.1
 large thickness over length screen = 3e-3
+size icon over width screen = 4e-2
 size small button over width screen = 2e-2
 size large button over width screen = 4e-2
 thickness route selection over length screen = 2e-2

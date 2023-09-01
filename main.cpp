@@ -47,6 +47,7 @@
 
  ********** THINGS TO FIX ************
  
+ - Class Close and CloseFrame are doubles -> remove Close
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted 
  - if one types a wrong entry in the projeciton field, no error message is displayed
  - in OnSelectRouteInListControlRoutesForTransport I cannot resize listcontrol_routes to account for the larger text resulting after the transport 

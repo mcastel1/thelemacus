@@ -13015,7 +13015,11 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 //saves the data in frame->plot to file frame->file
 template<class F> template <class T> void SaveFile<F>::operator()(T& event){
     
-    
+    ((frame->file)->value).open((frame->file_path).ToStdString());
+    (frame->plot).print(false, String(""), ((frame->file)->value));
+
+    ((frame->file)->value).close();
+
     
     event.Skip(true);
         

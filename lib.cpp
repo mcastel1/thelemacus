@@ -15744,14 +15744,11 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
 template<class E> void ListFrame::OnPressCtrlW(E& event){
     
     
-    //    if(plot == plot_saved){
-    //        //plot has not been edited
-    //
-    //    }else{
-    //        //plot has been edited
-    //
-    //
-    //    }
+    if(file_has_been_modified){
+        //the user wants to close a file that has been modified 
+        
+        
+    }
     
     
 }

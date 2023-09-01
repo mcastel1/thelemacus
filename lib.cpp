@@ -1165,7 +1165,7 @@ Rotation Rotation::operator *(const Rotation& s){
     //    (t.b) = acos(gsl_matrix_get(t.matrix, 2, 2));
     //    (t.a) = atan(gsl_matrix_get(t.matrix, 2, 1)/(-sin(t.b)), gsl_matrix_get(t.matrix, 2, 0)/(-sin(t.b)));
     //    (t.c) = atan(gsl_matrix_get(t.matrix, 1, 2)/sin(t.b), gsl_matrix_get(t.matrix, 0, 2)/(-sin(t.b)));
-    //    
+    //
     return t;
     
 }
@@ -14659,12 +14659,12 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value), -1));
     
     
-    sizer_v->Add(text, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_v->Add(image, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    sizer_v->Add(button_ok, 0,  wxALL | wxALIGN_CENTER, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(text, 0, wxEXPAND | wxALL, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(image, 0, wxEXPAND | wxALL, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(button_ok, 0,  wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     //    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
-    sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     Maximize(panel);
     
@@ -15743,11 +15743,11 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     
     //    if(plot == plot_saved){
     //        //plot has not been edited
-    //        
+    //
     //    }else{
     //        //plot has been edited
-    //        
-    //        
+    //
+    //
     //    }
     
     

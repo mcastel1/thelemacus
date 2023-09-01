@@ -13017,13 +13017,16 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 //saves the data in frame->plot to file frame->file
 template<class F> template <class T> void SaveFile<F>::operator()(T& event){
     
-    //remove the file to avoid overwriting 
+    //remove the file to avoid overwriting
     (frame->file).remove(String(""));
      
+    //open a new file
     ((frame->file).value).open((frame->file_path).ToStdString());
     
+    //write frame->plot into file
     (frame->plot)->print(false, String(""), ((frame->file).value));
 
+    //close the file
     ((frame->file).value).close();
 
     

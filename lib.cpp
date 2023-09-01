@@ -12953,7 +12953,7 @@ void DeletePosition::operator()(wxCommandEvent& event){
         
         //given that I called set in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
         (f->listcontrol_positions)->EnableButtons(false);
-
+        
         f->OnModifyFile();
         
     }
@@ -13445,7 +13445,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     (f->listcontrol_routes)->set<Route>((f->plot)->route_list);
     (f->listcontrol_routes)->Fit();
     f->Maximize(f->panel);
-
+    
     
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_change_selection_in_listcontrol_routes));
@@ -13527,40 +13527,40 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
     //you may need to put this back  - start
     //    if(!(f->idling)){
     //you may need to put this back  - end
-
-        //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-        (f->idling = true);
+    
+    //I may be about to prompt a temporary dialog window, thus I set f->idling to true
+    (f->idling = true);
+    
+    if(control != NULL){
         
-        if(control != NULL){
-            
-            if(((control->GetForegroundColour()) != (wxGetApp().error_color))){
-                
-                message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
-                message_frame ->Show(true);
-                
-                control->SetFocus();
-                control->SetForegroundColour((wxGetApp().error_color));
-                control->SetFont(wxGetApp().error_font);
-                //                Reset(control);
-                
-            }else{
-                //because in this case I don't print an error message frame, the code is no longer in idling mode
-                
-                (f->idling = false);
-                
-            }
-            
-        }else{
+        if(((control->GetForegroundColour()) != (wxGetApp().error_color))){
             
             message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame ->Show(true);
             
+            control->SetFocus();
+            control->SetForegroundColour((wxGetApp().error_color));
+            control->SetFont(wxGetApp().error_font);
+            //                Reset(control);
+            
+        }else{
+            //because in this case I don't print an error message frame, the code is no longer in idling mode
+            
+            (f->idling = false);
+            
         }
-       
+        
+    }else{
+        
+        message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame ->Show(true);
+        
+    }
+    
     //you may need to put this back  - start
-//    }
+    //    }
     //you may need to put this back  - end
-
+    
 }
 
 
@@ -14639,8 +14639,8 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     //allocate sizers
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-//    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
-//    sizer_grid = new wxGridSizer(3, 1, 0, 0);
+    //    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
+    //    sizer_grid = new wxGridSizer(3, 1, 0, 0);
     
     
     StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
@@ -14663,12 +14663,12 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     sizer_v->Add(image, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(button_ok, 0,  wxALL | wxALIGN_CENTER, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
-//    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
+    //    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
-        Maximize(panel);
+    Maximize(panel);
     
-//    sizer_h->Fit(panel);
+    //    sizer_h->Fit(panel);
     SetSizerAndFit(sizer_h);
     
     CentreOnScreen();
@@ -14850,7 +14850,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     plot = new Plot(catalog, String(""));
-
+    
     //read show_coastlines from file_init
     show_coastlines.read_from_file(String("show coastlines"), String(path_file_init), String(""));
     
@@ -14931,7 +14931,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
     menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
     menu_file->Append(wxID_HIGHEST + 7, "Close\tCtrl-w");
-
+    
     menu_bar->Append(menu_app, wxT("&App"));
     menu_bar->Append(menu_file, wxT("&File"));
     menu_bar->Append(menu_chart, wxT("&Chart"));
@@ -14946,7 +14946,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_bar->Bind(wxEVT_MENU, &MyApp::OnPressCtrlQ<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlO<wxCommandEvent>, this, wxID_HIGHEST + 6);
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlW<wxCommandEvent>, this, wxID_HIGHEST + 7);
-
+    
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
@@ -14987,24 +14987,24 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
     
     /*
-    //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
-    File file_sample_sight;
-    file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav"));
-    plot->read_from_file(file_sample_sight, String(""));
-    plot->print(true, String(""), cout);
-    */
+     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
+     File file_sample_sight;
+     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav"));
+     plot->read_from_file(file_sample_sight, String(""));
+     plot->print(true, String(""), cout);
+     */
     
     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
     /*
-    file_path = wxString("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav");
-    file.set_name(String(file_path.ToStdString()));
-    plot->read_from_file(file, String(""));
-    
-    menu_file->Enable(wxID_HIGHEST + 7, true);
-    set();
-    SetLabel(file_path);
-    DrawAll();
-    */
+     file_path = wxString("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav");
+     file.set_name(String(file_path.ToStdString()));
+     plot->read_from_file(file, String(""));
+     
+     menu_file->Enable(wxID_HIGHEST + 7, true);
+     set();
+     SetLabel(file_path);
+     DrawAll();
+     */
     
     
     //image for button_add_sight, button_add_position and button_add_route
@@ -15116,7 +15116,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.push_back(button_modify_position);
     disableable_buttons.push_back(button_transport_position);
     disableable_buttons.push_back(button_delete_position);
-  
+    
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions);
@@ -15128,7 +15128,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_positions->PushBackColumn(wxString("Latitude"));
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
     listcontrol_positions->PushBackColumn(wxString("Label"));
-        
+    
     sizer_box_position->Add(listcontrol_positions, 0,  wxALL, margin);
     
     
@@ -15136,7 +15136,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
     disableable_buttons.push_back(button_delete_route);
-        
+    
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
     on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes);
     //SetColor(listcontrol_routes);
@@ -15158,7 +15158,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_routes->PushBackColumn(wxString("Omega"));
     listcontrol_routes->PushBackColumn(wxString("Label"));
     listcontrol_routes->PushBackColumn(wxString("Related Sight"));
- 
+    
     
     sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
     //listcontrol routes with routes
@@ -15316,7 +15316,7 @@ void ListFrame::DrawAll(void){
 
 //set all the GUI fileds in *this from the data in this->plot and adapts the size of columns and panel accordingly
 void ListFrame::set(){
-        
+    
     //write the sights contained into plot->sight_list into listcontrol_sights
     listcontrol_sights->set(plot->sight_list);
     listcontrol_sights->Fit();
@@ -15394,16 +15394,16 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-//    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
-//                                                                                                        existing_route,
-//                                                                                                        String("Existing route"),
-//                                                                                                        create_route, String("New route"),
-//                                                                                                        "",
-//                                                                                                        "With what route do you want to transport the sight?",
-//                                                                                                        wxDefaultPosition,
-//                                                                                                        wxDefaultSize,
-//                                                                                                        String(""));
-//    question_frame->Show(true);
+    //    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
+    //                                                                                                        existing_route,
+    //                                                                                                        String("Existing route"),
+    //                                                                                                        create_route, String("New route"),
+    //                                                                                                        "",
+    //                                                                                                        "With what route do you want to transport the sight?",
+    //                                                                                                        wxDefaultPosition,
+    //                                                                                                        wxDefaultSize,
+    //                                                                                                        String(""));
+    //    question_frame->Show(true);
     
     OnModifyFile();
     
@@ -15421,7 +15421,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
     print_question->SetAndCall(NULL, String("You want to transport a position"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
-     OnModifyFile();
+    OnModifyFile();
     
     event.Skip(true);
     
@@ -15489,7 +15489,7 @@ void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
                                                                                                                                                       String(""));
     
     question_frame->Show(true);
-
+    
     
     event.Skip(true);
     
@@ -15508,7 +15508,7 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
                                                                                                                                         wxDefaultSize,
                                                                                                                                         String(""));
     question_frame->Show(true);
-        
+    
     event.Skip(true);
     
 }
@@ -15526,7 +15526,7 @@ void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
                                                                                                                                                       String(""));
     
     question_frame->Show(true);
-        
+    
     event.Skip(true);
     
 }
@@ -15684,7 +15684,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 
 void ListFrame::OnModifyFile(void){
     
-        //file has been modified
+    //file has been modified
     file_has_been_modified = true;
     
     //add a mark to the label of *this
@@ -15699,13 +15699,13 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
     
     if(openFileDialog.ShowModal() == wxID_CANCEL){
         
-             // the user changed his/her mind...
+        // the user changed his/her mind...
         
     }else{
         // proceed loading the file chosen by the user;
         
         wxFileInputStream input_stream(openFileDialog.GetPath());
-
+        
         if(!input_stream.IsOk()){
             
             wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
@@ -15715,7 +15715,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             file_path = openFileDialog.GetPath();
             file.set_name(String(file_path.ToStdString()));
             plot->read_from_file(file, String(""));
-//            plot->print(true, String(""), cout);
+            //            plot->print(true, String(""), cout);
             
             //emable the menu item to close file
             menu_file->Enable(wxID_HIGHEST + 7, true);
@@ -15733,22 +15733,22 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
     
     //the file has not been touched yet, thus
     file_has_been_modified = false;
-        
+    
     event.Skip(true);
     
 }
 
 template<class E> void ListFrame::OnPressCtrlW(E& event){
     
-
-//    if(plot == plot_saved){
-//        //plot has not been edited
-//        
-//    }else{
-//        //plot has been edited
-//        
-//        
-//    }
+    
+    //    if(plot == plot_saved){
+    //        //plot has not been edited
+    //        
+    //    }else{
+    //        //plot has been edited
+    //        
+    //        
+    //    }
     
     
 }

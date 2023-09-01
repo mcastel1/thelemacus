@@ -12995,7 +12995,7 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
     
 }
 
-template<class F> SaveFile<F>::SaveFile(F* frame_in){
+template<class F> SaveAndClose<F>::SaveAndClose(F* frame_in){
     
     frame = frame_in;
     
@@ -13014,20 +13014,23 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 }
 
 
-//saves the data in frame->plot to file frame->file
-template<class F> template <class T> void SaveFile<F>::operator()(T& event){
+//saves the data in frame->plot to file frame->file ,and closes frame
+template<class F> template <class T> void SaveAndClose<F>::operator()(T& event){
     
     //remove the file to avoid overwriting
     (frame->file).remove(String(""));
      
     //open a new file
-    ((frame->file).value).open(((frame->file).name).value);
+    (frame->file).open(String("out"), String(""));
     
     //write frame->plot into file
     (frame->plot)->print(false, String(""), ((frame->file).value));
 
     //close the file
-    ((frame->file).value).close();
+    (frame->file).close(String(""));
+    
+    //close frame
+    frame->Destroy();
 
     
     event.Skip(true);
@@ -15776,19 +15779,18 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     if(file_has_been_modified){
         //the user wants to close a file that has been modified
         
-        SaveFile<ListFrame>* save_file;
+        SaveAndClose<ListFrame>* save_and_close;
         CloseFrame<ListFrame>* close_frame;
-        PrintQuestion<ListFrame, SaveFile<ListFrame>, CloseFrame<ListFrame>  >* print_question;
+
+        PrintQuestion<ListFrame, SaveAndClose<ListFrame>, CloseFrame<ListFrame> >* print_question;
         
-        save_file = new SaveFile<ListFrame>(this);
+        save_and_close = new SaveAndClose<ListFrame>(this);
         close_frame = new CloseFrame<ListFrame>(this);
-        print_question = new PrintQuestion<ListFrame, SaveFile<ListFrame>,  CloseFrame<ListFrame> >(this, save_file, close_frame);
+        print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  CloseFrame<ListFrame> >(this, save_and_close, close_frame);
         
         print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
         
-        
     }
-    
     
 }
 

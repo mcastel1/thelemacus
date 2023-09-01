@@ -971,13 +971,13 @@ public:
     
 };
 
-template<class F> class SaveFile{
+template<class F> class SaveAndClose{
     
 public:
     
     //the frame to be closed
     F* frame;
-    SaveFile(F*);
+    SaveAndClose(F*);
     
     template<class T> void operator()(T&);
     

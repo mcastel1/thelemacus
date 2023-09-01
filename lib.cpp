@@ -13015,10 +13015,11 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 //saves the data in frame->plot to file frame->file
 template<class F> template <class T> void SaveFile<F>::operator()(T& event){
     
-    ((frame->file)->value).open((frame->file_path).ToStdString());
-    (frame->plot).print(false, String(""), ((frame->file)->value));
+    ((frame->file).value).open((frame->file_path).ToStdString());
+    
+    (frame->plot)->print(false, String(""), ((frame->file).value));
 
-    ((frame->file)->value).close();
+    ((frame->file).value).close();
 
     
     event.Skip(true);
@@ -15768,14 +15769,14 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     if(file_has_been_modified){
         //the user wants to close a file that has been modified
         
-        UnsetIdling<ListFrame>* unset_idling;
-        CloseFrame<ListFrame>* close;
-        PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
-        unset_idling = new UnsetIdling<ListFrame>(this);
-        close = new CloseFrame<ListFrame>(this);
+        SaveFile<ListFrame>* save_file;
+        CloseFrame<ListFrame>* close_frame;
+        PrintQuestion<ListFrame, SaveFile<ListFrame>, CloseFrame<ListFrame>  >* print_question;
+        save_file = new SaveFile<ListFrame>(this);
+        close_frame = new CloseFrame<ListFrame>(this);
         
-        print_question = new PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(this, close, unset_idling);
-        print_question->SetAndCall(NULL, String("You pressed CTRL+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
+        print_question = new PrintQuestion<ListFrame, SaveFile<ListFrame>,  CloseFrame<ListFrame> >(this, save_file, close_frame);
+        print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
         
         
     }

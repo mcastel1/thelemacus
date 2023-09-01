@@ -13021,7 +13021,7 @@ template<class F> template <class T> void SaveFile<F>::operator()(T& event){
     (frame->file).remove(String(""));
      
     //open a new file
-    ((frame->file).value).open((frame->file_path).ToStdString());
+    ((frame->file).value).open(((frame->file).name).value);
     
     //write frame->plot into file
     (frame->plot)->print(false, String(""), ((frame->file).value));
@@ -15745,8 +15745,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             
         }else{
             
-            file_path = openFileDialog.GetPath();
-            file.set_name(String(file_path.ToStdString()));
+            file.set_name(String((openFileDialog.GetPath()).ToStdString()));
             plot->read_from_file(file, String(""));
             //            plot->print(true, String(""), cout);
             
@@ -15755,7 +15754,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             //load the data in plot into the GUI fields of *this
             set();
             //change the title of *this to the filename
-            SetLabel(file_path);
+            SetLabel(wxString((file.name).value));
             //draw all charts according to the newly loaded data
             DrawAll();
             

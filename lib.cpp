@@ -14659,16 +14659,17 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value), -1));
     
     
-    sizer_v->Add(text, 0, wxALIGN_CENTER);
-    sizer_v->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    sizer_v->Add(button_ok, 0, wxALIGN_CENTER);
+    sizer_v->Add(text, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(image, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(button_ok, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
 //    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
-    sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    //  Maximize(panel);
+    sizer_h->Add(sizer_v, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    
+        Maximize(panel);
     
 //    sizer_h->Fit(panel);
-    panel->SetSizerAndFit(sizer_h);
+    SetSizerAndFit(sizer_h);
     
     CentreOnScreen();
     

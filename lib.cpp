@@ -12650,11 +12650,7 @@ template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in){
     
 }
 
-template<class P> Close<P>::Close(P* parent_in){
-    
-    parent = parent_in;
-    
-}
+
 
 
 AskRemoveRelatedSight::AskRemoveRelatedSight(ListFrame* parent_in){
@@ -12759,14 +12755,6 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     
 }
 
-template<class P> void Close<P>::operator()(wxCommandEvent& event){
-    
-    //destroys parent
-    parent->Destroy();
-    
-    event.Skip(true);
-    
-}
 
 void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
     

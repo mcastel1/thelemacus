@@ -1346,19 +1346,6 @@ public:
     
 };
 
-//this closes quits parent
-template<class P> class Close{
-    
-public:
-    
-    Close(P*);
-    
-    //the frame which called this struct
-    P* parent;
-
-    void operator()(wxCommandEvent&);
-    
-};
 
 
 //this functor pops up a QuestionFrame and asks the user whether he wants to remove the a Sight related to a Route

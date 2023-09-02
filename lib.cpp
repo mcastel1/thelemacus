@@ -15022,25 +15022,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
     
-    /*
-     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
-     File file_sample_sight;
-     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav"));
-     plot->read_from_file(file_sample_sight, String(""));
-     plot->print(true, String(""), cout);
-     */
-    
-    //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
-    /*
-     file_path = wxString("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav");
-     file.set_name(String(file_path.ToStdString()));
-     plot->read_from_file(file, String(""));
-     
-     menu_file->Enable(wxID_HIGHEST + 7, true);
-     set();
-     SetLabel(file_path);
-     DrawAll();
-     */
     
     
     //image for button_add_sight, button_add_position and button_add_route
@@ -15198,6 +15179,25 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
     //listcontrol routes with routes
+    
+    /*
+     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
+     File file_sample_sight;
+     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav"));
+     plot->read_from_file(file_sample_sight, String(""));
+     plot->print(true, String(""), cout);
+     */
+    
+    //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
+    //
+     file.set_name(String("/Users/macbookpro/Dropbox/sight_reduction_program/sample_sight.nav"));
+     plot->read_from_file(file, String(""));
+     
+     menu_file->Enable(wxID_HIGHEST + 7, true);
+     set();
+     SetLabel(file.name.value);
+     DrawAll();
+     //
     
     
     set();
@@ -18253,16 +18253,14 @@ template<class T> void ListControl::set(vector<T> v){
     
     unsigned int i;
     
-    
     DeleteAllItems();
     
     for(i=0; i<v.size(); i++){
         (v[i]).add_to_wxListCtrl(-1, this);
     }
     
-    
-    
 }
+
 
 //if check = true/false it enables/disables all disableable buttons in *this
 void ListControl::EnableButtons(bool check){

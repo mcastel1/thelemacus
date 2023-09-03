@@ -14746,6 +14746,9 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     button_b->Bind(wxEVT_BUTTON, *f_b);
     button_b->Bind(wxEVT_BUTTON, *close_frame);
     
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(QuestionFrame::KeyDown), this);
+
+    
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
@@ -14769,27 +14772,32 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 //if the user presses return/escape, I call f_a / f_b
 template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F_B>::KeyDown(E& event){
     
-    
+    wxCommandEvent dummy;
+
     switch(event.GetKeyCode()){
 
-        case WXK_RETURN:
+        case WXK_RETURN:{
             //the user pressed return
+            
 
-            (*f_a)();
-
+            (*f_a)(dummy);
+            
             break;
+            
+        }
 
-        case WXK_ESCAPE:
+        case WXK_ESCAPE:{
             //the user pressed esc
-
-            (*f_b)();
-
+                        
+            (*f_b)(dummy);
+            
             break;
-
-
+            
+        }
 
     }
-
+    
+    (*close_frame)(dummy);
 
     event.Skip(true);
     

@@ -14766,6 +14766,34 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     
 }
 
+template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F_B>::KeyDown(E& event){
+    
+    
+    switch(event.GetKeyCode()){
+
+        case WXK_RETURN:
+            //the user pressed return
+
+
+
+            break;
+
+        case WXK_ESCAPE:
+            //the user pressed esc
+
+
+            break;
+
+
+
+    }
+
+
+    event.Skip(true);
+    
+    
+}
+
 template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, FF_OK* f_ok_in){
     
     f = f_in;

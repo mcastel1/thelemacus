@@ -305,6 +305,8 @@ public:
     //pointer to the struct containing the functor which will be called when the button no is pressed
     F_B* f_b;
     String string_a, string_b;
+    
+    template<class E> void KeyDown(E&);
 
 };
 

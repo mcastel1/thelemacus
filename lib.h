@@ -286,7 +286,7 @@ public:
 
 };
 
-//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor struct which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B.
+//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor struct which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called 
 template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{
     
 public:

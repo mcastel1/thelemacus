@@ -14766,6 +14766,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     
 }
 
+//if the user presses return/escape, I call f_a / f_b
 template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F_B>::KeyDown(E& event){
     
     
@@ -14774,13 +14775,14 @@ template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F
         case WXK_RETURN:
             //the user pressed return
 
-
+            (*f_a)();
 
             break;
 
         case WXK_ESCAPE:
             //the user pressed esc
 
+            (*f_b)();
 
             break;
 

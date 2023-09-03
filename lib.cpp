@@ -14687,11 +14687,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     panel->SetSizer(sizer_v);
     
-    //    frame_sizer->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
     frame_sizer->Add(panel, wxSizerFlags().Expand());
 
-//    Maximize(panel);
-    
+    //    Maximize(panel);
     //    frame_sizer->Fit(panel);
     SetSizerAndFit(frame_sizer);
     
@@ -14734,10 +14732,9 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
     
     //allocate sizers
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    frame_sizer = new wxBoxSizer(wxVERTICAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
-    sizer_grid = new wxGridSizer(3, 1, 0, 0);
+    sizer_grid = new wxGridSizer(1, 2, 0, 0);
     
     StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
     
@@ -14752,17 +14749,18 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
-    sizer_grid->Add(text, 0, wxALIGN_CENTER);
-    sizer_grid->Add(image, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    sizer_buttons->Add(button_a, 0, wxALIGN_CENTER);
-    sizer_buttons->Add(button_b, 0, wxALIGN_CENTER);
-    sizer_grid->Add(sizer_buttons, 0, wxALIGN_CENTER);
-    
-    sizer_h->Add(sizer_grid, 0, wxALIGN_CENTER_VERTICAL);
-    sizer_v->Add(sizer_h, 0, wxALIGN_CENTER);
-    
-    sizer_v->Fit(panel);
+    sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_grid->Add(button_a, 0, wxALIGN_CENTER);
+    sizer_grid->Add(button_b, 0, wxALIGN_CENTER);
+    sizer_v->Add(sizer_grid, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+
     panel->SetSizer(sizer_v);
+
+    frame_sizer->Add(panel, wxSizerFlags().Expand());
+
+    SetSizerAndFit(frame_sizer);
+
     
     CentreOnScreen();
     

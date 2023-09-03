@@ -294,7 +294,7 @@ public:
     
     //the non-GUI object connected to the GUI object MessageFrame
     wxPanel *panel;
-    wxBoxSizer *sizer_h, *sizer_v, *sizer_buttons;
+    wxBoxSizer *frame_sizer, *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
     wxButton* button_a, *button_b;
     wxStaticBitmap* image;

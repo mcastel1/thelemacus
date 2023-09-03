@@ -5762,9 +5762,9 @@ void Plot::menu(String prefix){
                 
                 
                 file.name.enter(String("name of data file (without extension)"), new_prefix);
-                //add the extension .sav to name of sav file and the extension .kml to the name kml file
+                //add the extension .nav to name of sav file and the extension .kml to the name kml file
                 temp.str("");
-                temp << file.name.value << ".sav";
+                temp << file.name.value << ".nav";
                 temp_kml << file.name.value << ".kml";
                 file.set_name(temp.str());
                 file_kml.set_name(temp_kml.str());
@@ -5812,7 +5812,7 @@ void Plot::menu(String prefix){
             
             line_ins.str("");
             line.enter(String("name of file (without extension)"), new_prefix);
-            line_ins << line.value << ".sav";
+            line_ins << line.value << ".nav";
             
             file.set_name(String(line_ins.str()));
             
@@ -5834,7 +5834,7 @@ void Plot::menu(String prefix){
             
             //get date and time, which will be used for filename
             get_date_hour(line, new_prefix);
-            line = line.append(String(".sav"));
+            line = line.append(String(".nav"));
             
             //print all plots to file with the filename above
             ((file.name).value) = line.value;

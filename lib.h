@@ -23,6 +23,7 @@
 
 
 class BodyField;
+class ProjectionField;
 class LimbField;
 template<class T> class CheckField;
 template<class P> class AngleField;
@@ -57,6 +58,7 @@ class Atmosphere;
 class Answer;
 class Body;
 class String;
+class CheckProjection;
 
 
 //a class for color objects
@@ -986,7 +988,7 @@ public:
 };
 
 
-//this checks if an element of the Body class is valid
+//this checks if an element of the BodyField class is valid
 class CheckBody{
     
 public:
@@ -998,6 +1000,19 @@ public:
     
     
 };
+
+//this checks if an element of the ProjectionField class is valid
+class CheckProjection{
+    
+public:
+    
+    ProjectionField* p;
+    
+    CheckProjection(ProjectionField*);
+    template<class T> void operator()(T&);
+    
+};
+
 
 
 struct CheckLimb{

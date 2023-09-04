@@ -12977,6 +12977,105 @@ CheckBody::CheckBody(BodyField* p_in){
     
 }
 
+
+CheckProjection::CheckProjection(ProjectionField* p_in){
+    
+    p = p_in;
+    
+}
+
+template<class T>void CheckProjection::operator()(T& event){
+    
+    ChartFrame* f = (p->parent);
+    
+    //I proceed only if the progam is not is indling mode
+    if(!(f->idling)){
+        
+        unsigned int i;
+        bool check;
+        
+        //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
+        for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
+            if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
+                check = true;
+            }
+        }
+        i--;
+        
+        if(check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
+            //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+            
+            
+            if(check){
+                
+                if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
+                    //in this case, the selected Projection is a Projection which has a limb -> I enable the limb field
+                    
+                    ((f->limb)->name)->Enable(true);
+                    
+                }else{
+                    //in this case, the selected Projection is a Projection which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
+                    
+                    ((f->limb)->name)->Enable(false);
+                    ((f->limb)->ok) = true;
+                    
+                }
+                
+                if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
+                    //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+                    
+                    unsigned int j;
+                    stringstream ins;
+                    String prefix, s;
+                    
+                    prefix = String("");
+                    
+                    (p->recent_items)[(p->recent_items).size()-1] = i;
+                    rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
+                    
+                    for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
+                        ins << (p->recent_items)[j] << " ";
+                    }
+                    s = String(ins.str());
+                    
+                    (p->file_recent).open(String("in"), prefix);
+                    cout << prefix.value << YELLOW << "Writing recent items of Projection field to file " << (p->file_recent).name.value << " ...\n" << RESET;
+                    s.write_to_file(String("Projection"), p->file_recent, String(""));
+                    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+                    (p->file_recent).close(prefix);
+                    
+                    //I update p->bodies according to the content of file_recent
+                    p->read_recent_items();
+                    
+                }
+                
+                
+            }
+            
+            //if check is true (false) -> set ok to true (false)
+            (p->ok) = check;
+            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
+            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name)->SetFont(wxGetApp().default_font);
+            Reset(p->name);
+            
+        }else{
+            
+            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in catalog!"), String("Body must be in catalog."), String(path_file_error_icon));
+            
+            (p->ok) = false;
+            
+        }
+        
+        f->AllOk();
+        
+    }
+    
+    event.Skip(true);
+    
+}
+
+
 template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
     
     frame = frame_in;

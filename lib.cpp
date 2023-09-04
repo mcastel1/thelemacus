@@ -12995,8 +12995,8 @@ template<class T>void CheckProjection::operator()(T& event){
         bool check;
         
         //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
-        for(check = false, i=0; (i<((p->catalog)->list).size()) && (!check); i++){
-            if(String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)){
+        for(check = false, i=0; (i<(p->types).size()) && (!check); i++){
+            if(((p->name)->GetValue()) == ((p->types)[i])){
                 check = true;
             }
         }

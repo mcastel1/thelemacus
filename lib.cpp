@@ -13919,37 +13919,29 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 //if a key is pressed in the keyboard, I call this function
 void SightFrame::KeyDown(wxKeyEvent& event){
     
-    
-    
-    switch((event.GetKeyCode())){
-            
-        case WXK_ESCAPE:{
-            // the use pressed escape -> I do as if the user pressed button_cancel
-            
-            wxCommandEvent dummy;
-            OnPressCancel(dummy);
-            
-            break;
-            
-        }
-            
-            
-        case WXK_RETURN:{
-            //the user pressed return
+    if((event.GetKeyCode()) == WXK_ESCAPE){
+        // the use pressed escape -> I do as if the user pressed button_cancel
+           
+           wxCommandEvent dummy;
+        
+           OnPressCancel(dummy);
+  
+    }else{
+        
+        if(((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)){
+            //the user pressed return or numpad return
             
             if(is_ok()){
-                //if all fields are ok, I do as if the user presssed button_reduce
+                       //if all fields are ok, I do as if the user presssed button_reduce
+                       
+                       wxCommandEvent dummy;
                 
-                wxCommandEvent dummy;
-                OnPressReduce(dummy);
-                
-            }
-            
-            break;
-            
+                       OnPressReduce(dummy);
+                       
+                   }
+                   
         }
-            
-            
+        
     }
     
     event.Skip(true);

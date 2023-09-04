@@ -14746,40 +14746,38 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     
 }
 
+
+
+
 //if the user presses return/escape, I call f_a / f_b
 template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F_B>::KeyDown(E& event){
     
     wxCommandEvent dummy;
 
-    switch(event.GetKeyCode()){
-
-        case WXK_RETURN:{
-            //the user pressed return
+    if((event.GetKeyCode()) == WXK_ESCAPE){
+        //the user pressed esc
+                    
+        (*f_b)(dummy);
+    
+  
+    }else{
+        
+        if(((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)){
+            //the user pressed return or numpad return
             
-
             (*f_a)(dummy);
-            
-            break;
-            
+                   
         }
-
-        case WXK_ESCAPE:{
-            //the user pressed esc
-                        
-            (*f_b)(dummy);
-            
-            break;
-            
-        }
-
+        
     }
     
     (*close_frame)(dummy);
 
+    
     event.Skip(true);
     
-    
 }
+
 
 template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, FF_OK* f_ok_in){
     

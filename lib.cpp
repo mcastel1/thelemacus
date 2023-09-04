@@ -13003,23 +13003,11 @@ template<class T>void CheckProjection::operator()(T& event){
         i--;
         
         if(check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
-            //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             
             if(check){
-                
-                if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
-                    //in this case, the selected Projection is a Projection which has a limb -> I enable the limb field
-                    
-                    ((f->limb)->name)->Enable(true);
-                    
-                }else{
-                    //in this case, the selected Projection is a Projection which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
-                    
-                    ((f->limb)->name)->Enable(false);
-                    ((f->limb)->ok) = true;
-                    
-                }
+            
                 
                 if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
                     //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent

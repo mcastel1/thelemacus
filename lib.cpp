@@ -16701,6 +16701,9 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     types.Add(wxT("3D"));
     //    types.Add(wxT("Lambert"));
     
+    check = new CheckProjection(this);
+
+    
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     //SetColor(name);
     name->SetValue(types[0]);
@@ -16708,7 +16711,8 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
     name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-    
+    name->Bind(wxEVT_KILL_FOCUS, *check);
+
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     

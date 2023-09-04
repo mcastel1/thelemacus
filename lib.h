@@ -1667,6 +1667,7 @@ public:
 
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
+    CheckProjection* check;
     bool ok;
 
     ProjectionField(ChartFrame*);

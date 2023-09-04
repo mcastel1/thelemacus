@@ -13005,7 +13005,7 @@ template<class T>void CheckProjection::operator()(T& event){
         if(check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
-            
+            /*
             if(check){
             
                 
@@ -13039,6 +13039,7 @@ template<class T>void CheckProjection::operator()(T& event){
                 
                 
             }
+             */
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
@@ -13049,7 +13050,7 @@ template<class T>void CheckProjection::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in catalog!"), String("Body must be in catalog."), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String("Projection must be in the list."), String(path_file_error_icon));
             
             (p->ok) = false;
             

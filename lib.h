@@ -1668,9 +1668,15 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckProjection* check;
+    
+    File file_recent;
+    vector<int> recent_items;
+    
     bool ok;
 
     ProjectionField(ChartFrame*);
+    void read_recent_items(void);
+    void write_recent_items(void);
     template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
     

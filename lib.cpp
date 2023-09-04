@@ -16701,12 +16701,16 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     types.Add(wxT("3D"));
     //    types.Add(wxT("Lambert"));
     
+    //sets the name of file_recent for future use
+    file_recent.set_name(String(path_file_recent));
+    
     check = new CheckProjection(this);
 
     
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
     //SetColor(name);
     name->SetValue(types[0]);
+    read_recent_items();
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
@@ -16722,6 +16726,99 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
 }
 
 
+//reads from file_recent the recently selected items in the dropdown menu of ProjectionField and updates the dropdown menu in such a way that the recent items appear on top of it
+void ProjectionField::read_recent_items(void){
+    
+    unsigned int i, j;
+    wxArrayString types_temp;
+    String prefix, s;
+    size_t pos_end;
+    bool is_present;
+    wxString temp;
+    
+    prefix = String("");
+    
+    //save the current value of name in temp
+    temp = name->GetValue();
+    
+    for(types_temp.Clear(), i=0; i<(types.GetCount()); i++){
+        types_temp.Add(types[i]);
+        temp = types_temp[i];
+    }
+    
+    //read the recently selected items from file_recent
+    s.read_from_file(String("Projection"), String(path_file_recent), String(""));
+    
+    recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
+    for(i=0; i<(recent_items.size()); i++){
+        
+        pos_end = (s.value).find(" ", 0);
+        recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
+        (s.value) = ((s.value).substr(pos_end+1, string::npos));
+        
+    }
+    
+    types.Clear();
+    
+    //    cout << "Before: types_temp = ";
+    //    for(i=0; i<types_temp.GetCount(); i++){
+    //        cout << (types_temp[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
+    //
+    //    cout << "Before: Bodies = ";
+    //    for(i=0; i<bodies.GetCount(); i++){
+    //        cout << (bodies[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
+    
+    //I first add to bodies the recently selected celestial bodies written in recent_items
+    for(i=0; i<recent_items.size(); i++){
+        
+        types.Add(types_temp[recent_items[i]]);
+        
+    }
+    
+    //then, I fill types with the remaining projections
+    for(i=0; i<(types_temp.GetCount()); i++){
+        
+        for(is_present = false, j=0; (j<types.GetCount()) && (!is_present); j++){
+            
+            if(types[j] == types_temp[i]){
+                is_present = true;
+            }
+            
+        }
+        
+        if(!is_present){
+            types.Add(types_temp[i]);
+        }
+        
+    }
+    
+    name->Set(types);
+    
+    //because name->Set(bodies clears the value of name, I set the value of name back to temp
+    name->SetValue(temp);
+    
+    //
+    //    cout << "After: types_temp = ";
+    //    for(i=0; i<types_temp.GetCount(); i++){
+    //        cout << (types_temp[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
+    //
+    //    cout << "After: Projections = ";
+    //    for(i=0; i<types.GetCount(); i++){
+    //        cout << (types[i]).ToStdString() << " ";
+    //    }
+    //    cout << "\n";
+    
+    types_temp.Clear();
+    
+}
+
+
 //constructor of a BodyField object, based on the parent frame frame
 BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
@@ -16732,10 +16829,6 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     
     //sets the name of file_recent for future use
     file_recent.set_name(String(path_file_recent));
-    
-    
-    
-    //    write_recent_items();
     
     check = new CheckBody(this);
     
@@ -18083,9 +18176,6 @@ void BodyField::read_recent_items(void){
         
     }
     
-    
-    
-    
     bodies.Clear();
     
     //    cout << "Before: Bodies_temp = ";
@@ -18143,8 +18233,6 @@ void BodyField::read_recent_items(void){
     //    cout << "\n";
     
     bodies_temp.Clear();
-    
-    
     
 }
 

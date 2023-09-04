@@ -14465,21 +14465,17 @@ void RouteFrame::AllOk(void){
 //if a key is pressed in the keyboard, I call this function
 void RouteFrame::KeyDown(wxKeyEvent& event){
     
-    switch((event.GetKeyCode())){
-            
-        case WXK_ESCAPE:{
-            //the user pressed escape -> I do as if the user pressed button_cancel
-            
-            wxCommandEvent dummy;
-            
-            OnPressCancel(dummy);
-            
-            break;
-            
-        }
-            
-        case WXK_RETURN:{
-            //the user pressed return
+    if((event.GetKeyCode()) == WXK_ESCAPE){
+        //the user pressed escape -> I do as if the user pressed button_cancel
+        
+        wxCommandEvent dummy;
+        
+        OnPressCancel(dummy);
+        
+    }else{
+        
+        if(((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)){
+            //the user pressed return or numpad return
             
             if(is_ok()){
                 //if all fields are ok, I do as if the user presssed button_ok
@@ -14490,11 +14486,8 @@ void RouteFrame::KeyDown(wxKeyEvent& event){
                 
             }
             
-            break;
-            
         }
-            
-            
+        
     }
     
     event.Skip(true);

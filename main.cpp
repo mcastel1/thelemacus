@@ -46,7 +46,6 @@
 
  ********** THINGS TO FIX ************
  
- - make sure that everything that is bound to key return is also bound to return from keypad 
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted 
  - if one types a wrong entry in the projeciton field, no error message is displayed
  - in OnSelectRouteInListControlRoutesForTransport I cannot resize listcontrol_routes to account for the larger text resulting after the transport 

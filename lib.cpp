@@ -16735,11 +16735,10 @@ void ProjectionField::read_recent_items(void){
     prefix = String("");
     
     //save the current value of name in temp
-    temp = name->GetValue();
+    temp = (name->GetValue());
     
     for(types_temp.Clear(), i=0; i<(types.GetCount()); i++){
         types_temp.Add(types[i]);
-        temp = types_temp[i];
     }
     
     //read the recently selected items from file_recent
@@ -18177,12 +18176,10 @@ void BodyField::read_recent_items(void){
     prefix = String("");
     
     //save the current value of name in temp
-    temp = name->GetValue();
+    temp = (name->GetValue());
     
     for(bodies_temp.Clear(), i=0; i<(catalog->list).size(); i++){
         bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
-        wxString temp = bodies_temp[i];
-        
     }
     
     //read the recently selected items from file_recent

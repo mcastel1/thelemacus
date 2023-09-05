@@ -13011,9 +13011,12 @@ template<class T>void CheckProjection::operator()(T& event){
             
             if(check){
             
+                vector<int>::iterator position;
+
+                position = find((p->recent_items).begin(), (p->recent_items).end(), i);
                 
-                if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
-                    //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+                if(position == (p->recent_items).end()){
+                    //the selected item is not in the recent list: I write it in the recent list and in file_recent
                     
 //                    unsigned int j;
 //                    stringstream ins;
@@ -13041,6 +13044,10 @@ template<class T>void CheckProjection::operator()(T& event){
                     
                     //I update p->bodies according to the content of file_recent
                     p->read_recent_items();
+                    
+                }else{
+                    //the selected item is  in the recent list: I write it in the recent list and in file_recent
+                    
                     
                 }
                 

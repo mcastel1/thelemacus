@@ -13008,22 +13008,23 @@ template<class T>void CheckProjection::operator()(T& event){
         if(check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))){
             //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
-            /*
+            
             if(check){
             
                 
                 if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
                     //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
                     
-                    unsigned int j;
-                    stringstream ins;
-                    String prefix, s;
+//                    unsigned int j;
+//                    stringstream ins;
+                    String prefix/*, s*/;
                     
                     prefix = String("");
                     
                     (p->recent_items)[(p->recent_items).size()-1] = i;
                     rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
                     
+                    /*
                     for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
                         ins << (p->recent_items)[j] << " ";
                     }
@@ -13034,6 +13035,9 @@ template<class T>void CheckProjection::operator()(T& event){
                     s.write_to_file(String("Projection"), p->file_recent, String(""));
                     cout << prefix.value << YELLOW << "... done.\n" << RESET;
                     (p->file_recent).close(prefix);
+                     */
+                    p->write_recent_items();
+
                     
                     //I update p->bodies according to the content of file_recent
                     p->read_recent_items();
@@ -13042,7 +13046,7 @@ template<class T>void CheckProjection::operator()(T& event){
                 
                 
             }
-             */
+             
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
@@ -16821,6 +16825,31 @@ void ProjectionField::read_recent_items(void){
     
 }
 
+//write the recent items in recent_itams to file
+void ProjectionField::write_recent_items(void){
+    
+    String prefix, s;
+    stringstream temp;
+    unsigned int i;
+
+    
+    prefix = String("");
+
+    for(temp.str(""), i=0; i<(recent_items.size()); i++){
+        temp << recent_items[i] << " ";
+    }
+    s = String(temp.str().c_str());
+    
+    file_recent.open(String("in"), prefix);
+    
+    cout << prefix.value << YELLOW << "Writing recent items of projection field to file " << file_recent.name.value << " ...\n" << RESET;
+    s.write_to_file(String("projection"), file_recent, String(""));
+    
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    file_recent.close(prefix);
+    
+}
+
 
 //constructor of a BodyField object, based on the parent frame frame
 BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
@@ -18239,6 +18268,7 @@ void BodyField::read_recent_items(void){
     
 }
 
+//write the recent items in recent_itams to file
 void BodyField::write_recent_items(void){
     
     String prefix, s;

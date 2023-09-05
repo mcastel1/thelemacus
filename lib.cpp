@@ -13018,39 +13018,24 @@ template<class T>void CheckProjection::operator()(T& event){
                 if(position == (p->recent_items).end()){
                     //the selected item is not in the recent list: I write it in the recent list and in file_recent
                     
-//                    unsigned int j;
-//                    stringstream ins;
-                    String prefix/*, s*/;
+                    String prefix;
                     
                     prefix = String("");
                     
                     (p->recent_items)[(p->recent_items).size()-1] = i;
                     rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
                     
-                    /*
-                    for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
-                        ins << (p->recent_items)[j] << " ";
-                    }
-                    s = String(ins.str());
-                    
-                    (p->file_recent).open(String("in"), prefix);
-                    cout << prefix.value << YELLOW << "Writing recent items of Projection field to file " << (p->file_recent).name.value << " ...\n" << RESET;
-                    s.write_to_file(String("Projection"), p->file_recent, String(""));
-                    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-                    (p->file_recent).close(prefix);
-                     */
-                    p->write_recent_items();
-
-                    
-                    //I update p->bodies according to the content of file_recent
-                    p->read_recent_items();
-                    
                 }else{
-                    //the selected item is  in the recent list: I write it in the recent list and in file_recent
+                    //the selected item is  in the recent list: I move the element in position to the first place in recent_items
                     
+                    iter_swap((p->recent_items).begin(), position);
                     
                 }
                 
+                //write newly updated recent_items to file
+                p->write_recent_items();
+                //                //I update p->types according to the content of file_recent
+                p->read_recent_items();
                 
             }
              

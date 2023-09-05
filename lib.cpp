@@ -10936,6 +10936,8 @@ template<class T>void CheckBody::operator()(T& event){
             
             if(check){
                 
+                vector<int>::iterator position;
+                
                 if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
                     
@@ -10948,39 +10950,34 @@ template<class T>void CheckBody::operator()(T& event){
                     ((f->limb)->ok) = true;
                     
                 }
+            
+                position = find((p->recent_items).begin(), (p->recent_items).end(), i);
+      
                 
-                if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
+                if(position == (p->recent_items).end()){
                     //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
                     
-//                    unsigned int j;
-//                    stringstream ins;
-                    String prefix/*, s*/;
+                    String prefix;
                     
                     prefix = String("");
                     
                     (p->recent_items)[(p->recent_items).size()-1] = i;
                     rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
+  
+
+                }else{
                     
-                    /*
-                    for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
-                        ins << (p->recent_items)[j] << " ";
-                    }
-                    s = String(ins.str());
+                    //the selected item is  in the recent list: I move the element in position to the first place in recent_items
                     
-                    (p->file_recent).open(String("in"), prefix);
-                    cout << prefix.value << YELLOW << "Writing recent items of body field to file " << (p->file_recent).name.value << " ...\n" << RESET;
-                    s.write_to_file(String("body"), p->file_recent, String(""));
-                    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-                    (p->file_recent).close(prefix);
-                     */
-                    p->write_recent_items();
-                    
-                    //I update p->bodies according to the content of file_recent
-                    p->read_recent_items();
-                    
+                    iter_swap((p->recent_items).begin(), position);
+           
                 }
                 
-                
+                //write newly updated recent_items to file
+                p->write_recent_items();
+                //I update p->bodies according to the content of file_recent
+                p->read_recent_items();
+
             }
             
             //if check is true (false) -> set ok to true (false)
@@ -13034,7 +13031,7 @@ template<class T>void CheckProjection::operator()(T& event){
                 
                 //write newly updated recent_items to file
                 p->write_recent_items();
-                //                //I update p->types according to the content of file_recent
+                //I update p->types according to the content of file_recent
                 p->read_recent_items();
                 
             }

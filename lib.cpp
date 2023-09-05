@@ -16747,7 +16747,7 @@ void ProjectionField::read_recent_items(void){
     }
     
     //read the recently selected items from file_recent
-    s.read_from_file(String("Projection"), String(path_file_recent), String(""));
+    s.read_from_file(String("projection"), String(path_file_recent), String(""));
     
     recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
     for(i=0; i<(recent_items.size()); i++){

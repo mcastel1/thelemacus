@@ -10952,15 +10952,16 @@ template<class T>void CheckBody::operator()(T& event){
                 if(find((p->recent_items).begin(), (p->recent_items).end(), i) == (p->recent_items).end()){
                     //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
                     
-                    unsigned int j;
-                    stringstream ins;
-                    String prefix, s;
+//                    unsigned int j;
+//                    stringstream ins;
+                    String prefix/*, s*/;
                     
                     prefix = String("");
                     
                     (p->recent_items)[(p->recent_items).size()-1] = i;
                     rotate((p->recent_items).begin(), (p->recent_items).end()-1, (p->recent_items).end());
                     
+                    /*
                     for(ins.str(""), j=0; j<(p->recent_items).size(); j++){
                         ins << (p->recent_items)[j] << " ";
                     }
@@ -10971,6 +10972,8 @@ template<class T>void CheckBody::operator()(T& event){
                     s.write_to_file(String("body"), p->file_recent, String(""));
                     cout << prefix.value << YELLOW << "... done.\n" << RESET;
                     (p->file_recent).close(prefix);
+                     */
+                    p->write_recent_items();
                     
                     //I update p->bodies according to the content of file_recent
                     p->read_recent_items();

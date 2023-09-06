@@ -15879,12 +15879,16 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     
 }
 
-
+//write content of plot into file
 template<class E> void ListFrame::OnPressCtrlS(E& event){
     
+    file.open(String("out"), String(""));
+    plot->print(false, String(""), file.value);
+    file.close(String(""));
     
-        
-    
+    //I saved -> the file is no longer tagged as modified
+    file_has_been_modified = false;
+
     event.Skip(true);
 
 }

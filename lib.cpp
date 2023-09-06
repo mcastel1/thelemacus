@@ -15050,7 +15050,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
     menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
     menu_file->Append(wxID_HIGHEST + 7, "Close\tCtrl-w");
-    
+    menu_file->Append(wxID_HIGHEST + 8, "Save\tCtrl-s");
+
     menu_bar->Append(menu_app, wxT("&App"));
     menu_bar->Append(menu_file, wxT("&File"));
     menu_bar->Append(menu_chart, wxT("&Chart"));
@@ -15065,7 +15066,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_bar->Bind(wxEVT_MENU, &MyApp::OnPressCtrlQ<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlO<wxCommandEvent>, this, wxID_HIGHEST + 6);
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlW<wxCommandEvent>, this, wxID_HIGHEST + 7);
-    
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlS<wxCommandEvent>, this, wxID_HIGHEST + 8);
+
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
@@ -15876,6 +15878,17 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     }
     
 }
+
+
+template<class E> void ListFrame::OnPressCtrlS(E& event){
+    
+    
+        
+    
+    event.Skip(true);
+
+}
+
 
 
 //write into all the non-GUI objects the values of the GUI fields

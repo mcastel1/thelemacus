@@ -15889,6 +15889,9 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
     //I saved -> the file is no longer tagged as modified
     file_has_been_modified = false;
 
+    //reset label of *this to file path without the [modified] mark
+    SetLabel(file.name.value);
+    
     event.Skip(true);
 
 }

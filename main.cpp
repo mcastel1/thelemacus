@@ -23,6 +23,7 @@
  ********** THINGS TO ADD ************
  
  - when one double clicks on a sight/route/position in ListFrame, open the modify panel
+ - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
  with a better  choice
  - add an interface to load, save and close sight files

@@ -14406,6 +14406,9 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     
     //given that I have reset the content of listcontrol_positions, no items will be selected in this ListControl -> I disable its disableable buttons
     (parent->listcontrol_positions)->EnableButtons(false);
+    
+    parent->Resize();
+
     parent->OnModifyFile();
     
     parent->DrawAll();
@@ -14465,6 +14468,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
     (parent->listcontrol_routes)->EnableButtons(false);
+    
+    parent->Resize();
+    
     parent->OnModifyFile();
     
     parent->DrawAll();

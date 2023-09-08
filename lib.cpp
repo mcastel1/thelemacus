@@ -13516,9 +13516,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     f->DrawAll();
     //re-load the data of plot->route_list into listcontrol_routes and Fit it beacuse its size may have changed
     (f->listcontrol_routes)->set<Route>((f->plot)->route_list);
-    (f->listcontrol_routes)->Fit();
-    f->Maximize(f->panel);
-    
+    f->Resize();
     
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_change_selection_in_listcontrol_routes));
@@ -15318,9 +15316,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
 
     
     //given that I have incoroporated the listcontrols into the sizers, listrcontrols may have been resized -> I Fit() them so their content is properly shown
-    listcontrol_sights->Fit();
-    listcontrol_positions->Fit();
-    listcontrol_routes->Fit();
+    Resize();
 
 }
 
@@ -15408,23 +15404,29 @@ void ListFrame::DrawAll(void){
     
 }
 
-
+//fits the size of all listcontrols inside *this to their respective content and resizes *this to fit the new size of the listcontrols
+void ListFrame::Resize(void){
+    
+    listcontrol_sights->Fit();
+    listcontrol_positions->Fit();
+    listcontrol_routes->Fit();
+    Fit();
+    
+}
 
 //set all the GUI fileds in *this from the data in this->plot and adapts the size of columns and panel accordingly
 void ListFrame::set(){
     
     //write the sights contained into plot->sight_list into listcontrol_sights
     listcontrol_sights->set(plot->sight_list);
-    listcontrol_sights->Fit();
     
     //write the positions into plot->position_list into listcontrol_sights
     listcontrol_positions->set(plot->position_list);
-    listcontrol_positions->Fit();
     
     //write the routes into plot->route_list into listcontrol_routes
     listcontrol_routes->set(plot->route_list);
-    listcontrol_routes->Fit();
     
+    Resize();
     Maximize(panel);
     
 }
@@ -16672,6 +16674,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
     (parent->listcontrol_routes)->EnableButtons(false);
+    
+    parent->Resize();
+
     parent->OnModifyFile();
     
     parent->DrawAll();

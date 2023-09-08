@@ -13425,48 +13425,6 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 }
 
 
-//
-////if an item in listcontrol_sights is selected, then the modify_sight and delete_sight buttons are enabled
-//template<class T> void OnSelectInListControlSights::operator()(T& event){
-//
-//
-//
-//    (f->button_modify_sight)->Enable(true);
-//
-//    //button_transport_sight is enabled/disabled if the selected Sight is related/unrelated to a Route
-//    (f->button_transport_sight)->Enable(
-//
-//                                        ((((f->plot)->sight_list)[((f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_route).value != -1
-//
-//                                        );
-//
-//    (f->button_delete_sight)->Enable(true);
-//
-//    event.Skip(true);
-//
-//}
-
-////if an item in listcontrol_positions is selected, then the modify_position, transport_position and delete_position buttons are enabled
-//template<class T> void OnSelectInListControlPositions::operator()(T& event){
-//
-//    (f->button_modify_position)->Enable(true);
-//    (f->button_transport_position)->Enable(true);
-//    (f->button_delete_position)->Enable(true);
-//
-//    event.Skip(true);
-//
-//}
-
-//if an item in listcontrol_routes is selected, then the modify_route and delete_route buttons are enabled
-//template<class T> void OnSelectInListControlRoutes::operator()(T& event){
-//
-//    (f->button_modify_route)->Enable(true);
-//    (f->button_delete_route)->Enable(true);
-//
-//    event.Skip(true);
-//
-//}
-
 
 //if an item in listcontrol_sights is selected, I transport the sight/position under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){

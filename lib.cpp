@@ -15310,11 +15310,18 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);
+
     //    panel->SetSizer(sizer_v);
     
     //    panel->SetSize(wxSize(total_column_width+4*margin,-1));
     //    this->SetSize(wxSize(total_column_width+6*margin,-1));
-    //
+
+    
+    //given that I have incoroporated the listcontrols into the sizers, listrcontrols may have been resized -> I Fit() them so their content is properly shown
+    listcontrol_sights->Fit();
+    listcontrol_positions->Fit();
+    listcontrol_routes->Fit();
+
 }
 
 //create a new ChartFrame and appends it to the end of chart_frames

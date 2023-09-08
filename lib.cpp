@@ -13046,7 +13046,17 @@ template<class T>void CheckProjection::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String("Projection must be in the list."), String(path_file_error_icon));
+            stringstream temp;
+            unsigned int i;
+            
+            temp.str("");
+            temp << "Projection must be one of the following: ";
+            for(i=0; i<((p->types).GetCount()); i++){
+                temp << ((p->types)[i]).ToStdString() << (i < ((p->types).GetCount())-1 ? ", " : ".");
+            }
+            
+            
+            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String(temp.str().c_str()), String(path_file_error_icon));
             
             (p->ok) = false;
             

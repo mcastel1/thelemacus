@@ -18482,17 +18482,39 @@ void ListControl::EnableButtons(bool check){
 //correctly resizes the sizes of columns of *this
 void ListControl::Fit(void){
     
-    unsigned int i, total_column_width;
+    unsigned int i, j, total_column_width, header_width, item_width, column_width;
+    wxListItem temp;
+    wxString header_text, item_text;
     
     //    set the column width to the width of its longest item
-    for(i=0; i<GetColumnCount(); i++){
-        SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+    for(total_column_width=0, j=0; j<GetColumnCount(); j++){
+        
+        GetColumn(j, temp);
+        header_text = temp.GetText();
+        header_width  = GetTextExtent(header_text).GetWidth();
+        
+        for(item_width=0, i=0; i<GetItemCount(); i++){
+            
+            item_text = GetItemText(i, j);
+            
+            if(GetTextExtent(item_text).GetWidth() > item_width){
+                item_width = GetTextExtent(item_text).GetWidth();
+            }
+                        
+        }
+        
+        column_width = max(header_width, item_width);
+
+        SetColumnWidth(j, column_width + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+        total_column_width += column_width;
+        
     }
     
-    for(total_column_width=0, i=0; i<GetColumnCount(); i++){
-        total_column_width += GetColumnWidth(i);
-    }
     
+//    for(total_column_width=0, i=0; i<GetColumnCount(); i++){
+//        total_column_width += GetColumnWidth(i);
+//    }
+//
     SetMinSize(wxSize(total_column_width,-1));
     
 }

@@ -1,5 +1,5 @@
 CC=gcc
 CFLAGS=-I.
 
-hellomake: hellomake.c hellofunc.c hellomake.h
-	$(CC) -o hellomake.o hellomake.c hellofunc.c
+main: lib.c main.c
+	$(CC) -o main lib.c main.c

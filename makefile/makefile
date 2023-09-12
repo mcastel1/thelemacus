@@ -1,9 +1,9 @@
-CC=gcc
+CXX=g++
 CFLAGS=-I.
 DIR=/Users/macbookpro/Dropbox/sight_reduction_program/makefile/
 
-main.o: ${DIR}lib.c ${DIR}main.c
-	$(CC) -o main.o ${DIR}lib.c ${DIR}main.c
+main.o: lib.cpp main.cpp
+	$(CXX) -o main.o ${DIR}lib.cpp ${DIR}main.cpp
 
 clean:
 	echo "I am cleaning everything!"

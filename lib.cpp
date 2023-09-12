@@ -18503,9 +18503,9 @@ void ListControl::Fit(void){
                         
         }
         
-        column_width = max(header_width, item_width);
+        column_width = max(header_width, item_width)+ 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
 
-        SetColumnWidth(j, column_width + 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value));
+        SetColumnWidth(j, column_width);
         total_column_width += column_width;
         
     }

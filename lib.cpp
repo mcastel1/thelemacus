@@ -15413,9 +15413,9 @@ void ListFrame::DrawAll(void){
 //fits the size of all listcontrols inside *this to their respective content and resizes *this to fit the new size of the listcontrols
 void ListFrame::Resize(void){
     
-    listcontrol_sights->Fit();
-    listcontrol_positions->Fit();
-    listcontrol_routes->Fit();
+    listcontrol_sights->Resize();
+    listcontrol_positions->Resize();
+    listcontrol_routes->Resize();
     panel->Fit();
     Fit();
     
@@ -18481,7 +18481,7 @@ void ListControl::EnableButtons(bool check){
 }
 
 //correctly resizes the sizes of columns of *this
-void ListControl::Fit(void){
+void ListControl::Resize(void){
     
     unsigned int i, j, total_column_width, header_width, item_width, column_width;
     wxListItem temp;

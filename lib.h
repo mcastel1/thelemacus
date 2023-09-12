@@ -1272,7 +1272,7 @@ public:
     void DeselectAll(void);
     template<class T> void set(vector<T>);
     void EnableButtons(bool);
-    void Fit(void);
+    void Resize(void);
     
 };
 

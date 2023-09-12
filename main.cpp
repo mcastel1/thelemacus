@@ -50,7 +50,7 @@
  
  - the user should not be allowed to transport a sight with a circle of equal altitude 
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted
- - in OnSelectRouteInListControlRoutesForTransport I cannot resize listcontrol_routes to account for the larger text resulting after the transport
+ - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place
  - replace calls of QuestionFrame that do not use PrintQuestion by using PrintQUesiton 
  - meridians are still cut on the top in mercator projection 
  - check that WXK_PLUS does not depend on the computer

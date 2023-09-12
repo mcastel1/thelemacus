@@ -15416,6 +15416,7 @@ void ListFrame::Resize(void){
     listcontrol_sights->Fit();
     listcontrol_positions->Fit();
     listcontrol_routes->Fit();
+    panel->Fit();
     Fit();
     
 }

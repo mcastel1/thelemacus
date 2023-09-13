@@ -14262,6 +14262,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     //bind the function SightFrame::KeyDown to the event where a keyboard dey is pressed down in panel, ... and all fields
     panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    type->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     Z->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     omega->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     start_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
@@ -17528,7 +17529,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event
     
 }
 
-
+//bind all GUI windows in *this to method
 template<class P> template <typename EventTag, typename Method, typename Object> void AngleField<P>::Bind(EventTag tag,  Method method, Object object){
     
     
@@ -18169,6 +18170,15 @@ template<class E> void RouteTypeField::OnEdit(E& event){
     event.Skip(true);
     
 }
+
+//bind all GUI windows in *this to method
+template <typename EventTag, typename Method, typename Object> void RouteTypeField::Bind(EventTag tag,  Method method, Object object){
+    
+    name->Bind(tag, method, object);
+    
+}
+
+
 
 
 template<class T> void BodyField::InsertIn(T* host){

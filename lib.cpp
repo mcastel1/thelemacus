@@ -13077,6 +13077,13 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
     
 }
 
+ResetListFrame::ResetListFrame(ListFrame* p_in){
+    
+    p = p_in;
+    
+}
+
+
 template<class F> SaveAndClose<F>::SaveAndClose(F* frame_in){
     
     frame = frame_in;

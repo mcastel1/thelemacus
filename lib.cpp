@@ -15882,19 +15882,19 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
 
 template<class E> void ListFrame::OnPressCtrlW(E& event){
     
-    CloseFrame<ListFrame>* close_frame;
+    ResetListFrame* reset_list_frame;
     
-    close_frame = new CloseFrame<ListFrame>(this);
+    reset_list_frame = new ResetListFrame(this);
 
     if(file_has_been_modified){
         //the user wants to close a file that has been modified -> ask the user whethere he/she wants to save it before closing it
         
         SaveAndClose<ListFrame>* save_and_close;
 
-        PrintQuestion<ListFrame, SaveAndClose<ListFrame>, CloseFrame<ListFrame> >* print_question;
+        PrintQuestion<ListFrame, SaveAndClose<ListFrame>, ResetListFrame>* print_question;
         
         save_and_close = new SaveAndClose<ListFrame>(this);
-        print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  CloseFrame<ListFrame> >(this, save_and_close, close_frame);
+        print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
         
         print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
         
@@ -15903,7 +15903,7 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
         
         wxCommandEvent dummy;
         
-        (*close_frame)(dummy);
+        (*reset_list_frame)(dummy);
                 
     }
     

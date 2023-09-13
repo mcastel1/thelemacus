@@ -13083,6 +13083,29 @@ ResetListFrame::ResetListFrame(ListFrame* p_in){
     
 }
 
+//reset *this by destroying this->plot, and allocating a new one
+template <class T> void ResetListFrame::operator()(T& event){
+  
+    //clear p->plot and allocate a new one
+    delete [] (p->plot);
+    p->plot = new Plot(p->catalog, String(""));
+
+    //empty all listcontrols
+    (p->listcontrol_sights)->DeleteAllItems();
+    (p->listcontrol_positions)->DeleteAllItems();
+    (p->listcontrol_routes)->DeleteAllItems();
+    
+    //resize, set an 'untitled' label for the new, empty ListFrame, and update the chartframes
+    p->Resize();
+    p->SetLabel(wxString("untitled"));
+    p->DrawAll();
+    
+    event.Skip(true);
+ 
+    
+}
+
+
 
 template<class F> SaveAndClose<F>::SaveAndClose(F* frame_in){
     

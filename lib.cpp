@@ -15110,7 +15110,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //button to modify a sight
     button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight, this);
+    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight<wxCommandEvent>, this);
     button_modify_sight->Enable(false);
     
     //button to transport a sight
@@ -15222,6 +15222,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
+    
+    listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight), this);
+
     
     listcontrol_routes->PushBackColumn(wxString("Number"));
     listcontrol_routes->PushBackColumn(wxString("Type"));
@@ -15465,7 +15468,7 @@ void ListFrame::OnAddRoute(wxCommandEvent& event){
     
 }
 
-void ListFrame::OnModifySight(wxCommandEvent& event){
+template<class E> void ListFrame::OnModifySight(E& event){
     
     long item;
     item = listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);

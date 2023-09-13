@@ -2082,7 +2082,7 @@ public:
     void GetAllCoastLineData(void);
     
     void OnAddSight(wxCommandEvent& event);
-    void OnModifySight(wxCommandEvent& event);
+    template<class E> void OnModifySight(E&);
     void OnTransportSight(wxCommandEvent& event);
     void OnPressDeleteSight(wxCommandEvent& event);
     

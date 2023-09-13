@@ -2087,12 +2087,12 @@ public:
     void OnPressDeleteSight(wxCommandEvent& event);
     
     void OnAddPosition(wxCommandEvent& event);
-    void OnModifyPosition(wxCommandEvent& event);
+    template<class E> void OnModifyPosition(E&);
     void OnTransportPosition(wxCommandEvent& event);
     void OnPressDeletePosition(wxCommandEvent& event);
 
     void OnAddRoute(wxCommandEvent& event);
-    void OnModifyRoute(wxCommandEvent& event);
+    template<class E> void OnModifyRoute(E&);
     void OnPressDeleteRoute(wxCommandEvent& event);
     
     void Disconnect(int);

@@ -15120,7 +15120,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //button to modify a position
     button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition, this);
+    button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition<wxCommandEvent>, this);
     button_modify_position->Enable(false);
     
     //button to transport a position
@@ -15130,7 +15130,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     
     //button to modify a route
     button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute, this);
+    button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute<wxCommandEvent>, this);
     button_modify_route->Enable(false);
     
     //button to delete a sight
@@ -15223,7 +15223,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
     
+    
+    //bind all listcontrols to mouse double-click event, so when the user double clicks on an item in the listcontrol, the SightFrame, PositionFrame or RouteFrame is opened to modify the sight, position or route
     listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight), this);
+    listcontrol_positions->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyPosition), this);
+    listcontrol_routes->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyRoute), this);
 
     
     listcontrol_routes->PushBackColumn(wxString("Number"));
@@ -15537,7 +15541,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
 
 
 
-void ListFrame::OnModifyPosition(wxCommandEvent& event){
+template<class E> void ListFrame::OnModifyPosition(E& event){
     
     long item;
     item = listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
@@ -15558,7 +15562,7 @@ void ListFrame::OnModifyPosition(wxCommandEvent& event){
     
 }
 
-void ListFrame::OnModifyRoute(wxCommandEvent& event){
+template<class E> void ListFrame::OnModifyRoute(E& event){
     
     
     long item;

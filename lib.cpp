@@ -13169,23 +13169,23 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
     if(frame->file_is_untitled){
         //the file has no name -> save as
         
-        wxFileDialog openFileDialog(frame, _(""), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
-     
+        frame->OnPressCtrlShiftS(event);
         
-        if(openFileDialog.ShowModal() != wxID_CANCEL){
-            // the user did not presse cancel -> proceed saving on the file chosen by the user;
-                        
-            (frame->file).set_name(String((openFileDialog.GetPath()).ToStdString()));
-            //open a new file to save content on it
-            (frame->file).open(String("out"), String(""));
-            //write frame->plot into file
-            (frame->plot)->print(false, String(""), ((frame->file).value));
-            //close the file
-            (frame->file).close(String(""));
-    
-            
-        }
-        
+        //        wxFileDialog openFileDialog(frame, _(""), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
+        //
+        //
+        //        if((openFileDialog.ShowModal()) != wxID_CANCEL){
+        //            // the user did not presse cancel -> proceed saving on the file chosen by the user;
+        //
+        //            (frame->file).set_name(String((openFileDialog.GetPath()).ToStdString()));
+        //            //open a new file to save content on it
+        //            (frame->file).open(String("out"), String(""));
+        //            //write frame->plot into file
+        //            (frame->plot)->print(false, String(""), ((frame->file).value));
+        //            //close the file
+        //            (frame->file).close(String(""));
+        //
+        //        }
         
     }else{
         //the file has a name -> save
@@ -15912,11 +15912,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
     
     wxFileDialog openFileDialog(this, _("Open"), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
-    if(openFileDialog.ShowModal() == wxID_CANCEL){
-        
-        // the user changed his/her mind...
-        
-    }else{
+    if((openFileDialog.ShowModal()) != wxID_CANCEL){
         // proceed loading the file chosen by the user;
         
         wxFileInputStream input_stream(openFileDialog.GetPath());
@@ -16006,6 +16002,21 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
 
 //write content of plot into a named file
 template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
+    
+    wxFileDialog openFileDialog(this, _(""), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
+    
+    if((openFileDialog.ShowModal()) != wxID_CANCEL){
+        // the user did not presse cancel -> proceed saving on the file chosen by the user;
+                    
+        file.set_name(String((openFileDialog.GetPath()).ToStdString()));
+        //open a new file to save content on it
+        file.open(String("out"), String(""));
+        //writeplot into file
+        plot->print(false, String(""), (file).value);
+        //close the file
+        file.close(String(""));
+
+    }
     
     
     event.Skip(true);

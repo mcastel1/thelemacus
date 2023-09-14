@@ -5,22 +5,6 @@ Sights in the plot:
 			Name = sun
 			Radius = 375647.9481641469 nm
 		limb = l
-		sextant altitude = 17° 25.2000000000001'
-		index error = 0° 47.9'
-		artificial horizon = n
-		height of eye = 3 m
-		master-clock date and hour of sight:
-			master-clock date and hour of sight = 2021-10-16
-			hour of master-clock date and hour of sight = 15:09:26
-		use of stopwatch = n
-		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-		label = Pascale #1
-	Sight #2:
-		body:
-			Type = sun
-			Name = sun
-			Radius = 375647.9481641469 nm
-		limb = l
 		sextant altitude = 16° 9.399999999999977'
 		index error = 0° 47.9'
 		artificial horizon = n
@@ -36,7 +20,7 @@ Routes in the plot:
 		type = c
 		ground position:
 			latitude = 0° 39.1985954663397'
-			longitude = 342° 1.831658206431257'
+			longitude = 342° 1.831658206434668'
 			label = 
 		aperture angle = 64° 49.93446862384019'
 		label = jupiter 2021-10-16 19:45:41 TAI, Michele 3

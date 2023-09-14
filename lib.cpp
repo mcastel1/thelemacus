@@ -15896,6 +15896,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
 }
 
+//this function is called every time the file is changed to mark that it is a modified file
 void ListFrame::OnModifyFile(void){
     
     if(!file_has_been_modified){
@@ -15907,6 +15908,21 @@ void ListFrame::OnModifyFile(void){
     file_has_been_modified = true;
 
 }
+
+
+
+//this function is called every time the file is saved to mark that it is no longer a modified file
+void ListFrame::OnSaveFile(void){
+    
+    //set back the label of *this to the filename
+    SetLabel(wxString((file.name).value));
+    
+    file_is_untitled = false;
+    file_has_been_modified = false;
+
+}
+
+
 
 template<class E> void ListFrame::OnPressCtrlO(E& event){
     
@@ -15987,13 +16003,7 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
     plot->print(false, String(""), file.value);
     file.close(String(""));
     
-    //I saved -> the file is no longer tagged as modified
-    file_has_been_modified = false;
-    //the file now has a name -> I set
-    file_is_untitled = false;
-
-    //reset label of *this to file path without the [modified] mark
-    SetLabel(file.name.value);
+    OnSaveFile();
     
     event.Skip(true);
 
@@ -16015,6 +16025,8 @@ template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
         plot->print(false, String(""), (file).value);
         //close the file
         file.close(String(""));
+        
+        OnSaveFile();
 
     }
     

@@ -1596,7 +1596,6 @@ public:
     unsigned int  /*these are the values of width/height_chart when the chart is first drawn*/width_chart_0, height_chart_0, tick_length, /* gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes when setting the ticks on the x axis, and similarly for gamma_phi*/gamma_lambda, gamma_phi;
     //this is true if the label which is being drawn is the first among the parallel/meridian labels, false otherwise
     bool first_label;
-    Plot* plot;
     wxMemoryInputStream * memory_input_stream;
     wxBitmap* bitmap_image; 
     UnsetIdling<DrawPanel>* unset_idling;
@@ -2288,8 +2287,6 @@ public:
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
     ProjectionField* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
-    //pointer used to shorten the reference to parent->plot
-    Plot* plot;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
     //in p_coastline_draw, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline
     vector<wxPoint> p_coastline_draw;

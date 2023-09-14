@@ -1,18 +1,82 @@
-Sights in the plot:
-	Sight #1:
-		body:
-			Type = star
-			Name = spica
-			Right ascension = 201° 17.89998000000082'
-			Declination = 348° 50.32500000000027'
-		sextant altitude = 34° 4.399999999999835'
-		index error = 0° 1.9'
-		artificial horizon = n
-		height of eye = 3951.435102870205 m
-		master-clock date and hour of sight:
-			master-clock date and hour of sight = 2023-09-14
-			hour of master-clock date and hour of sight = 00:44:03
-		use of stopwatch = n
-		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-		label = utes in the plot:
-Routes in the plot:
+	Sights in the plot:
+		Sight #1:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 17° 25.200000000000102318153949454427'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 15:09:26
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Pascale #1
+		Sight #2:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375647.94816414685919880867004395 nm
+			limb = l
+			sextant altitude = 16° 9.3999999999999772626324556767941'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 15:20:13
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Michele #1
+		Sight #3:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.12095032397405702795367687941 nm
+			limb = u
+			sextant altitude = 14° 9.6000000000000085265128291212022'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 17:55:06
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Michele #2
+		Sight #4:
+			body:
+				Type = planet
+				Name = jupiter
+				Radius = 37748.920086393089150078594684601 nm
+			limb = c
+			sextant altitude = 26° 3.0000000000000426325641456060112'
+			index error = 0° 47.8999999999999985789145284798'
+			artificial horizon = n
+			height of eye = 3 m
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-10-16
+				hour of master-clock date and hour of sight = 19:45:04
+			use of stopwatch = n
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Michele 3
+	Positions in the plot:
+		Position #1:
+			latitude = 49° 44.239600000000081081452663056552'
+			longitude = 1° 27.709699999999997999111656099558'
+			label = Position pascale #1
+		Position #2:
+			latitude = 49° 44.938500000000090039975475519896'
+			longitude = 1° 26.233800000000012886403055745177'
+			label = Position Michele #1
+		Position #3:
+			latitude = 49° 39.44259999999985666363500058651'
+			longitude = 1° 11.683400000000002449951352900825'
+			label = Position Michele #2
+		Position #4:
+			latitude = 49° 35.914299999999883539203437976539'
+			longitude = 1° 13.182200000000001693933882052079'
+			label = Position Michele #3

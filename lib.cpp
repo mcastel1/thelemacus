@@ -13086,7 +13086,8 @@ template <class T> void ResetListFrame::operator()(T& event){
   
     //clear p->plot and allocate a new one
     (p->plot)->~Plot();
-    
+    //the file now has no title
+    (p->file_is_untitled) = true;
     
     p->plot = new Plot(p->catalog, String(""));
 
@@ -14962,7 +14963,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     idling = false;
     //the file has not been modified yet -> I set
     file_has_been_modified = false;
-    //for the time being, the file has no title 
+    //for the time being, the file has no title
     file_is_untitled = true;
     enable_highlight = true;
     unset_idling = new UnsetIdling<ListFrame>(this);
@@ -15863,6 +15864,8 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             plot->read_from_file(file, String(""));
             //            plot->print(true, String(""), cout);
             
+            file_is_untitled = false;
+            
             //emable the menu item to close file
             menu_file->Enable(wxID_HIGHEST + 7, true);
             //load the data in plot into the GUI fields of *this
@@ -15911,6 +15914,7 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
                 
     }
     
+    
 }
 
 //write content of plot into file
@@ -15922,6 +15926,8 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
     
     //I saved -> the file is no longer tagged as modified
     file_has_been_modified = false;
+    //the file now has a name -> I set 
+    file_is_untitled = false;
 
     //reset label of *this to file path without the [modified] mark
     SetLabel(file.name.value);

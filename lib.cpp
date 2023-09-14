@@ -13195,7 +13195,6 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
     }
     
     (*reset_list_frame)(event);
-
     
     event.Skip(true);
         

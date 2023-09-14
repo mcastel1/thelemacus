@@ -15896,14 +15896,33 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     if(file_has_been_modified){
         //the user wants to close a file that has been modified -> ask the user whethere he/she wants to save it before closing it
         
-        SaveAndClose<ListFrame>* save_and_close;
+        if(file_is_untitled){
+            //file has no name -> I ask the user whether he/she wants to save it and , if yes, call SaveAsAndClose
+            
+            SaveAsAndClose<ListFrame>* save_as_and_close;
+            
+            PrintQuestion<ListFrame, SaveAsAndClose<ListFrame>, ResetListFrame>* print_question;
+            
+            save_as_and_close = new SaveAsAndClose<ListFrame>(this);
+            print_question = new PrintQuestion<ListFrame, SaveAsAndClose<ListFrame>,  ResetListFrame>(this, save_as_and_close, reset_list_frame);
+            
+            print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
+            
+            
+        }else{
+            //file has no name -> I ask the user whether he/she wants to save it and , if yes, call SaveAndClose
 
-        PrintQuestion<ListFrame, SaveAndClose<ListFrame>, ResetListFrame>* print_question;
-        
-        save_and_close = new SaveAndClose<ListFrame>(this);
-        print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
-        
-        print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
+            SaveAndClose<ListFrame>* save_and_close;
+            
+            PrintQuestion<ListFrame, SaveAndClose<ListFrame>, ResetListFrame>* print_question;
+            
+            save_and_close = new SaveAndClose<ListFrame>(this);
+            print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
+            
+            print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
+            
+            
+        }
         
     }else{
         //the user wants to close a file that has not been modified -> close it
@@ -15926,7 +15945,7 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
     
     //I saved -> the file is no longer tagged as modified
     file_has_been_modified = false;
-    //the file now has a name -> I set 
+    //the file now has a name -> I set
     file_is_untitled = false;
 
     //reset label of *this to file path without the [modified] mark

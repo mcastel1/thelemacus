@@ -15121,7 +15121,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
     menu_file->Append(wxID_HIGHEST + 7, "Close\tCtrl-w");
     menu_file->Append(wxID_HIGHEST + 8, "Save\tCtrl-s");
-    menu_file->Append(wxID_HIGHEST + 9, "Save\tCtrl-Shift-s");
+    menu_file->Append(wxID_HIGHEST + 9, "Save as...\tCtrl-Shift-s");
 
     menu_bar->Append(menu_app, wxT("&App"));
     menu_bar->Append(menu_file, wxT("&File"));

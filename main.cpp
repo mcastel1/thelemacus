@@ -49,7 +49,6 @@
  ********** THINGS TO FIX ************
  
  - remove  = o = l = o = l printed to cout
- - when you open a Sight, Route or Position frame, set idling of the parent ListFrame to true 
  - the user should not be allowed to transport a sight with a circle of equal altitude
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted
  - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place

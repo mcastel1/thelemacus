@@ -13174,11 +13174,8 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
         wxFileDialog openFileDialog(frame, _("Save as ..."), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
      
         
-        if(openFileDialog.ShowModal() == wxID_CANCEL){
-            // the user pressed cancel
-            
-        }else{
-            //proceed saving on the file chosen by the user;
+        if(openFileDialog.ShowModal() != wxID_CANCEL){
+            // the user did not presse cancel -> proceed saving on the file chosen by the user;
                         
             (frame->file).set_name(String((openFileDialog.GetPath()).ToStdString()));
             //open a new file to save content on it

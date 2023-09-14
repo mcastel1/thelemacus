@@ -14109,12 +14109,13 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    idling = false;
     
     //SetColor(this);
     
     set_idling = new SetIdling<PositionFrame>(this);
     unset_idling = new UnsetIdling<PositionFrame>(this);
+    (*unset_idling)();
+    
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
     //if this PositionFrame has been constructed with position_in = NULL, then I allocate a new Position object with the pointer this->position and set position_in_listcontrol_positions to a 'NULL' value (position_in_listcontrol_positions = -1). Otherwise, the pointer position_in points to a valid Position object -> I let this->position point to position_in, and set position_in_listcontrol_positions to position_in_listcontrol_positions_in.
@@ -14500,10 +14501,9 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     //given that I have reset the content of listcontrol_positions, no items will be selected in this ListControl -> I disable its disableable buttons
     (parent->listcontrol_positions)->EnableButtons(false);
     
+    (*(parent->unset_idling))();
     parent->Resize();
-
     parent->OnModifyFile();
-    
     parent->DrawAll();
     
     event.Skip(true);

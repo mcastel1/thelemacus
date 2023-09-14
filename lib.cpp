@@ -13171,7 +13171,7 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
     if(frame->file_is_untitled){
         //the file has no name -> save as
         
-        wxFileDialog openFileDialog(frame, _("Save as ..."), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+        wxFileDialog openFileDialog(frame, _("Save as ..."), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
      
         
         if(openFileDialog.ShowModal() == wxID_CANCEL){

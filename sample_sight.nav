@@ -8,10 +8,11 @@ Sights in the plot:
 		sextant altitude = 34° 4.399999999999835'
 		index error = 0° 1.9'
 		artificial horizon = n
-		height of eye = 2.133604267208534 m
+		height of eye = 3951.435102870205 m
 		master-clock date and hour of sight:
 			master-clock date and hour of sight = 2023-09-14
 			hour of master-clock date and hour of sight = 00:44:03
 		use of stopwatch = n
 		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = utes in the plot:
 Routes in the plot:

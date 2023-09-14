@@ -13129,21 +13129,23 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 //saves the data in frame->plot to file frame->file ,and closes frame
 template<class F> template <class T> void SaveAndClose<F>::operator()(T& event){
     
+    
+    CloseFrame<ListFrame>* close_frame;
+
+    
+    close_frame = new CloseFrame<ListFrame>(frame);
+
+    
     //remove the file to avoid overwriting
     (frame->file).remove(String(""));
-     
     //open a new file
     (frame->file).open(String("out"), String(""));
-    
     //write frame->plot into file
     (frame->plot)->print(false, String(""), ((frame->file).value));
-
     //close the file
     (frame->file).close(String(""));
-    
     //close frame
-    frame->Destroy();
-
+    (*close_frame)(event);
     
     event.Skip(true);
         

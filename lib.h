@@ -2253,7 +2253,7 @@ public:
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     
-    //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
+    SetIdling<RouteFrame> * set_idling;
     UnsetIdling<RouteFrame> * unset_idling;
     PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >* print_error_message;
     
@@ -2267,9 +2267,7 @@ public:
     wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
     
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
-//    wxMenuBar *menuBar;
     
-    void SetIdling(bool);
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);

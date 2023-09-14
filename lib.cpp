@@ -14258,6 +14258,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     
     //SetColor(this);
     
+    set_idling = new SetIdling<RouteFrame>(this);
     unset_idling = new UnsetIdling<RouteFrame>(this);
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
     
@@ -14574,9 +14575,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
 
 void RouteFrame::OnPressCancel(wxCommandEvent& event){
     
-    //I am about to close the frame,  thus I set f->idling to true
-    SetIdling(true);
-    
+    //I am about to close the frame,  thus I set parent->idling to false
+    (*(parent->unset_idling))();
+
     Close(TRUE);
     
 }
@@ -14703,11 +14704,6 @@ template<class T> void RouteFrame::get(T& event){
     
 }
 
-void RouteFrame::SetIdling(bool b){
-    
-    idling = b;
-    
-}
 
 
 //write all the content in the GUI fields into the non-GUI objects, checks whether all the fields in PositionFrame are ok and if they are it returns true and false otherwise

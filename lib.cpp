@@ -14113,6 +14113,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //SetColor(this);
     
+    set_idling = new SetIdling<PositionFrame>(this);
     unset_idling = new UnsetIdling<PositionFrame>(this);
     print_error_message = new PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >(this, unset_idling);
     
@@ -14467,17 +14468,12 @@ template<class T> void PositionFrame::get(T &event){
     
 }
 
-void PositionFrame::SetIdling(bool b){
-    
-    idling = b;
-    
-}
 
 void PositionFrame::OnPressCancel(wxCommandEvent& event){
     
-    //I am about to close the frame,  thus I set f->idling to true
-    SetIdling(true);
-    
+    //I am about to close the frame,  thus I set parent->idling to false
+    (*(parent->unset_idling))();
+
     Close(TRUE);
     
 }
@@ -16202,8 +16198,8 @@ void SightFrame::TimeIntervalOk(String prefix){
 
 void SightFrame::OnPressCancel(wxCommandEvent& event){
     
-    //I am about to close the frame,  thus I set f->idling to true
-    (*set_idling)();
+    //I am about to close the frame,  thus I set parent->idling to true
+    (*(parent->unset_idling))();
 
     Close(TRUE);
     

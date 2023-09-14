@@ -2214,8 +2214,7 @@ public:
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling;
     
-    
-    //these are the functors needed to check whether GUI fields, such as arcdegrees and arcminutes,  are entered  correctly
+    SetIdling<PositionFrame>* set_idling;
     UnsetIdling<PositionFrame>* unset_idling;
     PrintMessage<PositionFrame, UnsetIdling<PositionFrame> >* print_error_message;
     
@@ -2229,7 +2228,6 @@ public:
     wxButton* /*button_ok denotes a button which triggers either an 'Add' command, when one is adding a new position, or a 'Modify' command, when one is modifying a position whih already exists*/button_ok, *button_cancel;
     wxMenuBar *menuBar;
     
-    void SetIdling(bool);
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);

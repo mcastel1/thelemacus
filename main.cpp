@@ -48,6 +48,7 @@
 
  ********** THINGS TO FIX ************
  
+ - SightFrame and PositionFrame and RouteFrame::SetIdling must be replaced with SetIdling class
  - the user should not be allowed to transport a sight with a circle of equal altitude 
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted
  - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place

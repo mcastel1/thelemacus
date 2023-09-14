@@ -12642,6 +12642,12 @@ NewRoute::NewRoute(ListFrame* f_in){
 }
 
 
+template<class P> SetIdling<P>::SetIdling(P* parent_in){
+    
+    parent = parent_in;
+    
+}
+
 template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in){
     
     parent = parent_in;
@@ -12750,6 +12756,33 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event){
     (parent->idling) = false;
     
     event.Skip(true);
+    
+}
+
+//this is the same as template<class P> void UnsetIdling<P>::operator()(void){ but without the event argument
+template<class P> void UnsetIdling<P>::operator()(void){
+    
+    wxCommandEvent dummy;
+    
+    (*this)(dummy);
+    
+}
+
+
+template<class P> void SetIdling<P>::operator()(wxCommandEvent& event){
+    
+    (parent->idling) = true;
+    
+    event.Skip(true);
+    
+}
+
+//this is the same as template<class P> void SetIdling<P>::operator()(wxCommandEvent& event){ but without the event argument
+template<class P> void SetIdling<P>::operator()(void){
+    
+    wxCommandEvent dummy;
+    
+    (*this)(dummy);
     
 }
 
@@ -13492,6 +13525,9 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
     int i, i_object_to_transport, i_transporting_route;
+    UnsetIdling<ListFrame>* unset_idling;
+
+    unset_idling = new UnsetIdling<ListFrame>(f);
     
     //the id of the Route which will transport
     
@@ -13585,7 +13621,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, *(f->on_change_selection_in_listcontrol_routes));
     
     //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-    (f->idling) = false;
+    (*unset_idling)();
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
     
     
@@ -13599,6 +13635,10 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event){
     
     int i_object_to_transport, i_transporting_route;
+    UnsetIdling<ListFrame>* unset_idling;
+
+    unset_idling = new UnsetIdling<ListFrame>(f);
+
     
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
     i_transporting_route = ((f->listcontrol_routes)->GetItemCount())-1;
@@ -13647,7 +13687,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     f->DrawAll();
     
     //set parameters back to their original value and unbing the closing of route_frame from on_new_route_in_listcontrol_routes_for_transport
-    (f->idling) = false;
+    (*unset_idling)();
     (f->route_frame)->Unbind(wxEVT_CLOSE_WINDOW, *(f->on_new_route_in_listcontrol_routes_for_transport));
     
     
@@ -13657,12 +13697,14 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
     
-    //you may need to put this back  - start
-    //    if(!(f->idling)){
-    //you may need to put this back  - end
+    SetIdling<T>* set_idling;
+    UnsetIdling<T>* unset_idling;
     
+    set_idling = new SetIdling<T>(f);
+    unset_idling = new UnsetIdling<T>(f);
+
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-    (f->idling = true);
+    (*set_idling)();
     
     if(control != NULL){
         
@@ -13676,11 +13718,6 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
             control->SetFont(wxGetApp().error_font);
             //                Reset(control);
             
-        }else{
-            //because in this case I don't print an error message frame, the code is no longer in idling mode
-            
-            (f->idling = false);
-            
         }
         
     }else{
@@ -13690,9 +13727,10 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
         
     }
     
-    //you may need to put this back  - start
-    //    }
-    //you may need to put this back  - end
+    
+    //AFTER the dialog window has been closed, I set f->idling to calse
+    f->CallAfter(*unset_idling);
+
     
 }
 
@@ -14941,11 +14979,18 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::operator()(void){
     
     
+    SetIdling<T>* set_idling;
+    UnsetIdling<T>* unset_idling;
+    
+    set_idling = new SetIdling<T>(f);
+    unset_idling = new UnsetIdling<T>(f);
+
+    
     if(!(f->idling)){
         
         //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-        (f->idling = true);
-        
+        (*set_idling)();
+
         if(control != NULL){
             //this question has been prompted from a control
             
@@ -14958,11 +15003,6 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
                 control->SetForegroundColour((wxGetApp().highlight_color));
                 control->SetFont(wxGetApp().highlight_font);
                 
-            }else{
-                //because in this case I don't print an error message frame, the code is no longer in idling mode
-                
-                (f->idling = false);
-                
             }
             
         }else{
@@ -14974,6 +15014,9 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
         }
         
     }
+    
+    //AFTER the question has been aswered and the related frame closed, I unset idling in f
+    f->CallAfter(*unset_idling);
     
 }
 
@@ -16167,8 +16210,8 @@ void SightFrame::OnPressCancel(wxCommandEvent& event){
     //I am about to close the frame,  thus I set f->idling to true
     SetIdling(true);
     
-    
     Close(TRUE);
+    
 }
 
 

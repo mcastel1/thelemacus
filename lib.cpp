@@ -12228,6 +12228,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                     
                     unsigned int i;
                     
+                    //the data in the file are being modified -> I call
+                    parent->parent->OnModifyFile();
+                    
                     if(((parent->parent)->highlighted_route) != -1){
                         //in this case, the mouse is over a route
                         
@@ -15900,13 +15903,14 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
 
 void ListFrame::OnModifyFile(void){
     
+    if(!file_has_been_modified){
+        //file is being modified for the first time -> add a mark to the label of *this
+        SetLabel((String(GetLabel().ToStdString()).append(String(" [modified]"))).value);
+    }
+    
     //file has been modified
     file_has_been_modified = true;
-    
-    //add a mark to the label of *this
-    SetLabel((String(GetLabel().ToStdString()).append(String(" [modified]"))).value);
-    
-    
+
 }
 
 template<class E> void ListFrame::OnPressCtrlO(E& event){

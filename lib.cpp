@@ -13749,6 +13749,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //SetColor(this);
     
+    set_idling = new SetIdling<SightFrame>(this);
     unset_idling = new UnsetIdling<SightFrame>(this);
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
     
@@ -16107,11 +16108,7 @@ void SightFrame::set(void){
     
 }
 
-void SightFrame::SetIdling(bool b){
-    
-    idling = b;
-    
-}
+
 
 
 //write the content in the GUI fields into the non=GUI fields, and check whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span:
@@ -16206,8 +16203,8 @@ void SightFrame::TimeIntervalOk(String prefix){
 void SightFrame::OnPressCancel(wxCommandEvent& event){
     
     //I am about to close the frame,  thus I set f->idling to true
-    SetIdling(true);
-    
+    (*set_idling)();
+
     Close(TRUE);
     
 }

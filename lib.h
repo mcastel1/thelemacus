@@ -2166,7 +2166,7 @@ public:
     wxStaticBitmap* image_time_interval_status;
     wxImage* image_time_interval_not_ok;
     
-    //these are the functors needed to check whether arcdegrees and arcminutes are entered in the right format
+    SetIdling<SightFrame>* set_idling;
     UnsetIdling<SightFrame>* unset_idling;
     PrintMessage<SightFrame, UnsetIdling<SightFrame> >* print_error_message;
     
@@ -2187,7 +2187,6 @@ public:
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
-    void SetIdling(bool);
     void set(void);
     bool is_ok();
     template<class T> void get(T&);

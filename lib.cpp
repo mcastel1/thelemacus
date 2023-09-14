@@ -6087,22 +6087,12 @@ void Plot::compute_crossings(String prefix){
     
 }
 
+//print all the data in plot to ostr
 void Plot::print(bool print_all_routes, String prefix, ostream& ostr){
     
-    if(sight_list.size()>0){
-        print_sights(prefix, ostr);
-    }
-    
-    if(route_list.size()>0){
-        print_routes(print_all_routes, prefix, ostr);
-    }
-    
-    if(position_list.size()>0){
-        print_positions(prefix, ostr);
-    }
-    
-    
-    
+    print_sights(prefix, ostr);
+    print_routes(print_all_routes, prefix, ostr);
+    print_positions(prefix, ostr);
     
 }
 
@@ -6155,7 +6145,7 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
     
     ostr << prefix.value << "Routes in the plot:\n";
     
-    for(i=0, j=0; i<route_list.size(); i++){
+    for(i=0, j=0; i<(route_list.size()); i++){
         
         //if print_all_routes = false, I only print routes which are not linked to a sight. This is to avoid doubles: If I print also Routes which are related to a Sight, then when the file to which I am saving will be read again, the code will reduce them and create double Routes identical to the ones already present in the file.
         if(((((route_list[i]).related_sight).value) == -1) || print_all_routes){
@@ -13171,7 +13161,7 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
     if(frame->file_is_untitled){
         //the file has no name -> save as
         
-        wxFileDialog openFileDialog(frame, _("Save as ..."), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
+        wxFileDialog openFileDialog(frame, _(""), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
      
         
         if(openFileDialog.ShowModal() != wxID_CANCEL){

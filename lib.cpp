@@ -12701,6 +12701,7 @@ void DeleteSight::operator()(wxCommandEvent& event){
         
     }
     
+    f->Resize();
     
     event.Skip(true);
     
@@ -12941,7 +12942,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     
     //given that I called set in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
     (f->listcontrol_routes)->EnableButtons(false);
-    
+    f->Resize();
     //given that a Route has been removed, I re-draw everything
     f->DrawAll();
     
@@ -12970,7 +12971,7 @@ void DeletePosition::operator()(wxCommandEvent& event){
         
         //given that I called set in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
         (f->listcontrol_positions)->EnableButtons(false);
-        
+        f->Resize();
         f->OnModifyFile();
         
     }
@@ -15524,6 +15525,8 @@ void ListFrame::Resize(void){
     listcontrol_sights->Resize();
     listcontrol_positions->Resize();
     listcontrol_routes->Resize();
+    
+    Maximize(panel);
     panel->Fit();
     Fit();
     

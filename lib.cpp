@@ -13744,13 +13744,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    
-    idling = false;
-    
-    //SetColor(this);
-    
+
+    (*(parent->set_idling))();
+
     set_idling = new SetIdling<SightFrame>(this);
     unset_idling = new UnsetIdling<SightFrame>(this);
+    (*unset_idling)();
+    
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
     
     file_init.set_name(String(path_file_init));
@@ -15021,13 +15021,16 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     parent = parent_in;
     
     
-    idling = false;
     //the file has not been modified yet -> I set
     file_has_been_modified = false;
     //for the time being, the file has no title
     file_is_untitled = true;
     enable_highlight = true;
+    
+    set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
+    (*unset_idling)();
+    
     close = new CloseFrame<ListFrame>(this);
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
@@ -16834,10 +16837,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     (parent->listcontrol_sights)->EnableButtons(false);
     (parent->listcontrol_routes)->EnableButtons(false);
     
+    (*(parent->unset_idling))();
     parent->Resize();
-
     parent->OnModifyFile();
-    
     parent->DrawAll();
     
     event.Skip(true);

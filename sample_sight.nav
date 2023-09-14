@@ -1,10 +1,10 @@
 Sights in the plot:
 	Sight #1:
 		body:
-			Type = sun
-			Name = sun
-			Radius = 375647.9481641469 nm
-		limb = l
+			Type = star
+			Name = kochab
+			Right ascension = 222° 40.52603999999974'
+			Declination = 74° 9.318959999999947'
 		sextant altitude = 16° 9.399999999999977'
 		index error = 0° 47.9'
 		artificial horizon = n
@@ -17,6 +17,14 @@ Sights in the plot:
 		label = Michele #1
 Routes in the plot:
 	Route #1:
+		type = c
+		ground position:
+			latitude = 29° 45.87888382754741'
+			longitude = 36° 46.8571621621615'
+			label = 
+		aperture angle = 74° 44.98586251052672'
+		label = kochab 2021-10-16 15:20:50 TAI, Michele #1
+	Route #2:
 		type = c
 		ground position:
 			latitude = 0° 39.1985954663397'

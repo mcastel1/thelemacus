@@ -2092,7 +2092,8 @@ public:
     vector< vector< vector<Position> > > p_coastline;
     Position /*these are the positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_now, p_end;
     
-    //a functor to unset idling mode in *this
+    //a functor to set/unset idling mode in *this
+    SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
     //a functor to close *this
     CloseFrame<ListFrame>* close;

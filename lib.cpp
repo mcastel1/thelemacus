@@ -15119,6 +15119,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
     menu_file->Append(wxID_HIGHEST + 7, "Close\tCtrl-w");
     menu_file->Append(wxID_HIGHEST + 8, "Save\tCtrl-s");
+    menu_file->Append(wxID_HIGHEST + 9, "Save\tCtrl-Shift-s");
 
     menu_bar->Append(menu_app, wxT("&App"));
     menu_bar->Append(menu_file, wxT("&File"));
@@ -15135,6 +15136,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& me
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlO<wxCommandEvent>, this, wxID_HIGHEST + 6);
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlW<wxCommandEvent>, this, wxID_HIGHEST + 7);
     menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlS<wxCommandEvent>, this, wxID_HIGHEST + 8);
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlShiftS<wxCommandEvent>, this, wxID_HIGHEST + 9);
 
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
@@ -16000,6 +16002,16 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
     event.Skip(true);
 
 }
+
+
+//write content of plot into a named file
+template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
+    
+    
+    event.Skip(true);
+
+}
+
 
 
 

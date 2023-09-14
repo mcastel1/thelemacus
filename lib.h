@@ -2140,6 +2140,7 @@ public:
     template<class E> void OnPressCtrlO(E&);
     template<class E> void OnPressCtrlW(E&);
     template<class E> void OnPressCtrlS(E&);
+    template<class E> void OnPressCtrlShiftS(E&);
 
     
 };

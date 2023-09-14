@@ -13130,9 +13130,33 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 //saves the data in frame->plot to file frame->file ,and closes frame
 template<class F> template <class T> void SaveAndClose<F>::operator()(T& event){
     
+    ResetListFrame* reset_list_frame;
+    
+    reset_list_frame = new ResetListFrame(frame);
+
     
     if(frame->file_is_untitled){
         //the file has no name -> save as
+        
+        wxFileDialog openFileDialog(frame, _("Save as ..."), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+     
+        
+        if(openFileDialog.ShowModal() == wxID_CANCEL){
+            // the user pressed cancel
+            
+        }else{
+            //proceed saving on the file chosen by the user;
+                        
+            (frame->file).set_name(String((openFileDialog.GetPath()).ToStdString()));
+            //open a new file to save content on it
+            (frame->file).open(String("out"), String(""));
+            //write frame->plot into file
+            (frame->plot)->print(false, String(""), ((frame->file).value));
+            //close the file
+            (frame->file).close(String(""));
+    
+            
+        }
         
         
     }else{
@@ -13140,23 +13164,17 @@ template<class F> template <class T> void SaveAndClose<F>::operator()(T& event){
 
         //remove the file to avoid overwriting
         (frame->file).remove(String(""));
-         
         //open a new file
         (frame->file).open(String("out"), String(""));
-        
         //write frame->plot into file
         (frame->plot)->print(false, String(""), ((frame->file).value));
-
         //close the file
         (frame->file).close(String(""));
-        
-        //close frame
-        frame->Destroy();
         
         
     }
     
-  
+    (*reset_list_frame)(event);
 
     
     event.Skip(true);
@@ -15856,7 +15874,7 @@ void ListFrame::OnModifyFile(void){
 
 template<class E> void ListFrame::OnPressCtrlO(E& event){
     
-    wxFileDialog openFileDialog(this, _("Open nav file"), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Open"), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
     if(openFileDialog.ShowModal() == wxID_CANCEL){
         

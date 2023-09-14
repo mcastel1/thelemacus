@@ -13087,7 +13087,9 @@ ResetListFrame::ResetListFrame(ListFrame* p_in){
 template <class T> void ResetListFrame::operator()(T& event){
   
     //clear p->plot and allocate a new one
-    delete [] (p->plot);
+    (p->plot)->~Plot();
+    
+    
     p->plot = new Plot(p->catalog, String(""));
 
     //empty all listcontrols

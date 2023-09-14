@@ -754,7 +754,7 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
     
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
-    print(name, prefix, cout);
+    print(name, true, prefix, cout);
     
 }
 
@@ -791,7 +791,7 @@ void String::read_from_file(String name, String filename, String prefix){
     
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
     
-    print(name, prefix, cout);
+    print(name, true, prefix, cout);
     
     file.close(prefix);
     
@@ -1003,13 +1003,18 @@ void String::enter(String name, String prefix){
         cout << prefix.value << YELLOW << "Entered an empty " << name.value << ", setting it to " << value << "\n" << RESET;
     }
     
-    print(name, prefix, cout);
+    print(name, true, prefix, cout);
     
 }
 
-void String::print(String name, String prefix, ostream& ostr){
+//Tries to print the string name to ostr. If print_if_empty the string is printed even if it is empty, while if print_if_empty = false the string is not printed if empty
+void String::print(String name, bool print_if_empty, String prefix, ostream& ostr){
     
-    if(((*this) != String(""))){ostr << prefix.value << name.value << " = " << value << "\n";}
+    if(((*this) != String("")) || print_if_empty){
+        
+        ostr << prefix.value << name.value << " = " << value << "\n";
+        
+    }
     
 }
 
@@ -1017,7 +1022,7 @@ void String::set(String name, String input_string, String prefix){
     
     value = (input_string.value);
     
-    if(name != String("")){print(name, prefix, cout);}
+    print(name, true, prefix, cout);
     
 }
 
@@ -3922,7 +3927,7 @@ bool Sight::modify(Catalog catalog, String prefix){
             
             old_label = label;
             
-            label.print(String("old label"), new_new_prefix, cout);
+            label.print(String("old label"), true, new_new_prefix, cout);
             label.enter(String("new label"), new_new_prefix);
             
             if(old_label != label){
@@ -3970,7 +3975,7 @@ void Route::print(String name, String prefix, ostream& ostr){
     
     ostr << prefix.value << name.value << ":\n";
     
-    type.print(String("type"), new_prefix, ostr);
+    type.print(String("type"), true, new_prefix, ostr);
     
     if((type == String("l")) || (type == String("o"))){
         
@@ -3985,7 +3990,7 @@ void Route::print(String name, String prefix, ostream& ostr){
         
     }
     
-    label.print(String("label"), new_prefix, ostr);
+    label.print(String("label"), true, new_prefix, ostr);
     
     
     if((related_sight.value) != -1){
@@ -5050,7 +5055,7 @@ void Sight::print(String name, String prefix, ostream& ostr){
     }
     TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix, ostr);
     
-    label.print(String("label"), new_prefix, ostr);
+    label.print(String("label"), true, new_prefix, ostr);
     
     if(((related_route.value) != -1) && (&ostr == &cout)){
         ostr << new_prefix.value << "# of related route = " << (related_route.value)+1 << "\n";
@@ -7596,7 +7601,7 @@ void Position::print(String name, String prefix, ostream& ostr){
     phi.print(String("latitude"), new_prefix, ostr);
     lambda.print(String("longitude"), new_prefix, ostr);
     
-    label.print(String("label"), new_prefix, ostr);
+    label.print(String("label"), true, new_prefix, ostr);
     
 }
 

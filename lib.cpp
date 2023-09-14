@@ -14255,12 +14255,12 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_i
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    idling = false;
-    
     //SetColor(this);
     
     set_idling = new SetIdling<RouteFrame>(this);
     unset_idling = new UnsetIdling<RouteFrame>(this);
+    (*unset_idling)();
+    
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
     
     //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
@@ -14562,10 +14562,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     (parent->listcontrol_sights)->EnableButtons(false);
     (parent->listcontrol_routes)->EnableButtons(false);
     
+    (*(parent->unset_idling))();
     parent->Resize();
-    
     parent->OnModifyFile();
-    
     parent->DrawAll();
     
     event.Skip(true);

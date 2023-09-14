@@ -13108,7 +13108,7 @@ template <class T> void ResetListFrame::operator()(T& event){
 
 
 
-template<class F> SaveAndClose<F>::SaveAndClose(F* frame_in){
+template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in){
     
     frame = frame_in;
     
@@ -13128,7 +13128,7 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 
 
 //saves the data in frame->plot to file frame->file ,and closes frame
-template<class F> template <class T> void SaveAndClose<F>::operator()(T& event){
+template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
     
     ResetListFrame* reset_list_frame;
     
@@ -15927,12 +15927,12 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     if(file_has_been_modified){
         //the user wants to close a file that has been modified -> ask the user whethere he/she wants to save it before closing it
         
-        SaveAndClose<ListFrame>* save_and_close;
+        SaveAndReset<ListFrame>* save_and_close;
 
-        PrintQuestion<ListFrame, SaveAndClose<ListFrame>, ResetListFrame>* print_question;
+        PrintQuestion<ListFrame, SaveAndReset<ListFrame>, ResetListFrame>* print_question;
         
-        save_and_close = new SaveAndClose<ListFrame>(this);
-        print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
+        save_and_close = new SaveAndReset<ListFrame>(this);
+        print_question = new PrintQuestion<ListFrame, SaveAndReset<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
         
         print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
         

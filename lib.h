@@ -988,13 +988,13 @@ public:
 };
 
 
-template<class F> class SaveAndClose{
+template<class F> class SaveAndReset{
     
 public:
     
     //the frame to be closed
     F* frame;
-    SaveAndClose(F*);
+    SaveAndReset(F*);
     
     template<class T> void operator()(T&);
     

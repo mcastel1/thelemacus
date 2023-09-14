@@ -64,11 +64,4 @@ Sights in the plot:
 		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 		label = Michele 3
 Routes in the plot:
-	Route #1:
-		type = c
-		ground position:
-			latitude = 5° 59.14878672344592'
-			longitude = 49° 34.99267343485656'
-		aperture angle = 74° 28.80526375554666'
-		label = sun 2021-10-16 15:20:50 TAI, Michele #1
 Positions in the plot:

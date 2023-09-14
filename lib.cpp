@@ -15769,6 +15769,9 @@ void ListFrame::Disconnect(int i_sight){
     //print an info message
     print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."), String(path_file_warning_icon));
     
+    //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file have been modified
+    OnModifyFile();
+    
 }
 
 

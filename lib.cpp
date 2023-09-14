@@ -13130,20 +13130,33 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 //saves the data in frame->plot to file frame->file ,and closes frame
 template<class F> template <class T> void SaveAndClose<F>::operator()(T& event){
     
-    //remove the file to avoid overwriting
-    (frame->file).remove(String(""));
-     
-    //open a new file
-    (frame->file).open(String("out"), String(""));
     
-    //write frame->plot into file
-    (frame->plot)->print(false, String(""), ((frame->file).value));
+    if(frame->file_is_untitled){
+        //the file has no name -> save as
+        
+        
+    }else{
+        //the file has a name -> save
 
-    //close the file
-    (frame->file).close(String(""));
+        //remove the file to avoid overwriting
+        (frame->file).remove(String(""));
+         
+        //open a new file
+        (frame->file).open(String("out"), String(""));
+        
+        //write frame->plot into file
+        (frame->plot)->print(false, String(""), ((frame->file).value));
+
+        //close the file
+        (frame->file).close(String(""));
+        
+        //close frame
+        frame->Destroy();
+        
+        
+    }
     
-    //close frame
-    frame->Destroy();
+  
 
     
     event.Skip(true);
@@ -15896,33 +15909,14 @@ template<class E> void ListFrame::OnPressCtrlW(E& event){
     if(file_has_been_modified){
         //the user wants to close a file that has been modified -> ask the user whethere he/she wants to save it before closing it
         
-        if(file_is_untitled){
-            //file has no name -> I ask the user whether he/she wants to save it and , if yes, call SaveAsAndClose
-            
-            SaveAsAndClose<ListFrame>* save_as_and_close;
-            
-            PrintQuestion<ListFrame, SaveAsAndClose<ListFrame>, ResetListFrame>* print_question;
-            
-            save_as_and_close = new SaveAsAndClose<ListFrame>(this);
-            print_question = new PrintQuestion<ListFrame, SaveAsAndClose<ListFrame>,  ResetListFrame>(this, save_as_and_close, reset_list_frame);
-            
-            print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
-            
-            
-        }else{
-            //file has no name -> I ask the user whether he/she wants to save it and , if yes, call SaveAndClose
+        SaveAndClose<ListFrame>* save_and_close;
 
-            SaveAndClose<ListFrame>* save_and_close;
-            
-            PrintQuestion<ListFrame, SaveAndClose<ListFrame>, ResetListFrame>* print_question;
-            
-            save_and_close = new SaveAndClose<ListFrame>(this);
-            print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
-            
-            print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
-            
-            
-        }
+        PrintQuestion<ListFrame, SaveAndClose<ListFrame>, ResetListFrame>* print_question;
+        
+        save_and_close = new SaveAndClose<ListFrame>(this);
+        print_question = new PrintQuestion<ListFrame, SaveAndClose<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
+        
+        print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
         
     }else{
         //the user wants to close a file that has not been modified -> close it

@@ -24,9 +24,6 @@ main.o: lib.cpp main.cpp
 	mkdir -p ${OUTPUT_DIR}/${APP_NAME}.app/Contents/MacOS
 	mkdir -p ${OUTPUT_DIR}/${APP_NAME}.app/Contents/Resources
 	
-	#sed commands should go here
-#	sed -e "s/'\${MACOSX_BUNDLE_GUI_IDENTIFIER}'/org.wxwidgets.${APP_NAME}/" ${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
-
 	sed -e 's/$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.${APP_NAME}/' \
 			-e 's/$${MACOSX_BUNDLE_EXECUTABLE_NAME}/${APP_NAME}/' \
 		-e 's/$${MACOSX_BUNDLE_BUNDLE_NAME}/${APP_NAME}/' \
@@ -36,10 +33,6 @@ main.o: lib.cpp main.cpp
 		-e 's/$${MACOSX_BUNDLE_LONG_VERSION_STRING}/3.2.0, (c) 2002-2022 wxWidgets/' \
 		-e 's/$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/3.2/' \
 	 ${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
-
-	
-	
-	#sed commands should go here
 
 	/bin/echo "APPL????" >${OUTPUT_DIR}/${APP_NAME}.app/Contents/PkgInfo
 	ln -f ${OUTPUT_DIR}/${APP_NAME} ${OUTPUT_DIR}/${APP_NAME}.app/Contents/MacOS/${APP_NAME}

@@ -12,7 +12,7 @@ ICON_PATH='${INPUT_DIR}/jolly_roger.icns'
 
 
 
-main.o: lib.cpp main.cpp
+${APP_NAME}: lib.cpp main.cpp 
 	clear; clear;
 	rm -rf temp.o ${OUTPUT_DIR}/${APP_NAME}.app ${OUTPUT_DIR}/${APP_NAME}
 	#$(CXX)  $(CXXFLAGS) -o ${OUTPUT_DIR}/main.o  ${INPUT_DIR}/main.cpp

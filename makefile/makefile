@@ -27,16 +27,16 @@ main.o: lib.cpp main.cpp
 	#sed commands should go here
 #	sed -e "s/'\${MACOSX_BUNDLE_GUI_IDENTIFIER}'/org.wxwidgets.${APP_NAME}/" ${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
 
-	sed -e "s/'\${MACOSX_BUNDLE_GUI_IDENTIFIER}'/org.wxwidgets.${APP_NAME}/" \
-		-e "s/'\${MACOSX_BUNDLE_EXECUTABLE_NAME}'/${APP_NAME}/" \
-		-e "s/'\${MACOSX_BUNDLE_BUNDLE_NAME}'/${APP_NAME}/" \
-		-e "s/'\${MACOSX_BUNDLE_COPYRIGHT}'/Copyright 2002-2022 wxWidgets/" \
-		-e "s/'\${MACOSX_BUNDLE_BUNDLE_VERSION}'/3.2.0/" \
-		-e "s/'\${MACOSX_BUNDLE_INFO_STRING}'/${APP_NAME} version 3.2.0, (c) 2002-2022 wxWidgets/" \
-		-e "s/'\${MACOSX_BUNDLE_LONG_VERSION_STRING}'/3.2.0, (c) 2002-2022 wxWidgets/" \
-		-e "s/'\${MACOSX_BUNDLE_SHORT_VERSION_STRING}'/3.2/" \
-		${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
+	sed -e 's/$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.${APP_NAME}/' ${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
 
+#		-e "s/'\${MACOSX_BUNDLE_EXECUTABLE_NAME}'/${APP_NAME}/" \
+#		-e "s/'\${MACOSX_BUNDLE_BUNDLE_NAME}'/${APP_NAME}/" \
+#		-e "s/'\${MACOSX_BUNDLE_COPYRIGHT}'/Copyright 2002-2022 wxWidgets/" \
+#		-e "s/'\${MACOSX_BUNDLE_BUNDLE_VERSION}'/3.2.0/" \
+#		-e "s/'\${MACOSX_BUNDLE_INFO_STRING}'/${APP_NAME} version 3.2.0, (c) 2002-2022 wxWidgets/" \
+#		-e "s/'\${MACOSX_BUNDLE_LONG_VERSION_STRING}'/3.2.0, (c) 2002-2022 wxWidgets/" \
+#		-e "s/'\${MACOSX_BUNDLE_SHORT_VERSION_STRING}'/3.2/" \
+	
 	#sed commands should go here
 
 	/bin/echo "APPL????" >${OUTPUT_DIR}/${APP_NAME}.app/Contents/PkgInfo

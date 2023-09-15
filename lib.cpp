@@ -1823,7 +1823,7 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
     (draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
     
     //comoute the end values of l and writes them in s
-    compute_l_ends(&s, draw_panel, prefix);
+    compute_l_ends(&s, NULL, draw_panel, prefix);
     
     if(type == String("l")){
         //*this is a loxodrome
@@ -1836,8 +1836,11 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
         //the following code holds for all projections
         
         vector<Length> s;
+        bool compute_l_ends_ok;
         
-        if(compute_l_ends(&s, draw_panel, prefix)){
+        compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
+        
+        if(compute_l_ends_ok){
             //*this is included in the area of the chart visible by the observer
             
             unsigned int j;
@@ -1913,9 +1916,12 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     wxPoint p;
     Angle lambda_a, lambda_b;
     vector<Length> s;
+    bool compute_l_ends_ok;
+    
+    compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
     
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
-    if(compute_l_ends(&s, draw_panel, prefix)){
+    if(compute_l_ends_ok){
         
         
         /*
@@ -2018,8 +2024,8 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     
 }
 
-//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. It returns true if the values of the length above could be computed succesfully, and false otherwise.
-bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, [[maybe_unused]] String prefix){
+//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.
+void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_panel, [[maybe_unused]] String prefix){
     
     vector<Angle> t;
     
@@ -2029,7 +2035,9 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, [[maybe_unu
             
             cout << prefix.value << RED << "Cannot execute compute_l_ends: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
             
-            return false;
+            if(success != NULL){
+                (*success) = false;
+            }
             
             break;
             
@@ -2080,12 +2088,16 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, [[maybe_unu
                 
                 t.clear();
                 
-                return true;
+                if(success != NULL){
+                    (*success) =  true;
+                }
                 
             }else{
                 //no part of this is included in circle/rectagle observer -> no part of this lies on the visible part of the earth
                 
-                return false;
+                if(success != NULL){
+                    (*success) =  false;
+                }
                 
             }
             
@@ -2126,12 +2138,16 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, [[maybe_unu
                             
                         }
                         
-                        return true;
+                        if(success != NULL){
+                            (*success) =  true;
+                        }
                         
                     }else{
                         //*this is not included in rectangle_observer
                         
-                        return false;
+                        if(success != NULL){
+                            (*success) =  false;
+                        }
                         
                     }
                     
@@ -2191,11 +2207,15 @@ bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, [[maybe_unu
                         
                         t.clear();
                         
-                        return true;
+                        if(success != NULL){
+                            (*success) =  true;
+                        }
                         
                     }else{
                         
-                        return false;
+                        if(success != NULL){
+                            (*success) =  false;
+                        }
                         
                     }
                     

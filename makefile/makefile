@@ -8,7 +8,7 @@ CXXFLAGS_1=-I${INPUT_DIR} `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/loc
 CXXFLAGS_2=`wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -L/Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib      -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lwx_osx_cocoau_core-3.2  -lwx_baseu-3.2        -lpng -lz -ljpeg -L/usr/local/Cellar/libtiff/4.3.0/lib -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lz -framework Security -lpthread -liconv -lcurl -L/usr/local/Cellar/pcre2/10.39/lib -lpcre2-32  -lz -framework Security -lpthread -liconv -lcurl
 #the name of the app that you want to create
 #the path to the icon of the app
-ICON_PATH='${INPUT_DIR}jolly_roger.icns'
+ICON_PATH='${INPUT_DIR}/jolly_roger.icns'
 
 
 
@@ -28,7 +28,7 @@ main.o: lib.cpp main.cpp
 	
 	/bin/echo "APPL????" >${OUTPUT_DIR}/$APP_NAME.app/Contents/PkgInfo
 	ln -f ${OUTPUT_DIR}/$APP_NAME ${OUTPUT_DIR}/$APP_NAME.app/Contents/MacOS/$APP_NAME
-	cp -f $ICON_PATH ${OUTPUT_DIR}/$APP_NAME.app/Contents/Resources/wxmac.icns
+	cp -f ${ICON_PATH} ${OUTPUT_DIR}/$APP_NAME.app/Contents/Resources/wxmac.icns
 
 	rm -rf ${OUTPUT_DIR}/temp.o ${OUTPUT_DIR}/$APP_NAME
 

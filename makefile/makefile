@@ -14,7 +14,7 @@ ICON_PATH='${INPUT_DIR}/jolly_roger.icns'
 
 main.o: lib.cpp main.cpp
 	clear; clear;
-	rm -rf temp.o ${APP_NAME}.app ${APP_NAME}
+	rm -rf temp.o ${OUTPUT_DIR}/${APP_NAME}.app ${OUTPUT_DIR}/${APP_NAME}
 	#$(CXX)  $(CXXFLAGS) -o ${OUTPUT_DIR}/main.o  ${INPUT_DIR}/main.cpp
 	
 	${WX_DIR}/build-cocoa-debug/bk-deps $(CXX) $(CXXFLAGS_1)  -c -o ${OUTPUT_DIR}/temp.o   ${OUTPUT_DIR}/main.cpp
@@ -25,9 +25,18 @@ main.o: lib.cpp main.cpp
 	mkdir -p ${OUTPUT_DIR}/${APP_NAME}.app/Contents/Resources
 	
 	#sed commands should go here
-	echo "--------" ${MACOSX_BUNDLE_GUI_IDENTIFIER} "-----"
-	
-	sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.${APP_NAME}/" ${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
+#	sed -e "s/'\${MACOSX_BUNDLE_GUI_IDENTIFIER}'/org.wxwidgets.${APP_NAME}/" ${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
+
+	sed -e "s/'\${MACOSX_BUNDLE_GUI_IDENTIFIER}'/org.wxwidgets.${APP_NAME}/" \
+		-e "s/'\${MACOSX_BUNDLE_EXECUTABLE_NAME}'/${APP_NAME}/" \
+		-e "s/'\${MACOSX_BUNDLE_BUNDLE_NAME}'/${APP_NAME}/" \
+		-e "s/'\${MACOSX_BUNDLE_COPYRIGHT}'/Copyright 2002-2022 wxWidgets/" \
+		-e "s/'\${MACOSX_BUNDLE_BUNDLE_VERSION}'/3.2.0/" \
+		-e "s/'\${MACOSX_BUNDLE_INFO_STRING}'/${APP_NAME} version 3.2.0, (c) 2002-2022 wxWidgets/" \
+		-e "s/'\${MACOSX_BUNDLE_LONG_VERSION_STRING}'/3.2.0, (c) 2002-2022 wxWidgets/" \
+		-e "s/'\${MACOSX_BUNDLE_SHORT_VERSION_STRING}'/3.2/" \
+		${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
+
 	#sed commands should go here
 
 	/bin/echo "APPL????" >${OUTPUT_DIR}/${APP_NAME}.app/Contents/PkgInfo

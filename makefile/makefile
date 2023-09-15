@@ -25,7 +25,11 @@ main.o: lib.cpp main.cpp
 	mkdir -p ${OUTPUT_DIR}/${APP_NAME}.app/Contents/Resources
 	
 	#sed commands should go here
+	echo "--------" ${MACOSX_BUNDLE_GUI_IDENTIFIER} "-----"
 	
+	sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.${APP_NAME}/" ${WX_DIR}/src/osx/carbon/Info.plist.in >${OUTPUT_DIR}/${APP_NAME}.app/Contents/Info.plist
+	#sed commands should go here
+
 	/bin/echo "APPL????" >${OUTPUT_DIR}/${APP_NAME}.app/Contents/PkgInfo
 	ln -f ${OUTPUT_DIR}/${APP_NAME} ${OUTPUT_DIR}/${APP_NAME}.app/Contents/MacOS/${APP_NAME}
 	cp -f ${ICON_PATH} ${OUTPUT_DIR}/${APP_NAME}.app/Contents/Resources/wxmac.icns

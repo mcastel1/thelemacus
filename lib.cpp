@@ -173,7 +173,7 @@ bool String::operator!=(const String& s){
     
 }
 
-void Int::set(String name, int i, String prefix){
+void Int::set(String name, int i, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -201,7 +201,7 @@ bool Int::operator!=(const Int& i){
 
 
 //enter an Int
-void Int::enter(String name, String prefix){
+void Int::enter(String name, [[maybe_unused]] String prefix){
     
     enter_int(&value, false, 0, 0, name, prefix);
     print(name, prefix, cout);
@@ -291,7 +291,7 @@ bool File::check_if_exists(String prefix){
     
 }
 
-bool File::open(String mode, String prefix){
+bool File::open(String mode, [[maybe_unused]] String prefix){
     
     
     if(mode == String("in")){
@@ -324,7 +324,7 @@ void File::close(String prefix){
     
 }
 
-void Double::set(String name, double x, String prefix){
+void Double::set(String name, double x, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -359,7 +359,7 @@ bool Double::equal_approx(Double x){
     
 }
 
-void Double::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+void Double::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -397,7 +397,7 @@ void Double::read_from_file(String name, File& file, bool search_entire_file, St
 
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Double::read_from_file(String name, String filename, String prefix){
+void Double::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -450,7 +450,7 @@ Double Double::operator+ (const Double& x){
 
 
 //reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_file = true, does not search the file from the beginning otherwise. Writes the result in *this
-void Int::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+void Int::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -492,7 +492,7 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, Strin
 }
 
 //reads the Int *this from file with path filename. Writes the result in *this
-void Int::read_from_file(String name, String filename, String prefix){
+void Int::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -624,7 +624,7 @@ Length Length::operator- (const Length& l){
 
 
 
-bool Speed::check_valid(String name, String prefix){
+bool Speed::check_valid(String name, [[maybe_unused]] String prefix){
     
     bool check = true;
     
@@ -647,7 +647,7 @@ void Speed::print(String name, String prefix, ostream& ostr){
 
 
 //enter a speed in knots
-void Speed::enter(String name, String prefix){
+void Speed::enter(String name, [[maybe_unused]] String prefix){
     
     do{
         
@@ -677,7 +677,7 @@ String::String(string s){
 
 
 //reads from file the color written after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Color::read_from_file(String name, String filename, String prefix){
+void Color::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     String new_prefix, s;
     size_t pos_end;
@@ -718,7 +718,7 @@ void Color::read_from_file(String name, String filename, String prefix){
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
-void String::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+void String::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -760,7 +760,7 @@ void String::read_from_file(String name, File& file, bool search_entire_file, St
 
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void String::read_from_file(String name, String filename, String prefix){
+void String::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -799,7 +799,7 @@ void String::read_from_file(String name, String filename, String prefix){
 
 
 //writes to file the content of string after 'name = '
-void String::write_to_file(String name, File& file, String prefix){
+void String::write_to_file(String name, File& file, [[maybe_unused]] String prefix){
     
     File temp;
     string line;
@@ -862,7 +862,7 @@ Answer::Answer(void){
     
 }
 
-Answer::Answer(char c, String prefix){
+Answer::Answer(char c, [[maybe_unused]] String prefix){
     
     if((c=='y') || (c=='n')){
         
@@ -892,7 +892,7 @@ bool Answer::operator!=(const Answer& s){
 }
 
 
-bool Answer::set(String name, char c, String prefix){
+bool Answer::set(String name, char c, [[maybe_unused]] String prefix){
     
     bool check;
     
@@ -919,7 +919,7 @@ bool Answer::set(String name, char c, String prefix){
     
 }
 //reads *this from file whose path is filename, by looking through the entire file
-void Answer::read_from_file(String name, String filename, String prefix){
+void Answer::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -950,7 +950,7 @@ void Answer::read_from_file(String name, String filename, String prefix){
 
 
 
-void Answer::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+void Answer::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -988,7 +988,7 @@ void Answer::read_from_file(String name, File& file, bool search_entire_file, St
 }
 
 
-void String::enter(String name, String prefix){
+void String::enter(String name, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -1018,7 +1018,7 @@ void String::print(String name, bool print_if_empty, String prefix, ostream& ost
     
 }
 
-void String::set(String name, String input_string, String prefix){
+void String::set(String name, String input_string, [[maybe_unused]] String prefix){
     
     value = (input_string.value);
     
@@ -1211,7 +1211,7 @@ void Rotation::print(String name, String prefix, ostream& ostr){
 
 
 //reads the Rotation from file whose path is filename, by looking through the entire file
-void Rotation::read_from_file(String name, String filename, String prefix){
+void Rotation::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     File file;
@@ -1267,7 +1267,7 @@ Angle::Angle(unsigned int deg, double min){
 
 
 //constructor of Angle, which sets the value of the angle to x and eventually prints *this
-Angle::Angle(String name, double x, String prefix){
+Angle::Angle(String name, double x, [[maybe_unused]] String prefix){
     
     value = x;
     normalize();
@@ -1320,7 +1320,7 @@ bool operator<(const Angle& x, const double& y){
 
 
 //I added the booleian variable search_entire_file. If true, then this function rewinds the file pointer to the beginning of file and goes through the file until it finds the quantity 'name'. If false, it reads the angle at the position where 'file' was when it was passed to this function
-void Angle::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+void Angle::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos1, pos2, pos3;
@@ -1361,7 +1361,7 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, Str
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Angle::read_from_file(String name, String filename, String prefix){
+void Angle::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos1, pos2, pos3;
@@ -1442,7 +1442,7 @@ Position::Position(Angle lambda_in, Angle phi_in){
 }
 
 //here name is the name of the distance that I am computing; for example 'distance between positions A and B'
-bool Position::distance(Position p, Length* l, String name, String prefix){
+bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] String prefix){
     
     bool check;
     check = true;
@@ -1468,7 +1468,7 @@ bool Position::distance(Position p, Length* l, String name, String prefix){
 }
 
 //if route is a circle of equal altitude, it returns true if *this is into the circle, and zero otherwise. If route is not a circle of equal altitude, it prints an error message and returns false.
-bool Position::is_in(Route route, String prefix){
+bool Position::is_in(Route route, [[maybe_unused]] String prefix){
     
     if((route.type) == String("c")){
         
@@ -1588,7 +1588,7 @@ Rectangle::Rectangle(void){
 }
 
 //constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
-Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, String prefix){
+Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix){
     
     //    Angle phi_N, phi_S, lambda_W, lambda_E;
     //
@@ -1709,7 +1709,7 @@ void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 }
 
 
-void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> > *v, String prefix){
+void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> > *v, [[maybe_unused]] String prefix){
     
     wxPoint p;
     bool end_connected;
@@ -1796,7 +1796,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
     
 }
 
-void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, String prefix){
+void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix){
     
     int i;
     vector< vector<wxPoint> > v;
@@ -1811,7 +1811,7 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, Stri
 
 
 //draws the Route *this into draw_panel, with any projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_panel, String prefix){
+void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_panel, [[maybe_unused]] String prefix){
     
     unsigned int i;
     vector<wxPoint> p;
@@ -1893,7 +1893,7 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
     
 }
 
-void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, String prefix){
+void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix){
     
     int i;
     vector< vector<wxPoint> > v;
@@ -1907,7 +1907,7 @@ void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, String 
 }
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
-void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, String prefix){
+void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix){
     
     unsigned int i, j;
     wxPoint p;
@@ -2019,7 +2019,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 }
 
 //computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. It returns true if the values of the length above could be computed succesfully, and false otherwise.
-bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, String prefix){
+bool Route::compute_l_ends(vector<Length>* s, DrawPanel* draw_panel, [[maybe_unused]] String prefix){
     
     vector<Angle> t;
     
@@ -2277,7 +2277,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 
 
 //Given the route (*this), this function returns the point on the Route which is closest to Position q, and writes this position and the corresponding value of t in p and tau, respectively.
-bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix){
+bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused]] String prefix){
     
     String new_prefix;
     bool check;
@@ -2365,7 +2365,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, String prefix)
 }
 
 //If circle is not a circle of equal altitude, it returns false. Otherwise,  *this is a circle of equal altitude and if a part of *this is included into the circle of circle, it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
-bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
+bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -2525,7 +2525,7 @@ bool Route::inclusion(Route circle, vector<Angle> *t, String prefix){
 
 
 //If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
-bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
+bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     
     if(type == String("l")){
@@ -2664,7 +2664,7 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, String prefix){
 
 
 //If route is not a circle of equal altitide, it returns false. Othwewise, If *this and route intersect, it returns true and, if t!=NULL, it also allocates t and it writes in t the  values of the parametric angles t of (*this), at which (*this) crosses route. If *this and route do not intersect, it returns false and does nothing with t.
-bool Route::intersection(Route route, vector<Angle> *t, String prefix){
+bool Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     String new_prefix;
     Angle t_a, t_b;
@@ -2909,7 +2909,7 @@ bool Route::intersection(Route route, vector<Angle> *t, String prefix){
     
 }
 
-void Route::read_from_file(File& file, String prefix){
+void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     String new_prefix;
     string line;
@@ -2946,7 +2946,7 @@ void Route::read_from_file(File& file, String prefix){
 
 
 //this function computes the crossings between Route (*this) and Route route: it writes the two crossing points in p, and the cosing of the crossing angle in cos_crossing_angle
-bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle, String prefix){
+bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle, [[maybe_unused]] String prefix){
     
     //these are the two lengths along Route (*this) which correspond to the two crossings with route
     String new_prefix;
@@ -3095,7 +3095,7 @@ bool Chrono::operator>(const Chrono& chrono){
 }
 
 //sets the Chrono object to the time x, which is expressed in hours
-bool Chrono::set(String name, double x, String prefix){
+bool Chrono::set(String name, double x, [[maybe_unused]] String prefix){
     
     String new_prefix;
     bool check;
@@ -3351,7 +3351,7 @@ void Time:: to_MJD(void)
 
 
 //transport the Position *this with the Route route
-bool Position::transport(Route route, String prefix){
+bool Position::transport(Route route, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -3443,7 +3443,7 @@ Route Position::transport(String prefix){
 }
 
 //rotates the Position (*this) according to the Rotation s, and writes the result in *p
-void Position::rotate(String name, Rotation r, Position* p, String prefix){
+void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] String prefix){
     
     gsl_vector *u, *s;
     
@@ -3468,7 +3468,7 @@ void Position::rotate(String name, Rotation r, Position* p, String prefix){
     
 }
 
-void Position::read_from_file(File& file, String prefix){
+void Position::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -3580,7 +3580,7 @@ void Route::compute_end(String prefix){
 }
 
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
-bool Route::compute_end(Length d, String prefix){
+bool Route::compute_end(Length d, [[maybe_unused]] String prefix){
     
     if((type == String("c")) || (d<=l)){
         
@@ -3617,7 +3617,7 @@ bool Limb::operator==(const Limb& limb){
     
 }
 
-bool Sight::modify(Catalog catalog, String prefix){
+bool Sight::modify(Catalog catalog, [[maybe_unused]] String prefix){
     
     unsigned int i;
     String new_prefix, new_new_prefix;
@@ -4002,7 +4002,7 @@ void Route::print(String name, String prefix, ostream& ostr){
 }
 
 
-void Route::enter(String name, String prefix){
+void Route::enter(String name, [[maybe_unused]] String prefix){
     
     string s;
     bool check;
@@ -4049,7 +4049,7 @@ void Route::enter(String name, String prefix){
 
 
 
-bool Chrono::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+bool Chrono::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -4120,7 +4120,7 @@ bool Chrono::read_from_file(String name, File& file, bool search_entire_file, St
     
 }
 
-bool Chrono::read_from_file(String name, String filename, String prefix){
+bool Chrono::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -4189,7 +4189,7 @@ bool Chrono::read_from_file(String name, String filename, String prefix){
 
 
 //this function returns true if the date read is consistent, false if it is not
-bool Date::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+bool Date::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -4293,7 +4293,7 @@ void Date::check_leap_year(void){
     
 }
 
-bool Time::read_from_file(String name, File& file, String prefix){
+bool Time::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
     
     string line;
     bool check = true;
@@ -4348,7 +4348,7 @@ void Time::operator -= (const Chrono& chrono){
 
 
 
-bool Length::check_valid(String name, String prefix){
+bool Length::check_valid(String name, [[maybe_unused]] String prefix){
     
     bool check = true;
     
@@ -4362,7 +4362,7 @@ bool Length::check_valid(String name, String prefix){
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
-void Length::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+void Length::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -4417,7 +4417,7 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, St
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Length::read_from_file(String name, String filename, String prefix){
+void Length::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -4569,7 +4569,7 @@ Angle Angle::operator/ (const double& x){
 
 
 
-void Limb::read_from_file(String name, File& file, bool search_entire_file, String prefix){
+void Limb::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -4603,7 +4603,7 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, Stri
 }
 
 
-void Body::read_from_file(String name, File& file, String prefix){
+void Body::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
     
     string line;
     String new_prefix;
@@ -4645,7 +4645,7 @@ void Body::read_from_file(String name, File& file, String prefix){
 
 
 
-Catalog::Catalog(String filename, String prefix){
+Catalog::Catalog(String filename, [[maybe_unused]] String prefix){
     
     File file;
     string line;
@@ -4721,7 +4721,7 @@ void Catalog::add(String type, String name, double radius){
 
 
 
-void Answer::enter(String name, String prefix){
+void Answer::enter(String name, [[maybe_unused]] String prefix){
     
     bool check;
     string temp;
@@ -4900,7 +4900,7 @@ void Sight::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 
 
 //this function returns true if the reading operation has been performed without errors, false otherwise
-bool Sight::read_from_file(File& file, String prefix){
+bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     string line;
     bool check = true;
@@ -5225,7 +5225,7 @@ void Plot::print_to_kml(String prefix){
 }
 
 
-bool Plot::read_from_file(File& file, String prefix){
+bool Plot::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     stringstream line_ins;
     string line;
@@ -5876,7 +5876,7 @@ void Plot::menu(String prefix){
     
 }
 
-Plot::Plot(Catalog* cata, String prefix){
+Plot::Plot(Catalog* cata, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -6170,7 +6170,7 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
 }
 
 
-bool Plot::modify_sight(unsigned int i, String prefix){
+bool Plot::modify_sight(unsigned int i, [[maybe_unused]] String prefix){
     
     bool check;
     
@@ -6201,7 +6201,7 @@ bool Plot::modify_sight(unsigned int i, String prefix){
 
 
 
-bool Plot::add_sight_and_reduce(Sight* sight_in, String prefix){
+bool Plot::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix){
     
     
     bool check = true;
@@ -6249,7 +6249,7 @@ void Plot::add_position(String prefix){
 }
 
 //adds to Plot-> this the Route written in *route_in
-void Plot::add_route(Route* route_in, String prefix){
+void Plot::add_route(Route* route_in, [[maybe_unused]] String prefix){
     
     
     //    route.enter(String("new route"), prefix);
@@ -6262,7 +6262,7 @@ void Plot::add_route(Route* route_in, String prefix){
 
 
 //removes sight #i from sight_list by updating all the connections to between sights and routes. If remove_related_route = 'y', it removes also the route related to sight i
-void Plot::remove_sight(unsigned int i, Answer remove_related_route, String prefix){
+void Plot::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unused]] String prefix){
     
     stringstream name;
     unsigned int j;
@@ -6313,7 +6313,7 @@ void Plot::remove_sight(unsigned int i, Answer remove_related_route, String pref
     
 }
 
-void Plot::remove_position(unsigned int i, String prefix){
+void Plot::remove_position(unsigned int i, [[maybe_unused]] String prefix){
     
     stringstream name;
     
@@ -6329,7 +6329,7 @@ void Plot::remove_position(unsigned int i, String prefix){
 }
 
 //removes route #i from route_list by updating all the connections to between sights and routes. If remove_related_sight = 'y', it removes also the sight related to route i
-void Plot::remove_route(unsigned int i, Answer remove_related_sight, String prefix){
+void Plot::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unused]] String prefix){
     
     unsigned int j;
     Int i_related_sight;
@@ -6371,7 +6371,7 @@ void Plot::remove_route(unsigned int i, Answer remove_related_sight, String pref
 }
 
 
-void Plot::transport_route(unsigned int i, String prefix){
+void Plot::transport_route(unsigned int i, [[maybe_unused]] String prefix){
     
     stringstream name;
     String new_prefix;
@@ -6398,7 +6398,7 @@ void Plot::transport_route(unsigned int i, String prefix){
 }
 
 
-void Plot::transport_position(unsigned int i, String prefix){
+void Plot::transport_position(unsigned int i, [[maybe_unused]] String prefix){
     
     stringstream name;
     String new_prefix;
@@ -6426,7 +6426,7 @@ void Plot::transport_position(unsigned int i, String prefix){
 
 
 
-bool Sight::enter(Catalog catalog, String name, String prefix){
+bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
     
     //pointer to init.txt to read fixed sight data from in there
     File file_init;
@@ -6505,7 +6505,7 @@ bool Sight::enter(Catalog catalog, String name, String prefix){
     
 }
 
-bool Sight::reduce(Route* circle_of_equal_altitude, String prefix){
+bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix){
     
     bool check = true;
     String new_prefix;
@@ -6811,7 +6811,7 @@ double Route::lambda_minus_pi(double t, void* route){
 }
 
 //comppute the extremal longidues taken by the points lying on *this, if *this is a circle of equal altitude, and writes them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center. If *this is not a circle of equal altitude, an error is printed and lambda_min /max are not touched.
-bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, String prefix){
+bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix){
     
     String new_prefix;
     Angle t_min, t_max, temp;
@@ -6990,7 +6990,7 @@ void Body::print(String name_in, String prefix, ostream& ostr){
 }
 
 
-void Body::enter(String name, Catalog catalog, String prefix){
+void Body::enter(String name, Catalog catalog, [[maybe_unused]] String prefix){
     
     unsigned int i;
     string s;
@@ -7018,7 +7018,7 @@ void Body::enter(String name, Catalog catalog, String prefix){
 }
 
 //this function checks whether the Body's name  is found in the body list comprised in catalog
-bool Body::check(unsigned int* j, Catalog catalog, String prefix){
+bool Body::check(unsigned int* j, Catalog catalog, [[maybe_unused]] String prefix){
     
     unsigned int i;
     bool check;
@@ -7134,7 +7134,7 @@ Length::Length(double x){
 }
 
 
-void Length::set(String name, double x, String prefix){
+void Length::set(String name, double x, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -7149,7 +7149,7 @@ void Length::set(String name, double x, String prefix){
 }
 
 //enter a length in meters
-void Length::enter(String name, String unit, String prefix){
+void Length::enter(String name, String unit, [[maybe_unused]] String prefix){
     
     stringstream temp;
     
@@ -7204,7 +7204,7 @@ void Length::print(String name, String unit, String prefix, ostream& ostr){
     
 }
 
-bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
+bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix){
     
     File file;
     stringstream filename, line_ins;
@@ -7430,7 +7430,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, String prefix){
     
 }
 
-void Angle::set(String name, double x, String prefix){
+void Angle::set(String name, double x, [[maybe_unused]] String prefix){
     
     value = x;
     normalize();
@@ -7439,7 +7439,7 @@ void Angle::set(String name, double x, String prefix){
 }
 
 //this fucnction takes an angle entered from keyboard. the angle may or may not contain a sign in front of it. If it does not contain a sign, the sign is interpreted as '+'
-void Angle::enter(String name, String prefix){
+void Angle::enter(String name, [[maybe_unused]] String prefix){
     
     unsigned int ad;
     double am;
@@ -7530,7 +7530,7 @@ void Angle::enter(String name, String prefix){
     
 }
 
-void Position::enter(String name, String prefix){
+void Position::enter(String name, [[maybe_unused]] String prefix){
     
     bool check;
     String new_prefix;
@@ -7556,7 +7556,7 @@ void Position::enter(String name, String prefix){
 }
 
 //set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
-void Position::set_cartesian(String name, const gsl_vector* r, String prefix){
+void Position::set_cartesian(String name, const gsl_vector* r, [[maybe_unused]] String prefix){
     
     String new_prefix, name_lambda, name_phi;
     
@@ -7581,7 +7581,7 @@ void Position::set_cartesian(String name, const gsl_vector* r, String prefix){
 }
 
 //write the cartesian components of Position p into r
-void Position::get_cartesian(String name, gsl_vector* r, String prefix){
+void Position::get_cartesian([[maybe_unused]] String name, gsl_vector* r, [[maybe_unused]] String prefix){
     
     gsl_vector_set(r, 0, cos(phi)*cos(lambda));
     gsl_vector_set(r, 1, -cos(phi)*sin(lambda));
@@ -7762,7 +7762,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces){
 
 
 //this function prints out only the integer degree closest to this
-string Angle::deg_to_string(String mode, unsigned int precision){
+string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision){
     
     stringstream output;
     
@@ -7855,7 +7855,7 @@ string Angle::min_to_string(String mode, unsigned int precision){
 
 
 
-void Limb::enter(String name, String prefix){
+void Limb::enter(String name, [[maybe_unused]] String prefix){
     
     bool check;
     
@@ -7986,7 +7986,7 @@ bool Date::set_current(String prefix){
 }
 
 //this function sets (*this) to the current UTC time +- time_zone
-bool Chrono::set_current(Int time_zone, String prefix){
+bool Chrono::set_current(Int time_zone, [[maybe_unused]] String prefix){
     
     stringstream line_ins;
     string input;
@@ -8760,7 +8760,7 @@ EVT_PAINT(DrawPanel::PaintEvent)
 END_EVENT_TABLE()
 
 
-void DrawPanel::PaintEvent(wxPaintEvent & evt){
+void DrawPanel::PaintEvent([[maybe_unused]]  wxPaintEvent & event){
     
     wxPaintDC dc(this);
     (this->*Render)(dc);

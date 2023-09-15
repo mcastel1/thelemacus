@@ -23,6 +23,15 @@ main.o: lib.cpp main.cpp
 	mkdir -p ${OUTPUT_DIR}/$APP_NAME.app/Contents
 	mkdir -p ${OUTPUT_DIR}/$APP_NAME.app/Contents/MacOS
 	mkdir -p ${OUTPUT_DIR}/$APP_NAME.app/Contents/Resources
+	
+	#sed commands should go here
+	
+	/bin/echo "APPL????" >${OUTPUT_DIR}/$APP_NAME.app/Contents/PkgInfo
+	ln -f ${OUTPUT_DIR}/$APP_NAME ${OUTPUT_DIR}/$APP_NAME.app/Contents/MacOS/$APP_NAME
+	cp -f $ICON_PATH ${OUTPUT_DIR}/$APP_NAME.app/Contents/Resources/wxmac.icns
+
+	rm -rf ${OUTPUT_DIR}/temp.o ${OUTPUT_DIR}/$APP_NAME
+
 
 
 clean:

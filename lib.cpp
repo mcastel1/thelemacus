@@ -14472,7 +14472,7 @@ template<class T> void PositionFrame::get(T &event){
 }
 
 
-void PositionFrame::OnPressCancel(wxCommandEvent& event){
+void PositionFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event){
     
     //I am about to close the frame,  thus I set parent->idling to false
     (*(parent->unset_idling))();
@@ -14573,7 +14573,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     Close(TRUE);
 }
 
-void RouteFrame::OnPressCancel(wxCommandEvent& event){
+void RouteFrame::OnPressCancel([[maybe_unused]]  wxCommandEvent& event){
     
     //I am about to close the frame,  thus I set parent->idling to false
     (*(parent->unset_idling))();
@@ -14761,7 +14761,7 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
 
 
 
-template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN){
+template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]]  String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN){
     
     wxDisplay display;
     wxRect rectangle;
@@ -14832,7 +14832,7 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event){
 }
 
 
-template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN){
+template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]]  String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN){
     
     wxDisplay display;
     wxRect rectangle;
@@ -15008,7 +15008,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 }
 
 
-ListFrame::ListFrame(MyApp* parent_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
+ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]]  String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size){
     
     unsigned int i, red, green, blue;
     wxListItem column, item;
@@ -15971,7 +15971,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
     
 }
 
-template<class E> void ListFrame::OnPressCtrlW(E& event){
+template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event){
     
     ResetListFrame* reset_list_frame;
     
@@ -16179,7 +16179,7 @@ void SightFrame::AllOk(void){
 }
 
 //compute time_interval_ok
-void SightFrame::TimeIntervalOk(String prefix){
+void SightFrame::TimeIntervalOk([[maybe_unused]] String prefix){
     
     if(
        (master_clock_date->is_ok()) &&
@@ -16232,7 +16232,7 @@ void SightFrame::TimeIntervalOk(String prefix){
 //}
 
 
-void SightFrame::OnPressCancel(wxCommandEvent& event){
+void SightFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event){
     
     //I am about to close the frame,  thus I set parent->idling to true
     (*(parent->unset_idling))();

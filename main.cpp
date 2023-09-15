@@ -59,7 +59,7 @@
  */
 
 //this function is executed reguarly over time, to check some things
-void MyApp::OnTimer(wxTimerEvent& event){
+void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event){
     
     if(dark_mode != ((settings->GetAppearance()).IsDark())){
         //if the dark mode of the operating system has changed, I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
@@ -71,7 +71,7 @@ void MyApp::OnTimer(wxTimerEvent& event){
 }
 
 //if the user presses Ctrl + Q to exit the app, I call this function which prompts a message frame
-template<class T> void MyApp::OnPressCtrlQ(T& event){
+template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event){
     
 //    for(; 0<chart_frames.size(); ){
 //        (chart_frames[0])->OnClose(event);
@@ -119,7 +119,7 @@ template<class T> void MyApp::OnPressCtrlQ(T& event){
 }
 
 //shows all ChartFrames and positions them properly on the screen 
-template<class T> void MyApp::ShowChart(T& event){
+template<class T> void MyApp::ShowChart([[maybe_unused]] T& event){
     
     unsigned int i;
     //the spacing between one frame and another in the x and y direction, respectively
@@ -171,7 +171,7 @@ template<class T> void MyApp::ShowChart(T& event){
 }
 
 //shows ListFrame and positions it properly on the screen
-void MyApp::ShowList(wxCommandEvent& event){
+void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
     
     list_frame->SetPosition(wxPoint(0, /*move down ListFrame to take account of the menu_bar*/((list_frame->menu_bar)->GetSize()).GetHeight()));
     list_frame->Raise();

@@ -2384,6 +2384,8 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
     
 }
 
+
+
 //If circle is not a circle of equal altitude, it returns false. Otherwise, if a part of *this is included into  circle, it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
 bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String prefix){
     
@@ -2394,21 +2396,19 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
     
     if(((circle.type) == String("c"))){
         
-        switch((type.value)[0]){
+        if((type.value)[0] == 'l'){
+            
+            //*this is a loxodrome
+            
+            cout << prefix.value << RED << "Cannot determine whether *this is included in circle, because *this is a loxodrome!\n" << RESET;
+            
+            return false;
+            
+        }else{
+            
+            
+            if((type.value)[0] == 'o'){
                 
-            case 'l':{
-                
-                //*this is a loxodrome
-                
-                cout << prefix.value << RED << "Cannot determine whether *this is included in circle, because *this is a loxodrome!\n" << RESET;
-                
-                return false;
-                
-                break;
-                
-            }
-                
-            case 'o':{
                 //*this is an orthodrome
                 
                 if(!(intersection(circle, t, new_prefix))){
@@ -2477,7 +2477,6 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                                     
                                     sort(t->begin(), t->end());
                                     
-                                    
                                 }
                                 
                                 
@@ -2493,54 +2492,58 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                     
                 }
                 
-                break;
+            }else{
                 
-            }
-                
-            case 'c':{
-                //*this is a circle of equal altitude
-                
-                Length d;
-                
-                reference_position.distance(circle.reference_position, &d, String(""), new_prefix);
-                
-                if(d < (Re*((omega+(circle.omega)).value))){
-                    //the circles have a common area
+                if((type.value)[0] == 'c'){
                     
-                    if((t!=NULL) && (!(intersection(circle, t, new_prefix)))){
-                        //the circles do no intersect: I write 0, 0 into t
+                    //*this is a circle of equal altitude
+                    
+                    Length d;
+                    
+                    reference_position.distance(circle.reference_position, &d, String(""), new_prefix);
+                    
+                    if(d < (Re*((omega+(circle.omega)).value))){
+                        //the circles have a common area
                         
-                        t->resize(2);
-                        ((*t)[0]).set(String(""), 0.0, new_prefix);
-                        ((*t)[1]).set(String(""), 0.0, new_prefix);
+                        if((t!=NULL) && (!(intersection(circle, t, new_prefix)))){
+                            //the circles do no intersect: I write 0, 0 into t
+                            
+                            t->resize(2);
+                            ((*t)[0]).set(String(""), 0.0, new_prefix);
+                            ((*t)[1]).set(String(""), 0.0, new_prefix);
+                            
+                        }
+                        
+                        return true;
+                        
+                    }else{
+                        //the circles don't have a common area
+                        
+                        return false;
                         
                     }
                     
-                    return true;
-                    
                 }else{
-                    //the circles don't have a common area
+                    
+                    cout << prefix.value << RED << "Cannot determine whether Route is included in circle, Route type is invalid!\n" << RESET;
                     
                     return false;
                     
                 }
                 
-                break;
-                
             }
-                
+            
         }
         
     }else{
         
-        cout << prefix.value << RED << "Cannot determine whether *this is included in circle, because circle is not a circle of equal altitude!\n" << RESET;
+        cout << prefix.value << RED << "Cannot determine whether Route is included in circle, because circle is not a circle of equal altitude!\n" << RESET;
         
         return false;
         
     }
     
 }
-
 
 //If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t. If *this is a loxodrome, return false because I don't know how to determine whetehr the loxodrome is included in a Rectangle
 bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, [[maybe_unused]] String prefix){

@@ -2386,7 +2386,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 
 
 
-//If circle is not a circle of equal altitude, it returns false. Otherwise, if a part of *this is included into  circle, it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
+//If circle is not a circle of equal altitude, it returns false. Otherwise, if the type of *this is not valid, it returns false. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
 bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     String new_prefix;

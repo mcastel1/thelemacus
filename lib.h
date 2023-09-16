@@ -757,7 +757,7 @@ public:
     static double lambda_minus_pi(double, void*);
     int inclusion(Route, bool, vector<Angle>*, String);
     int inclusion(Rectangle, bool, vector<Angle>*, String);
-    int intersection(Route, vector<Angle>*, String);
+    int intersection(Route, bool, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);

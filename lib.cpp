@@ -2056,6 +2056,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                     check = inclusion(draw_panel->rectangle_observer, true, &t, String(""));
                     
                     break;
+                    
                 }
                     
                 case '3':{
@@ -2409,7 +2410,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
             if((type.value)[0] == 'o'){
                 //*this is an orthodrome
                 
-                if(intersection(circle, t, new_prefix) == 0){
+                if(intersection(circle, true, t, new_prefix) == 0){
                     //*this and circle do not intersect: check whether *this is fully included into circle
                     
                     if(reference_position.is_in(circle, prefix)){
@@ -2504,7 +2505,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
                         
                         if(write_t){
                             
-                            if(intersection(circle, t, new_prefix) == 0){
+                            if(intersection(circle, true, t, new_prefix) == 0){
                                 //the circles do no intersect: I set t[0] = t[1] = 0.0
                                 
                                 t->resize(2);
@@ -2606,19 +2607,19 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
         
         
         //compute the intersections between *this and side_N/S/E/W, and writes in temp the values of the parametric angle t of *this at which *this crosses side_N/S/E/W: temps are then appended to u, which, at the end, will contain all intersections
-        intersection(side_N, &temp, String(""));
+        intersection(side_N, true, &temp, String(""));
         u.insert(u.end(), temp.begin(), temp.end());
         temp.clear();
         
-        intersection(side_S, &temp, String(""));
+        intersection(side_S, true, &temp, String(""));
         u.insert(u.end(), temp.begin(), temp.end());
         temp.clear();
         
-        intersection(side_E, &temp, String(""));
+        intersection(side_E, true, &temp, String(""));
         u.insert(u.end(), temp.begin(), temp.end());
         temp.clear();
         
-        intersection(side_W, &temp, String(""));
+        intersection(side_W, true, &temp, String(""));
         u.insert(u.end(), temp.begin(), temp.end());
         
         u.push_back(Angle(0.0));
@@ -2698,8 +2699,8 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
 }
 
 
-//If route is not a circle of equal altitide,  returs -1. Othwewise, a) If *this and route intersect,  return 1 and, if t!=NULL, it also allocates t and it writes in t the  values of the parametric angles t of (*this), at which (*this) crosses route. b) If *this and route do not intersect, it returns 0 and does nothing with t c) if the type of *this is such that the intersection cannot be computed, it returns -1
-int Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String prefix){
+//If route is not a circle of equal altitide,  returs -1 (error code). Othwewise, a) If *this and route intersect,  return 1 and, if write_t = true, it also allocates t and it writes in t the  values of the parametric angles t of (*this), at which (*this) crosses route. b) If *this and route do not intersect, it returns 0 and does nothing with t c) if the type of *this is such that the intersection cannot be computed, it returns -1
+int Route::intersection(Route route, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     String new_prefix;
     Angle t_a, t_b;
@@ -2774,11 +2775,11 @@ int Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String p
                 output = 0;
                 
                 //clear up t because I will write in i in what follows
-                if(t){t->clear();}
+                if(write_t){t->clear();}
                 
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_p.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_p)), prefix)){
                     
-                    if(t){
+                    if(write_t){
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_p), prefix);
                     }
@@ -2788,7 +2789,7 @@ int Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String p
                     
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_p))), prefix)){
                         
-                        if(t){
+                        if(write_t){
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_p), prefix);
                         }
@@ -2796,14 +2797,13 @@ int Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String p
                         //if I find a viable instersection point, I set output to true
                         output = 1;
                         
-                        
                     }
                     
                 }
                 
                 if((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value)*(cos_t_m.value)+cos(route.omega))/(b.value) > 0.0) && compute_end(Length(Re*acos(cos_t_m)), prefix)){
                     
-                    if(t){
+                    if(write_t){
                         t->resize((t->size())+1);
                         (t->back()).set(String(""), acos(cos_t_m), prefix);
                     }
@@ -2811,10 +2811,9 @@ int Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String p
                     //if I find a viable instersection point, I set output to 1
                     output = 1;
                     
-                    
                     if(compute_end(Length(Re*(2.0*M_PI-acos(cos_t_m))), prefix)){
                         
-                        if(t){
+                        if(write_t){
                             t->resize((t->size())+1);
                             (t->back()).set(String(""), 2.0*M_PI-acos(cos_t_m), prefix);
                         }
@@ -2845,9 +2844,9 @@ int Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String p
                 if(/*this is the condition that *this and route intersect*/(d > Re*fabs((omega.value)- ((route.omega).value))) && (d < Re*((omega + (route.omega)).value))){
                     //in this case, *this and route intersect
                     
-                    if(t){
+                    if(write_t){
                         
-                        (*t).resize(2);
+                        t->resize(2);
                         
                         if(((route.reference_position.phi) != M_PI_2) && ((route.reference_position.phi) != 3.0*M_PI_2)){
                             //theg general case where route.reference_position.phi != +-pi/2
@@ -3031,8 +3030,8 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
             
             cout << prefix.value << "Routes intersect\n";
             
-            (*this).intersection(route, &t, new_prefix);
-            route.intersection((*this), &u, new_prefix);
+            intersection(route, true, &t, new_prefix);
+            route.intersection((*this), true, &u, new_prefix);
             
             (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), new_prefix);
             (*p)[0] = end;

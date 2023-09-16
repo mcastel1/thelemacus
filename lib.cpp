@@ -2927,7 +2927,7 @@ int Route::intersection(Route route, vector<Angle> *t, [[maybe_unused]] String p
                 }else{
                     //in this case, *this and route do not intersect
                     
-                    return 1;
+                    return 0;
                     
                 }
                 

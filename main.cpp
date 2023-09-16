@@ -23,6 +23,7 @@
  
  ********** THINGS TO ADD ************
  
+ 
 - remove ugly maximizaiton of panel that occurs in ListFrame::Resize() and beep
  - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
@@ -49,6 +50,7 @@
 
  ********** THINGS TO FIX ************
  
+ - add missing case in                                 //the circles d intersect: here you should compute t
  - remove  = o = l = o = l printed to cout
  - the user should not be allowed to transport a sight with a circle of equal altitude
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted

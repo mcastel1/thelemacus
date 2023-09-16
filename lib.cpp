@@ -2046,7 +2046,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
         case 'o':{
             //the Route this is an orthodrome
             
-            bool check;
+            int check;
             
             switch(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]){
                     
@@ -2061,7 +2061,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                 case '3':{
                     //I am using the 3d projection
                     
-                    check = inclusion(draw_panel->circle_observer, &t, String(""));
+                    check = inclusion(draw_panel->circle_observer, true, &t, String(""));
                     
                     break;
                     
@@ -2070,7 +2070,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
             }
             
             
-            if(check){
+            if(check == 1){
                 //there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
                 
                 unsigned int i;
@@ -2114,7 +2114,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                 case 'M':{
                     //I am using the mercator projection
                     
-                    if(inclusion(draw_panel->rectangle_observer, true, &t, String(""))){
+                    if(inclusion(draw_panel->rectangle_observer, true, &t, String("")) == 1){
                         //*this is included in rectangle_observer
                         
                         if((t[0] == 0.0) && (t[1] == 0.0)){
@@ -2159,7 +2159,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                 case '3':{
                     //I am using the 3d projection
                     
-                    if(inclusion(draw_panel->circle_observer, &t, String(""))){
+                    if(inclusion(draw_panel->circle_observer, true, &t, String("")) == 1){
                         //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
                         
                         s->resize(2);
@@ -2386,8 +2386,8 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 
 
 
-//If circle is not a circle of equal altitude, it returns false. Otherwise, if the type of *this is not valid, it returns false. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
-bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String prefix){
+//If circle is not a circle of equal altitude, it returns -1 (error code). Otherwise, if the type of *this is not valid, it returns -1. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and write_t = true, it sets t[0] = t[1] = 0.0
+int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -2397,18 +2397,16 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
     if(((circle.type) == String("c"))){
         
         if((type.value)[0] == 'l'){
-            
             //*this is a loxodrome
             
             cout << prefix.value << RED << "Cannot determine whether *this is included in circle, because *this is a loxodrome!\n" << RESET;
             
-            return false;
+            return -1;
             
         }else{
             
             
             if((type.value)[0] == 'o'){
-                
                 //*this is an orthodrome
                 
                 if(intersection(circle, t, new_prefix) == 0){
@@ -2417,7 +2415,7 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                     if(reference_position.is_in(circle, prefix)){
                         //reference_position is included into the circle of circle, thus *this is included into circle
                         
-                        if(t){
+                        if(write_t){
                             
                             t->resize(2);
                             ((*t)[0]).set(String(""), 0.0, new_prefix);
@@ -2425,19 +2423,19 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                             
                         }
                         
-                        return true;
+                        return 1;
                         
                     }else{
                         //reference_position is not included into the circle of circle, thus *this is not included into circle
                         
-                        return false;
+                        return 0;
                         
                     }
                     
                 }else{
-                    //*this and circle intersect
+                    //*this and circle intersect ->  a part of *this is included into circle
                     
-                    if(t){
+                    if(write_t){
                         
                         switch(t->size()){
                                 
@@ -2488,14 +2486,13 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                         
                     }
                     
-                    return true;
+                    return 1;
                     
                 }
                 
             }else{
                 
                 if((type.value)[0] == 'c'){
-                    
                     //*this is a circle of equal altitude
                     
                     Length d;
@@ -2505,21 +2502,30 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                     if(d < (Re*((omega+(circle.omega)).value))){
                         //the circles have a common area
                         
-                        if((t!=NULL) && (intersection(circle, t, new_prefix) == 0)){
-                            //the circles do no intersect: I write 0, 0 into t
+                        if(write_t){
                             
-                            t->resize(2);
-                            ((*t)[0]).set(String(""), 0.0, new_prefix);
-                            ((*t)[1]).set(String(""), 0.0, new_prefix);
+                            if(intersection(circle, t, new_prefix) == 0){
+                                //the circles do no intersect: I set t[0] = t[1] = 0.0
+                                
+                                t->resize(2);
+                                ((*t)[0]).set(String(""), 0.0, new_prefix);
+                                ((*t)[1]).set(String(""), 0.0, new_prefix);
+                                
+                            }else{
+                                //the circles d intersect: here you should compute t
+                                
+                                
+                                
+                            }
                             
                         }
                         
-                        return true;
+                        return 1;
                         
                     }else{
                         //the circles don't have a common area
                         
-                        return false;
+                        return 0;
                         
                     }
                     
@@ -2527,7 +2533,7 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                     
                     cout << prefix.value << RED << "Cannot determine whether Route is included in circle, Route type is invalid!\n" << RESET;
                     
-                    return false;
+                    return -1;
                     
                 }
                 
@@ -2539,14 +2545,14 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
         
         cout << prefix.value << RED << "Cannot determine whether Route is included in circle, because circle is not a circle of equal altitude!\n" << RESET;
         
-        return false;
+        return -1;
         
     }
     
 }
 
-//If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entireli lies within circle and write_t = true, it returns 0, 0 in t. If *this is a loxodrome, return false because I don't know how to determine whetehr the loxodrome is included in a Rectangle
-bool Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
+//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a Rectangle. Otherwise, if *this is included into the Rectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
+int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     
     if(type == String("l")){
@@ -2554,7 +2560,7 @@ bool Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[may
         
         cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
         
-        return false;
+        return -1;
         
     }else{
         //the longitude and latitude span of rectangle
@@ -2562,8 +2568,9 @@ bool Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[may
         Angle lambda_span, phi_span;
         Route side_N, side_S, side_E, side_W;
         vector<Angle> u, temp;
-        bool output, /*this is true if the entire Route *this is included in rectangle, and false otherwise*/is_fully_included;
+        bool  /*this is true if the entire Route *this is included in rectangle, and false otherwise*/is_fully_included;
         unsigned int i;
+        int output;
         
         
         lambda_span = ((rectangle.p_NW).lambda).span((rectangle.p_SE).lambda);
@@ -2633,7 +2640,7 @@ bool Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[may
         
         //run over all chunks of *this in between the intersections and find out whether some fall within rectangle
         if(write_t){t->resize(0);}
-        for(output = false, is_fully_included = true, i=0; i<(u.size())-1; i++){
+        for(output = 0, is_fully_included = true, i=0; i<(u.size())-1; i++){
             
             //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
             if(type == String("o")){
@@ -2644,9 +2651,9 @@ bool Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[may
             }
             
             if(rectangle.Contains(end)){
-                //if rectangle contains the midpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return true
+                //if rectangle contains the midpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return 1
                 
-                output = true;
+                output = 1;
                 
                 //If write_t < write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
                 if(write_t){

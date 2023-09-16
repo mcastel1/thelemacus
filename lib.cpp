@@ -10138,7 +10138,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     //button to show list
-    button_show_list = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_list), wxDefaultPosition, (my_image_list.GetSize()) + wxSize(((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value), ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_show_list = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_list), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
     
     

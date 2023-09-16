@@ -50,6 +50,7 @@
 
  ********** THINGS TO FIX ************
  
+-  bool crossing(Route, vector<Position>*, double*, String); should return a proper int error code (-1, 0 or 1)
  - add missing case in                                 //the circles d intersect: here you should compute t
  - remove  = o = l = o = l printed to cout
  - the user should not be allowed to transport a sight with a circle of equal altitude

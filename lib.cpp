@@ -2544,7 +2544,7 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
 }
 
 
-//If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t.
+//If *this is included into the Rectangle rectangle it returns true, and false otherwise. If true is returned and t!=NULL, it writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this lies within circle and t!=NULL, it returns 0, 0 in t. If *this is a loxodrome, return false because I don't know how to determine whetehr the loxodrome is included in a Rectangle
 bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     
@@ -2552,6 +2552,8 @@ bool Route::inclusion(Rectangle rectangle, vector<Angle> *t, [[maybe_unused]] St
         //*this is a loxodrome
         
         cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
+        
+        return false;
         
     }else{
         //the longitude and latitude span of rectangle

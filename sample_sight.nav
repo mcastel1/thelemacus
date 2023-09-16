@@ -40,4 +40,13 @@ Routes in the plot:
 			label = 
 		aperture angle = 64° 49.93446862384019'
 		label = jupiter 2021-10-16 19:45:41 TAI, Michele 3
+	Route #4:
+		type = l
+		start position:
+			latitude = 307° 2.391371036502505'
+			longitude = 275° 38.52388235293915'
+			label = 
+		starting heading = 23° 3.23200000000007'
+		length = 3324 nm
+		label = Michele al parco giochi
 Positions in the plot:

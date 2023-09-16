@@ -2531,15 +2531,11 @@ bool Route::inclusion(Route circle, vector<Angle> *t, [[maybe_unused]] String pr
                 
         }
         
-        
-        
-        
     }else{
         
         cout << prefix.value << RED << "Cannot determine whether *this is included in circle, because circle is not a circle of equal altitude!\n" << RESET;
         
         return false;
-        
         
     }
     

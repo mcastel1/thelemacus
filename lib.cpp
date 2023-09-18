@@ -2997,8 +2997,8 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
 }
 
 
-//this function computes the crossings between Route (*this) and Route route: it writes the two crossing points in p, and the cosing of the crossing angle in cos_crossing_angle
-bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle, [[maybe_unused]] String prefix){
+//this function computes the crossings between Route (*this) and Route route: it writes the two crossing points in p, and the cosing of the crossing angle in cos_crossing_angle. If the intersection cannot be computed it returns -1 (error code), othwerwise it returns 1 (0) if the Routes intersect (do not interesect). 
+int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle, [[maybe_unused]] String prefix){
     
     //these are the two lengths along Route (*this) which correspond to the two crossings with route
     String new_prefix;
@@ -3007,18 +3007,19 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    check = true;
-    
+
     if(!((type == String("c")) && (route.type == String("c")))){
         
         cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
-        check &= false;
+        return (-1);
         
     }else{
         
         Angle theta, t_temp;
         Length r, s;
         
+        check = true;
+
         theta.set(String("angle between the two GPs"), acos(cos((reference_position .phi))*cos((route.reference_position).phi)*cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin((reference_position.phi))*sin((route.reference_position).phi)), prefix);
         
         if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
@@ -3075,16 +3076,19 @@ bool Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angl
             }
             
         }else{
+            //routes do not intersect
             
             cout << prefix.value << "Routes do no intersect\n";
             check &= false;
             
         }
         
+        if(check){return 1;}
+        else{retrn 0;}
+
     }
     
-    return check;
-    
+
 }
 
 String String::append(String s){

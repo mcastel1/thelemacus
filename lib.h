@@ -752,7 +752,7 @@ public:
     void read_from_file(File&, String);
     void compute_end(String);
     bool compute_end(Length, String);
-    bool crossing(Route, vector<Position>*, double*, String);
+    int crossing(Route, vector<Position>*, double*, String);
     void transport(String);
     static double lambda_minus_pi(double, void*);
     int inclusion(Route, bool, vector<Angle>*, String);

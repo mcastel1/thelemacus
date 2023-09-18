@@ -2997,7 +2997,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
 }
 
 
-//this function computes the crossings between Route (*this) and Route route: it writes the two crossing points in p, and the cosing of the crossing angle in cos_crossing_angle. If the intersection cannot be computed it returns -1 (error code), othwerwise it returns 1 (0) if the Routes intersect (do not interesect). 
+//this function computes the crossings between Route (*this) and Route route: it writes the two crossing points in p, and the cosing of the crossing angle in cos_crossing_angle. If the intersection cannot be computed it returns -1 (error code), othwerwise it returns 1 (0) if the Routes intersect (do not interesect).
 int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle, [[maybe_unused]] String prefix){
     
     //these are the two lengths along Route (*this) which correspond to the two crossings with route
@@ -3084,7 +3084,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
         }
         
         if(check){return 1;}
-        else{retrn 0;}
+        else{return 0;}
 
     }
     
@@ -6023,7 +6023,7 @@ void Plot::compute_crossings(String prefix){
             
             cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
             
-            if((route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix)){
+            if(((route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix)) >= 0){
                 //in this case, the two routes under consideration intercept with no error message
                 
                 //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle), then I add this crossing to the list of sensible crossings

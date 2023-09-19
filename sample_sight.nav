@@ -15,6 +15,22 @@ Sights in the plot:
 		use of stopwatch = n
 		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 		label = Michele #1
+	Sight #2:
+		body:
+			Type = star
+			Name = vega
+			Right ascension = 279° 13.92611999999986'
+			Declination = 38° 46.93896000000009'
+		sextant altitude = 4° 2.999999999999989'
+		index error = 0° 1.9'
+		artificial horizon = n
+		height of eye = 2.133604267208534 m
+		master-clock date and hour of sight:
+			master-clock date and hour of sight = 2023-09-19
+			hour of master-clock date and hour of sight = 10:19:35
+		use of stopwatch = n
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = 
 Routes in the plot:
 	Route #1:
 		type = c
@@ -49,4 +65,13 @@ Routes in the plot:
 		starting heading = 23° 3.23200000000007'
 		length = 3324 nm
 		label = Michele al parco giochi
+	Route #5:
+		type = o
+		start position:
+			latitude = 3° 7.000000000000002'
+			longitude = 357° 58.00000000000182'
+			label = 
+		starting heading = 33° 2.999999999999829'
+		length = 3333 nm
+		label = Jack
 Positions in the plot:

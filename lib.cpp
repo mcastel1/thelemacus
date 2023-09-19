@@ -12793,7 +12793,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     }
     
     (f->listcontrol_routes)->set(route_list_for_transport);
-    //I bing listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport 
+    //I bing listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
 
     
@@ -13595,7 +13595,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     for(i_transporting_route=0, i=0; i_transporting_route<((f->plot)->route_list).size(); i_transporting_route++){
         
-        if((((((f->plot)->route_list)[i_transporting_route]).related_sight).value) == -1){
+        if(((((((f->plot)->route_list)[i_transporting_route]).related_sight).value) == -1) && (((((f->plot)->route_list)[i_transporting_route]).type) != String("c"))){
             
             if(i == ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)))){
                 

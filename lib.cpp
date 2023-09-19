@@ -12866,16 +12866,23 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
         
         //remove the route from the non-GUI object plot
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
-        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
-                                                                                                              parent->delete_route_and_related_sight, String("Yes"),
-                                                                                                              parent->delete_route, String("No"),
-                                                                                                              "",
-                                                                                                              "Do you want to remove the sight related to this route?",
-                                                                                                              wxDefaultPosition,
-                                                                                                              wxDefaultSize,
-                                                                                                              String(""));
         
-        question_frame->Show(true);
+//        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
+//                                                                                                              parent->delete_route_and_related_sight, String("Yes"),
+//                                                                                                              parent->delete_route, String("No"),
+//                                                                                                              "",
+//                                                                                                              "Do you want to remove the sight related to this route?",
+//                                                                                                              wxDefaultPosition,
+//                                                                                                              wxDefaultSize,
+//                                                                                                              String(""));
+        
+        PrintQuestion<ListFrame, DeleteRoute, DeleteRoute>* print_question;
+        
+        print_question  = new PrintQuestion<ListFrame, DeleteRoute, DeleteRoute>(parent, parent->delete_route_and_related_sight, parent->delete_route);
+        
+        print_question->SetAndCall(NULL, String("The route that you are about to remove is related to a sight"), String("Do you want to remove the sight related to this route?"), String("Yes"), String("No"));
+        
+//        question_frame->Show(true);
         
     }else{
         //if not, I simply delete teh route

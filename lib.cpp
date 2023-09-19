@@ -12766,7 +12766,8 @@ void DeleteSight::operator()(wxCommandEvent& event){
 void ExistingRoute::operator()(wxCommandEvent& event){
     
     int i;
-    vector<Route> route_list_no_related_sight;
+    //the list of Routes which may be used for transport
+    vector<Route> route_list_for_transport;
     
     (f->print_info_message->control) = NULL;
     (f->print_info_message->title) = String("");
@@ -12776,18 +12777,18 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
     (f->enable_highlight) = false;
     
-    //Given that a sight must be transported only with a Route that does not come from a Sight, I store in route_list_no_related_sight the Routes in route_list which are not related to any sight, show route_list_no_related_sight in listcontrol_routes, and let the user select one item in route_list_no_related_sight to transport the Sight
+    //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for(i=0; i<((f->plot)->route_list).size(); i++){
         
-        if((((((f->plot)->route_list)[i]).related_sight).value) == -1){
+        if(((((((f->plot)->route_list)[i]).related_sight).value) == -1) && ((((f->plot)->route_list)[i]).type != String("c"))){
             
-            route_list_no_related_sight.push_back(((f->plot)->route_list)[i]);
+            route_list_for_transport.push_back(((f->plot)->route_list)[i]);
             
         }
         
     }
     
-    (f->listcontrol_routes)->set(route_list_no_related_sight);
+    (f->listcontrol_routes)->set(route_list_for_transport);
     
     event.Skip(true);
     

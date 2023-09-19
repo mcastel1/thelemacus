@@ -12768,11 +12768,14 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     int i;
     //the list of Routes which may be used for transport
     vector<Route> route_list_for_transport;
-    
-    (f->print_info_message->control) = NULL;
-    (f->print_info_message->title) = String("");
-    (f->print_info_message->message) = String("Select the route with which you want to transport the sight");
-    (*(f->print_info_message))();
+
+//    (f->print_info_message->control) = NULL;
+//    (f->print_info_message->title) = String("");
+//    (f->print_info_message->message) = String("Select the route with which you want to transport the sight");
+//    (*(f->print_info_message))();
+    //print an info message
+    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), String(path_file_warning_icon));
+
     
     //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
     (f->enable_highlight) = false;

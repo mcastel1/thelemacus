@@ -12776,6 +12776,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     //print an info message
     (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), String(path_file_warning_icon));
 
+   
     
     //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
     (f->enable_highlight) = false;
@@ -12792,6 +12793,9 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     }
     
     (f->listcontrol_routes)->set(route_list_for_transport);
+    //I bing listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport 
+    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
+
     
     event.Skip(true);
     

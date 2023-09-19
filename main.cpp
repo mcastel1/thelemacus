@@ -52,7 +52,6 @@
  
  - add missing case in                                 //the circles d intersect: here you should compute t
  - remove  = o = l = o = l printed to cout
- - the user should not be allowed to transport a sight with a circle of equal altitude
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted
  - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place
  - replace calls of QuestionFrame that do not use PrintQuestion by using PrintQUesiton 

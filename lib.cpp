@@ -15767,16 +15767,13 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
 void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
     
     //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame> >(NULL,
-                                                                                                                                                      ask_remove_related_route, String("Yes"), unset_idling, String("No"),
-                                                                                                                                                      "",
-                                                                                                                                                      "Do you really want to remove this sight?",
-                                                                                                                                                      wxDefaultPosition,
-                                                                                                                                                      wxDefaultSize,
-                                                                                                                                                      String(""));
-    
-    question_frame->Show(true);
-    
+    PrintQuestion<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* print_question;
+  
+ 
+    print_question = new PrintQuestion<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >(this, ask_remove_related_route, unset_idling);
+
+    print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this sight?"), String("Yes"), String("No"));
+
     
     event.Skip(true);
     

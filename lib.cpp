@@ -15784,14 +15784,13 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
     (delete_position->i_position_to_remove) = ((int)(listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    QuestionFrame<DeletePosition, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<DeletePosition, UnsetIdling<ListFrame> >(NULL,
-                                                                                                                                        delete_position, String("Yes"), unset_idling, String("No"),
-                                                                                                                                        "",
-                                                                                                                                        "Do you really want to remove this position?",
-                                                                                                                                        wxDefaultPosition,
-                                                                                                                                        wxDefaultSize,
-                                                                                                                                        String(""));
-    question_frame->Show(true);
+    
+    PrintQuestion<ListFrame, DeletePosition, UnsetIdling<ListFrame> >* print_question;
+    
+    print_question = new PrintQuestion<ListFrame, DeletePosition,  UnsetIdling<ListFrame> >(this, delete_position, unset_idling);
+
+    print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this position?"), String("Yes"), String("No"));
+
     
     event.Skip(true);
     

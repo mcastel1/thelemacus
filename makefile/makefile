@@ -18,7 +18,10 @@ CXXFLAGS_2=`wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0
 ${APP_NAME}: lib.cpp main.cpp 
 	clear; clear;
 	rm -rf temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}.app ${OUTPUT_CODE_DIR}/${APP_NAME}
-	#$(CXX)  $(CXXFLAGS) -o ${OUTPUT_CODE_DIR}/main.o  ${INPUT_CODE_DIR}/main.cpp
+	
+	
+	sed -e 's#${INPUT_IMAGE_DIR}#${OUTPUT_IMAGE_DIR}#' ${INPUT_CODE_DIR}/data/init.txt
+
 	
 	${WX_DIR}/build-cocoa-debug/bk-deps $(CXX) $(CXXFLAGS_1)  -c -o ${OUTPUT_CODE_DIR}/temp.o   ${OUTPUT_CODE_DIR}/main.cpp
 	$(CXX) $(CXXFLAGS_2) -o ${OUTPUT_CODE_DIR}/${APP_NAME} ${OUTPUT_CODE_DIR}/temp.o
@@ -47,6 +50,7 @@ ${APP_NAME}: lib.cpp main.cpp
 	#copy the image files
 	cp ${INPUT_IMAGE_DIR}/*.png ${OUTPUT_IMAGE_DIR}
 	cp ${INPUT_DATA_DIR}/map_conv_blocked.csv ${INPUT_DATA_DIR}/n_line_map_conv_blocked.txt ${OUTPUT_DATA_DIR}
+
 
 	rm -rf ${OUTPUT_CODE_DIR}/temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}
 

@@ -26,7 +26,7 @@ ${APP_NAME}: lib.cpp main.cpp
 		 ${INPUT_CODE_DIR}/data/init.txt
 	#
 	
-	${WX_DIR}/build-cocoa-debug/bk-deps $(CXX) $(CXXFLAGS_1)  -c -o ${OUTPUT_CODE_DIR}/temp.o   ${OUTPUT_CODE_DIR}/main.cpp
+	${WX_DIR}/build-cocoa-debug/bk-deps $(CXX) $(CXXFLAGS_1)  -c -o ${OUTPUT_CODE_DIR}/temp.o   ${INPUT_CODE_DIR}/main.cpp
 	$(CXX) $(CXXFLAGS_2) -o ${OUTPUT_CODE_DIR}/${APP_NAME} ${OUTPUT_CODE_DIR}/temp.o
 	
 	mkdir -p ${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents

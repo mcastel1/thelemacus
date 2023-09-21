@@ -15138,9 +15138,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     //read color list from file_init
     s.read_from_file(String("color list"), String(path_file_init), String(""));
-    
-    
-    
+
     
     margin = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);
     
@@ -15262,13 +15260,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
     
-    
-    
     //image for button_add_sight, button_add_position and button_add_route
     wxBitmap my_bitmap_plus = wxBitmap(wxT(path_file_plus_icon), wxBITMAP_TYPE_PNG);
     wxImage my_image_plus = my_bitmap_plus.ConvertToImage();
     RescaleProportionally(&my_image_plus, wxGetApp().size_small_button);
-    
     
     //image for button_map
     wxBitmap my_bitmap_map = wxBitmap(wxT(path_file_map_icon), wxBITMAP_TYPE_PNG);
@@ -15318,7 +15313,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     //button to delete a sight
     button_delete_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight, this);
+    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight<wxCommandEvent>, this);
     button_delete_sight->Enable(false);
     
     //button to delete a position
@@ -15425,7 +15420,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     
     sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
-    //listcontrol routes with routes
+
+    //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
+    Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
+    listcontrol_sights->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
+    listcontrol_routes->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
+    listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
+
     
     /*
      //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
@@ -15775,7 +15777,7 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
 
 
 
-void ListFrame::OnPressDeleteSight(wxCommandEvent& event){
+template<class E> void ListFrame::OnPressDeleteSight(E& event){
     
     //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     PrintQuestion<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* print_question;
@@ -16118,6 +16120,41 @@ template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
     
 }
 
+
+
+template<class E> void ListFrame::KeyDown(E& event){
+    
+    if(((event.GetKeyCode()) == WXK_DELETE) || ((event.GetKeyCode()) == WXK_BACK)){
+        // the user pressed delete or backspace
+           
+        
+        if((listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1){
+            //an item was selected in listcontrol_sights -> call OnPressDeleteSight
+            
+            OnPressDeleteSight(event);
+            
+        }
+     
+        if((listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1){
+            //an item was selected in listcontrol_positions -> call OnPressDeleteposition
+            
+            OnPressDeletePosition(event);
+            
+        }
+        
+        if((listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1){
+            //an item was selected in listcontrol_routes -> call OnPressDeleteroute
+            
+            OnPressDeleteroute(event);
+            
+        }
+     
+            
+    }
+    
+    event.Skip(true);
+    
+}
 
 
 

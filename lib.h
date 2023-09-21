@@ -2116,7 +2116,7 @@ public:
     void OnAddSight(wxCommandEvent& event);
     template<class E> void OnModifySight(E&);
     void OnTransportSight(wxCommandEvent& event);
-    void OnPressDeleteSight(wxCommandEvent& event);
+    template<class E> void OnPressDeleteSight(E&);
     
     void OnAddPosition(wxCommandEvent& event);
     template<class E> void OnModifyPosition(E&);
@@ -2143,6 +2143,7 @@ public:
     template<class E> void OnPressCtrlW(E&);
     template<class E> void OnPressCtrlS(E&);
     template<class E> void OnPressCtrlShiftS(E&);
+    template<class E> void KeyDown(E&);
 
     
 };

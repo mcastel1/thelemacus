@@ -15318,12 +15318,12 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     //button to delete a position
     button_delete_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition, this);
+    button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition<wxCommandEvent>, this);
     button_delete_position->Enable(false);
     
     //button to delete a route
     button_delete_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute, this);
+    button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute<wxCommandEvent>, this);
     button_delete_route->Enable(false);
     
     
@@ -16145,7 +16145,7 @@ template<class E> void ListFrame::KeyDown(E& event){
         if((listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1){
             //an item was selected in listcontrol_routes -> call OnPressDeleteroute
             
-            OnPressDeleteroute(event);
+            OnPressDeleteRoute(event);
             
         }
      

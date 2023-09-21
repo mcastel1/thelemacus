@@ -321,7 +321,7 @@ bool MyApp::OnInit(){
     path_file_pencil_icon.read_from_file(String("path file pencil icon"), String(path_file_init), String(""));
     path_file_trash_icon.read_from_file(String("path file trash icon"), String(path_file_init), String(""));
     path_file_arrow_icon.read_from_file(String("path file arrow icon"), String(path_file_init), String(""));
-    path_file_coastline_data_blocked.read_from_file(String("path file_coastline data blocked"), String(path_file_init), String(""));
+    path_file_coastline_data_blocked.read_from_file(String("path file coastline data blocked"), String(path_file_init), String(""));
     path_file_n_line.read_from_file(String("path file n line"), String(path_file_init), String(""));
 
      

@@ -1845,6 +1845,8 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
             
             unsigned int j;
             bool check;
+            //a temporary length used to computed end
+            Length r;
             
             for(j=0; j<(s.size())-1; j++){
                 
@@ -1854,7 +1856,19 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
                 //tabulate the Route points
                 for(i=0; i<n_points; i++){
                     
-                    compute_end(Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1))), String(""));
+                    
+                    //to avoid rounding problems, I set r exactly to s[j] (s[j+1]) for i=0 (i=n_points-2) and use the linear formula in between 
+                    if(i==0){
+                        r = s[j];
+                    }else{
+                        if(i<n_points-1){
+                             r = Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1)));
+                        }else{
+                            r = s[j+1];
+                        }
+                    }
+                    
+                    compute_end(r, String(""));
                     
                     check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
                     

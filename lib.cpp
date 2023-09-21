@@ -5045,9 +5045,9 @@ bool Sight::check_time_interval(String prefix){
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
     temp.clear();
     if((body.type) != String("star")){
-        temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/" << (body.name.value) << ".txt";
+        temp << (wxGetApp().data_directory).value << (body.name.value) << ".txt";
     }else{
-        temp << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/j2000_to_itrf93.txt";
+        temp << (wxGetApp().data_directory).value << "j2000_to_itrf93.txt";
     }
     data_file.set_name(temp.str());
     
@@ -7292,9 +7292,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
     cout << prefix.value << "Fetching ephemerides' data ...\n";
     
     if((body.type.value) != "star"){
-        filename << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/" << body.name.value << ".txt";
+        filename << (wxGetApp().data_directory).value << body.name.value << ".txt";
     }else{
-        filename << "/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/j2000_to_itrf93.txt";
+        filename << (wxGetApp().data_directory).value << "j2000_to_itrf93.txt";
     }
     temp = filename.str();
     
@@ -14124,15 +14124,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
     
-    /*
-     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
-     File file_sample_sight;
-     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.txt"));
-     file_sample_sight.open(String("in"), String(""));
-     sight->read_from_file(file_sample_sight, String(""));
-     file_sample_sight.close(String(""));
-     set();
-     */
+
     
     if(sight_in != NULL){set();}
     
@@ -15429,13 +15421,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
 
     
-    /*
-     //here I read a sample sight from file_sample_sight, store into sight and set all the fields in this to the data in sight with set()
-     File file_sample_sight;
-     file_sample_sight.set_name(String("/Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/sample_sight.nav"));
-     plot->read_from_file(file_sample_sight, String(""));
-     plot->print(true, String(""), cout);
-     */
+
     
     //here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
     //

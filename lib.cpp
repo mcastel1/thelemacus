@@ -9484,7 +9484,7 @@ void DrawPanel::Draw_Mercator(void){
     
     
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (route.type).set(String("Type of Route repreenting meridians"), String("o"), String(""));
+    (route.type).set(String("Type of Route representing meridians"), String("o"), String(""));
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = (p_SE.phi);
     

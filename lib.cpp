@@ -805,7 +805,7 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
     string line;
     stringstream s;
     
-    temp.set_name(String(path_file_temp));
+    temp.set_name((wxGetApp().path_file_temp));
     temp.remove(String(""));
     temp.open(String("out"), prefix);
     
@@ -5959,7 +5959,7 @@ Plot::Plot(Catalog* cata, [[maybe_unused]] String prefix){
     plot_command.precision((data_precision.value));
     command.precision((data_precision.value));
     
-    file_init.set_name(String(path_file_init));
+    file_init.set_name((wxGetApp().path_file_init));
     file_id.set_name(String("job_id.txt"));
     file_gnuplot.set_name(String("plot.plt"));
     file_boundary.set_name(String("boundary.txt"));
@@ -6021,7 +6021,7 @@ void Plot::compute_crossings(String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), String(path_file_init), new_prefix);
+    min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), new_prefix);
     
     cout << prefix.value << "Computing crossings between routes #:";
     for(i=0; i<crossing_route_list.size(); i++){
@@ -6510,7 +6510,7 @@ bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
     
     additional_items = 0;
     
-    file_init.set_name(String(path_file_init));
+    file_init.set_name((wxGetApp().path_file_init));
     check &= (file_init.open(String("in"), prefix));
     
     cout << prefix.value << "Enter " << name.value << ":\n";
@@ -8010,11 +8010,11 @@ bool Date::set_current(String prefix){
     
     check = true;
     
-    file_utc_date.set_name(String(path_file_utc_date_and_time));
+    file_utc_date.set_name((wxGetApp().path_file_utc_date_and_time));
     file_utc_date.remove(prefix);
     
     line_ins.str("");
-    line_ins << "date -u \"+%Y-%m-%d\"  >> " << path_file_utc_date_and_time;
+    line_ins << "date -u \"+%Y-%m-%d\"  >> " << ((wxGetApp().path_file_utc_date_and_time).value);
     
     //execute the date command in the terminal and writes the UTC date to file_utc_date
     system(line_ins.str().c_str());
@@ -8072,7 +8072,7 @@ bool Chrono::set_current(Int time_zone, [[maybe_unused]] String prefix){
     
     check = true;
     
-    file_utc_time.set_name(String(path_file_utc_date_and_time));
+    file_utc_time.set_name((wxGetApp().path_file_utc_date_and_time));
     file_utc_time.remove(prefix);
     
     //    date -u -v+1H +%H:%M:%S
@@ -8081,7 +8081,7 @@ bool Chrono::set_current(Int time_zone, [[maybe_unused]] String prefix){
     if((time_zone.value) > 0){sign = "+";}
     else{sign = "";}
     //run the command to get the current time with time zone specified by time_zone
-    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << path_file_utc_date_and_time;
+    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << ((wxGetApp().path_file_utc_date_and_time).value);
     
     string temp = line_ins.str().c_str();
     
@@ -8614,7 +8614,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
 }
 
 
-//this function fetches the data in path_file_coastline_data_blocked and stores them in data_x, data_y, p_coastline so that they can be read fastly
+//this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, p_coastline so that they can be read fastly
 void ListFrame::GetAllCoastLineData(void){
     
     File file_n_line, file_coastline_data_blocked;
@@ -8631,8 +8631,8 @@ void ListFrame::GetAllCoastLineData(void){
     double lambda_temp, phi_temp;
     
     
-    file_n_line.set_name(String(path_file_n_line));
-    file_coastline_data_blocked.set_name(String(path_file_coastline_data_blocked));
+    file_n_line.set_name((wxGetApp().path_file_n_line));
+    file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
     
     //read file n_line and store it into vector n_line
     file_n_line.open(String("in"), String(""));
@@ -8763,8 +8763,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     SetCursor(*wxCROSS_CURSOR);
     
     
-    (circle_observer.omega).read_from_file(String("omega draw 3d"), String(path_file_init), prefix);
-    thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), String(path_file_init), prefix);
+    (circle_observer.omega).read_from_file(String("omega draw 3d"), (wxGetApp().path_file_init), prefix);
+    thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), (wxGetApp().path_file_init), prefix);
     
     rotation = Rotation(
                         Angle(String("Euler angle alpha"), -M_PI_2, String("")),
@@ -10088,10 +10088,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     new_prefix = prefix.append(String("\t"));
     
     //read lambda_min, ...., phi_max from file_init
-    lambda_min.read_from_file(String("minimal longitude"), String(path_file_init), new_prefix);
-    lambda_max.read_from_file(String("maximal longitude"), String(path_file_init), new_prefix);
-    phi_min.read_from_file(String("minimal latitude"), String(path_file_init), new_prefix);
-    phi_max.read_from_file(String("maximal latitude"), String(path_file_init), new_prefix);
+    lambda_min.read_from_file(String("minimal longitude"), (wxGetApp().path_file_init), new_prefix);
+    lambda_max.read_from_file(String("maximal longitude"), (wxGetApp().path_file_init), new_prefix);
+    phi_min.read_from_file(String("minimal latitude"), (wxGetApp().path_file_init), new_prefix);
+    phi_max.read_from_file(String("maximal latitude"), (wxGetApp().path_file_init), new_prefix);
     
     
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
@@ -10105,7 +10105,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     zoom_factor.set(String(""), 1.0, String(""));
     
     //read zoom_factor_max from file_init
-    (wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), String(path_file_init), String(""));
+    (wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), (wxGetApp().path_file_init), String(""));
     
     
     idling = false;
@@ -10132,7 +10132,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)((wxGetApp().zoom_factor_max).value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
     
     //sets the coefficients for the function which relates the zoom factor to the slider value: read from file (wxGetApp().e_zoom) and set (wxGetApp().a_zoom), (wxGetApp().b_zoom)
-    (wxGetApp().e_zoom).read_from_file(String("exponent zoom"), String(path_file_init), String(""));
+    (wxGetApp().e_zoom).read_from_file(String("exponent zoom"), (wxGetApp().path_file_init), String(""));
     (wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value))/(-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
     (wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value))/(-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
     
@@ -10143,7 +10143,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize);
     
     //image for button_list
-    wxBitmap my_bitmap_list = wxBitmap(wxT(path_file_list_icon), wxBITMAP_TYPE_PNG);
+    wxBitmap my_bitmap_list = wxBitmap(wxString(((wxGetApp().path_file_list_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_list = my_bitmap_list.ConvertToImage();
     RescaleProportionally(&my_image_list, (wxGetApp().size_large_button));
     
@@ -10197,7 +10197,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     if(projection_in == String("")){
         //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
         
-        default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+        default_projection.read_from_file(String("default projection"), (wxGetApp().path_file_init), String(""));
         (projection->name)->SetValue(wxString(default_projection.value));
         
     }else{
@@ -10619,10 +10619,10 @@ template<class T> void ChartFrame::Reset(T& event){
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
         //read lambda_min, ...., phi_max from file_init
-        lambda_min.read_from_file(String("minimal longitude"), String(path_file_init), String(""));
-        lambda_max.read_from_file(String("maximal longitude"), String(path_file_init), String(""));
-        phi_min.read_from_file(String("minimal latitude"), String(path_file_init), String(""));
-        phi_max.read_from_file(String("maximal latitude"), String(path_file_init), String(""));
+        lambda_min.read_from_file(String("minimal longitude"), (wxGetApp().path_file_init), String(""));
+        lambda_max.read_from_file(String("maximal longitude"), (wxGetApp().path_file_init), String(""));
+        phi_min.read_from_file(String("minimal latitude"), (wxGetApp().path_file_init), String(""));
+        phi_max.read_from_file(String("maximal latitude"), (wxGetApp().path_file_init), String(""));
         draw_panel->Set_x_y_min_max_Mercator();
         ComputeZoomFactor_Mercator(draw_panel->x_span());
         
@@ -10634,7 +10634,7 @@ template<class T> void ChartFrame::Reset(T& event){
     if(((projection->name)->GetValue()) == wxString("3D")){
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
         
-        ((draw_panel->circle_observer_0).omega).read_from_file(String("omega draw 3d"), String(path_file_init), String(""));
+        ((draw_panel->circle_observer_0).omega).read_from_file(String("omega draw 3d"), (wxGetApp().path_file_init), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
         ComputeZoomFactor_3D();
         
@@ -10643,7 +10643,7 @@ template<class T> void ChartFrame::Reset(T& event){
         //                                            Angle(String("Euler angle beta"), 0.0, String("")),
         //                                            Angle(String("Euler angle gamma"), 0.0, String(""))
         //                                            );
-        (draw_panel->rotation_0).read_from_file(String("rotation 0"), String(path_file_init), String(""));
+        (draw_panel->rotation_0).read_from_file(String("rotation 0"), (wxGetApp().path_file_init), String(""));
         
         (draw_panel->rotation) = (draw_panel->rotation_0);
         
@@ -11052,7 +11052,7 @@ template<class T>void CheckBody::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name, String("Body not found in catalog!"), String("Body must be in catalog."), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Body not found in catalog!"), String("Body must be in catalog."), (wxGetApp().path_file_error_icon));
             
             (p->ok) = false;
             
@@ -11097,7 +11097,7 @@ template<class T> void CheckLimb::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, lower or center."), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, lower or center."), (wxGetApp().path_file_error_icon));
             (p->ok) = false;
             
         }
@@ -11175,7 +11175,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
             (p->sign_ok) = false;
             
         }
@@ -11929,7 +11929,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     TabulateRoutes();
                     PaintNow();
                     
-                    print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."), String(path_file_error_icon));
+                    print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
                     
                 }
                 
@@ -11946,7 +11946,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     //given that the position under consideration has changed, I re-pain the chart
                     PaintNow();
                     
-                    print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."), String(path_file_error_icon));
+                    print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
                     
                 }
                 
@@ -12133,7 +12133,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                     s << "Zoom level must be >= 1 and <= " << ((wxGetApp().zoom_factor_max).value) << ".";
                     
                     //set the title and message for the functor print_error_message, and then call the functor
-                    print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()), String(path_file_error_icon));
+                    print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()), (wxGetApp().path_file_error_icon));
                     
                 }
                 
@@ -12788,7 +12788,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
 //    (f->print_info_message->message) = String("Select the route with which you want to transport the sight");
 //    (*(f->print_info_message))();
     //print an info message
-    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), String(path_file_warning_icon));
+    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
 
    
     
@@ -13168,7 +13168,7 @@ template<class T>void CheckProjection::operator()(T& event){
             }
             
             
-            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String(temp.str().c_str()), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
             
             (p->ok) = false;
             
@@ -13395,7 +13395,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°"), (wxGetApp().path_file_error_icon));
             
             (p->deg_ok) = false;
             
@@ -13431,7 +13431,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"), (wxGetApp().path_file_error_icon));
             
             (p->min_ok) = false;
             
@@ -13469,7 +13469,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
             
             (p->value_ok) = false;
             
@@ -13513,7 +13513,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T &even
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."), (wxGetApp().path_file_error_icon));
             
             (p->unit_ok) = false;
             
@@ -13836,10 +13836,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
     
-    file_init.set_name(String(path_file_init));
+    file_init.set_name((wxGetApp().path_file_init));
     check &= (file_init.open(String("in"), prefix));
     
-    catalog = new Catalog(String(path_file_catalog), String(""));
+    catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
     
     //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set position_in_listcontrol_sights to a 'NULL' value (position_in_listcontrol_sights = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set position_in_listcontrol_sights to position_in_listcontrol_sights_in.
     if(sight_in != NULL){
@@ -13912,7 +13912,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye), String("m"));
     if(sight_in == NULL){
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
-        (sight->height_of_eye).read_from_file(String("default height of eye"), String(path_file_init), String(""));
+        (sight->height_of_eye).read_from_file(String("default height of eye"), (wxGetApp().path_file_init), String(""));
         height_of_eye->set();
         
     }
@@ -13989,7 +13989,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     image_time_interval_not_ok = new wxImage();
-    (*image_time_interval_not_ok) = (wxBitmap(path_file_warning_icon, wxBITMAP_TYPE_PNG).ConvertToImage());
+    (*image_time_interval_not_ok) = (wxBitmap(((wxGetApp().path_file_warning_icon).value), wxBITMAP_TYPE_PNG).ConvertToImage());
     RescaleProportionally(image_time_interval_not_ok, wxGetApp().size_small_button);
     
     
@@ -14953,7 +14953,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     
     
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(path_file_app_icon, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(((wxGetApp().path_file_app_icon).value), wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
@@ -15124,7 +15124,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     plot = new Plot(catalog, String(""));
     
     //read show_coastlines from file_init
-    show_coastlines.read_from_file(String("show coastlines"), String(path_file_init), String(""));
+    show_coastlines.read_from_file(String("show coastlines"), (wxGetApp().path_file_init), String(""));
     
     GetAllCoastLineData();
     
@@ -15134,10 +15134,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     (parent->rectangle_display) = ((wxGetApp().display).GetClientArea());
     
-    (wxGetApp().file_init).set_name(String(path_file_init));
+    (wxGetApp().file_init).set_name((wxGetApp().path_file_init));
     
     //read color list from file_init
-    s.read_from_file(String("color list"), String(path_file_init), String(""));
+    s.read_from_file(String("color list"), (wxGetApp().path_file_init), String(""));
 
     
     margin = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);
@@ -15243,7 +15243,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     existing_route = new ExistingRoute(this);
     create_route = new NewRoute(this);
     
-    catalog = new Catalog(String(path_file_catalog), String(""));
+    catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
     
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
@@ -15261,27 +15261,27 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
     
     //image for button_add_sight, button_add_position and button_add_route
-    wxBitmap my_bitmap_plus = wxBitmap(wxT(path_file_plus_icon), wxBITMAP_TYPE_PNG);
+    wxBitmap my_bitmap_plus = wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_plus = my_bitmap_plus.ConvertToImage();
     RescaleProportionally(&my_image_plus, wxGetApp().size_small_button);
     
     //image for button_map
-    wxBitmap my_bitmap_map = wxBitmap(wxT(path_file_map_icon), wxBITMAP_TYPE_PNG);
+    wxBitmap my_bitmap_map = wxBitmap(wxString(((wxGetApp().path_file_map_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_map = my_bitmap_map.ConvertToImage();
     RescaleProportionally(&my_image_map, wxGetApp().size_large_button);
     
     //image for button_modify_sight
-    wxBitmap my_bitmap = wxBitmap(wxT(path_file_pencil_icon), wxBITMAP_TYPE_PNG);
+    wxBitmap my_bitmap = wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();
     RescaleProportionally(&my_image, wxGetApp().size_small_button);
     
     //image for button_transport_sight
-    wxBitmap my_bitmap_transport_sight = wxBitmap(wxT(path_file_arrow_icon), wxBITMAP_TYPE_PNG);
+    wxBitmap my_bitmap_transport_sight = wxBitmap(wxString(((wxGetApp().path_file_arrow_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_transport = my_bitmap_transport_sight.ConvertToImage();
     RescaleProportionally(&my_image_transport, wxGetApp().size_small_button);
     
     //image for button_delete_sight
-    wxBitmap my_bitmap_delete_sight = wxBitmap(wxT(path_file_trash_icon), wxBITMAP_TYPE_PNG);
+    wxBitmap my_bitmap_delete_sight = wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_delete = my_bitmap_delete_sight.ConvertToImage();
     RescaleProportionally(&my_image_delete, wxGetApp().size_small_button);
     
@@ -15855,7 +15855,7 @@ void ListFrame::Disconnect(int i_sight){
     }
     
     //print an info message
-    print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."), String(path_file_warning_icon));
+    print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."), (wxGetApp().path_file_warning_icon));
     
     //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file have been modified
     OnModifyFile();
@@ -16011,7 +16011,7 @@ void ListFrame::OnSaveFile(void){
 
 template<class E> void ListFrame::OnPressCtrlO(E& event){
     
-    wxFileDialog openFileDialog(this, _("Open"), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Open"), (wxGetApp().default_open_directory).value, "", "nav files (*.nav)|*.nav", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
     if((openFileDialog.ShowModal()) != wxID_CANCEL){
         // proceed loading the file chosen by the user;
@@ -16098,7 +16098,7 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
 //write content of plot into a named file
 template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
     
-    wxFileDialog openFileDialog(this, _(""), default_open_directory, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _(""), (wxGetApp().default_open_directory).value, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
     
     if((openFileDialog.ShowModal()) != wxID_CANCEL){
         // the user did not presse cancel -> proceed saving on the file chosen by the user;
@@ -16410,7 +16410,7 @@ template<class T> void CheckYear::operator()(T&event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), (wxGetApp().path_file_error_icon));
             
             (p->year_ok) = false;
             (p->day)->Enable(false);
@@ -16455,7 +16455,7 @@ template<class T> void CheckMonth::operator()(T&event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), (wxGetApp().path_file_error_icon));
             
             (p->month_ok) = false;
             (p->day)->Enable(false);
@@ -16506,7 +16506,7 @@ template<class T> void CheckDay::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"), (wxGetApp().path_file_error_icon));
             
             (p->day_ok) = false;
             
@@ -16650,7 +16650,7 @@ template<class T> void CheckHour::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"), (wxGetApp().path_file_error_icon));
             
             (p->hour_ok) = false;
             
@@ -16691,7 +16691,7 @@ template<class T> void CheckMinute::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"), (wxGetApp().path_file_error_icon));
             
             (p->minute_ok) = false;
             
@@ -16732,7 +16732,7 @@ template<class T> void CheckSecond::operator()(T &event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), (wxGetApp().path_file_error_icon));
             
             (p->second_ok) = false;
             
@@ -16832,7 +16832,7 @@ template<class T>void CheckRouteType::operator()(T& event){
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."), String(path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."), (wxGetApp().path_file_error_icon));
             
             (p->ok) = false;
             
@@ -16976,7 +16976,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     //    types.Add(wxT("Lambert"));
     
     //sets the name of file_recent for future use
-    file_recent.set_name(String(path_file_recent));
+    file_recent.set_name((wxGetApp().path_file_recent));
     
     check = new CheckProjection(this);
     
@@ -17020,7 +17020,7 @@ void ProjectionField::read_recent_items(void){
     }
     
     //read the recently selected items from file_recent
-    s.read_from_file(String("projection"), String(path_file_recent), String(""));
+    s.read_from_file(String("projection"), (wxGetApp().path_file_recent), String(""));
     
     recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
     for(i=0; i<(recent_items.size()); i++){
@@ -17126,7 +17126,7 @@ BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
     catalog = c;
     
     //sets the name of file_recent for future use
-    file_recent.set_name(String(path_file_recent));
+    file_recent.set_name((wxGetApp().path_file_recent));
     
     check = new CheckBody(this);
     
@@ -18470,7 +18470,7 @@ void BodyField::read_recent_items(void){
     }
     
     //read the recently selected items from file_recent
-    s.read_from_file(String("body"), String(path_file_recent), String(""));
+    s.read_from_file(String("body"), (wxGetApp().path_file_recent), String(""));
     
     recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
     for(i=0; i<recent_items.size(); i++){

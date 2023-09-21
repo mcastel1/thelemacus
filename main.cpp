@@ -287,9 +287,9 @@ bool MyApp::OnInit(){
     
     
     //the default directory where to look for files when openin a file
-    default_open_directory  = String("/Users/macbookpro/Dropbox/sight_reduction_program/");
     path_file_init  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/init.txt");
     
+    /*
     path_file_utc_date_and_time  = String("/Users/macbookpro/Dropbox/sight_reduction_program/utc.txt");
     path_file_recent  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/recent.txt");
     path_file_catalog  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/catalog.txt");
@@ -305,6 +305,24 @@ bool MyApp::OnInit(){
     path_file_arrow_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/arrow_icon.png");
     path_file_coastline_data_blocked  = String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
     path_file_n_line  = String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt");
+     */
+
+    default_open_directory.read_from_file(String("default open directory"), String(path_file_init), String(""));
+    path_file_utc_date_and_time.read_from_file(String("path file utc date and time"), String(path_file_init), String(""));
+    path_file_recent.read_from_file(String("path file recent"), String(path_file_init), String(""));
+    path_file_catalog.read_from_file(String("path file catalog"), String(path_file_init), String(""));
+    path_file_temp.read_from_file(String("path file temp"), String(path_file_init), String(""));
+    path_file_app_icon.read_from_file(String("path file app icon"), String(path_file_init), String(""));
+    path_file_error_icon.read_from_file(String("path file error icon"), String(path_file_init), String(""));
+    path_file_warning_icon.read_from_file(String("path file warning icon"), String(path_file_init), String(""));
+    path_file_plus_icon.read_from_file(String("path file plus icon"), String(path_file_init), String(""));
+    path_file_list_icon.read_from_file(String("path file list icon"), String(path_file_init), String(""));
+    path_file_map_icon.read_from_file(String("path file map icon"), String(path_file_init), String(""));
+    path_file_pencil_icon.read_from_file(String("path file pencil icon"), String(path_file_init), String(""));
+    path_file_trash_icon.read_from_file(String("path file trash icon"), String(path_file_init), String(""));
+    path_file_arrow_icon.read_from_file(String("path file arrow icon"), String(path_file_init), String(""));
+    path_file_coastline_data_blocked.read_from_file(String("path file_coastline data blocked"), String(path_file_init), String(""));
+    path_file_n_line.read_from_file(String("path file n line"), String(path_file_init), String(""));
 
      
     

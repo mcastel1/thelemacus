@@ -15792,7 +15792,7 @@ template<class E> void ListFrame::OnPressDeleteSight(E& event){
     
 }
 
-void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
+template<class E> void ListFrame::OnPressDeletePosition(E& event){
     
     (delete_position->i_position_to_remove) = ((int)(listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
@@ -15810,7 +15810,7 @@ void ListFrame::OnPressDeletePosition(wxCommandEvent& event){
 }
 
 
-void ListFrame::OnPressDeleteRoute(wxCommandEvent& event){
+template<class E> void ListFrame::OnPressDeleteRoute(E& event){
     
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,

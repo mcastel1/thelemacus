@@ -2121,11 +2121,11 @@ public:
     void OnAddPosition(wxCommandEvent& event);
     template<class E> void OnModifyPosition(E&);
     void OnTransportPosition(wxCommandEvent& event);
-    void OnPressDeletePosition(wxCommandEvent& event);
+    template<class E> void OnPressDeletePosition(E&);
 
     void OnAddRoute(wxCommandEvent& event);
     template<class E> void OnModifyRoute(E&);
-    void OnPressDeleteRoute(wxCommandEvent& event);
+    template<class E> void OnPressDeleteRoute(E& event);
     
     void Disconnect(int);
 

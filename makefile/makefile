@@ -57,6 +57,7 @@ ${APP_NAME}: lib.cpp main.cpp
 	#copy the  files
 	cp ${INPUT_CODE_DIR}/sample_sight.nav ${OUTPUT_CODE_DIR}/${APP_NAME}.app/sample_sight.nav
 	cp ${INPUT_IMAGE_DIR}/*.png ${OUTPUT_IMAGE_DIR}
+	cp ${INPUT_DATA_DIR}/* ${OUTPUT_DATA_DIR}
 	cp ${INPUT_DATA_DIR}/map_conv_blocked.csv ${INPUT_DATA_DIR}/n_line_map_conv_blocked.txt ${OUTPUT_DATA_DIR}
 
 

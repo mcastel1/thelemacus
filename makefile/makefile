@@ -1,9 +1,9 @@
 CXX=g++
 APP_NAME=Thelemacus
 INPUT_CODE_DIR=/Users/macbookpro/Dropbox/sight_reduction_program
-INPUT_DATA_DIR=/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2
-INPUT_IMAGE_DIR=${INPUT_CODE_DIR}
-OUTPUT_CODE_DIR=/Users/macbookpro/Dropbox/sight_reduction_program
+INPUT_DATA_DIR=${INPUT_CODE_DIR}/data
+INPUT_IMAGE_DIR=${INPUT_CODE_DIR}/images
+OUTPUT_CODE_DIR=/Users/macbookpro/Desktop
 OUTPUT_DATA_DIR=${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents/Resources/Data
 OUTPUT_IMAGE_DIR=${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents/Resources/Images
 WX_DIR=/Applications/wxWidgets-3.2.2.1
@@ -20,8 +20,10 @@ ${APP_NAME}: lib.cpp main.cpp
 	rm -rf temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}.app ${OUTPUT_CODE_DIR}/${APP_NAME}
 	
 	#split input data and images in different directories and revise these lines 
-	sed -e 's#${INPUT_IMAGE_DIR}#${OUTPUT_IMAGE_DIR}#' ${INPUT_CODE_DIR}/data/init.txt
-	sed -e 's#${INPUT_DATA_DIR}#${OUTPUT_DATA_DIR}#' ${INPUT_CODE_DIR}/data/init.txt
+	sed -e 's#${INPUT_DATA_DIR}#${OUTPUT_DATA_DIR}#' \
+		-e 's#${INPUT_IMAGE_DIR}#${OUTPUT_IMAGE_DIR}#' \
+		-e 's#${INPUT_CODE_DIR}#${OUTPUT_CODE_DIR}/${APP_NAME}.app#' \
+		 ${INPUT_CODE_DIR}/data/init.txt
 	#
 	
 	${WX_DIR}/build-cocoa-debug/bk-deps $(CXX) $(CXXFLAGS_1)  -c -o ${OUTPUT_CODE_DIR}/temp.o   ${OUTPUT_CODE_DIR}/main.cpp

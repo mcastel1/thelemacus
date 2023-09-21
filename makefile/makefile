@@ -19,9 +19,10 @@ ${APP_NAME}: lib.cpp main.cpp
 	clear; clear;
 	rm -rf temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}.app ${OUTPUT_CODE_DIR}/${APP_NAME}
 	
-	
+	#split input data and images in different directories and revise these lines 
 	sed -e 's#${INPUT_IMAGE_DIR}#${OUTPUT_IMAGE_DIR}#' ${INPUT_CODE_DIR}/data/init.txt
-
+	sed -e 's#${INPUT_DATA_DIR}#${OUTPUT_DATA_DIR}#' ${INPUT_CODE_DIR}/data/init.txt
+	#
 	
 	${WX_DIR}/build-cocoa-debug/bk-deps $(CXX) $(CXXFLAGS_1)  -c -o ${OUTPUT_CODE_DIR}/temp.o   ${OUTPUT_CODE_DIR}/main.cpp
 	$(CXX) $(CXXFLAGS_2) -o ${OUTPUT_CODE_DIR}/${APP_NAME} ${OUTPUT_CODE_DIR}/temp.o

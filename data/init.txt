@@ -89,20 +89,26 @@ day background color = (224,224,224)
 night background color = (40,40,43)
 number of points coastline = 180000
 show coastlines = n
-#paths for files
+#directories and names of files
 default open directory = /Users/macbookpro/Dropbox/sight_reduction_program/
-path file utc date and time = /Users/macbookpro/Dropbox/sight_reduction_program/utc.txt
-path file recent = /Users/macbookpro/Dropbox/sight_reduction_program/data/recent.txt
-path file catalog = /Users/macbookpro/Dropbox/sight_reduction_program/data/catalog.txt
-path file temp = /Users/macbookpro/Dropbox/sight_reduction_program/temp.txt
-path file app icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/jolly_rogers_png.png
-path file error icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/jolly_rogers_png.png
-path file warning icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/warning_icon.png
-path file plus icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/plus_icon.png
-path file list icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/list_icon.png
-path file map icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/map_icon.png
-path file pencil icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/pencil_icon.png
-path file trash icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/trash_icon.png
-path file arrow icon = /Users/macbookpro/Dropbox/sight_reduction_program/images/arrow_icon.png
-path file coastline data blocked = /Users/macbookpro/Dropbox/sight_reduction_program/data/map_conv_blocked.csv
-path file n line = /Users/macbookpro/Dropbox/sight_reduction_program/data/n_line_map_conv_blocked.txt
+code directory = /Users/macbookpro/Dropbox/sight_reduction_program/
+data directory = /Users/macbookpro/Dropbox/sight_reduction_program/data/
+image directory = /Users/macbookpro/Dropbox/sight_reduction_program/images/
+#files in code directory
+name file utc date and time = utc.txt
+name file recent = recent.txt
+name file temp = temp.txt
+#files in data directory
+name file catalog = catalog.txt
+name file coastline data blocked = data/map_conv_blocked.csv
+name file n line = n_line_map_conv_blocked.txt
+#files in image directory
+name file app icon = jolly_rogers_png.png
+name file error icon = jolly_rogers_png.png
+name file warning icon = warning_icon.png
+name file plus icon = plus_icon.png
+name file list icon = list_icon.png
+name file map icon = map_icon.png
+name file pencil icon = pencil_icon.png
+name file trash icon = trash_icon.png
+name file arrow icon = arrow_icon.png

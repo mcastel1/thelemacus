@@ -19,13 +19,6 @@ ${APP_NAME}: lib.cpp main.cpp
 	clear; clear;
 	rm -rf temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}.app ${OUTPUT_CODE_DIR}/${APP_NAME}
 	
-	#split input data and images in different directories and revise these lines 
-	sed -e 's#${INPUT_DATA_DIR}#${OUTPUT_DATA_DIR}#' \
-		-e 's#${INPUT_IMAGE_DIR}#${OUTPUT_IMAGE_DIR}#' \
-		-e 's#${INPUT_CODE_DIR}#${OUTPUT_CODE_DIR}/${APP_NAME}.app#' \
-		 ${INPUT_CODE_DIR}/data/init.txt
-	#
-	
 	${WX_DIR}/build-cocoa-debug/bk-deps $(CXX) $(CXXFLAGS_1)  -c -o ${OUTPUT_CODE_DIR}/temp.o   ${INPUT_CODE_DIR}/main.cpp
 	$(CXX) $(CXXFLAGS_2) -o ${OUTPUT_CODE_DIR}/${APP_NAME} ${OUTPUT_CODE_DIR}/temp.o
 	
@@ -34,6 +27,12 @@ ${APP_NAME}: lib.cpp main.cpp
 	mkdir -p ${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents/Resources
 	mkdir -p ${OUTPUT_DATA_DIR}
 	mkdir -p ${OUTPUT_IMAGE_DIR}
+	
+	sed -e 's#${INPUT_DATA_DIR}#${OUTPUT_DATA_DIR}#' \
+		-e 's#${INPUT_IMAGE_DIR}#${OUTPUT_IMAGE_DIR}#' \
+		-e 's#${INPUT_CODE_DIR}#${OUTPUT_CODE_DIR}/${APP_NAME}.app#' \
+		 ${INPUT_CODE_DIR}/data/init.txt >${OUTPUT_DATA_DIR}/init.txt
+
 	
 	sed -e 's/$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.${APP_NAME}/' \
 			-e 's/$${MACOSX_BUNDLE_EXECUTABLE_NAME}/${APP_NAME}/' \

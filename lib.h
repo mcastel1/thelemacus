@@ -2130,7 +2130,7 @@ public:
     void Disconnect(int);
 
     void OnAddChartFrame(wxCommandEvent& event);
-    void OnCloseFocusedChartFrame(wxCommandEvent&);
+    void OnCloseActiveChartFrame(wxCommandEvent&);
     void OnCloseAllChartFrames(wxCommandEvent&);
 
 //    void OnMouseOnListControlSights(wxMouseEvent&);

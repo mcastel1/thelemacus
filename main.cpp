@@ -54,7 +54,6 @@
  - remove  = o = l = o = l printed to cout
  - sometimes if I thype a wrong thing in the second field of chronofield, no error message is prompted
  - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place
- - replace calls of QuestionFrame that do not use PrintQuestion by using PrintQUesiton 
  - meridians are still cut on the top in mercator projection 
  - check that WXK_PLUS does not depend on the computer
  */

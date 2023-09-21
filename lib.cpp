@@ -16128,22 +16128,22 @@ template<class E> void ListFrame::KeyDown(E& event){
         // the user pressed delete or backspace
            
         
-        if((listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1){
-            //an item was selected in listcontrol_sights -> call OnPressDeleteSight
+        if((listcontrol_sights->HasFocus()) && ((listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
+            //an item was selected in listcontrol_sights while listcontrol_sights has focus -> call OnPressDeleteSight
             
             OnPressDeleteSight(event);
             
         }
      
-        if((listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1){
-            //an item was selected in listcontrol_positions -> call OnPressDeleteposition
+        if((listcontrol_positions->HasFocus()) && ((listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
+            //an item was selected in listcontrol_positions while listcontrol_positions has focus -> call OnPressDeleteposition
             
             OnPressDeletePosition(event);
             
         }
         
-        if((listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1){
-            //an item was selected in listcontrol_routes -> call OnPressDeleteroute
+        if((listcontrol_routes->HasFocus()) && ((listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
+            //an item was selected in listcontrol_routes  while listcontrol_routes has focus-> call OnPressDeleteroute
             
             OnPressDeleteRoute(event);
             

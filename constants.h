@@ -58,7 +58,7 @@ Angle max_lat, min_lat;
 
 //this string defines the width of GUI fields hosting floating-point numbers
 #define sample_width_floating_point_field "0.000000000"
-#define sample_width_string_field "Et repellat optio nam iste voluptatum in magnam?"
+#define sample_width_string_field "This is a sample string?"
 #define path_file_app_icon "/Users/macbookpro/Dropbox/sight_reduction_program/jolly_rogers_png.png"
 #define path_file_error_icon "/Users/macbookpro/Dropbox/sight_reduction_program/jolly_rogers_png.png"
 #define path_file_warning_icon "/Users/macbookpro/Dropbox/sight_reduction_program/warning_icon.png"

@@ -290,6 +290,11 @@ bool MyApp::OnInit(){
     path_file_init  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/init.txt");
     
     default_open_directory.read_from_file(String("default open directory"), String(path_file_init), String(""));
+    code_directory.read_from_file(String("code directory"), String(path_file_init), String(""));
+    data_directory.read_from_file(String("data directory"), String(path_file_init), String(""));
+    image_directory.read_from_file(String("image directory"), String(path_file_init), String(""));
+
+
     path_file_utc_date_and_time.read_from_file(String("path file utc date and time"), String(path_file_init), String(""));
     path_file_recent.read_from_file(String("path file recent"), String(path_file_init), String(""));
     path_file_catalog.read_from_file(String("path file catalog"), String(path_file_init), String(""));

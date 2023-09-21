@@ -289,24 +289,6 @@ bool MyApp::OnInit(){
     //the default directory where to look for files when openin a file
     path_file_init  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/init.txt");
     
-    /*
-    path_file_utc_date_and_time  = String("/Users/macbookpro/Dropbox/sight_reduction_program/utc.txt");
-    path_file_recent  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/recent.txt");
-    path_file_catalog  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/catalog.txt");
-    path_file_temp  = String("/Users/macbookpro/Dropbox/sight_reduction_program/temp.txt");
-    path_file_app_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/jolly_rogers_png.png");
-    path_file_error_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/jolly_rogers_png.png");
-    path_file_warning_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/warning_icon.png");
-    path_file_plus_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/plus_icon.png");
-    path_file_list_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/list_icon.png");
-    path_file_map_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/map_icon.png");
-    path_file_pencil_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/pencil_icon.png");
-    path_file_trash_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/trash_icon.png");
-    path_file_arrow_icon  = String("/Users/macbookpro/Dropbox/sight_reduction_program/arrow_icon.png");
-    path_file_coastline_data_blocked  = String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv");
-    path_file_n_line  = String("/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt");
-     */
-
     default_open_directory.read_from_file(String("default open directory"), String(path_file_init), String(""));
     path_file_utc_date_and_time.read_from_file(String("path file utc date and time"), String(path_file_init), String(""));
     path_file_recent.read_from_file(String("path file recent"), String(path_file_init), String(""));

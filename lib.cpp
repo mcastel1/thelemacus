@@ -6546,7 +6546,7 @@ bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
             
         }
         
-        //read TAI_minus_UTC from /Users/macbookpro/Documents/navigational_astronomy/sight_reduction_program/data/index.txt
+        //read TAI_minus_UTC from index.txt
         TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
         time+=TAI_minus_UTC;
         time.print(String("TAI date and hour of sight"), new_prefix, cout);

@@ -268,7 +268,7 @@ bool MyApp::OnInit(){
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
-    String default_projection;
+    String default_projection, temp;
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
     wxCommandEvent dummy;
@@ -288,30 +288,61 @@ bool MyApp::OnInit(){
     
     //the default directory where to look for files when openin a file
     path_file_init  = String("/Users/macbookpro/Dropbox/sight_reduction_program/data/init.txt");
-    
+    //read the directories
     default_open_directory.read_from_file(String("default open directory"), String(path_file_init), String(""));
     code_directory.read_from_file(String("code directory"), String(path_file_init), String(""));
     data_directory.read_from_file(String("data directory"), String(path_file_init), String(""));
     image_directory.read_from_file(String("image directory"), String(path_file_init), String(""));
 
-
-    path_file_utc_date_and_time.read_from_file(String("path file utc date and time"), String(path_file_init), String(""));
-    path_file_recent.read_from_file(String("path file recent"), String(path_file_init), String(""));
-    path_file_catalog.read_from_file(String("path file catalog"), String(path_file_init), String(""));
-    path_file_temp.read_from_file(String("path file temp"), String(path_file_init), String(""));
-    path_file_app_icon.read_from_file(String("path file app icon"), String(path_file_init), String(""));
-    path_file_error_icon.read_from_file(String("path file error icon"), String(path_file_init), String(""));
-    path_file_warning_icon.read_from_file(String("path file warning icon"), String(path_file_init), String(""));
-    path_file_plus_icon.read_from_file(String("path file plus icon"), String(path_file_init), String(""));
-    path_file_list_icon.read_from_file(String("path file list icon"), String(path_file_init), String(""));
-    path_file_map_icon.read_from_file(String("path file map icon"), String(path_file_init), String(""));
-    path_file_pencil_icon.read_from_file(String("path file pencil icon"), String(path_file_init), String(""));
-    path_file_trash_icon.read_from_file(String("path file trash icon"), String(path_file_init), String(""));
-    path_file_arrow_icon.read_from_file(String("path file arrow icon"), String(path_file_init), String(""));
-    path_file_coastline_data_blocked.read_from_file(String("path file coastline data blocked"), String(path_file_init), String(""));
-    path_file_n_line.read_from_file(String("path file n line"), String(path_file_init), String(""));
-
-     
+    //read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
+    //files in code directory
+    temp.read_from_file(String("name file utc date and time"), String(path_file_init), String(""));
+    path_file_utc_date_and_time = code_directory.append(temp);
+    
+    temp.read_from_file(String("name file recent"), String(path_file_init), String(""));
+    path_file_recent = code_directory.append(temp);
+    
+    temp.read_from_file(String("name file temp"), String(path_file_init), String(""));
+    path_file_temp = code_directory.append(temp);
+    
+    //files in data directory
+    temp.read_from_file(String("name file catalog"), String(path_file_init), String(""));
+    path_file_catalog = data_directory.append(temp);
+    
+    temp.read_from_file(String("name file coastline data blocked"), String(path_file_init), String(""));
+    path_file_coastline_data_blocked = data_directory.append(temp);
+    
+    temp.read_from_file(String("name file n line"), String(path_file_init), String(""));
+    path_file_n_line = data_directory.append(temp);
+    
+    //files in image directory
+    temp.read_from_file(String("name file app icon"), String(path_file_init), String(""));
+    path_file_app_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file error icon"), String(path_file_init), String(""));
+    path_file_error_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file warning icon"), String(path_file_init), String(""));
+    path_file_warning_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file plus icon"), String(path_file_init), String(""));
+    path_file_plus_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file list icon"), String(path_file_init), String(""));
+    path_file_list_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file map icon"), String(path_file_init), String(""));
+    path_file_map_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file pencil icon"), String(path_file_init), String(""));
+    path_file_pencil_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file trash icon"), String(path_file_init), String(""));
+    path_file_trash_icon = image_directory.append(temp);
+    
+    temp.read_from_file(String("name file arrow icon"), String(path_file_init), String(""));
+    path_file_arrow_icon = image_directory.append(temp);
+    
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));

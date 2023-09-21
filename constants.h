@@ -40,11 +40,6 @@ Angle max_lat, min_lat;
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 #define color_white  (wxColour(255,255,255))
-#define path_file_utc_date_and_time "utc.txt"
-#define path_file_init "/Users/macbookpro/Dropbox/sight_reduction_program/data/init.txt"
-#define path_file_recent "/Users/macbookpro/Dropbox/sight_reduction_program/data/recent.txt"
-#define path_file_catalog "/Users/macbookpro/Dropbox/sight_reduction_program/data/catalog.txt"
-#define path_file_temp "/Users/macbookpro/Dropbox/sight_reduction_program/temp.txt"
 #define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
 #define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
 #define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))
@@ -59,19 +54,6 @@ Angle max_lat, min_lat;
 //this string defines the width of GUI fields hosting floating-point numbers
 #define sample_width_floating_point_field "0.000000000"
 #define sample_width_string_field "This is a sample string?"
-#define path_file_app_icon "/Users/macbookpro/Dropbox/sight_reduction_program/jolly_rogers_png.png"
-#define path_file_error_icon "/Users/macbookpro/Dropbox/sight_reduction_program/jolly_rogers_png.png"
-#define path_file_warning_icon "/Users/macbookpro/Dropbox/sight_reduction_program/warning_icon.png"
-#define path_file_plus_icon "/Users/macbookpro/Dropbox/sight_reduction_program/plus_icon.png"
-#define path_file_list_icon "/Users/macbookpro/Dropbox/sight_reduction_program/list_icon.png"
-#define path_file_map_icon "/Users/macbookpro/Dropbox/sight_reduction_program/map_icon.png"
-#define path_file_pencil_icon "/Users/macbookpro/Dropbox/sight_reduction_program/pencil_icon.png"
-#define path_file_trash_icon "/Users/macbookpro/Dropbox/sight_reduction_program/trash_icon.png"
-#define path_file_arrow_icon "/Users/macbookpro/Dropbox/sight_reduction_program/arrow_icon.png"
-#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
-#define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"
-//the default directory where to look for files when openin a file 
-#define default_open_directory "/Users/macbookpro/Dropbox/sight_reduction_program/"
 
 //for debug
 //#define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked_toy.csv"

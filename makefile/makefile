@@ -1,7 +1,7 @@
 CXX=g++
 APP_NAME=Thelemacus
 INPUT_CODE_DIR=/Users/macbookpro/Dropbox/sight_reduction_program
-INPUT_DATA_DIR=/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/
+INPUT_DATA_DIR=/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2
 INPUT_IMAGE_DIR=${INPUT_CODE_DIR}
 OUTPUT_CODE_DIR=/Users/macbookpro/Dropbox/sight_reduction_program
 OUTPUT_DATA_DIR=${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents/Resources/Data
@@ -41,8 +41,12 @@ ${APP_NAME}: lib.cpp main.cpp
 
 	/bin/echo "APPL????" >${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents/PkgInfo
 	ln -f ${OUTPUT_CODE_DIR}/${APP_NAME} ${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents/MacOS/${APP_NAME}
-	#copy the icon file 
+	#copy the icon file
 	cp -f ${INPUT_IMAGE_DIR}/jolly_roger.icns ${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents/Resources/wxmac.icns
+
+	#copy the image files
+	cp ${INPUT_IMAGE_DIR}/*.png ${OUTPUT_IMAGE_DIR}
+	cp ${INPUT_DATA_DIR}/map_conv_blocked.csv ${INPUT_DATA_DIR}/n_line_map_conv_blocked.txt ${OUTPUT_DATA_DIR}
 
 	rm -rf ${OUTPUT_CODE_DIR}/temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}
 

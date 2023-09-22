@@ -10182,8 +10182,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     draw_panel->Bind(wxEVT_MOUSEWHEEL, wxMouseEventHandler(DrawPanel::OnMouseWheel), draw_panel);
     
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll<wxScrollEvent>), this);
-    slider->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider), this);
-    slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider), this);
+    slider->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider<wxMouseEvent>), this);
+    slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider<wxMouseEvent>), this);
     
     empty_text_1 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     empty_text_2 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
@@ -11617,7 +11617,6 @@ template<class E> void DrawPanel::OnChooseProjection(E& event){
     stringstream s;
     String temp;
     size_t pos;
-    vector<ChartFrame*>::iterator i;
     
     //set the ChartFrame title
     //extract the part of the title which comes before the name of the projection type
@@ -14942,7 +14941,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     button_b->Bind(wxEVT_BUTTON, *f_b);
     button_b->Bind(wxEVT_BUTTON, *close_frame);
     
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(QuestionFrame::KeyDown), this);
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(QuestionFrame::KeyDown<wxKeyEvent>), this);
     
     
     
@@ -15396,9 +15395,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     
     //bind all listcontrols to mouse double-click event, so when the user double clicks on an item in the listcontrol, the SightFrame, PositionFrame or RouteFrame is opened to modify the sight, position or route
-    listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight), this);
-    listcontrol_positions->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyPosition), this);
-    listcontrol_routes->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyRoute), this);
+    listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight<wxMouseEvent>), this);
+    listcontrol_positions->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyPosition<wxMouseEvent>), this);
+    listcontrol_routes->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyRoute<wxMouseEvent>), this);
     
     
     listcontrol_routes->PushBackColumn(wxString("Number"));
@@ -15415,11 +15414,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
 
     //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
-    Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
-    listcontrol_sights->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
-    listcontrol_routes->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
-    listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown), this);
+    Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    listcontrol_sights->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    listcontrol_routes->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
 
     
 

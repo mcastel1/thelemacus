@@ -18,7 +18,7 @@ CXXFLAGS_2=`wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0
 
 
 
-${APP_NAME}: lib.cpp main.cpp 
+${APP_NAME}: ${INPUT_CODE_DIR}/lib.cpp ${INPUT_CODE_DIR}/main.cpp
 	clear; clear;
 	rm -rf temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}.app ${OUTPUT_CODE_DIR}/${APP_NAME}
 	mkdir -p ${OUTPUT_CODE_DIR}/${APP_NAME}.app/Contents
@@ -62,7 +62,7 @@ ${APP_NAME}: lib.cpp main.cpp
 
 
 	rm -rf ${OUTPUT_CODE_DIR}/temp.o ${OUTPUT_CODE_DIR}/${APP_NAME}
-	#rm -rf ${OUTPUT_CODE_DIR}/${APP_NAME}.app/main.cpp
+	rm -rf ${OUTPUT_CODE_DIR}/${APP_NAME}.app/main.cpp
 
 
 

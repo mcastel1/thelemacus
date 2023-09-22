@@ -225,7 +225,7 @@ void File::count_lines(String prefix){
     new_prefix = prefix.append(String("\t"));
     
     
-    file_number_of_lines.set_name(String("output.out"));
+    file_number_of_lines.set_name((wxGetApp().code_directory).append(String("output.out")));
     file_number_of_lines.remove(new_prefix);
     
     command.str("");
@@ -239,7 +239,8 @@ void File::count_lines(String prefix){
     line_ins >> number_of_lines >> dummy;
     
     file_number_of_lines.close(new_prefix);
-    
+    file_number_of_lines.remove(new_prefix);
+
     cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
     
     

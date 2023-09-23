@@ -90,10 +90,10 @@ night background color = (40,40,43)
 number of points coastline = 180000
 show coastlines = n
 #directories and names of files
-default open directory = /Users/macbookpro/Dropbox/sight_reduction_program/
-code directory = /Users/macbookpro/Dropbox/sight_reduction_program/
-data directory = /Users/macbookpro/Dropbox/sight_reduction_program/data/
-image directory = /Users/macbookpro/Dropbox/sight_reduction_program/images/
+default open directory = /Users/macbookpro/Documents/sight_reduction_program/
+code directory = /Users/macbookpro/Documents/sight_reduction_program/
+data directory = /Users/macbookpro/Documents/sight_reduction_program/data/
+image directory = /Users/macbookpro/Documents/sight_reduction_program/images/
 #files in code directory
 name file utc date and time = utc.txt
 name file recent = recent.txt

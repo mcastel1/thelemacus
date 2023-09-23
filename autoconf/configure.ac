@@ -2,10 +2,10 @@
 # The first parameter is project name
 # second is version number
 # third is bug report address
-AC_INIT([hello], [1.0])
+AC_INIT([main],pp [1.0])
 
 # Safety checks in case user overwritten --srcdir
-AC_CONFIG_SRCDIR([hello.c])
+AC_CONFIG_SRCDIR([main.cpp])
 
 # Store the auxiliary build tools (e.g., install-sh, config.sub, config.guess)
 # in this dir (build-aux)
@@ -18,6 +18,9 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 # Check for C compiler
 AC_PROG_CC
+#Check for C++ compiles
+AC_PROG_CXX
+
 # We can add more checks in this section
 
 # Tells automake to create a Makefile

@@ -101,9 +101,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_main_OBJECTS = main-main.$(OBJEXT) main-lib.$(OBJEXT)
+am_main_OBJECTS = main-main.$(OBJEXT)
 main_OBJECTS = $(am_main_OBJECTS)
 main_LDADD = $(LDADD)
+main_LINK = $(CXXLD) $(main_CXXFLAGS) $(CXXFLAGS) $(main_LDFLAGS) \
+	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -119,7 +121,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/main-lib.Po ./$(DEPDIR)/main-main.Po
+am__depfiles_remade = ./$(DEPDIR)/main-main.Po
 am__mv = mv -f
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -188,12 +190,12 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} '/Users/macbookpro/Dropbox/sight_reduction_program/autoconf/build-aux/missing' aclocal-1.16
+ACLOCAL = ${SHELL} '/Users/macbookpro/Documents/sight_reduction_program/autoconf/build-aux/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} '/Users/macbookpro/Dropbox/sight_reduction_program/autoconf/build-aux/missing' autoconf
-AUTOHEADER = ${SHELL} '/Users/macbookpro/Dropbox/sight_reduction_program/autoconf/build-aux/missing' autoheader
-AUTOMAKE = ${SHELL} '/Users/macbookpro/Dropbox/sight_reduction_program/autoconf/build-aux/missing' automake-1.16
+AUTOCONF = ${SHELL} '/Users/macbookpro/Documents/sight_reduction_program/autoconf/build-aux/missing' autoconf
+AUTOHEADER = ${SHELL} '/Users/macbookpro/Documents/sight_reduction_program/autoconf/build-aux/missing' autoheader
+AUTOMAKE = ${SHELL} '/Users/macbookpro/Documents/sight_reduction_program/autoconf/build-aux/missing' automake-1.16
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -205,7 +207,7 @@ CXX = g++
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"main\" -DPACKAGE_TARNAME=\"main\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"main\ 1.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"main\" -DVERSION=\"1.0\"
+DEFS = -DPACKAGE_NAME=\"main\" -DPACKAGE_TARNAME=\"main\" -DPACKAGE_VERSION=\"pp\ 1.0\" -DPACKAGE_STRING=\"main\ pp\ 1.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"main\" -DVERSION=\"pp\ 1.0\"
 DEPDIR = .deps
 ECHO_C = \c
 ECHO_N = 
@@ -221,25 +223,25 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} '/Users/macbookpro/Dropbox/sight_reduction_program/autoconf/build-aux/missing' makeinfo
+MAKEINFO = ${SHELL} '/Users/macbookpro/Documents/sight_reduction_program/autoconf/build-aux/missing' makeinfo
 MKDIR_P = ./build-aux/install-sh -c -d
 OBJEXT = o
 PACKAGE = main
 PACKAGE_BUGREPORT = 
 PACKAGE_NAME = main
-PACKAGE_STRING = main 1.0
+PACKAGE_STRING = main pp 1.0
 PACKAGE_TARNAME = main
 PACKAGE_URL = 
-PACKAGE_VERSION = 1.0
+PACKAGE_VERSION = pp 1.0
 PATH_SEPARATOR = :
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = 
-VERSION = 1.0
-abs_builddir = /Users/macbookpro/Dropbox/sight_reduction_program/autoconf
-abs_srcdir = /Users/macbookpro/Dropbox/sight_reduction_program/autoconf
-abs_top_builddir = /Users/macbookpro/Dropbox/sight_reduction_program/autoconf
-abs_top_srcdir = /Users/macbookpro/Dropbox/sight_reduction_program/autoconf
+VERSION = pp 1.0
+abs_builddir = /Users/macbookpro/Documents/sight_reduction_program/autoconf
+abs_srcdir = /Users/macbookpro/Documents/sight_reduction_program/autoconf
+abs_top_builddir = /Users/macbookpro/Documents/sight_reduction_program/autoconf
+abs_top_srcdir = /Users/macbookpro/Documents/sight_reduction_program/autoconf
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 am__include = include
@@ -259,7 +261,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /Users/macbookpro/Dropbox/sight_reduction_program/autoconf/build-aux/install-sh
+install_sh = ${SHELL} /Users/macbookpro/Documents/sight_reduction_program/autoconf/build-aux/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -280,9 +282,9 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-main_SOURCES = main.cpp lib.cpp
-main_CPPFLAGS = -I/usr/local/include/gsl/ -I/Users/macbookpro/Dropbox/sight_reduction_program/ `wx-config --cxxflags` -I/Applications/boost_1_66_0/  -Wall -Wno-c++11-extensions -O3
-AM_LDFLAGS = -lgsl -lcblas `wx-config --cxxflags` -L/Applications/ChartDirector/lib
+main_SOURCES = main.cpp
+main_CXXFLAGS = `wx-config --cxxflags` -I/usr/local/include/gsl/ -I/Applications/boost_1_66_0/  -Wall -Wno-c++11-extensions --std=c++17  -O3
+main_LDFLAGS = -L/Applications/ChartDirector/lib -lgsl -lcblas `wx-config --libs`
 all: all-am
 
 .SUFFIXES:
@@ -365,7 +367,7 @@ clean-binPROGRAMS:
 
 main$(EXEEXT): $(main_OBJECTS) $(main_DEPENDENCIES) $(EXTRA_main_DEPENDENCIES) 
 	@rm -f main$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(main_OBJECTS) $(main_LDADD) $(LIBS)
+	$(AM_V_CXXLD)$(main_LINK) $(main_OBJECTS) $(main_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -373,7 +375,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/main-lib.Po # am--include-marker
 include ./$(DEPDIR)/main-main.Po # am--include-marker
 
 $(am__depfiles_remade):
@@ -397,32 +398,18 @@ am--depfiles: $(am__depfiles_remade)
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 main-main.o: main.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT main-main.o -MD -MP -MF $(DEPDIR)/main-main.Tpo -c -o main-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(main_CXXFLAGS) $(CXXFLAGS) -MT main-main.o -MD -MP -MF $(DEPDIR)/main-main.Tpo -c -o main-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
 	$(AM_V_at)$(am__mv) $(DEPDIR)/main-main.Tpo $(DEPDIR)/main-main.Po
 #	$(AM_V_CXX)source='main.cpp' object='main-main.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o main-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(main_CXXFLAGS) $(CXXFLAGS) -c -o main-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
 
 main-main.obj: main.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT main-main.obj -MD -MP -MF $(DEPDIR)/main-main.Tpo -c -o main-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(main_CXXFLAGS) $(CXXFLAGS) -MT main-main.obj -MD -MP -MF $(DEPDIR)/main-main.Tpo -c -o main-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
 	$(AM_V_at)$(am__mv) $(DEPDIR)/main-main.Tpo $(DEPDIR)/main-main.Po
 #	$(AM_V_CXX)source='main.cpp' object='main-main.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o main-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
-
-main-lib.o: lib.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT main-lib.o -MD -MP -MF $(DEPDIR)/main-lib.Tpo -c -o main-lib.o `test -f 'lib.cpp' || echo '$(srcdir)/'`lib.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/main-lib.Tpo $(DEPDIR)/main-lib.Po
-#	$(AM_V_CXX)source='lib.cpp' object='main-lib.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o main-lib.o `test -f 'lib.cpp' || echo '$(srcdir)/'`lib.cpp
-
-main-lib.obj: lib.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT main-lib.obj -MD -MP -MF $(DEPDIR)/main-lib.Tpo -c -o main-lib.obj `if test -f 'lib.cpp'; then $(CYGPATH_W) 'lib.cpp'; else $(CYGPATH_W) '$(srcdir)/lib.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/main-lib.Tpo $(DEPDIR)/main-lib.Po
-#	$(AM_V_CXX)source='lib.cpp' object='main-lib.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(main_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o main-lib.obj `if test -f 'lib.cpp'; then $(CYGPATH_W) 'lib.cpp'; else $(CYGPATH_W) '$(srcdir)/lib.cpp'; fi`
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(main_CXXFLAGS) $(CXXFLAGS) -c -o main-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -697,8 +684,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-		-rm -f ./$(DEPDIR)/main-lib.Po
-	-rm -f ./$(DEPDIR)/main-main.Po
+		-rm -f ./$(DEPDIR)/main-main.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -746,8 +732,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-		-rm -f ./$(DEPDIR)/main-lib.Po
-	-rm -f ./$(DEPDIR)/main-main.Po
+		-rm -f ./$(DEPDIR)/main-main.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

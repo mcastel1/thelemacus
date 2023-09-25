@@ -300,7 +300,7 @@ bool MyApp::OnInit(){
     path_file_utc_date_and_time = code_directory.append(temp);
     
     temp.read_from_file(String("name file recent"), String(path_file_init), String(""));
-    path_file_recent = code_directory.append(temp);
+    path_file_recent = data_directory.append(temp);
     
     temp.read_from_file(String("name file temp"), String(path_file_init), String(""));
     path_file_temp = code_directory.append(temp);

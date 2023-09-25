@@ -27,16 +27,16 @@ sed -e 's#'$INPUT_DATA_DIR'#'$OUTPUT_DATA_DIR'#' \
     $INPUT_FILE_INIT >$OUTPUT_FILE_INIT
 
 
-#sed -e 's/$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/' \
-#-e 's/$${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/' \
-#-e 's/$${MACOSX_BUNDLE_BUNDLE_NAME}/$APP_NAME/' \
-#-e 's/$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/' \
-#-e 's/$${MACOSX_BUNDLE_BUNDLE_VERSION}/3.2.0/' \
-#-e 's/$${MACOSX_BUNDLE_INFO_STRING}/$APP_NAME version 3.2.0, (c) 2002-2022 wxWidgets/' \
-#-e 's/$${MACOSX_BUNDLE_LONG_VERSION_STRING}/3.2.0, (c) 2002-2022 wxWidgets/' \
-#-e 's/$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/3.2/' \
-#${WX_DIR}/src/osx/carbon/Info.plist.in >$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Info.plist
-#
+sed -e 's/${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.'$APP_NAME'/' \
+-e 's/${MACOSX_BUNDLE_EXECUTABLE_NAME}/'$APP_NAME'/' \
+-e 's/${MACOSX_BUNDLE_BUNDLE_NAME}/'$APP_NAME'/' \
+-e 's/${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/' \
+-e 's/${MACOSX_BUNDLE_BUNDLE_VERSION}/3.2.0/' \
+-e 's/${MACOSX_BUNDLE_INFO_STRING}/'$APP_NAME' version 3.2.0, (c) 2002-2022 wxWidgets/' \
+-e 's/${MACOSX_BUNDLE_LONG_VERSION_STRING}/3.2.0, (c) 2002-2022 wxWidgets/' \
+-e 's/${MACOSX_BUNDLE_SHORT_VERSION_STRING}/3.2/' \
+${WX_DIR}/src/osx/carbon/Info.plist.in >$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Info.plist
+
 #/bin/echo "APPL????" >$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/PkgInfo
 #ln -f main $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/MacOS/$APP_NAME
 #cp -f ${INPUT_IMAGE_DIR}/jolly_roger.icns $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/wxmac.icns

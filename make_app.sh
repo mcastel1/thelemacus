@@ -43,6 +43,6 @@ sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     /Applications/wxWidgets-3.2.2.1/src/osx/carbon/Info.plist.in >$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Info.plist
 /bin/echo "APPL????" >$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/PkgInfo
 ln -f $OUTPUT_CODE_DIR/$APP_NAME $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/MacOS/$APP_NAME
-cp -f $ICON_PATH $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/wxmac.icns
+cp -f $INPUT_IMAGE_DIR/jolly_roger.icns $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/wxmac.icns
 
 rm -rf temp.o $OUTPUT_CODE_DIR/$APP_NAME

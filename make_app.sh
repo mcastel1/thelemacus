@@ -23,6 +23,14 @@ g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $OU
 mkdir -p $OUTPUT_CODE_DIR/$APP_NAME.app/Contents
 mkdir -p $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/MacOS
 mkdir -p $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources
+mkdir -p $OUTPUT_DATA_DIR
+mkdir -p $OUTPUT_IMAGE_DIR
+
+sed -e 's#'$INPUT_DATA_DIR'#'$OUTPUT_DATA_DIR'#' \
+    -e 's#'$INPUT_IMAGE_DIR'#'$OUTPUT_IMAGE_DIR'#' \
+    -e 's#'$INPUT_CODE_DIR'#'$OUTPUT_CODE_DIR/$APP_NAME.app'#' \
+    $INPUT_DATA_DIR/init.txt >$OUTPUT_DATA_DIR/init.txt
+
 
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \

@@ -713,4 +713,4 @@ temp.o: /Users/macbookpro/Documents/sight_reduction_program/main_main.cpp \
   /usr/local/include/wx-3.1/wx/convauto.h \
   /usr/local/include/wx-3.1/wx/ffile.h \
   /Users/macbookpro/Documents/sight_reduction_program/constants.h \
-  /Users/macbookpro/Documents/sight_reduction_program/lib_lib.cpp
+  /Users/macbookpro/Documents/sight_reduction_program/lib.cpp

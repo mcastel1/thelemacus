@@ -14,10 +14,9 @@ OUTPUT_DATA_DIR=$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/Data
 OUTPUT_IMAGE_DIR=$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/Images
 
 
-rm -rf temp.o main_main.cpp lib_lib.cpp $OUTPUT_CODE_DIR/$APP_NAME.app $OUTPUT_CODE_DIR/$APP_NAME
+rm -rf temp.o main_main.cpp $OUTPUT_CODE_DIR/$APP_NAME.app $OUTPUT_CODE_DIR/$APP_NAME
 
 sed -e 's#WRITE_HERE_PATH_TO_INIT_FILE#'$OUTPUT_DATA_DIR'/init.txt#' $INPUT_CODE_DIR/main.cpp >$INPUT_CODE_DIR/main_main.cpp
-sed -e 's#WRITE_HERE_PATH_TO_SAMPLE_SIGHT#'$OUTPUT_DATA_DIR'/sample_sight.nav#' $INPUT_CODE_DIR/lib.cpp >$INPUT_CODE_DIR/lib_lib.cpp
 
 
 /Applications/wxWidgets-3.2.2.1/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags --libs` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/ -I/Applications/boost_1_66_0/ -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/macbookpro/Dropbox/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $INPUT_CODE_DIR/main_main.cpp
@@ -51,4 +50,4 @@ sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
 ln -f $OUTPUT_CODE_DIR/$APP_NAME $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/MacOS/$APP_NAME
 cp -f $INPUT_IMAGE_DIR/jolly_roger.icns $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/wxmac.icns
 
-rm -rf temp.o $OUTPUT_CODE_DIR/$APP_NAME
+rm -rf temp.o $OUTPUT_CODE_DIR/$APP_NAME main_main.cpp

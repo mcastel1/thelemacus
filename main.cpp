@@ -9,7 +9,7 @@
 
 
 #include "main.h"
-#include "lib_lib.cpp"
+#include "lib.cpp"
 
 /*
  notes:

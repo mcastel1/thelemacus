@@ -14,10 +14,13 @@ OUTPUT_DATA_DIR=$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/Data
 OUTPUT_IMAGE_DIR=$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/Images
 
 
-rm -rf temp.o $OUTPUT_CODE_DIR/$APP_NAME.app $OUTPUT_CODE_DIR/$APP_NAME
+rm -rf temp.o main_main.cpp lib_lib.cpp $OUTPUT_CODE_DIR/$APP_NAME.app $OUTPUT_CODE_DIR/$APP_NAME
+
+sed -e 's#WRITE_HERE_PATH_TO_INIT_FILE#'$OUTPUT_DATA_DIR'/init.txt#' $INPUT_CODE_DIR/main.cpp >$INPUT_CODE_DIR/main_main.cpp
+sed -e 's#WRITE_HERE_PATH_TO_SAMPLE_SIGHT#'$OUTPUT_DATA_DIR'/sample_sight.nav#' $INPUT_CODE_DIR/lib.cpp >$INPUT_CODE_DIR/lib_lib.cpp
 
 
-/Applications/wxWidgets-3.2.2.1/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags --libs` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/ -I/Applications/boost_1_66_0/ -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/macbookpro/Dropbox/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $INPUT_CODE_DIR/main.cpp
+/Applications/wxWidgets-3.2.2.1/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags --libs` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/ -I/Applications/boost_1_66_0/ -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/macbookpro/Dropbox/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $INPUT_CODE_DIR/main_main.cpp
 g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $OUTPUT_CODE_DIR/$APP_NAME  temp.o    -L/Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib      -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lwx_osx_cocoau_core-3.2  -lwx_baseu-3.2        -lpng -lz -ljpeg -L/usr/local/Cellar/libtiff/4.3.0/lib -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lz -framework Security -lpthread -liconv -lcurl -L/usr/local/Cellar/pcre2/10.39/lib -lpcre2-32  -lz -framework Security -lpthread -liconv -lcurl
 
 mkdir -p $OUTPUT_CODE_DIR/$APP_NAME.app/Contents
@@ -25,6 +28,9 @@ mkdir -p $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/MacOS
 mkdir -p $OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources
 mkdir -p $OUTPUT_DATA_DIR
 mkdir -p $OUTPUT_IMAGE_DIR
+
+cp $INPUT_DATA_DIR/* $OUTPUT_DATA_DIR
+cp $INPUT_IMAGE_DIR/*.png $OUTPUT_IMAGE_DIR
 
 sed -e 's#'$INPUT_DATA_DIR'#'$OUTPUT_DATA_DIR'#' \
     -e 's#'$INPUT_IMAGE_DIR'#'$OUTPUT_IMAGE_DIR'#' \

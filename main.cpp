@@ -182,6 +182,7 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 void MyApp::where_am_I(String prefix){
     
     unsigned int i;
+    size_t position;
     stringstream command, ins;
     string line, dummy;
     File temp;
@@ -203,22 +204,24 @@ void MyApp::where_am_I(String prefix){
 
     getline((temp.value), line);
     ins << line;
-    for(i=0; i<10; i++){
+    //fetch the last column in the output of ps aux, where the path is located
+    for(i=0; i<11; i++){
         
         dummy.clear();
         ins >> dummy;
         
     }
-    ins >> (run_directory.value);
-    (run_directory.value).push_back('/');
+    
+    //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
+    position = dummy.find("Contents/MacOS/Thelemacus");
+
+    if(position != string::npos){
+          run_directory.set(String("Run directory"), String(dummy.substr(0, position)), new_prefix);
+    }
     
     temp.close(new_prefix);
     temp.remove(new_prefix);
-    
-    cout << new_prefix.value <<  "Running directory = " << run_directory.value <<  "\n";
-    
-
-    
+        
 }
 
 bool MyApp::OnInit(){

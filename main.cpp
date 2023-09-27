@@ -325,7 +325,7 @@ bool MyApp::OnInit(){
     
     
     //the default directory where to look for files when openin a file
-    path_file_init  = String("/Users/macbookpro/Documents/sight_reduction_program/data/init.txt");
+    path_file_init  = String("WRITE_HERE_PATH_TO_INIT_FILE");
     //read the directories
     default_open_directory.read_from_file(String("default open directory"), String(path_file_init), String(""));
     code_directory.read_from_file(String("code directory"), String(path_file_init), String(""));

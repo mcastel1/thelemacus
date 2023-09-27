@@ -15425,7 +15425,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     //here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
     //
-    file.set_name((wxGetApp().default_open_directory).append(String("sample_sight.nav")));
+    file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
     plot->read_from_file(file, String(""));
     file_is_untitled = false;
     

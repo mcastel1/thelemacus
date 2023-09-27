@@ -1,6 +1,5 @@
-/Users/macbookpro/Dropbox/sight_reduction_program/temp.o: \
-  /Users/macbookpro/Dropbox/sight_reduction_program/main.cpp \
-  /Users/macbookpro/Dropbox/sight_reduction_program/main.h \
+temp.o: /Users/macbookpro/Documents/sight_reduction_program/main_main.cpp \
+  /Users/macbookpro/Documents/sight_reduction_program/main.h \
   /usr/local/include/wx-3.1/wx/wx.h /usr/local/include/wx-3.1/wx/defs.h \
   /usr/local/include/wx-3.1/wx/platform.h \
   /usr/local/include/wx-3.1/wx/compiler.h \
@@ -699,7 +698,7 @@
   /Applications/boost_1_66_0/boost/algorithm/string/formatter.hpp \
   /Applications/boost_1_66_0/boost/algorithm/string/detail/formatter.hpp \
   /Applications/boost_1_66_0/boost/algorithm/string/erase.hpp \
-  /Users/macbookpro/Dropbox/sight_reduction_program/lib.h \
+  /Users/macbookpro/Documents/sight_reduction_program/lib.h \
   /usr/local/include/wx-3.1/wx/wxprec.h \
   /usr/local/include/wx-3.1/wx/display.h \
   /usr/local/include/wx-3.1/wx/vidmode.h \
@@ -713,5 +712,5 @@
   /usr/local/include/wx-3.1/wx/file.h \
   /usr/local/include/wx-3.1/wx/convauto.h \
   /usr/local/include/wx-3.1/wx/ffile.h \
-  /Users/macbookpro/Dropbox/sight_reduction_program/constants.h \
-  /Users/macbookpro/Dropbox/sight_reduction_program/lib.cpp
+  /Users/macbookpro/Documents/sight_reduction_program/constants.h \
+  /Users/macbookpro/Documents/sight_reduction_program/lib.cpp

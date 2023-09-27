@@ -190,7 +190,7 @@ void MyApp::where_am_I(String prefix){
     new_prefix = prefix.append(String("\t"));
   
     
-    temp.set_name((wxGetApp().path_file_temp));
+    temp.set_name(String("output.dat"));
     temp.remove(String(""));
     
     command.str("");

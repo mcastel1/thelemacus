@@ -178,7 +178,7 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
     
 }
 
-//returns a string with the path of the executable 
+//writes into this->run_directory the path of the executable 
 void MyApp::where_am_I(String prefix){
     
     stringstream command, ins;
@@ -310,6 +310,9 @@ bool MyApp::OnInit(){
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     //    Chrono current_time, dawn, dusk;
     
+    where_am_I(String(""));
+
+    
     settings = new wxSystemSettings();
     timer = new wxTimer();
     
@@ -422,7 +425,6 @@ bool MyApp::OnInit(){
     //read tick length over width plot area from file_init
     (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
-    where_am_I(String(""));
     
     //read the time, and set the background color to either the day or night background color, which are read from file
     //    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));

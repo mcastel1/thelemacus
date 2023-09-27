@@ -179,8 +179,37 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 }
 
 //returns a string with the path of the executable 
-String MyApp::where_am_I(void){
+String MyApp::where_am_I(String prefix){
     
+    stringstream command, ins;
+    string line, dummy;
+    File temp;
+    String output, new_prefix;
+        
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+  
+    
+    temp.set_name((wxGetApp().path_file_temp));
+    temp.remove(String(""));
+    
+    command.str("");
+    command << "pwd >> " << ((temp.name).value);
+    system(command.str().c_str());
+    
+    temp.open(String("in"), new_prefix);
+    
+    getline((temp.value), line);
+    ins << line;
+    ins >> (output.value);
+    
+    temp.close(new_prefix);
+    temp.remove(new_prefix);
+    
+    cout << new_prefix.value <<  "Current directory = " << output.value <<  "\n";
+    
+    return output;
+
     
 }
 

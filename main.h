@@ -88,7 +88,7 @@ public:
     void OnTimer(wxTimerEvent&);
     template<class T> void ShowChart(T&);
     void ShowList(wxCommandEvent&);
-    String where_am_I(void);
+    String where_am_I(String);
 
 };
 

@@ -423,7 +423,7 @@ bool MyApp::OnInit(){
     //read tick length over width plot area from file_init
     (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     
-    
+    where_am_I(String(""));
     
     //read the time, and set the background color to either the day or night background color, which are read from file
     //    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));

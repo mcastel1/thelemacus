@@ -13,7 +13,7 @@
 
 /*
  notes:
- - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus 
+ - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
  - when a new chartframe is created, call ShowCharts to re-arrange all chartframes.
@@ -175,6 +175,12 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
     
     list_frame->SetPosition(wxPoint(0, /*move down ListFrame to take account of the menu_bar*/((list_frame->menu_bar)->GetSize()).GetHeight()));
     list_frame->Raise();
+    
+}
+
+//returns a string with the path of the executable 
+String MyApp::where_am_I(void){
+    
     
 }
 

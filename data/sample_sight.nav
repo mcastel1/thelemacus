@@ -1,0 +1,77 @@
+Sights in the plot:
+	Sight #1:
+		body:
+			Type = star
+			Name = kochab
+			Right ascension = 222° 40.52603999999974'
+			Declination = 74° 9.318959999999947'
+		sextant altitude = 16° 9.399999999999977'
+		index error = 0° 47.9'
+		artificial horizon = n
+		height of eye = 3 m
+		master-clock date and hour of sight:
+			master-clock date and hour of sight = 2021-10-16
+			hour of master-clock date and hour of sight = 15:20:13
+		use of stopwatch = n
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = Michele #1
+	Sight #2:
+		body:
+			Type = star
+			Name = vega
+			Right ascension = 279° 13.92611999999986'
+			Declination = 38° 46.93896000000009'
+		sextant altitude = 4° 2.999999999999989'
+		index error = 0° 1.9'
+		artificial horizon = n
+		height of eye = 2.133604267208534 m
+		master-clock date and hour of sight:
+			master-clock date and hour of sight = 2023-09-19
+			hour of master-clock date and hour of sight = 10:19:35
+		use of stopwatch = n
+		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+		label = 
+Routes in the plot:
+	Route #1:
+		type = c
+		ground position:
+			latitude = 65° 29.45442342918568'
+			longitude = 39° 44.32709459459375'
+			label = 
+		aperture angle = 74° 44.98586251052672'
+		label = kochab 2021-10-16 15:20:50 TAI, Michele #1
+	Route #2:
+		type = c
+		ground position:
+			latitude = 16° 10.24467771344789'
+			longitude = 51° 34.20682432432315'
+			label = 
+		aperture angle = 74° 44.98586251052672'
+		label = kochab 2021-10-16 15:20:50 TAI, Michele #1
+	Route #3:
+		type = c
+		ground position:
+			latitude = 13° 37.17111733610761'
+			longitude = 82° 22.0380536912748'
+			label = 
+		aperture angle = 64° 49.93446862384019'
+		label = jupiter 2021-10-16 19:45:41 TAI, Michele 3
+	Route #4:
+		type = l
+		start position:
+			latitude = 307° 2.391371036502505'
+			longitude = 275° 38.52388235293915'
+			label = 
+		starting heading = 23° 3.23200000000007'
+		length = 3324 nm
+		label = Michele al parco giochi
+	Route #5:
+		type = o
+		start position:
+			latitude = 3° 7.000000000000002'
+			longitude = 357° 58.00000000000182'
+			label = 
+		starting heading = 33° 2.999999999999829'
+		length = 3333 nm
+		label = Jack
+Positions in the plot:

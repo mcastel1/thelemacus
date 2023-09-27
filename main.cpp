@@ -13,6 +13,7 @@
 
 /*
  notes:
+ - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
  - when a new chartframe is created, call ShowCharts to re-arrange all chartframes.
@@ -177,6 +178,52 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
     
 }
 
+//writes into this->run_directory the path where the executable is currently running
+void MyApp::where_am_I(String prefix){
+    
+    unsigned int i;
+    size_t position;
+    stringstream command, ins;
+    string line, dummy;
+    File temp;
+    String new_prefix;
+        
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+  
+    temp.set_name(String("output.dat"));
+    temp.remove(String(""));
+    
+    command.str("");
+    //get the path where the executable is running with ps aux command and write the result fo File temp
+    command << "ps aux | grep Thelemacus >> " << ((temp.name).value);
+    system(command.str().c_str());
+
+    //read the result from temp and write it in run_directory
+    temp.open(String("in"), new_prefix);
+
+    getline((temp.value), line);
+    ins << line;
+    //fetch the last column in the output of ps aux, where the path is located
+    for(i=0; i<11; i++){
+        
+        dummy.clear();
+        ins >> dummy;
+        
+    }
+    
+    //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
+    position = dummy.find("Contents/MacOS/Thelemacus");
+
+    if(position != string::npos){
+          run_directory.set(String("Run directory"), String(dummy.substr(0, position)), new_prefix);
+    }
+    
+    temp.close(new_prefix);
+    temp.remove(new_prefix);
+        
+}
+
 bool MyApp::OnInit(){
     
     /*
@@ -274,6 +321,9 @@ bool MyApp::OnInit(){
     wxCommandEvent dummy;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     //    Chrono current_time, dawn, dusk;
+    
+    where_am_I(String(""));
+
     
     settings = new wxSystemSettings();
     timer = new wxTimer();
@@ -386,7 +436,6 @@ bool MyApp::OnInit(){
     (wxGetApp().tick_length_over_width_plot_area).read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
     //read tick length over width plot area from file_init
     (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
-    
     
     
     //read the time, and set the background color to either the day or night background color, which are read from file

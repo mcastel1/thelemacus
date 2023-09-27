@@ -178,9 +178,10 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
     
 }
 
-//writes into this->run_directory the path of the executable 
+//writes into this->run_directory the path where the executable is currently running
 void MyApp::where_am_I(String prefix){
     
+    unsigned int i;
     stringstream command, ins;
     string line, dummy;
     File temp;
@@ -189,24 +190,32 @@ void MyApp::where_am_I(String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
   
-    
     temp.set_name(String("output.dat"));
     temp.remove(String(""));
     
     command.str("");
-    command << "pwd >> " << ((temp.name).value);
+    //get the path where the executable is running with ps aux command and write the result fo File temp
+    command << "ps aux | grep Thelemacus >> " << ((temp.name).value);
     system(command.str().c_str());
-    
+
+    //read the result from temp and write it in run_directory
     temp.open(String("in"), new_prefix);
-    
+
     getline((temp.value), line);
-    ins << line << "/";
+    ins << line;
+    for(i=0; i<10; i++){
+        
+        dummy.clear();
+        ins >> dummy;
+        
+    }
     ins >> (run_directory.value);
+    (run_directory.value).push_back('/');
     
     temp.close(new_prefix);
     temp.remove(new_prefix);
     
-    cout << new_prefix.value <<  "Current directory = " << run_directory.value <<  "\n";
+    cout << new_prefix.value <<  "Running directory = " << run_directory.value <<  "\n";
     
 
     

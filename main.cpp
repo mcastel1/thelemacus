@@ -200,7 +200,7 @@ String MyApp::where_am_I(String prefix){
     temp.open(String("in"), new_prefix);
     
     getline((temp.value), line);
-    ins << line;
+    ins << line << "/";
     ins >> (output.value);
     
     temp.close(new_prefix);

@@ -202,7 +202,17 @@ void MyApp::where_am_I(String prefix){
     //read the result from temp and write it in run_directory
     temp.open(String("in"), new_prefix);
 
-    getline((temp.value), line);
+    //given that ps aux may yield an output with multiple lines, I pick the line rleated to the app by selecting the line that contains "Thelemacus.app"
+    do{
+        
+        line.clear();
+        getline(temp.value, line);
+        
+    }while((line.find("Thelemacus.app")) == (string::npos));
+    
+//    getline((temp.value), line);
+    
+    
     ins << line;
     //fetch the last column in the output of ps aux, where the path is located
     for(i=0; i<11; i++){

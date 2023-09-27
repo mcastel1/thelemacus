@@ -202,7 +202,17 @@ void MyApp::where_am_I(String prefix){
     //read the result from temp and write it in run_directory
     temp.open(String("in"), new_prefix);
 
-    getline((temp.value), line);
+    //given that ps aux may yield an output with multiple lines, I pick the line rleated to the app by selecting the line that contains "Thelemacus.app"
+    do{
+        
+        line.clear();
+        getline(temp.value, line);
+        
+    }while((line.find("Thelemacus.app")) == (string::npos));
+    
+//    getline((temp.value), line);
+    
+    
     ins << line;
     //fetch the last column in the output of ps aux, where the path is located
     for(i=0; i<11; i++){
@@ -336,13 +346,12 @@ bool MyApp::OnInit(){
     rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
     
     
-    //the default directory where to look for files when openin a file
-    path_file_init  = String("WRITE_HERE_PATH_TO_INIT_FILE");
-    //read the directories
-    default_open_directory.read_from_file(String("default open directory"), String(path_file_init), String(""));
-    code_directory.read_from_file(String("code directory"), String(path_file_init), String(""));
-    data_directory.read_from_file(String("data directory"), String(path_file_init), String(""));
-    image_directory.read_from_file(String("image directory"), String(path_file_init), String(""));
+    //directories are set dynamically from run_directory
+    path_file_init  = run_directory.append(String("Contents/Resources/Data/init.txt"));
+    code_directory = run_directory;
+    data_directory = run_directory.append(String("Contents/Resources/Data/"));
+    image_directory = run_directory.append(String("Contents/Resources/Images/"));
+    default_open_directory = data_directory;
 
     //read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
     //files in code directory

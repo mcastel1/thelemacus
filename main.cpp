@@ -179,12 +179,12 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 }
 
 //returns a string with the path of the executable 
-String MyApp::where_am_I(String prefix){
+void MyApp::where_am_I(String prefix){
     
     stringstream command, ins;
     string line, dummy;
     File temp;
-    String output, new_prefix;
+    String new_prefix;
         
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -201,14 +201,13 @@ String MyApp::where_am_I(String prefix){
     
     getline((temp.value), line);
     ins << line << "/";
-    ins >> (output.value);
+    ins >> (run_directory.value);
     
     temp.close(new_prefix);
     temp.remove(new_prefix);
     
-    cout << new_prefix.value <<  "Current directory = " << output.value <<  "\n";
+    cout << new_prefix.value <<  "Current directory = " << run_directory.value <<  "\n";
     
-    return output;
 
     
 }

@@ -215,13 +215,19 @@ void MyApp::where_am_I(String prefix){
     
     ins << line;
     //fetch the last column in the output of ps aux, where the path is located
-    for(i=0; i<11; i++){
+    for(i=0; i<10; i++){
         
         dummy.clear();
         ins >> dummy;
         
     }
-    
+
+    //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
+    dummy.clear();
+    do{
+        ins >> dummy;
+    }while(ins.tellg() != -1);
+
     //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
     position = dummy.find("Contents/MacOS/Thelemacus");
 

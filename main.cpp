@@ -52,6 +52,7 @@
 
  ********** THINGS TO FIX ************
  
+- whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 
  - add missing case in                                 //the circles d intersect: here you should compute t
  - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place

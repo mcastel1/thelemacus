@@ -6,8 +6,8 @@ clear; clear;
 APP_NAME=Thelemacus
 
 INPUT_CODE_DIR=/Users/macbookpro/Documents/sight_reduction_program
-INPUT_DATA_DIR=$INPUT_CODE_DIR/data
-INPUT_IMAGE_DIR=$INPUT_CODE_DIR/images
+INPUT_DATA_DIR=$INPUT_CODE_DIR/Contents/Resources/Data
+INPUT_IMAGE_DIR=$INPUT_CODE_DIR/Contents/Resources/Images
 
 OUTPUT_CODE_DIR=/Users/macbookpro/Desktop
 OUTPUT_DATA_DIR=$OUTPUT_CODE_DIR/$APP_NAME.app/Contents/Resources/Data

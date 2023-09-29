@@ -13,6 +13,9 @@
 
 /*
  notes:
+=======
+ - if the running idrectory of the app contains a ' it does not work, but let us leave it like this
+>>>>>>> revise_make_app
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
@@ -51,6 +54,7 @@
 
  ********** THINGS TO FIX ************
  
+- whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 
  - add missing case in                                 //the circles d intersect: here you should compute t
  - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place
@@ -187,10 +191,10 @@ void MyApp::where_am_I(String prefix){
     string line, dummy;
     File temp;
     String new_prefix;
-        
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-  
+    
     temp.set_name(String("output.dat"));
     temp.remove(String(""));
     
@@ -198,10 +202,10 @@ void MyApp::where_am_I(String prefix){
     //get the path where the executable is running with ps aux command and write the result fo File temp
     command << "ps aux | grep Thelemacus >> " << ((temp.name).value);
     system(command.str().c_str());
-
+    
     //read the result from temp and write it in run_directory
     temp.open(String("in"), new_prefix);
-
+    
     //given that ps aux may yield an output with multiple lines, I pick the line rleated to the app by selecting the line that contains "Thelemacus.app"
     do{
         
@@ -210,7 +214,7 @@ void MyApp::where_am_I(String prefix){
         
     }while((line.find("Thelemacus.app")) == (string::npos));
     
-//    getline((temp.value), line);
+    //    getline((temp.value), line);
     
     
     ins << line;
@@ -221,23 +225,27 @@ void MyApp::where_am_I(String prefix){
         ins >> dummy;
         
     }
-
+    
     //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
     dummy.clear();
+    (run_directory.value).clear();
+    //    run_directory.appendto(String("'"));
     do{
         ins >> dummy;
+        run_directory.appendto(dummy);
+        if(ins.tellg() != -1){run_directory.appendto(String("\ "));}
     }while(ins.tellg() != -1);
-
+    
     //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
-    position = dummy.find("Contents/MacOS/Thelemacus");
-
+    position = (run_directory.value).find("Contents/MacOS/Thelemacus");
+    
     if(position != string::npos){
-          run_directory.set(String("Run directory"), String(dummy.substr(0, position)), new_prefix);
+        run_directory.set(String("Run directory"), String((run_directory.value).substr(0, position)), new_prefix);
     }
     
     temp.close(new_prefix);
     temp.remove(new_prefix);
-        
+    
 }
 
 bool MyApp::OnInit(){
@@ -337,6 +345,12 @@ bool MyApp::OnInit(){
     wxCommandEvent dummy;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     //    Chrono current_time, dawn, dusk;
+
+    
+    //to build the app
+    where_am_I(String(""));
+    //to develop the app with Xcode
+    //run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
     
     where_am_I(String(""));
 
@@ -352,13 +366,12 @@ bool MyApp::OnInit(){
     rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
     
     
-    //the default directory where to look for files when openin a file
-    path_file_init  = String("WRITE_HERE_PATH_TO_INIT_FILE");
-    //read the directories
-    default_open_directory.read_from_file(String("default open directory"), String(path_file_init), String(""));
-    code_directory.read_from_file(String("code directory"), String(path_file_init), String(""));
-    data_directory.read_from_file(String("data directory"), String(path_file_init), String(""));
-    image_directory.read_from_file(String("image directory"), String(path_file_init), String(""));
+    //directories are set dynamically from run_directory
+    path_file_init  = run_directory.append(String("Contents/Resources/Data/init.txt"));
+    code_directory = run_directory;
+    data_directory = run_directory.append(String("Contents/Resources/Data/"));
+    image_directory = run_directory.append(String("Contents/Resources/Images/"));
+    default_open_directory = data_directory;
 
     //read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
     //files in code directory

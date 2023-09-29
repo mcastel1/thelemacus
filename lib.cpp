@@ -225,12 +225,17 @@ void File::count_lines(String prefix){
     new_prefix = prefix.append(String("\t"));
     
     
-    file_number_of_lines.set_name((wxGetApp().code_directory).append(String("output.out")));
+    file_number_of_lines.set_name((wxGetApp().data_directory).append(String("output.dat")));
     file_number_of_lines.remove(new_prefix);
     
+//    cout << "****** I am about to run wc on " << (name.value) << "...";
+    
     command.str("");
-    command << "wc -l " << (name.value)  << " >> " << ((file_number_of_lines.name).value);
+    //here I add ' because name.value and ((file_number_of_lines.name).value) may contain special characters
+    command << "wc -l '" << (name.value)  << "' >> '" << ((file_number_of_lines.name).value) << "'";
     system(command.str().c_str());
+    
+//    cout << "... done\n";
     
     file_number_of_lines.open(String("in"), new_prefix);
     
@@ -252,7 +257,7 @@ void File::remove(String prefix){
     stringstream command;
     
     command.str("");
-    command << "rm -rf " << (name.value) << "> /dev/null 2>&1";
+    command << "rm -rf '" << (name.value) << "'> /dev/null 2>&1";
     system(command.str().c_str());
     
     cout << prefix.value << "File " << name.value << " removed\n";
@@ -845,14 +850,8 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
     
     //move file_temp to file, so as to obtain the desired result
     s.str("");
-    s << "mv " << ((temp.name).value) << " " << ((file.name).value);
-    
-    
+    s << "mv '" << ((temp.name).value) << "' '" << ((file.name).value) << "'";
     system(s.str().c_str());
-    
-    
-    
-    
     
 }
 
@@ -3106,6 +3105,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
 }
 
+//append s to *this and returns the result
 String String::append(String s){
     
     String output;
@@ -3117,6 +3117,14 @@ String String::append(String s){
     output.value = temp.str();
     
     return output;
+    
+}
+
+
+//append s to *this and writes the result in *this
+void String::appendto(String s){
+    
+    (*this) = (this->append(s));
     
 }
 
@@ -5284,7 +5292,7 @@ void Plot::print_to_kml(String prefix){
     }
     
     //add the line to plot_kml.kml which contains the parametric plot of the positions
-    command << "LANG=C sed 's/\\/\\/position\\_plots/" << plot_command.str().c_str() << "/g' kml_temp.kml >> " << file_kml.name.value << "\nrm -rf kml_temp.kml\n";
+    command << "LANG=C sed 's/\\/\\/position\\_plots/" << plot_command.str().c_str() << "/g' kml_temp.kml >> '" << file_kml.name.value << "'\nrm -rf kml_temp.kml\n";
     
     //execute the command string
     system(command.str().c_str());
@@ -5864,7 +5872,7 @@ void Plot::menu(String prefix){
                     file.close(new_prefix);
                     
                     command.str("");
-                    command << "mv plot.plt " << "'plot " << temp.str() << "'";
+                    command << "mv plot.plt " << "'plot '" << temp.str() << "''";
                     system(command.str().c_str());
                     
                 }
@@ -5921,7 +5929,7 @@ void Plot::menu(String prefix){
             //if plot.plt has been filled, here I save it with the name 'plot' + filename above
             if(sight_list.size() + position_list.size() >0){
                 command.str("");
-                command << "mv plot.plt " << "'plot " << line.value.c_str() << "'";
+                command << "mv plot.plt " << "'plot '" << line.value.c_str() << "''";
                 system(command.str().c_str());
             }
             
@@ -8015,7 +8023,7 @@ bool Date::set_current(String prefix){
     file_utc_date.remove(prefix);
     
     line_ins.str("");
-    line_ins << "date -u \"+%Y-%m-%d\"  >> " << ((wxGetApp().path_file_utc_date_and_time).value);
+    line_ins << "date -u \"+%Y-%m-%d\"  >> '" << ((wxGetApp().path_file_utc_date_and_time).value) << "'";
     
     //execute the date command in the terminal and writes the UTC date to file_utc_date
     system(line_ins.str().c_str());
@@ -8082,7 +8090,7 @@ bool Chrono::set_current(Int time_zone, [[maybe_unused]] String prefix){
     if((time_zone.value) > 0){sign = "+";}
     else{sign = "";}
     //run the command to get the current time with time zone specified by time_zone
-    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << ((wxGetApp().path_file_utc_date_and_time).value);
+    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << "'" <<  ((wxGetApp().path_file_utc_date_and_time).value) << "'";
     
     string temp = line_ins.str().c_str();
     

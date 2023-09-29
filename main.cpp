@@ -231,17 +231,13 @@ void MyApp::where_am_I(String prefix){
         run_directory.appendto(dummy);
         if(ins.tellg() != -1){run_directory.appendto(String("\ "));}
     }while(ins.tellg() != -1);
-//    run_directory.appendto(String("'"));
-
-    cout << "************* Last column = " << run_directory.value << "***********\n";
 
     //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
     position = (run_directory.value).find("Contents/MacOS/Thelemacus");
 
     if(position != string::npos){
-          run_directory.set(String("Run directory (add a ' at the end)"), String((run_directory.value).substr(0, position)), new_prefix);
+          run_directory.set(String("Run directory"), String((run_directory.value).substr(0, position)), new_prefix);
     }
-//    run_directory.appendto(String("'"));
     
     temp.close(new_prefix);
     temp.remove(new_prefix);

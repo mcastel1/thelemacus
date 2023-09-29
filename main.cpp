@@ -343,9 +343,12 @@ bool MyApp::OnInit(){
     wxCommandEvent dummy;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     //    Chrono current_time, dawn, dusk;
-    
-    where_am_I(String(""));
 
+    
+    //to build the app
+    where_am_I(String(""));
+    //to develop the app with Xcode
+    //run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
     
     settings = new wxSystemSettings();
     timer = new wxTimer();

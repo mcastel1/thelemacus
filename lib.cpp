@@ -225,7 +225,7 @@ void File::count_lines(String prefix){
     new_prefix = prefix.append(String("\t"));
     
     
-    file_number_of_lines.set_name((wxGetApp().code_directory).append(String("output.out")));
+    file_number_of_lines.set_name((wxGetApp().data_directory).append(String("output.out")));
     file_number_of_lines.remove(new_prefix);
     
     command.str("");

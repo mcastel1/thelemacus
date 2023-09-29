@@ -191,11 +191,11 @@ void MyApp::where_am_I(String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
   
-    temp.set_name(String("/Users/macbookpro/Desktop/aux.dat"));
+    temp.set_name(String("output.dat"));
     temp.remove(String(""));
     
     command.str("");
-//    //get the path where the executable is running with ps aux command and write the result fo File temp
+    //get the path where the executable is running with ps aux command and write the result fo File temp
     command << "ps aux | grep Thelemacus >> " << ((temp.name).value);
     system(command.str().c_str());
 

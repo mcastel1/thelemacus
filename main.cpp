@@ -13,6 +13,7 @@
 
 /*
  notes:
+ - if the running idrectory of the app contains a ' it does not work, but let us leave it like this
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR

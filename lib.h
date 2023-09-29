@@ -89,6 +89,7 @@ public:
     void write_to_file(String, File&, String);
     void set(String, String, String);
     String append(String);
+    void appendto(String);
     String prepend(String);
     
     bool operator==(const String&), operator!=(const String&);

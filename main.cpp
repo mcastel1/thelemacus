@@ -191,11 +191,11 @@ void MyApp::where_am_I(String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
   
-    temp.set_name(String("output.dat"));
+    temp.set_name(String("/Users/macbookpro/Desktop/aux.dat"));
     temp.remove(String(""));
     
     command.str("");
-    //get the path where the executable is running with ps aux command and write the result fo File temp
+//    //get the path where the executable is running with ps aux command and write the result fo File temp
     command << "ps aux | grep Thelemacus >> " << ((temp.name).value);
     system(command.str().c_str());
 
@@ -215,23 +215,37 @@ void MyApp::where_am_I(String prefix){
     
     ins << line;
     //fetch the last column in the output of ps aux, where the path is located
-    for(i=0; i<11; i++){
+    for(i=0; i<10; i++){
         
         dummy.clear();
         ins >> dummy;
         
     }
-    
+
+    //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
+    dummy.clear();
+    (run_directory.value).clear();
+//    run_directory.appendto(String("'"));
+    do{
+        ins >> dummy;
+        run_directory.appendto(dummy);
+        if(ins.tellg() != -1){run_directory.appendto(String("\ "));}
+    }while(ins.tellg() != -1);
+//    run_directory.appendto(String("'"));
+
+    cout << "************* Last column = " << run_directory.value << "***********\n";
+
     //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
-    position = dummy.find("Contents/MacOS/Thelemacus");
+    position = (run_directory.value).find("Contents/MacOS/Thelemacus");
 
     if(position != string::npos){
-          run_directory.set(String("Run directory"), String(dummy.substr(0, position)), new_prefix);
+          run_directory.set(String("Run directory (add a ' at the end)"), String((run_directory.value).substr(0, position)), new_prefix);
     }
+//    run_directory.appendto(String("'"));
     
     temp.close(new_prefix);
     temp.remove(new_prefix);
-        
+    
 }
 
 bool MyApp::OnInit(){

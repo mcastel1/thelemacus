@@ -3106,6 +3106,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
 }
 
+//append s to *this and returns the result
 String String::append(String s){
     
     String output;
@@ -3117,6 +3118,14 @@ String String::append(String s){
     output.value = temp.str();
     
     return output;
+    
+}
+
+
+//append s to *this and writes the result in *this
+void String::appendto(String s){
+    
+    (*this) = (this->append(s));
     
 }
 

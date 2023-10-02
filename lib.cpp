@@ -6115,7 +6115,7 @@ void Plot::compute_crossings(String prefix){
         //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center. Crossings are also added to position_list, in such a way that they are shown in the plot
         q.clear();
         q.push_back(center);
-        position_list.push_back(q[q.size()-1]);
+//        position_list.push_back(q[q.size()-1]);
         for(i=0; i<p.size(); i++){
             
             if(!( ((p[i][0])==center) || ((p[i][1])==center) )){
@@ -6133,7 +6133,7 @@ void Plot::compute_crossings(String prefix){
                     
                 }
                 
-                position_list.push_back(q[q.size()-1]);
+//                position_list.push_back(q[q.size()-1]);
                 
             }
             

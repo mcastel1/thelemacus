@@ -131,6 +131,8 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event){
     AllRoutes* all_routes;
     SomeRoutes* some_routes;
     
+    all_routes = new AllRoutes(this);
+    some_routes = new SomeRoutes(this);
     print_question = new PrintQuestion<ListFrame, AllRoutes, SomeRoutes>(this, all_routes, some_routes);
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.

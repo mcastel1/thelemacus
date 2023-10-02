@@ -6012,7 +6012,7 @@ Plot::Plot(Catalog* cata, [[maybe_unused]] String prefix){
 }
 
 
-
+//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively 
 void Plot::compute_crossings(String prefix){
     
     unsigned int i, j, l;

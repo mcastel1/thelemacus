@@ -127,8 +127,9 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event){
 template<class T> void MyApp::ComputePosition([[maybe_unused]] T& event){
     
     (list_frame->plot)->compute_crossings(String("\t"));
-    (list_frame->set)();
-    (list_frame->DrawAll());
+    list_frame->set();
+    list_frame->Resize();
+    list_frame->DrawAll();
     
     
 }

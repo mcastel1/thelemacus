@@ -54,6 +54,7 @@
 
  ********** THINGS TO FIX ************
  
+ - when the position is computed, sometime I get nan as coordinates 
  - move min_crossing_angle to MyApp
  - replace parent->rectangle_display -> wxGetApp().rectangle_display
 - whan you transport something with a Route, the start position is pointless -> gray it out

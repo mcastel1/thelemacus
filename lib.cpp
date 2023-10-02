@@ -10089,13 +10089,17 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     StaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
+    int margin;
+
+
     
     parent = parent_input;
     
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    
+    margin = ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
+
     //read lambda_min, ...., phi_max from file_init
     lambda_min.read_from_file(String("minimal longitude"), (wxGetApp().path_file_init), new_prefix);
     lambda_max.read_from_file(String("maximal longitude"), (wxGetApp().path_file_init), new_prefix);
@@ -10154,7 +10158,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //image for button_list
     wxBitmap my_bitmap_list = wxBitmap(wxString(((wxGetApp().path_file_list_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_list = my_bitmap_list.ConvertToImage();
-    RescaleProportionally(&my_image_list, (wxGetApp().size_large_button));
+    RescaleProportionally(&my_image_list, (wxGetApp().size_large_button) - wxSize(margin, margin));
     
     
     //navigation buttons
@@ -15268,8 +15272,10 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //image for button_map
     wxBitmap my_bitmap_map = wxBitmap(wxString(((wxGetApp().path_file_map_icon).value)), wxBITMAP_TYPE_PNG), my_bitmap_position = wxBitmap(wxString(((wxGetApp().path_file_position_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_map = my_bitmap_map.ConvertToImage(), my_image_position = my_bitmap_position.ConvertToImage();
-    RescaleProportionally(&my_image_map, wxGetApp().size_large_button);
-    
+
+    RescaleProportionally(&my_image_map, wxGetApp().size_large_button - wxSize(margin, margin));
+    RescaleProportionally(&my_image_position, wxGetApp().size_large_button - wxSize(margin, margin));
+
     //image for button_modify_sight
     wxBitmap my_bitmap = wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image = my_bitmap.ConvertToImage();

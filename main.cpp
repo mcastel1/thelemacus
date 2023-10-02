@@ -126,6 +126,9 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event){
 //compute the astronomical position
 template<class T> void MyApp::ComputePosition([[maybe_unused]] T& event){
     
+    (list_frame->plot)->compute_crossings(String("\t"));
+    
+    
 }
 
 //shows all ChartFrames and positions them properly on the screen 

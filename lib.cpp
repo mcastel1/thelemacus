@@ -12845,7 +12845,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     }
     
     (f->listcontrol_routes)->set(route_list_for_transport);
-    //I bing listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
+    //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
 
     
@@ -12881,7 +12881,7 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     
     int i;
  
-    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position"), (wxGetApp().path_file_warning_icon));
+    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for(i=0; i<((f->plot)->route_list).size(); i++){
@@ -12894,12 +12894,12 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     
     (f->listcontrol_routes)->set(f->plot->crossing_route_list);
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_position in such a way that when the user will select an item in listcontrol, I perform the computation of the position
-//    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
+    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_position));
 
-    f->plot->compute_crossings(String("\t"));
-    f->set();
-    f->Resize();
-    f->DrawAll();
+//    f->plot->compute_crossings(String("\t"));
+//    f->set();
+//    f->Resize();
+//    f->DrawAll();
 
     
     
@@ -15193,6 +15193,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //for the time being, the file has no title
     file_is_untitled = true;
     enable_highlight = true;
+    computing_position = false;
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
@@ -16237,6 +16238,12 @@ template<class E> void ListFrame::KeyDown(E& event){
         }
      
             
+    }
+    
+    if(((event.GetKeyCode()) == WXK_RETURN) && computing_position){
+        
+        
+        
     }
     
     event.Skip(true);

@@ -12885,18 +12885,19 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for(i=0; i<((f->plot)->route_list).size(); i++){
+    for((f->crossing_route_list_temp.clear()), i=0; i<((f->plot)->route_list).size(); i++){
         
         if((((f->plot)->route_list)[i]).type == String("c")){
-            (f->plot->crossing_route_list).push_back((((f->plot)->route_list)[i]));
+            (f->crossing_route_list_temp).push_back((((f->plot)->route_list)[i]));
         }
         
     }
     
+    //setting this to true, now when the enter key is pressed the selected Routes are used to compute the position
     (f->selecting_route_for_position) = true;
-    (f->listcontrol_routes)->set(f->plot->crossing_route_list);
+    (f->listcontrol_routes)->set(f->crossing_route_list_temp);
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_position in such a way that when the user will select an item in listcontrol, I perform the computation of the position
-    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_position));
+//    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_position));
 
 
     
@@ -16247,16 +16248,28 @@ template<class E> void ListFrame::KeyDown(E& event){
             
     }
     
-    if(((event.GetKeyCode()) == WXK_RETURN) && selecting_route_for_position){
+    if((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) && selecting_route_for_position){
+        
+        long previous_item;
+        
+        previous_item = -1;
+        (plot->crossing_route_list).clear();
+        do{
+            
+            previous_item = (listcontrol_routes->GetNextItem(previous_item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+            if(previous_item != -1){(plot->crossing_route_list).push_back(crossing_route_list_temp[previous_item]);}
+            
+        }while(previous_item != -1);
+      
         
         
-        //    f->plot->compute_crossings(String("\t"));
+        plot->compute_crossings(String("\t"));
+        
+        set();
+        Resize();
+        DrawAll();
 
-        //    f->set();
-        //    f->Resize();
-        //    f->DrawAll();
-
-        1;
+        
         
     }
     

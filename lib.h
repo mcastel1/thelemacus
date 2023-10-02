@@ -2126,6 +2126,8 @@ public:
     OnChangeSelectionInListControl *on_change_selection_in_listcontrol_sights, *on_change_selection_in_listcontrol_routes, *on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *create_route;
+    //a temporary value of plot->crossing_route_list
+    vector<Route> crossing_route_list_temp;
     bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position;
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines;
     File file;

@@ -5676,7 +5676,7 @@ void Plot::menu(String prefix){
                 
                 if((((route_list)[j]).type.value) == "c"){
                     
-                    crossing_route_list.push_back(j);
+                    crossing_route_list.push_back( ((route_list)[j]) );
                     
                 }
                 
@@ -6038,9 +6038,9 @@ void Plot::compute_crossings(String prefix){
         vector< vector<Position> > p;
         vector<Position> q, q_temp(2);
 
-        cout << prefix.value << "Computing crossings between routes #:";
+        cout << prefix.value << "Computing crossings between routes :";
         for(i=0; i<crossing_route_list.size(); i++){
-            cout << crossing_route_list[i]+1 << " ";
+            cout << new_prefix.value << "\t" << (crossing_route_list[i]).label.value << "\n";
         }
         cout << "\n";
         
@@ -6050,9 +6050,9 @@ void Plot::compute_crossings(String prefix){
             for(j=i+1; j<crossing_route_list.size(); j++){
                 
                 
-                cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
+//                cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
                 
-                if(((route_list[crossing_route_list[i]]).crossing((route_list[crossing_route_list[j]]), &q_temp, &x, new_prefix)) >= 0){
+                if(((crossing_route_list[i]).crossing(crossing_route_list[j], &q_temp, &x, new_prefix)) >= 0){
                     //in this case, the two routes under consideration intercept with no error message
                     
                     //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle), then I add this crossing to the list of sensible crossings
@@ -12861,16 +12861,46 @@ void AllRoutes::operator()(wxCommandEvent& event){
     for(((f->plot)->crossing_route_list).clear(), j=0; j<((f->plot)->route_list).size(); j++){
         
         if((((((f->plot)->route_list))[j]).type.value) == "c"){
-            ((f->plot)->crossing_route_list).push_back(j);
+            ((f->plot)->crossing_route_list).push_back(((((f->plot)->route_list))[j]));
         }
         
     }
+    
+    f->plot->compute_crossings(String("\t"));
+    f->set();
+    f->Resize();
+    f->DrawAll();
+ 
     
     event.Skip(true);
 
 }
 
 void SomeRoutes::operator()(wxCommandEvent& event){
+    
+    
+    int i;
+ 
+    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes"), (wxGetApp().path_file_warning_icon));
+
+    //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
+    for(i=0; i<((f->plot)->route_list).size(); i++){
+        
+        if((((f->plot)->route_list)[i]).type != String("c")){
+            (f->plot->crossing_route_list).push_back((((f->plot)->route_list)[i]));
+        }
+        
+    }
+    
+    (f->listcontrol_routes)->set(f->plot->crossing_route_list);
+    //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_position in such a way that when the user will select an item in listcontrol, I perform the computation of the position
+//    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
+
+    f->plot->compute_crossings(String("\t"));
+    f->set();
+    f->Resize();
+    f->DrawAll();
+
     
     
     event.Skip(true);

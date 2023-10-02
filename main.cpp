@@ -140,10 +140,6 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event){
     
     
     
-    plot->compute_crossings(String("\t"));
-    set();
-    Resize();
-    DrawAll();
     
     
 }

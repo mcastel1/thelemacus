@@ -12881,7 +12881,7 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     
     int i;
  
-    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes"), (wxGetApp().path_file_warning_icon));
+    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position"), (wxGetApp().path_file_warning_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for(i=0; i<((f->plot)->route_list).size(); i++){

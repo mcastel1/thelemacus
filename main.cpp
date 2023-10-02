@@ -54,6 +54,7 @@
 
  ********** THINGS TO FIX ************
  
+ - move min_crossing_angle to MyApp
  - replace parent->rectangle_display -> wxGetApp().rectangle_display
 - whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 
@@ -124,12 +125,23 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event){
 }
 
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything
-template<class T> void MyApp::ComputePosition([[maybe_unused]] T& event){
+template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event){
     
-    (list_frame->plot)->compute_crossings(String("\t"));
-    list_frame->set();
-    list_frame->Resize();
-    list_frame->DrawAll();
+    PrintQuestion<ListFrame, AllRoutes, SomeRoutes>* print_question;
+    AllRoutes* all_routes;
+    SomeRoutes* some_routes;
+    
+    print_question = new PrintQuestion<ListFrame, AllRoutes, SomeRoutes>(this, all_routes, some_routes);
+    
+    //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
+    print_question->SetAndCall(NULL, String("You want to determine the astronomical position"), String("With what route do you want to do it?"), String("All routes"), String("Some routes"));
+    
+    
+    
+    plot->compute_crossings(String("\t"));
+    set();
+    Resize();
+    DrawAll();
     
     
 }

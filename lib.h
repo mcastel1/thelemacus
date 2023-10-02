@@ -1362,6 +1362,35 @@ public:
     
 };
 
+//this class defines a functor () used to select all Routes to compute the astronomical position
+class AllRoutes{
+    
+public:
+    
+    AllRoutes(ListFrame*);
+    
+    //the frame which called this struct
+    ListFrame* f;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
+//this class defines a functor () used to select some specific Routes to compute the astronomical position
+class SomeRoutes{
+    
+public:
+    
+    SomeRoutes(ListFrame*);
+    
+    //the frame which called this struct
+    ListFrame* f;
+    
+    void operator()(wxCommandEvent&);
+    
+};
+
+
 
 //this functor sets idling -> true in parent
 template<class P> class SetIdling{
@@ -2145,7 +2174,7 @@ public:
     template<class E> void OnPressCtrlS(E&);
     template<class E> void OnPressCtrlShiftS(E&);
     template<class E> void KeyDown(E&);
-
+    template<class T> void ComputePosition(T&);
     
 };
 

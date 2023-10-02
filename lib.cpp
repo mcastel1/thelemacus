@@ -6030,14 +6030,7 @@ void Plot::compute_crossings(String prefix){
     
     min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), new_prefix);
     
-    //there need to be at list two routes of type "c" to compute crossings. Here I write the indexes of routes of type "c" into crossing_route_list
-    for(crossing_route_list.clear(), j=0; j<route_list.size(); j++){
-        
-        if((((route_list)[j]).type.value) == "c"){
-            crossing_route_list.push_back(j);
-        }
-        
-    }
+
     
     if(crossing_route_list.size() > 1){
         //there are enough Routes in crossing_route_list -> I compute the crossing
@@ -12741,6 +12734,19 @@ NewRoute::NewRoute(ListFrame* f_in){
     
 }
 
+AllRoutes::AllRoutes(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
+
+SomeRoutes::SomeRoutes(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
 
 template<class P> SetIdling<P>::SetIdling(P* parent_in){
     
@@ -12846,6 +12852,31 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     event.Skip(true);
     
 }
+
+void AllRoutes::operator()(wxCommandEvent& event){
+    
+    unsigned int j;
+    
+    //there need to be at list two routes of type "c" to compute crossings. Here I include all routes of type "c" into crossing_route_list by writing their index into crossing_route_list
+    for(((f->plot)->crossing_route_list).clear(), j=0; j<((f->plot)->route_list).size(); j++){
+        
+        if((((((f->plot)->route_list))[j]).type.value) == "c"){
+            ((f->plot)->crossing_route_list).push_back(j);
+        }
+        
+    }
+    
+    event.Skip(true);
+
+}
+
+void SomeRoutes::operator()(wxCommandEvent& event){
+    
+    
+    event.Skip(true);
+
+}
+
 
 void NewRoute::operator()(wxCommandEvent& event){
     
@@ -15478,7 +15509,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     //button to compute astronomical position
     button_compute_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_position), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
-    button_compute_position->Bind(wxEVT_BUTTON, &MyApp::ComputePosition<wxCommandEvent>, &wxGetApp());
+    button_compute_position->Bind(wxEVT_BUTTON, &ListFrame::ComputePosition<wxCommandEvent>, this);
 
     
     //button to add a sight

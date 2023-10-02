@@ -12887,7 +12887,7 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for(i=0; i<((f->plot)->route_list).size(); i++){
         
-        if((((f->plot)->route_list)[i]).type != String("c")){
+        if((((f->plot)->route_list)[i]).type == String("c")){
             (f->plot->crossing_route_list).push_back((((f->plot)->route_list)[i]));
         }
         

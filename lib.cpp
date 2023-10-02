@@ -6012,7 +6012,7 @@ Plot::Plot(Catalog* cata, [[maybe_unused]] String prefix){
 }
 
 
-//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively 
+//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively
 void Plot::compute_crossings(String prefix){
     
     unsigned int i, j, l;
@@ -15450,6 +15450,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_show_map = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart<wxCommandEvent>, &wxGetApp());
     
+    //button to compute astronomical position
+    button_compute_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_map), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_compute_position->Bind(wxEVT_BUTTON, &MyApp::ComputePosition<wxCommandEvent>, &wxGetApp());
+
+    
     //button to add a sight
     button_add_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
@@ -15495,6 +15500,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_listcontrol_routes_button_show_map->Add(sizer_box_route);
     sizer_listcontrol_routes_button_show_map->AddStretchSpacer(1);
     //here I set the flag '0' to avoid button_show_map from being stretched
+    sizer_listcontrol_routes_button_show_map->Add(button_compute_position, 0, wxALIGN_BOTTOM);
     sizer_listcontrol_routes_button_show_map->Add(button_show_map, 0, wxALIGN_BOTTOM);
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_button_show_map expand, and thus I flush to the right button_show_map
     sizer_v->Add(sizer_listcontrol_routes_button_show_map, 0,  wxALL | wxEXPAND, margin);

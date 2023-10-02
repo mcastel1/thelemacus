@@ -86,6 +86,7 @@ public:
     virtual bool OnInit();
     template<class T> void OnPressCtrlQ(T&);
     void OnTimer(wxTimerEvent&);
+    template<class T> void ComputePosition(T&);
     template<class T> void ShowChart(T&);
     void ShowList(wxCommandEvent&);
     void where_am_I(String);

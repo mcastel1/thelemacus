@@ -12867,10 +12867,11 @@ void AllRoutes::operator()(wxCommandEvent& event){
     }
     
     f->plot->compute_crossings(String("\t"));
+    
     f->set();
     f->Resize();
     f->DrawAll();
- 
+
     
     event.Skip(true);
 
@@ -12892,14 +12893,11 @@ void SomeRoutes::operator()(wxCommandEvent& event){
         
     }
     
+    (f->selecting_route_for_position) = true;
     (f->listcontrol_routes)->set(f->plot->crossing_route_list);
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_position in such a way that when the user will select an item in listcontrol, I perform the computation of the position
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_position));
 
-//    f->plot->compute_crossings(String("\t"));
-//    f->set();
-//    f->Resize();
-//    f->DrawAll();
 
     
     
@@ -13862,6 +13860,14 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     
     
     event.Skip(true);
+    
+}
+
+template<class T> void OnSelectRouteInListControlRoutesForPosition::operator()(T& event){
+    
+    
+    event.Skip(true);
+
     
 }
 
@@ -15193,7 +15199,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //for the time being, the file has no title
     file_is_untitled = true;
     enable_highlight = true;
-    computing_position = false;
+    selecting_route_for_position = false;
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
@@ -15310,7 +15316,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
-    
+    on_select_route_in_listcontrol_routes_for_position = new OnSelectRouteInListControlRoutesForPosition(this);
+
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
     //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
@@ -16240,9 +16247,16 @@ template<class E> void ListFrame::KeyDown(E& event){
             
     }
     
-    if(((event.GetKeyCode()) == WXK_RETURN) && computing_position){
+    if(((event.GetKeyCode()) == WXK_RETURN) && selecting_route_for_position){
         
         
+        //    f->plot->compute_crossings(String("\t"));
+
+        //    f->set();
+        //    f->Resize();
+        //    f->DrawAll();
+
+        1;
         
     }
     
@@ -18782,6 +18796,13 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
     f = f_in;
     
 }
+
+OnSelectRouteInListControlRoutesForPosition::OnSelectRouteInListControlRoutesForPosition(ListFrame* f_in){
+    
+    f = f_in;
+    
+}
+
 
 
 ListControl::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size) : wxListCtrl(parent_in, wxID_ANY, pos, size, wxLC_REPORT){

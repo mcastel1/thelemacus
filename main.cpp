@@ -135,6 +135,8 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event){
     some_routes = new SomeRoutes(this);
     print_question = new PrintQuestion<ListFrame, AllRoutes, SomeRoutes>(this, all_routes, some_routes);
     
+    selecting_route_for_position = true;
+    
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     print_question->SetAndCall(NULL, String("You want to determine the astronomical position"), String("With what route do you want to do it?"), String("All routes"), String("Some routes"));
     

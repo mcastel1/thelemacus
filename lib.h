@@ -2077,6 +2077,20 @@ public:
     
 };
 
+class OnSelectRouteInListControlRoutesForPosition{
+    
+public:
+    
+    //parent frame
+    ListFrame* f;
+    
+    //constructor, which sets the parent frame
+    OnSelectRouteInListControlRoutesForPosition(ListFrame*);
+    
+    template<class T> void operator()(T&);
+    
+    
+};
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...
 class ListFrame: public wxFrame{
@@ -2112,7 +2126,7 @@ public:
     OnChangeSelectionInListControl *on_change_selection_in_listcontrol_sights, *on_change_selection_in_listcontrol_routes, *on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *create_route;
-    bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/computing_position;
+    bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position;
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines;
     File file;
     
@@ -2134,6 +2148,7 @@ public:
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
+    OnSelectRouteInListControlRoutesForPosition* on_select_route_in_listcontrol_routes_for_position;
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
 

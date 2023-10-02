@@ -12869,7 +12869,6 @@ void AllRoutes::operator()(wxCommandEvent& event){
     f->plot->compute_crossings(String("\t"));
     
     f->set();
-    f->Resize();
     f->DrawAll();
 
     
@@ -16266,7 +16265,6 @@ template<class E> void ListFrame::KeyDown(E& event){
         plot->compute_crossings(String("\t"));
         
         set();
-        Resize();
         DrawAll();
 
         

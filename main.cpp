@@ -123,10 +123,12 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event){
     
 }
 
-//compute the astronomical position
+//compute the astronomical position and updated all the GUI fields in set() and re-draws everything
 template<class T> void MyApp::ComputePosition([[maybe_unused]] T& event){
     
     (list_frame->plot)->compute_crossings(String("\t"));
+    (list_frame->set)();
+    (list_frame->DrawAll());
     
     
 }

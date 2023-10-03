@@ -54,9 +54,7 @@
 
  ********** THINGS TO FIX ************
  
-- move margin to MyApp
- - when the position is computed, return an error message if no Routes satisfy the minimal angle
-- whan you transport something with a Route, the start position is pointless -> gray it out
+ - whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 
  - add missing case in                                 //the circles d intersect: here you should compute t
  - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place
@@ -151,19 +149,16 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event){
     
     unsigned int i;
     //the spacing between one frame and another in the x and y direction, respectively
-    double delta_x, delta_y, margin;
+    double delta_x, delta_y;
     
     
     i = (((list_frame->menu_bar)->GetSize()).GetHeight());
-    
-    //I add the margin so the frames do not stick to the edges of the screen
-    margin = ((double)((rectangle_display.GetWidth())*(length_border_over_length_screen.value)));
-    
+       
     if(((list_frame->chart_frames).size()) > 1){
         //if ((list_frame->chart_frames).size() > 1 it makes sens to introduce delta_x, delta_y
         
-        delta_x = ( ((double)(rectangle_display.GetWidth())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetWidth())) ) / 2.0  - 2.0 * margin ) / ((double)(((list_frame->chart_frames).size())-1));
-        delta_y = ( ((double)(rectangle_display.GetHeight())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetHeight())) ) / 2.0 - 2.0 * margin ) / ((double)(((list_frame->chart_frames).size())-1));
+        delta_x = ( ((double)(rectangle_display.GetWidth())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetWidth())) ) / 2.0  - 2.0 * ((wxGetApp().border).value) ) / ((double)(((list_frame->chart_frames).size())-1));
+        delta_y = ( ((double)(rectangle_display.GetHeight())) - ( (double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size())-1])->GetSize()).GetHeight())) ) / 2.0 - 2.0 * ((wxGetApp().border).value) ) / ((double)(((list_frame->chart_frames).size())-1));
         
     }else{
         //if ((list_frame->chart_frames).size() <= 1, it does not make sense to define delta_x, delta_y, and I set
@@ -183,14 +178,14 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event){
         ((list_frame->chart_frames)[i])->SetPosition(wxPoint(
                                                              
                                                              
-                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth())) ) / 2.0 + margin + delta_x*((double)i)
+                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth())) ) / 2.0 + ((wxGetApp().border).value) + delta_x*((double)i)
                                                              
                                                              
                                                              ,
                                                              
                                                              /*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
                                                              (((list_frame->menu_bar)->GetSize()).GetHeight()) +
-                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight())) ) / 2.0 + margin + delta_y*((double)i)
+                                                             ( ((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight())) ) / 2.0 + ((wxGetApp().border).value) + delta_y*((double)i)
                                                              
                                                              ));
         
@@ -474,6 +469,8 @@ bool MyApp::OnInit(){
     length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
     length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
+    
+    border.set(String("border"), (rectangle_display.GetWidth())*(length_border_over_length_screen.value), String(""));
     
     //read n_points_minor_ticks from file_init
     n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));

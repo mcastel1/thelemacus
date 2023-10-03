@@ -2145,7 +2145,7 @@ public:
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
-    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message;
+    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message;
     PrintMessage<ListFrame, SelectRoute >* print_info_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
@@ -2179,6 +2179,7 @@ public:
     void OnAddChartFrame(wxCommandEvent& event);
     void OnCloseActiveChartFrame(wxCommandEvent&);
     void OnCloseAllChartFrames(wxCommandEvent&);
+    void OnComputePosition(void);
 
 //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);

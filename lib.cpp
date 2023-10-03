@@ -131,17 +131,14 @@ template <class T> void Reset(T* control){
     
 }
 
-//rescales *image to fit into size, by including the margin given by length_border_over_length_screen, and by keeping its proprtions, and writes the result into *image
+//rescales *image to fit into size, by including the border given by length_border_over_length_screen, and by keeping its proprtions, and writes the result into *image
 void RescaleProportionally(wxImage* image, const wxSize size){
     
     wxSize original_size, size_minus_margins;
     Double scaling_factor;
     
     original_size = (image->GetSize());
-    size_minus_margins = wxSize(
-                                (size.GetWidth()) -   ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),
-                                ( (size.GetHeight()) - ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value) )
-                                );
+    size_minus_margins = wxSize((size.GetWidth()) - ((wxGetApp().border).value), (size.GetHeight()) - ((wxGetApp().border).value));
     
     scaling_factor.set(String(""),
                        (
@@ -6022,7 +6019,6 @@ int Plot::compute_position(String prefix){
     Position center;
     double x;
     Route error_circle;
-    int output;
     
     
     //append \t to prefix
@@ -9398,9 +9394,9 @@ void DrawPanel::Draw_Mercator(void){
        ((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))) * (size_chart.GetHeight())/(size_chart.GetWidth())
        < (size_chart.GetHeight()) - (((int)size_label_vertical) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value))
        ){
-           //if I set size_plot_area's width first to leave room for size_label_horizontal + 3 margins, then there is enough space to set size_plot_area's height by keeping the aspect ratio
+           //if I set size_plot_area's width first to leave room for size_label_horizontal + 3 borders, then there is enough space to set size_plot_area's height by keeping the aspect ratio
            
-           size_plot_area.SetWidth((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
+           size_plot_area.SetWidth((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().border).value)));
            size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight())/(size_chart.GetWidth()) );
            
            
@@ -9411,9 +9407,9 @@ void DrawPanel::Draw_Mercator(void){
            
            
        }else{
-           //if I set size_plot_area's width first to leave room for  ((int)size_label_horizontal) + 3 margins and there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first and set the width later according to the aspect ratio
+           //if I set size_plot_area's width first to leave room for  ((int)size_label_horizontal) + 3 borders and there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first and set the width later according to the aspect ratio
            
-           size_plot_area.SetHeight((size_chart.GetHeight()) - ( ((int)size_label_vertical) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )));
+           size_plot_area.SetHeight((size_chart.GetHeight()) - ( ((int)size_label_vertical) + 3*((wxGetApp().border).value)));
            size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) );
            
            if(((size_plot_area.GetHeight()) * (size_chart.GetWidth())/(size_chart.GetHeight()) ) < ((size_chart.GetWidth()) - ( ((int)size_label_horizontal) + 3*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value  )))){
@@ -10119,16 +10115,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     StaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
-    int margin;
-
-
     
     parent = parent_input;
-    
-    
+        
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    margin = ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
 
     //read lambda_min, ...., phi_max from file_init
     lambda_min.read_from_file(String("minimal longitude"), (wxGetApp().path_file_init), new_prefix);
@@ -10188,7 +10179,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //image for button_list
     wxBitmap my_bitmap_list = wxBitmap(wxString(((wxGetApp().path_file_list_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_list = my_bitmap_list.ConvertToImage();
-    RescaleProportionally(&my_image_list, (wxGetApp().size_large_button) - wxSize(margin, margin));
+    RescaleProportionally(&my_image_list, (wxGetApp().size_large_button) - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)));
     
     
     //navigation buttons
@@ -12873,7 +12864,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
 void AllRoutes::operator()(wxCommandEvent& event){
     
     unsigned int j;
-    
+
     //there need to be at list two routes of type "c" to compute crossings. Here I include all routes of type "c" into crossing_route_list by writing their index into crossing_route_list
     for(((f->plot)->crossing_route_list).clear(), j=0; j<((f->plot)->route_list).size(); j++){
         
@@ -12883,12 +12874,8 @@ void AllRoutes::operator()(wxCommandEvent& event){
         
     }
     
-    f->plot->compute_position(String("\t"));
-    
-    f->set();
-    f->DrawAll();
-
-    
+    f->OnComputePosition();
+     
     event.Skip(true);
 
 }
@@ -15244,6 +15231,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
     select_route = new SelectRoute(this);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+    print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
@@ -15265,9 +15253,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //read color list from file_init
     s.read_from_file(String("color list"), (wxGetApp().path_file_init), String(""));
 
-    
-    margin = ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
-    
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     (wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
     
@@ -15396,8 +15381,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     wxBitmap my_bitmap_map = wxBitmap(wxString(((wxGetApp().path_file_map_icon).value)), wxBITMAP_TYPE_PNG), my_bitmap_position = wxBitmap(wxString(((wxGetApp().path_file_position_icon).value)), wxBITMAP_TYPE_PNG);
     wxImage my_image_map = my_bitmap_map.ConvertToImage(), my_image_position = my_bitmap_position.ConvertToImage();
 
-    RescaleProportionally(&my_image_map, wxGetApp().size_large_button - wxSize(margin, margin));
-    RescaleProportionally(&my_image_position, wxGetApp().size_large_button - wxSize(margin, margin));
+    RescaleProportionally(&my_image_map, wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)));
+    RescaleProportionally(&my_image_position, wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)));
 
     //image for button_modify_sight
     wxBitmap my_bitmap = wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG);
@@ -15489,7 +15474,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     
     
-    sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, margin);
+    sizer_box_sight->Add(listcontrol_sights, 0,  wxALL, ((wxGetApp().border).value));
     
     
     //listcontrol_positions with positions
@@ -15510,7 +15495,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
     listcontrol_positions->PushBackColumn(wxString("Label"));
     
-    sizer_box_position->Add(listcontrol_positions, 0,  wxALL, margin);
+    sizer_box_position->Add(listcontrol_positions, 0,  wxALL, ((wxGetApp().border).value));
     
     
     //listcontrol routes with routes
@@ -15548,7 +15533,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     listcontrol_routes->PushBackColumn(wxString("Related Sight"));
     
     
-    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, margin);
+    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, ((wxGetApp().border).value));
 
     //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
     Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
@@ -15603,18 +15588,18 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_transport_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_delete_sight, 0, wxALIGN_CENTER);
-    sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, margin);
+    sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
     
     sizer_buttons_position->Add(button_add_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_modify_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_transport_position, 0, wxALIGN_CENTER);
     sizer_buttons_position->Add(button_delete_position, 0, wxALIGN_CENTER);
-    sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, margin);
+    sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
     
     sizer_buttons_route->Add(button_add_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
-    sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, margin);
+    sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
     
     
     //
@@ -15624,23 +15609,23 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
     //    }
     
-    sizer_v->Add(sizer_box_sight, 0,  wxALL, margin);
-    sizer_v->Add(sizer_box_position, 0,  wxALL, margin);
+    sizer_v->Add(sizer_box_sight, 0,  wxALL, ((wxGetApp().border).value));
+    sizer_v->Add(sizer_box_position, 0,  wxALL, ((wxGetApp().border).value));
     sizer_listcontrol_routes_button_show_map->Add(sizer_box_route);
     sizer_listcontrol_routes_button_show_map->AddStretchSpacer(1);
     //here I set the flag '0' to avoid button_show_map from being stretched
     sizer_listcontrol_routes_button_show_map->Add(button_compute_position, 0, wxALIGN_BOTTOM);
     sizer_listcontrol_routes_button_show_map->Add(button_show_map, 0, wxALIGN_BOTTOM);
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_button_show_map expand, and thus I flush to the right button_show_map
-    sizer_v->Add(sizer_listcontrol_routes_button_show_map, 0,  wxALL | wxEXPAND, margin);
+    sizer_v->Add(sizer_listcontrol_routes_button_show_map, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     
     Maximize(panel);
     SetSizerAndFit(sizer_v);
     
     //    panel->SetSizer(sizer_v);
     
-    //    panel->SetSize(wxSize(total_column_width+4*margin,-1));
-    //    this->SetSize(wxSize(total_column_width+6*margin,-1));
+    //    panel->SetSize(wxSize(total_column_width+4*((wxGetApp().border).value),-1));
+    //    this->SetSize(wxSize(total_column_width+6*((wxGetApp().border).value),-1));
     
     
     //given that I have incoroporated the listcontrols into the sizers, listrcontrols may have been resized -> I Fit() them so their content is properly shown
@@ -15715,7 +15700,33 @@ void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event){
     
 }
 
-
+//this is the GUI function called when the user wants to compute the position: it calls the non-GUI method plot->compute_position and returns GUI error/warning messages according to the output of plot->compute_position
+void ListFrame::OnComputePosition(void){
+    
+    int out;
+    
+    out = (plot->compute_position(String("\t")));
+    
+    if(out == -1){
+            //the position could not be computed
+            
+            print_error_message->SetAndCall(NULL, String("I could not compute the astronomical position!"), String("No routes yield valid crossings"), (wxGetApp().path_file_error_icon));
+            
+    }else{
+        
+        if(out == 0){
+            //the position couldbe computed by using only some crossings/Routes
+              
+            print_error_message->SetAndCall(NULL, String("Not all routes could be used to compute the astronomical position!"), String("Rome routes yield invalid crossings"), (wxGetApp().path_file_warning_icon));
+     
+        }
+        
+        set();
+        DrawAll();
+      
+    }
+    
+}
 
 
 //calls Draw and PaintNow in all che ChartFrames which are children of *this
@@ -16294,14 +16305,7 @@ template<class E> void ListFrame::KeyDown(E& event){
             
         }while(previous_item != -1);
       
-        
-        
-        plot->compute_position(String("\t"));
-        
-        set();
-        DrawAll();
-
-        
+        OnComputePosition();
         
     }
     

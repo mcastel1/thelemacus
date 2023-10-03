@@ -6022,7 +6022,6 @@ int Plot::compute_position(String prefix){
     Position center;
     double x;
     Route error_circle;
-    int output;
     
     
     //append \t to prefix
@@ -12873,7 +12872,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
 void AllRoutes::operator()(wxCommandEvent& event){
     
     unsigned int j;
-    
+
     //there need to be at list two routes of type "c" to compute crossings. Here I include all routes of type "c" into crossing_route_list by writing their index into crossing_route_list
     for(((f->plot)->crossing_route_list).clear(), j=0; j<((f->plot)->route_list).size(); j++){
         
@@ -12883,40 +12882,8 @@ void AllRoutes::operator()(wxCommandEvent& event){
         
     }
     
-    switch((f->plot->compute_position(String("\t")))){
-            
-        case '(-1)':{
-            //the position could not be computed
-            
-            
-            break;
-            
-        }
-        
-        case '0':{
-            //the position couldbe computed by using only some crossings/Routes
-              
-            f->set();
-            f->DrawAll();
-
-            break;
-            
-        }
-    
-        case '1':{
-            //the position could be computed by using all Routes
-            
-            f->set();
-            f->DrawAll();
-              
-            break;
-            
-        }
-            
-    };
-    
-  
-    
+    f->OnComputePosition();
+     
     event.Skip(true);
 
 }
@@ -15272,6 +15239,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
     select_route = new SelectRoute(this);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+    print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
@@ -15743,7 +15711,33 @@ void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event){
     
 }
 
-
+//this is the GUI function called when the user wants to compute the position: it calls the non-GUI method plot->compute_position and returns GUI error/warning messages according to the output of plot->compute_position
+void ListFrame::OnComputePosition(void){
+    
+    int out;
+    
+    out = (plot->compute_position(String("\t")));
+    
+    if(out == -1){
+            //the position could not be computed
+            
+            print_error_message->SetAndCall(NULL, String("I could not compute the astronomical position!"), String("No routes yield valid crossings"), (wxGetApp().path_file_error_icon));
+            
+    }else{
+        
+        if(out == 0){
+            //the position couldbe computed by using only some crossings/Routes
+              
+            print_error_message->SetAndCall(NULL, String("Not all routes could be used to compute the astronomical position!"), String("Rome routes yield invalid crossings"), (wxGetApp().path_file_warning_icon));
+     
+        }
+        
+        set();
+        DrawAll();
+      
+    }
+    
+}
 
 
 //calls Draw and PaintNow in all che ChartFrames which are children of *this
@@ -16322,14 +16316,7 @@ template<class E> void ListFrame::KeyDown(E& event){
             
         }while(previous_item != -1);
       
-        
-        
-        plot->compute_position(String("\t"));
-        
-        set();
-        DrawAll();
-
-        
+        OnComputePosition();
         
     }
     

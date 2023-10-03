@@ -15722,7 +15722,7 @@ void ListFrame::set(){
     listcontrol_routes->set(plot->route_list);
     
     Resize();
-    Maximize(panel);
+//    Maximize(panel);
     
 }
 

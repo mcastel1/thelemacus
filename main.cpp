@@ -55,7 +55,6 @@
  ********** THINGS TO FIX ************
  
  - when the position is computed, sometime I get nan as coordinates 
- - move min_crossing_angle to MyApp
  - replace parent->rectangle_display -> wxGetApp().rectangle_display
 - whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 
@@ -476,21 +475,24 @@ bool MyApp::OnInit(){
     length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
     
     //read n_points_minor_ticks from file_init
-    (wxGetApp().n_points_minor_ticks).read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
+    n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
     //read relative_displacement from file_init
-    (wxGetApp().relative_displacement).read_from_file(String("relative displacement"), String(path_file_init), String(""));
+    relative_displacement.read_from_file(String("relative displacement"), String(path_file_init), String(""));
     //read standard_thickness_over_length_screen from file_init
-    (wxGetApp().standard_thickness_over_length_screen).read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
+    standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
     //read large_thickness_over_length_screen from file_init
-    (wxGetApp().large_thickness_over_length_screen).read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
+    large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
     //read color horizon from file
-    (wxGetApp().color_horizon).read_from_file(String("color horizon"), String(path_file_init), String(""));
+    color_horizon.read_from_file(String("color horizon"), String(path_file_init), String(""));
     //read color selected item from file
     color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
     //read tick length over width plot area from file_init
-    (wxGetApp().tick_length_over_width_plot_area).read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
+    tick_length_over_width_plot_area.read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
     //read tick length over width plot area from file_init
-    (wxGetApp().tick_length_over_aperture_circle_observer).read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
+    tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
+    //read min_crossing_angle from file_init
+    min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String(""));
+
     
     
     //read the time, and set the background color to either the day or night background color, which are read from file

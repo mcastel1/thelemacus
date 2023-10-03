@@ -6020,7 +6020,6 @@ void Plot::compute_crossings(String prefix){
     stringstream dummy;
     Length r, s;
     Position center;
-    Angle min_crossing_angle;
     double x;
     Route error_circle;
     
@@ -6028,7 +6027,6 @@ void Plot::compute_crossings(String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), new_prefix);
     
 
     
@@ -6055,8 +6053,8 @@ void Plot::compute_crossings(String prefix){
                 if(((crossing_route_list[i]).crossing(crossing_route_list[j], &q_temp, &x, new_prefix)) >= 0){
                     //in this case, the two routes under consideration intercept with no error message
                     
-                    //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos(min_crossing_angle), then I add this crossing to the list of sensible crossings
-                    if(fabs(x) < cos(min_crossing_angle)){
+                    //if the two routes under consideration are not too parallel (i.e., |cos(their crossing angle)| < cos((wxGetApp().min_crossing_angle)), then I add this crossing to the list of sensible crossings
+                    if(fabs(x) < cos((wxGetApp().min_crossing_angle))){
                         
                         p.resize(l+1);
                         (p[l]).resize(2);

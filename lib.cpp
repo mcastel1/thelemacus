@@ -5684,7 +5684,7 @@ void Plot::menu(String prefix){
             
             if(crossing_route_list.size() > 1){
                 
-                compute_crossings(new_prefix);
+                compute_position(new_prefix);
                 
             }else{
                 
@@ -6012,8 +6012,8 @@ Plot::Plot(Catalog* cata, [[maybe_unused]] String prefix){
 }
 
 
-//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively
-void Plot::compute_crossings(String prefix){
+//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively. It returns 1 if all crossings are valid, -1 if no crossings are valid, 0 if some crossings are valid.
+int Plot::compute_position(String prefix){
     
     unsigned int i, j, l;
     String new_prefix;
@@ -6022,13 +6022,11 @@ void Plot::compute_crossings(String prefix){
     Position center;
     double x;
     Route error_circle;
+    int output;
     
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    
-    
-
     
     if(crossing_route_list.size() > 1){
         //there are enough Routes in crossing_route_list -> I compute the crossing
@@ -6036,19 +6034,17 @@ void Plot::compute_crossings(String prefix){
         vector< vector<Position> > p;
         vector<Position> q, q_temp(2);
 
-        cout << prefix.value << "Computing crossings between routes :";
+        cout << prefix.value << "Computing crossings between routes :\n";
         for(i=0; i<crossing_route_list.size(); i++){
             cout << new_prefix.value << "\t" << (crossing_route_list[i]).label.value << "\n";
         }
-        cout << "\n";
         
         //I run over all the pairs of circles of equal altitude and write their crossing points into p
         l=0;
         for(i=0; i<crossing_route_list.size(); i++){
             for(j=i+1; j<crossing_route_list.size(); j++){
                 
-                
-//                cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
+                //                cout << prefix.value << "Computing crossing between routes " << crossing_route_list[i]+1 << " and " << crossing_route_list[j]+1 << "\n";
                 
                 if(((crossing_route_list[i]).crossing(crossing_route_list[j], &q_temp, &x, new_prefix)) >= 0){
                     //in this case, the two routes under consideration intercept with no error message
@@ -6066,11 +6062,11 @@ void Plot::compute_crossings(String prefix){
                         
                         l++;
                         
-                        cout << new_prefix.value << "Crossing accepted\n";
+                        cout << new_prefix.value << "Crossing is valid.\n";
                         
                     }else{
                         
-                        cout << new_prefix.value << "Crossing not accepted\n";
+                        cout << new_prefix.value << "Crossing is not valid.\n";
                         
                     }
                     
@@ -6079,95 +6075,117 @@ void Plot::compute_crossings(String prefix){
             }
         }
         
-        //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center
-        
-        cout << prefix.value << "Distances between pairs of crossing positions:\n";
-        r.set(String(""), M_PI*Re, prefix);
-        
-        for(i=0; i<q.size(); i++){
-            for(j=i+1; j<q.size(); j++){
+        if(l>0){
+            //there is at least one valid crossing
+            
+            //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center
+            
+            cout << prefix.value << "Distances between pairs of crossing positions:\n";
+            r.set(String(""), M_PI*Re, prefix);
+            
+            for(i=0; i<q.size(); i++){
+                for(j=i+1; j<q.size(); j++){
+                    
+                    dummy.str("");
+                    dummy << "distance between points " << i << " and " << j;
+                    
+                    (q[i]).distance((q[j]), &s, String(dummy.str()), new_prefix);
+                    
+                    if(r>s){
+                        r = s;
+                        center = (q[i]);
+                    }
+                    
+                }
+            }
+            
+            r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
+            center.print(String("center crossing"), prefix, cout);
+            
+            //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center. Crossings are also added to position_list, in such a way that they are shown in the plot
+            q.clear();
+            q.push_back(center);
+            //        position_list.push_back(q[q.size()-1]);
+            for(i=0; i<p.size(); i++){
                 
-                dummy.str("");
-                dummy << "distance between points " << i << " and " << j;
-                
-                (q[i]).distance((q[j]), &s, String(dummy.str()), new_prefix);
-                
-                if(r>s){
-                    r = s;
-                    center = (q[i]);
+                if(!( ((p[i][0])==center) || ((p[i][1])==center) )){
+                    
+                    center.distance(p[i][0], &r, String(""), new_prefix);
+                    center.distance(p[i][1], &s, String(""), new_prefix);
+                    
+                    if(r>s){
+                        
+                        q.push_back(p[i][1]);
+                        
+                    }else{
+                        
+                        q.push_back(p[i][0]);
+                        
+                    }
+                    
+                    //                position_list.push_back(q[q.size()-1]);
+                    
                 }
                 
             }
-        }
-        
-        r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
-        center.print(String("center crossing"), prefix, cout);
-        
-        //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center. Crossings are also added to position_list, in such a way that they are shown in the plot
-        q.clear();
-        q.push_back(center);
-//        position_list.push_back(q[q.size()-1]);
-        for(i=0; i<p.size(); i++){
             
-            if(!( ((p[i][0])==center) || ((p[i][1])==center) )){
+            //compute astronomical position by averaging on all viable crossing points
+            center.lambda.value = 0.0;
+            center.phi.value = 0.0;
+            for(i=0 ; i<q.size(); i++){
                 
-                center.distance(p[i][0], &r, String(""), new_prefix);
-                center.distance(p[i][1], &s, String(""), new_prefix);
+                (center.lambda.value) += ((q[i]).lambda.value);
+                (center.phi.value) += ((q[i]).phi.value);
                 
-                if(r>s){
+            }
+            (center.lambda.value)/=((double)(q.size()));
+            (center.phi.value)/=((double)(q.size()));
+            center.label.set(String(""), String("astronomical position"),  prefix);
+            
+            //compute error on astronomical position
+            (r.value) = 0.0;
+            for(i=0 ; i<q.size(); i++){
+                for(j=i+1 ; j<q.size(); j++){
                     
-                    q.push_back(p[i][1]);
                     
-                }else{
-                    
-                    q.push_back(p[i][0]);
+                    (q[i]).distance(q[j], &s, String(""), new_prefix);
+                    r= r+s;
                     
                 }
+            }
+            (r.value) /= ((double)((q.size())*((q.size())-1)/2));
+            
+            //computes the circle of equal altitude which represents the error of the sight
+            (error_circle.type) = String("c");
+            (error_circle.reference_position) = center;
+            (error_circle.omega.value) = (r.value)/Re;
+            (error_circle.label) = String("error on astronomical position");
+            ((error_circle.related_sight).value) = -1;
+            
+            center.print(String("astronomical position"), prefix, cout);
+            r.print(String("error on astronomical position"), String("nm"), prefix, cout);
+            
+            position_list.push_back(center);
+            route_list.push_back(error_circle);
+            
+            if(l == (crossing_route_list.size())*((crossing_route_list.size())-1)/2){
+                //all Routes in crossing_route_list have been used to get the position
                 
-//                position_list.push_back(q[q.size()-1]);
+                return 1;
+                
+            }else{
+                //only some Routes in crossing_route_list have been used to get the position
+                
+                return 0;
                 
             }
+
+        }else{
+            
+            cout << prefix.value << RED << "I could not compute the position because there are no valid crossings!\n" << RESET;
+            return(-1);
             
         }
-        
-        //compute astronomical position by averaging on all viable crossing points
-        center.lambda.value = 0.0;
-        center.phi.value = 0.0;
-        for(i=0 ; i<q.size(); i++){
-            
-            (center.lambda.value) += ((q[i]).lambda.value);
-            (center.phi.value) += ((q[i]).phi.value);
-            
-        }
-        (center.lambda.value)/=((double)(q.size()));
-        (center.phi.value)/=((double)(q.size()));
-        center.label.set(String(""), String("astronomical position"),  prefix);
-        
-        //compute error on astronomical position
-        (r.value) = 0.0;
-        for(i=0 ; i<q.size(); i++){
-            for(j=i+1 ; j<q.size(); j++){
-                
-                
-                (q[i]).distance(q[j], &s, String(""), new_prefix);
-                r= r+s;
-                
-            }
-        }
-        (r.value) /= ((double)((q.size())*((q.size())-1)/2));
-        
-        //computes the circle of equal altitude which represents the error of the sight
-        (error_circle.type) = String("c");
-        (error_circle.reference_position) = center;
-        (error_circle.omega.value) = (r.value)/Re;
-        (error_circle.label) = String("error on astronomical position");
-        ((error_circle.related_sight).value) = -1;
-        
-        center.print(String("astronomical position"), prefix, cout);
-        r.print(String("error on astronomical position"), String("nm"), prefix, cout);
-        
-        position_list.push_back(center);
-        route_list.push_back(error_circle);
         
         p.clear();
         q.clear();
@@ -6176,7 +6194,8 @@ void Plot::compute_crossings(String prefix){
     }else{
         //there are not enough Routes in crossing_route_list -> I cannot compute the crossing
 
-        cout << prefix.value << RED << "I could not compute the crossing because there are not enough Routes!\n" << RESET;
+        cout << prefix.value << RED << "I could not compute the position because there are no valid Routes!\n" << RESET;
+        return(-1);
         
     }
     
@@ -12864,7 +12883,7 @@ void AllRoutes::operator()(wxCommandEvent& event){
         
     }
     
-    f->plot->compute_crossings(String("\t"));
+    f->plot->compute_position(String("\t"));
     
     f->set();
     f->DrawAll();
@@ -16260,7 +16279,7 @@ template<class E> void ListFrame::KeyDown(E& event){
       
         
         
-        plot->compute_crossings(String("\t"));
+        plot->compute_position(String("\t"));
         
         set();
         DrawAll();

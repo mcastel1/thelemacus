@@ -945,7 +945,7 @@ public:
     void print_routes(bool, String, ostream&);
     //    void show(bool, String);
     void menu(String);
-    void compute_crossings(String);
+    int compute_position(String);
     
 };
 

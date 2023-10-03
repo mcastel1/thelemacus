@@ -54,7 +54,8 @@
 
  ********** THINGS TO FIX ************
  
- - when the position is computed, sometime I get nan as coordinates 
+
+ - when the position is computed, return an error message if no Routes satisfy the minimal angle
 - whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 
  - add missing case in                                 //the circles d intersect: here you should compute t

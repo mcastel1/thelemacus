@@ -15222,7 +15222,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    (parent->rectangle_display) = ((wxGetApp().display).GetClientArea());
+    (wxGetApp().rectangle_display) = ((wxGetApp().display).GetClientArea());
     
     (wxGetApp().file_init).set_name((wxGetApp().path_file_init));
     
@@ -15230,7 +15230,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     s.read_from_file(String("color list"), (wxGetApp().path_file_init), String(""));
 
     
-    margin = ((parent->rectangle_display).GetWidth())*(length_border_over_length_screen.value);
+    margin = ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     (wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));

@@ -458,6 +458,7 @@ bool MyApp::OnInit(){
     size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
     size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), String(path_file_init), String(""));
     size_icon_over_width_screen.read_from_file(String("size icon over width screen"), String(path_file_init), String(""));
+    size_message_image_over_width_screen.read_from_file(String("size message image over width screen"), String(path_file_init), String(""));
 
     //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
     size_small_button = wxSize(

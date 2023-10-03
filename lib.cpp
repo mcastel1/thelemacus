@@ -12883,11 +12883,39 @@ void AllRoutes::operator()(wxCommandEvent& event){
         
     }
     
-    f->plot->compute_position(String("\t"));
-    
-    f->set();
-    f->DrawAll();
+    switch((f->plot->compute_position(String("\t")))){
+            
+        case '(-1)':{
+            //the position could not be computed
+            
+            
+            break;
+            
+        }
+        
+        case '0':{
+            //the position couldbe computed by using only some crossings/Routes
+              
+            f->set();
+            f->DrawAll();
 
+            break;
+            
+        }
+    
+        case '1':{
+            //the position could be computed by using all Routes
+            
+            f->set();
+            f->DrawAll();
+              
+            break;
+            
+        }
+            
+    };
+    
+  
     
     event.Skip(true);
 
@@ -14991,12 +15019,12 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     image->SetMinSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value))
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
                       );
     image->SetMaxSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value))
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
                       );
 
     
@@ -15072,12 +15100,12 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     
     image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(((wxGetApp().path_file_app_icon).value), wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     image->SetMinSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value))
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
                       );
     image->SetMaxSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_icon_over_width_screen).value))
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
                       );
     
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));

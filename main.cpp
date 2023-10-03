@@ -54,7 +54,7 @@
 
  ********** THINGS TO FIX ************
  
-
+- move margin to MyApp
  - when the position is computed, return an error message if no Routes satisfy the minimal angle
 - whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 

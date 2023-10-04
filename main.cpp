@@ -421,6 +421,9 @@ bool MyApp::OnInit(){
     temp.read_from_file(String("name file warning icon"), String(path_file_init), String(""));
     path_file_warning_icon = image_directory.append(temp);
     
+    temp.read_from_file(String("name file question icon"), String(path_file_init), String(""));
+    path_file_question_icon = image_directory.append(temp);
+ 
     temp.read_from_file(String("name file plus icon"), String(path_file_init), String(""));
     path_file_plus_icon = image_directory.append(temp);
     

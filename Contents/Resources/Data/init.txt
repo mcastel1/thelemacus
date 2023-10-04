@@ -105,6 +105,7 @@ name file coastline data blocked = map_conv_blocked.csv
 name file n line = n_line_map_conv_blocked.txt
 #files in image directory
 name file app icon = jolly_rogers_png.png
+name file question icon = question_icon.png
 name file error icon = jolly_rogers_png.png
 name file warning icon = warning_icon.png
 name file plus icon = plus_icon.png

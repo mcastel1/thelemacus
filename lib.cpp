@@ -14531,6 +14531,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool enable_sta
         GP_lambda->Enable(false);
         omega->Enable(false);
         
+    }else{
+
+        start_phi->Enable(enable_start_position);
+        start_lambda->Enable(enable_start_position);
+        
     }
     
     //I enable the ok button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL

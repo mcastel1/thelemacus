@@ -12739,6 +12739,7 @@ ExistingRoute::ExistingRoute(ListFrame* f_in){
 NewRoute::NewRoute(ListFrame* f_in){
     
     f = f_in;
+    enable_start_position = true;
     
 }
 
@@ -14420,7 +14421,9 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
 }
 
-RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+
+//create a new RouteFrame. If enable_start_position = true/false, it enables the fields related to the start position of the Route
+RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool enable_start_position, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -15791,7 +15794,7 @@ void ListFrame::OnAddPosition(wxCommandEvent& event){
 
 void ListFrame::OnAddRoute(wxCommandEvent& event){
     
-    route_frame = new RouteFrame(this, NULL, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
+    route_frame = new RouteFrame(this, NULL, true, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
     route_frame->Show(true);
     
     event.Skip(true);
@@ -15901,7 +15904,7 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
         s.str("");
         s << "Route #" << item+1;
         
-        RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), true, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);
         
         route_frame->Show(true);

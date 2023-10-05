@@ -1357,8 +1357,6 @@ public:
     
     //the frame which called this struct
     ListFrame* f;
-    //if this is true (false) the GUI field related to the start position will be enabled (diabled) when RouteFrame is created 
-    bool enable_start_position;
     
     void operator()(wxCommandEvent&);
     

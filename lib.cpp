@@ -12739,7 +12739,6 @@ ExistingRoute::ExistingRoute(ListFrame* f_in){
 NewRoute::NewRoute(ListFrame* f_in){
     
     f = f_in;
-    enable_start_position = true;
     
 }
 
@@ -14779,7 +14778,7 @@ bool RouteFrame::is_ok(void){
     return((type->is_ok()) &&
            (
             ( ( (((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome")) ) &&
-             ((Z->is_ok()) && (start_phi->is_ok()) && (start_lambda->is_ok()) && (l->is_ok()) ))
+             ((Z->is_ok()) && ((start_phi->is_ok()) || for_transport) && ((start_lambda->is_ok()) || for_transport) && (l->is_ok()) ))
             ||
             ( (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
              ((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok()) ))
@@ -16956,7 +16955,7 @@ CheckRouteType::CheckRouteType(RouteTypeField* p_in){
     
 }
 
-//this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, Z and start fields in RouteFrame. If it is equal to circle of equal altitude, it enables only the GP and omege fields.
+//this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, Z and start fields in RouteFrame (the latter if for_transport = false, becasue I don't need a start position if I am using the Route for transport). If it is equal to circle of equal altitude, it enables only the GP and omege fields.
 template<class T>void CheckRouteType::operator()(T& event){
     
     RouteFrame* f = (p->parent_frame);
@@ -16982,8 +16981,10 @@ template<class T>void CheckRouteType::operator()(T& event){
             enable = ((((p->types)[i]) == wxString("loxodrome")) || (((p->types)[i]) == wxString("orthodrome")));
             
             (f->Z)->Enable(enable);
-            (f->start_phi)->Enable(enable);
-            (f->start_lambda)->Enable(enable);
+            
+            (f->start_phi)->Enable(!(f->for_transport));
+            (f->start_lambda)->Enable(!(f->for_transport));
+            
             (f->l)->Enable(enable);
             
             (f->GP_phi)->Enable(!enable);
@@ -18581,8 +18582,8 @@ template<class E> void RouteTypeField::OnEdit(E& event){
         enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
         
         (parent_frame->Z)->Enable(enable);
-        (parent_frame->start_phi)->Enable(enable);
-        (parent_frame->start_lambda)->Enable(enable);
+        (parent_frame->start_phi)->Enable(enable && (!(parent_frame->for_transport)));
+        (parent_frame->start_lambda)->Enable(enable && (!(parent_frame->for_transport)));
         (parent_frame->l)->Enable(enable);
         
         (parent_frame->GP_phi)->Enable(!enable);

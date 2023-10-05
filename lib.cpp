@@ -14838,8 +14838,10 @@ void RouteFrame::set(void){
         //I disable the GUI fields which do not define a circle of equal altitude and set the others
         
         Z->Enable(false);
+        
         start_phi->Enable(false);
         start_lambda->Enable(false);
+        
         l->Enable(false);
         
         GP_phi->set();
@@ -14850,8 +14852,12 @@ void RouteFrame::set(void){
         //I disable the GUI fields which do not define a loxodrome or orthodrome and set the others
         
         Z->set();
+        
         start_phi->set();
         start_lambda->set();
+        start_phi->Enable(!for_transport);
+        start_lambda->Enable(!for_transport);
+
         l->set();
         
         GP_phi->Enable(false);

@@ -2173,6 +2173,7 @@ public:
     template<class E> void OnPressDeletePosition(E&);
 
     void OnAddRoute(wxCommandEvent& event);
+    void OnAddRouteForTransport(wxCommandEvent& event);
     template<class E> void OnModifyRoute(E&);
     template<class E> void OnPressDeleteRoute(E& event);
     

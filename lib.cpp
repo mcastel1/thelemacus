@@ -12914,7 +12914,7 @@ void SomeRoutes::operator()(wxCommandEvent& event){
 void NewRoute::operator()(wxCommandEvent& event){
     
     //call OnAddRoute to add a new Route
-    (f->OnAddRoute)(event);
+    (f->OnAddRouteForTransport)(event);
     
     //when the frame with which the new Route will be closed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
     (f->route_frame)->Bind(wxEVT_CLOSE_WINDOW, *(f->on_new_route_in_listcontrol_routes_for_transport));
@@ -14422,8 +14422,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 }
 
 
-//create a new RouteFrame. If enable_start_position = true/false, it enables the fields related to the start position of the Route
-RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool enable_start_position, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+//create a new RouteFrame. If for_transport = true/false, it enables the fields related to the start position of the Route
+RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transport, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -14533,8 +14533,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool enable_sta
         
     }else{
 
-        start_phi->Enable(enable_start_position);
-        start_lambda->Enable(enable_start_position);
+        start_phi->Enable(for_transport);
+        start_lambda->Enable(for_transport);
         
     }
     
@@ -15797,7 +15797,18 @@ void ListFrame::OnAddPosition(wxCommandEvent& event){
     
 }
 
+//method to be called when a new Route is added to *this
 void ListFrame::OnAddRoute(wxCommandEvent& event){
+    
+    route_frame = new RouteFrame(this, NULL, false, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
+    route_frame->Show(true);
+    
+    event.Skip(true);
+    
+}
+
+//method to be called when a new Route is added to *this to transport something
+void ListFrame::OnAddRouteForTransport(wxCommandEvent& event){
     
     route_frame = new RouteFrame(this, NULL, true, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
     route_frame->Show(true);
@@ -15909,7 +15920,7 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
         s.str("");
         s << "Route #" << item+1;
         
-        RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), true, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), false, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);
         
         route_frame->Show(true);

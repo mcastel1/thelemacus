@@ -14422,8 +14422,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 }
 
 
-//create a new RouteFrame. If for_transport = true/false, it enables the fields related to the start position of the Route
-RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transport, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
+//create a new RouteFrame. If for_transport = true/false, it enables the fields related to the start position of the Route and disables the circle of equal altitude type 
+RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transport_in, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     parent = parent_input;
     
@@ -14432,6 +14432,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     bool check = true;
     
+    for_transport = for_transport_in;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));

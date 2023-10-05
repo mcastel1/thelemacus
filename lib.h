@@ -2305,8 +2305,7 @@ public:
     //this long represents the position in the list (this->GetParent())->listcontrol_routes of route. If list_position = -1, then route is not in that list
     long position_in_listcontrol_routes;
     wxPanel *panel;
-    //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
-    bool idling;
+    bool /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/idling, /*for_transport = true (false) means that the Route is meant to transport objects*/for_transport;
     
     SetIdling<RouteFrame> * set_idling;
     UnsetIdling<RouteFrame> * unset_idling;

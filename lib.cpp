@@ -13820,6 +13820,8 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         //the id of the Route or Position that will be transported
         i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
         
+        ((((f->plot)->route_list)[i_transporting_route]).reference_position) = ((((f->plot)->route_list)[ i_object_to_transport ]).reference_position);
+        
         //tranport the Route
         ((((f->plot)->route_list)[ i_object_to_transport ]).reference_position).transport(
                                                                                           
@@ -13844,6 +13846,9 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         //the id of the Route or Position that will be transported
         i_object_to_transport =  ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+        
+        ((((f->plot)->route_list)[i_transporting_route]).reference_position) = (((f->plot)->position_list)[ i_object_to_transport ]);
+    
         
         //tranport the Position
         (((f->plot)->position_list)[ i_object_to_transport ]).transport(((f->plot)->route_list)[i_transporting_route], String(""));

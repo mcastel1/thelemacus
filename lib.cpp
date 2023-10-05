@@ -15810,7 +15810,7 @@ void ListFrame::OnAddRoute(wxCommandEvent& event){
 //method to be called when a new Route is added to *this to transport something
 void ListFrame::OnAddRouteForTransport(wxCommandEvent& event){
     
-    route_frame = new RouteFrame(this, NULL, true, -1, "New route", wxDefaultPosition, wxDefaultSize, String(""));
+    route_frame = new RouteFrame(this, NULL, true, -1, "New route for transport", wxDefaultPosition, wxDefaultSize, String(""));
     route_frame->Show(true);
     
     event.Skip(true);

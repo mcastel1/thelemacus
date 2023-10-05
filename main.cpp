@@ -53,7 +53,7 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- 
+ - There is a segmentation fault when I transport the last sight in sight_list
  - whan you transport something with a Route, the start position is pointless -> gray it out
  - parallels are cut on bottom of chart in Mercator projection 
  - add missing case in                                 //the circles d intersect: here you should compute t

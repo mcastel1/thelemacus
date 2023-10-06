@@ -14752,11 +14752,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
     }
     
-    //I am about to call  (parent->listcontrol_sights)->set, which will destroy the selection in (parent->listcontrol_sights) -> I store the selected items of (parent->listcontrol_sights) in selected_sight -> call (parent->listcontrol_sights)->set and then re-select in (parent->listcontrol_sights) the items in selected_sight
-    selected_sight = ((parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
-    (parent->listcontrol_sights)->set((parent->plot)->sight_list);
-    (parent->listcontrol_sights)->SetItemState(selected_sight, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-
+     (parent->listcontrol_sights)->set((parent->plot)->sight_list, true);
+   
     
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
     
@@ -18942,11 +18939,26 @@ void ListControl::DeselectAll(void){
 template<class T> void ListControl::set(vector<T> v, bool keep_selected_items){
     
     unsigned int i;
+    vector<long> selected_items;
     
+    //store the selected items into selected_items
+    GetSelectedItems(&selected_items);
+    
+    //set *this
     DeleteAllItems();
-    
     for(i=0; i<v.size(); i++){
         (v[i]).add_to_wxListCtrl(-1, this);
+    }
+    
+    if(keep_selected_items){
+        //restore selected items
+        
+        for(i=0; i<selected_items.size(); i++){
+            if(selected_items[i] < GetItemCount()){
+                SetItemState(selected_items[i], wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+            }
+        }
+        
     }
     
 }

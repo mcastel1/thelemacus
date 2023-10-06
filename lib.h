@@ -1287,6 +1287,7 @@ public:
     template<class T> void set(vector<T>, bool);
     void EnableButtons(bool);
     void Resize(void);
+    void GetSelectedItems(vector<long>*);
     
 };
 

@@ -14752,9 +14752,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
     }
     
-     (parent->listcontrol_sights)->set((parent->plot)->sight_list, true);
-   
-    
+    (parent->listcontrol_sights)->set((parent->plot)->sight_list, true);
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
@@ -19014,5 +19012,22 @@ void ListControl::Resize(void){
     //    }
     //
     SetMinSize(wxSize(total_column_width,-1));
+    
+}
+
+
+//get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items
+void ListControl::GetSelectedItems(vector<long>* selected_items){
+    
+    long item;
+    
+    item = -1;
+    selected_items.clear();
+    do{
+        item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+        if(item != -1){selected_items.push_back(item);}
+         
+    }while(item != -1);
+    
     
 }

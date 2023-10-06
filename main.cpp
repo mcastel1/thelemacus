@@ -53,10 +53,10 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - when a listcontrol in ListFrame is resized, the show_map button is cut
  - add buttons to transport positions and routes 
  - parallels are cut on bottom of chart in Mercator projection
  - add missing case in                                 //the circles d intersect: here you should compute t
- - when I resize listcontrol_routes to account for a smaller text resulting after a modification, a strange odd column is added to the right and no resizing takes place
  - meridians are still cut on the top in mercator projection
  - check that WXK_PLUS does not depend on the computer
  */

@@ -14752,6 +14752,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
     }
     
+    //I call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
     (parent->listcontrol_sights)->set((parent->plot)->sight_list, true);
     (parent->listcontrol_routes)->set((parent->plot)->route_list, false);
     
@@ -17141,7 +17142,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     }
     
     (parent->listcontrol_sights)->set((parent->plot)->sight_list, false);
-    (parent->listcontrol_routes)->set((parent->plot)->route_list, false);
+    //I call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
+    (parent->listcontrol_routes)->set((parent->plot)->route_list, true);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);

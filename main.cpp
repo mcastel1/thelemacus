@@ -366,9 +366,9 @@ bool MyApp::OnInit(){
 
     
     //to build the app
-//        where_am_I(String(""));
+        where_am_I(String(""));
     //to develop the app with Xcode
-    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
+//    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
     
     
     settings = new wxSystemSettings();

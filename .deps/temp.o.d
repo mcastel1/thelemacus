@@ -1,4 +1,4 @@
-temp.o: /Users/macbookpro/Documents/sight_reduction_program/main_main.cpp \
+temp.o: /Users/macbookpro/Documents/sight_reduction_program/main.cpp \
   /Users/macbookpro/Documents/sight_reduction_program/main.h \
   /usr/local/include/wx-3.1/wx/wx.h /usr/local/include/wx-3.1/wx/defs.h \
   /usr/local/include/wx-3.1/wx/platform.h \

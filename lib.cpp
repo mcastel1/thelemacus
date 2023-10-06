@@ -18938,8 +18938,8 @@ void ListControl::DeselectAll(void){
     
 }
 
-//clears *this and sets all its items equal to the items in the non-GUI vector v
-template<class T> void ListControl::set(vector<T> v){
+//clears *this and sets all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
+template<class T> void ListControl::set(vector<T> v, bool keep_selected_items){
     
     unsigned int i;
     

@@ -12804,8 +12804,8 @@ void DeleteSight::operator()(wxCommandEvent& event){
     //I remove the sight and the related route from  the non-GUI object plot
     (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
     
-    (f->listcontrol_sights)->set((f->plot)->sight_list);
-    (f->listcontrol_routes)->set((f->plot)->route_list);
+    (f->listcontrol_sights)->set((f->plot)->sight_list, false);
+    (f->listcontrol_routes)->set((f->plot)->route_list, false);
     
     //given that I called set in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
     (f->listcontrol_sights)->EnableButtons(false);
@@ -12852,7 +12852,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
         
     }
     
-    (f->listcontrol_routes)->set(route_list_for_transport);
+    (f->listcontrol_routes)->set(route_list_for_transport, false);
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
 
@@ -12898,7 +12898,7 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     
     //setting this to true, now when the enter key is pressed the selected Routes are used to compute the position
     (f->selecting_route_for_position) = true;
-    (f->listcontrol_routes)->set(f->crossing_route_list_temp);
+    (f->listcontrol_routes)->set(f->crossing_route_list_temp, false);
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_position in such a way that when the user will select an item in listcontrol, I perform the computation of the position
 //    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_position));
 
@@ -13114,8 +13114,8 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     //I remove the route and the related sight from both the non-GUI object plot
     (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
-    (f->listcontrol_sights)->set((f->plot)->sight_list);
-    (f->listcontrol_routes)->set((f->plot)->route_list);
+    (f->listcontrol_sights)->set((f->plot)->sight_list, false);
+    (f->listcontrol_routes)->set((f->plot)->route_list, false);
     
     //given that I called set in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
     (f->listcontrol_routes)->EnableButtons(false);
@@ -13144,7 +13144,7 @@ void DeletePosition::operator()(wxCommandEvent& event){
     if(i != -1){
         
         (f->plot)->remove_position(((unsigned int)i), String(""));
-        (f->listcontrol_positions)->set((f->plot)->position_list);
+        (f->listcontrol_positions)->set((f->plot)->position_list, false);
         
         //given that I called set in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
         (f->listcontrol_positions)->EnableButtons(false);
@@ -13743,7 +13743,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         new_label = ((((f->plot)->route_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
         
         //set back listcontrol_routes to route_list, in order to include all routes (not only those which are not related to a sight)
-        (f->listcontrol_routes)->set((f->plot)->route_list);
+        (f->listcontrol_routes)->set((f->plot)->route_list, false);
         //------------------
         //given that the transport is over, set highlight_routes back to true
         (f->enable_highlight) = true;
@@ -13785,7 +13785,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     f->DrawAll();
     //re-load the data of plot->route_list into listcontrol_routes and Fit it beacuse its size may have changed
-    (f->listcontrol_routes)->set<Route>((f->plot)->route_list);
+    (f->listcontrol_routes)->set<Route>((f->plot)->route_list, false);
     f->Resize();
     
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
@@ -14692,7 +14692,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
         (((this->parent)->plot)->position_list).push_back(*position);
     }
     
-    (parent->listcontrol_positions)->set((parent->plot)->position_list);
+    (parent->listcontrol_positions)->set((parent->plot)->position_list, false);
     
     //given that I have reset the content of listcontrol_positions, no items will be selected in this ListControl -> I disable its disableable buttons
     (parent->listcontrol_positions)->EnableButtons(false);
@@ -14753,7 +14753,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     }
     
     (parent->listcontrol_sights)->set((parent->plot)->sight_list, true);
-    (parent->listcontrol_routes)->set((parent->plot)->route_list);
+    (parent->listcontrol_routes)->set((parent->plot)->route_list, false);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
@@ -15783,13 +15783,13 @@ void ListFrame::Resize(void){
 void ListFrame::set(){
     
     //write the sights contained into plot->sight_list into listcontrol_sights
-    listcontrol_sights->set(plot->sight_list);
+    listcontrol_sights->set(plot->sight_list, false);
     
     //write the positions into plot->position_list into listcontrol_sights
-    listcontrol_positions->set(plot->position_list);
+    listcontrol_positions->set(plot->position_list, false);
     
     //write the routes into plot->route_list into listcontrol_routes
-    listcontrol_routes->set(plot->route_list);
+    listcontrol_routes->set(plot->route_list, false);
     
     Resize();
 //    Maximize(panel);
@@ -17140,8 +17140,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
     }
     
-    (parent->listcontrol_sights)->set((parent->plot)->sight_list);
-    (parent->listcontrol_routes)->set((parent->plot)->route_list);
+    (parent->listcontrol_sights)->set((parent->plot)->sight_list, false);
+    (parent->listcontrol_routes)->set((parent->plot)->route_list, false);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
@@ -19022,10 +19022,10 @@ void ListControl::GetSelectedItems(vector<long>* selected_items){
     long item;
     
     item = -1;
-    selected_items.clear();
+    selected_items->clear();
     do{
         item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-        if(item != -1){selected_items.push_back(item);}
+        if(item != -1){selected_items->push_back(item);}
          
     }while(item != -1);
     

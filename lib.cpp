@@ -15784,7 +15784,7 @@ void ListFrame::Resize(void){
     listcontrol_positions->Resize();
     listcontrol_routes->Resize();
     
-    Maximize(panel);
+    //    Maximize(panel);
     panel->Fit();
     Fit();
     

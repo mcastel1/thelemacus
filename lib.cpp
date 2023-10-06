@@ -14713,6 +14713,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     unsigned int i;
     stringstream s;
+    long selected_sight;
     
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
@@ -14751,7 +14752,12 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         }
     }
     
+    //I am about to call  (parent->listcontrol_sights)->set, which will destroy the selection in (parent->listcontrol_sights) -> I store the selected items of (parent->listcontrol_sights) in selected_sight -> call (parent->listcontrol_sights)->set and then re-select in (parent->listcontrol_sights) the items in selected_sight
+    selected_sight = ((parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
     (parent->listcontrol_sights)->set((parent->plot)->sight_list);
+    (parent->listcontrol_sights)->SetItemState(selected_sight, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+
+    
     (parent->listcontrol_routes)->set((parent->plot)->route_list);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons

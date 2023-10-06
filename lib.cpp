@@ -13841,7 +13841,10 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         //change the label of Route #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
         ((((f->plot)->route_list)[i_object_to_transport]).label) = ((((f->plot)->route_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
         
-        (f->listcontrol_routes)->SetItem(i_transporting_route, 7, wxString(((((f->plot)->route_list)[i_object_to_transport]).label).prepend(String("Transporting ")).value), -1);
+        if((f->listcontrol_routes)->GetItemText(i_transporting_route, 7) == wxString("")){
+            //if the user set no label in the transporting Route, I set an automatic label to it
+            (f->listcontrol_routes)->SetItem(i_transporting_route, 7, wxString(((((f->plot)->route_list)[i_object_to_transport]).label).prepend(String("Transporting ")).value), -1);
+        }
         
         //update the Route information in f, and re-draw everything
         (((f->plot)->route_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_routes);

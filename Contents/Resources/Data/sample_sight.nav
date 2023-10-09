@@ -74,4 +74,17 @@ Routes in the plot:
 		starting heading = 33° 2.999999999999829'
 		length = 3333 nm
 		label = Jack
+	Route #6:
+		type = l
+		start position:
+			latitude = 5° 2.999999999999989'
+			longitude = 356° 56.99999999999932'
+			label = Cape
+		starting heading = 1° 3.000000000000003'
+		length = 3 nm
+		label = 
 Positions in the plot:
+	Position #1:
+		latitude = 5° 5.999496253039673'
+		longitude = 356° 56.94480884170275'
+		label =  transported with 

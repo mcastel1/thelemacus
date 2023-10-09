@@ -14,6 +14,7 @@
 /*
  notes:
 =======
+ - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging 
  - if the running idrectory of the app contains a ' it does not work, but let us leave it like this
 >>>>>>> revise_make_app
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
@@ -366,9 +367,9 @@ bool MyApp::OnInit(){
 
     
     //to build the app
-        where_am_I(String(""));
+//        where_am_I(String(""));
     //to develop the app with Xcode
-//    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
+    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
     
     
     settings = new wxSystemSettings();

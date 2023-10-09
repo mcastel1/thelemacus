@@ -14723,7 +14723,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     unsigned int i;
     stringstream s;
-    long selected_sight;
     
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
@@ -14764,6 +14763,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     //I call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
     (parent->listcontrol_sights)->set((parent->plot)->sight_list, true);
+    (parent->listcontrol_positions)->set((parent->plot)->position_list, true);
     (parent->listcontrol_routes)->set((parent->plot)->route_list, false);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons

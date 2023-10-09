@@ -77,14 +77,41 @@ Routes in the plot:
 	Route #6:
 		type = l
 		start position:
-			latitude = 5° 2.999999999999989'
-			longitude = 356° 56.99999999999932'
-			label = Cape
+			latitude = 5° 5.999496253039673'
+			longitude = 356° 56.94480884170275'
+			label =  transported with 
 		starting heading = 1° 3.000000000000003'
 		length = 3 nm
 		label = 
+	Route #7:
+		type = l
+		start position:
+			latitude = 5° 8.99899250608085'
+			longitude = 356° 56.88961338550143'
+			label = 2023-10-09 18:34:09
+		starting heading = 233° 3.000000000000682'
+		length = 3000 nm
+		label = 
+	Route #8:
+		type = l
+		start position:
+			latitude = 335° 5.645433123090697'
+			longitude = 38° 0.6188158901719021'
+			label = hdlsdjfhdlsj
+		starting heading = 233° 3.000000000000682'
+		length = 3000 nm
+		label = 
+	Route #9:
+		type = o
+		start position:
+			latitude = 3° 2.999999999999989'
+			longitude = 356° 56.99999999999932'
+			label = rre
+		starting heading = 33° 2.999999999999829'
+		length = 3000 nm
+		label = 
 Positions in the plot:
 	Position #1:
-		latitude = 5° 5.999496253039673'
-		longitude = 356° 56.94480884170275'
+		latitude = 42° 29.04848594960839'
+		longitude = 322° 26.58243497594981'
 		label =  transported with 

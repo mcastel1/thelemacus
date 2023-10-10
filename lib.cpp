@@ -1535,7 +1535,7 @@ void Position::modify(String prefix){
     
 }
 
-//creates an element in listcontrol and writes into this element the values of all the fields containes in this
+//creates an element in listcontrol and writes into this element the values of all the fields contained in this
 void Position::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol){
     
     unsigned int i;
@@ -1574,7 +1574,19 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), (display_precision.value), true)));
     
     //update label column
-    listcontrol->SetItem(i, j++, wxString(label.value));
+    if(label != String("")){
+        //the label in *this is not empty -> I write it int listcontrol
+        
+        listcontrol->SetItem(i, j++, wxString(label.value));
+    }else{
+        //the label in *this is empty -> I write as label in listcontrol the current date and time
+        
+        Time now;
+        
+        now.set_current(String(""));
+        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+        
+    }
     
 }
 

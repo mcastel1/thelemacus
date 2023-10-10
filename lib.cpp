@@ -12832,24 +12832,19 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     //the list of Routes which may be used for transport
     
     
-    //clear up route_list_for_transport and route_list_saved
-    (f->route_list_for_transport).clear();
+    //save plot->route_list into route_list_saved
     (f->route_list_saved).clear();
+    (f->route_list_saved).resize(((f->plot)->route_list).size());
+    copy(((f->plot)->route_list).begin(), ((f->plot)->route_list).end(), (f->route_list_saved).begin());
 
-//    (f->print_info_message->control) = NULL;
-//    (f->print_info_message->title) = String("");
-//    (f->print_info_message->message) = String("Select the route with which you want to transport the sight");
-//    (*(f->print_info_message))();
     //print an info message
-    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
-
-   
+    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));   
     
     //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
     (f->enable_highlight) = false;
     
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for(i=0; i<((f->plot)->route_list).size(); i++){
+    for((f->route_list_for_transport).clear(), i=0; i<((f->plot)->route_list).size(); i++){
         
         if(((((((f->plot)->route_list)[i]).related_sight).value) == -1) && ((((f->plot)->route_list)[i]).type != String("c"))){
             

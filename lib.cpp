@@ -11753,7 +11753,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         for(((parent->parent)->highlighted_route) = -1, i=0; i<(((parent->parent)->plot)->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+            //when only a fraction of the Routes is Drawn, this will create a problem ---
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
+            //when only a fraction of the Routes is Drawn, this will create a problem ---
+
             if((((((parent->parent)->plot)->route_list)[i]).related_sight).value != -1){
                 ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->plot)->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }

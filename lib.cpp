@@ -12830,7 +12830,11 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     
     int i;
     //the list of Routes which may be used for transport
-    vector<Route> route_list_for_transport;
+    
+    
+    //clear up route_list_for_transport and route_list_saved
+    (f->route_list_for_transport).clear();
+    (f->route_list_saved).clear();
 
 //    (f->print_info_message->control) = NULL;
 //    (f->print_info_message->title) = String("");
@@ -12849,13 +12853,13 @@ void ExistingRoute::operator()(wxCommandEvent& event){
         
         if(((((((f->plot)->route_list)[i]).related_sight).value) == -1) && ((((f->plot)->route_list)[i]).type != String("c"))){
             
-            route_list_for_transport.push_back(((f->plot)->route_list)[i]);
+            (f->route_list_for_transport).push_back(((f->plot)->route_list)[i]);
             
         }
         
     }
     
-    (f->listcontrol_routes)->set(route_list_for_transport, false);
+    (f->listcontrol_routes)->set((f->route_list_for_transport), false);
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
 

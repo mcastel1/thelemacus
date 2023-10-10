@@ -2107,7 +2107,7 @@ public:
     vector<ChartFrame*> chart_frames;
     //this is a pointer to a Catalog object which will be used by plot
     Catalog *catalog;
-    //    wxListBox* listbox;
+    vector<Route> /*when I transport by using an existing Route, I will store the list of Routes which can be used for transport here*/route_list_for_transport, /*when I transport by using an existing Route, I will save plot->list_routes temporarily here and recover it from here after the transport */route_list_saved;
     wxMenuBar *menu_bar;
     wxMenu *menu_app, *menu_file, *menu_chart, *menu_new_chart, *menu_item_mercator, *menu_item_3d;
     ListControl *listcontrol_sights, *listcontrol_routes, *listcontrol_positions;

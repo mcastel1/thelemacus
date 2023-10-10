@@ -12843,11 +12843,12 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     (f->enable_highlight) = false;
     
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for((f->route_list_for_transport).clear(), i=0; i<((f->plot)->route_list).size(); i++){
+    for((f->route_list_for_transport).clear(), (f->map).clear(), i=0; i<((f->plot)->route_list).size(); i++){
         
         if(((((((f->plot)->route_list)[i]).related_sight).value) == -1) && ((((f->plot)->route_list)[i]).type != String("c"))){
             
             (f->route_list_for_transport).push_back(((f->plot)->route_list)[i]);
+            (f->map).push_back(i);
             
         }
         
@@ -12856,6 +12857,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     (f->listcontrol_routes)->set((f->route_list_for_transport), false);
     ((f->plot)->route_list).resize((f->route_list_for_transport).size());
     copy((f->route_list_for_transport).begin(), (f->route_list_for_transport).end(), ((f->plot)->route_list).begin());
+    f->DrawAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
@@ -13700,33 +13702,18 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 //if an item in listcontrol_sights is selected, I transport the sight/position under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
-    int i, i_object_to_transport, i_transporting_route;
+    long i_object_to_transport, i_transporting_route;
     UnsetIdling<ListFrame>* unset_idling;
     
     unset_idling = new UnsetIdling<ListFrame>(f);
     
-    //the id of the Route which will transport
     
+    //copy the data of f->route_list_saved into f->plot->route_list
+    ((f->plot)->route_list).resize((f->route_list_saved).size());
+    copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->plot)->route_list).begin());
     
-    
-    
-    for(i_transporting_route=0, i=0; i_transporting_route<((f->plot)->route_list).size(); i_transporting_route++){
-        
-        if(((((((f->plot)->route_list)[i_transporting_route]).related_sight).value) == -1) && (((((f->plot)->route_list)[i_transporting_route]).type) != String("c"))){
-            
-            if(i == ((int)((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)))){
-                
-                break;
-                
-            }
-            
-            i++;
-            
-        }
-        
-    }
-    
-    
+    //this is the # of the transporting Route in the full Route list given by plot->route_list
+    i_transporting_route = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
     
     if(transported_object == String("route")){
         
@@ -13748,10 +13735,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         //set back listcontrol_routes to route_list, in order to include all routes (not only those which are not related to a sight)
         (f->listcontrol_routes)->set((f->plot)->route_list, false);
-        //------------------
         //given that the transport is over, set highlight_routes back to true
         (f->enable_highlight) = true;
-        
         
         //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
         f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
@@ -13760,7 +13745,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         ((((f->plot)->route_list)[i_object_to_transport]).label) = new_label;
         
         //update the Route information in f, and re-draw everything
-        (((f->plot)->route_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_routes);
+//        (((f->plot)->route_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_routes);
         
         
     }
@@ -13769,7 +13754,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         
         //the id of the Position that will be transported,
-        i_object_to_transport = ((int)((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+        i_object_to_transport = ((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
         //tranport the Position
         (((f->plot)->position_list)[ i_object_to_transport ]).transport(
@@ -13787,10 +13772,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
     }
     
-    //copy the data of f->route_list_saved into f->plot->route_list
-    ((f->plot)->route_list).resize((f->route_list_saved).size());
-    copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->plot)->route_list).begin());
-    //re-load the data of route_list into listcontrol_routes and Fit it beacuse its size may have changed
+    (f->listcontrol_sights)->set<Sight>((f->plot)->sight_list, false);
     (f->listcontrol_routes)->set<Route>((f->plot)->route_list, false);
     f->Resize();
     f->DrawAll();
@@ -13802,8 +13784,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
     (*unset_idling)();
     (f->listcontrol_routes)->Unbind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
-    
-    
     
     event.Skip(true);
     

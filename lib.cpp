@@ -12833,7 +12833,6 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     
     
     //save plot->route_list into route_list_saved
-    (f->route_list_saved).clear();
     (f->route_list_saved).resize(((f->plot)->route_list).size());
     copy(((f->plot)->route_list).begin(), ((f->plot)->route_list).end(), (f->route_list_saved).begin());
 
@@ -12855,6 +12854,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     }
     
     (f->listcontrol_routes)->set((f->route_list_for_transport), false);
+    ((f->plot)->route_list).resize((f->route_list_for_transport).size());
     copy((f->route_list_for_transport).begin(), (f->route_list_for_transport).end(), ((f->plot)->route_list).begin());
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
@@ -13787,11 +13787,14 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
     }
     
-    f->DrawAll();
-    //re-load the data of plot->route_list into listcontrol_routes and Fit it beacuse its size may have changed
+    //copy the data of f->route_list_saved into f->plot->route_list
+    ((f->plot)->route_list).resize((f->route_list_saved).size());
+    copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->plot)->route_list).begin());
+    //re-load the data of route_list into listcontrol_routes and Fit it beacuse its size may have changed
     (f->listcontrol_routes)->set<Route>((f->plot)->route_list, false);
     f->Resize();
-    
+    f->DrawAll();
+
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_change_selection_in_listcontrol_routes));
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, *(f->on_change_selection_in_listcontrol_routes));

@@ -12838,7 +12838,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     copy(((f->plot)->route_list).begin(), ((f->plot)->route_list).end(), (f->route_list_saved).begin());
 
     //print an info message
-    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));   
+    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
     
     //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
     (f->enable_highlight) = false;
@@ -12855,6 +12855,8 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     }
     
     (f->listcontrol_routes)->set((f->route_list_for_transport), false);
+    copy((f->route_list_for_transport).begin(), (f->route_list_for_transport).end(), ((f->plot)->route_list).begin());
+
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
 

@@ -1578,6 +1578,7 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
         //the label in *this is not empty -> I write it int listcontrol
         
         listcontrol->SetItem(i, j++, wxString(label.value));
+        
     }else{
         //the label in *this is empty -> I write as label in listcontrol the current date and time
         
@@ -2300,8 +2301,22 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
         
     }
     
-    listcontrol->SetItem(i, j++, wxString(label.value));
-    
+    //update label column
+    if(label != String("")){
+        //the label in *this is not empty -> I write it int listcontrol
+        
+        listcontrol->SetItem(i, j++, wxString(label.value));
+        
+    }else{
+        //the label in *this is empty -> I write as label in listcontrol the current date and time
+        
+        Time now;
+        
+        now.set_current(String(""));
+        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+        
+    }
+
     
     if((related_sight.value) == -1){
         //if the route is not connected to a sight, I leave the column field empty
@@ -4942,9 +4957,22 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     //set TAI-UTC
     listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value))));
     
-    //set label
-    listcontrol->SetItem(i, j++, wxString((label).value));
-    
+    //update label column
+    if(label != String("")){
+        //the label in *this is not empty -> I write it int listcontrol
+        
+        listcontrol->SetItem(i, j++, wxString(label.value));
+        
+    }else{
+        //the label in *this is empty -> I write as label in listcontrol the current date and time
+        
+        Time now;
+        
+        now.set_current(String(""));
+        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+        
+    }
+
     if((related_route.value) == -1){
         //if the sight is not connected to a route, I leave the column field empty
         

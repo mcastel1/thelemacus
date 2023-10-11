@@ -449,7 +449,8 @@ bool MyApp::OnInit(){
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
     time_check.read_from_file(String("time check"), String(path_file_init), String(""));
-    
+    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
+
     max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
     min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
     

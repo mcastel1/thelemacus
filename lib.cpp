@@ -13805,13 +13805,26 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     //this is the # of the transporting Route in the full Route list given by plot->route_list
     i_transporting_route = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
     
-    if(transported_object == String("route")){
+    if((transported_object == String("sight")) || transported_object == String("route")){
+        //the transported object is either a Sight or a Route
         
         String new_label;
         
-        //the id of the Route that will be transported,
-        i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+        if(transported_object == String("sight")){
+            //the transported object is a Sight
+            
+            //the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
+            i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+            
+        }else{
+            //the transported object is a Route
+            
+            //the id of the Route that will be transported is ...
+  
+            
+        }
         
+          
         //tranport the Route
         ((((f->plot)->route_list)[ i_object_to_transport ]).reference_position).transport(
                                                                                           

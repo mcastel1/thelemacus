@@ -5081,10 +5081,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
-        Time now;
-        
-        now.set_current(String(""));
-        label.set(String("Empty label set to current time"), String(now.to_string(display_precision.value, true)), new_prefix);
+        label.set_to_current_time();
         
     }
     
@@ -13247,11 +13244,11 @@ template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operat
     //if the label is empty, I replace it with the local time and date
     if(((p->value)->GetValue()).IsEmpty()){
         
-        Time time_temp;
+        Time now;
         
-        time_temp.set_current(String(""));
+        now.set_current(String(""));
         //I write in the non-GUI object (p->string)
-        (*(p->string)) = String(time_temp.to_string(data_precision.value, true));
+        (*(p->string)) = String(now.to_string(data_precision.value, true));
         
         p->set();
         

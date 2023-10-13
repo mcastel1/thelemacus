@@ -17161,13 +17161,13 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     
     stringstream s;
     
-    if(sight->label.value == ""){
+    if(label->value->GetValue().ToStdString() == ""){
+        //if the user entered no label, I set a label with the time at which Reduce has been pressed
         
         Time now;
         
         now.set_current(String(""));
-        
-        sight->label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
+        label->value->SetValue(wxString(now.to_string(display_precision.value)));
         
     }
 

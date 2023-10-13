@@ -1307,6 +1307,14 @@ public:
 
 
 
+struct SetStringToCurrentTime{
+    
+    String* p;
+    
+    template<class T> void operator()(T&);
+    
+};
+
 template<class P> struct SetStringFieldToCurrentTime{
     
     StringField<P>* p;

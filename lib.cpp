@@ -13228,6 +13228,20 @@ void DeletePosition::operator()(wxCommandEvent& event){
 }
 
 
+template<class T> void SetStringToCurrentTime::operator()(T& event){
+            
+    Time time_temp;
+    
+    time_temp.set_current(String(""));
+    //I write in the non-GUI object *this
+    
+    p->set(String("String set to current time"), String(time_temp.to_string(data_precision.value, true)), String(""));
+    
+    event.Skip(true);
+    
+}
+
+
 
 template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event){
     

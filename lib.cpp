@@ -5072,6 +5072,15 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     check &= check_time_interval(prefix);
     
     label.read_from_file(String("label"), file, false, new_prefix);
+    if(label.value == ""){
+        //if the value of label read from file is empty, set in label the time at which *this has been read
+        
+        Time now;
+        
+        now.set_current(String(""));
+        label.set(String("Empty label set to current time"), String(now.to_string(display_precision.value)), new_prefix);
+        
+    }
     
     //given that the sight is not yet related to a route, I set
     (related_route.value) = -1;

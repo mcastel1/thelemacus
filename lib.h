@@ -1307,10 +1307,11 @@ public:
 
 
 
-struct SetStringToCurrentTime{
+class SetStringToCurrentTime{
     
     String* p;
     
+    SetStringToCurrentTime(String*);
     template<class T> void operator()(T&);
     
 };

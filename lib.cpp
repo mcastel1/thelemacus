@@ -13227,6 +13227,12 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
 }
 
+SetStringToCurrentTime::SetStringToCurrentTime(String* p_in){
+    
+    p = p_in;
+    
+}
+
 //set *this to the current time
 template<class T> void SetStringToCurrentTime::operator()(T& event){
             

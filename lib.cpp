@@ -1574,23 +1574,23 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), (display_precision.value), true)));
     
     //update label column
-    if(label != String("")){
-        //the label in *this is not empty -> I write it int listcontrol
+//    if(label != String("")){
+//        //the label in *this is not empty -> I write it int listcontrol
+//
+    listcontrol->SetItem(i, j++, wxString(label.value));
         
-        listcontrol->SetItem(i, j++, wxString(label.value));
-        
-    }else{
-        //the label in *this is empty -> I write as label in listcontrol  and in *this the current date and time
-        
-        Time now;
-        
-        now.set_current(String(""));
-        
-        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
-        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
-        
-    }
-    
+//    }else{
+//        //the label in *this is empty -> I write as label in listcontrol  and in *this the current date and time
+//
+//        Time now;
+//
+//        now.set_current(String(""));
+//
+//        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
+//        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+//
+//    }
+//
 }
 
 
@@ -2304,22 +2304,22 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     }
     
     //update label column
-    if(label != String("")){
-        //the label in *this is not empty -> I write it int listcontrol
+//    if(label != String("")){
+//        //the label in *this is not empty -> I write it int listcontrol
         
         listcontrol->SetItem(i, j++, wxString(label.value));
         
-    }else{
-        //the label in *this is empty -> I write as label in listcontrol the current date and time
-        
-        Time now;
-        
-        now.set_current(String(""));
-        
-        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
-        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
-        
-    }
+//    }else{
+//        //the label in *this is empty -> I write as label in listcontrol the current date and time
+//
+//        Time now;
+//
+//        now.set_current(String(""));
+//
+//        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
+//        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+//
+//    }
 
     
     if((related_sight.value) == -1){
@@ -4962,22 +4962,22 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value))));
     
     //update label column
-    if(label != String("")){
-        //the label in *this is not empty -> I write it int listcontrol
+//    if(label != String("")){
+//        //the label in *this is not empty -> I write it int listcontrol
         
         listcontrol->SetItem(i, j++, wxString(label.value));
         
-    }else{
-        //the label in *this is empty -> I write as label in listcontrol the current date and time
-        
-        Time now;
-        
-        now.set_current(String(""));
-        
-        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
-        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
-        
-    }
+//    }else{
+//        //the label in *this is empty -> I write as label in listcontrol the current date and time
+//        
+//        Time now;
+//        
+//        now.set_current(String(""));
+//        
+//        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
+//        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+//        
+//    }
 
     if((related_route.value) == -1){
         //if the sight is not connected to a route, I leave the column field empty

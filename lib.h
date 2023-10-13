@@ -108,7 +108,7 @@ public:
     void set(String, int, String);
     void print(String, String, ostream&);
     
-    bool operator==(const Int&), operator!=(const Int&);
+    bool operator==(const Int&), operator!=(const Int&), operator>(const int&);
     
 };
 
@@ -124,7 +124,7 @@ public:
     void enter(String, String);
     bool read_from_file(String, File&, bool, String);
     bool read_from_file(String, String, String);
-    string to_string(unsigned int);
+    string to_string(unsigned int, bool);
     
     bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);
     
@@ -810,7 +810,7 @@ public:
     void to_MJD(void);
     void to_TAI(void);
     
-    string to_string(unsigned int);
+    string to_string(unsigned int, bool);
     bool operator==(const Time&), operator!=(const Time&), operator> (const Time&);
     void operator += (const Chrono&);
     void operator -= (const Chrono&);

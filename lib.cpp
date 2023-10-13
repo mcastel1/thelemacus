@@ -196,6 +196,11 @@ bool Int::operator!=(const Int& i){
     
 }
 
+bool Int::operator>(const int& i){
+    
+    return(value > i);
+    
+}
 
 //enter an Int
 void Int::enter(String name, [[maybe_unused]] String prefix){
@@ -3268,12 +3273,13 @@ bool Time::operator>(const Time& t){
     
 }
 
-string Time::to_string(unsigned int precision){
+//convert *this to a string by adding the time zone if time_zone = true
+string Time::to_string(unsigned int precision, bool time_zone){
     
     stringstream output;
     
     //I deleted UTC at the end of string for the sake of shortness
-    output << date.to_string() << " " << chrono.to_string(precision);
+    output << date.to_string() << " " << chrono.to_string(precision, time_zone);
     
     return (output.str().c_str());
     
@@ -4946,20 +4952,20 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     //I add to master_clock_date_and_hour the value stopwatch (if any): I write the result in time_UTC and I write in the GUI object  time_UTC
     time_UTC = master_clock_date_and_hour;
     //    if((use_stopwatch.value)=='y'){time_UTC += stopwatch;}
-    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string((display_precision.value))));
+    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string(display_precision.value, false)));
     
     //set use of stopwatch
     listcontrol->SetItem(i, j++, wxString((use_stopwatch.value)));
     
     //set stopwatch reading
     if((use_stopwatch.value) == 'y'){
-        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string(display_precision.value, false)));
     }else{
         listcontrol->SetItem(i, j++, wxString(""));
     }
     
     //set TAI-UTC
-    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value))));
+    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value), false)));
     
     //update label column
 //    if(label != String("")){
@@ -5078,7 +5084,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
         Time now;
         
         now.set_current(String(""));
-        label.set(String("Empty label set to current time"), String(now.to_string(display_precision.value)), new_prefix);
+        label.set(String("Empty label set to current time"), String(now.to_string(display_precision.value, true)), new_prefix);
         
     }
     
@@ -6684,7 +6690,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
     
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp <<  body.name.value << " " << time.to_string((display_precision.value)) << " TAI, " << label.value;
+    temp <<  body.name.value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
     (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
     
     check &= compute_H_o(new_prefix);
@@ -8043,8 +8049,8 @@ void Limb::print(String name, String prefix, ostream& ostr){
 
 
 
-
-string Chrono::to_string(unsigned int precision){
+//convert *this to a string. If time_zone == true, then I add at the end of the string the time zone compared to UTC written in wxGetApp().time_zone
+string Chrono::to_string(unsigned int precision, bool time_zone){
     
     stringstream output;
     
@@ -8056,6 +8062,9 @@ string Chrono::to_string(unsigned int precision){
     output << m << ":";
     if(s<10.0){output << 0;}
     output << s;
+    if(time_zone){
+        output << " UTC" << (wxGetApp().time_zone > 0 ? "+": "-") << fabs(wxGetApp().time_zone.value);
+    }
     
     return (output.str().c_str());
     
@@ -8346,7 +8355,7 @@ void Chrono::print(String name, String prefix, ostream& ostr){
         precision = (data_precision.value);
     }
     
-    ostr << prefix.value << "hour of " << name.value << " = " << to_string(precision) << "\n";
+    ostr << prefix.value << "hour of " << name.value << " = " << to_string(precision, false) << "\n";
     
 };
 void Chrono::enter(String name, String prefix) {
@@ -13229,7 +13238,7 @@ template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(
         
         time_temp.set_current(String(""));
         //I write in the non-GUI object (p->string)
-        (*(p->string)) = String(time_temp.to_string((data_precision.value)));
+        (*(p->string)) = String(time_temp.to_string(data_precision.value, true));
         
         p->set();
         
@@ -17176,7 +17185,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         Time now;
         
         now.set_current(String(""));
-        label->value->SetValue(wxString(now.to_string(display_precision.value)));
+        label->value->SetValue(wxString(now.to_string(display_precision.value, true)));
         
     }
 

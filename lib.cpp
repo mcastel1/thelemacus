@@ -13229,7 +13229,7 @@ void DeletePosition::operator()(wxCommandEvent& event){
 
 
 
-template<class P> template <class T> void SetStringToCurrentTime<P>::operator()(T& event){
+template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event){
     
     //if the label is empty, I replace it with the local time and date
     if(((p->value)->GetValue()).IsEmpty()){
@@ -14172,9 +14172,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     button_cancel->Bind(wxEVT_BUTTON, &SightFrame::OnPressCancel, this);
     
-    //I bind reduce button to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
+    //I bind reduce button to label->set_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
     button_reduce->Bind(wxEVT_BUTTON, &SightFrame::OnPressReduce, this);
-    button_reduce->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+    button_reduce->Bind(wxEVT_BUTTON, label->set_to_current_time);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &BodyField::get<wxCommandEvent>, body);
@@ -14409,8 +14409,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     label = new StringField<PositionFrame>(this, &(position->label));
     
     
-    //I bind  button_ok to label->set_string_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
-    button_ok->Bind(wxEVT_BUTTON, label->set_string_to_current_time);
+    //I bind  button_ok to label->set_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
+    button_ok->Bind(wxEVT_BUTTON, label->set_to_current_time);
     //If I press button_ok, I want all the fields in this PositionFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
     button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
@@ -17184,7 +17184,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         
         wxCommandEvent dummy;
         
-        (label->set_string_to_current_time)(dummy);
+        (label->set_to_current_time)(dummy);
         
     }
 
@@ -17941,7 +17941,7 @@ template<class P> StringField<P>::StringField(P* parent_in, String* p){
     //initialize check
     (check.p) = this;
     
-    (set_string_to_current_time.p) = this;
+    (set_to_current_time.p) = this;
     
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     //SetColor(value);

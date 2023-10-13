@@ -1307,7 +1307,7 @@ public:
 
 
 
-template<class P> struct SetStringToCurrentTime{
+template<class P> struct SetStringFieldToCurrentTime{
     
     StringField<P>* p;
     
@@ -1883,7 +1883,7 @@ public:
     //non-GUI object related to this
     String* string;
     CheckString<P> check;
-    SetStringToCurrentTime<P> set_string_to_current_time;
+    SetStringFieldToCurrentTime<P> set_to_current_time;
     
     StringField(P*, String*);
     void set(void);

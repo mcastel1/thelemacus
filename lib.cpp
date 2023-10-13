@@ -3038,6 +3038,14 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     }
     
     label.read_from_file(String("label"), file, false, new_prefix);
+    if(label.value == ""){
+        //if the value of label read from file is empty, set in label the time at which *this has been read
+        
+        label.set_to_current_time();
+        
+    }
+    
+    
     //when a sight is read from file, it is not yet linked to any route, thus I set
     (related_sight.value) = -1;
     
@@ -3590,7 +3598,15 @@ void Position::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     phi.read_from_file(String("latitude"), file, false, new_prefix);
     lambda.read_from_file(String("longitude"), file, false, new_prefix);
+    
     label.read_from_file(String("label"), file, false, new_prefix);
+    if(label.value == ""){
+        //if the value of label read from file is empty, set in label the time at which *this has been read
+        
+        label.set_to_current_time();
+        
+    }
+    
     
 }
 
@@ -14753,6 +14769,16 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     
     stringstream s;
     
+    if(label->value->GetValue().ToStdString() == ""){
+        //if the user entered no label, I set a label with the time at which Reduce has been pressed
+        
+        wxCommandEvent dummy;
+        
+        (label->set_to_current_time)(dummy);
+        
+    }
+
+    
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
     
@@ -14784,6 +14810,16 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     
     unsigned int i;
     stringstream s;
+    
+    if(label->value->GetValue().ToStdString() == ""){
+        //if the user entered no label, I set a label with the time at which Reduce has been pressed
+        
+        wxCommandEvent dummy;
+        
+        (label->set_to_current_time)(dummy);
+        
+    }
+
     
     //writes the values of the GUI fields in the non-GUI fields
     get(event);

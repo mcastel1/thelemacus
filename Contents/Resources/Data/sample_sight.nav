@@ -40,7 +40,7 @@ Routes in the plot:
 			label = 
 		starting heading = 23° 3.23200000000007'
 		length = 3324 nm
-		label = Michele al parco giochi
+		label =
 	Route #2:
 		type = o
 		start position:
@@ -90,4 +90,4 @@ Positions in the plot:
 	Position #1:
 		latitude = 42° 29.04848594960882'
 		longitude = 322° 26.58243497594981'
-		label =  transported with 
+		label = 

@@ -16007,7 +16007,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event){
     (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
     
-    //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
+    //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
     print_question->SetAndCall(NULL, String("You want to transport a position"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
@@ -16067,6 +16067,13 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
 
 void ListFrame::OnTransportRoute(wxCommandEvent& event){
     
+    //tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Position
+    (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+    (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+
+    //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
+    PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
+    print_question->SetAndCall(NULL, String("You want to transport a position"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
     OnModifyFile();
     

@@ -17182,10 +17182,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     if(label->value->GetValue().ToStdString() == ""){
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
         
-        Time now;
+        wxCommandEvent dummy;
         
-        now.set_current(String(""));
-        label->value->SetValue(wxString(now.to_string(display_precision.value, true)));
+        (label->set_string_to_current_time)(dummy);
         
     }
 

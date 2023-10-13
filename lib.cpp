@@ -13227,15 +13227,15 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
 }
 
-
+//set *this to the current time
 template<class T> void SetStringToCurrentTime::operator()(T& event){
             
-    Time time_temp;
+    Time now;
     
-    time_temp.set_current(String(""));
+    now.set_current(String(""));
     //I write in the non-GUI object *this
     
-    p->set(String("String set to current time"), String(time_temp.to_string(data_precision.value, true)), String(""));
+    p->set(String("String set to current time"), String(now.to_string(data_precision.value, true)), String(""));
     
     event.Skip(true);
     

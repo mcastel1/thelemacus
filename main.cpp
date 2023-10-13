@@ -55,7 +55,7 @@
 
  ********** THINGS TO FIX ************
  - when a listcontrol in ListFrame is resized, the show_map button is cut
- - add buttons to transport positions and routes 
+ - add buttons to transport  routes
  - parallels are cut on bottom of chart in Mercator projection
  - add missing case in                                 //the circles d intersect: here you should compute t
  - meridians are still cut on the top in mercator projection

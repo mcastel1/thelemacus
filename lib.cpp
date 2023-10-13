@@ -15550,6 +15550,12 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
+
+    //button to transport a route
+    button_transport_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
+    button_transport_route->Enable(false);
+
     
     //button to modify a route
     button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
@@ -15632,6 +15638,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //listcontrol routes with routes
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
+    disableable_buttons.push_back(button_transport_route);
     disableable_buttons.push_back(button_delete_route);
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
@@ -15729,6 +15736,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     sizer_buttons_route->Add(button_add_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
+    sizer_buttons_route->Add(button_transport_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
     sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
     
@@ -16052,6 +16060,15 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
         
     }
     
+    
+    event.Skip(true);
+    
+}
+
+void ListFrame::OnTransportRoute(wxCommandEvent& event){
+    
+    
+    OnModifyFile();
     
     event.Skip(true);
     

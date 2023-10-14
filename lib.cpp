@@ -16083,6 +16083,8 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event){
     //tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Position
     (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+    
+    //here set i_object_to_transport to the currently selected Route
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);

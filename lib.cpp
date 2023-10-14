@@ -13789,7 +13789,7 @@ template<class P> template <class T> void LengthField<P>::get(T &event){
 
 
 
-//if an item in listcontrol_sights is selected, I transport the sight/position under consideration with such Route
+//if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event){
     
     long i_object_to_transport, i_transporting_route;

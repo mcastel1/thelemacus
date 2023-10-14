@@ -2144,7 +2144,7 @@ public:
     File file;
     
     unsigned int margin;
-    int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
+    int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position, i_object_to_transport;
     /*map[i] is the position in plot->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked

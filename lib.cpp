@@ -13819,7 +13819,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         }else{
             //the transported object is a Route
             
-            //the id of the Route that will be transported is ...
+            //the id of the Route that will be transported has been written in i_object_to_transport before, so I do not overwrite i_object_to_transport
   
             
         }
@@ -16083,6 +16083,9 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event){
     //tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Position
     (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
     (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+    
+    //I store the # of the selected Route into i_object_to_transport
+    i_object_to_transport = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //here set i_object_to_transport to the currently selected Route
 

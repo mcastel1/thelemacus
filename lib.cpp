@@ -13836,20 +13836,20 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //the new label which will be given to the transported Route
         new_label = ((((f->plot)->route_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
         
-        //set back listcontrol_routes to route_list, in order to include all routes (not only those which are not related to a sight)
+        //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
         (f->listcontrol_routes)->set((f->plot)->route_list, false);
         //given that the transport is over, set highlight_routes back to true
         (f->enable_highlight) = true;
         
-        //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-        f->Disconnect(((((f->plot)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+        if(transported_object == String("sight")){
+            //I am transporting a Route related to a Sight -> disconnect the Route from the sight
+            
+            f->Disconnect(((((f->plot)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+            
+        }
         
         //change the label of Route #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
         ((((f->plot)->route_list)[(f->i_object_to_transport)]).label) = new_label;
-        
-        //update the Route information in f, and re-draw everything
-//        (((f->plot)->route_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_routes);
-        
         
     }
     

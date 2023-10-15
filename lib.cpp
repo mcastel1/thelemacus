@@ -13857,7 +13857,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         
         //the id of the Position that will be transported,
-        (f->i_object_to_transport) = ((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+        (f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         //tranport the Position
         (((f->plot)->position_list)[ (f->i_object_to_transport) ]).transport(

@@ -15990,8 +15990,8 @@ template<class E> void ListFrame::OnModifySight(E& event){
 void ListFrame::OnTransportSight(wxCommandEvent& event){
     
     //tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Route (related to a Sight)
-    (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
-    (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+    (on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("sight");
+    (on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("sight");
     
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
     print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));

@@ -13929,7 +13929,8 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
                                                                                           
                                                                                           );
         
-        if(transported_object == String("sight")){
+        if((transported_object == String("sight")) || (((((f->plot)->route_list)[(f->i_object_to_transport)]).related_sight.value) != -1)){
+            //I am either transporting a Sight, or a Route related to a Sight -> I disconnect Route and respective Sight
             
             
             //given that I am transporting a Route related to a Sight, disconnect the Route from the sight

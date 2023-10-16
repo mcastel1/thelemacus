@@ -54,6 +54,7 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - template<class T> void OnSelectRouteInListControlRoutesForPosition::operator()(T& event){ is empty
  - when a listcontrol in ListFrame is resized, the show_map button is cut
  - add buttons to transport  routes
  - parallels are cut on bottom of chart in Mercator projection

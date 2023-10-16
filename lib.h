@@ -2127,7 +2127,7 @@ public:
     //a dummy RouteFrame which will be used for various purposes
     RouteFrame* route_frame;
     wxButton  *button_delete_position, *button_delete_route, *button_show_map, *button_compute_position;
-    wxBitmapButton *button_add_sight, *button_add_position, *button_add_route, *button_modify_sight, *button_delete_sight, *button_transport_sight, *button_transport_position, *button_modify_position, *button_modify_route;
+    wxBitmapButton *button_add_sight, *button_add_position, *button_add_route, *button_modify_sight, *button_delete_sight, *button_transport_sight, *button_transport_position, *button_modify_position, *button_modify_route, *button_transport_route;
     wxBoxSizer *sizer_h, *sizer_v;
     wxSizer *sizer_buttons_sight, *sizer_buttons_position, *sizer_buttons_route;
     wxStaticBoxSizer* sizer_box_sight, *sizer_box_position, *sizer_box_route;
@@ -2144,7 +2144,7 @@ public:
     File file;
     
     unsigned int margin;
-    int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position;
+    int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position, i_object_to_transport;
     /*map[i] is the position in plot->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
@@ -2186,6 +2186,7 @@ public:
     void OnAddRoute(wxCommandEvent& event);
     void OnAddRouteForTransport(wxCommandEvent& event);
     template<class E> void OnModifyRoute(E&);
+    void OnTransportRoute(wxCommandEvent&);
     template<class E> void OnPressDeleteRoute(E& event);
     
     void Disconnect(int);

@@ -13909,10 +13909,17 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
   
 
 
-    if(transported_object == String("route")){
+    if((transported_object == String("sight")) || (transported_object == String("route"))){
         
-        //the id of the Route or Position that will be transported
-        i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+        if(transported_object == String("sight")){
+            
+            //the id of the Route or Position that will be transported
+            i_object_to_transport = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+            
+        }else{
+            
+            
+        }
        
         
         ((((f->plot)->route_list)[i_transporting_route]).reference_position) = ((((f->plot)->route_list)[ i_object_to_transport ]).reference_position);
@@ -13925,9 +13932,14 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
                                                                                           
                                                                                           );
         
-        //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-        f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
-        
+        if(transported_object == String("sight")){
+            
+            
+            //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
+            f->Disconnect(((((f->plot)->route_list)[i_object_to_transport]).related_sight).value);
+            
+        }
+            
         //change the label of Route #i_object_to_transport by appending to it 'translated with [label of the translating Route]'
         ((((f->plot)->route_list)[i_object_to_transport]).label) = ((((f->plot)->route_list)[i_object_to_transport]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
         

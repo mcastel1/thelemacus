@@ -54,6 +54,7 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - when mouse hovers over a Route in ChartFrame and the corresponding Route in ListFrame is down and hidden in route_list-> move up / down Route-list to show it
  - I transport an object with an existing route , go to the map, click on a Route -> segmentstion fault 
  - when a listcontrol in ListFrame is resized, the show_map button is cut
  - add buttons to transport  routes

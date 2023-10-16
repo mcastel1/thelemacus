@@ -16356,10 +16356,12 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
         wxFileInputStream input_stream(openFileDialog.GetPath());
         
         if(!input_stream.IsOk()){
+            //file could not be opened
             
             wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
             
         }else{
+            //file could be opened
             
             file.set_name(String((openFileDialog.GetPath()).ToStdString()));
             plot->read_from_file(file, String(""));
@@ -16373,7 +16375,8 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             set();
             //change the title of *this to the filename
             SetLabel(wxString((file.name).value));
-            //draw all charts according to the newly loaded data
+            //resize and draw all charts according to the newly loaded data
+            Resize();
             DrawAll();
             
         }
@@ -16397,12 +16400,12 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event){
     if(file_has_been_modified){
         //the user wants to close a file that has been modified -> ask the user whethere he/she wants to save it before closing it
         
-        SaveAndReset<ListFrame>* save_and_close;
+        SaveAndReset<ListFrame>* save_and_reset;
         
         PrintQuestion<ListFrame, SaveAndReset<ListFrame>, ResetListFrame>* print_question;
         
-        save_and_close = new SaveAndReset<ListFrame>(this);
-        print_question = new PrintQuestion<ListFrame, SaveAndReset<ListFrame>,  ResetListFrame>(this, save_and_close, reset_list_frame);
+        save_and_reset = new SaveAndReset<ListFrame>(this);
+        print_question = new PrintQuestion<ListFrame, SaveAndReset<ListFrame>,  ResetListFrame>(this, save_and_reset, reset_list_frame);
         
         print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
         

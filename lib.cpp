@@ -13973,6 +13973,9 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         (((f->plot)->position_list)[i_object_to_transport]).update_wxListCtrl(i_object_to_transport, f->listcontrol_positions);
     }
     
+    (f->listcontrol_sights)->set<Sight>((f->plot)->sight_list, false);
+    (f->listcontrol_routes)->set<Route>((f->plot)->route_list, false);
+    f->Resize();
     f->DrawAll();
     
     //set parameters back to their original value and unbing the closing of route_frame from on_new_route_in_listcontrol_routes_for_transport

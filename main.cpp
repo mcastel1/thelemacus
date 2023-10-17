@@ -229,67 +229,10 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 //writes into this->run_directory the path where the executable is currently running
 void MyApp::where_am_I(String prefix){
     
-    unsigned int i;
-    size_t position;
-    stringstream command, ins;
-    string line, dummy;
-    File temp;
-    String new_prefix;
-    
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
-    
-    temp.set_name(String("output.dat"));
-    temp.remove(String(""));
-    
-    command.str("");
-    //get the path where the executable is running with ps aux command and write the result fo File temp
-    command << "ps aux | grep Thelemacus >> " << ((temp.name).value);
-    system(command.str().c_str());
-    
-    //read the result from temp and write it in run_directory
-    temp.open(String("in"), new_prefix);
-    
-    //given that ps aux may yield an output with multiple lines, I pick the line rleated to the app by selecting the line that contains "Thelemacus.app"
-    do{
-        
-        line.clear();
-        getline(temp.value, line);
-        
-    }while((line.find("Thelemacus.app")) == (string::npos));
-    
-    //    getline((temp.value), line);
-    
-    
-    ins << line;
-    //fetch the last column in the output of ps aux, where the path is located
-    for(i=0; i<10; i++){
-        
-        dummy.clear();
-        ins >> dummy;
-        
-    }
-    
     //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
-    dummy.clear();
-    (run_directory.value).clear();
-    //    run_directory.appendto(String("'"));
-    do{
-        ins >> dummy;
-        run_directory.appendto(dummy);
-        if(ins.tellg() != -1){run_directory.appendto(String("\ "));}
-    }while(ins.tellg() != -1);
+    run_directory.set(String("Run directory"), String("/Users/macbookpro/Desktop/Thelemacus.app/"), String(""));
     
-    //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
-    position = (run_directory.value).find("Contents/MacOS/Thelemacus");
-    
-    if(position != string::npos){
-        run_directory.set(String("Run directory"), String((run_directory.value).substr(0, position)), new_prefix);
-    }
-    
-    temp.close(new_prefix);
-    temp.remove(new_prefix);
-    
+   
 }
 
 bool MyApp::OnInit(){
@@ -392,9 +335,9 @@ bool MyApp::OnInit(){
 
     
     //to build the app
-//        where_am_I(String(""));
+        where_am_I(String(""));
     //to develop the app with Xcode
-    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
+//    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
     
     
     settings = new wxSystemSettings();

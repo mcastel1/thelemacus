@@ -25,9 +25,14 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents
 mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/MacOS
 mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Data
 mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Images
+mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
+#copy data and images
 cp -r $INPUT_PATH/Contents/Resources/Data/* $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Data
 cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Images
+
+#copy libraries
+cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1* $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \

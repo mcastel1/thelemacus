@@ -116,6 +116,7 @@ int main(int argc, const char * argv[]) {
     ins << run_directory << "/run_path.dat";
     cout << "File = " << ins.str().c_str() << "\n";
     outfile.open(ins.str().c_str());
+    outfile << run_directory << "/";
     outfile.close();
     
     library_directory.str("");

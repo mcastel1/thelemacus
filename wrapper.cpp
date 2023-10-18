@@ -29,12 +29,8 @@ int main(int argc, const char * argv[]) {
     ifstream infile;
     ofstream outfile;
     stringstream run_directory, library_directory, command, ins;
-    string line, dummy;
+    string line, dummy, result;
     size_t position;
-    
-    
-    //*****************
-    //writes into this->run_directory the path where the executable is currently running
     
     
     
@@ -73,19 +69,19 @@ int main(int argc, const char * argv[]) {
     
     //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
     dummy.clear();
-    run_directory.clear();
-    //    run_directory.appendto(String("'"));
+    ins.clear();
+    //    ins.appendto(String("'"));
     do{
         ins >> dummy;
-        run_directory << dummy;
-        if(ins.tellg() != -1){run_directory << "\ ";}
+        ins << dummy;
+        if(ins.tellg() != -1){ins << "\ ";}
     }while(ins.tellg() != -1);
     
-    //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
-    position = (run_directory.str().c_str()).find("Contents/MacOS/Thelemacus");
+    //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in ins
+    position = (ins.str()).find("Contents/MacOS/Thelemacus");
     
     if(position != string::npos){
-        run_directory = (run_directory.str().c_str()).substr(0, position);
+        result = ((ins.str()).substr(0, position));
     }
     
     
@@ -102,7 +98,7 @@ int main(int argc, const char * argv[]) {
 //    cout << "Running directory = " << running_directory << "\n";
 //
     library_directory.clear();
-    library_directory << run_directory << "/../Resources/Libraries/";
+    library_directory << run_directory.str() << "/../Resources/Libraries/";
     
     cout << "Library directory = " << library_directory.str().c_str() << "\n";
     

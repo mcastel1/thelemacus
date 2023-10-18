@@ -27,40 +27,39 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     unsigned int i;
     ifstream infile;
-    stringstream library_directory, command, ins;
+    ofstream outfile;
+    stringstream run_directory, library_directory, command, ins;
     string line, dummy;
     size_t position;
-    File temp;
-    String new_prefix, run_directory;
     
     
     //*****************
     //writes into this->run_directory the path where the executable is currently running
     
     
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
     
-    temp.set_name(String("output.dat"));
-    temp.remove(String(""));
-    
+    system("rm -rf path.dat;");
+
     command.str("");
-    //get the path where the executable is running with ps aux command and write the result fo File temp
-    command << "ps aux | grep wrapper >> " << ((temp.name).value);
+    //get the path where the executable is running with ps aux command and write the result fo File outfile
+    command << "ps aux | grep wrapper >> path.dat";
     system(command.str().c_str());
     
-    //read the result from temp and write it in run_directory
-    temp.open(String("in"), new_prefix);
+    //read the result from outfile and write it in run_directory
+    infile.open("path.dat");
     
     //given that ps aux may yield an output with multiple lines, I pick the line rleated to the app by selecting the line that contains "Thelemacus.app"
     do{
         
         line.clear();
-        getline(temp.value, line);
+        getline(infile, line);
         
     }while((line.find("wrapper")) == (string::npos));
     
-    //    getline((temp.value), line);
+    infile.close();
+
+    
+    //    getline((outfile.value), line);
     
     
     ins << line;
@@ -74,19 +73,19 @@ int main(int argc, const char * argv[]) {
     
     //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
     dummy.clear();
-    (run_directory.value).clear();
+    run_directory.clear();
     //    run_directory.appendto(String("'"));
     do{
         ins >> dummy;
-        run_directory.appendto(dummy);
-        if(ins.tellg() != -1){run_directory.appendto(String("\ "));}
+        run_directory << dummy;
+        if(ins.tellg() != -1){run_directory << "\ ";}
     }while(ins.tellg() != -1);
     
     //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in run_directory
-    position = (run_directory.value).find("Contents/MacOS/Thelemacus");
+    position = (run_directory.str().c_str()).find("Contents/MacOS/Thelemacus");
     
     if(position != string::npos){
-        run_directory.set(String("Run directory"), String((run_directory.value).substr(0, position)), new_prefix);
+        run_directory = (run_directory.str().c_str()).substr(0, position);
     }
     
     
@@ -95,18 +94,15 @@ int main(int argc, const char * argv[]) {
     
     //*****************
     
-    //run pwd and get the current running path of this .o -> write it into path.dat so the app can read it later
-    system("rm -rf path.dat; pwd >> path.dat;");
-    infile.open("path.dat");
-    running_directory.clear();
-    getline(infile, running_directory);
-    infile.close();
-    //    system("rm -rf path.dat");
-    
-    cout << "Running directory = " << running_directory << "\n";
-    
+//    //run pwd and get the current running path of this .o -> write it into path.dat so the app can read it later
+//    infile.open("path.dat");
+//    getline(infile, running_directory);
+//    //    system("rm -rf path.dat");
+//
+//    cout << "Running directory = " << running_directory << "\n";
+//
     library_directory.clear();
-    library_directory << running_directory << "/../Resources/Libraries/";
+    library_directory << run_directory << "/../Resources/Libraries/";
     
     cout << "Library directory = " << library_directory.str().c_str() << "\n";
     
@@ -123,8 +119,6 @@ int main(int argc, const char * argv[]) {
     
     system(command.str().c_str());
     
-    temp.close(new_prefix);
-    temp.remove(new_prefix);
 
     
     return 0;

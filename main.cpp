@@ -229,9 +229,13 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 //writes into this->run_directory the path where the executable is currently running
 void MyApp::where_am_I(String prefix){
     
-    //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
-    run_directory.set(String("Run directory"), String("/Users/macbookpro/Desktop/Thelemacus.app/"), String(""));
+    File path_file;
     
+    path_file.set_name(String("run_path.dat"));
+    path_file.open(String("in"), String(""));
+    run_directory.read_from_file(String("run directory"), path_file, true, String(""));
+    path_file.close(String(""));
+  
    
 }
 

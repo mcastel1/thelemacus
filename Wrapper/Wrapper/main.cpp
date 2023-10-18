@@ -10,7 +10,17 @@
 #include <list>
 #include <stdio.h>
 
+/*
+ compile on mac with
+ 
+ g++ main.cpp -o main.o -Wall -Wno-c++11-extensions --std=c++17  -O3
+ 
+ */
+
+
 using namespace std;
+
+
 
 int main(int argc, const char * argv[]) {
     

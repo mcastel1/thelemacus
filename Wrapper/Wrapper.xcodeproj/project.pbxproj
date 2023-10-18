@@ -248,9 +248,11 @@
 					"-lcblas",
 					"-lgsl",
 					"-lz",
+					"-lboost_filesystem",
+					"-lboost_system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_HEADER_SEARCH_PATHS = /Applications/boost_1_66_0;
+				SYSTEM_HEADER_SEARCH_PATHS = /usr/local/include;
 			};
 			name = Debug;
 		};
@@ -267,9 +269,11 @@
 					"-lcblas",
 					"-lgsl",
 					"-lz",
+					"-lboost_filesystem",
+					"-lboost_system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_HEADER_SEARCH_PATHS = /Applications/boost_1_66_0;
+				SYSTEM_HEADER_SEARCH_PATHS = /usr/local/include;
 			};
 			name = Release;
 		};

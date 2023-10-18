@@ -12,11 +12,13 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/dll/runtime_symbol_info.hpp>
+#include <boost/dll.hpp>
+
 /*
  compile on mac with
  
- g++ wrapper.cpp -o wrapper.o -Wall -Wno-c++11-extensions --std=c++17  -O3
- 
+ g++ wrapper.cpp -o wrapper.o -I/usr/local/include/  -Wall -Wno-c++11-extensions --std=c++17  -O3 -L/usr/local/bin  -lboost_filesystem -lboost_system
+
  */
 
 
@@ -35,6 +37,8 @@ int main(int argc, const char * argv[]) {
     //    size_t position;
     //
     
+    boost::dll::program_location().parent_path();
+
     
     //    system("rm -rf path.dat;");
     //

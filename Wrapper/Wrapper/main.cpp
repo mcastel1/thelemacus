@@ -16,12 +16,12 @@ int main(int argc, const char * argv[]) {
     
     // insert code here...
     ifstream infile;
-    string line;
+    string running_directory;
     
     system("rm -rf path.dat; pwd >> path.dat;");
     infile.open("path.dat");
-    line.clear();
-    getline(infile, line);
+    running_directory.clear();
+    getline(infile, running_directory);
     infile.close();
     system("rm -rf path.dat");
     

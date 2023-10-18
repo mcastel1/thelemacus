@@ -32,7 +32,8 @@ int main(int argc, const char * argv[]) {
     unsigned int i;
     ifstream infile;
     //    ofstream outfile;
-    stringstream run_directory, library_directory, command, ins;
+    string run_directory;
+    stringstream library_directory, command, ins;
     //    string line, dummy, result;
     //    size_t position;
     //
@@ -101,10 +102,18 @@ int main(int argc, const char * argv[]) {
     //    getline(infile, running_directory);
     //    //    system("rm -rf path.dat");
     //
-    //    cout << "Running directory = " << running_directory << "\n";
-    //
+    
+    ins.clear();
+    ins << (boost::dll::program_location().parent_path());
+    run_directory = ins.str();
+    
+    //remove " from run_directory
+    run_directory.erase(std::remove(run_directory.begin(), run_directory.end(), '"'), run_directory.end());
+
+    cout << "Run directory = " << run_directory << "\n";
+    
     library_directory.clear();
-    library_directory << run_directory.str() << "/../Resources/Libraries/";
+    library_directory << run_directory << "/../Resources/Libraries/";
     
     cout << "Library directory = " << library_directory.str().c_str() << "\n";
     

@@ -39,7 +39,10 @@ cp -r $INPUT_PATH/Contents/Resources/Data/* $OUTPUT_PATH/$APP_NAME.app/Contents/
 cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Images
 
 #copy libraries
-cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1* /usr/local/lib/libwx_baseu* /usr/local/lib/libpng* /usr/local/lib/libjpeg*  /usr/local/Cellar/libtiff/4.3.0/lib/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
+cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1* /usr/local/lib/libwx_baseu* /usr/local/lib/libpng* /usr/local/lib/libjpeg*  /usr/local/Cellar/libtiff/4.3.0/lib/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib  /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib
+
+
+ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \

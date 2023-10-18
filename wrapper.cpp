@@ -10,6 +10,8 @@
 #include <list>
 #include <stdio.h>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/dll/runtime_symbol_info.hpp>
 /*
  compile on mac with
  

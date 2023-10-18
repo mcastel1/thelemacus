@@ -227,7 +227,7 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 }
 
 //writes into this->run_directory the path where the executable is currently running
-void MyApp::where_am_I(String prefix){
+void MyApp::where_am_I([[maybe_unused]] String prefix){
     
 //    File path_file;
 //

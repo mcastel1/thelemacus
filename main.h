@@ -44,8 +44,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/dll.hpp>
 
-
-
 using namespace std;
 
 #include "lib.h"

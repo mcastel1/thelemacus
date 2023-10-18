@@ -39,6 +39,48 @@ cp -r $INPUT_PATH/Contents/Resources/Data/* $OUTPUT_PATH/$APP_NAME.app/Contents/
 cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Images
 
 #copy libraries
+#libraries for $APP_NAME
+#         name /usr/lib/dyld (offset 12)
+#         name /usr/local/opt/boost/lib/libboost_filesystem.dylib (offset 24)
+#         name /usr/local/opt/boost/lib/libboost_system.dylib (offset 24)
+#         name /usr/lib/libc++.1.dylib (offset 24)
+#         name /usr/lib/libSystem.B.dylib (offset 24)
+
+#libraries for main.o
+#         name /usr/lib/dyld (offset 12)
+#         name /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit (offset 24)
+#         name /System/Library/Frameworks/Carbon.framework/Versions/A/Carbon (offset 24)
+#         name /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa (offset 24)
+#         name /System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore (offset 24)
+#         name /System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox (offset 24)
+#         name /usr/lib/libSystem.B.dylib (offset 24)
+#         name /System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL (offset 24)
+#         name /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib (offset 24)
+#         name /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib (offset 24)
+#         name /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib (offset 24)
+#         name /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib (offset 24)
+#         name /usr/local/lib/libwx_baseu_xml-3.1.dylib (offset 24)
+#         name /usr/local/lib/libwx_baseu_net-3.1.dylib (offset 24)
+#         name /usr/local/lib/libwx_baseu-3.1.dylib (offset 24)
+#         name /Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/libwx_osx_cocoau_core-3.2.0.2.1.dylib (offset 24)
+#         name /Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/libwx_baseu-3.2.0.2.1.dylib (offset 24)
+#         name /usr/local/lib/libpng16.16.dylib (offset 24)
+#         name /usr/lib/libz.1.dylib (offset 24)
+#         name /usr/local/lib/libjpeg.9.dylib (offset 24)
+#         name /usr/local/lib/libtiff.5.dylib (offset 24)
+#         name /System/Library/Frameworks/WebKit.framework/Versions/A/WebKit (offset 24)
+#         name /usr/local/lib/libgsl.27.dylib (offset 24)
+#         name /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib (offset 24)
+#         name /System/Library/Frameworks/Security.framework/Versions/A/Security (offset 24)
+#         name /usr/lib/libiconv.2.dylib (offset 24)
+#         name /usr/lib/libcurl.4.dylib (offset 24)
+#         name /usr/local/lib/libpcre2-32.0.dylib (offset 24)
+#         name /usr/local/opt/boost/lib/libboost_filesystem.dylib (offset 24)
+#         name /usr/local/opt/boost/lib/libboost_system.dylib (offset 24)
+#         name /usr/lib/libc++.1.dylib (offset 24)
+
+
+
 cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1* /usr/local/lib/libwx_baseu* /usr/local/lib/libpng* /usr/local/lib/libjpeg*  /usr/local/Cellar/libtiff/4.3.0/lib/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib  /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib
 
 

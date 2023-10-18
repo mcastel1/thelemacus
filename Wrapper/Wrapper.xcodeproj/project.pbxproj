@@ -245,9 +245,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
-					"-lcblas",
-					"-lgsl",
-					"-lz",
 					"-lboost_filesystem",
 					"-lboost_system",
 				);
@@ -266,9 +263,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
-					"-lcblas",
-					"-lgsl",
-					"-lz",
 					"-lboost_filesystem",
 					"-lboost_system",
 				);

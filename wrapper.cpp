@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     unsigned int i;
     ifstream infile;
-    //    ofstream outfile;
+    ofstream outfile;
     string run_directory;
     stringstream library_directory, command, ins;
     //    string line, dummy, result;
@@ -54,7 +54,7 @@ int main(int argc, const char * argv[]) {
     //    //given that ps aux may yield an output with multiple lines, I pick the line rleated to the app by selecting the line that contains "Thelemacus.app"
     //    do{
     //
-    //        line.clear();
+    //        line..str("");
     //        getline(infile, line);
     //
     //    }while((line.find("wrapper")) == (string::npos));
@@ -69,14 +69,14 @@ int main(int argc, const char * argv[]) {
     //    //fetch the last column in the output of ps aux, where the path is located
     //    for(i=0; i<10; i++){
     //
-    //        dummy.clear();
+    //        dummy..str("");
     //        ins >> dummy;
     //
     //    }
     //
     //    //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
-    //    dummy.clear();
-    //    ins.clear();
+    //    dummy..str("");
+    //    ins..str("");
     //    //    ins.appendto(String("'"));
     //    do{
     //        ins >> dummy;
@@ -103,7 +103,7 @@ int main(int argc, const char * argv[]) {
     //    //    system("rm -rf path.dat");
     //
     
-    ins.clear();
+    ins.str("");
     ins << (boost::dll::program_location().parent_path());
     run_directory = ins.str();
     
@@ -112,13 +112,19 @@ int main(int argc, const char * argv[]) {
 
     cout << "Run directory = " << run_directory << "\n";
     
-    library_directory.clear();
+    ins.str("");
+    ins << run_directory << "/run_path.dat";
+    cout << "File = " << ins.str().c_str() << "\n";
+    outfile.open(ins.str().c_str());
+    outfile.close();
+    
+    library_directory.str("");
     library_directory << run_directory << "/../Resources/Libraries/";
     
     cout << "Library directory = " << library_directory.str().c_str() << "\n";
     
     //export the libraries so the app knows where to find them later
-    command.clear();
+    command.str("");
     command << "export DYLD_LIBRARY_PATH=\$DYLD_LIBRARY_PATH:"
     << library_directory.str().c_str()
     << "; echo \$DYLD_LIBRARY_PATH"

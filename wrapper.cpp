@@ -122,13 +122,13 @@ int main(int argc, const char * argv[]) {
     command << "export DYLD_LIBRARY_PATH=\$DYLD_LIBRARY_PATH:"
     << library_directory.str().c_str()
     << "; echo \$DYLD_LIBRARY_PATH"
-    << "; ./main.o";
+    << "; " << run_directory << "/./main.o";
     
     cout << "Command  = " << command.str().c_str() << "\n";
     
     
     
-//    system(command.str().c_str());
+    system(command.str().c_str());
     
     
     

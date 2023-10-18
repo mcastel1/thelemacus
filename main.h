@@ -42,6 +42,7 @@
 // #include "gsl_complex_math.h"
 
 #include <boost/algorithm/string.hpp>
+#include <boost/dll.hpp>
 
 
 

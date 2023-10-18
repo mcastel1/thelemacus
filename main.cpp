@@ -1,6 +1,6 @@
 /*
  
- g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -I/Applications/boost_1_66_0/ -L/Applications/ChartDirector/lib  -Wall -Wno-c++11-extensions --std=c++17  -O3
+ g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -lboost_filesystem -lboost_system -L/Applications/ChartDirector/lib  -Wall -Wno-c++11-extensions --std=c++17  -O3
  */
 
 //uncomment this to test the code at higher speed
@@ -229,14 +229,27 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 //writes into this->run_directory the path where the executable is currently running
 void MyApp::where_am_I(String prefix){
     
-    File path_file;
+//    File path_file;
+//
+//    path_file.set_name(String("run_path.dat"));
+//    path_file.open(String("in"), String(""));
+//    run_directory.read_from_file(String("run directory"), path_file, true, String(""));
+//    path_file.close(String(""));
+//
+ 
+    stringstream ins;
     
-    path_file.set_name(String("run_path.dat"));
-    path_file.open(String("in"), String(""));
-    run_directory.read_from_file(String("run directory"), path_file, true, String(""));
-    path_file.close(String(""));
-  
-   
+    ins.str("");
+    ins << (boost::dll::program_location().parent_path());
+    run_directory = ins.str();
+
+    //remove " from run_directory
+    run_directory.value.erase(std::remove(run_directory.value.begin(), run_directory.value.end(), '"'), run_directory.value.end());
+
+    run_directory.appendto(String("/"));
+    run_directory.print(String("Run directory"), true, String("***"), cout);
+
+    
 }
 
 bool MyApp::OnInit(){

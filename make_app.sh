@@ -40,51 +40,14 @@ cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Content
 
 #copy libraries
 #libraries for $APP_NAME
-# /usr/lib/dyld
-# /usr/local/opt/boost/lib/libboost_filesystem.dylib
-# /usr/local/opt/boost/lib/libboost_system.dylib
-# /usr/lib/libc++.1.dylib
-# /usr/lib/libSystem.B.dylib
+cp /usr/lib/dyld  /usr/local/opt/boost/lib/libboost_filesystem.dylib  /usr/local/opt/boost/lib/libboost_system.dylib  /usr/lib/libc++.1.dylib  /usr/lib/libSystem.B.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
-#libraries for main.o
-# /usr/lib/dyld
-# /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
-# /System/Library/Frameworks/Carbon.framework/Versions/A/Carbon
-# /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
-# /System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
-# /System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox 
-# /usr/lib/libSystem.B.dylib
-# /System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
-# /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib 
-# /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib 
-# /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib 
-# /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib 
-# /usr/local/lib/libwx_baseu_xml-3.1.dylib 
-# /usr/local/lib/libwx_baseu_net-3.1.dylib 
-# /usr/local/lib/libwx_baseu-3.1.dylib 
-# /Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/libwx_osx_cocoau_core-3.2.0.2.1.dylib 
-# /Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/libwx_baseu-3.2.0.2.1.dylib 
-# /usr/local/lib/libpng16.16.dylib 
-# /usr/lib/libz.1.dylib 
-# /usr/local/lib/libjpeg.9.dylib 
-# /usr/local/lib/libtiff.5.dylib 
-# /System/Library/Frameworks/WebKit.framework/Versions/A/WebKit 
-# /usr/local/lib/libgsl.27.dylib 
-# /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# /System/Library/Frameworks/Security.framework/Versions/A/Security 
-# /usr/lib/libiconv.2.dylib 
-# /usr/lib/libcurl.4.dylib 
-# /usr/local/lib/libpcre2-32.0.dylib 
-# /usr/local/opt/boost/lib/libboost_filesystem.dylib 
-# /usr/local/opt/boost/lib/libboost_system.dylib 
-# /usr/lib/libc++.1.dylib 
+#libraries for main.o (removed /usr/lib/libc++.1.dylib /usr/lib/libSystem.B.dylib /usr/lib/dyld /usr/local/opt/boost/lib/libboost_filesystem.dylib   /usr/local/opt/boost/lib/libboost_system.dylib because they are alreday in the libraries for $APP_NAME)
+cp   /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit  /System/Library/Frameworks/Carbon.framework/Versions/A/Carbon  /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa  /System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore  /System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox     /System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL  /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib   /usr/local/lib/libwx_baseu_xml-3.1.dylib   /usr/local/lib/libwx_baseu_net-3.1.dylib   /usr/local/lib/libwx_baseu-3.1.dylib   /Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/libwx_osx_cocoau_core-3.2.0.2.1.dylib   /Applications/wxWidgets-3.2.2.1/build-cocoa-debug/lib/libwx_baseu-3.2.0.2.1.dylib   /usr/local/lib/libpng16.16.dylib   /usr/lib/libz.1.dylib   /usr/local/lib/libjpeg.9.dylib   /usr/local/lib/libtiff.5.dylib   /System/Library/Frameworks/WebKit.framework/Versions/A/WebKit   /usr/local/lib/libgsl.27.dylib   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib   /System/Library/Frameworks/Security.framework/Versions/A/Security   /usr/lib/libiconv.2.dylib   /usr/lib/libcurl.4.dylib   /usr/local/lib/libpcre2-32.0.dylib       $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 
 
-cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1* /usr/local/lib/libwx_baseu* /usr/local/lib/libpng* /usr/local/lib/libjpeg*  /usr/local/Cellar/libtiff/4.3.0/lib/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib  /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib
-
-
- $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
+#cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1* /usr/local/lib/libwx_baseu* /usr/local/lib/libpng* /usr/local/lib/libjpeg*  /usr/local/Cellar/libtiff/4.3.0/lib/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib  /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \

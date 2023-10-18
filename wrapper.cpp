@@ -37,7 +37,7 @@ int main(int argc, const char * argv[]) {
     //    size_t position;
     //
     
-    boost::dll::program_location().parent_path();
+    cout << "Program location = " << boost::dll::program_location().parent_path() << "\n";
 
     
     //    system("rm -rf path.dat;");
@@ -119,7 +119,7 @@ int main(int argc, const char * argv[]) {
     
     
     
-    system(command.str().c_str());
+//    system(command.str().c_str());
     
     
     

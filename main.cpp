@@ -228,14 +228,6 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 
 //writes into this->run_directory the path where the executable is currently running
 void MyApp::where_am_I([[maybe_unused]] String prefix){
-    
-//    File path_file;
-//
-//    path_file.set_name(String("run_path.dat"));
-//    path_file.open(String("in"), String(""));
-//    run_directory.read_from_file(String("run directory"), path_file, true, String(""));
-//    path_file.close(String(""));
-//
  
     stringstream ins;
     

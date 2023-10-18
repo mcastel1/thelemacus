@@ -246,7 +246,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix){
     //remove " from run_directory
     run_directory.value.erase(std::remove(run_directory.value.begin(), run_directory.value.end(), '"'), run_directory.value.end());
 
-    run_directory.appendto(String("/"));
+    run_directory.appendto(String("\/..\/..\/"));
     run_directory.print(String("Run directory"), true, String("***"), cout);
 
     

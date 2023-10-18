@@ -16,6 +16,7 @@ int main(int argc, const char * argv[]) {
     
     // insert code here...
     ifstream infile;
+    stringstream library_directory, command;
     string running_directory;
     
     system("rm -rf path.dat; pwd >> path.dat;");
@@ -27,10 +28,22 @@ int main(int argc, const char * argv[]) {
     
     cout << "Running directory = " << running_directory << "\n";
     
-    
-    system("export DYLD_LIBRARY_PATH=\$DYLD_LIBRARY_PATH:/Users/macbookpro/Desktop/Thelemacus.app/Contents/Resources/Libraries/; echo \$DYLD_LIBRARY_PATH");
+    library_directory.clear();
+    library_directory << running_directory << "/../Resources/Libraries/";
 
-    std::cout << "Hello, World!\n";
+    cout << "Library directory = " << library_directory.str().c_str() << "\n";
+
+    command.clear();
+    command << "export DYLD_LIBRARY_PATH=\$DYLD_LIBRARY_PATH:"
+            << library_directory.str().c_str()
+            << "; echo \$DYLD_LIBRARY_PATH";
+    
+    cout << "Command  = " << command.str().c_str() << "\n";
+    
+
+    
+    system(command.str().c_str());
+
     return 0;
     
 }

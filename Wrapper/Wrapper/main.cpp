@@ -25,6 +25,8 @@ int main(int argc, const char * argv[]) {
     infile.close();
     system("rm -rf path.dat");
     
+    cout << "Running directory = " << running_directory << "\n";
+    
     
     system("export DYLD_LIBRARY_PATH=\$DYLD_LIBRARY_PATH:/Users/macbookpro/Desktop/Thelemacus.app/Contents/Resources/Libraries/; echo \$DYLD_LIBRARY_PATH");
 

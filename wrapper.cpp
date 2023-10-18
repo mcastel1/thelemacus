@@ -28,80 +28,12 @@ using namespace std;
 
 int main(int argc, const char * argv[]) {
     
-    // insert code here...
-    unsigned int i;
     ifstream infile;
     ofstream outfile;
     string run_directory;
     stringstream library_directory, command, ins;
-    //    string line, dummy, result;
-    //    size_t position;
-    //
     
     cout << "Program location = " << boost::dll::program_location().parent_path() << "\n";
-
-    
-    //    system("rm -rf path.dat;");
-    //
-    //    command.str("");
-    //    //get the path where the executable is running with ps aux command and write the result fo File outfile
-    //    command << "ps aux | grep wrapper >> path.dat";
-    //    system(command.str().c_str());
-    //
-    //    //read the result from outfile and write it in run_directory
-    //    infile.open("path.dat");
-    //
-    //    //given that ps aux may yield an output with multiple lines, I pick the line rleated to the app by selecting the line that contains "Thelemacus.app"
-    //    do{
-    //
-    //        line..str("");
-    //        getline(infile, line);
-    //
-    //    }while((line.find("wrapper")) == (string::npos));
-    //
-    //    infile.close();
-    //
-    //
-    //    //    getline((outfile.value), line);
-    //
-    //
-    //    ins << line;
-    //    //fetch the last column in the output of ps aux, where the path is located
-    //    for(i=0; i<10; i++){
-    //
-    //        dummy..str("");
-    //        ins >> dummy;
-    //
-    //    }
-    //
-    //    //I got to the last column, which constains the path. Because it may contain spaces, I put all of its words in dummy until the end of the column (ins) is reached
-    //    dummy..str("");
-    //    ins..str("");
-    //    //    ins.appendto(String("'"));
-    //    do{
-    //        ins >> dummy;
-    //        ins << dummy;
-    //        if(ins.tellg() != -1){ins << "\ ";}
-    //    }while(ins.tellg() != -1);
-    //
-    //    //get the part of the path preceeding Contents/MacOS/Thelemacus and write it in ins
-    //    position = (ins.str()).find("Contents/MacOS/Thelemacus");
-    //
-    //    if(position != string::npos){
-    //        result = ((ins.str()).substr(0, position));
-    //    }
-    //
-    //
-    //
-    
-    
-    //*****************
-    
-    //    //run pwd and get the current running path of this .o -> write it into path.dat so the app can read it later
-    //    infile.open("path.dat");
-    //    getline(infile, running_directory);
-    //    //    system("rm -rf path.dat");
-    //
     
     ins.str("");
     ins << (boost::dll::program_location().parent_path());
@@ -132,12 +64,9 @@ int main(int argc, const char * argv[]) {
     << "; " << run_directory << "/./main.o";
     
     cout << "Command  = " << command.str().c_str() << "\n";
-    
-    
-    
+
     system(command.str().c_str());
-    
-    
+
     
     return 0;
     

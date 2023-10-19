@@ -30,42 +30,41 @@ int main(int argc, const char * argv[]) {
     
     ifstream infile;
     ofstream outfile;
-    string run_directory;
-    stringstream library_directory, command, ins;
+    stringstream run_directory, library_directory, command, ins;
+    string dummy;
     
     cout << "Program location = " << boost::dll::program_location().parent_path() << "\n";
     
     ins.str("");
     ins << (boost::dll::program_location().parent_path());
-    run_directory = ins.str();
     
-    //remove " from run_directory
-    run_directory.erase(std::remove(run_directory.begin(), run_directory.end(), '"'), run_directory.end());
-
-    cout << "Run directory = " << run_directory << "\n";
+    //remove " from the path obtained from program_location, write it into run_directory and add a / at the end
+    dummy = ins.str().c_str();
+    dummy.erase(std::remove(dummy.begin(), dummy.end(), '"'), dummy.end());
+    run_directory.str("");
+    run_directory << dummy << "/";
     
-    ins.str("");
-    ins << run_directory << "/";
     
-    run_directory.clear();
-    run_directory = ins.str().c_str();
     
-//    cout << "File = " << ins.str().c_str() << "\n";
-//    outfile.open(ins.str().c_str());
-//    outfile << "run directory = " << run_directory << "/";
-//    outfile.close();
-
+ 
+    //properly format run_diretory and library_directory
+    dummy = run_directory.str().c_str();
+//    run_directory.str("");
     library_directory.str("");
-    library_directory << "\"" << run_directory << "../Resources/Libraries/\"";
-    
-    cout << "Library directory = " << library_directory.str().c_str() << "\n";
+//    run_directory << "\"" << dummy << "\"";
+    library_directory << "\"" << dummy << "../Resources/Libraries/\"";
     
     //export the libraries so the app knows where to find them later
     command.str("");
     command << "export DYLD_LIBRARY_PATH=\$DYLD_LIBRARY_PATH:"
     << library_directory.str().c_str()
     << "; echo \$DYLD_LIBRARY_PATH"
-    << "; " << run_directory << "/./main.o";
+    << "; \"" << run_directory.str().c_str() << "./main.o\"";
+
+    
+    cout << "Run directory = " << run_directory.str().c_str() << "\n";
+    cout << "Library directory = " << library_directory.str().c_str() << "\n";
+    
     
     cout << "Command  = " << command.str().c_str() << "\n";
 

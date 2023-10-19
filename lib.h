@@ -690,15 +690,12 @@ public:
     Angle phi, lambda;
     //label to add a note about the position
     String label;
-    //this is a list of the items which are part of a Position object (phi, lambda, ..)
-    vector<String> items;
-    
+   
     Position();
     Position(Angle, Angle);
     void enter(String, String);
     void set_cartesian(String, const gsl_vector*, String);
     void get_cartesian(String, gsl_vector*, String);
-    void modify(String);
     void print(String, String, ostream&);
     void read_from_file(File&, String);
     bool transport(Route, String);

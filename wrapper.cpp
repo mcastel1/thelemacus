@@ -56,7 +56,7 @@ int main(int argc, const char * argv[]) {
 //    outfile.close();
 
     library_directory.str("");
-    library_directory << run_directory << "/../Resources/Libraries/";
+    library_directory << "\"" << run_directory << "../Resources/Libraries/\"";
     
     cout << "Library directory = " << library_directory.str().c_str() << "\n";
     

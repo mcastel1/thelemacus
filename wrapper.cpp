@@ -45,12 +45,16 @@ int main(int argc, const char * argv[]) {
     cout << "Run directory = " << run_directory << "\n";
     
     ins.str("");
-    ins << run_directory << "/run_path.dat";
-    cout << "File = " << ins.str().c_str() << "\n";
-    outfile.open(ins.str().c_str());
-    outfile << "run directory = " << run_directory << "/";
-    outfile.close();
+    ins << run_directory << "/";
     
+    run_directory.clear();
+    run_directory = ins.str().c_str();
+    
+//    cout << "File = " << ins.str().c_str() << "\n";
+//    outfile.open(ins.str().c_str());
+//    outfile << "run directory = " << run_directory << "/";
+//    outfile.close();
+
     library_directory.str("");
     library_directory << run_directory << "/../Resources/Libraries/";
     

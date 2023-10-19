@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5272F81E2AE111CB003CE934 /* wrapper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wrapper.entitlements; sourceTree = "<group>"; };
 		52B1CCB62ADFE7DA00B538C7 /* wrapper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wrapper; sourceTree = BUILT_PRODUCTS_DIR; };
 		52B1CCC82ADFFFBB00B538C7 /* wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wrapper.cpp; path = ../wrapper.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +59,7 @@
 		52B1CCB82ADFE7DA00B538C7 /* wrapper */ = {
 			isa = PBXGroup;
 			children = (
+				5272F81E2AE111CB003CE934 /* wrapper.entitlements */,
 			);
 			path = wrapper;
 			sourceTree = "<group>";
@@ -240,8 +242,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V3N3VGR839;
+				CODE_SIGN_ENTITLEMENTS = wrapper/wrapper.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
@@ -249,6 +253,7 @@
 					"-lboost_system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SYSTEM_HEADER_SEARCH_PATHS = /usr/local/include;
 			};
 			name = Debug;
@@ -258,8 +263,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V3N3VGR839;
+				CODE_SIGN_ENTITLEMENTS = wrapper/wrapper.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
@@ -267,6 +274,7 @@
 					"-lboost_system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SYSTEM_HEADER_SEARCH_PATHS = /usr/local/include;
 			};
 			name = Release;

@@ -74,13 +74,10 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - template<class T> void OnSelectRouteInListControlRoutesForPosition::operator()(T& event){ is empty
  - when mouse hovers over a Route in ChartFrame and the corresponding Route in ListFrame is down and hidden in route_list-> move up / down Route-list to show it
  - I transport an object with an existing route , go to the map, click on a Route -> segmentstion fault 
  - I transport an object with an existing route , go to the map, click on a Route -> segmentstion fault 
- - template<class T> void OnSelectRouteInListControlRoutesForPosition::operator()(T& event){ is empty
  - when a listcontrol in ListFrame is resized, the show_map button is cut
- - add buttons to transport  routes
  - parallels are cut on bottom of chart in Mercator projection
  - add missing case in                                 //the circles d intersect: here you should compute t
  - meridians are still cut on the top in mercator projection

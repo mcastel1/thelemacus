@@ -2088,20 +2088,7 @@ public:
     
 };
 
-class OnSelectRouteInListControlRoutesForPosition{
-    
-public:
-    
-    //parent frame
-    ListFrame* f;
-    
-    //constructor, which sets the parent frame
-    OnSelectRouteInListControlRoutesForPosition(ListFrame*);
-    
-    template<class T> void operator()(T&);
-    
-    
-};
+
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...
 class ListFrame: public wxFrame{
@@ -2163,7 +2150,6 @@ public:
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
-    OnSelectRouteInListControlRoutesForPosition* on_select_route_in_listcontrol_routes_for_position;
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
 

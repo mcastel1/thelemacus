@@ -13985,13 +13985,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     
 }
 
-template<class T> void OnSelectRouteInListControlRoutesForPosition::operator()(T& event){
-    
-    
-    event.Skip(true);
 
-    
-}
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
     
@@ -15492,7 +15486,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
-    on_select_route_in_listcontrol_routes_for_position = new OnSelectRouteInListControlRoutesForPosition(this);
 
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
@@ -19059,11 +19052,7 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
     
 }
 
-OnSelectRouteInListControlRoutesForPosition::OnSelectRouteInListControlRoutesForPosition(ListFrame* f_in){
-    
-    f = f_in;
-    
-}
+
 
 
 

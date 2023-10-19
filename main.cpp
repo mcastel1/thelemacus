@@ -232,14 +232,18 @@ void MyApp::where_am_I([[maybe_unused]] String prefix){
     stringstream ins;
     
     ins.str("");
+    //note that here boost::dll::program_location() may return a path with './' at the end, but this has no effect because ./ simply says to stay in the same path
     ins << (boost::dll::program_location().parent_path());
-    run_directory = ins.str();
+    run_directory.value = ins.str().c_str();
 
+    run_directory.print(String("Non-formatted run directory"), true, String("*******"), cout);
+
+    
     //remove " from run_directory
     run_directory.value.erase(std::remove(run_directory.value.begin(), run_directory.value.end(), '"'), run_directory.value.end());
 
-    run_directory.appendto(String("\/..\/..\/"));
-    run_directory.print(String("Run directory"), true, String("***"), cout);
+    run_directory.appendto(String("/../../"));
+    run_directory.print(String("Formatted run directory"), true, String("*******"), cout);
 
     
 }

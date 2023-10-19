@@ -11678,6 +11678,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                     PaintNow();
                     
                     parent->UpdateSlider();
+                    //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen 
+                    wxGetApp().ShowChart(event);
                     
                 }else{
                     //if the zoom factor is not valid, then I print an error message
@@ -11724,6 +11726,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                 (this->*Draw)();
                 PaintNow();
                 parent->UpdateSlider();
+                //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
+                wxGetApp().ShowChart(event);
+
                 
             }
             

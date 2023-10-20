@@ -9205,7 +9205,7 @@ void DrawPanel::Draw_Mercator(void){
     for(i=0; i<(parent->p_coastline_draw).size(); i++){
         memory_dc.DrawEllipse((parent->p_coastline_draw)[i], wxSize(1, 1));
     }
-//    memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+    memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
     
     TabulateRoutes();

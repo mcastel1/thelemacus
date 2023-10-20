@@ -9539,11 +9539,14 @@ void DrawPanel::Draw_3D(void){
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
+    memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
+    memory_dc.SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
     for(i=0; i<(parent->p_coastline_draw).size(); i++){
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        memory_dc.DrawPoint((parent->p_coastline_draw)[i]);
+        memory_dc.DrawEllipse((parent->p_coastline_draw)[i], wxSize(1, 1));
     }
-    
+    memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+
     
     TabulateRoutes();
     

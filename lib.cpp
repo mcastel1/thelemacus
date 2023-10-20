@@ -1714,6 +1714,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
     wxPoint temp;
     bool end_connected;
     unsigned int i;
+    Length s;
     
     //sets color and width of memory_dc to the ones supported as arguments of Draw
     (draw_panel->memory_dc).SetPen(wxPen(color, width));
@@ -1723,7 +1724,22 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
     //tabulate the Route points
     for(/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i=0; i<n_points; i++){
         
-        compute_end(Length((l.value)*((double)i)/((double)(n_points-1))), String(""));
+        //handle special cases i=0 and i = n_points-1 to avoind roundoff error
+        if((i > 0) && (i<n_points-1)){
+            
+            s.set(String(""), (l.value)*((double)i)/((double)(n_points-1)), String(""));
+            
+        }else{
+            
+            if(i==0){
+                s.set(String(""), 0.0, String(""));
+            }else{
+                s=l;
+            }
+            
+        }
+        
+        compute_end(s, String(""));
         
         if((draw_panel->GeoToDrawPanel)(end, &temp, false)){
             

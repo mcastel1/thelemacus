@@ -76,7 +76,6 @@
  ********** THINGS TO FIX ************
  - when mouse hovers over a Route in ChartFrame and the corresponding Route in ListFrame is down and hidden in route_list-> move up / down Route-list to show it
  - when a listcontrol in ListFrame is resized, the show_map button is cut
- - parallels are cut on bottom of chart in Mercator projection
  - add missing case in                                 //the circles d intersect: here you should compute t
  - meridians are still cut on the top in mercator projection
  - check that WXK_PLUS does not depend on the computer

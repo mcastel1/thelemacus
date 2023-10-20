@@ -90,7 +90,7 @@ day background color = (224,224,224)
 night background color = (40,40,43)
 point size = 1
 number of points coastline = 45000
-show coastlines = y
+show coastlines = n
 #directories and names of files
 default open directory = /Users/macbookpro/Desktop/Thelemacus.app/
 code directory = /Users/macbookpro/Desktop/Thelemacus.app/

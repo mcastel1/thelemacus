@@ -336,7 +336,7 @@ bool MyApp::OnInit(){
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
-    String default_projection, temp;
+    String projection, temp;
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     wxDisplay display;
     wxCommandEvent dummy;
@@ -506,6 +506,9 @@ bool MyApp::OnInit(){
     highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
     
+//    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+ 
+    
     list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
     
@@ -515,29 +518,19 @@ bool MyApp::OnInit(){
     (list_frame->chart_frames).resize(n_chart_frames.value);
     for(i=0; i<(list_frame->chart_frames).size(); i++){
         
-        default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+        projection = String((((i % 2) == 0) ? "Mercator" : "3D"));
         
-        
+        //open a Mercator projection for even is and a 3D projection for odd is
         s.str("");
-        s << "Chart #" << i+1 << " - " << (default_projection.value) << " projection";
+        s << "Chart #" << i+1 << " - " << projection.value << " projection";
         
+        string dummy = s.str();
+
         (list_frame->chart_frames)[i] = new ChartFrame(
                                                        list_frame,
-                                                       String(""),
+                                                       projection,
                                                        s.str(),
-                                                       /*place each ChartFrame by shifting it with respect to the top-left corner of the screen*/
-                                                       //                                                       wxPoint(
-                                                       //
-                                                       //                                                                 ((double)(rectangle_display.GetWidth())) - ((double)(rectangle_display.GetWidth()))
-                                                       //                                                               )
-                                                       //                                                               ,
-                                                       //                                                               i*(
-                                                       //                                                                   (rectangle_display.GetHeight())/3.0 - ((rectangle_display.GetHeight()) - ((list_frame->chart_frames).size())*((rectangle_display.GetHeight())/3.0))/2.0
-                                                       //                                                               )
-                                                       //
-                                                       //                                                               )
-                                                       wxDefaultPosition
-                                                       ,
+                                                       wxDefaultPosition,
                                                        wxDefaultSize,
                                                        String("")
                                                        );

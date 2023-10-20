@@ -9201,10 +9201,12 @@ void DrawPanel::Draw_Mercator(void){
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
+    memory_dc.SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
     for(i=0; i<(parent->p_coastline_draw).size(); i++){
-        memory_dc.DrawPoint((parent->p_coastline_draw)[i]);
+        memory_dc.DrawCircle((parent->p_coastline_draw)[i], 1);
     }
-    
+//    memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+
     
     TabulateRoutes();
     

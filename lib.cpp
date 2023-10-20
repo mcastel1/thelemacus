@@ -9203,7 +9203,7 @@ void DrawPanel::Draw_Mercator(void){
     memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
     memory_dc.SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
     for(i=0; i<(parent->p_coastline_draw).size(); i++){
-        memory_dc.DrawCircle((parent->p_coastline_draw)[i], 1);
+        memory_dc.DrawEllipse((parent->p_coastline_draw)[i], wxSize(1, 1));
     }
 //    memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 

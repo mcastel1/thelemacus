@@ -15381,6 +15381,7 @@ void ListFrame::DrawAll(void){
 void ListFrame::Resize(void){
     
     listcontrol_sights->Resize();
+    
     listcontrol_positions->Resize();
     listcontrol_routes->Resize();
     
@@ -15673,6 +15674,9 @@ void ListFrame::Disconnect(int i_sight){
 void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;
+    
+        cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+ 
     
     //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
     MousePositionOnListControl(listcontrol_sights, &highlighted_sight);
@@ -18631,6 +18635,9 @@ void ListControl::Resize(void){
         header_text = temp.GetText();
         header_width  = GetTextExtent(header_text).GetWidth();
         
+        int nombre_de_lignes = GetItemCount();
+        
+        
         for(item_width=0, i=0; i<GetItemCount(); i++){
             
             item_text = GetItemText(i, j);
@@ -18653,7 +18660,7 @@ void ListControl::Resize(void){
     //        total_column_width += GetColumnWidth(i);
     //    }
     //
-    SetMinSize(wxSize(total_column_width,-1));
+    SetMinSize(wxSize(total_column_width + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),-1));
     
 }
 

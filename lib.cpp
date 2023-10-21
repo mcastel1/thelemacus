@@ -14834,7 +14834,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     unsigned int i, red, green, blue;
     wxListItem column, item;
     String s;
-    wxBoxSizer *sizer_listcontrol_routes_plus_buttons;
+    wxBoxSizer *sizer_listcontrol_routes_plus_buttons, * sizer_big_buttons;
     vector<wxButton*> disableable_buttons;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
@@ -14989,7 +14989,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_listcontrol_routes_plus_buttons = new wxBoxSizer(wxHORIZONTAL);
-    
+    sizer_big_buttons = new wxBoxSizer(wxVERTICAL);
+
     sizer_buttons_sight = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_route = new wxBoxSizer(wxHORIZONTAL);
@@ -15248,8 +15249,9 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route);
     sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
     //here I set the flag '0' to avoid button_show_map from being stretched
-    sizer_listcontrol_routes_plus_buttons->Add(button_compute_position, 0, wxALIGN_BOTTOM);
-    sizer_listcontrol_routes_plus_buttons->Add(button_show_map, 0, wxALIGN_BOTTOM);
+    sizer_big_buttons->Add(button_compute_position, 0);
+    sizer_big_buttons->Add(button_show_map, 0);
+    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
     sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     

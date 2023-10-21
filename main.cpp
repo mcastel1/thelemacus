@@ -74,7 +74,7 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - when mouse hovers over a Route in ChartFrame and the corresponding Route in ListFrame is down and hidden in route_list-> move up / down Route-list to show it
+- when I drag the mercator projection it gets back to its original configuration 
  - when a listcontrol in ListFrame is resized, the show_map button is cut
  - add missing case in                                 //the circles d intersect: here you should compute t
  - meridians are still cut on the top in mercator projection

@@ -48,7 +48,7 @@
  
  ********** THINGS TO ADD ************
  
- 
+ - when switching to dark mode, buttons with images must have white and black inverted 
 - remove ugly maximizaiton of panel that occurs in ListFrame::Resize() and beep
  - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
@@ -498,6 +498,10 @@ bool MyApp::OnInit(){
     error_color.read_from_file(String("error color"), String(path_file_init), String(""));
     highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
+    
+    char red = foreground_color.Red();
+    
+    
     
 //    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
  

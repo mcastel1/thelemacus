@@ -47,7 +47,7 @@ class Position;
 class Catalog;
 class Limb;
 class Length;
-class Plot;
+class Data;
 class File;
 class Time;
 class Date;
@@ -910,7 +910,7 @@ public:
 
 
 
-class Plot{
+class Data{
     
 public:
     Catalog* catalog;
@@ -924,8 +924,8 @@ public:
     vector<Route> crossing_route_list;
     Int n_points_plot_coastline, n_points_routes, /*the preferred numer of ticks per axis in the chart plot: if there is enough space, I will put this number of ticks. If not, I will plot a nuber of ticks as cloase as possible to the preferred one*/n_intervals_ticks_preferred;
     
-    Plot(Catalog*, String);
-    //~Plot();
+    Data(Catalog*, String);
+    //~Data();
     bool add_sight_and_reduce(Sight*, String);
     bool modify_sight(unsigned int, String);
     void transport_route(unsigned int, String);
@@ -2096,7 +2096,7 @@ public:
     
     //the MyApp that constructed *this
     MyApp* parent;
-    Plot /*pointer to the non-GUI object Plot which is related to the GUI object this*/*plot;
+    Data /*pointer to the non-GUI object Data which is related to the GUI object this*/*plot;
     //point to the child frame of this
     vector<ChartFrame*> chart_frames;
     //this is a pointer to a Catalog object which will be used by plot

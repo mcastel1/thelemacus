@@ -5222,7 +5222,7 @@ Projection Projection::operator-(const Projection& q){
 
 
 // this function plots the Routes of type String("c") in route_list in kml format
-void Plot::print_to_kml(String prefix){
+void Data::print_to_kml(String prefix){
     
     stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
     string line;
@@ -5338,7 +5338,7 @@ void Plot::print_to_kml(String prefix){
 }
 
 
-bool Plot::read_from_file(File& file, [[maybe_unused]] String prefix){
+bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     stringstream line_ins;
     string line;
@@ -5482,7 +5482,7 @@ bool Plot::read_from_file(File& file, [[maybe_unused]] String prefix){
 
 
 
-Plot::Plot(Catalog* cata, [[maybe_unused]] String prefix){
+Data::Data(Catalog* cata, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -5540,7 +5540,7 @@ Plot::Plot(Catalog* cata, [[maybe_unused]] String prefix){
 
 
 //compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively. It returns 1 if all crossings are valid, -1 if no crossings are valid, 0 if some crossings are valid.
-int Plot::compute_position(String prefix){
+int Data::compute_position(String prefix){
     
     unsigned int i, j, l;
     String new_prefix;
@@ -5728,7 +5728,7 @@ int Plot::compute_position(String prefix){
 }
 
 //print all the data in plot to ostr
-void Plot::print(bool print_all_routes, String prefix, ostream& ostr){
+void Data::print(bool print_all_routes, String prefix, ostream& ostr){
     
     print_sights(prefix, ostr);
     print_routes(print_all_routes, prefix, ostr);
@@ -5736,7 +5736,7 @@ void Plot::print(bool print_all_routes, String prefix, ostream& ostr){
     
 }
 
-void Plot::print_sights(String prefix, ostream& ostr){
+void Data::print_sights(String prefix, ostream& ostr){
     
     stringstream name;
     unsigned int i;
@@ -5755,7 +5755,7 @@ void Plot::print_sights(String prefix, ostream& ostr){
     
 }
 
-void Plot::print_positions(String prefix, ostream& ostr){
+void Data::print_positions(String prefix, ostream& ostr){
     
     stringstream name;
     unsigned int i;
@@ -5774,7 +5774,7 @@ void Plot::print_positions(String prefix, ostream& ostr){
     
 }
 
-void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
+void Data::print_routes(bool print_all_routes, String prefix, ostream& ostr){
     
     stringstream name;
     unsigned int i, j;
@@ -5805,7 +5805,7 @@ void Plot::print_routes(bool print_all_routes, String prefix, ostream& ostr){
 }
 
 
-bool Plot::modify_sight(unsigned int i, [[maybe_unused]] String prefix){
+bool Data::modify_sight(unsigned int i, [[maybe_unused]] String prefix){
     
     bool check;
     
@@ -5836,7 +5836,7 @@ bool Plot::modify_sight(unsigned int i, [[maybe_unused]] String prefix){
 
 
 
-bool Plot::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix){
+bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix){
     
     
     bool check = true;
@@ -5871,7 +5871,7 @@ bool Plot::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
     
 }
 
-void Plot::add_position(String prefix){
+void Data::add_position(String prefix){
     
     Position position;
     
@@ -5883,8 +5883,8 @@ void Plot::add_position(String prefix){
     
 }
 
-//adds to Plot-> this the Route written in *route_in
-void Plot::add_route(Route* route_in, [[maybe_unused]] String prefix){
+//adds to Data-> this the Route written in *route_in
+void Data::add_route(Route* route_in, [[maybe_unused]] String prefix){
     
     
     //    route.enter(String("new route"), prefix);
@@ -5897,7 +5897,7 @@ void Plot::add_route(Route* route_in, [[maybe_unused]] String prefix){
 
 
 //removes sight #i from sight_list by updating all the connections to between sights and routes. If remove_related_route = 'y', it removes also the route related to sight i
-void Plot::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unused]] String prefix){
+void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unused]] String prefix){
     
     stringstream name;
     unsigned int j;
@@ -5948,7 +5948,7 @@ void Plot::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
     
 }
 
-void Plot::remove_position(unsigned int i, [[maybe_unused]] String prefix){
+void Data::remove_position(unsigned int i, [[maybe_unused]] String prefix){
     
     stringstream name;
     
@@ -5964,7 +5964,7 @@ void Plot::remove_position(unsigned int i, [[maybe_unused]] String prefix){
 }
 
 //removes route #i from route_list by updating all the connections to between sights and routes. If remove_related_sight = 'y', it removes also the sight related to route i
-void Plot::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unused]] String prefix){
+void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unused]] String prefix){
     
     unsigned int j;
     Int i_related_sight;
@@ -6006,7 +6006,7 @@ void Plot::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
 }
 
 
-void Plot::transport_route(unsigned int i, [[maybe_unused]] String prefix){
+void Data::transport_route(unsigned int i, [[maybe_unused]] String prefix){
     
     stringstream name;
     String new_prefix;
@@ -6033,7 +6033,7 @@ void Plot::transport_route(unsigned int i, [[maybe_unused]] String prefix){
 }
 
 
-void Plot::transport_position(unsigned int i, [[maybe_unused]] String prefix){
+void Data::transport_position(unsigned int i, [[maybe_unused]] String prefix){
     
     stringstream name;
     String new_prefix;
@@ -12867,11 +12867,11 @@ ResetListFrame::ResetListFrame(ListFrame* p_in){
 template <class T> void ResetListFrame::operator()(T& event){
     
     //clear p->plot and allocate a new one
-    (p->plot)->~Plot();
+    (p->plot)->~Data();
     //the file now has no title
     (p->file_is_untitled) = true;
     
-    p->plot = new Plot(p->catalog, String(""));
+    p->plot = new Data(p->catalog, String(""));
     
     //empty all listcontrols
     (p->listcontrol_sights)->DeleteAllItems();
@@ -14863,7 +14863,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
-    plot = new Plot(catalog, String(""));
+    plot = new Data(catalog, String(""));
     
     //read show_coastlines from file_init
     show_coastlines.read_from_file(String("show coastlines"), (wxGetApp().path_file_init), String(""));

@@ -18640,9 +18640,6 @@ void ListControl::Resize(void){
         header_text = temp.GetText();
         header_width  = GetTextExtent(header_text).GetWidth();
         
-        int nombre_de_lignes = GetItemCount();
-        
-        
         for(item_width=0, i=0; i<GetItemCount(); i++){
             
             item_text = GetItemText(i, j);

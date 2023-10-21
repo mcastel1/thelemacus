@@ -76,7 +76,6 @@
  ********** THINGS TO FIX ************
  - when a listcontrol in ListFrame is resized, the show_map button is cut
  - add missing case in                                 //the circles d intersect: here you should compute t
- - meridians are still cut on the top in mercator projection
  - check that WXK_PLUS does not depend on the computer
  */
 

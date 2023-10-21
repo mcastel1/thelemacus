@@ -15252,12 +15252,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //here I set the flag '0' to avoid button_show_map from being stretched
     sizer_big_buttons->Add(button_compute_position, 0);
     sizer_big_buttons->Add(button_show_map, 0);
-    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
+//    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
     sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
+    sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM);
+    sizer_h->Add(sizer_big_buttons, 0, wxALIGN_BOTTOM);
     
     Maximize(panel);
-    SetSizerAndFit(sizer_v);
+    SetSizerAndFit(sizer_h);
     
     //    panel->SetSizer(sizer_v);
     

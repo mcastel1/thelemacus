@@ -74,7 +74,6 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - when a listcontrol in ListFrame is resized, the show_map button is cut
  - check that WXK_PLUS does not depend on the computer
  */
 

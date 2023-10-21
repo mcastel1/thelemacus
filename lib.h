@@ -1323,7 +1323,7 @@ template<class P> struct SetStringFieldToCurrentTime{
     
 };
 
-//this class defines the functor () used to remove a sight from the non-GUI object plot
+//this class defines the functor () used to remove a sight from the non-GUI object data
 class DeleteSight{
     
 public:
@@ -1492,7 +1492,7 @@ public:
     
 };
 
-//this class defines the functor () used to remove a Route from the non-GUI object plot
+//this class defines the functor () used to remove a Route from the non-GUI object data
 class DeleteRoute{
     
 public:
@@ -1510,7 +1510,7 @@ public:
     
 };
 
-//this class defines the functor () used to remove a Position from the non-GUI object plot
+//this class defines the functor () used to remove a Position from the non-GUI object data
 class DeletePosition{
     
 public:
@@ -2096,12 +2096,12 @@ public:
     
     //the MyApp that constructed *this
     MyApp* parent;
-    Data /*pointer to the non-GUI object Data which is related to the GUI object this*/*plot;
+    Data /*pointer to the non-GUI object Data which is related to the GUI object this*/*data;
     //point to the child frame of this
     vector<ChartFrame*> chart_frames;
-    //this is a pointer to a Catalog object which will be used by plot
+    //this is a pointer to a Catalog object which will be used by data
     Catalog *catalog;
-    vector<Route> /*when I transport by using an existing Route, I will store the list of Routes which can be used for transport here*/route_list_for_transport, /*when I transport by using an existing Route, I will save plot->list_routes temporarily here and recover it from here after the transport */route_list_saved;
+    vector<Route> /*when I transport by using an existing Route, I will store the list of Routes which can be used for transport here*/route_list_for_transport, /*when I transport by using an existing Route, I will save data->list_routes temporarily here and recover it from here after the transport */route_list_saved;
     wxMenuBar *menu_bar;
     wxMenu *menu_app, *menu_file, *menu_chart, *menu_new_chart, *menu_item_mercator, *menu_item_3d;
     ListControl *listcontrol_sights, *listcontrol_routes, *listcontrol_positions;
@@ -2121,7 +2121,7 @@ public:
     OnChangeSelectionInListControl *on_change_selection_in_listcontrol_sights, *on_change_selection_in_listcontrol_routes, *on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *create_route;
-    //a temporary value of plot->crossing_route_list
+    //a temporary value of data->crossing_route_list
     vector<Route> crossing_route_list_temp;
     bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position;
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines;
@@ -2129,7 +2129,7 @@ public:
     
     unsigned int margin;
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position, i_object_to_transport;
-    /*map[i] is the position in plot->route_list of the i-th Route in route_list_for_transport*/
+    /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<Position> > > p_coastline;

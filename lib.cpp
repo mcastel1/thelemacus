@@ -5358,7 +5358,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
         
         //1. Here I read sights
         
-        //read dummy text line '    Sights in the plot:"
+        //read dummy text line '    Sights in the data:"
         getline(file.value, line);
         
         line.clear();
@@ -5727,7 +5727,7 @@ int Data::compute_position(String prefix){
     
 }
 
-//print all the data in plot to ostr
+//print all the data in data to ostr
 void Data::print(bool print_all_routes, String prefix, ostream& ostr){
     
     print_sights(prefix, ostr);
@@ -5745,7 +5745,7 @@ void Data::print_sights(String prefix, ostream& ostr){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    ostr << prefix.value << "Sights in the plot:\n";
+    ostr << prefix.value << "Sights in the data:\n";
     for(i=0; i<sight_list.size(); i++){
         name.str("");
         name <<  "Sight #" << i+1;
@@ -5764,7 +5764,7 @@ void Data::print_positions(String prefix, ostream& ostr){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    ostr << prefix.value << "Positions in the plot:\n";
+    ostr << prefix.value << "Positions in the data:\n";
     for(i=0; i<position_list.size(); i++){
         name.str("");
         name << "Position #" << i+1;
@@ -5783,7 +5783,7 @@ void Data::print_routes(bool print_all_routes, String prefix, ostream& ostr){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    ostr << prefix.value << "Routes in the plot:\n";
+    ostr << prefix.value << "Routes in the data:\n";
     
     for(i=0, j=0; i<(route_list.size()); i++){
         
@@ -8049,13 +8049,13 @@ void ChartFrame::GetCoastLineData_3D(void){
                 n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
                 
                 //I plot every 'every' data points
-                every = (unsigned long)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+                every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid));
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
                 for(l=0; (l*every)<((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++){
                     
-                    //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+                    //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
                     if((draw_panel->GeoToDrawPanel)((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l*every], &q, false)){
                         
                         p_coastline_draw.push_back(q);
@@ -8075,12 +8075,12 @@ void ChartFrame::GetCoastLineData_3D(void){
     
     
     /*
-     every = (unsigned int)(((double)((parent->p_coastline).size()))/((double)(((parent->plot)->n_points_plot_coastline).value)));
+     every = (unsigned int)(((double)((parent->p_coastline).size()))/((double)(((parent->data)->n_points_plot_coastline).value)));
      if(every == 0){every = 1;}
      
      for(x_3d.clear(), y_3d.clear(), i=0; every*i<(parent->p_coastline).size(); i++){
      
-     //I write points in data_x and data_y to x and y in such a way to write (((parent->plot)->n_points_coastline).value) points to the most
+     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
      if((draw_panel->GeoTo3D((parent->p_coastline)[every*i], &temp))){
      
      x_3d.push_back(temp.x);
@@ -8152,7 +8152,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((unsigned int)(((parent->p_coastline)[i - floor_min_lat][j % 360]).size()));
                 
-                every = (unsigned int)(((double)n)/((double)(((parent->plot)->n_points_plot_coastline).value))*((double)n_points_grid));
+                every = (unsigned int)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid));
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
@@ -8350,8 +8350,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //    rotation.print(String("initial rotation"), String(""), cout);
     
     //allocates points_route_list and ts_route_list
-    points_route_list.resize((((parent->parent)->plot)->route_list).size());
-    for(i=0; i<(((parent->parent)->plot)->route_list).size(); i++){
+    points_route_list.resize((((parent->parent)->data)->route_list).size());
+    for(i=0; i<(((parent->parent)->data)->route_list).size(); i++){
         (points_route_list[i]).clear();
     }
     
@@ -8463,7 +8463,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     color_id = 0;
     
     //draw routes
-    for(i=0; i<(((parent->parent)->plot)->route_list).size(); i++){
+    for(i=0; i<(((parent->parent)->data)->route_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_route)){
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
@@ -8475,7 +8475,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         
         
         //draw the reference position
-        if(GeoToDrawPanel((((((parent->parent)->plot)->route_list)[i]).reference_position), &p, false)){
+        if(GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)){
             dc.DrawCircle(p, 4.0*thickness);
         }
         
@@ -8498,7 +8498,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
     }
     
     //draw positions
-    for(i=0; i<(((parent->parent)->plot)->position_list).size(); i++){
+    for(i=0; i<(((parent->parent)->data)->position_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_position)){
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
@@ -8509,7 +8509,7 @@ void DrawPanel::Render_Mercator(wxDC&  dc){
         dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         
-        if(GeoToDrawPanel((((parent->parent)->plot)->position_list)[i], &p, false)){
+        if(GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)){
             //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
@@ -8685,7 +8685,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     color_id = 0;
     
     //draw routes
-    for(i=0; i<(((parent->parent)->plot)->route_list).size(); i++){
+    for(i=0; i<(((parent->parent)->data)->route_list).size(); i++){
         
         //set the route thickness and pen
         if(i == ((parent->parent)->highlighted_route)){
@@ -8696,7 +8696,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         //draw the reference_position
-        if(GeoToDrawPanel((((((parent->parent)->plot)->route_list)[i]).reference_position), &p, false)){
+        if(GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)){
             dc.DrawCircle(p, 4.0*thickness);
         }
         
@@ -8720,7 +8720,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
     
     
     //draw positions
-    for(i=0; i<(((parent->parent)->plot)->position_list).size(); i++){
+    for(i=0; i<(((parent->parent)->data)->position_list).size(); i++){
         
         //set thickness and pen
         if(i == ((parent->parent)->highlighted_position)){
@@ -8730,7 +8730,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
         }
         dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
-        if(GeoToDrawPanel((((parent->parent)->plot)->position_list)[i], &p, false)){
+        if(GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)){
             //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
             
             dc.DrawCircle(p, 4.0*thickness);
@@ -8750,7 +8750,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                ((parent->parent)->p_start),
                Angle(M_PI*(1.0 - GSL_SIGN( (((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re* fabs( (((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value) ) )
-               )).Draw(((((parent->parent)->plot)->n_points_routes).value), &dc, this, String(""));
+               )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         //left vertical edge of rectangle
         (Route(
@@ -8758,7 +8758,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                ((parent->parent)->p_now),
                Angle(M_PI*(1.0 + GSL_SIGN( (((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re* fabs( (((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value) ) )
-               )).Draw(((((parent->parent)->plot)->n_points_routes).value), &dc, this, String(""));
+               )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         //bottom horizontal edge of rectangle
         (Route(
@@ -8767,7 +8767,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                //change this by introducing if
                Angle(M_PI_2 + M_PI*(1.0 + GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re*cos(((parent->parent)->p_start).phi) * fabs( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ) )
-               )).DrawOld(((((parent->parent)->plot)->n_points_routes).value), &dc, this, String(""));
+               )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         //top horizontal edge of rectangle
         (Route(
@@ -8776,7 +8776,7 @@ void DrawPanel::Render_3D(wxDC&  dc){
                //change this by introducing if
                Angle(M_PI_2 + M_PI*(1.0 - GSL_SIGN( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ))/2.0),
                Length( Re*cos(((parent->parent)->p_now).phi) * fabs( (((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value) ) )
-               )).DrawOld(((((parent->parent)->plot)->n_points_routes).value), &dc, this, String(""));
+               )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         
     }
@@ -8792,23 +8792,23 @@ void DrawPanel::TabulateRoutes(void){
     unsigned int i;
     wxPoint p;
     
-    //resize points_route_list, which needs to have the same size as (plot->route_list), and clear up points_route_list
-    points_route_list.resize((((parent->parent)->plot)->route_list).size());
+    //resize points_route_list, which needs to have the same size as (data->route_list), and clear up points_route_list
+    points_route_list.resize((((parent->parent)->data)->route_list).size());
     for(i=0; i<(points_route_list.size()); i++){
         (points_route_list[i]).clear();
     }
     
     //tabulate the points of routes
-    for(i=0; i<(((parent->parent)->plot)->route_list).size(); i++){
+    for(i=0; i<(((parent->parent)->data)->route_list).size(); i++){
         
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
-        if(((((parent->parent)->plot)->route_list)[i]).type != String("l")){
+        if(((((parent->parent)->data)->route_list)[i]).type != String("l")){
             
-            ((((parent->parent)->plot)->route_list)[i]).Draw((unsigned int)((((parent->parent)->plot)->n_points_routes).value), this, (points_route_list.data())+i, String(""));
+            ((((parent->parent)->data)->route_list)[i]).Draw((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list.data())+i, String(""));
             
         }else{
             
-            ((((parent->parent)->plot)->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->plot)->n_points_routes).value), this, (points_route_list.data())+i, String(""));
+            ((((parent->parent)->data)->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list.data())+i, String(""));
             
         }
         
@@ -8860,7 +8860,7 @@ void DrawPanel::Draw_Mercator(void){
     }
     
     delta_phi=k/((double)gamma_phi);
-    while(((((parent->parent)->plot)->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
+    while(((((parent->parent)->data)->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
         if(delta_phi == k/((double)gamma_phi)){delta_phi += k*4.0/((double)gamma_phi);}
         else{delta_phi += k*5.0/((double)gamma_phi);}
     }
@@ -8992,7 +8992,7 @@ void DrawPanel::Draw_Mercator(void){
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth()))/((double)size_label_horizontal)));
     n_intervals_ticks = min(
-                            (unsigned int)((((parent->parent)->plot)->n_intervals_ticks_preferred).value),
+                            (unsigned int)((((parent->parent)->data)->n_intervals_ticks_preferred).value),
                             n_intervals_ticks_max
                             );
     
@@ -9093,9 +9093,9 @@ void DrawPanel::Draw_Mercator(void){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            //            route.Draw(((((parent->parent)->plot)->n_points_routes).value), 0x808080, -1, this, String(""));
+            //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-            route.Draw(((((parent->parent)->plot)->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
+            route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis
@@ -9150,9 +9150,9 @@ void DrawPanel::Draw_Mercator(void){
                                          
                                          ).value), String(""));
             
-            //            route.Draw(((((parent->parent)->plot)->n_points_routes).value), 0x808080, -1, this, String(""));
+            //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw cannot handle loxodromes
-            route.DrawOld(((((parent->parent)->plot)->n_points_routes).value), wxGetApp().foreground_color, -1, this);
+            route.DrawOld(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, this);
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9287,7 +9287,7 @@ void DrawPanel::Draw_3D(void){
     
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    n_intervals_ticks = (unsigned int)((((parent->parent)->plot)->n_intervals_ticks_preferred).value);
+    n_intervals_ticks = (unsigned int)((((parent->parent)->data)->n_intervals_ticks_preferred).value);
     
     
     //set lambda_span
@@ -9389,7 +9389,7 @@ void DrawPanel::Draw_3D(void){
     }
     
     delta_phi=k/((double)gamma_phi);
-    while(((((parent->parent)->plot)->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
+    while(((((parent->parent)->data)->n_intervals_ticks_preferred).value)*delta_phi<phi_span){
         if(delta_phi == k/((double)gamma_phi)){delta_phi += k*4.0/((double)gamma_phi);}
         else{delta_phi += k*5.0/((double)gamma_phi);}
     }
@@ -9443,8 +9443,8 @@ void DrawPanel::Draw_3D(void){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            //            route.draw(((((parent->parent)->plot)->n_points_routes).value), 0x808080, -1, this);
-            route.Draw(((((parent->parent)->plot)->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
+            //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, -1, this);
+            route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9493,7 +9493,7 @@ void DrawPanel::Draw_3D(void){
             (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI_2, String(""));
             
-            route.Draw(((((parent->parent)->plot)->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
+            route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, this, String(""));
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -11288,15 +11288,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         position_draw_panel_now = position_screen_now - position_draw_panel;
         
         
-        for(((parent->parent)->highlighted_route) = -1, i=0; i<(((parent->parent)->plot)->route_list).size(); i++){
+        for(((parent->parent)->highlighted_route) = -1, i=0; i<(((parent->parent)->data)->route_list).size(); i++){
             
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
             //when only a fraction of the Routes is Drawn, this will create a problem ---
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
             //when only a fraction of the Routes is Drawn, this will create a problem ---
 
-            if((((((parent->parent)->plot)->route_list)[i]).related_sight).value != -1){
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->plot)->route_list)[i]).related_sight).value, wxGetApp().background_color);
+            if((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1){
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
             
             
@@ -11332,14 +11332,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                         ((parent->parent)->highlighted_route) = i;
                         
                         parent->parent->listcontrol_routes->EnsureVisible(i);
-                        if((((parent->parent->plot->route_list)[i]).related_sight.value) != -1){
-                            parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->plot->route_list)[i]).related_sight.value);
+                        if((((parent->parent->data->route_list)[i]).related_sight.value) != -1){
+                            parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
                         }
                         
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                        if((((((parent->parent)->plot)->route_list)[i]).related_sight).value != -1){
-                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->plot)->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
+                        if((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1){
+                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
                         }
                         
                         // quit the loops over l ad j
@@ -11364,9 +11364,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
         
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
-        for(((parent->parent)->highlighted_position) = -1, i=0; i<(((parent->parent)->plot)->position_list).size(); i++){
+        for(((parent->parent)->highlighted_position) = -1, i=0; i<(((parent->parent)->data)->position_list).size(); i++){
             
-            GeoToScreen((((parent->parent)->plot)->position_list)[i], &q);
+            GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
             
             if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
                4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth())){
@@ -11509,7 +11509,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 if(((parent->parent)->highlighted_route) != -1){
                     //in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
                     
-                    (((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
+                    (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
                     
                     TabulateRoutes();
                     PaintNow();
@@ -11522,11 +11522,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                     //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
                     
                     //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                    (this->*ScreenToGeo)(position_start_drag, &((((parent->parent)->plot)->position_list)[((parent->parent)->highlighted_position)]));
+                    (this->*ScreenToGeo)(position_start_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]));
                     
                     
                     //update the coordinates of the Position under consideration in listcontrol_positions
-                    ((((parent->parent)->plot)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                    ((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                     
                     //given that the position under consideration has changed, I re-pain the chart
                     PaintNow();
@@ -11578,16 +11578,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
             //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour((parent->parent)->highlighted_route,  wxSystemSettings::GetColour    (wxSYS_COLOUR_HIGHLIGHT));
             
-            if((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value != -1){
+            if((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value != -1){
                 //the selected Route is related to a Sight
                 
                 
                 
                 //select the related Sight in ListFrame
-                ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value,  wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value,  wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
             }
             
@@ -11797,15 +11797,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                 if(((parent->parent)->highlighted_route) != -1){
                     //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
                     
-                    if((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                    if((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                         
-                        route_position_start_drag = (((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position);
+                        route_position_start_drag = (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position);
                         
-                        if(((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1){
+                        if(((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1){
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
                             (parent->parent)->Disconnect(
-                                                         (((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value
+                                                         (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value
                                                          );
                             
                         }
@@ -11813,7 +11813,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         
                     }else{
                         
-                        route_position_start_drag = (((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position);
+                        route_position_start_drag = (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position);
                         
                     }
                     
@@ -11904,7 +11904,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             GeoToDrawPanel(route_position_start_drag, &p, false);
                             
                             //this command is the same for all types of Routes
-                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position));
+                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position));
                             
                         }
                         
@@ -11920,14 +11920,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             
                             //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
                             
-                            if((((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
+                            if((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")){
                                 
-                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position));
-                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position));
+                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
                                 
                             }else{
                                 
-                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
                                 
                             }
                             
@@ -11938,10 +11938,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         wxPoint q;
                         
                         //show the coordinates of the reference position of the Route that is being dragged
-                        ShowCoordinates(((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
+                        ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
                         
                         //update the data of the Route under consideration in listcontrol_routes
-                        ((((parent->parent)->plot)->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
+                        ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
                         
                         //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
                         for(i=0; i<((parent->parent)->chart_frames).size(); i++){
@@ -11962,19 +11962,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                             
                             
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                            (this->*ScreenToGeo)(position_now_drag, &((((parent->parent)->plot)->position_list)[((parent->parent)->highlighted_position)]));
+                            (this->*ScreenToGeo)(position_now_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]));
                             
                         }
                         
                         
                         if((((parent->projection)->name)->GetValue()) == wxString("3D")){
                             
-                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &((((parent->parent)->plot)->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
                             (rotation.inverse()) *
                             rotation_start_end(position_start_drag, position_now_drag) *
                             rotation;
-                            geo_start_drag.rotate(String(""), rotation_now_drag, &((((parent->parent)->plot)->position_list)[((parent->parent)->highlighted_position)]), String(""));
+                            geo_start_drag.rotate(String(""), rotation_now_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]), String(""));
                             
                         }
                         
@@ -11982,7 +11982,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         ShowCoordinates(position_now_drag, text_geo_position);
                         
                         //update the data of the Position under consideration in listcontrol_positions
-                        ((((parent->parent)->plot)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                        ((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
                         
                         //given that the Position under consideration has changed, I re-paint the charts
                         for(i=0; i<((parent->parent)->chart_frames).size(); i++){
@@ -12358,11 +12358,11 @@ template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in){
 
 void DeleteSight::operator()(wxCommandEvent& event){
     
-    //I remove the sight and the related route from  the non-GUI object plot
-    (f->plot)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
+    //I remove the sight and the related route from  the non-GUI object data
+    (f->data)->remove_sight(((unsigned int)i_sight_to_remove), remove_related_route, String(""));
     
-    (f->listcontrol_sights)->set((f->plot)->sight_list, false);
-    (f->listcontrol_routes)->set((f->plot)->route_list, false);
+    (f->listcontrol_sights)->set((f->data)->sight_list, false);
+    (f->listcontrol_routes)->set((f->data)->route_list, false);
     
     //given that I called set in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
     (f->listcontrol_sights)->EnableButtons(false);
@@ -12386,9 +12386,9 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     //the list of Routes which may be used for transport
     
     
-    //save plot->route_list into route_list_saved
-    (f->route_list_saved).resize(((f->plot)->route_list).size());
-    copy(((f->plot)->route_list).begin(), ((f->plot)->route_list).end(), (f->route_list_saved).begin());
+    //save data->route_list into route_list_saved
+    (f->route_list_saved).resize(((f->data)->route_list).size());
+    copy(((f->data)->route_list).begin(), ((f->data)->route_list).end(), (f->route_list_saved).begin());
 
     //print an info message
     (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
@@ -12397,11 +12397,11 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     (f->enable_highlight) = false;
     
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for((f->route_list_for_transport).clear(), (f->map).clear(), i=0; i<((f->plot)->route_list).size(); i++){
+    for((f->route_list_for_transport).clear(), (f->map).clear(), i=0; i<((f->data)->route_list).size(); i++){
         
-        if(((((((f->plot)->route_list)[i]).related_sight).value) == -1) && ((((f->plot)->route_list)[i]).type != String("c"))){
+        if(((((((f->data)->route_list)[i]).related_sight).value) == -1) && ((((f->data)->route_list)[i]).type != String("c"))){
             
-            (f->route_list_for_transport).push_back(((f->plot)->route_list)[i]);
+            (f->route_list_for_transport).push_back(((f->data)->route_list)[i]);
             (f->map).push_back(i);
             
         }
@@ -12409,8 +12409,8 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     }
     
     (f->listcontrol_routes)->set((f->route_list_for_transport), false);
-    ((f->plot)->route_list).resize((f->route_list_for_transport).size());
-    copy((f->route_list_for_transport).begin(), (f->route_list_for_transport).end(), ((f->plot)->route_list).begin());
+    ((f->data)->route_list).resize((f->route_list_for_transport).size());
+    copy((f->route_list_for_transport).begin(), (f->route_list_for_transport).end(), ((f->data)->route_list).begin());
     f->DrawAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
@@ -12426,10 +12426,10 @@ void AllRoutes::operator()(wxCommandEvent& event){
     unsigned int j;
 
     //there need to be at list two routes of type "c" to compute crossings. Here I include all routes of type "c" into crossing_route_list by writing their index into crossing_route_list
-    for(((f->plot)->crossing_route_list).clear(), j=0; j<((f->plot)->route_list).size(); j++){
+    for(((f->data)->crossing_route_list).clear(), j=0; j<((f->data)->route_list).size(); j++){
         
-        if((((((f->plot)->route_list))[j]).type.value) == "c"){
-            ((f->plot)->crossing_route_list).push_back(((((f->plot)->route_list))[j]));
+        if((((((f->data)->route_list))[j]).type.value) == "c"){
+            ((f->data)->crossing_route_list).push_back(((((f->data)->route_list))[j]));
         }
         
     }
@@ -12448,10 +12448,10 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for((f->crossing_route_list_temp.clear()), i=0; i<((f->plot)->route_list).size(); i++){
+    for((f->crossing_route_list_temp.clear()), i=0; i<((f->data)->route_list).size(); i++){
         
-        if((((f->plot)->route_list)[i]).type == String("c")){
-            (f->crossing_route_list_temp).push_back((((f->plot)->route_list)[i]));
+        if((((f->data)->route_list)[i]).type == String("c")){
+            (f->crossing_route_list_temp).push_back((((f->data)->route_list)[i]));
         }
         
     }
@@ -12530,10 +12530,10 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
     ((parent->delete_route)->i_route_to_remove) = i_route_to_remove;
     
     
-    if( (((((parent->plot)->route_list)[i_route_to_remove]).related_sight).value) != -1){
+    if( (((((parent->data)->route_list)[i_route_to_remove]).related_sight).value) != -1){
         //if the route which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
         
-        //remove the route from the non-GUI object plot
+        //remove the route from the non-GUI object data
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
         
 //        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
@@ -12576,14 +12576,14 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event){
     ((parent->delete_sight)->i_sight_to_remove) = i_sight_to_remove;
     
     
-    if( (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value) != -1){
+    if( (((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value) != -1){
         //if the sight which I am about to remove is related to a Route, I ask the user whether he wants to remove the related Route too by showing  question_frame
         
         PrintQuestion<ListFrame, DeleteRoute, DeleteSight >* print_question;
       
-        ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->plot)->sight_list)[i_sight_to_remove]).related_route).value);
+        ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value);
         
-        //remove the route from the non-GUI object plot
+        //remove the route from the non-GUI object data
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_sight. If no, it calls the functor delete_sight.
      
         print_question = new PrintQuestion<ListFrame, DeleteRoute, DeleteSight >(parent, parent->delete_route_and_related_sight, parent->delete_sight);
@@ -12657,7 +12657,7 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     
     int i_related_sight;
     
-    i_related_sight = ((((f->plot)->route_list)[i_route_to_remove]).related_sight).value;
+    i_related_sight = ((((f->data)->route_list)[i_route_to_remove]).related_sight).value;
     
     //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
     if((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))){
@@ -12671,11 +12671,11 @@ void DeleteRoute::operator()(wxCommandEvent& event){
         
     }
     
-    //I remove the route and the related sight from both the non-GUI object plot
-    (f->plot)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
+    //I remove the route and the related sight from both the non-GUI object data
+    (f->data)->remove_route(((unsigned int)i_route_to_remove), remove_related_sight, String(""));
     
-    (f->listcontrol_sights)->set((f->plot)->sight_list, false);
-    (f->listcontrol_routes)->set((f->plot)->route_list, false);
+    (f->listcontrol_sights)->set((f->data)->sight_list, false);
+    (f->listcontrol_routes)->set((f->data)->route_list, false);
     
     //given that I called set in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
     (f->listcontrol_routes)->EnableButtons(false);
@@ -12694,7 +12694,7 @@ DeletePosition::DeletePosition(ListFrame* f_in){
     
 }
 
-//delete the  selected position in the GUI object f->listcontrol_position and in the non-GUI object f->plot. If no position is selected, it does nothing. 
+//delete the  selected position in the GUI object f->listcontrol_position and in the non-GUI object f->data. If no position is selected, it does nothing.
 void DeletePosition::operator()(wxCommandEvent& event){
     
     long i;
@@ -12703,8 +12703,8 @@ void DeletePosition::operator()(wxCommandEvent& event){
     
     if(i != -1){
         
-        (f->plot)->remove_position(((unsigned int)i), String(""));
-        (f->listcontrol_positions)->set((f->plot)->position_list, false);
+        (f->data)->remove_position(((unsigned int)i), String(""));
+        (f->listcontrol_positions)->set((f->data)->position_list, false);
         
         //given that I called set in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
         (f->listcontrol_positions)->EnableButtons(false);
@@ -12863,15 +12863,15 @@ ResetListFrame::ResetListFrame(ListFrame* p_in){
     
 }
 
-//reset *this by destroying this->plot, and allocating a new one
+//reset *this by destroying this->data, and allocating a new one
 template <class T> void ResetListFrame::operator()(T& event){
     
-    //clear p->plot and allocate a new one
-    (p->plot)->~Data();
+    //clear p->data and allocate a new one
+    (p->data)->~Data();
     //the file now has no title
     (p->file_is_untitled) = true;
     
-    p->plot = new Data(p->catalog, String(""));
+    p->data = new Data(p->catalog, String(""));
     
     //empty all listcontrols
     (p->listcontrol_sights)->DeleteAllItems();
@@ -12909,7 +12909,7 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
 }
 
 
-//saves the data in frame->plot to file frame->file ,and closes frame
+//saves the data in frame->data to file frame->file ,and closes frame
 template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
     
     ResetListFrame* reset_list_frame;
@@ -12931,8 +12931,8 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
         //            (frame->file).set_name(String((openFileDialog.GetPath()).ToStdString()));
         //            //open a new file to save content on it
         //            (frame->file).open(String("out"), String(""));
-        //            //write frame->plot into file
-        //            (frame->plot)->print(false, String(""), ((frame->file).value));
+        //            //write frame->data into file
+        //            (frame->data)->print(false, String(""), ((frame->file).value));
         //            //close the file
         //            (frame->file).close(String(""));
         //
@@ -12945,8 +12945,8 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
         (frame->file).remove(String(""));
         //open a new file
         (frame->file).open(String("out"), String(""));
-        //write frame->plot into file
-        (frame->plot)->print(false, String(""), ((frame->file).value));
+        //write frame->data into file
+        (frame->data)->print(false, String(""), ((frame->file).value));
         //close the file
         (frame->file).close(String(""));
         
@@ -13275,11 +13275,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     unset_idling = new UnsetIdling<ListFrame>(f);
     
     
-    //copy the data of f->route_list_saved into f->plot->route_list
-    ((f->plot)->route_list).resize((f->route_list_saved).size());
-    copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->plot)->route_list).begin());
+    //copy the data of f->route_list_saved into f->data->route_list
+    ((f->data)->route_list).resize((f->route_list_saved).size());
+    copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->data)->route_list).begin());
     
-    //this is the # of the transporting Route in the full Route list given by plot->route_list
+    //this is the # of the transporting Route in the full Route list given by data->route_list
     i_transporting_route = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
     
     if((transported_object == String("sight")) || transported_object == String("route")){
@@ -13291,7 +13291,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             //the transported object is a Sight
             
             //the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
-            (f->i_object_to_transport) = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+            (f->i_object_to_transport) = (((((f->data)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
             
         }else{
             //the transported object is a Route
@@ -13303,30 +13303,30 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
           
         //tranport the Route
-        ((((f->plot)->route_list)[ (f->i_object_to_transport) ]).reference_position).transport(
+        ((((f->data)->route_list)[ (f->i_object_to_transport) ]).reference_position).transport(
                                                                                           
-                                                                                          ((f->plot)->route_list)[i_transporting_route],
+                                                                                          ((f->data)->route_list)[i_transporting_route],
                                                                                           String("")
                                                                                           
                                                                                           );
         
         //the new label which will be given to the transported Route
-        new_label = ((((f->plot)->route_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        new_label = ((((f->data)->route_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
         
         //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
-        (f->listcontrol_routes)->set((f->plot)->route_list, false);
+        (f->listcontrol_routes)->set((f->data)->route_list, false);
         //given that the transport is over, set highlight_routes back to true
         (f->enable_highlight) = true;
         
         if(transported_object == String("sight")){
             //I am transporting a Route related to a Sight -> disconnect the Route from the sight
             
-            f->Disconnect(((((f->plot)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+            f->Disconnect(((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight).value);
             
         }
         
         //change the label of Route #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-        ((((f->plot)->route_list)[(f->i_object_to_transport)]).label) = new_label;
+        ((((f->data)->route_list)[(f->i_object_to_transport)]).label) = new_label;
         
     }
     
@@ -13337,23 +13337,23 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         (f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         //tranport the Position
-        (((f->plot)->position_list)[ (f->i_object_to_transport) ]).transport(
+        (((f->data)->position_list)[ (f->i_object_to_transport) ]).transport(
                                                                         
-                                                                        ((f->plot)->route_list)[i_transporting_route],
+                                                                        ((f->data)->route_list)[i_transporting_route],
                                                                         String("")
                                                                         
                                                                         );
         
         //change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-        ((((f->plot)->position_list)[(f->i_object_to_transport)]).label) = ((((f->plot)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        ((((f->data)->position_list)[(f->i_object_to_transport)]).label) = ((((f->data)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
         
         //update the Position information in f, and re-draw everything
-        (((f->plot)->position_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_positions);
+        (((f->data)->position_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_positions);
         
     }
     
-    (f->listcontrol_sights)->set<Sight>((f->plot)->sight_list, false);
-    (f->listcontrol_routes)->set<Route>((f->plot)->route_list, false);
+    (f->listcontrol_sights)->set<Sight>((f->data)->sight_list, false);
+    (f->listcontrol_routes)->set<Route>((f->data)->route_list, false);
     f->Resize();
     f->DrawAll();
 
@@ -13388,7 +13388,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         if(transported_object == String("sight")){
             
             //the id of the Route or Position that will be transported
-            (f->i_object_to_transport) = (((((f->plot)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
+            (f->i_object_to_transport) = (((((f->data)->sight_list)[ (f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) ]).related_route).value);
             
         }else{
             
@@ -13396,35 +13396,35 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         }
        
         
-        ((((f->plot)->route_list)[i_transporting_route]).reference_position) = ((((f->plot)->route_list)[ (f->i_object_to_transport) ]).reference_position);
+        ((((f->data)->route_list)[i_transporting_route]).reference_position) = ((((f->data)->route_list)[ (f->i_object_to_transport) ]).reference_position);
         
         //tranport the Route
-        ((((f->plot)->route_list)[ (f->i_object_to_transport) ]).reference_position).transport(
+        ((((f->data)->route_list)[ (f->i_object_to_transport) ]).reference_position).transport(
                                                                                           
-                                                                                          ((f->plot)->route_list)[i_transporting_route],
+                                                                                          ((f->data)->route_list)[i_transporting_route],
                                                                                           String("")
                                                                                           
                                                                                           );
         
-        if((transported_object == String("sight")) || (((((f->plot)->route_list)[(f->i_object_to_transport)]).related_sight.value) != -1)){
+        if((transported_object == String("sight")) || (((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight.value) != -1)){
             //I am either transporting a Sight, or a Route related to a Sight -> I disconnect Route and respective Sight
             
             
             //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-            f->Disconnect(((((f->plot)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+            f->Disconnect(((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight).value);
             
         }
             
         //change the label of Route #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-        ((((f->plot)->route_list)[(f->i_object_to_transport)]).label) = ((((f->plot)->route_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        ((((f->data)->route_list)[(f->i_object_to_transport)]).label) = ((((f->data)->route_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
         
         if((f->listcontrol_routes)->GetItemText(i_transporting_route, 7) == wxString("")){
             //if the user set no label in the transporting Route, I set an automatic label to it
-            (f->listcontrol_routes)->SetItem(i_transporting_route, 7, wxString(((((f->plot)->route_list)[(f->i_object_to_transport)]).label).prepend(String("Transporting ")).value), -1);
+            (f->listcontrol_routes)->SetItem(i_transporting_route, 7, wxString(((((f->data)->route_list)[(f->i_object_to_transport)]).label).prepend(String("Transporting ")).value), -1);
         }
         
         //update the Route information in f, and re-draw everything
-        (((f->plot)->route_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_routes);
+        (((f->data)->route_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_routes);
         
         
     }
@@ -13434,22 +13434,22 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         //the id of the Route or Position that will be transported
         (f->i_object_to_transport) =  ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
-        ((((f->plot)->route_list)[i_transporting_route]).reference_position) = (((f->plot)->position_list)[ (f->i_object_to_transport) ]);
+        ((((f->data)->route_list)[i_transporting_route]).reference_position) = (((f->data)->position_list)[ (f->i_object_to_transport) ]);
     
         
         //tranport the Position
-        (((f->plot)->position_list)[ (f->i_object_to_transport) ]).transport(((f->plot)->route_list)[i_transporting_route], String(""));
+        (((f->data)->position_list)[ (f->i_object_to_transport) ]).transport(((f->data)->route_list)[i_transporting_route], String(""));
         
         //change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-        ((((f->plot)->position_list)[(f->i_object_to_transport)]).label) = ((((f->plot)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->plot)->route_list)[i_transporting_route]).label));
+        ((((f->data)->position_list)[(f->i_object_to_transport)]).label) = ((((f->data)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
         
         
         //update the Route information in f, and re-draw everything
-        (((f->plot)->position_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_positions);
+        (((f->data)->position_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_positions);
     }
     
-    (f->listcontrol_sights)->set<Sight>((f->plot)->sight_list, false);
-    (f->listcontrol_routes)->set<Route>((f->plot)->route_list, false);
+    (f->listcontrol_sights)->set<Sight>((f->data)->sight_list, false);
+    (f->listcontrol_routes)->set<Route>((f->data)->route_list, false);
     f->Resize();
     f->DrawAll();
     
@@ -14283,10 +14283,10 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     
     //if the constructor of PositionFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of position_list
     if(position_in_listcontrol_positions==-1){
-        (((this->parent)->plot)->position_list).push_back(*position);
+        (((this->parent)->data)->position_list).push_back(*position);
     }
     
-    (parent->listcontrol_positions)->set((parent->plot)->position_list, false);
+    (parent->listcontrol_positions)->set((parent->data)->position_list, false);
     
     //given that I have reset the content of listcontrol_positions, no items will be selected in this ListControl -> I disable its disableable buttons
     (parent->listcontrol_positions)->EnableButtons(false);
@@ -14328,7 +14328,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         //I am creating a new Route
         
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
-        (parent->plot)->add_route(route, String(""));
+        (parent->data)->add_route(route, String(""));
         
     }else{
         //I am modifying an existing Route
@@ -14356,9 +14356,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     }
     
     //I call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
-    (parent->listcontrol_sights)->set((parent->plot)->sight_list, true);
-    (parent->listcontrol_positions)->set((parent->plot)->position_list, true);
-    (parent->listcontrol_routes)->set((parent->plot)->route_list, false);
+    (parent->listcontrol_sights)->set((parent->data)->sight_list, true);
+    (parent->listcontrol_positions)->set((parent->data)->position_list, true);
+    (parent->listcontrol_routes)->set((parent->data)->route_list, false);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);
@@ -14863,7 +14863,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
-    plot = new Data(catalog, String(""));
+    data = new Data(catalog, String(""));
     
     //read show_coastlines from file_init
     show_coastlines.read_from_file(String("show coastlines"), (wxGetApp().path_file_init), String(""));
@@ -15182,7 +15182,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
     //
     file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
-    plot->read_from_file(file, String(""));
+    data->read_from_file(file, String(""));
     file_is_untitled = false;
     
     menu_file->Enable(wxID_HIGHEST + 7, true);
@@ -15335,12 +15335,12 @@ void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event){
     
 }
 
-//this is the GUI function called when the user wants to compute the position: it calls the non-GUI method plot->compute_position and returns GUI error/warning messages according to the output of plot->compute_position
+//this is the GUI function called when the user wants to compute the position: it calls the non-GUI method data->compute_position and returns GUI error/warning messages according to the output of data->compute_position
 void ListFrame::OnComputePosition(void){
     
     int out;
     
-    out = (plot->compute_position(String("\t")));
+    out = (data->compute_position(String("\t")));
     
     if(out == -1){
             //the position could not be computed
@@ -15391,17 +15391,17 @@ void ListFrame::Resize(void){
     
 }
 
-//set all the GUI fileds in *this from the data in this->plot and adapts the size of columns and panel accordingly
+//set all the GUI fileds in *this from the data in this->data and adapts the size of columns and panel accordingly
 void ListFrame::set(){
     
-    //write the sights contained into plot->sight_list into listcontrol_sights
-    listcontrol_sights->set(plot->sight_list, false);
+    //write the sights contained into data->sight_list into listcontrol_sights
+    listcontrol_sights->set(data->sight_list, false);
     
-    //write the positions into plot->position_list into listcontrol_sights
-    listcontrol_positions->set(plot->position_list, false);
+    //write the positions into data->position_list into listcontrol_sights
+    listcontrol_positions->set(data->position_list, false);
     
-    //write the routes into plot->route_list into listcontrol_routes
-    listcontrol_routes->set(plot->route_list, false);
+    //write the routes into data->route_list into listcontrol_routes
+    listcontrol_routes->set(data->route_list, false);
     
     Resize();
 //    Maximize(panel);
@@ -15458,8 +15458,8 @@ template<class E> void ListFrame::OnModifySight(E& event){
         s.str("");
         s << "Sight #" << item+1;
         
-        SightFrame *sight_frame = new SightFrame(this, &((plot->sight_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
-        //        (sight_frame->sight) = &((plot->sight_list)[item]);
+        SightFrame *sight_frame = new SightFrame(this, &((data->sight_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        //        (sight_frame->sight) = &((data->sight_list)[item]);
         sight_frame->Show(true);
         
         
@@ -15527,7 +15527,7 @@ template<class E> void ListFrame::OnModifyPosition(E& event){
         s.str("");
         s << "Position #" << item+1;
         
-        PositionFrame *position_frame = new PositionFrame(this, &((plot->position_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        PositionFrame *position_frame = new PositionFrame(this, &((data->position_list)[item]), item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         position_frame->Show(true);
         
     }
@@ -15549,7 +15549,7 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
         s.str("");
         s << "Route #" << item+1;
         
-        RouteFrame *route_frame = new RouteFrame(this, &((plot->route_list)[item]), false, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
+        RouteFrame *route_frame = new RouteFrame(this, &((data->route_list)[item]), false, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
         //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);
         
         route_frame->Show(true);
@@ -15639,15 +15639,15 @@ void ListFrame::Disconnect(int i_sight){
     
     int i_route;
     
-    i_route = (((plot->sight_list)[i_sight]).related_route).value;
+    i_route = (((data->sight_list)[i_sight]).related_route).value;
     
     //disconnect route and sight
-    (((plot->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
-    (((plot->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
+    (((data->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
+    (((data->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
     
     //update the related wxListCtrls in ListFrame
-    ((plot->sight_list)[i_sight]).update_wxListCtrl(i_sight, listcontrol_sights);
-    ((plot->route_list)[i_route]).update_wxListCtrl(i_route, listcontrol_routes);
+    ((data->sight_list)[i_sight]).update_wxListCtrl(i_sight, listcontrol_sights);
+    ((data->route_list)[i_route]).update_wxListCtrl(i_route, listcontrol_routes);
     
     //set the background color of the related sight to white
     (listcontrol_sights)->SetItemBackgroundColour(i_sight, wxGetApp().background_color);
@@ -15656,7 +15656,7 @@ void ListFrame::Disconnect(int i_sight){
     if((listcontrol_sights->GetSelectedItemCount()) != 0){
         
         button_transport_sight->Enable(
-                                       (((plot->sight_list)[listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value != -1
+                                       (((data->sight_list)[listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value != -1
                                        );
         
     }
@@ -15699,7 +15699,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         if((highlighted_sight != wxNOT_FOUND) && enable_highlight){
             //in this case, the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
             
-            highlighted_route = ((((plot->sight_list)[highlighted_sight]).related_route).value);
+            highlighted_route = ((((data->sight_list)[highlighted_sight]).related_route).value);
             
             for(i=0; i<(listcontrol_sights->GetItemCount()); i++){
                 
@@ -15715,8 +15715,8 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                     
                     //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
                     listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
-                    if((((((plot->sight_list)[i]).related_route).value) != -1) && ((listcontrol_routes->GetItemCount()) > ((((plot->sight_list)[i]).related_route).value))){
-                        listcontrol_routes->SetItemBackgroundColour(((((plot->sight_list)[i]).related_route).value), wxGetApp().background_color);
+                    if((((((data->sight_list)[i]).related_route).value) != -1) && ((listcontrol_routes->GetItemCount()) > ((((data->sight_list)[i]).related_route).value))){
+                        listcontrol_routes->SetItemBackgroundColour(((((data->sight_list)[i]).related_route).value), wxGetApp().background_color);
                     }
                     
                 }
@@ -15750,7 +15750,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
         if((highlighted_route != wxNOT_FOUND) && enable_highlight){
             //in this case, the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
             
-            j = ((((plot->route_list)[highlighted_route]).related_sight).value);
+            j = ((((data->route_list)[highlighted_route]).related_sight).value);
             
             for(i=0; i<(listcontrol_routes->GetItemCount()); i++){
                 
@@ -15766,8 +15766,8 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
                     
                     //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
                     listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
-                    if((((((plot->route_list)[i]).related_sight).value) != -1) && ((listcontrol_sights->GetItemCount()) >  ((((plot->route_list)[i]).related_sight).value))){
-                        listcontrol_sights->SetItemBackgroundColour(((((plot->route_list)[i]).related_sight).value), wxGetApp().background_color);
+                    if((((((data->route_list)[i]).related_sight).value) != -1) && ((listcontrol_sights->GetItemCount()) >  ((((data->route_list)[i]).related_sight).value))){
+                        listcontrol_sights->SetItemBackgroundColour(((((data->route_list)[i]).related_sight).value), wxGetApp().background_color);
                     }
                     
                 }
@@ -15834,14 +15834,14 @@ template<class E> void ListFrame::OnPressCtrlO(E& event){
             //file could be opened
             
             file.set_name(String((openFileDialog.GetPath()).ToStdString()));
-            plot->read_from_file(file, String(""));
-            //            plot->print(true, String(""), cout);
+            data->read_from_file(file, String(""));
+            //            data->print(true, String(""), cout);
             
             file_is_untitled = false;
             
             //emable the menu item to close file
             menu_file->Enable(wxID_HIGHEST + 7, true);
-            //load the data in plot into the GUI fields of *this
+            //load the data in data into the GUI fields of *this
             set();
             //change the title of *this to the filename
             SetLabel(wxString((file.name).value));
@@ -15891,11 +15891,11 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event){
     
 }
 
-//write content of plot into file
+//write content of data into file
 template<class E> void ListFrame::OnPressCtrlS(E& event){
     
     file.open(String("out"), String(""));
-    plot->print(false, String(""), file.value);
+    data->print(false, String(""), file.value);
     file.close(String(""));
     
     OnSaveFile();
@@ -15905,7 +15905,7 @@ template<class E> void ListFrame::OnPressCtrlS(E& event){
 }
 
 
-//write content of plot into a named file
+//write content of data into a named file
 template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
     
     wxFileDialog openFileDialog(this, _(""), (wxGetApp().default_open_directory).value, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
@@ -15916,8 +15916,8 @@ template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
         file.set_name(String((openFileDialog.GetPath()).ToStdString()));
         //open a new file to save content on it
         file.open(String("out"), String(""));
-        //writeplot into file
-        plot->print(false, String(""), (file).value);
+        //writedata into file
+        data->print(false, String(""), (file).value);
         //close the file
         file.close(String(""));
         
@@ -15967,11 +15967,11 @@ template<class E> void ListFrame::KeyDown(E& event){
         long previous_item;
         
         previous_item = -1;
-        (plot->crossing_route_list).clear();
+        (data->crossing_route_list).clear();
         do{
             
             previous_item = (listcontrol_routes->GetNextItem(previous_item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
-            if(previous_item != -1){(plot->crossing_route_list).push_back(crossing_route_list_temp[previous_item]);}
+            if(previous_item != -1){(data->crossing_route_list).push_back(crossing_route_list_temp[previous_item]);}
             
         }while(previous_item != -1);
       
@@ -16772,23 +16772,23 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     if(position_in_listcontrol_sights==-1){
         //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list and reduce it
         
-        ((this->parent)->plot)->add_sight_and_reduce(sight, String(""));
+        ((this->parent)->data)->add_sight_and_reduce(sight, String(""));
         
         //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
         //        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
-        //        ((((this->parent)->plot)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
+        //        ((((this->parent)->data)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
         
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
         
         
-        sight->reduce(&((((this->parent)->plot)->route_list)[(sight->related_route).value]), String(""));
+        sight->reduce(&((((this->parent)->data)->route_list)[(sight->related_route).value]), String(""));
         
     }
     
-    (parent->listcontrol_sights)->set((parent->plot)->sight_list, false);
+    (parent->listcontrol_sights)->set((parent->data)->sight_list, false);
     //I call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
-    (parent->listcontrol_routes)->set((parent->plot)->route_list, true);
+    (parent->listcontrol_routes)->set((parent->data)->route_list, true);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
     (parent->listcontrol_sights)->EnableButtons(false);

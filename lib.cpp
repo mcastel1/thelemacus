@@ -2406,6 +2406,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
     new_prefix = prefix.append(String("\t"));
     
     if(((circle.type) == String("c"))){
+        //circle is a circle of equal altittude
         
         if((type.value)[0] == 'l'){
             //*this is a loxodrome
@@ -2415,7 +2416,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
             return -1;
             
         }else{
-            
+            //*this is either an orthodrome or a loxodrome
             
             if((type.value)[0] == 'o'){
                 //*this is an orthodrome
@@ -2523,7 +2524,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
                                 ((*t)[1]).set(String(""), 0.0, new_prefix);
                                 
                             }else{
-                                //the circles d intersect: here you should compute t
+                                //the circles intersect: here you should compute t: method intersection called in the condition intersection(circle, true, t, new_prefix) == 0 has written in t the intersection angles 
                                 
                                 
                                 

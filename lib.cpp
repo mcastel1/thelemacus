@@ -15116,7 +15116,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.push_back(button_delete_position);
     
     
-    listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxSize((this->GetSize()).GetWidth()*0.95 ,  -1));
+    listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxDefaultSize);
     on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
@@ -15127,7 +15127,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
     listcontrol_positions->PushBackColumn(wxString("Label"));
     
-    sizer_box_position->Add(listcontrol_positions, 0,  wxALL, ((wxGetApp().border).value));
+    sizer_box_position->Add(listcontrol_positions, 1,  wxALL, ((wxGetApp().border).value));
     
     
     //listcontrol routes with routes
@@ -15244,7 +15244,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //    }
     
     sizer_v->Add(sizer_box_sight, 0,  wxALL, ((wxGetApp().border).value));
-    sizer_v->Add(sizer_box_position, 0,  wxALL, ((wxGetApp().border).value));
+    sizer_v->Add(sizer_box_position, 1,  wxALL, ((wxGetApp().border).value));
     sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route);
     sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
     //here I set the flag '0' to avoid button_show_map from being stretched
@@ -18660,7 +18660,7 @@ void ListControl::Resize(void){
     //        total_column_width += GetColumnWidth(i);
     //    }
     //
-    SetMinSize(wxSize(total_column_width + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),-1));
+    SetSize(wxSize(total_column_width + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),-1));
     
 }
 

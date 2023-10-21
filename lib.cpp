@@ -11326,12 +11326,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                         <= (thickness_route_selection_over_length_screen.value)*((double)((((parent->parent)->parent)->rectangle_display).GetWidth()))/2.0
                         )
                        ){
-                        
-                        //                    if(sqrt(gsl_pow_2((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x)) + gsl_pow_2((position_draw_panel_now.y) - ((points_route_list[i][j][l]).y))) <
-                        //                       ((((wxGetApp().standard_thickness_over_length_screen)).value) * (((parent->parent)->parent)->rectangle_display).GetWidth())){
+                        //the mouse is overing over a Route
                         
                         //sets the highlighted route to i, so as to use highlighted_route in other functions
                         ((parent->parent)->highlighted_route) = i;
+                        
+                        parent->parent->listcontrol_routes->EnsureVisible(i);
+                        if((((parent->parent->plot->route_list)[i]).related_sight.value) != -1){
+                            parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->plot->route_list)[i]).related_sight.value);
+                        }
                         
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
@@ -11349,13 +11352,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
             }
             
-            
-            
-            
         }
         
-        //        cout << "\n++++++++++++ Highlighted route = " << ((parent->parent)->highlighted_route);
-        
+        if((parent->parent->highlighted_route) == -1){
+            //no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
+          
+            parent->parent->listcontrol_routes->EnsureVisible(0);
+            parent->parent->listcontrol_sights->EnsureVisible(0);
+            
+        }
+                
         
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
         for(((parent->parent)->highlighted_position) = -1, i=0; i<(((parent->parent)->plot)->position_list).size(); i++){
@@ -11364,17 +11370,22 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             
             if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
                4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth())){
+                //the mouse is over a position
                 
                 //sets the highlighted position to i, so as to use highlighted_position in other functions
                 ((parent->parent)->highlighted_position) = i;
                 
                 ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                parent->parent->listcontrol_positions->EnsureVisible(i);
+
                 
                 
             }else{
+                //no Position is highlighted -> reset the background color in listcontrol positions, and in listcontrol_positions go back to showing the first  item
                 
                 ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
-                
+                parent->parent->listcontrol_positions->EnsureVisible(0);
+
             }
             
         }

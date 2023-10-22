@@ -8153,7 +8153,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((unsigned int)(((parent->p_coastline)[i - floor_min_lat][j % 360]).size()));
                 
-                every = (unsigned int)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid));
+                every = (unsigned int)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid)*/*this factor taks into account of the latitude expansion of Mercator projection*/cos(k*((double)i)));
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points

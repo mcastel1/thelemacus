@@ -499,10 +499,6 @@ bool MyApp::OnInit(){
     highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
     
-    char red = foreground_color.Red();
-    
-    
-    
 //    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
  
     

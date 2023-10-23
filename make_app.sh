@@ -74,11 +74,13 @@ cp  /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit  /System/Library
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_xrc-3.1.dylib
 install_name_tool -change /usr/local/lib/libwx_osx_cocoau_core-3.1.5.0.0.dylib @rpath/libwx_osx_cocoau_core-3.1.5.0.0.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_xrc-3.1.dylib
 install_name_tool -change /usr/local/lib/libwx_osx_cocoau_html-3.1.5.0.0.dylib @rpath/libwx_osx_cocoau_html-3.1.5.0.0.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_xrc-3.1.dylib
-install_name_tool -change /usr/local/lib/libwx_baseu_xml-3.1.5.0.0.dylib rpath/libwx_baseu_xml-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_xrc-3.1.dylib
+install_name_tool -change /usr/local/lib/libwx_baseu_xml-3.1.5.0.0.dylib @rpath/libwx_baseu_xml-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_xrc-3.1.dylib
+install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_xrc-3.1.dylib
+
 
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.dylib
 install_name_tool -change /usr/local/lib/libwx_osx_cocoau_core-3.1.5.0.0.dylib @rpath/libwx_osx_cocoau_core-3.1.5.0.0.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.dylib
-install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib rpath/libwx_baseu-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.dylib
+install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.dylib
 
 
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.1.dylib
@@ -95,6 +97,22 @@ install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libw
 
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_net-3.1.dylib
 install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_net-3.1.dylib
+
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.5.0.0.dylib
+install_name_tool -change /usr/local/lib/libwx_osx_cocoau_core-3.1.5.0.0.dylib @rpath/libwx_osx_cocoau_core-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.5.0.0.dylib
+install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.5.0.0.dylib
+
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.1.5.0.0.dylib
+install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.1.5.0.0.dylib
+
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.5.0.0.dylib
+install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.5.0.0.dylib
+
+
+
+#install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/CALLER_LIBRARY
+#install_name_tool -change /usr/local/lib/CALLED_LIBRARY @rpath/CALLED_LIBRARY $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/CALLER_LIBRARY
+
 
 
 #cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1* /usr/local/lib/libwx_baseu* /usr/local/lib/libpng* /usr/local/lib/libjpeg*  /usr/local/Cellar/libtiff/4.3.0/lib/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib  /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries

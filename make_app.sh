@@ -102,10 +102,12 @@ install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5
 #libraries called by libwx_baseu_xml-3.1.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.dylib
 install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.dylib
+install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.dylib
 
 #libraries called by libwx_baseu_net-3.1.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_net-3.1.dylib
 install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_net-3.1.dylib
+install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_net-3.1.dylib
 
 #libraries called by libwx_osx_cocoau_html-3.1.5.0.0.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.1.5.0.0.dylib
@@ -119,16 +121,25 @@ install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libw
 #libraries called by libwx_baseu_xml-3.1.5.0.0.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.5.0.0.dylib
 install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libwx_baseu-3.1.5.0.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.5.0.0.dylib
+install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu_xml-3.1.5.0.0.dylib
+
 
 #libraries called by libtiff.5.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libtiff.5.dylib
 install_name_tool -change /usr/local/opt/jpeg/lib/libjpeg.9.dylib @rpath/libjpeg.9.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libtiff.5.dylib
 
+#libraries called by libwx_baseu-3.1.dylib
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu-3.1.dylib
+install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu-3.1.dylib
+
+#libraries called by libwx_baseu-3.2.0.2.1.dylib
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu-3.2.0.2.1.dylib
+install_name_tool -change /usr/local/lib/libpcre2-32.0.dylib @rpath/libpcre2-32.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu-3.2.0.2.1.dylib
 
 
 
 #install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/CALLER_LIBRARY
-#install_name_tool -change /usr/local/lib/CALLED_LIBRARY @rpath/CALLED_LIBRARY $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/CALLER_LIBRARY
+#install_name_tool -change CALLED_LIBRARY @rpath/CALLED_LIBRARY $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/CALLER_LIBRARY
 
 
 

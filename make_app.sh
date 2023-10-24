@@ -122,7 +122,7 @@ install_name_tool -change /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib @rpath/libw
 
 #libraries called by libtiff.5.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libtiff.5.dylib
-install_name_tool -change /usr/local/lib/libjpeg.9.dylib @rpath/libjpeg.9.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libtiff.5.dylib
+install_name_tool -change /usr/local/opt/jpeg/lib/libjpeg.9.dylib @rpath/libjpeg.9.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libtiff.5.dylib
 
 
 

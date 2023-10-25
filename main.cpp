@@ -74,6 +74,7 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - when a sight that is not related to any Route is reduced, create a new Route representing the sight and relate the sight to that Route
  - buttons on bottom of ListFrame are cut on Enrico's computer
  - do not use system() to get current time -> use boost library
  - check that WXK_PLUS does not depend on the computer

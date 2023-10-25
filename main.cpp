@@ -74,6 +74,8 @@
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - buttons on bottom of ListFrame are cut on Enrico's computer
+ - do not use system() to get current time -> use boost library
  - check that WXK_PLUS does not depend on the computer
  */
 

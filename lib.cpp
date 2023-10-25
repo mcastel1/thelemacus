@@ -16789,8 +16789,17 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
         
-        
-        sight->reduce(&((((this->parent)->data)->route_list)[(sight->related_route).value]), String(""));
+
+        if((sight->related_route.value) != -1){
+            //sight has a related Route -> reduce sight and write the resulting Route into such related Route
+
+            sight->reduce(&((((this->parent)->data)->route_list)[(sight->related_route).value]), String(""));
+            
+        }else{
+            //sight has no related Route -> create a related Route and add it to listcontrol_routes
+
+            
+        }
         
     }
     

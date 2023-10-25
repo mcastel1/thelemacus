@@ -16793,12 +16793,14 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         if((sight->related_route.value) != -1){
             //sight has a related Route -> reduce sight and write the resulting Route into such related Route
 
-            sight->reduce(&((((this->parent)->data)->route_list)[(sight->related_route).value]), String(""));
+            sight->reduce(&((parent->data->route_list)[(sight->related_route).value]), String(""));
             
         }else{
             //sight has no related Route -> create a related Route and add it to listcontrol_routes
 
-            
+            (parent->data->route_list).resize((parent->data->route_list).size()+1);
+            sight->reduce(&((parent->data->route_list)[(parent->data->route_list).size()-1]), String(""));
+
         }
         
     }

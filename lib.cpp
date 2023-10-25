@@ -16797,13 +16797,17 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
             
         }else{
             //sight has no related Route -> create a related Route and add it to listcontrol_routes
+            
+            ptrdiff_t sight_position;
 
+            sight_position = sight - (&((parent->data->sight_list)[0]));
+            
             (parent->data->route_list).resize((parent->data->route_list).size()+1);
             sight->reduce(&((parent->data->route_list)[(parent->data->route_list).size()-1]), String(""));
             
             //I link the Sight to the Route, and the Route to the Sight
             (sight->related_route.value) = ((int)(parent->data->route_list).size())-1;
-//            ((((parent->data->route_list)[(parent->data->route_list).size()-1]).related_sight).value) = ;
+            ((((parent->data->route_list)[(parent->data->route_list).size()-1]).related_sight).value) = ((int)sight_position);
           
 
         }

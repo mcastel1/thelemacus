@@ -48,6 +48,7 @@
  
  ********** THINGS TO ADD ************
  
+ - add button to disconnect route from sight and vicecers to listcontrol_routes and _sights
  - when switching to dark mode, buttons with images must have white and black inverted 
 - remove ugly maximizaiton of panel that occurs in ListFrame::Resize() and beep
  - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon

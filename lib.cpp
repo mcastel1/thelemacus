@@ -15680,7 +15680,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;
     
-        cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+//        cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
  
     
     //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights

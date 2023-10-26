@@ -7822,12 +7822,17 @@ void ChartFrame::GetCoastLineData_3D(void){
     unsigned long every, l, n, n_points_grid;
     //integer values of min/max lat/lon to be extractd from p_coastline
     int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
+    double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
     Projection temp;
     bool check;
     wxPoint q;
+    gsl_vector *r, *s;
+    Position u;
+    
+    r = gsl_vector_alloc(3);
+    s = gsl_vector_alloc(3);
     
     //set i_min/max, j_min/max
-    
     i_min = floor(K*(((phi_min).normalize_pm_pi_ret()).value));
     i_max = ceil(K*(((phi_max).normalize_pm_pi_ret()).value));
     
@@ -7924,16 +7929,23 @@ void ChartFrame::GetCoastLineData_3D(void){
             
             if(check){
                 
+                
+         
                 //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
                 
-//                draw_panel->circle_observer.reference_position.get_cartesian(String(""), r, String(""));
-                 
-                
-                //I plot every 'every' data points
-                every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid)
-                                      
-                                        );
+                //set r
+                draw_panel->circle_observer.reference_position.get_cartesian(String(""), r, String(""));
+                //set s
+                u.phi.set(String(""), k*((double)i), String(""));
+                u.lambda.set(String(""), k*((double)j), String(""));
+                u.get_cartesian(String(""), s, String(""));
+                //compute cos
+                gsl_blas_ddot(r, s, &cos);
+                if(cos == 0.0){cos = 1.0;}
+
+                //I plot every 'every' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around 
+                every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid)/cos);
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
@@ -7946,36 +7958,17 @@ void ChartFrame::GetCoastLineData_3D(void){
                         
                     }
                     
-                    
                 }
-                
+            
             }
             
         }
         
     }
-    
-    
-    
-    
-    /*
-     every = (unsigned int)(((double)((parent->p_coastline).size()))/((double)(((parent->data)->n_points_plot_coastline).value)));
-     if(every == 0){every = 1;}
-     
-     for(x_3d.clear(), y_3d.clear(), i=0; every*i<(parent->p_coastline).size(); i++){
-     
-     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
-     if((draw_panel->GeoTo3D((parent->p_coastline)[every*i], &temp))){
-     
-     x_3d.push_back(temp.x);
-     y_3d.push_back(temp.y);
-     
-     }
-     
-     }
-     */
-    
-    
+
+    gsl_vector_free(r);
+    gsl_vector_free(s);
+
 }
 
 

@@ -7557,92 +7557,24 @@ void Time::set_current(void){
 //this function sets (*this) to the current UTC date
 void Date::set_current(void){
     
-    boost::posix_time::ptime universal_time;
-    boost::local_time::time_zone_ptr zone;
-    
-    zone = boost::local_time::time_zone_ptr(new boost::local_time::posix_time_zone("MST-07"));
-    universal_time = boost::posix_time::second_clock::universal_time();
-    
-    boost::local_time::local_date_time local_time(universal_time, zone);
+    (wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
 
-    Y = local_time.date().year();
-    M = local_time.date().month().as_number();
-    D = local_time.date().day();
+    Y = (wxGetApp().local_time).date().year();
+    M = (wxGetApp().local_time).date().month().as_number();
+    D = (wxGetApp().local_time).date().day();
     
 }
 
 //this function sets (*this) to the current UTC time +- time_zone
 void Chrono::set_current(Int time_zone){
     
-    boost::posix_time::ptime local_time;
 
-    local_time = boost::posix_time::second_clock::local_time();
+    (wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
     
     
-    h = ((unsigned int)(local_time.time_of_day().hours()));
-    m = ((unsigned int)(local_time.time_of_day().minutes()));
-    s = local_time.time_of_day().seconds();
-
-    
-//    stringstream line_ins;
-//    string input;
-//    File file_utc_time;
-//    size_t pos;
-//    String new_prefix;
-//    bool check;
-//    //the sign argument to prepend to the time zone
-//    string sign;
-//
-//
-//    check = true;
-//
-//    file_utc_time.set_name((wxGetApp().path_file_utc_date_and_time));
-//    file_utc_time.remove(prefix);
-//
-//    //    date -u -v+1H +%H:%M:%S
-//
-//    line_ins.str("");
-//    if((time_zone.value) > 0){sign = "+";}
-//    else{sign = "";}
-//    //run the command to get the current time with time zone specified by time_zone
-//    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << "\"" <<  ((wxGetApp().path_file_utc_date_and_time).value) << "\"";
-//
-//    string temp = line_ins.str().c_str();
-//
-//
-//    //execute the date command in the terminal and writes the UTC date to file_utc_time
-//    system(line_ins.str().c_str());
-//
-//
-//    check &= (file_utc_time.open(String("in"), new_prefix));
-//
-//    if(check){
-//
-//        getline(file_utc_time.value, input);
-//
-//        //read the part of input containing the hour
-//        pos = input.find(":");
-//        h = stoi(input.substr(0, pos).c_str(), NULL, 10);
-//
-//        //now I am no longer interested in the hour, the string runs from the minutes to seconds
-//        input  =  (input.substr(pos+1).c_str());
-//        //find the position of the second ':'
-//        pos = input.find(":");
-//        //check whether the minute part is formatted correctly
-//        m = stoi(input.substr(0, pos).c_str(), NULL, 10);
-//
-//        //now I am no longer interested in the minute, the string runs from the days to the end of the string
-//        input  =  (input.substr(pos+1).c_str());
-//        s = stod(input.c_str());
-//
-//
-//    }
-//
-//    file_utc_time.close(new_prefix);
-//    file_utc_time.remove(new_prefix);
-//
-//    return check;
-    
+    h = ((unsigned int)((wxGetApp().local_time).time_of_day().hours()));
+    m = ((unsigned int)((wxGetApp().local_time).time_of_day().minutes()));
+    s = (wxGetApp().local_time).time_of_day().seconds();    
     
 }
 

@@ -75,6 +75,8 @@ public:
     Angle min_crossing_angle;
 
     wxTimer* timer;
+    //type of the Boost library which contains the local time, intended as the time of the machine where the app is running
+    boost::posix_time::ptime local_time;
     wxSystemSettings* settings;
     //the code checks every time_check whether the operating system has changed its light/dark mode
     Chrono time_check;

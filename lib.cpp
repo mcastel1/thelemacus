@@ -5532,9 +5532,10 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix){
     //read number of points for routes from file_init
     n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
     
-    //read n_points_plot_coastline from file_init
-    n_points_plot_coastline.read_from_file(String("number of points coastline"), file_init, true, new_prefix);
-    
+    //read n_points_plot_coastline_* from file_init
+    n_points_plot_coastline_Mercator.read_from_file(String("number of points coastline Mercator"), file_init, true, new_prefix);
+    n_points_plot_coastline_3D.read_from_file(String("number of points coastline 3D"), file_init, true, new_prefix);
+ 
     file_init.close(prefix);
     
 }
@@ -7944,8 +7945,8 @@ void ChartFrame::GetCoastLineData_3D(void){
                 gsl_blas_ddot(r, s, &cos);
                 if(cos == 0.0){cos = 1.0;}
 
-                //I plot every 'every' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around 
-                every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid)/cos);
+                //I plot every 'every' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
+                every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline_3D).value))*((double)n_points_grid)/cos);
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
@@ -8029,7 +8030,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((unsigned int)(((parent->p_coastline)[i - floor_min_lat][j % 360]).size()));
                 
-                every = (unsigned int)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid)*/*this factor taks into account of the latitude expansion of Mercator projection*/cos(k*((double)i)));
+                every = (unsigned int)(((double)n)/((double)(((parent->data)->n_points_plot_coastline_Mercator).value))*((double)n_points_grid)*/*this factor taks into account of the latitude expansion of Mercator projection*/cos(k*((double)i)));
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
@@ -9689,7 +9690,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     projection->InsertIn<wxBoxSizer>(sizer_slider);
     sizer_slider->AddStretchSpacer(1);
-    sizer_slider->Add(button_show_list, 0, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
+    sizer_slider->Add(button_show_list, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     
     sizer_h->Add(draw_panel, 0, wxALIGN_TOP | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));

@@ -54,7 +54,6 @@
  - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
  with a better  choice
- - add an interface to load, save and close sight files
  - the selection rectangle in the 3D projection should be filled with color
  - add + / - button in chartframe to zoom in / out
  - add instrumental error
@@ -68,8 +67,6 @@
  - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
  - replace use of epsilon_double with more proper methods 
  - replace limb dropdown menu and other dropdown menus with horizontal selection menus
- - selection rectangle should be activated with a single left mouse click rather than with a right mouse click
- - the code should return the position (lat lon) of the crossiing betqween two circles of equal altitude
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - move all stuff which is general enough in the code to MyApp class

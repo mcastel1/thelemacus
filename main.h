@@ -43,6 +43,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/dll.hpp>
+#include <boost/date_time.hpp>
 
 using namespace std;
 

@@ -786,7 +786,7 @@ public:
     bool read_from_file(String, File&, bool, String);
     string to_string(void);
     void check_leap_year(void);
-    bool set_current(String);
+    void set_current(String);
     
 };
 

@@ -7547,80 +7547,29 @@ void Date::print(String name, String prefix, ostream& ostr){
 };
 
 //this function sets (*this) to the current UTC date and time
-bool Time::set_current(String prefix){
+void Time::set_current(String prefix){
     
     String new_prefix;
-    bool check;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    check=true;
     
-    check &= (date.set_current(new_prefix));
-    check &= (chrono.set_current((wxGetApp()).time_zone, new_prefix));
-    
-    return check;
-    
+    date.set_current(new_prefix);
+    chrono.set_current((wxGetApp()).time_zone, new_prefix);
+        
 }
 
 //this function sets (*this) to the current UTC date
-bool Date::set_current(String prefix){
+void Date::set_current(String prefix){
     
-    String new_prefix;
-    stringstream line_ins;
-    string input;
-    File file_utc_date;
-    size_t pos;
-    bool check;
+    boost::posix_time::ptime now;
     
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
+    now = boost::posix_time::second_clock::universal_time();
     
-    check = true;
-    
-    file_utc_date.set_name((wxGetApp().path_file_utc_date_and_time));
-    file_utc_date.remove(prefix);
-    
-    line_ins.str("");
-    line_ins << "date -u \"+%Y-%m-%d\"  >> \"" << ((wxGetApp().path_file_utc_date_and_time).value) << "\"";
-    
-    //execute the date command in the terminal and writes the UTC date to file_utc_date
-    system(line_ins.str().c_str());
-    
-    //reads the utc date from file_utc_date
-    cout << prefix.value << YELLOW << "Reading utc date from file " << file_utc_date.name.value << " ...\n" << RESET;
-    
-    check &= (file_utc_date.open(String("in"), new_prefix));
-    
-    if(check){
-        
-        getline(file_utc_date.value, input);
-        
-        //read the part of input containing the year
-        pos = input.find("-");
-        Y = stoi(input.substr(0, pos).c_str(), NULL, 10);
-        
-        //now I am no longer interested in the year, the string runs from the month to days
-        input  =  (input.substr(pos+1).c_str());
-        //find the position of the second '-'
-        pos = input.find("-");
-        //check whether month part is formatted correctly
-        M = stoi(input.substr(0, pos).c_str(), NULL, 10);
-        
-        //now I am no longer interested in the month, the string runs from the days to the end of the string
-        input  =  (input.substr(pos+1).c_str());
-        D = stoi(input.c_str());
-        
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        
-    }
-    
-    file_utc_date.close(new_prefix);
-    file_utc_date.remove(new_prefix);
-    
-    return check;
-    
+    Y = now.date().year();
+    M = now.date().month().as_number();
+    D = now.date().day();
     
 }
 
@@ -7716,7 +7665,7 @@ void Date::enter(String name, String prefix) {
         if(input.empty()){
             
             cout << prefix.value << YELLOW << "Entered an empty date, setting it to current UTC date!\n" << RESET;
-            check &= set_current(new_prefix);
+            set_current(new_prefix);
             print(String("entered date"), prefix, cout);
             
         }else{

@@ -244,13 +244,6 @@ void MyApp::where_am_I([[maybe_unused]] String prefix){
 
 bool MyApp::OnInit(){
     
-    
-    boost::posix_time::ptime timeLocal;
-    
-    timeLocal = boost::posix_time::second_clock::local_time();
-
-    cout << "Current System Time = " << timeLocal << "\n";
-
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

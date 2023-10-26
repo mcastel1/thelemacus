@@ -7547,21 +7547,15 @@ void Date::print(String name, String prefix, ostream& ostr){
 };
 
 //this function sets (*this) to the current UTC date and time
-void Time::set_current(String prefix){
-    
-    String new_prefix;
-    
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
-    
-    
-    date.set_current(new_prefix);
-    chrono.set_current((wxGetApp()).time_zone, new_prefix);
+void Time::set_current(void){
+
+    date.set_current();
+    chrono.set_current((wxGetApp()).time_zone);
         
 }
 
 //this function sets (*this) to the current UTC date
-void Date::set_current(String prefix){
+void Date::set_current(void){
     
     boost::posix_time::ptime now;
     
@@ -7574,71 +7568,75 @@ void Date::set_current(String prefix){
 }
 
 //this function sets (*this) to the current UTC time +- time_zone
-bool Chrono::set_current(Int time_zone, [[maybe_unused]] String prefix){
+void Chrono::set_current(Int time_zone){
     
-    stringstream line_ins;
-    string input;
-    File file_utc_time;
-    size_t pos;
-    String new_prefix;
-    bool check;
-    //the sign argument to prepend to the time zone
-    string sign;
+    boost::posix_time::ptime now;
     
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
+    now = boost::posix_time::second_clock::universal_time();
     
-    check = true;
+    h = ((unsigned int)(now.time_of_day().hours()));
+    m = ((unsigned int)(now.time_of_day().minutes()));
+    s = now.time_of_day().seconds();
+
     
-    file_utc_time.set_name((wxGetApp().path_file_utc_date_and_time));
-    file_utc_time.remove(prefix);
-    
-    //    date -u -v+1H +%H:%M:%S
-    
-    line_ins.str("");
-    if((time_zone.value) > 0){sign = "+";}
-    else{sign = "";}
-    //run the command to get the current time with time zone specified by time_zone
-    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << "\"" <<  ((wxGetApp().path_file_utc_date_and_time).value) << "\"";
-    
-    string temp = line_ins.str().c_str();
-    
-    
-    //execute the date command in the terminal and writes the UTC date to file_utc_time
-    system(line_ins.str().c_str());
-    
-    //reads the utc date from file_utc_time
-    cout << prefix.value << YELLOW << "Reading utc time from file " << file_utc_time.name.value << " ...\n" << RESET;
-    
-    check &= (file_utc_time.open(String("in"), new_prefix));
-    
-    if(check){
-        
-        getline(file_utc_time.value, input);
-        
-        //read the part of input containing the hour
-        pos = input.find(":");
-        h = stoi(input.substr(0, pos).c_str(), NULL, 10);
-        
-        //now I am no longer interested in the hour, the string runs from the minutes to seconds
-        input  =  (input.substr(pos+1).c_str());
-        //find the position of the second ':'
-        pos = input.find(":");
-        //check whether the minute part is formatted correctly
-        m = stoi(input.substr(0, pos).c_str(), NULL, 10);
-        
-        //now I am no longer interested in the minute, the string runs from the days to the end of the string
-        input  =  (input.substr(pos+1).c_str());
-        s = stod(input.c_str());
-        
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        
-    }
-    
-    file_utc_time.close(new_prefix);
-    file_utc_time.remove(new_prefix);
-    
-    return check;
+//    stringstream line_ins;
+//    string input;
+//    File file_utc_time;
+//    size_t pos;
+//    String new_prefix;
+//    bool check;
+//    //the sign argument to prepend to the time zone
+//    string sign;
+//
+//
+//    check = true;
+//
+//    file_utc_time.set_name((wxGetApp().path_file_utc_date_and_time));
+//    file_utc_time.remove(prefix);
+//
+//    //    date -u -v+1H +%H:%M:%S
+//
+//    line_ins.str("");
+//    if((time_zone.value) > 0){sign = "+";}
+//    else{sign = "";}
+//    //run the command to get the current time with time zone specified by time_zone
+//    line_ins << "date -u -v" << sign << ((wxGetApp()).time_zone).value <<  "H \"+%H:%M:%S\"  >> " << "\"" <<  ((wxGetApp().path_file_utc_date_and_time).value) << "\"";
+//
+//    string temp = line_ins.str().c_str();
+//
+//
+//    //execute the date command in the terminal and writes the UTC date to file_utc_time
+//    system(line_ins.str().c_str());
+//
+//
+//    check &= (file_utc_time.open(String("in"), new_prefix));
+//
+//    if(check){
+//
+//        getline(file_utc_time.value, input);
+//
+//        //read the part of input containing the hour
+//        pos = input.find(":");
+//        h = stoi(input.substr(0, pos).c_str(), NULL, 10);
+//
+//        //now I am no longer interested in the hour, the string runs from the minutes to seconds
+//        input  =  (input.substr(pos+1).c_str());
+//        //find the position of the second ':'
+//        pos = input.find(":");
+//        //check whether the minute part is formatted correctly
+//        m = stoi(input.substr(0, pos).c_str(), NULL, 10);
+//
+//        //now I am no longer interested in the minute, the string runs from the days to the end of the string
+//        input  =  (input.substr(pos+1).c_str());
+//        s = stod(input.c_str());
+//
+//
+//    }
+//
+//    file_utc_time.close(new_prefix);
+//    file_utc_time.remove(new_prefix);
+//
+//    return check;
     
     
 }
@@ -7665,7 +7663,7 @@ void Date::enter(String name, String prefix) {
         if(input.empty()){
             
             cout << prefix.value << YELLOW << "Entered an empty date, setting it to current UTC date!\n" << RESET;
-            set_current(new_prefix);
+            set_current();
             print(String("entered date"), prefix, cout);
             
         }else{
@@ -12672,7 +12670,7 @@ void String::set_to_current_time(void){
             
     Time now;
     
-    now.set_current(String(""));
+    now.set_current();
     //I write in the non-GUI object *this
     
     set(String("String set to current time"), String(now.to_string(data_precision.value, true)), String(""));
@@ -12688,7 +12686,7 @@ template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operat
         
         Time now;
         
-        now.set_current(String(""));
+        now.set_current();
         //I write in the non-GUI object (p->string)
         (*(p->string)) = String(now.to_string(data_precision.value, true));
         
@@ -13563,10 +13561,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //master-clock date
     //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
     if(sight_in == NULL){
-        (sight->master_clock_date_and_hour).date.set_current(prefix);
-        (sight->master_clock_date_and_hour).chrono.set_current((wxGetApp()).time_zone, prefix);
-        (sight->time).date.set_current(prefix);
-        (sight->time).chrono.set_current((wxGetApp()).time_zone, prefix);
+        (sight->master_clock_date_and_hour).date.set_current();
+        (sight->master_clock_date_and_hour).chrono.set_current((wxGetApp()).time_zone);
+        (sight->time).date.set_current();
+        (sight->time).chrono.set_current((wxGetApp()).time_zone);
     }
     StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
     master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));

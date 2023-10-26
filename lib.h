@@ -121,7 +121,7 @@ public:
     
     void print(String, String, ostream&);
     bool set(String, double, String);
-    bool set_current(Int, String);
+    void set_current(Int);
     void enter(String, String);
     bool read_from_file(String, File&, bool, String);
     bool read_from_file(String, String, String);
@@ -786,7 +786,7 @@ public:
     bool read_from_file(String, File&, bool, String);
     string to_string(void);
     void check_leap_year(void);
-    void set_current(String);
+    void set_current(void);
     
 };
 
@@ -802,7 +802,7 @@ public:
     double s, MJD;
     void enter(String, String);
     void print(String, String, ostream&);
-    bool set_current(String);
+    void set_current(void);
     bool read_from_file(String, File&, String);
     
     void to_MJD(void);

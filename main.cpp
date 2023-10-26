@@ -13,7 +13,7 @@
 
 /*
  notes:
-=======
+ =======
  - error message when running the app on another computer:
  
  The default interactive shell is now zsh.
@@ -22,11 +22,11 @@
  /Users/carlesblanch/Downloads/Thelemacus.app/Contents/MacOS/Thelemacus ; exit;
  (base) ICR-C02V907EHV2G:~ carlesblanch$ /Users/carlesblanch/Downloads/Thelemacus.app/Contents/MacOS/Thelemacus ; exit;
  dyld[25231]: Library not loaded: /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib
-   Referenced from: <4ED96060-7B5A-3EEB-9E52-015DE76E93C0> /Users/carlesblanch/Downloads/Thelemacus.app/Contents/MacOS/Thelemacus
-   Reason: tried: '/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/usr/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file, not in dyld cache)
+ Referenced from: <4ED96060-7B5A-3EEB-9E52-015DE76E93C0> /Users/carlesblanch/Downloads/Thelemacus.app/Contents/MacOS/Thelemacus
+ Reason: tried: '/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/usr/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file, not in dyld cache)
  Abort trap: 6
  logout
-
+ 
  Saving session...
  ...copying shared history...
  ...saving history...truncating history files...
@@ -36,7 +36,7 @@
  
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging 
  - if the running idrectory of the app contains a ' it does not work, but let us leave it like this
->>>>>>> revise_make_app
+ >>>>>>> revise_make_app
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
@@ -50,7 +50,7 @@
  
  - add button to disconnect route from sight and vicecers to listcontrol_routes and _sights
  - when switching to dark mode, buttons with images must have white and black inverted 
-- remove ugly maximizaiton of panel that occurs in ListFrame::Resize() and beep
+ - remove ugly maximizaiton of panel that occurs in ListFrame::Resize() and beep
  - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
  with a better  choice
@@ -73,11 +73,10 @@
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - move all stuff which is general enough in the code to MyApp class
-
+ 
  ********** THINGS TO FIX ************
  - when listcontrol_sights or _routes is long enough that there is a scroll bar, the highlight due to mouse hovering over sight/route does not work 
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
- - do not use system() to get current time -> use boost library
  - check that WXK_PLUS does not depend on the computer
  */
 
@@ -96,47 +95,47 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event){
 //if the user presses Ctrl + Q to exit the app, I call this function which prompts a message frame
 template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event){
     
-//    for(; 0<chart_frames.size(); ){
-//        (chart_frames[0])->OnClose(event);
-//    }
-//    
-//    Destroy();
-//    Close(true);
+    //    for(; 0<chart_frames.size(); ){
+    //        (chart_frames[0])->OnClose(event);
+    //    }
+    //    
+    //    Destroy();
+    //    Close(true);
     
-//    return this->wxApp::OnPressCtrlQ();
+    //    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     CloseFrame<ListFrame>* close;
     PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
     unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new CloseFrame<ListFrame>(list_frame);
     
-//    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
+    //    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
     
     print_question = new PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(list_frame, close, unset_idling);
     
     print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
     
-//    QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>(NULL,
-//                                                                                                        close,
-//                                                                                                        String("Yes"),
-//                                                                                                        unset_idling, String("No"),
-//                                                                                                        "",
-//                                                                                                        "Do you want to close the app?",
-//                                                                                                        wxDefaultPosition,
-//                                                                                                        wxDefaultSize,
-//                                                                                                        String(""));
-//    question_frame->Show(true);
-
-
-//    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(list_frame, unset_idling);
-//    print_info_message = new PrintMessage<ListFrame, Close<ListFrame> >(list_frame, close);
-//    print_info_message->SetAndCall(NULL, String("You want to exit the app"), String("Exiting the app"));
-    
-
+    //    QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>(NULL,
+    //                                                                                                        close,
+    //                                                                                                        String("Yes"),
+    //                                                                                                        unset_idling, String("No"),
+    //                                                                                                        "",
+    //                                                                                                        "Do you want to close the app?",
+    //                                                                                                        wxDefaultPosition,
+    //                                                                                                        wxDefaultSize,
+    //                                                                                                        String(""));
+    //    question_frame->Show(true);
     
     
-//    delete list_frame;
-//
+    //    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(list_frame, unset_idling);
+    //    print_info_message = new PrintMessage<ListFrame, Close<ListFrame> >(list_frame, close);
+    //    print_info_message->SetAndCall(NULL, String("You want to exit the app"), String("Exiting the app"));
+    
+    
+    
+    
+    //    delete list_frame;
+    //
     
     
 }
@@ -172,7 +171,7 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event){
     
     
     i = (((list_frame->menu_bar)->GetSize()).GetHeight());
-       
+    
     if(((list_frame->chart_frames).size()) > 1){
         //if ((list_frame->chart_frames).size() > 1 it makes sens to introduce delta_x, delta_y
         
@@ -222,23 +221,23 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event){
 
 //writes into this->run_directory the path where the executable is currently running
 void MyApp::where_am_I([[maybe_unused]] String prefix){
- 
+    
     stringstream ins;
     
     ins.str("");
     //note that here boost::dll::program_location() may return a path with './' at the end, but this has no effect because ./ simply says to stay in the same path
     ins << (boost::dll::program_location().parent_path());
     run_directory.value = ins.str().c_str();
-
+    
     run_directory.print(String("Non-formatted run directory"), true, String("*******"), cout);
-
+    
     
     //remove " from run_directory
     run_directory.value.erase(std::remove(run_directory.value.begin(), run_directory.value.end(), '"'), run_directory.value.end());
-
+    
     run_directory.appendto(String("/../../"));
     run_directory.print(String("Formatted run directory"), true, String("*******"), cout);
-
+    
     
 }
 
@@ -253,20 +252,20 @@ bool MyApp::OnInit(){
     wxCommandEvent dummy;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     //    Chrono current_time, dawn, dusk;
-
+    
     
     //to build the app
-        where_am_I(String(""));
+    //        where_am_I(String(""));
     //to develop the app with Xcode
-//    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
+    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
     
     
     settings = new wxSystemSettings();
     timer = new wxTimer();
     
     wxImage::AddHandler(new wxPNGHandler);
-//    wxImage::AddHandler(new wxBMPHandler);
-
+    //    wxImage::AddHandler(new wxBMPHandler);
+    
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));
     rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
@@ -278,7 +277,7 @@ bool MyApp::OnInit(){
     data_directory = run_directory.append(String("Contents/Resources/Data/"));
     image_directory = run_directory.append(String("Contents/Resources/Images/"));
     default_open_directory = data_directory;
-
+    
     //read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
     //files in code directory
     temp.read_from_file(String("name file utc date and time"), String(path_file_init), String(""));
@@ -312,7 +311,7 @@ bool MyApp::OnInit(){
     
     temp.read_from_file(String("name file question icon"), String(path_file_init), String(""));
     path_file_question_icon = image_directory.append(temp);
- 
+    
     temp.read_from_file(String("name file plus icon"), String(path_file_init), String(""));
     path_file_plus_icon = image_directory.append(temp);
     
@@ -339,7 +338,7 @@ bool MyApp::OnInit(){
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
     time_check.read_from_file(String("time check"), String(path_file_init), String(""));
     time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
-
+    
     max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
     min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
     
@@ -385,7 +384,7 @@ bool MyApp::OnInit(){
     tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     //read min_crossing_angle from file_init
     min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String(""));
-
+    
     
     
     //read the time, and set the background color to either the day or night background color, which are read from file
@@ -417,8 +416,8 @@ bool MyApp::OnInit(){
     highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
     
-//    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
- 
+    //    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+    
     
     list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     list_frame->Show(true);
@@ -436,7 +435,7 @@ bool MyApp::OnInit(){
         s << "Chart #" << i+1 << " - " << projection.value << " projection";
         
         string dummy = s.str();
-
+        
         (list_frame->chart_frames)[i] = new ChartFrame(
                                                        list_frame,
                                                        projection,
@@ -453,7 +452,7 @@ bool MyApp::OnInit(){
     ShowChart(dummy);
     
     //bring either of these wxFrames to front
-//    list_frame->Raise();
+    //    list_frame->Raise();
     
     //fore/background color is determined from the default background color of extract_colors
     foreground_color = Color(list_frame->extract_colors->GetForegroundColour());

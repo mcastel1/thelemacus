@@ -7557,26 +7557,31 @@ void Time::set_current(void){
 //this function sets (*this) to the current UTC date
 void Date::set_current(void){
     
-    boost::posix_time::ptime now;
+    boost::posix_time::ptime universal_time;
+    boost::local_time::time_zone_ptr zone;
     
-    now = boost::posix_time::second_clock::universal_time();
+    zone = boost::local_time::time_zone_ptr(new boost::local_time::posix_time_zone("MST-07"));
+    universal_time = boost::posix_time::second_clock::universal_time();
     
-    Y = now.date().year();
-    M = now.date().month().as_number();
-    D = now.date().day();
+    boost::local_time::local_date_time local_time(universal_time, zone);
+
+    Y = local_time.date().year();
+    M = local_time.date().month().as_number();
+    D = local_time.date().day();
     
 }
 
 //this function sets (*this) to the current UTC time +- time_zone
 void Chrono::set_current(Int time_zone){
     
-    boost::posix_time::ptime now;
+    boost::posix_time::ptime local_time;
+
+    local_time = boost::posix_time::second_clock::local_time();
     
-    now = boost::posix_time::second_clock::universal_time();
     
-    h = ((unsigned int)(now.time_of_day().hours()));
-    m = ((unsigned int)(now.time_of_day().minutes()));
-    s = now.time_of_day().seconds();
+    h = ((unsigned int)(local_time.time_of_day().hours()));
+    m = ((unsigned int)(local_time.time_of_day().minutes()));
+    s = local_time.time_of_day().seconds();
 
     
 //    stringstream line_ins;

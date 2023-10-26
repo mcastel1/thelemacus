@@ -86,11 +86,13 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event){
         if((settings->GetAppearance().IsDark())){
             //the system is in dark mode
             
+            image_directory = run_directory.append(String("Contents/Resources/Images/Dark/"));
             
         }else{
             //the system is in light mode
             
-            
+            image_directory = run_directory.append(String("Contents/Resources/Images/Light/"));
+
         }
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
@@ -284,7 +286,13 @@ bool MyApp::OnInit(){
     path_file_init  = run_directory.append(String("Contents/Resources/Data/init.txt"));
     code_directory = run_directory;
     data_directory = run_directory.append(String("Contents/Resources/Data/"));
-    image_directory = run_directory.append(String("Contents/Resources/Images/"));
+    if((settings->GetAppearance().IsDark())){
+        //the system is in dark mode
+        image_directory = run_directory.append(String("Contents/Resources/Images/Dark/"));
+    }else{
+        //the system is in light mode
+        image_directory = run_directory.append(String("Contents/Resources/Images/Light/"));
+    }
     default_open_directory = data_directory;
     
     //read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path

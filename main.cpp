@@ -244,92 +244,13 @@ void MyApp::where_am_I([[maybe_unused]] String prefix){
 
 bool MyApp::OnInit(){
     
-    /*
-     gsl_vector *a, *b, *c;
-     a = gsl_vector_alloc(3);
-     b = gsl_vector_alloc(3);
-     
-     gsl_vector_set(a, 0, 3.43);
-     gsl_vector_set(a, 1, 2.43);
-     gsl_vector_set(a, 2, 43);
-     
-     gsl_vector_set(b, 0, 2.3);
-     gsl_vector_set(b, 1, .12);
-     gsl_vector_set(b, 2, .3);
-     
-     cross(a, b, &c);
-     
-     cout << "\t\t c = " << gsl_vector_get(c, 0) << " " << gsl_vector_get(c, 1) << " " << gsl_vector_get(c, 2) << "\n";    
-     */
     
-    /*
-     string a = "ciao";
-     string b = "CiaOx";
-     
-     cout << "comparison = " << boost::iequals(a, b) << "\n";
-     
-     
-     */
+    boost::posix_time::ptime timeLocal;
     
-    /*
-     Route cape_horn;
-     Rectangle ice;
-     vector<Angle> t;
-     bool output;
-     
-     
-     cape_horn = Route(String("c"), Position(Angle(-0.9), Angle(-1)), Angle(0.1));
-     ice = Rectangle(Position(Angle(-1), Angle(-0.5)), Position(Angle(-1.2), Angle(-1.2)));
-     
-     output = cape_horn.is_included_in(ice, &t, String(""));
-     
-     
-     */
-    
-    /*
-     Color my_color(232,23,13);
-     int j = my_color.ToRGB();
-     */
-    
-    /*
-     wxBitmap *michele;
-     wxMemoryDC dc;
-     
-     michele = new wxBitmap(100, 100);
-     dc.SelectObject(*michele);
-     dc.SetPen(wxPen(*wxRED, 1));
-     dc.DrawLine(0,0,10,10);
-     
-     */
-    
-    //    //
-    //    Double a, b;
-    //    a.set(String("a"), 3.2423, String("\t"));
-    //    b = a;
-    ////    (b.value) += 1e-6;
-    //
-    //    cout << "equal_approx = " << a.equal_approx(b) << "\n";
-    
-    
-    /*
-     Position r, rp;
-     gsl_rng* myran;
-     gsl_rng_env_setup();
-     myran = gsl_rng_alloc(gsl_rng_default);
-     gsl_rng_set(myran, 0);
-     
-     r = Position(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
-     rp = Position(Angle(gsl_rng_uniform(myran)), Angle(gsl_rng_uniform(myran)));
-     
-     r.print(String("r"), String(""), cout);
-     rp.print(String("rp"), String(""), cout);
-     Rotation R;
-     R = Rotation(r, rp);
-     R.print(String("r*rp"), String(" * "), cout);
-     
-     */
-    
-    
+    timeLocal = boost::posix_time::second_clock::local_time();
+
+    cout << "Current System Time = " << timeLocal << "\n";
+
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

@@ -7856,12 +7856,6 @@ void ChartFrame::GetCoastLineData_3D(void){
     }
     
     
-    
-    
-    //        cout << "i_min/max = \t\t" << i_min << " , " << i_max << "\n";
-    //        cout << "j_min/max = \t\t" << j_min << " , " << j_max << "\n";
-    
-    
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_points_grid = (i_max - i_min + 1 ) * (j_max - j_min + 1);
     
@@ -7933,8 +7927,13 @@ void ChartFrame::GetCoastLineData_3D(void){
                 //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
                 
+//                draw_panel->circle_observer.reference_position.get_cartesian(String(""), r, String(""));
+                 
+                
                 //I plot every 'every' data points
-                every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid));
+                every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline).value))*((double)n_points_grid)
+                                      
+                                        );
                 if(every == 0){every = 1;}
                 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points

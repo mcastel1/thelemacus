@@ -14987,6 +14987,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
     
     
+    sizer_all = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_listcontrol_routes_plus_buttons = new wxBoxSizer(wxHORIZONTAL);
@@ -15256,10 +15257,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
     sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM, ((wxGetApp().border).value));
-    sizer_h->Add(sizer_big_buttons, 0, wxALIGN_BOTTOM, ((wxGetApp().border).value));
-    
+    sizer_h->Add(sizer_big_buttons, 0, wxALIGN_TOP, ((wxGetApp().border).value));
+    sizer_all->Add(sizer_h, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
+
     Maximize(panel);
-    SetSizerAndFit(sizer_h);
+    SetSizerAndFit(sizer_all);
     
     //    panel->SetSizer(sizer_v);
     

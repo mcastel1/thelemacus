@@ -9626,7 +9626,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_show_list = new wxBitmapButton(
                                           panel,
                                           wxID_ANY,
-                                          Bitmap(wxGetApp().path_file_list_icon, wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
+                                          Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
                                           wxDefaultPosition,
                                           wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)),
                                           wxBU_EXACTFIT | wxSIMPLE_BORDER

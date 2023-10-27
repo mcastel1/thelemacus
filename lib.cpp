@@ -9535,6 +9535,13 @@ Bitmap::Bitmap() : wxBitmap(){
     
 }
 
+//constructs a Bitmap object by loading it from path path and rescaling it to size, by keeping its proportions
+Bitmap::Bitmap(String path, wxSize size) : wxBitmap(RescaleProportionally(wxBitmap(path.value, wxBITMAP_TYPE_PNG).ConvertToImage(), size)){
+    
+    
+}
+
+
 
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     

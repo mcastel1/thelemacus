@@ -80,7 +80,8 @@ class Bitmap: public wxBitmap{
     
 public:
     Bitmap();
-    
+    Bitmap(String, wxSize);
+
 };
 
 class String{

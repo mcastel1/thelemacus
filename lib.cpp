@@ -15119,7 +15119,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_add_sight = new wxBitmapButton(
                                           panel,
                                           wxID_ANY,
-                                          wxBitmap(   RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                          wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
                                           wxDefaultPosition,
                                           (wxGetApp().size_small_button),
                                           wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -15127,11 +15127,24 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
     
     //button to add a position
-    button_add_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_position = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY, wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                             wxDefaultPosition,
+                                             (wxGetApp().size_small_button),
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
     button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
     
     //button to add a route
-    button_add_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_route = new wxBitmapButton(
+                                          panel,
+                                          wxID_ANY,
+                                          wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                          wxDefaultPosition,
+                                          (wxGetApp().size_small_button),
+                                          wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                          );
     button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
     
     extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, wxSize(0, 0));

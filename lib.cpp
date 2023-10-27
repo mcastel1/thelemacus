@@ -14885,10 +14885,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
 
 
-    //image for button_modify_sight
-    wxBitmap my_bitmap = wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG);
-    wxImage my_image = my_bitmap.ConvertToImage();
-    RescaleProportionally(&my_image, wxGetApp().size_small_button);
     
     //image for button_transport_sight
     wxBitmap my_bitmap_transport_sight = wxBitmap(wxString(((wxGetApp().path_file_arrow_icon).value)), wxBITMAP_TYPE_PNG);
@@ -14902,7 +14898,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     
     //button to modify a sight
-    button_modify_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_modify_sight = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
     button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight<wxCommandEvent>, this);
     button_modify_sight->Enable(false);
     

@@ -14908,7 +14908,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_transport_sight->Enable(false);
     
     //button to modify a position
-    button_modify_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_modify_position = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                                wxDefaultPosition,
+                                                wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
     button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition<wxCommandEvent>, this);
     button_modify_position->Enable(false);
     
@@ -14924,7 +14931,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
 
     
     //button to modify a route
-    button_modify_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_modify_route = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
     button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute<wxCommandEvent>, this);
     button_modify_route->Enable(false);
     

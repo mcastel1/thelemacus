@@ -9626,7 +9626,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_show_list = new wxBitmapButton(
                                           panel,
                                           wxID_ANY,
-                                          wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_list_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), (wxGetApp().size_large_button) - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                          Bitmap(wxGetApp().path_file_list_icon, wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
                                           wxDefaultPosition,
                                           wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)),
                                           wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -15124,7 +15124,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_show_map = new wxBitmapButton(
                                          panel,
                                          wxID_ANY,
-                                         wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_map_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                         Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
                                          wxDefaultPosition,
                                          wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)),
                                          wxBU_EXACTFIT | wxSIMPLE_BORDER

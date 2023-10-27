@@ -14884,10 +14884,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
     
-    //image for button_add_sight, button_add_position and button_add_route
-    wxBitmap my_bitmap_plus = wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG);
-    wxImage my_image_plus = my_bitmap_plus.ConvertToImage();
-    RescaleProportionally(&my_image_plus, wxGetApp().size_small_button);
     
     //image for button_map
     wxBitmap my_bitmap_map = wxBitmap(wxString(((wxGetApp().path_file_map_icon).value)), wxBITMAP_TYPE_PNG), my_bitmap_position = wxBitmap(wxString(((wxGetApp().path_file_position_icon).value)), wxBITMAP_TYPE_PNG);
@@ -15089,7 +15085,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
 
     
     //button to add a sight
-    button_add_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_plus), wxDefaultPosition, (wxGetApp().size_small_button), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_add_sight = new wxBitmapButton(
+                                          panel,
+                                          wxID_ANY,
+                                          wxBitmap(   RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                          wxDefaultPosition,
+                                          (wxGetApp().size_small_button),
+                                          wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                          );
     button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
     
     //button to add a position

@@ -14914,7 +14914,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_transport_sight = new wxBitmapButton(
                                                 panel,
                                                 wxID_ANY,
-                                                wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_arrow_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                                Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
                                                 wxDefaultPosition, wxGetApp().size_small_button,
                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
                                                 );
@@ -14925,7 +14925,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_modify_position = new wxBitmapButton(
                                                 panel,
                                                 wxID_ANY,
-                                                wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                                Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
                                                 wxDefaultPosition,
                                                 wxGetApp().size_small_button,
                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -14937,7 +14937,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_transport_position = new wxBitmapButton(
                                                    panel,
                                                    wxID_ANY,
-                                                   wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_arrow_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                                   Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
                                                    wxDefaultPosition,
                                                    wxGetApp().size_small_button,
                                                    wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -14949,7 +14949,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_transport_route = new wxBitmapButton(
                                                 panel,
                                                 wxID_ANY,
-                                                wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_arrow_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                                Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
                                                 wxDefaultPosition,
                                                 wxGetApp().size_small_button,
                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -14962,7 +14962,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_modify_route = new wxBitmapButton(
                                              panel,
                                              wxID_ANY,
-                                             wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                             Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
                                              wxDefaultPosition,
                                              wxGetApp().size_small_button,
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -15157,7 +15157,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //button to add a position
     button_add_position = new wxBitmapButton(
                                              panel,
-                                             wxID_ANY, wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                             wxID_ANY,
+                                             Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button),
                                              wxDefaultPosition,
                                              (wxGetApp().size_small_button),
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -15168,7 +15169,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_add_route = new wxBitmapButton(
                                           panel,
                                           wxID_ANY,
-                                          wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                          Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button),
                                           wxDefaultPosition,
                                           (wxGetApp().size_small_button),
                                           wxBU_EXACTFIT | wxSIMPLE_BORDER
